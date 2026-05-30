@@ -65,6 +65,7 @@ Current structure:
 │   ├── install-codex-dev-skills
 │   └── uninstall-codex-dev-skills
 ├── skills/
+│   ├── first-slice-flow/
 │   ├── ingest-reference/
 │   ├── meaning-interview/
 │   ├── text-to-image-plan/
@@ -87,12 +88,17 @@ bin/install-codex-dev-skills
 This creates namespaced links under `~/.codex/skills`:
 
 ```text
+artist-os
 artist-os-ingest-reference
 artist-os-meaning-interview
 artist-os-text-to-image-plan
 artist-os-art-critic-review
 artist-os-critique-asset
 ```
+
+The `name:` field inside each skill uses the same namespaced value, so invoke them with the `artist-os-*` names above.
+
+For the normal end-to-end dry run, start with `artist-os`. The other skills are role-specific entry points for debugging or resuming a single phase.
 
 The repo remains the source of truth. Editing files under `skills/` updates the installed Codex skills immediately through the symlinks. Codex may still require a new thread or app reload to refresh skill discovery.
 

@@ -10,6 +10,18 @@ if [[ ! -d "$skills_dir" ]]; then
 fi
 
 found=0
+
+orchestrator="$skills_dir/artist-os"
+if [[ -e "$orchestrator" ]]; then
+  found=1
+  if [[ ! -L "$orchestrator" ]]; then
+    echo "refusing to remove non-symlink: $orchestrator" >&2
+    exit 1
+  fi
+  rm "$orchestrator"
+  echo "removed: $orchestrator"
+fi
+
 while IFS= read -r -d '' target; do
   found=1
   if [[ ! -L "$target" ]]; then

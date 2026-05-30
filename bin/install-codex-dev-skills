@@ -15,9 +15,9 @@ skills=(
 
 mkdir -p "$skills_dir"
 
-for skill in "${skills[@]}"; do
-  source_dir="$repo_root/skills/$skill"
-  target="$skills_dir/$prefix$skill"
+install_skill() {
+  local source_dir="$1"
+  local target="$2"
 
   if [[ ! -f "$source_dir/SKILL.md" ]]; then
     echo "missing skill source: $source_dir/SKILL.md" >&2
@@ -33,7 +33,7 @@ for skill in "${skills[@]}"; do
     current_target="$(readlink "$target")"
     if [[ "$current_target" == "$source_dir" ]]; then
       echo "ok: $target -> $source_dir"
-      continue
+      return
     fi
     rm "$target"
     echo "updated: $target -> $source_dir"
@@ -42,6 +42,20 @@ for skill in "${skills[@]}"; do
   fi
 
   ln -s "$source_dir" "$target"
+}
+
+install_skill "$repo_root/skills/first-slice-flow" "$skills_dir/artist-os"
+
+legacy_orchestrator="$skills_dir/${prefix}first-slice-flow"
+if [[ -L "$legacy_orchestrator" && "$(readlink "$legacy_orchestrator")" == "$repo_root/skills/first-slice-flow" ]]; then
+  rm "$legacy_orchestrator"
+  echo "removed legacy alias: $legacy_orchestrator"
+fi
+
+for skill in "${skills[@]}"; do
+  source_dir="$repo_root/skills/$skill"
+  target="$skills_dir/$prefix$skill"
+  install_skill "$source_dir" "$target"
 done
 
 cat <<EOF
@@ -50,6 +64,7 @@ Artist OS dev skills installed into:
   $skills_dir
 
 Installed skill names:
+  - artist-os
 $(for skill in "${skills[@]}"; do printf '  - %s%s\n' "$prefix" "$skill"; done)
 
 These are symlinks to this repo, so edits in skills/ update the installed files immediately.

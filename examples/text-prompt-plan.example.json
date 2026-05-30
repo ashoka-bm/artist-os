@@ -5,6 +5,12 @@
   "target_media_type": "image",
   "plan_mode": "single_image",
   "provider_neutral": true,
+  "layout_plan": {
+    "layout_type": "single_image",
+    "panel_count": 1,
+    "aspect_ratio": "open",
+    "instructions": "Generate one image from the selected Prompt Variant Plan. If the artist wants to compare variants in one generation, convert the three Prompt Variant Plans into a three-panel square triptych before provider translation."
+  },
   "style_direction_summary": {
     "primary_style": "cinematic photoreal",
     "style_modifiers": [
@@ -24,7 +30,11 @@
     {
       "variant_type": "faithful",
       "variant_test_axis_label": "balanced interpretation",
-      "prompt_text": "Create a cinematic photoreal image of a still figure standing at the edge of a lit doorway in a dark concrete domestic space. The interior contains two untouched chairs and a cooling cup. Rain softens the outside steps. The figure holds a small key with tenderness and dread. Preserve sparse composition, strong light/dark threshold tension, realistic domestic detail, and unresolved ambiguity.",
+      "variant_differentiators": [
+        "medium-wide threshold composition with the figure, doorway, chairs, cup, rain, and key all legible",
+        "balanced literal/symbolic treatment that keeps the domestic room recognizable"
+      ],
+      "prompt_text": "Create a cinematic photoreal medium-wide image of a still figure standing at the edge of a lit doorway in a dark concrete domestic space. Keep the whole threshold readable: the figure in partial silhouette, two untouched chairs inside, a cooling cup on a small table, rain softening the outside steps, and a small key held with tenderness and dread. Preserve sparse composition, strong light/dark threshold tension, realistic domestic detail, and unresolved ambiguity.",
       "negative_constraints": [
         "no explicit horror antagonist",
         "no sentimental melodrama",
@@ -58,7 +68,11 @@
     {
       "variant_type": "amplified",
       "variant_test_axis_label": "more symbolic / heightened",
-      "prompt_text": "Create a cinematic photoreal image with restrained surreal symbolism: a figure paused at a glowing doorway in a dark concrete room, two untouched chairs and a cooling cup inside, rain outside. The key in the figure's hand should feel almost animate, like a fragile breath held still. Let the doorway light become memory refusing to go dark while the surrounding room remains shadowed and withholding.",
+      "variant_differentiators": [
+        "low close viewpoint focused on the hand and key, with the doorway and empty chairs blurred behind it",
+        "heightened symbolic treatment of light and absence while keeping photoreal grounding"
+      ],
+      "prompt_text": "Create a cinematic photoreal close image from a low viewpoint near the figure's hand: the small key dominates the foreground, held with tenderness and dread, while the glowing doorway, two untouched chairs, and cooling cup fall into soft shadowed depth behind it. Use restrained surreal symbolism: the key should feel almost animate, like a fragile breath held still, and the doorway light should feel like memory refusing to go dark. Keep the surrounding room shadowed and withholding.",
       "negative_constraints": [
         "no monster or visible threat",
         "no literal animal key",
@@ -109,7 +123,11 @@
     {
       "variant_type": "minimal",
       "variant_test_axis_label": "more restrained / sparse",
-      "prompt_text": "Create a sparse cinematic photoreal image: a lit doorway, dark concrete threshold, two empty chairs barely visible inside, rain outside, and a single figure holding a key at the edge of the light. Use minimal objects, quiet composition, matte film grain, and strong negative space. The story should remain unresolved.",
+      "variant_differentiators": [
+        "distant wide composition with the figure reduced to a small silhouette inside large negative space",
+        "reduced object detail where only the doorway light, key glint, and faint chair shapes remain visible"
+      ],
+      "prompt_text": "Create a sparse cinematic photoreal wide image: a dark concrete threshold fills most of the frame, a lit doorway sits off-center, and the figure is reduced to a small still silhouette at the edge of the light. Keep only a tiny glint of the key, two barely visible chair shapes inside, and rain outside as quiet evidence. Use matte film grain, large negative space, restrained contrast, and almost no decorative detail. The story should remain unresolved.",
       "negative_constraints": [
         "no extra symbolic objects",
         "no visible backstory",

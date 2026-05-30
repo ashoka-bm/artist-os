@@ -1,6 +1,6 @@
 ---
-name: text-to-image-plan
-description: Convert a Text Reference and Meaning Interview into a Creative Brief, Beat Map, and Provider-Neutral Image Prompt Plan.
+name: artist-os-text-to-image-plan
+description: Use when Artist OS has a Text Reference and Artist Meaning and needs a Creative Brief, Style Direction, Beat Map, Series Recommendation, or image Prompt Plan.
 ---
 
 # Text To Image Plan
@@ -39,6 +39,7 @@ Use this process before Art Critic Review:
    - contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
    Stop early when Primary Style, bounded Style Modifiers, known conflicts, and alignment with Artist Meaning are clear.
    Then synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style.
+   If several styles remain plausible, ask whether the artist wants a Style Exploration Board: one mosaic image showing the same subject across the candidate styles for comparison. Default to six square tiles in a 2x3 grid. If fewer than six styles are under consideration, add useful contrast styles or repeat the strongest style with a different treatment. Do not use more than three tiles per row unless the artist asks for a different layout.
    If the artist does not confirm before Art Critic Review, set Style Confirmation Status to `unconfirmed`.
    Treat Brief Approval as Style Direction confirmation unless the artist explicitly excludes style from approval.
 6. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
@@ -55,7 +56,7 @@ Use this process before Art Critic Review:
 17. Define what the image should preserve.
 18. Define what the image should avoid.
 19. Produce a draft Creative Brief Document.
-20. Tell the user the next step is `art-critic-review`.
+20. Tell the user the next step is `artist-os-art-critic-review`.
 
 ## Final Prompt Plan Process
 
@@ -67,15 +68,27 @@ Use this process only after Art Critic Review and Brief Approval:
    - Faithful: closest to the approved Creative Brief.
    - Amplified: pushes the strongest tension, Poetic Density, and Target Visual Engine without inventing new Artist Meaning.
    - Minimal: strips the image down to the essential emotional and visual engine without becoming underspecified.
-4. Mark any Derived Symbols used by the Amplified Prompt Variant.
-5. Trace every Derived Symbol to Artist Meaning, a Core Tension Pair, an Active Visual Tension, a Beat or Tension Point, or a Poetic Density Note.
-6. If unresolved creative dimensions remain, use the three Prompt Variant Plans to test named Variant Test Axes. Keep the labels Faithful, Amplified, and Minimal, and add a Variant Test Axis Label to each.
-7. Include critique criteria for each Prompt Variant Plan.
-8. If the artist approved a Series Plan, select the Calibration Image Role by representativeness of Style Direction, Target Visual Engine, and emotional tension.
-9. Produce three calibration Prompt Variant Plans for the Series Calibration Image.
-10. Do not produce one prompt per remaining Image Role until the artist approves the calibration direction.
-11. After calibration approval, record the Calibration Choice with selected variant, accepted style traits, rejected style traits, locked visual rules, and notes for remaining images.
-12. Do not let Calibration Choice update Artist Meaning, Core Tension Pairs, or Beat Map unless the artist explicitly revises meaning.
+   If the user wants one generation that compares the variants, create a Single-Generation Variant Triptych prompt: three equal square panels in one horizontal image, with the left panel as Minimal, center panel as Faithful or modern/balanced, and right panel as Amplified or maximal. Keep the same subject, meaning, and core visual engine across all panels.
+4. Make the three Prompt Variant Plans visually distinct. Do not only vary adjective intensity. Each variant must name at least two concrete differentiators from this list:
+   - composition or subject scale,
+   - camera/viewpoint or spatial depth,
+   - density or negative space,
+   - literal/symbolic balance,
+   - representation/abstraction level,
+   - light/color strategy,
+   - texture/finish/rendering language,
+   - focal hierarchy or centered/decentered emphasis.
+5. If all three prompts could plausibly generate the same image with minor differences, rewrite them before returning the Prompt Plan.
+6. Mark any Derived Symbols used by the Amplified Prompt Variant.
+7. Trace every Derived Symbol to Artist Meaning, a Core Tension Pair, an Active Visual Tension, a Beat or Tension Point, or a Poetic Density Note.
+8. If unresolved creative dimensions remain, use the three Prompt Variant Plans to test named Variant Test Axes. Keep the labels Faithful, Amplified, and Minimal, and add a Variant Test Axis Label to each.
+9. Include critique criteria for each Prompt Variant Plan.
+10. Include a `layout_plan` in the Provider-Neutral Image Prompt Plan. Use `single_image` by default. Use `three_panel_variant_triptych` when the artist wants Minimal / Faithful-or-modern / Amplified-or-maximal in one generated image. Use `style_mosaic_board` when the artist wants to compare candidate styles. Style mosaic boards default to six square tiles arranged in two rows of three.
+11. If the artist approved a Series Plan, select the Calibration Image Role by representativeness of Style Direction, Target Visual Engine, and emotional tension.
+12. Produce three calibration Prompt Variant Plans for the Series Calibration Image.
+13. Do not produce one prompt per remaining Image Role until the artist approves the calibration direction.
+14. After calibration approval, record the Calibration Choice with selected variant, accepted style traits, rejected style traits, locked visual rules, and notes for remaining images.
+15. Do not let Calibration Choice update Artist Meaning, Core Tension Pairs, or Beat Map unless the artist explicitly revises meaning.
 
 ## Traceability Rules
 
@@ -109,9 +122,11 @@ After Art Critic Review and Brief Approval, return:
 
 - Creative Brief Record,
 - Provider-Neutral Image Prompt Plan,
+- layout plan,
 - Faithful Prompt Variant Plan,
 - Amplified Prompt Variant Plan,
 - Minimal Prompt Variant Plan,
+- variant differentiators for each Prompt Variant Plan,
 - Variant Test Axes, if any,
 - Series Plan or Series Recommendation,
 - Series Calibration Image calibration Prompt Variant Plans when series is approved,

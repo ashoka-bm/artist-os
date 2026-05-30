@@ -144,6 +144,10 @@ _Avoid_: Asking all fallback questions when style is already clear
 The agent-synthesized Style Direction proposed after a Style Interview for artist confirmation.
 _Avoid_: Raw style answers without synthesis
 
+**Style Exploration Board**:
+One generated mosaic image that compares several candidate Style Directions using the same subject, Artist Meaning, and Target Visual Engine. Defaults to six square tiles in a 2x3 grid.
+_Avoid_: Treating style samples as separate final artworks
+
 **Style Confirmation Status**:
 Whether Style Direction is artist specified, confirmed, or unconfirmed before Brief Approval.
 _Avoid_: Extra approval gate before Art Critic Review
@@ -251,6 +255,18 @@ _Avoid_: Arbitrary variation
 **Variant Test Axis Label**:
 The field on a Prompt Variant Plan that states how that stable variant label tests an unresolved creative dimension.
 _Avoid_: Replacing Faithful, Amplified, and Minimal labels
+
+**Variant Differentiator**:
+A concrete visual lever that makes one Prompt Variant Plan visually distinct from the others, such as composition, viewpoint, density, symbolic treatment, abstraction level, light/color strategy, texture, finish, or focal hierarchy.
+_Avoid_: Only changing adjectives or intensity words
+
+**Single-Generation Variant Triptych**:
+One horizontal image made of three equal square panels that compares the Minimal/minimalist, Faithful/modern/balanced, and Amplified/maximalist prompt directions in a single generation.
+_Avoid_: Treating the comparison triptych as a Series Plan
+
+**Layout Plan**:
+The Provider-Neutral Prompt Plan field that records whether the prompt is a single image, a three-panel variant triptych, a style mosaic board, a series calibration image, or a series image.
+_Avoid_: Hiding generation layout inside prompt prose only
 
 **Image Role**:
 The function of one image inside a Series Plan, such as opening image, threshold image, rupture image, return image, or resolution image.
@@ -379,6 +395,7 @@ _Avoid_: Generated Work, Source Record
 - **Style Interview** is adaptive, with **Style Interview Fallback Order** used when the Reference and **Artist Meaning** do not already narrow the next question.
 - **Style Interview** stops early when **Style Interview Stop Condition** is met.
 - **Style Interview** produces a **Style Recommendation** for artist confirmation.
+- When several styles remain plausible, offer a **Style Exploration Board** so the artist can compare them in one mosaic image.
 - **Style Recommendation** can proceed into **Art Critic Review** unconfirmed if **Style Confirmation Status** records that state.
 - **Brief Approval** is the hard approval gate for final **Style Direction** in the First Slice.
 - **Brief Approval** confirms **Style Direction** unless the artist explicitly excludes style from approval.
@@ -689,6 +706,9 @@ _Avoid_: Generated Work, Source Record
 - Add compact **Style Conflict Fields** to the Creative Brief Record now.
 - Three single-image **Prompt Variant Plans** may test unresolved **Variant Test Axes** instead of only varying intensity.
 - Keep **Prompt Variant Plan** labels stable. Use **Variant Test Axis Labels** to explain what each variant tests.
+- Each **Prompt Variant Plan** must name concrete **Variant Differentiators** so the three prompts produce meaningfully different visual options.
+- Use a **Single-Generation Variant Triptych** when the artist wants Minimal, Faithful/modern, and Amplified/maximal directions compared in one generated image.
+- Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
 - "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.
 - "accepted" needed a boundary. Resolved: a **Generated Work** becomes an **Accepted Work** only through **Acceptance Review**.

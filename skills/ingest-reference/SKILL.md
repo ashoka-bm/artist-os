@@ -1,6 +1,6 @@
 ---
-name: ingest-reference
-description: Create a Source Record for a user-provided Reference before interpretation or generation.
+name: artist-os-ingest-reference
+description: Use when starting Artist OS with a user-provided Reference that needs a Source Record before interpretation, briefing, prompting, or generation.
 ---
 
 # Ingest Reference
@@ -40,4 +40,4 @@ Return a Source Record matching `schemas/source-record.schema.json`.
 
 ## Required Closing
 
-After returning the Source Record, tell the user the next step is `meaning-interview`.
+After returning the Source Record, tell the user the next step is `artist-os-meaning-interview`.

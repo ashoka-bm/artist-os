@@ -153,8 +153,8 @@ Representative GStack roles:
 
 Artist Generation equivalent roles:
 
-- `ingest-reference`: creates a source record without generating anything.
-- `meaning-interview`: grills the user on personal meaning, sacred details, and desired transformation.
+- `artist-os-ingest-reference`: creates a source record without generating anything.
+- `artist-os-meaning-interview`: grills the user on personal meaning, sacred details, and desired transformation.
 - `formal-analysis`: identifies observable components by medium.
 - `emotional-structure`: maps evidence to Core Tension Pairs and Emotional Qualities with confidence.
 - `beat-map`: identifies changes, value shifts, and emotional payloads.
@@ -162,7 +162,7 @@ Artist Generation equivalent roles:
 - `generate-image`: creates or prepares image generation.
 - `generate-audio`: creates or prepares audio generation.
 - `generate-video`: creates or prepares video generation.
-- `critique-asset`: compares output against the Creative Brief.
+- `artist-os-critique-asset`: compares output against the Creative Brief.
 - `archive-asset`: records provenance, prompts, settings, rights notes, and review state.
 
 Recommendation: start with plain `SKILL.md` files, not generated templates. Introduce `.tmpl` generation after two or three skills reveal duplicated structure.

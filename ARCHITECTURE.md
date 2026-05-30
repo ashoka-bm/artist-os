@@ -24,19 +24,22 @@ Text Reference
 
 No paid generation call is required for the First Slice.
 
+Use `artist-os` as the normal orchestration skill for this workflow. It moves through the role skills automatically and stops only at artist-input or approval gates. The individual role skills remain available for debugging, resuming, or improving one phase.
+
 ## Data Flow
 
-1. `ingest-reference` creates a Source Record.
-2. `meaning-interview` captures Artist Meaning and transformation constraints.
-3. `text-to-image-plan` creates the first pass of Artist Meaning, Emotional Structure, and Beat Map.
-4. `text-to-image-plan` uses Style Direction directly if specified, or runs a short Style Interview when style is unclear.
-5. `text-to-image-plan` adds Style Direction and Series Recommendation to the draft Creative Brief Document.
-6. `art-critic-review` is mandatory. It strengthens the Creative Brief Document, resolves Open Questions, improves Style Direction and Visual Dynamics, and increases Poetic Density without overriding Artist Meaning.
-7. After Brief Approval, `text-to-image-plan` creates the Creative Brief Record and one Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
-8. If the artist approves a Series Plan, `text-to-image-plan` creates three calibration Prompt Variant Plans for the Series Calibration Image first.
-9. After the artist approves one calibration direction, `text-to-image-plan` records the Calibration Choice and can create one Provider-Neutral Image Prompt Plan per remaining Image Role.
-10. `critique-asset` compares the Prompt Plan or Generated Work against the approved Creative Brief.
-11. The archive records prompts, settings, outputs, and review notes.
+1. `artist-os` starts the workflow and conducts the phase handoffs.
+2. `artist-os-ingest-reference` creates a Source Record.
+3. `artist-os-meaning-interview` captures Artist Meaning and transformation constraints.
+4. `artist-os-text-to-image-plan` creates the first pass of Artist Meaning, Emotional Structure, and Beat Map.
+5. `artist-os-text-to-image-plan` uses Style Direction directly if specified, or runs a short Style Interview when style is unclear.
+6. `artist-os-text-to-image-plan` adds Style Direction and Series Recommendation to the draft Creative Brief Document.
+7. `artist-os-art-critic-review` is mandatory. It strengthens the Creative Brief Document, resolves Open Questions, improves Style Direction and Visual Dynamics, and increases Poetic Density without overriding Artist Meaning.
+8. After Brief Approval, `artist-os-text-to-image-plan` creates the Creative Brief Record and one Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
+9. If the artist approves a Series Plan, `artist-os-text-to-image-plan` creates three calibration Prompt Variant Plans for the Series Calibration Image first.
+10. After the artist approves one calibration direction, `artist-os-text-to-image-plan` records the Calibration Choice and can create one Provider-Neutral Image Prompt Plan per remaining Image Role.
+11. `artist-os-critique-asset` compares the Prompt Plan or Generated Work against the approved Creative Brief.
+12. The archive records prompts, settings, outputs, and review notes.
 
 ## State Model
 

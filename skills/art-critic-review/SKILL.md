@@ -1,6 +1,6 @@
 ---
-name: art-critic-review
-description: Mandatory review that strengthens a Creative Brief Document before Brief Approval by resolving weak interpretations, increasing Poetic Density, and making the direction decisive.
+name: artist-os-art-critic-review
+description: Use when an Artist OS Creative Brief Document needs mandatory art-critic review before Brief Approval or final Prompt Plan creation.
 ---
 
 # Art Critic Review

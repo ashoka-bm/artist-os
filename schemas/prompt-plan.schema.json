@@ -11,6 +11,7 @@
     "target_media_type",
     "plan_mode",
     "provider_neutral",
+    "layout_plan",
     "style_direction_summary",
     "target_visual_engine_summary",
     "prompt_variants",
@@ -25,6 +26,7 @@
     "target_media_type": { "type": "string", "enum": ["image"] },
     "plan_mode": { "type": "string", "enum": ["single_image", "series_calibration", "series_image"] },
     "provider_neutral": { "type": "boolean", "const": true },
+    "layout_plan": { "$ref": "#/$defs/layout_plan" },
     "style_direction_summary": { "$ref": "#/$defs/style_direction_summary" },
     "target_visual_engine_summary": { "type": "string" },
     "prompt_variants": {
@@ -61,6 +63,30 @@
     }
   },
   "$defs": {
+    "layout_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layout_type", "panel_count", "aspect_ratio", "instructions"],
+      "properties": {
+        "layout_type": {
+          "type": "string",
+          "enum": [
+            "single_image",
+            "three_panel_variant_triptych",
+            "style_mosaic_board",
+            "series_calibration_image",
+            "series_image"
+          ]
+        },
+        "panel_count": { "type": "integer", "minimum": 1 },
+        "aspect_ratio": { "type": "string" },
+        "instructions": {
+          "type": "string",
+          "minLength": 1,
+          "description": "For style_mosaic_board, default to six square tiles in a 2x3 grid with no more than three tiles per row unless the artist asks otherwise."
+        }
+      }
+    },
     "style_direction_summary": {
       "type": "object",
       "additionalProperties": false,
@@ -92,6 +118,7 @@
       "required": [
         "variant_type",
         "variant_test_axis_label",
+        "variant_differentiators",
         "prompt_text",
         "negative_constraints",
         "derived_symbols",
@@ -101,6 +128,11 @@
       "properties": {
         "variant_type": { "type": "string", "enum": ["faithful", "amplified", "minimal"] },
         "variant_test_axis_label": { "type": "string" },
+        "variant_differentiators": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        },
         "prompt_text": { "type": "string", "minLength": 1 },
         "negative_constraints": {
           "type": "array",

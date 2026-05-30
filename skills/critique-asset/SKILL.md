@@ -1,6 +1,6 @@
 ---
-name: critique-asset
-description: Compare a Generated Work or Prompt Plan against the Creative Brief instead of judging surface similarity alone.
+name: artist-os-critique-asset
+description: Use when Artist OS needs to critique a Prompt Plan or Generated Work against the approved Creative Brief, emotional function, and Target Visual Engine.
 ---
 
 # Critique Asset

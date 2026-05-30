@@ -304,12 +304,12 @@ No paid generation call is required for the first slice.
 
 ## Data Flow
 
-1. `ingest-reference` creates a Source Record.
-2. `meaning-interview` captures Artist Meaning and transformation constraints.
-3. `text-to-image-plan` creates a draft Creative Brief Document.
-4. `art-critic-review` is mandatory. It strengthens the Creative Brief Document, resolves Open Questions, and increases Poetic Density without overriding Artist Meaning.
-5. After Brief Approval, `text-to-image-plan` creates the Creative Brief Record and one Provider-Neutral Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
-6. `critique-asset` compares outputs against the approved Creative Brief.
+1. `artist-os-ingest-reference` creates a Source Record.
+2. `artist-os-meaning-interview` captures Artist Meaning and transformation constraints.
+3. `artist-os-text-to-image-plan` creates a draft Creative Brief Document.
+4. `artist-os-art-critic-review` is mandatory. It strengthens the Creative Brief Document, resolves Open Questions, and increases Poetic Density without overriding Artist Meaning.
+5. After Brief Approval, `artist-os-text-to-image-plan` creates the Creative Brief Record and one Provider-Neutral Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
+6. `artist-os-critique-asset` compares outputs against the approved Creative Brief.
 7. The archive records prompts, settings, outputs, and review notes.
 
 ## State Model
@@ -331,11 +331,11 @@ Recommended later local state:
 
 Each skill has one job:
 
-- `ingest-reference`: records the source.
-- `meaning-interview`: captures Artist Meaning.
-- `text-to-image-plan`: transforms Artist Meaning into image direction.
-- `art-critic-review`: mandatory review that improves the Creative Brief Document before Brief Approval.
-- `critique-asset`: evaluates the Generated Work or Prompt Plan.
+- `artist-os-ingest-reference`: records the source.
+- `artist-os-meaning-interview`: captures Artist Meaning.
+- `artist-os-text-to-image-plan`: transforms Artist Meaning into image direction.
+- `artist-os-art-critic-review`: mandatory review that improves the Creative Brief Document before Brief Approval.
+- `artist-os-critique-asset`: evaluates the Generated Work or Prompt Plan.
 
 Skills may read earlier outputs, but they should not silently rewrite them. If a later skill discovers a contradiction, it records the contradiction and asks the user before changing the Creative Brief.
 
@@ -860,7 +860,7 @@ The skill must say:
 
 ```markdown
 ---
-name: ingest-reference
+name: artist-os-ingest-reference
 description: Create a Source Record for text, image, audio, video, or mixed References without generating new media.
 ---
 
@@ -888,7 +888,7 @@ Return a Source Record matching `schemas/source-record.schema.json`.
 
 ## Required Closing
 
-After returning the Source Record, tell the user the next step is `meaning-interview`.
+After returning the Source Record, tell the user the next step is `artist-os-meaning-interview`.
 ```
 
 - [x] **Step 2: Create `skills/meaning-interview/SKILL.md`**
@@ -897,7 +897,7 @@ The skill must say:
 
 ```markdown
 ---
-name: meaning-interview
+name: artist-os-meaning-interview
 description: Interview the artist about what a source means before formal or emotional analysis hardens into assumptions.
 ---
 
@@ -940,7 +940,7 @@ The skill must say:
 
 ```markdown
 ---
-name: text-to-image-plan
+name: artist-os-text-to-image-plan
 description: Convert a Text Reference and Meaning Interview into a Creative Brief, Beat Map, and Provider-Neutral Image Prompt Plan.
 ---
 
@@ -971,7 +971,7 @@ Read:
 7. Define what the image should preserve.
 8. Define what the image should avoid.
 9. Produce a draft Creative Brief Document.
-10. Tell the user the next step is `art-critic-review`.
+10. Tell the user the next step is `artist-os-art-critic-review`.
 11. Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete.
 
 ## Output
@@ -1011,7 +1011,7 @@ The skill must say:
 
 ```markdown
 ---
-name: art-critic-review
+name: artist-os-art-critic-review
 description: Mandatory review that strengthens a Creative Brief Document before Brief Approval by resolving weak interpretations, increasing Poetic Density, and making the direction decisive.
 ---
 
@@ -1080,7 +1080,7 @@ Write:
 
 ```markdown
 ---
-name: critique-asset
+name: artist-os-critique-asset
 description: Compare a Generated Work or Prompt Plan against the Creative Brief instead of judging surface similarity alone.
 ---
 
@@ -1226,12 +1226,12 @@ sed -n '1,260p' examples/text-creative-brief.example.json
 
 Then simulate the workflow:
 
-1. `ingest-reference` creates a Source Record for `examples/text-source.md`.
-2. `meaning-interview` uses the sample Artist Meaning from the example Creative Brief.
-3. `text-to-image-plan` produces a draft Creative Brief Document.
-4. `art-critic-review` revises the Creative Brief Document and asks for Brief Approval.
-5. After Brief Approval, `text-to-image-plan` produces the Creative Brief Record and one Provider-Neutral Prompt Plan containing Faithful, Amplified, and Minimal Prompt Variant Plans.
-6. `critique-asset` critiques the plan against the approved Creative Brief.
+1. `artist-os-ingest-reference` creates a Source Record for `examples/text-source.md`.
+2. `artist-os-meaning-interview` uses the sample Artist Meaning from the example Creative Brief.
+3. `artist-os-text-to-image-plan` produces a draft Creative Brief Document.
+4. `artist-os-art-critic-review` revises the Creative Brief Document and asks for Brief Approval.
+5. After Brief Approval, `artist-os-text-to-image-plan` produces the Creative Brief Record and one Provider-Neutral Prompt Plan containing Faithful, Amplified, and Minimal Prompt Variant Plans.
+6. `artist-os-critique-asset` critiques the plan against the approved Creative Brief.
 
 - [x] **Step 2: Record problems**
 

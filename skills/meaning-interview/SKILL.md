@@ -1,6 +1,6 @@
 ---
-name: meaning-interview
-description: Interview the artist about what a Reference means before formal or emotional analysis hardens into assumptions.
+name: artist-os-meaning-interview
+description: Use when Artist OS needs the artist's stated meaning, transformation intent, and must-preserve details before analysis or prompt planning.
 ---
 
 # Meaning Interview

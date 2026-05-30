@@ -80,6 +80,11 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Updated metadata docs, AGENTS rules, README, and `skills/text-to-image-plan/SKILL.md` to reference the Prompt Plan schema.
 - Added `bin/install-codex-dev-skills` and `bin/uninstall-codex-dev-skills` for symlink-based Codex skill development installs.
 - Installed the Artist OS dev skills into `/Users/ashokaji/.codex/skills` as `artist-os-*` symlinks pointing back to this repository.
+- Updated the Artist OS skill frontmatter names to match the installed `artist-os-*` command names so Codex discovery and invocation use the same namespace.
+- Tightened Prompt Variant Plan rules after a real test showed Faithful, Amplified, and Minimal could produce images that were too similar. Prompt variants now require concrete Variant Differentiators.
+- Added `artist-os` as the orchestration skill so the normal First Slice can move through role phases automatically instead of requiring the user to invoke each skill manually.
+- Added Style Exploration Board and Single-Generation Variant Triptych concepts so artists can compare candidate styles or Minimal/Faithful/Amplified directions in one generated image.
+- Set the Style Exploration Board default layout to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks otherwise.
 
 ## Working Assumptions
 
@@ -92,8 +97,8 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 
 ## Next Steps
 
-1. Start a new Codex thread or reload Codex so skill discovery can pick up the `artist-os-*` dev symlinks.
-2. Run the manual First Slice on a new user-provided text Reference.
+1. Start a new Codex thread or reload Codex so skill discovery can pick up the corrected `artist-os-*` skill names.
+2. Re-test the First Slice through `artist-os` and confirm it advances automatically, offers style boards when style is unresolved, and can pack Minimal/Faithful/Amplified into one triptych prompt.
 3. Consider a later `series-plan.schema.json` or `calibration-choice.schema.json` when image review/provider-backed generation exists.
 4. Add schema validation tooling or tests once the workflow settles.
 5. Only after the manual workflow feels right, add host adapters, provider profiles, and API-key-backed generation.

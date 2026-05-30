@@ -161,6 +161,8 @@ Stop the Style Interview early when Primary Style, bounded Style Modifiers, know
 
 After the Style Interview, synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style. Do not make the artist assemble taxonomy from raw answers.
 
+When several Style Directions remain plausible, offer a Style Exploration Board: one generated mosaic image that holds the same subject and Target Visual Engine across multiple candidate styles. The board helps the artist compare style language without committing to separate full generations. It is optional and does not replace Brief Approval. Default to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout.
+
 Use the Wondermint Category Reference as initial category vocabulary, but do not treat upload categories as the entire art ontology. Style Direction must serve the Creative Brief.
 
 ## Layer 7: Beats And Tension Points
@@ -224,6 +226,10 @@ When the Creative Brief still contains unresolved creative dimensions, the three
 Keep the stable labels Faithful, Amplified, and Minimal even when variants test an unresolved axis. Add a Variant Test Axis Label to explain what each variant is testing.
 
 The Amplified Prompt Variant may use Derived Symbols, but each Derived Symbol must be marked and traced to the approved Creative Brief.
+
+The three Prompt Variant Plans must create meaningful visual alternatives. They should not be three near-identical prompts with different intensity levels. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic treatment, abstraction level, color/light strategy, texture, finish, or focal hierarchy.
+
+When the artist wants one generation for comparison, the three Prompt Variant Plans can be packed into a Single-Generation Variant Triptych: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center carries the Faithful/modern/balanced direction, and the right carries the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
 
 ## First Slice
 

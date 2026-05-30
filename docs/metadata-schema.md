@@ -112,15 +112,26 @@ Each Prompt Variant Plan should include:
 
 - variant type,
 - variant test axis label, if testing an unresolved dimension,
+- variant differentiators,
 - prompt text,
 - negative constraints,
 - derived symbols, if any,
 - traceability notes back to the approved Creative Brief,
 - critique checklist.
 
+The three Prompt Variant Plans must be visually distinct. Do not create variants that only turn the same image up or down. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, literal/symbolic balance, representation/abstraction, light/color strategy, texture/finish, or focal hierarchy.
+
 Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan and do not require a separate First Slice approval gate.
 
 `schemas/prompt-plan.schema.json` records the Provider-Neutral Image Prompt Plan. It is provider-neutral by design and must not include provider-specific settings, model names, seeds, cost metadata, or output paths.
+
+`layout_plan` records how the prompt should be arranged before provider translation:
+
+- `single_image`: one generated image from one selected variant.
+- `three_panel_variant_triptych`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/modern, and Amplified/maximal directions.
+- `style_mosaic_board`: one generated mosaic image comparing candidate styles using the same subject and visual engine. Default to six square tiles in a 2x3 grid, and use no more than three tiles per row unless the artist asks for another layout.
+- `series_calibration_image`: one calibration image for an approved Series Plan.
+- `series_image`: one image role inside an approved Series Plan.
 
 For `single_image` and `series_calibration` plans, include Faithful, Amplified, and Minimal Prompt Variant Plans. For later approved `series_image` plans, use one prompt variant per Image Role by default unless the artist asks for variants.
 
