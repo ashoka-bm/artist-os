@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/source-record.schema.json",
+  "title": "SourceRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_id",
+    "title",
+    "media_type",
+    "source_ref",
+    "user_context",
+    "rights_notes",
+    "created_at"
+  ],
+  "properties": {
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "media_type": { "type": "string", "enum": ["text", "image", "audio", "video", "mixed"] },
+    "source_ref": { "type": "string", "minLength": 1 },
+    "user_context": { "type": "string" },
+    "rights_notes": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

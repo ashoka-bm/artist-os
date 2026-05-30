@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
+prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
+
+skills=(
+  "ingest-reference"
+  "meaning-interview"
+  "text-to-image-plan"
+  "art-critic-review"
+  "critique-asset"
+)
+
+mkdir -p "$skills_dir"
+
+for skill in "${skills[@]}"; do
+  source_dir="$repo_root/skills/$skill"
+  target="$skills_dir/$prefix$skill"
+
+  if [[ ! -f "$source_dir/SKILL.md" ]]; then
+    echo "missing skill source: $source_dir/SKILL.md" >&2
+    exit 1
+  fi
+
+  if [[ -e "$target" && ! -L "$target" ]]; then
+    echo "refusing to overwrite non-symlink: $target" >&2
+    exit 1
+  fi
+
+  if [[ -L "$target" ]]; then
+    current_target="$(readlink "$target")"
+    if [[ "$current_target" == "$source_dir" ]]; then
+      echo "ok: $target -> $source_dir"
+      continue
+    fi
+    rm "$target"
+    echo "updated: $target -> $source_dir"
+  else
+    echo "installed: $target -> $source_dir"
+  fi
+
+  ln -s "$source_dir" "$target"
+done
+
+cat <<EOF
+
+Artist OS dev skills installed into:
+  $skills_dir
+
+Installed skill names:
+$(for skill in "${skills[@]}"; do printf '  - %s%s\n' "$prefix" "$skill"; done)
+
+These are symlinks to this repo, so edits in skills/ update the installed files immediately.
+Codex may require a new thread or app reload to refresh skill discovery.
+EOF

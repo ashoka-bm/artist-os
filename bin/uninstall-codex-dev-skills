@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
+prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
+
+if [[ ! -d "$skills_dir" ]]; then
+  echo "nothing to uninstall: $skills_dir does not exist"
+  exit 0
+fi
+
+found=0
+while IFS= read -r -d '' target; do
+  found=1
+  if [[ ! -L "$target" ]]; then
+    echo "refusing to remove non-symlink: $target" >&2
+    exit 1
+  fi
+  rm "$target"
+  echo "removed: $target"
+done < <(find "$skills_dir" -maxdepth 1 -name "$prefix*" -print0 | sort -z)
+
+if [[ "$found" -eq 0 ]]; then
+  echo "no $prefix* symlinks found in $skills_dir"
+fi

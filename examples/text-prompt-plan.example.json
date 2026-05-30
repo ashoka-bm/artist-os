@@ -1,0 +1,174 @@
+{
+  "prompt_plan_id": "plan_door_left_lit",
+  "brief_id": "brief_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "target_media_type": "image",
+  "plan_mode": "single_image",
+  "provider_neutral": true,
+  "style_direction_summary": {
+    "primary_style": "cinematic photoreal",
+    "style_modifiers": [
+      "grainy / film-grain",
+      "surreal / dreamlike",
+      "dark / moody"
+    ],
+    "style_conflicts": [
+      {
+        "conflict": "Photoreal style could over-literalize the room and reduce the poem's opacity.",
+        "adaptation": "Use cinematic photoreal grounding with restrained surreal lighting and symbolic treatment of the key."
+      }
+    ]
+  },
+  "target_visual_engine_summary": "A still figure held at the edge of a lit doorway, with sparse domestic evidence, deep shadow, rain haze, and a key that carries fragile agency.",
+  "prompt_variants": [
+    {
+      "variant_type": "faithful",
+      "variant_test_axis_label": "balanced interpretation",
+      "prompt_text": "Create a cinematic photoreal image of a still figure standing at the edge of a lit doorway in a dark concrete domestic space. The interior contains two untouched chairs and a cooling cup. Rain softens the outside steps. The figure holds a small key with tenderness and dread. Preserve sparse composition, strong light/dark threshold tension, realistic domestic detail, and unresolved ambiguity.",
+      "negative_constraints": [
+        "no explicit horror antagonist",
+        "no sentimental melodrama",
+        "no glossy fantasy rendering",
+        "do not show whether the figure enters"
+      ],
+      "derived_symbols": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "must_preserve[0]",
+          "note": "Preserves the threshold between returning and leaving."
+        },
+        {
+          "source_type": "active_visual_tension",
+          "source_ref": "Light / Dark",
+          "note": "Uses the lit doorway against deep shadow as the formal anchor."
+        },
+        {
+          "source_type": "beat",
+          "source_ref": "agency to paralysis",
+          "note": "Places the key in the figure's hand while the body remains suspended."
+        }
+      ],
+      "critique_checklist": [
+        "Does the image keep the threshold unresolved?",
+        "Does the key imply agency and fragility?",
+        "Does the lit interior feel both inviting and dangerous?"
+      ]
+    },
+    {
+      "variant_type": "amplified",
+      "variant_test_axis_label": "more symbolic / heightened",
+      "prompt_text": "Create a cinematic photoreal image with restrained surreal symbolism: a figure paused at a glowing doorway in a dark concrete room, two untouched chairs and a cooling cup inside, rain outside. The key in the figure's hand should feel almost animate, like a fragile breath held still. Let the doorway light become memory refusing to go dark while the surrounding room remains shadowed and withholding.",
+      "negative_constraints": [
+        "no monster or visible threat",
+        "no literal animal key",
+        "no fantasy glow effects",
+        "avoid explaining the missing person"
+      ],
+      "derived_symbols": [
+        {
+          "symbol": "the key as almost animate",
+          "purpose": "Amplifies fragile agency without changing Artist Meaning.",
+          "traces_to": [
+            {
+              "source_type": "poetic_density_note",
+              "source_ref": "the key",
+              "note": "The key already carries agency, fragility, and the burden of choosing."
+            },
+            {
+              "source_type": "reference_evidence",
+              "source_ref": "holding the key like a small animal",
+              "note": "The source text supports the key's near-living quality."
+            }
+          ]
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "presence_absence",
+          "note": "Uses empty chairs and lit threshold to make absence active."
+        },
+        {
+          "source_type": "poetic_density_note",
+          "source_ref": "the lit doorway",
+          "note": "Doorway functions as invitation, danger, and memory."
+        },
+        {
+          "source_type": "style_direction",
+          "source_ref": "style_conflicts[0]",
+          "note": "Keeps photoreal grounding while adding restrained surreal symbolism."
+        }
+      ],
+      "critique_checklist": [
+        "Does the symbolism deepen rather than replace the original meaning?",
+        "Does the key remain subtle and not become a fantasy object?",
+        "Does the image preserve tenderness and threat at once?"
+      ]
+    },
+    {
+      "variant_type": "minimal",
+      "variant_test_axis_label": "more restrained / sparse",
+      "prompt_text": "Create a sparse cinematic photoreal image: a lit doorway, dark concrete threshold, two empty chairs barely visible inside, rain outside, and a single figure holding a key at the edge of the light. Use minimal objects, quiet composition, matte film grain, and strong negative space. The story should remain unresolved.",
+      "negative_constraints": [
+        "no extra symbolic objects",
+        "no visible backstory",
+        "no crowded room",
+        "no dramatic action pose"
+      ],
+      "derived_symbols": [],
+      "traceability_notes": [
+        {
+          "source_type": "active_visual_tension",
+          "source_ref": "Dense / Sparse",
+          "note": "Uses minimal objects so a few details carry the grief."
+        },
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "stillness_motion",
+          "note": "Keeps the figure still while rain implies motion."
+        },
+        {
+          "source_type": "emotional_quality",
+          "source_ref": "threshold grief",
+          "note": "Reduces the image to the threshold and the held key."
+        }
+      ],
+      "critique_checklist": [
+        "Does the minimal version still feel emotionally complete?",
+        "Does sparsity avoid becoming empty or generic?",
+        "Does the threshold remain the emotional engine?"
+      ]
+    }
+  ],
+  "series_calibration": {
+    "is_series_calibration": false,
+    "calibration_image_role": "",
+    "uses_three_prompt_variants": false,
+    "requires_artist_approval_before_series": false
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "must_preserve",
+      "note": "All variants preserve threshold, tenderness/threat, active absence, and fragile agency."
+    },
+    {
+      "source_type": "active_visual_tension",
+      "source_ref": "Light / Dark",
+      "note": "All variants use the lit doorway against darkness as the Target Visual Engine."
+    },
+    {
+      "source_type": "critical_heuristic",
+      "source_ref": "preserve contradiction",
+      "note": "All variants avoid resolving the scene into simple safety, threat, or loneliness."
+    }
+  ],
+  "critique_checklist": [
+    "Does the prompt preserve Artist Meaning over surface style?",
+    "Does the image keep Attraction / Repulsion and Safety / Threat active at the same time?",
+    "Does the Target Visual Engine remain traceable to the approved Creative Brief?",
+    "Do any Derived Symbols remain marked and justified?",
+    "Does the prompt avoid provider-specific settings?"
+  ]
+}

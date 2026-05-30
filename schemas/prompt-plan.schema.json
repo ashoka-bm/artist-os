@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/prompt-plan.schema.json",
+  "title": "ProviderNeutralImagePromptPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "prompt_plan_id",
+    "brief_id",
+    "source_id",
+    "target_media_type",
+    "plan_mode",
+    "provider_neutral",
+    "style_direction_summary",
+    "target_visual_engine_summary",
+    "prompt_variants",
+    "series_calibration",
+    "traceability_summary",
+    "critique_checklist"
+  ],
+  "properties": {
+    "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
+    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "enum": ["image"] },
+    "plan_mode": { "type": "string", "enum": ["single_image", "series_calibration", "series_image"] },
+    "provider_neutral": { "type": "boolean", "const": true },
+    "style_direction_summary": { "$ref": "#/$defs/style_direction_summary" },
+    "target_visual_engine_summary": { "type": "string" },
+    "prompt_variants": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/prompt_variant_plan" }
+    },
+    "series_calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "is_series_calibration",
+        "calibration_image_role",
+        "uses_three_prompt_variants",
+        "requires_artist_approval_before_series"
+      ],
+      "properties": {
+        "is_series_calibration": { "type": "boolean" },
+        "calibration_image_role": { "type": "string" },
+        "uses_three_prompt_variants": { "type": "boolean" },
+        "requires_artist_approval_before_series": { "type": "boolean" }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "critique_checklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "style_direction_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_style", "style_modifiers", "style_conflicts"],
+      "properties": {
+        "primary_style": { "type": "string" },
+        "style_modifiers": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "type": "string" }
+        },
+        "style_conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["conflict", "adaptation"],
+            "properties": {
+              "conflict": { "type": "string" },
+              "adaptation": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "prompt_variant_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_type",
+        "variant_test_axis_label",
+        "prompt_text",
+        "negative_constraints",
+        "derived_symbols",
+        "traceability_notes",
+        "critique_checklist"
+      ],
+      "properties": {
+        "variant_type": { "type": "string", "enum": ["faithful", "amplified", "minimal"] },
+        "variant_test_axis_label": { "type": "string" },
+        "prompt_text": { "type": "string", "minLength": 1 },
+        "negative_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "derived_symbols": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/derived_symbol" }
+        },
+        "traceability_notes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        },
+        "critique_checklist": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "derived_symbol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symbol", "purpose", "traces_to"],
+      "properties": {
+        "symbol": { "type": "string" },
+        "purpose": { "type": "string" },
+        "traces_to": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "artist_meaning",
+            "reference_evidence",
+            "core_tension_pair",
+            "active_visual_tension",
+            "emotional_quality",
+            "beat",
+            "tension_point",
+            "poetic_density_note",
+            "style_direction",
+            "critical_heuristic"
+          ]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

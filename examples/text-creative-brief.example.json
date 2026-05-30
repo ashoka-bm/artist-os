@@ -1,0 +1,378 @@
+{
+  "brief_id": "brief_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning": {
+    "why_it_matters": "The text is about grief at a threshold: the desire to return to intimacy and the knowledge that return would reopen the wound.",
+    "must_preserve": [
+      "the threshold between returning and leaving",
+      "the coexistence of tenderness and threat",
+      "the sense that absence is active and present",
+      "the key as an object of agency that has become fragile"
+    ],
+    "may_transform": [
+      "the literal room",
+      "the cup and chairs",
+      "the rain",
+      "the human figure's age, clothing, and setting"
+    ]
+  },
+  "formal_observations": [
+    "The text uses domestic objects as emotional pressure points.",
+    "The pacing slows around the threshold through repeated negation: not entering, not leaving.",
+    "The final image turns the key into a living, vulnerable metaphor.",
+    "The contrast between inside and outside organizes the passage."
+  ],
+  "style_direction": {
+    "selection_method": "style_interview",
+    "style_family": "camera-based cinematic image",
+    "style_mode": "grainy cinematic photoreal with restrained surreal symbolism",
+    "primary_style": "cinematic photoreal",
+    "confirmation_status": "unconfirmed",
+    "style_modifiers": [
+      "grainy / film-grain",
+      "surreal / dreamlike",
+      "dark / moody"
+    ],
+    "wondermint_subcategories": [
+      "Cinematic",
+      "Photoreal",
+      "Grainy / Film-grain",
+      "Surreal / Dreamlike",
+      "Dark / Moody"
+    ],
+    "rationale": "A cinematic photoreal style preserves the threshold drama and lets the domestic details feel physically real, while restrained surreal symbolism allows the key to carry fragility without becoming literal horror.",
+    "avoid": [
+      "glossy fantasy rendering",
+      "cartoon exaggeration",
+      "generic horror poster styling"
+    ],
+    "style_conflicts": [
+      {
+        "conflict": "Photoreal style could over-literalize the room and reduce the poem's opacity.",
+        "proposed_adaptation": "Use cinematic photoreal grounding with restrained surreal lighting and symbolic treatment of the key.",
+        "requires_artist_approval": false
+      }
+    ]
+  },
+  "visual_dynamics": {
+    "active_visual_tensions": [
+      {
+        "name": "Light / Dark",
+        "poles": {
+          "light": { "presence": 0.75 },
+          "dark": { "presence": 0.85 }
+        },
+        "tension_intensity": 0.9,
+        "evidence": [
+          "the doorway kept its lamp on",
+          "She stood where the light ended"
+        ],
+        "translation_notes": [
+          "Use a lit doorway as the bright formal anchor inside a darker concrete environment."
+        ]
+      },
+      {
+        "name": "Dense / Sparse",
+        "poles": {
+          "dense": { "presence": 0.25 },
+          "sparse": { "presence": 0.85 }
+        },
+        "tension_intensity": 0.55,
+        "evidence": [
+          "a cup cooled beside two untouched chairs",
+          "few objects carry most of the emotional weight"
+        ],
+        "translation_notes": [
+          "Keep the composition sparse; let a few domestic details carry the grief."
+        ]
+      },
+      {
+        "name": "Geometric / Organic",
+        "poles": {
+          "geometric": { "presence": 0.8 },
+          "organic": { "presence": 0.35 }
+        },
+        "tension_intensity": 0.65,
+        "evidence": [
+          "doorway",
+          "room",
+          "concrete steps",
+          "key like a small animal"
+        ],
+        "translation_notes": [
+          "Set the figure inside hard architectural geometry, then make the key feel fragile and almost animate."
+        ]
+      },
+      {
+        "name": "Sharp / Diffuse",
+        "poles": {
+          "sharp": { "presence": 0.55 },
+          "diffuse": { "presence": 0.65 }
+        },
+        "tension_intensity": 0.6,
+        "evidence": [
+          "rain worried the concrete steps",
+          "where the light ended"
+        ],
+        "translation_notes": [
+          "Use crisp threshold edges against rain haze and softened shadows."
+        ]
+      },
+      {
+        "name": "Representational / Non-Representational",
+        "poles": {
+          "representational": { "presence": 0.85 },
+          "non_representational": { "presence": 0.15 }
+        },
+        "tension_intensity": 0.25,
+        "evidence": [
+          "room",
+          "doorway",
+          "cup",
+          "chairs",
+          "key"
+        ],
+        "translation_notes": [
+          "Use recognizable objects, but let lighting and composition carry symbolic ambiguity."
+        ]
+      },
+      {
+        "name": "Flat / Deep",
+        "poles": {
+          "flat": { "presence": 0.2 },
+          "deep": { "presence": 0.8 }
+        },
+        "tension_intensity": 0.7,
+        "evidence": [
+          "outside",
+          "inside",
+          "doorway"
+        ],
+        "translation_notes": [
+          "Build a clear inside/outside depth axis through the doorway."
+        ]
+      }
+    ]
+  },
+  "core_tension_pairs": {
+    "attraction_repulsion": {
+      "salience": "high",
+      "poles": {
+        "attraction": { "presence": 0.7 },
+        "repulsion": { "presence": 0.65 }
+      },
+      "tension_intensity": 0.85,
+      "evidence": [
+        "the doorway kept its lamp on",
+        "not entering, not leaving"
+      ],
+      "translation_notes": [
+        "The image should make the doorway inviting and difficult to enter."
+      ]
+    },
+    "proximity_distance": {
+      "salience": "high",
+      "poles": {
+        "proximity": { "presence": 0.7 },
+        "distance": { "presence": 0.8 }
+      },
+      "tension_intensity": 0.9,
+      "evidence": [
+        "two untouched chairs",
+        "She stood where the light ended"
+      ],
+      "translation_notes": [
+        "Place the figure close to the threshold but emotionally separated from the interior."
+      ]
+    },
+    "order_chaos": {
+      "salience": "medium",
+      "poles": {
+        "order": { "presence": 0.75 },
+        "chaos": { "presence": 0.25 }
+      },
+      "tension_intensity": 0.45,
+      "evidence": [
+        "room",
+        "doorway",
+        "concrete steps",
+        "rain worried"
+      ],
+      "translation_notes": [
+        "Use controlled architecture disturbed by rain and emotional pressure."
+      ]
+    },
+    "stillness_motion": {
+      "salience": "high",
+      "poles": {
+        "stillness": { "presence": 0.9 },
+        "motion": { "presence": 0.35 }
+      },
+      "tension_intensity": 0.7,
+      "evidence": [
+        "She stood",
+        "rain worried"
+      ],
+      "translation_notes": [
+        "Make the figure still while rain and light imply movement."
+      ]
+    },
+    "legibility_opacity": {
+      "salience": "medium",
+      "poles": {
+        "legibility": { "presence": 0.55 },
+        "opacity": { "presence": 0.7 }
+      },
+      "tension_intensity": 0.75,
+      "evidence": [
+        "The room had forgotten her name",
+        "holding the key like a small animal"
+      ],
+      "translation_notes": [
+        "Keep the scene readable, but make the exact story unresolved."
+      ]
+    },
+    "control_surrender": {
+      "salience": "medium",
+      "poles": {
+        "control": { "presence": 0.6 },
+        "surrender": { "presence": 0.55 }
+      },
+      "tension_intensity": 0.7,
+      "evidence": [
+        "holding the key",
+        "not entering, not leaving"
+      ],
+      "translation_notes": [
+        "The key should imply agency, but the posture should imply paralysis."
+      ]
+    },
+    "safety_threat": {
+      "salience": "high",
+      "poles": {
+        "safety": { "presence": 0.65 },
+        "threat": { "presence": 0.55 }
+      },
+      "tension_intensity": 0.8,
+      "evidence": [
+        "doorway kept its lamp on",
+        "the room had forgotten her name"
+      ],
+      "translation_notes": [
+        "Make the lit interior feel like sanctuary and danger at the same time."
+      ]
+    },
+    "presence_absence": {
+      "salience": "high",
+      "poles": {
+        "presence": { "presence": 0.8 },
+        "absence": { "presence": 0.9 }
+      },
+      "tension_intensity": 0.95,
+      "evidence": [
+        "two untouched chairs",
+        "The room had forgotten her name"
+      ],
+      "translation_notes": [
+        "Use empty chairs and the doorway to make absence feel active."
+      ]
+    }
+  },
+  "emotional_qualities": [
+    "tender dread",
+    "threshold grief",
+    "domestic haunting",
+    "suspended return"
+  ],
+  "poetic_density_notes": {
+    "layered_meanings": [
+      {
+        "detail": "the lit doorway",
+        "meanings": [
+          "invitation",
+          "danger",
+          "memory refusing to go dark"
+        ]
+      },
+      {
+        "detail": "the key",
+        "meanings": [
+          "agency",
+          "fragility",
+          "the burden of choosing whether to return"
+        ]
+      }
+    ],
+    "flattening_risks": [
+      "turning the scene into generic sadness",
+      "making the interior purely safe or purely threatening",
+      "overexplaining the missing person"
+    ]
+  },
+  "beats": [
+    {
+      "before": "The room is framed as having forgotten her.",
+      "after": "The doorway still keeps a light for her.",
+      "value_shift": "erasure to invitation",
+      "emotional_payload": "hope that hurts because it may not be trustworthy",
+      "evidence": "The room had forgotten her name, / but the doorway kept its lamp on."
+    },
+    {
+      "before": "She has the means to enter.",
+      "after": "She remains suspended at the threshold.",
+      "value_shift": "agency to paralysis",
+      "emotional_payload": "the pain of having a choice that cannot be safely made",
+      "evidence": "not entering, not leaving, / holding the key"
+    }
+  ],
+  "series_recommendation": {
+    "mode": "triptych",
+    "reason": "The text has at least two major Beats: the room's erasure against the doorway's invitation, then the figure's agency collapsing into paralysis. A triptych could preserve the larger emotional movement better than one compressed image.",
+    "suggested_images": [
+      {
+        "image_role": "opening image",
+        "beat_or_tension_point": "erasure to invitation",
+        "emotional_payload": "hope that hurts because it may not be trustworthy",
+        "target_visual_engine": "empty room, lit doorway, cool shadows, sparse domestic evidence"
+      },
+      {
+        "image_role": "threshold image",
+        "beat_or_tension_point": "agency to paralysis",
+        "emotional_payload": "the pain of having a choice that cannot be safely made",
+        "target_visual_engine": "still figure at the edge of light, key visible, rain haze outside"
+      },
+      {
+        "image_role": "resonance image",
+        "beat_or_tension_point": "presence and absence remain unresolved",
+        "emotional_payload": "absence becoming active and almost embodied",
+        "target_visual_engine": "untouched chairs and lit threshold without showing whether she enters"
+      }
+    ],
+    "style_progression": {
+      "proposed": true,
+      "progression_summary": "Move from restrained cinematic realism toward slightly more symbolic and dreamlike composition across the triptych.",
+      "beat_map_rationale": "The Beat Map moves from concrete domestic erasure, to threshold paralysis, to unresolved presence/absence; a subtle style progression can make the final image feel more haunted without abandoning photoreal grounding."
+    },
+    "calibration": {
+      "required": true,
+      "calibration_image_role": "threshold image",
+      "uses_three_prompt_variants": true
+    },
+    "requires_artist_approval": true
+  },
+  "transformation_constraints": {
+    "target_media_type": "image",
+    "preserve": [
+      "threshold composition",
+      "light and dark tension",
+      "empty domestic evidence",
+      "key as fragile agency"
+    ],
+    "avoid": [
+      "literal horror tropes",
+      "sentimental melodrama",
+      "showing a clear antagonist",
+      "flattening the scene into simple loneliness"
+    ]
+  }
+}

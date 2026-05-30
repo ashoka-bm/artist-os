@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/creative-brief.schema.json",
+  "title": "CreativeBriefRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "brief_id",
+    "source_id",
+    "artist_meaning",
+    "formal_observations",
+    "style_direction",
+    "visual_dynamics",
+    "core_tension_pairs",
+    "emotional_qualities",
+    "poetic_density_notes",
+    "beats",
+    "series_recommendation",
+    "transformation_constraints"
+  ],
+  "properties": {
+    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_it_matters", "must_preserve", "may_transform"],
+      "properties": {
+        "why_it_matters": { "type": "string" },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "formal_observations": { "type": "array", "items": { "type": "string" } },
+    "style_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_method",
+        "style_family",
+        "style_mode",
+        "primary_style",
+        "style_modifiers",
+        "confirmation_status",
+        "rationale",
+        "avoid",
+        "style_conflicts"
+      ],
+      "properties": {
+        "selection_method": { "type": "string", "enum": ["artist_specified", "style_interview", "agent_recommended"] },
+        "style_family": { "type": "string" },
+        "style_mode": { "type": "string" },
+        "primary_style": { "type": "string" },
+        "confirmation_status": {
+          "type": "string",
+          "enum": ["artist_specified", "confirmed", "unconfirmed"]
+        },
+        "style_modifiers": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "type": "string" }
+        },
+        "wondermint_subcategories": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rationale": { "type": "string" },
+        "avoid": { "type": "array", "items": { "type": "string" } },
+        "style_conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["conflict", "proposed_adaptation", "requires_artist_approval"],
+            "properties": {
+              "conflict": { "type": "string" },
+              "proposed_adaptation": { "type": "string" },
+              "requires_artist_approval": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "visual_dynamics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_visual_tensions"],
+      "properties": {
+        "active_visual_tensions": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/visual_tension_pair_record" }
+        },
+        "conditional_visual_tensions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/visual_tension_pair_record" }
+        }
+      }
+    },
+    "core_tension_pairs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attraction_repulsion",
+        "proximity_distance",
+        "order_chaos",
+        "stillness_motion",
+        "legibility_opacity",
+        "control_surrender",
+        "safety_threat",
+        "presence_absence"
+      ],
+      "properties": {
+        "attraction_repulsion": { "$ref": "#/$defs/tension_pair_record" },
+        "proximity_distance": { "$ref": "#/$defs/tension_pair_record" },
+        "order_chaos": { "$ref": "#/$defs/tension_pair_record" },
+        "stillness_motion": { "$ref": "#/$defs/tension_pair_record" },
+        "legibility_opacity": { "$ref": "#/$defs/tension_pair_record" },
+        "control_surrender": { "$ref": "#/$defs/tension_pair_record" },
+        "safety_threat": { "$ref": "#/$defs/tension_pair_record" },
+        "presence_absence": { "$ref": "#/$defs/tension_pair_record" }
+      }
+    },
+    "emotional_qualities": { "type": "array", "items": { "type": "string" } },
+    "poetic_density_notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layered_meanings", "flattening_risks"],
+      "properties": {
+        "layered_meanings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["detail", "meanings"],
+            "properties": {
+              "detail": { "type": "string" },
+              "meanings": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "flattening_risks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "beats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["before", "after", "value_shift", "emotional_payload", "evidence"],
+        "properties": {
+          "before": { "type": "string" },
+          "after": { "type": "string" },
+          "value_shift": { "type": "string" },
+          "emotional_payload": { "type": "string" },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "series_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "reason",
+        "suggested_images",
+        "style_progression",
+        "calibration",
+        "requires_artist_approval"
+      ],
+      "properties": {
+        "mode": { "type": "string", "enum": ["single_image", "triptych", "image_series"] },
+        "reason": { "type": "string" },
+        "suggested_images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["image_role", "beat_or_tension_point", "emotional_payload", "target_visual_engine"],
+            "properties": {
+              "image_role": { "type": "string" },
+              "beat_or_tension_point": { "type": "string" },
+              "emotional_payload": { "type": "string" },
+              "target_visual_engine": { "type": "string" }
+            }
+          }
+        },
+        "style_progression": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["proposed", "progression_summary", "beat_map_rationale"],
+          "properties": {
+            "proposed": { "type": "boolean" },
+            "progression_summary": { "type": "string" },
+            "beat_map_rationale": { "type": "string" }
+          }
+        },
+        "calibration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "calibration_image_role", "uses_three_prompt_variants"],
+          "properties": {
+            "required": { "type": "boolean" },
+            "calibration_image_role": { "type": "string" },
+            "uses_three_prompt_variants": { "type": "boolean" }
+          }
+        },
+        "requires_artist_approval": { "type": "boolean" }
+      }
+    },
+    "transformation_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_media_type", "preserve", "avoid"],
+      "properties": {
+        "target_media_type": { "type": "string", "enum": ["image", "audio", "video", "text"] },
+        "preserve": { "type": "array", "items": { "type": "string" } },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "pole_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["presence"],
+      "properties": {
+        "presence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "tension_pair_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["salience", "poles", "tension_intensity", "evidence", "translation_notes"],
+      "properties": {
+        "salience": { "type": "string", "enum": ["not_salient", "low", "medium", "high"] },
+        "poles": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 2,
+          "additionalProperties": { "$ref": "#/$defs/pole_record" }
+        },
+        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "type": "string" } },
+        "artist_note": { "type": "string" },
+        "translation_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "visual_tension_pair_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "poles", "tension_intensity", "evidence", "translation_notes"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "Light / Dark",
+            "Saturated / Muted",
+            "Warm / Cool",
+            "Harmonious / Discordant",
+            "Dense / Sparse",
+            "Geometric / Organic",
+            "Sharp / Diffuse",
+            "Linear / Painterly",
+            "Textured / Smooth",
+            "Representational / Non-Representational",
+            "Flat / Deep",
+            "Balanced / Unbalanced",
+            "Centered / Decentered",
+            "Singular / Repetitive",
+            "Monumental / Intimate"
+          ]
+        },
+        "poles": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 2,
+          "additionalProperties": { "$ref": "#/$defs/pole_record" }
+        },
+        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "type": "string" } },
+        "translation_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
