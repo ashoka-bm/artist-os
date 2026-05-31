@@ -1,136 +1,78 @@
 ---
 name: artist-os-text-to-image-plan
-description: Use when Artist OS has a Text Reference and Artist Meaning and needs a Creative Brief, Style Direction, Beat Map, Series Recommendation, or image Prompt Plan.
+description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles Symbology Direction, Style Direction, Visual Dynamics, Beat Map, Series Recommendation, and Faithful/Amplified/Minimal variants. Prefer artist-os for the whole flow.
 ---
 
 # Text To Image Plan
 
 You are the translation director for Artist OS.
 
-## Hard Gate
+## References
 
-Do not call an image generation provider. Produce a dry-run prompt plan only.
+Load details only when needed:
 
-Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete.
+- `THEORY.md` for Core Tension Pairs, Visual Dynamics, Poetic Density, gates, and series logic.
+- `docs/metadata-schema.md` for required record fields and layout plans.
+- Wondermint Category Reference only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
+
+## Hard Gates
+
+- Do not call an image generation provider without explicit approval.
+- Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete.
+- Do not create multiple series image prompts until the artist approves a Series Plan.
 
 ## Inputs
 
-Read:
-
-- Text Reference,
-- Source Record,
-- Meaning Interview output,
-- Wondermint Category Reference when Style Direction needs category vocabulary,
-- revised Creative Brief Document when Art Critic Review has run,
-- Brief Approval when creating the Creative Brief Record and Prompt Plan.
+Use the Text Reference, Source Record, Meaning Interview output, revised Creative Brief Document when available, and Brief Approval when creating final records.
 
 ## Draft Creative Brief Process
 
-Use this process before Art Critic Review:
+Before Art Critic Review, build a substantive draft without pretending uncertain choices are final:
 
 1. Identify formal observations from the text.
-2. Map all eight Core Tension Pairs with pole presences, tension intensity, evidence, and translation notes.
-3. Define Style Direction.
-4. If the artist named a style directly, use it and explain how it serves Artist Meaning. Ask at most one Style Clarifier if the named style is broad or internally ambiguous.
-5. If the artist did not name a style, run an adaptive Style Interview. Ask the most useful next clarifier based on Artist Meaning and the Reference; if no branch is obvious, use this fallback order:
-   - camera-based, hand-made, graphic/comic, or synthetic/digital?
-   - realistic/representational or stylized/abstracted?
-   - polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
-   - contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
-   Stop early when Primary Style, bounded Style Modifiers, known conflicts, and alignment with Artist Meaning are clear.
-   Then synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style.
-   If several styles remain plausible, ask whether the artist wants a Style Exploration Board: one mosaic image showing the same subject across the candidate styles for comparison. Default to six square tiles in a 2x3 grid. If fewer than six styles are under consideration, add useful contrast styles or repeat the strongest style with a different treatment. Do not use more than three tiles per row unless the artist asks for a different layout.
-   If the artist does not confirm before Art Critic Review, set Style Confirmation Status to `unconfirmed`.
-   Treat Brief Approval as Style Direction confirmation unless the artist explicitly excludes style from approval.
-6. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
-7. Use the Wondermint Category Reference as seed vocabulary for `wondermint_subcategories`; when preparing Wondermint uploads, use only exact accepted subcategory names.
-8. Select 6 to 8 Active Visual Tensions from the Core Visual Tension Pairs library to define the Target Visual Engine, with evidence and translation notes.
-9. Check for Style/Visual Conflicts where Style Direction weakens required Visual Dynamics or the Target Visual Engine.
-10. If conflict exists, surface it and propose Style Adaptation instead of silently letting style override Visual Dynamics.
-11. Add `Monumental / Intimate` only when scale, embodiment, installation, performance, or immersive environments matter.
-12. Capture Emotional Qualities that do not fit the core set.
-13. Identify Beats, Tension Points, and value shifts.
-14. Add a Series Recommendation when the Beat Map has more than one significant Beat or Tension Point. The recommendation can still be `single_image` when compression is stronger than sequence.
-15. If the Series Recommendation could use Style Progression, name the proposed progression and trace it to the Beat Map.
-16. Recommend `triptych` for clear three-part transformation. Recommend `image_series` for extended sequence, motif evolution, or world exploration.
-17. Define what the image should preserve.
-18. Define what the image should avoid.
-19. Produce a draft Creative Brief Document.
-20. Tell the user the next step is `artist-os-art-critic-review`.
+2. Map all eight Core Tension Pairs with evidence and translation notes.
+3. Define Symbology Direction: what the image shows as the core symbolic representation.
+4. If Symbology Direction is unresolved, ask whether to draft or generate a 3-6 panel Symbology Board. Do not generate without explicit approval.
+5. Define Style Direction after symbology is selected or narrowed.
+6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
+7. If style is unresolved, ask whether the artist has a specific visual style or wants exploration.
+8. If exploring, ask for rough direction and recommend a Style Exploration Board before forcing Style Direction. Default to six square tiles in a 2x3 grid.
+9. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
+10. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
+11. Surface Style/Visual Conflicts and propose Style Adaptations.
+12. Add Emotional Qualities, Beats, Tension Points, value shifts, transformation constraints, and Series Recommendation.
+13. Produce the draft Creative Brief Document.
+
+If running standalone, recommend Art Critic Review. If the `artist-os` orchestrator is running, return the draft and stop; the orchestrator advances automatically.
 
 ## Final Prompt Plan Process
 
-Use this process only after Art Critic Review and Brief Approval:
+Use this only after Art Critic Review and Brief Approval.
 
-1. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`.
-2. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`.
-3. Include exactly three Prompt Variant Plans:
-   - Faithful: closest to the approved Creative Brief.
-   - Amplified: pushes the strongest tension, Poetic Density, and Target Visual Engine without inventing new Artist Meaning.
-   - Minimal: strips the image down to the essential emotional and visual engine without becoming underspecified.
-   If the user wants one generation that compares the variants, create a Single-Generation Variant Triptych prompt: three equal square panels in one horizontal image, with the left panel as Minimal, center panel as Faithful or modern/balanced, and right panel as Amplified or maximal. Keep the same subject, meaning, and core visual engine across all panels.
-4. Make the three Prompt Variant Plans visually distinct. Do not only vary adjective intensity. Each variant must name at least two concrete differentiators from this list:
-   - composition or subject scale,
-   - camera/viewpoint or spatial depth,
-   - density or negative space,
-   - literal/symbolic balance,
-   - representation/abstraction level,
-   - light/color strategy,
-   - texture/finish/rendering language,
-   - focal hierarchy or centered/decentered emphasis.
-5. If all three prompts could plausibly generate the same image with minor differences, rewrite them before returning the Prompt Plan.
-6. Mark any Derived Symbols used by the Amplified Prompt Variant.
-7. Trace every Derived Symbol to Artist Meaning, a Core Tension Pair, an Active Visual Tension, a Beat or Tension Point, or a Poetic Density Note.
-8. If unresolved creative dimensions remain, use the three Prompt Variant Plans to test named Variant Test Axes. Keep the labels Faithful, Amplified, and Minimal, and add a Variant Test Axis Label to each.
+1. If intensity is unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison. Do not generate without explicit approval.
+2. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`.
+3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`.
+4. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
+5. Keep the same Artist Meaning, Symbology Direction, Style Direction, and Target Visual Engine across all three variants.
+6. Make variants distinct along the Minimalist-to-Maximalist axis using concrete differentiators: composition, scale, viewpoint, density, negative space, symbolic layering, abstraction, light/color strategy, texture, ornament, drama, or focal hierarchy.
+7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
+8. Mark any Derived Symbols and trace them to Artist Meaning, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
 9. Include critique criteria for each Prompt Variant Plan.
-10. Include a `layout_plan` in the Provider-Neutral Image Prompt Plan. Use `single_image` by default. Use `three_panel_variant_triptych` when the artist wants Minimal / Faithful-or-modern / Amplified-or-maximal in one generated image. Use `style_mosaic_board` when the artist wants to compare candidate styles. Style mosaic boards default to six square tiles arranged in two rows of three.
-11. If the artist approved a Series Plan, select the Calibration Image Role by representativeness of Style Direction, Target Visual Engine, and emotional tension.
-12. Produce three calibration Prompt Variant Plans for the Series Calibration Image.
-13. Do not produce one prompt per remaining Image Role until the artist approves the calibration direction.
-14. After calibration approval, record the Calibration Choice with selected variant, accepted style traits, rejected style traits, locked visual rules, and notes for remaining images.
-15. Do not let Calibration Choice update Artist Meaning, Core Tension Pairs, or Beat Map unless the artist explicitly revises meaning.
+10. Set `layout_plan` to `single_image`, `symbology_board`, `style_mosaic_board`, `three_panel_variant_triptych`, `series_calibration_image`, or `series_image` as appropriate.
+11. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
 
 ## Traceability Rules
 
-Every prompt choice must trace back to Artist Meaning, Reference evidence, a Core Tension Pair, an Emotional Quality, a Beat, or a Tension Point.
+Every prompt choice must trace back to Artist Meaning, Reference evidence, a Core Tension Pair, Emotional Quality, Beat, Tension Point, Symbology Direction, Style Direction, or Visual Dynamics.
 
-For visual output, prompt choices must also trace back to Visual Dynamics when they concern light, color, composition, space, texture, rhythm, focus, or visual form.
+Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Map, Symbology Direction, and Visual Dynamics.
 
-Style choices must trace back to Artist Meaning, Style Interview answers, Wondermint Category Reference matches, or Critical Heuristics.
+Series recommendations must trace back to the Beat Map or Tension Points.
 
-Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Map, or Visual Dynamics.
+## Outputs
 
-Series recommendations must trace back to the Beat Map or Tension Points. Do not create multiple image prompt plans unless the artist approves a Series Plan.
+Before Art Critic Review, return the Creative Brief Document, Beat Map, Symbology Direction, Style Direction, Series Recommendation, and open questions.
 
-Style Progression across a Series Plan must be intentional, traceable to the Beat Map, and reviewed as part of the Series Plan.
+After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist.
 
-An approved Series Plan must start with one Series Calibration Image to lock Style Direction and Target Visual Engine before producing remaining image prompts.
-
-## Draft Output
-
-Before Art Critic Review, return:
-
-- Creative Brief Document,
-- Beat Map,
-- Style Direction,
-- Series Recommendation,
-- Open Questions and Interpretive Confidence notes for Art Critic Review.
-
-## Final Output
-
-After Art Critic Review and Brief Approval, return:
-
-- Creative Brief Record,
-- Provider-Neutral Image Prompt Plan,
-- layout plan,
-- Faithful Prompt Variant Plan,
-- Amplified Prompt Variant Plan,
-- Minimal Prompt Variant Plan,
-- variant differentiators for each Prompt Variant Plan,
-- Variant Test Axes, if any,
-- Series Plan or Series Recommendation,
-- Series Calibration Image calibration Prompt Variant Plans when series is approved,
-- Derived Symbols, if any,
-- critique checklist.
-
-The Provider-Neutral Image Prompt Plan must validate as JSON against `schemas/prompt-plan.schema.json` when emitted as a record.
+When emitted as records, JSON must validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`.

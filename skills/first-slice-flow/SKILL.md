@@ -1,180 +1,111 @@
 ---
 name: artist-os
-description: Use when starting the full Artist OS dry-run First Slice from a Text Reference through Source Record, Meaning Interview, Creative Brief, review, approval, and image Prompt Plan.
+description: Use when an artist wants to turn writing — a poem, story, song lyric, journal entry, monologue, or other text — into visual art prompts, even if they do not mention Artist OS. Prefer this orchestrator for the whole text-to-image flow; use role skills only for isolated or delegated steps.
 ---
 
 # First Slice Flow
 
-You are the Artist OS workflow conductor.
+You are the Artist OS workflow conductor. Run the dry-run First Slice without asking the user to invoke role skills manually.
 
-## Goal
+## References
 
-Run the full dry-run First Slice without requiring the user to invoke each role skill manually.
+Load detailed definitions only when needed:
+
+- `THEORY.md` for product theory and gate definitions.
+- `docs/metadata-schema.md` for record fields and layout plans.
+- `AGENTS.md` for repository invariants.
+
+Use sibling skills as phase references when needed: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/art-critic-review`, and `skills/critique-asset`.
 
 ## Hard Gates
 
-Do not call a generation provider.
+- Do not call a generation provider without explicit approval.
+- Do not create the Creative Brief Record or Provider-Neutral Image Prompt Plan until Art Critic Review has revised the Creative Brief Document and the artist has approved it.
+- Do not create multiple series image prompts until the artist approves a Series Plan.
 
-Do not create the Creative Brief Record or Provider-Neutral Image Prompt Plan until:
+## Autopilot
 
-- Art Critic Review has revised the Creative Brief Document, and
-- the artist has approved the revised Creative Brief Document.
+Move forward automatically unless the next step needs artist input. Ask only for missing reference, Artist Meaning, Symbology choice, Style choice, intensity choice, Brief Approval, Series Plan approval, layout choice, or calibration approval.
 
-Do not create multiple series image prompts until the artist approves a Series Plan.
+Default visual gates:
 
-## Autopilot Rule
+1. **Symbology Gate**: decide what the image shows. If unresolved, ask whether to draft or generate a 3-6 panel Symbology Board.
+2. **Style Gate**: decide the artistic language for the selected Symbology Direction. If unresolved, ask whether the artist has a specific visual style or wants a Style Exploration Board.
+3. **Minimalist-to-Maximalist Gate**: decide visual intensity after symbology and style are selected. If unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison.
 
-Move to the next phase automatically when no new artist input is required. Do not end a phase by telling the user to invoke another skill.
+Each generated board or triptych requires explicit provider-backed generation approval. Drafted boards are allowed without provider calls.
 
-Ask the user only when a real decision, missing reference, meaning answer, style clarification, style board choice, Brief Approval, Series Plan approval, layout choice, or calibration approval is needed.
+## Phase Order
 
-When several style directions remain plausible, ask whether the artist wants a Style Exploration Board: one mosaic image that compares the same subject across candidate styles. This is optional and should not replace Brief Approval. Default the board to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout.
-
-When asking questions, ask the smallest useful batch. Prefer one question. Use up to three only when the answers unblock separate required fields.
-
-## Internal Role Order
-
-Apply these roles in sequence inside the same conversation:
-
-1. Intake agent: create the Source Record.
-2. Meaning interviewer: capture Artist Meaning and must-preserve details.
-3. Translation director: draft the Creative Brief Document, Style Direction, Visual Dynamics, Beat Map, and Series Recommendation.
-4. Art critic reviewer: strengthen the Creative Brief Document before approval.
-5. Approval steward: ask for Brief Approval or targeted revisions.
-6. Translation director: after approval, create the Creative Brief Record and Provider-Neutral Image Prompt Plan.
-7. Critic: critique the Prompt Plan against the approved Creative Brief.
-
-Use the sibling role skills as reference when needed:
-
-- `../ingest-reference/SKILL.md`
-- `../meaning-interview/SKILL.md`
-- `../text-to-image-plan/SKILL.md`
-- `../art-critic-review/SKILL.md`
-- `../critique-asset/SKILL.md`
-
-Do not ask the user to invoke those skills.
+1. Create a compact Source Record.
+2. Capture Artist Meaning.
+3. Draft the Creative Brief Document with Symbology Direction, Style Direction, Visual Dynamics, Beat Map, Series Recommendation, transformation constraints, and open questions.
+4. Run Art Critic Review.
+5. Ask for Brief Approval or targeted revisions.
+6. After approval, run the intensity gate if needed.
+7. Create the Creative Brief Record and Provider-Neutral Image Prompt Plan.
+8. Critique the Prompt Plan against the approved Creative Brief.
 
 ## Start Conditions
 
-If the user provides a Text Reference, begin immediately.
-
 If the Text Reference is missing, ask for it.
 
-If the artist's meaning is missing, ask:
+If Artist Meaning is missing, ask:
 
 > What does this Reference mean to you, and what must survive when it changes form?
 
-If title, rights notes, or source context are missing, infer safe placeholders and mark them as assumptions unless the missing information could affect rights, privacy, or consent.
+Infer safe placeholders for title, rights notes, and source context unless rights, privacy, or consent could be affected.
 
-## Phase Behavior
+## Phase Rules
 
-### 1. Source Record
+### Source Record
 
-Create a compact Source Record:
+Return source id, title, media type, source reference, user context, rights notes, and created date. Then continue to Artist Meaning if incomplete.
 
-- source id,
-- title,
-- media type,
-- source reference,
-- user context,
-- rights notes,
-- created date.
+### Meaning Interview
 
-Then continue automatically to the Meaning Interview if Artist Meaning is incomplete.
+Capture what must survive, allowed transformations, forbidden transformations, intended use, and personal symbols only when needed. Then continue to the draft brief.
 
-### 2. Meaning Interview
+### Draft Creative Brief
 
-Capture Artist Meaning before analysis hardens.
+Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep gates in this order: Symbology, Style, then intensity later.
 
-Ask adaptive follow-ups only when needed to identify:
+If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation.
 
-- must-preserve details,
-- allowed transformations,
-- forbidden transformations,
-- intended audience or use,
-- personal symbols that should not be overwritten.
+If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style or wants exploration. Recommend a Style Exploration Board before forcing Style Direction.
 
-Then continue automatically to the draft Creative Brief.
+Then continue to Art Critic Review.
 
-### 3. Draft Creative Brief Document
+### Art Critic Review
 
-Create an artist-readable draft Creative Brief Document with:
+Use `skills/art-critic-review/SKILL.md`. Preserve Artist Meaning, deepen Poetic Density, strengthen Symbology Direction, Style Direction, and Visual Dynamics, and resolve avoidable ambiguity.
 
-- Artist Meaning,
-- formal observations,
-- Core Tension Pairs,
-- Emotional Qualities,
-- Visual Dynamics,
-- Style Direction,
-- Beat Map,
-- Series Recommendation,
-- transformation constraints,
-- open questions or interpretive confidence notes for review.
+Present the revised Creative Brief Document and ask for Brief Approval.
 
-If Style Direction is unclear, run the short Style Interview inside this phase. Do not require a separate invocation.
+### Brief Approval
 
-Then continue automatically to Art Critic Review.
+If the artist requests changes, revise the Creative Brief Document and re-run Art Critic Review only for changed areas that affect meaning, symbology, style, Visual Dynamics, Beat Map, or transformation constraints.
 
-### 4. Art Critic Review
+If approved, continue. If intensity is unresolved, ask whether to draft or generate the Minimalist-to-Maximalist comparison before final prompt locking.
 
-Review and revise the Creative Brief Document as the art critic reviewer:
+### Final Records And Prompt Plan
 
-- preserve Artist Meaning,
-- deepen Poetic Density,
-- resolve avoidable ambiguity,
-- strengthen Style Direction and Visual Dynamics,
-- preserve contradiction and tension,
-- fill gaps using best practice when artist input is absent.
+Create records only after the applicable gates are resolved or deliberately left unconfirmed:
 
-Then present the revised Creative Brief Document and ask for Brief Approval.
+- Creative Brief Record matching `schemas/creative-brief.schema.json`
+- Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`
+- Faithful, Amplified, and Minimal Prompt Variant Plans
 
-### 5. Brief Approval
-
-Ask the artist to approve, revise, or give Rough Brief Approval.
-
-If the artist requests changes, revise the Creative Brief Document and repeat Art Critic Review only for changed areas that affect meaning, style, Visual Dynamics, Beat Map, or transformation constraints.
-
-If approved, continue automatically to final records.
-
-### 6. Creative Brief Record And Prompt Plan
-
-Create:
-
-- Creative Brief Record matching `schemas/creative-brief.schema.json`,
-- Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`,
-- Faithful, Amplified, and Minimal Prompt Variant Plans.
-
-Each Prompt Variant Plan must include concrete Variant Differentiators so the variants are meaningfully different visual options.
-
-Ask whether the artist wants the three prompt variants as separate prompts or as one Single-Generation Variant Triptych. The triptych layout is one horizontal image made of three equal square panels:
-
-- left: Minimal / minimalist,
-- center: Faithful / modern / balanced,
-- right: Amplified / maximalist.
-
-Use this when the artist wants to compare the three directions with one generation call.
+Base the variants on approved Symbology Direction and Style Direction. Variants test intensity from minimalist to maximalist, not new symbolic representations.
 
 If the Series Recommendation is `triptych` or `image_series`, explain the recommendation and ask for Series Plan approval before creating multiple image prompt plans.
 
-### 7. Prompt Plan Critique
+### Prompt Plan Critique
 
-Critique the Prompt Plan against:
-
-- Artist Meaning,
-- approved Creative Brief,
-- Core Tension Pairs,
-- Active Visual Tensions,
-- Beat Map,
-- Poetic Density,
-- Style Direction,
-- transformation constraints.
-
-Return accept/revise guidance and the strongest next action.
+Critique against Artist Meaning, approved Creative Brief, Core Tension Pairs, Active Visual Tensions, Beat Map, Poetic Density, Symbology Direction, Style Direction, and transformation constraints.
 
 ## Output Style
 
-Keep the user oriented with phase labels, but do not over-explain process mechanics.
+Use concise phase labels. Use full JSON only when the user asks for records or when final records are produced after approval.
 
-Use concise summaries for intermediate artifacts. Use full JSON records only when the user asks for the record or when final records are being produced after approval.
-
-Never end with "next, invoke..." or "now call...". Either continue automatically or ask the specific approval/question needed to proceed.
+Never end with "next, invoke..." or "now call...". Continue automatically or ask the specific question needed to proceed.

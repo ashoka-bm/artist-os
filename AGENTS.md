@@ -44,12 +44,16 @@ Provider-Neutral Image Prompt Plan records should validate against `schemas/prom
 - Keep Visual Dynamics separate from Emotional Structure.
 - Keep Style Direction separate from Emotional Structure and Visual Dynamics.
 - Treat Style Direction as the last priority after Artist Meaning, Emotional Structure, Beat Map, and Visual Dynamics.
-- Use a short Style Interview when the artist has not named a style directly.
+- When the artist has not named a specific style directly, ask whether they have a specific vision or want to explore what art style to use.
+- Run visual choice gates in this default order: Symbology Gate, Style Gate, then Minimalist-to-Maximalist Gate.
+- At the Symbology Gate, ask whether to draft or generate a 3-6 image grid of symbolic representations before locking what the image shows.
+- Recommend a six-tile Style Exploration Board as the first option when Style Direction is unresolved; do not call a provider-backed generator without explicit approval.
 - Surface Style/Visual Conflicts and record proposed Style Adaptations instead of silently letting style override Visual Dynamics.
 - Use the Wondermint Category Reference only as seed vocabulary unless preparing a Wondermint upload, where exact accepted subcategory names are required.
 - Recommend a Series Plan when multiple significant Beats would be flattened into one image, but do not create multiple image prompt plans without artist approval.
 - For an approved Series Plan, produce three calibration Prompt Variant Plans for one Series Calibration Image first and wait for artist approval before producing the remaining series.
 - Use Prompt Variant Plans to test named unresolved creative axes when that is more useful than simple intensity variation.
+- Before locking final Prompt Variant Plans, use the Minimalist-to-Maximalist Gate to compare visual intensity once symbology and style are selected.
 
 ## First Slice
 
@@ -59,13 +63,15 @@ The First Slice is Text Reference to Image Prompt Plan:
 2. Run a Meaning Interview.
 3. Produce a Source Record.
 4. Produce a draft Creative Brief Document.
-5. Define Style Direction.
-6. Add a Series Recommendation when the Beat Map calls for it.
-7. Run Art Critic Review.
-8. Get Brief Approval.
-9. Produce a Creative Brief Record.
-10. Produce a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
-11. Critique the Prompt Plan against the approved Creative Brief.
+5. Define Symbology Direction with a visual Symbology Board when unresolved.
+6. Define Style Direction.
+7. Add a Series Recommendation when the Beat Map calls for it.
+8. Run Art Critic Review.
+9. Get Brief Approval.
+10. Use the Minimalist-to-Maximalist Gate when intensity is unresolved.
+11. Produce a Creative Brief Record.
+12. Produce a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
+13. Critique the Prompt Plan against the approved Creative Brief.
 
 ## Provider Boundary
 

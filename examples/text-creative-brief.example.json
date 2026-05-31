@@ -22,6 +22,22 @@
     "The final image turns the key into a living, vulnerable metaphor.",
     "The contrast between inside and outside organizes the passage."
   ],
+  "symbology_direction": {
+    "selection_method": "agent_recommended",
+    "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
+    "confirmation_status": "unconfirmed",
+    "alternatives_considered": [
+      "the key alone as a ritual object",
+      "an empty room with no figure",
+      "a rain-soaked exterior looking toward the door"
+    ],
+    "rationale": "The threshold scene preserves the text's central pressure between return and refusal while letting the key remain a concrete symbol of fragile agency.",
+    "avoid": [
+      "turning the key into a magical artifact",
+      "literalizing the absent person",
+      "resolving whether the figure enters"
+    ]
+  },
   "style_direction": {
     "selection_method": "style_interview",
     "style_family": "camera-based cinematic image",

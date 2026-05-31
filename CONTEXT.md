@@ -113,8 +113,8 @@ An intentional change in Style Direction across images in a Series Plan, such as
 _Avoid_: Inconsistent series style by accident
 
 **Style Interview**:
-A short narrowing interview that helps the artist choose Style Direction without needing to know style taxonomy.
-_Avoid_: Long category survey
+A short narrowing interview that starts by asking whether the artist has a specific visual vision or wants to explore what art style to use. It helps the artist choose Style Direction without needing to know style taxonomy.
+_Avoid_: Long category survey or fixed menu of styles
 
 **Style Clarifier**:
 One targeted question used when the artist names a style that is broad or internally ambiguous.
@@ -145,8 +145,28 @@ The agent-synthesized Style Direction proposed after a Style Interview for artis
 _Avoid_: Raw style answers without synthesis
 
 **Style Exploration Board**:
-One generated mosaic image that compares several candidate Style Directions using the same subject, Artist Meaning, and Target Visual Engine. Defaults to six square tiles in a 2x3 grid.
-_Avoid_: Treating style samples as separate final artworks
+One generated or drafted mosaic image that compares several candidate Style Directions using the same subject, Artist Meaning, and Target Visual Engine. Defaults to six square tiles in a 2x3 grid. It is the first recommended option when Style Direction is unresolved.
+_Avoid_: Treating style samples as separate final artworks or calling a provider without explicit approval
+
+**Symbology Direction**:
+What the image shows as the core symbolic representation of Artist Meaning, such as a figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction.
+_Avoid_: Choosing art style before deciding what the image represents
+
+**Symbology Gate**:
+The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented.
+_Avoid_: Hiding symbolic representation inside final prompt variants
+
+**Symbology Board**:
+A drafted or generated grid of three to six image panels comparing different symbolic representations for the same Artist Meaning and Creative Brief.
+_Avoid_: Provider-backed generation without explicit approval
+
+**Style Gate**:
+The second visual choice gate, where the artist chooses the artistic language for the selected Symbology Direction.
+_Avoid_: Style overriding symbolic meaning
+
+**Minimalist-to-Maximalist Gate**:
+The third visual choice gate, where the artist compares Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+_Avoid_: Reopening symbology or style unless the artist asks
 
 **Style Confirmation Status**:
 Whether Style Direction is artist specified, confirmed, or unconfirmed before Brief Approval.
@@ -261,11 +281,11 @@ A concrete visual lever that makes one Prompt Variant Plan visually distinct fro
 _Avoid_: Only changing adjectives or intensity words
 
 **Single-Generation Variant Triptych**:
-One horizontal image made of three equal square panels that compares the Minimal/minimalist, Faithful/modern/balanced, and Amplified/maximalist prompt directions in a single generation.
+One horizontal image made of three equal square panels that compares Minimal/minimalist, Faithful/Balanced, and Amplified/Maximal intensity directions in a single generation after Symbology Direction and Style Direction are selected.
 _Avoid_: Treating the comparison triptych as a Series Plan
 
 **Layout Plan**:
-The Provider-Neutral Prompt Plan field that records whether the prompt is a single image, a three-panel variant triptych, a style mosaic board, a series calibration image, or a series image.
+The Provider-Neutral Prompt Plan field that records whether the prompt is a single image, a three-panel variant triptych, a symbology board, a style mosaic board, a series calibration image, or a series image.
 _Avoid_: Hiding generation layout inside prompt prose only
 
 **Image Role**:
@@ -384,18 +404,20 @@ _Avoid_: Generated Work, Source Record
 - **Art Critic Review** applies **Critical Heuristics** in this order: preserve **Artist Meaning**, stay anchored to **Reference** evidence, deepen salient **Core Tension Pairs**, strengthen **Active Visual Tensions**, increase **Poetic Density**, use medium-specific translation principles, then apply art-critical rules such as avoiding literalism, preserving contradiction, making form carry meaning, and preferring layered specificity over generic mood.
 - A **Creative Brief** contains **Artist Meaning**, **Formal Analysis**, **Style Direction**, **Visual Dynamics**, **Emotional Structure**, a **Beat Map**, **Series Recommendation**, and a **Transformation Plan**.
 - **Style Direction** defines the artistic language of the generated work and must serve **Artist Meaning**.
-- **Style Direction** is chosen after the first pass of **Artist Meaning**, **Emotional Structure**, and **Beat Map**, and before **Art Critic Review**.
+- **Style Direction** is chosen after the first pass of **Artist Meaning**, **Emotional Structure**, **Beat Map**, and **Symbology Direction**, and before **Art Critic Review**.
 - **Style Direction** can be hybrid, but it must have one **Primary Style** and bounded **Style Modifiers**.
 - **Style Priority** makes **Style Direction** the last priority after **Artist Meaning**, **Emotional Structure**, **Beat Map**, and **Visual Dynamics**.
 - A **Style/Visual Conflict** must be surfaced to the artist instead of silently letting style override **Visual Dynamics**.
 - A **Style/Visual Conflict** can produce **Style Adaptation**, where the chosen style is modified to preserve the **Target Visual Engine**.
 - **Style Conflict Fields** preserve **Style/Visual Conflicts** and proposed **Style Adaptations** in the **Creative Brief Record**.
 - **Art Critic Review** may propose a default **Style Adaptation** and only ask for explicit approval when it materially changes the named style.
-- **Style Interview** uses a **Style Decision Tree** when the artist has not named a specific style.
+- **Style Interview** first asks whether the artist has a specific visual vision or wants to explore what art style to use when the artist has not named a specific style.
+- **Symbology Gate** comes before **Style Gate** by default because symbolic representation is closer to **Artist Meaning** than art style.
+- **Symbology Board** compares three to six visual representations and asks for artist selection before style is locked.
 - **Style Interview** is adaptive, with **Style Interview Fallback Order** used when the Reference and **Artist Meaning** do not already narrow the next question.
 - **Style Interview** stops early when **Style Interview Stop Condition** is met.
 - **Style Interview** produces a **Style Recommendation** for artist confirmation.
-- When several styles remain plausible, offer a **Style Exploration Board** so the artist can compare them in one mosaic image.
+- When **Style Direction** is unresolved, recommend a **Style Exploration Board** as the first option so the artist can compare candidate styles in one mosaic image.
 - **Style Recommendation** can proceed into **Art Critic Review** unconfirmed if **Style Confirmation Status** records that state.
 - **Brief Approval** is the hard approval gate for final **Style Direction** in the First Slice.
 - **Brief Approval** confirms **Style Direction** unless the artist explicitly excludes style from approval.
@@ -429,8 +451,9 @@ _Avoid_: Generated Work, Source Record
 - **Calibration Choice** updates the **Creative Brief Record** or **Series Plan** with accepted style traits, rejected style traits, locked visual rules, and notes for remaining images.
 - **Calibration Choice** can update visual language, **Style Direction**, **Visual Dynamics** translation notes, locked visual rules, and series continuity rules.
 - **Calibration Choice** cannot update **Artist Meaning**, **Core Tension Pairs**, or **Beat Map** unless the artist explicitly says the calibration revealed a better meaning.
+- A **Symbology Board** gives the artist human input before style and prompt locking by comparing three to six symbolic or compositional branches with visual representations.
 - A **Prompt Variant Plan** explores one approved image direction; a **Series Plan** creates multiple related images with distinct **Image Roles**.
-- In the single-image First Slice, three **Prompt Variant Plans** may test **Variant Test Axes** when style or interpretation remains unresolved.
+- In the single-image First Slice, three **Prompt Variant Plans** should preserve the approved **Symbology Direction** and **Style Direction**, then vary minimalist-to-maximalist intensity.
 - **Prompt Variant Plan** labels stay Faithful, Amplified, and Minimal even when using **Variant Test Axis Labels**.
 - A **Series Plan** may include **Style Progression** when the Reference warrants a changing visual language across Beats.
 - The First Slice may include **Style Progression** inside **Series Recommendation**, but it becomes executable only after **Series Plan** approval.
@@ -674,7 +697,7 @@ _Avoid_: Generated Work, Source Record
 - **Critical Heuristics** are the explicit best-practice rules used by **Art Critic Review** when artist feedback leaves gaps.
 - **Visual Dynamics** is a second interpretive layer beside **Emotional Structure**. The First Slice uses a library of 14 **Core Visual Tension Pairs** but records only **Active Visual Tensions**.
 - **Style Direction** is a separate layer from **Emotional Structure** and **Visual Dynamics**.
-- **Style Direction** is selected after the first meaning/emotional/beat pass and before **Art Critic Review**.
+- **Style Direction** is selected after the first meaning/emotional/beat/symbology pass and before **Art Critic Review**.
 - Hybrid style is allowed only as one **Primary Style** plus bounded **Style Modifiers**.
 - **Style Direction** is the last priority. It must not override **Artist Meaning**, **Emotional Structure**, **Beat Map**, or **Visual Dynamics**.
 - **Style/Visual Conflicts** should be shown to the artist and can become **Style Adaptations**.
@@ -705,9 +728,10 @@ _Avoid_: Generated Work, Source Record
 - Add minimal **Series Calibration Fields** to the Creative Brief Record now; defer full **Calibration Choice** schema until image review exists.
 - Add compact **Style Conflict Fields** to the Creative Brief Record now.
 - Three single-image **Prompt Variant Plans** may test unresolved **Variant Test Axes** instead of only varying intensity.
+- Before locking those three Prompt Variant Plans, use the **Minimalist-to-Maximalist Gate** when intensity, density, or complexity could materially change the image.
 - Keep **Prompt Variant Plan** labels stable. Use **Variant Test Axis Labels** to explain what each variant tests.
 - Each **Prompt Variant Plan** must name concrete **Variant Differentiators** so the three prompts produce meaningfully different visual options.
-- Use a **Single-Generation Variant Triptych** when the artist wants Minimal, Faithful/modern, and Amplified/maximal directions compared in one generated image.
+- Use a **Single-Generation Variant Triptych** when the artist wants Minimal, Faithful/Balanced, and Amplified/Maximal intensity directions compared in one generated image.
 - Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
 - "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.

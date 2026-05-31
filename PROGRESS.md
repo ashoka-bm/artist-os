@@ -58,7 +58,7 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Added the Wondermint Category Reference as seed vocabulary for style/category mapping, with exact category names required for Wondermint uploads.
 - Added Series Recommendation for multi-Beat References and clarified that Series Plans require artist approval before multiple image prompt plans are created.
 - Updated `schemas/creative-brief.schema.json` and `examples/text-creative-brief.example.json` with `style_direction` and `series_recommendation`.
-- Resolved Style Direction timing: choose it after the first Artist Meaning, Emotional Structure, and Beat Map pass, before Art Critic Review.
+- Resolved Style Direction timing: choose it after the first Artist Meaning, Emotional Structure, Beat Map, and Symbology Direction pass, before Art Critic Review.
 - Resolved direct style handling: artist-specified styles skip the full Style Interview, with at most one Style Clarifier when broad or ambiguous.
 - Resolved hybrid style handling: use one Primary Style plus bounded Style Modifiers instead of equal-weight style pileups.
 - Resolved Style Priority: Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Map, and Visual Dynamics.
@@ -85,6 +85,9 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Added `artist-os` as the orchestration skill so the normal First Slice can move through role phases automatically instead of requiring the user to invoke each skill manually.
 - Added Style Exploration Board and Single-Generation Variant Triptych concepts so artists can compare candidate styles or Minimal/Faithful/Amplified directions in one generated image.
 - Set the Style Exploration Board default layout to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks otherwise.
+- Hardened Style Exploration as the default unresolved-style path: ask whether the artist has a specific visual vision or wants exploration, ask for a rough direction instead of presenting a fixed menu, then recommend a six-tile Style Exploration Board before locking Style Direction.
+- Added Symbology Board as the first visual human-input gate: compare three to six visual branches for symbolic or compositional expression before style is locked.
+- Refined the visual gates into the default order Symbology Gate, Style Gate, and Minimalist-to-Maximalist Gate. Symbology now asks whether to draft or generate a 3-6 image grid before style is locked.
 
 ## Working Assumptions
 
@@ -98,7 +101,7 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 ## Next Steps
 
 1. Start a new Codex thread or reload Codex so skill discovery can pick up the corrected `artist-os-*` skill names.
-2. Re-test the First Slice through `artist-os` and confirm it advances automatically, offers style boards when style is unresolved, and can pack Minimal/Faithful/Amplified into one triptych prompt.
+2. Re-test the First Slice through `artist-os` and confirm it advances automatically through Symbology, Style, and Minimalist-to-Maximalist visual gates, with explicit approval before any provider-backed grid generation.
 3. Consider a later `series-plan.schema.json` or `calibration-choice.schema.json` when image review/provider-backed generation exists.
 4. Add schema validation tooling or tests once the workflow settles.
 5. Only after the manual workflow feels right, add host adapters, provider profiles, and API-key-backed generation.

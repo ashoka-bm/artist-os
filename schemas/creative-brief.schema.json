@@ -9,6 +9,7 @@
     "source_id",
     "artist_meaning",
     "formal_observations",
+    "symbology_direction",
     "style_direction",
     "visual_dynamics",
     "core_tension_pairs",
@@ -32,6 +33,32 @@
       }
     },
     "formal_observations": { "type": "array", "items": { "type": "string" } },
+    "symbology_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_method",
+        "primary_symbolic_representation",
+        "confirmation_status",
+        "alternatives_considered",
+        "rationale",
+        "avoid"
+      ],
+      "properties": {
+        "selection_method": { "type": "string", "enum": ["artist_specified", "symbology_board", "agent_recommended"] },
+        "primary_symbolic_representation": { "type": "string" },
+        "confirmation_status": {
+          "type": "string",
+          "enum": ["artist_specified", "confirmed", "unconfirmed"]
+        },
+        "alternatives_considered": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "rationale": { "type": "string" },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
     "style_direction": {
       "type": "object",
       "additionalProperties": false,

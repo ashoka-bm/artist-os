@@ -12,6 +12,7 @@
     "plan_mode",
     "provider_neutral",
     "layout_plan",
+    "symbology_direction_summary",
     "style_direction_summary",
     "target_visual_engine_summary",
     "prompt_variants",
@@ -27,6 +28,7 @@
     "plan_mode": { "type": "string", "enum": ["single_image", "series_calibration", "series_image"] },
     "provider_neutral": { "type": "boolean", "const": true },
     "layout_plan": { "$ref": "#/$defs/layout_plan" },
+    "symbology_direction_summary": { "$ref": "#/$defs/symbology_direction_summary" },
     "style_direction_summary": { "$ref": "#/$defs/style_direction_summary" },
     "target_visual_engine_summary": { "type": "string" },
     "prompt_variants": {
@@ -74,6 +76,7 @@
             "single_image",
             "three_panel_variant_triptych",
             "style_mosaic_board",
+            "symbology_board",
             "series_calibration_image",
             "series_image"
           ]
@@ -83,7 +86,19 @@
         "instructions": {
           "type": "string",
           "minLength": 1,
-          "description": "For style_mosaic_board, default to six square tiles in a 2x3 grid with no more than three tiles per row unless the artist asks otherwise."
+          "description": "For symbology_board, use three to six panels comparing symbolic or compositional representations. For style_mosaic_board, default to six square tiles in a 2x3 grid with no more than three tiles per row unless the artist asks otherwise. For three_panel_variant_triptych, compare Minimal, Faithful/Balanced, and Amplified/Maximal intensity."
+        }
+      }
+    },
+    "symbology_direction_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_symbolic_representation", "avoid"],
+      "properties": {
+        "primary_symbolic_representation": { "type": "string" },
+        "avoid": {
+          "type": "array",
+          "items": { "type": "string" }
         }
       }
     },

@@ -125,7 +125,7 @@ Text Reference
   -> Provider-Neutral Image Prompt Plan
 ```
 
-This milestone does not call paid providers. It produces a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans. Style Direction is subordinate to meaning and Visual Dynamics, and Series Recommendation can propose single image, triptych, or image series without executing a series until the artist approves it.
+This milestone does not call paid providers. It produces a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans. The default visual gates are Symbology, Style, then Minimalist-to-Maximalist intensity. When symbology is unresolved, ask whether to draft or generate a 3-6 image Symbology Board. When style is unresolved, recommend a six-tile Style Exploration Board. When intensity is unresolved, recommend a three-panel Minimal/Faithful/Amplified comparison. Series Recommendation can propose single image, triptych, or image series without executing a series until the artist approves it.
 
 ## Open Questions
 

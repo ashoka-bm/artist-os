@@ -137,6 +137,8 @@ Use Monumental / Intimate only when scale, embodiment, installation, performance
 
 Style Direction defines the artistic language used to express the Creative Brief. It is separate from Emotional Structure and Visual Dynamics.
 
+Before choosing Style Direction by default, choose Symbology Direction: what the image shows as the core symbolic representation of Artist Meaning. Symbology is closer to meaning than style, so unresolved symbology should be explored visually before style is locked. Use a Symbology Board: three to six drafted or generated image panels comparing symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Ask whether the artist wants the board drafted for review or generated as one comparison image. Do not call a provider-backed generator until the artist explicitly approves that generation call.
+
 Style Direction should answer:
 
 - should this feel photographic, illustrated, painterly, graphic, cinematic, comic, abstract, or material?
@@ -148,7 +150,9 @@ Style Direction may be hybrid, but it must have one Primary Style and bounded St
 
 Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Map, or Visual Dynamics. When a chosen style conflicts with the Target Visual Engine, surface the conflict and adapt the style instead of silently weakening the brief.
 
-Choose Style Direction after the first pass of Artist Meaning, Emotional Structure, and Beat Map, and before Art Critic Review. If the artist names a style directly, use it and record the reason. Do not run the full Style Interview unless no style was named. Ask at most one Style Clarifier if the named style is broad or internally ambiguous.
+Choose Style Direction after the first pass of Artist Meaning, Emotional Structure, Beat Map, and Symbology Direction, and before Art Critic Review. If the artist names a specific style directly, use it and record the reason. Do not run the full Style Interview unless no style was named. Ask at most one Style Clarifier if the named style is broad or internally ambiguous.
+
+If the artist has not named a specific style, the first style gate is not a menu of styles. Ask whether they already have a specific visual vision or want to explore what art style to use. If they want exploration, ask for a rough direction in their own words, then use that direction to build candidate styles.
 
 The Style Interview should be adaptive. If Artist Meaning or the Reference already points toward a style branch, ask the most useful next clarifier. When no branch is obvious, use this fallback order:
 
@@ -157,11 +161,11 @@ The Style Interview should be adaptive. If Artist Meaning or the Reference alrea
 3. Should the finish feel polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
 4. Should the cultural genre lean contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
 
-Stop the Style Interview early when Primary Style, bounded Style Modifiers, known conflicts, and alignment with Artist Meaning are clear.
+Stop the Style Interview early when either Primary Style, bounded Style Modifiers, known conflicts, and alignment with Artist Meaning are clear, or when there is enough information to create a useful Style Exploration Board.
 
-After the Style Interview, synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style. Do not make the artist assemble taxonomy from raw answers.
+After the Style Interview or Style Exploration Board, synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style. Do not make the artist assemble taxonomy from raw answers.
 
-When several Style Directions remain plausible, offer a Style Exploration Board: one generated mosaic image that holds the same subject and Target Visual Engine across multiple candidate styles. The board helps the artist compare style language without committing to separate full generations. It is optional and does not replace Brief Approval. Default to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout.
+When Style Direction is unresolved, recommend a Style Exploration Board as the first option: one generated or drafted mosaic image that holds the same subject and Target Visual Engine across multiple candidate styles. The board helps the artist compare style language without committing to separate full generations. It does not replace Brief Approval. Default to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout. Do not call a provider-backed generator until the artist explicitly approves that generation call.
 
 Use the Wondermint Category Reference as initial category vocabulary, but do not treat upload categories as the entire art ontology. Style Direction must serve the Creative Brief.
 
@@ -215,21 +219,25 @@ Do not preserve surface form by default. Preserve emotional function. Change the
 
 ## Prompt Variant Plans
 
+Before final Prompt Variant Plans are locked, Artist OS should give the artist a visual intensity choice when Minimal, Faithful, and Amplified would materially change the work. By this point Symbology Direction and Style Direction should be selected or narrowed. Use a Minimalist-to-Maximalist Gate: three drafted or generated visual representations that keep the same approved meaning, symbology, Style Direction, and Target Visual Engine, but vary density, symbolic layering, visual complexity, scale, drama, ornament, and negative space.
+
+The Minimalist-to-Maximalist Gate is not a Series Plan and should not reopen symbology or style unless the artist explicitly asks to go back. Ask the artist to select, combine, reject, or revise intensity directions before final prompt locking whenever intensity would materially affect the image.
+
 The First Slice produces one Provider-Neutral Image Prompt Plan with three Prompt Variant Plans:
 
 - Faithful: closest to the approved Creative Brief.
 - Amplified: pushes the strongest tension, Poetic Density, and Target Visual Engine while preserving Artist Meaning.
 - Minimal: strips the image down to the essential emotional and visual engine.
 
-When the Creative Brief still contains unresolved creative dimensions, the three Prompt Variant Plans may test Variant Test Axes. For example, one variant may lean more realistic while another leans more cartoon, or one may be more literal while another is more symbolic. Each variant must name the axis it is testing.
+When the Creative Brief still contains unresolved creative dimensions, the three Prompt Variant Plans may test Variant Test Axes inside the approved symbology and style. For example, one variant may be sparse and iconic, another balanced and readable, and another dense and layered. Each variant must name the axis it is testing.
 
 Keep the stable labels Faithful, Amplified, and Minimal even when variants test an unresolved axis. Add a Variant Test Axis Label to explain what each variant is testing.
 
 The Amplified Prompt Variant may use Derived Symbols, but each Derived Symbol must be marked and traced to the approved Creative Brief.
 
-The three Prompt Variant Plans must create meaningful visual alternatives. They should not be three near-identical prompts with different intensity levels. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic treatment, abstraction level, color/light strategy, texture, finish, or focal hierarchy.
+The three Prompt Variant Plans must create meaningful visual alternatives along the Minimalist-to-Maximalist axis. They should not be three near-identical prompts with adjective changes. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic layering, abstraction level, color/light strategy, texture, finish, negative space, ornament, scale, drama, or focal hierarchy.
 
-When the artist wants one generation for comparison, the three Prompt Variant Plans can be packed into a Single-Generation Variant Triptych: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center carries the Faithful/modern/balanced direction, and the right carries the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
+When the artist wants one generation for comparison, the three final intensity directions can be packed into a Single-Generation Variant Triptych: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center the Faithful/balanced direction, and the right the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
 
 ## First Slice
 

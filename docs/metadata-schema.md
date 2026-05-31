@@ -28,6 +28,7 @@ Required sections:
 - `source_id`
 - `artist_meaning`
 - `formal_observations`
+- `symbology_direction`
 - `style_direction`
 - `visual_dynamics`
 - `core_tension_pairs`
@@ -49,12 +50,29 @@ Required sections:
 - `target_media_type`
 - `plan_mode`
 - `provider_neutral`
+- `layout_plan`
+- `symbology_direction_summary`
 - `style_direction_summary`
 - `target_visual_engine_summary`
 - `prompt_variants`
 - `series_calibration`
 - `traceability_summary`
 - `critique_checklist`
+
+## Symbology Direction
+
+`symbology_direction` records what the image shows as its core symbolic representation before style is selected.
+
+Required fields:
+
+- `selection_method`: `artist_specified`, `symbology_board`, or `agent_recommended`
+- `primary_symbolic_representation`
+- `confirmation_status`: `artist_specified`, `confirmed`, or `unconfirmed`
+- `alternatives_considered`
+- `rationale`
+- `avoid`
+
+When unresolved, ask whether to draft or generate a 3-6 panel Symbology Board before locking style.
 
 ## Style Direction
 
@@ -85,12 +103,14 @@ Minimal style conflict fields:
 
 Use the Wondermint Category Reference at `/Users/ashokaji/code/fullstock/Wondermint Skill File/skills/wondermint-marketplace/skills/references/categories.md` as seed vocabulary for image/video/audio categories. `wondermint_subcategories` are useful for style mapping but are required only when preparing Wondermint upload. When uploading to Wondermint, use only exact accepted subcategory names from that file.
 
-If the artist does not name a style directly, use an adaptive Style Interview. When the Reference and Artist Meaning do not narrow the next question, use this fallback order:
+If the artist does not name a specific style directly, ask whether they already have a specific visual vision or want to explore what art style to use. If they want exploration, ask for a rough direction and use an adaptive Style Interview only as far as needed to create a useful Style Exploration Board. When the Reference, Artist Meaning, and rough direction do not narrow the next question, use this fallback order:
 
 1. Camera-based, hand-made, graphic/comic, or synthetic/digital?
 2. Realistic/representational or stylized/abstracted?
 3. Polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
 4. Contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
+
+When Style Direction is unresolved, recommend a Style Exploration Board as the first option. The board may be drafted as a Provider-Neutral Prompt Plan or generated only after explicit artist approval for provider-backed generation.
 
 ## Visual Dynamics
 
@@ -100,7 +120,25 @@ Use `visual_dynamics.conditional_visual_tensions` for `Monumental / Intimate` wh
 
 For text-to-image work, Visual Dynamics describes the Target Visual Engine of the generated image. It must not pretend the text literally has visual properties.
 
+## Visual Gates
+
+The default First Slice has three visual gates:
+
+1. `symbology_board`: three to six image panels comparing symbolic representations before style is locked.
+2. `style_mosaic_board`: six square tiles comparing art styles for the selected symbolic representation.
+3. `three_panel_variant_triptych`: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+
+Each board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+
 ## Prompt Variant Plans
+
+Before Style Direction is locked, use a Symbology Board when multiple symbolic or compositional strategies remain plausible. The board contains three to six drafted or generated visual representations for the same Artist Meaning, Creative Brief, and Target Visual Engine. Each branch should include:
+
+- branch label,
+- symbolic or compositional strategy,
+- what the artist can react to,
+- traceability note,
+- known risk or tradeoff.
 
 A Provider-Neutral Image Prompt Plan contains exactly three Prompt Variant Plans:
 
@@ -119,7 +157,7 @@ Each Prompt Variant Plan should include:
 - traceability notes back to the approved Creative Brief,
 - critique checklist.
 
-The three Prompt Variant Plans must be visually distinct. Do not create variants that only turn the same image up or down. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, literal/symbolic balance, representation/abstraction, light/color strategy, texture/finish, or focal hierarchy.
+The three Prompt Variant Plans must be visually distinct along the Minimalist-to-Maximalist axis. Do not create variants that only change adjectives. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, symbolic layering, representation/abstraction, light/color strategy, texture/finish, negative space, ornament, scale, drama, or focal hierarchy. Each Prompt Variant Plan should preserve the selected Symbology Direction and Style Direction unless the artist explicitly asks to revisit an earlier gate.
 
 Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan and do not require a separate First Slice approval gate.
 
@@ -128,7 +166,8 @@ Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan 
 `layout_plan` records how the prompt should be arranged before provider translation:
 
 - `single_image`: one generated image from one selected variant.
-- `three_panel_variant_triptych`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/modern, and Amplified/maximal directions.
+- `symbology_board`: one drafted or generated board comparing three to six symbolic representations before style is locked.
+- `three_panel_variant_triptych`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 - `style_mosaic_board`: one generated mosaic image comparing candidate styles using the same subject and visual engine. Default to six square tiles in a 2x3 grid, and use no more than three tiles per row unless the artist asks for another layout.
 - `series_calibration_image`: one calibration image for an approved Series Plan.
 - `series_image`: one image role inside an approved Series Plan.
