@@ -13,11 +13,11 @@ Text Reference
   -> Creative Brief Document
   -> Symbology Direction
   -> Style Direction
-  -> Minimalist-to-Maximalist Direction
   -> Series Recommendation
   -> Art Critic Review
   -> revised Creative Brief Document
   -> Brief Approval
+  -> Minimalist-to-Maximalist Direction
   -> Creative Brief Record
   -> Provider-Neutral Image Prompt Plan
   -> critique checklist

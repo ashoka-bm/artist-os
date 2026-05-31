@@ -34,6 +34,7 @@ Default visual gates:
 3. **Minimalist-to-Maximalist Gate**: decide visual intensity after symbology and style are selected. If unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison.
 
 Each generated board or triptych requires explicit provider-backed generation approval. Drafted boards are allowed without provider calls.
+After a Symbology or Style board is drafted or generated, wait for the artist to select, combine, reject, or revise options before locking that gate and moving forward.
 
 ## Phase Order
 
@@ -70,9 +71,9 @@ Capture what must survive, allowed transformations, forbidden transformations, i
 
 Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep gates in this order: Symbology, Style, then intensity later.
 
-If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation.
+If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 
-If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style or wants exploration. Recommend a Style Exploration Board before forcing Style Direction.
+If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style or wants exploration. Recommend a Style Exploration Board before forcing Style Direction. Do not lock Style Direction until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 
 Then continue to Art Critic Review.
 

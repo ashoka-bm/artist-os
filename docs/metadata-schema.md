@@ -50,10 +50,11 @@ Required sections:
 - `target_media_type`
 - `plan_mode`
 - `provider_neutral`
-- `layout_plan`
+- `visual_boards`
 - `symbology_direction_summary`
 - `style_direction_summary`
 - `target_visual_engine_summary`
+- `layout_plan`
 - `prompt_variants`
 - `series_calibration`
 - `traceability_summary`
@@ -72,7 +73,7 @@ Required fields:
 - `rationale`
 - `avoid`
 
-When unresolved, ask whether to draft or generate a 3-6 panel Symbology Board before locking style.
+When unresolved, ask whether to draft or generate a 3-6 panel Symbology Board before locking style. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
 
 ## Style Direction
 
@@ -110,7 +111,7 @@ If the artist does not name a specific style directly, ask whether they already 
 3. Polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
 4. Contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
 
-When Style Direction is unresolved, recommend a Style Exploration Board as the first option. The board may be drafted as a Provider-Neutral Prompt Plan or generated only after explicit artist approval for provider-backed generation.
+When Style Direction is unresolved, recommend a Style Exploration Board as the first option. The board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
 
 ## Visual Dynamics
 
@@ -124,15 +125,27 @@ For text-to-image work, Visual Dynamics describes the Target Visual Engine of th
 
 The default First Slice has three visual gates:
 
-1. `symbology_board`: three to six image panels comparing symbolic representations before style is locked.
-2. `style_mosaic_board`: six square tiles comparing art styles for the selected symbolic representation.
-3. `three_panel_variant_triptych`: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+1. Symbology Board: three to six image panels comparing symbolic representations before style is locked.
+2. Style Exploration Board: six square tiles comparing art styles for the selected symbolic representation.
+3. Minimalist-to-Maximalist Gate: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 
-Each board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+Exploration boards are stored in `visual_boards`, not `layout_plan`. Each board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+
+`visual_boards[]` records pre-locking exploration artifacts:
+
+- `board_type`: `symbology_board` or `style_mosaic_board`
+- `status`: `proposed`, `drafted`, `generated`, `selected`, or `skipped`
+- `panel_count`: 3 to 6
+- `layout`
+- `requires_generation_approval`
+- `selected_option_label`
+- `options[]`
+
+Each `options[]` entry includes label, visual prompt, decision focus, traceability notes, and risks. A Style Exploration Board should use six options unless the artist asks otherwise.
 
 ## Prompt Variant Plans
 
-Before Style Direction is locked, use a Symbology Board when multiple symbolic or compositional strategies remain plausible. The board contains three to six drafted or generated visual representations for the same Artist Meaning, Creative Brief, and Target Visual Engine. Each branch should include:
+Before Style Direction is locked, use a Symbology Board when multiple symbolic or compositional strategies remain plausible. The board contains three to six drafted or generated visual representations for the same Artist Meaning, Creative Brief, and Target Visual Engine. Wait for the artist to select, combine, reject, or revise options before confirming Symbology Direction. Each branch should include:
 
 - branch label,
 - symbolic or compositional strategy,
@@ -163,12 +176,10 @@ Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan 
 
 `schemas/prompt-plan.schema.json` records the Provider-Neutral Image Prompt Plan. It is provider-neutral by design and must not include provider-specific settings, model names, seeds, cost metadata, or output paths.
 
-`layout_plan` records how the prompt should be arranged before provider translation:
+`layout_plan` records final output arrangement before provider translation. It does not store pre-locking exploration boards:
 
 - `single_image`: one generated image from one selected variant.
-- `symbology_board`: one drafted or generated board comparing three to six symbolic representations before style is locked.
 - `three_panel_variant_triptych`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
-- `style_mosaic_board`: one generated mosaic image comparing candidate styles using the same subject and visual engine. Default to six square tiles in a 2x3 grid, and use no more than three tiles per row unless the artist asks for another layout.
 - `series_calibration_image`: one calibration image for an approved Series Plan.
 - `series_image`: one image role inside an approved Series Plan.
 

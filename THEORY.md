@@ -137,7 +137,7 @@ Use Monumental / Intimate only when scale, embodiment, installation, performance
 
 Style Direction defines the artistic language used to express the Creative Brief. It is separate from Emotional Structure and Visual Dynamics.
 
-Before choosing Style Direction by default, choose Symbology Direction: what the image shows as the core symbolic representation of Artist Meaning. Symbology is closer to meaning than style, so unresolved symbology should be explored visually before style is locked. Use a Symbology Board: three to six drafted or generated image panels comparing symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Ask whether the artist wants the board drafted for review or generated as one comparison image. Do not call a provider-backed generator until the artist explicitly approves that generation call.
+Before choosing Style Direction by default, choose Symbology Direction: what the image shows as the core symbolic representation of Artist Meaning. Symbology is closer to meaning than style, so unresolved symbology should be explored visually before style is locked. Use a Symbology Board: three to six drafted or generated image panels comparing symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Ask whether the artist wants the board drafted for review or generated as one comparison image. Do not call a provider-backed generator until the artist explicitly approves that generation call. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction unless they explicitly choose to proceed unconfirmed.
 
 Style Direction should answer:
 
@@ -165,7 +165,7 @@ Stop the Style Interview early when either Primary Style, bounded Style Modifier
 
 After the Style Interview or Style Exploration Board, synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style. Do not make the artist assemble taxonomy from raw answers.
 
-When Style Direction is unresolved, recommend a Style Exploration Board as the first option: one generated or drafted mosaic image that holds the same subject and Target Visual Engine across multiple candidate styles. The board helps the artist compare style language without committing to separate full generations. It does not replace Brief Approval. Default to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout. Do not call a provider-backed generator until the artist explicitly approves that generation call.
+When Style Direction is unresolved, recommend a Style Exploration Board as the first option: one generated or drafted mosaic image that holds the same subject and Target Visual Engine across multiple candidate styles. The board helps the artist compare style language without committing to separate full generations. It does not replace Brief Approval. Default to six square tiles in a 2x3 grid, with no more than three tiles per row unless the artist asks for a different layout. Do not call a provider-backed generator until the artist explicitly approves that generation call. Wait for artist response before locking Style Direction unless they explicitly choose to proceed unconfirmed.
 
 Use the Wondermint Category Reference as initial category vocabulary, but do not treat upload categories as the entire art ontology. Style Direction must serve the Creative Brief.
 

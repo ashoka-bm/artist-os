@@ -5,12 +5,7 @@
   "target_media_type": "image",
   "plan_mode": "single_image",
   "provider_neutral": true,
-  "layout_plan": {
-    "layout_type": "single_image",
-    "panel_count": 1,
-    "aspect_ratio": "open",
-    "instructions": "Generate one image from the selected Prompt Variant Plan. If the artist wants to compare variants in one generation, convert the three Prompt Variant Plans into a three-panel square triptych before provider translation."
-  },
+  "visual_boards": [],
   "symbology_direction_summary": {
     "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
     "avoid": [
@@ -18,6 +13,12 @@
       "literalizing the absent person",
       "resolving whether the figure enters"
     ]
+  },
+  "layout_plan": {
+    "layout_type": "single_image",
+    "panel_count": 1,
+    "aspect_ratio": "open",
+    "instructions": "Generate one image from the selected Prompt Variant Plan. If the artist wants to compare variants in one generation, convert the three Prompt Variant Plans into a three-panel square triptych before provider translation."
   },
   "style_direction_summary": {
     "primary_style": "cinematic photoreal",

@@ -285,8 +285,12 @@ One horizontal image made of three equal square panels that compares Minimal/min
 _Avoid_: Treating the comparison triptych as a Series Plan
 
 **Layout Plan**:
-The Provider-Neutral Prompt Plan field that records whether the prompt is a single image, a three-panel variant triptych, a symbology board, a style mosaic board, a series calibration image, or a series image.
+The Provider-Neutral Prompt Plan field that records final output arrangement: single image, three-panel variant triptych, series calibration image, or series image. Pre-locking exploration boards are recorded in visual boards, not Layout Plan.
 _Avoid_: Hiding generation layout inside prompt prose only
+
+**Visual Boards**:
+The Provider-Neutral Prompt Plan field that records pre-locking Symbology Boards and Style Exploration Boards, including options, traceability, risks, selection status, and whether provider-backed generation was approved.
+_Avoid_: Stuffing exploration-board options into Layout Plan prose
 
 **Image Role**:
 The function of one image inside a Series Plan, such as opening image, threshold image, rupture image, return image, or resolution image.

@@ -32,11 +32,11 @@ Before Art Critic Review, build a substantive draft without pretending uncertain
 1. Identify formal observations from the text.
 2. Map all eight Core Tension Pairs with evidence and translation notes.
 3. Define Symbology Direction: what the image shows as the core symbolic representation.
-4. If Symbology Direction is unresolved, ask whether to draft or generate a 3-6 panel Symbology Board. Do not generate without explicit approval.
+4. If Symbology Direction is unresolved, ask whether to draft or generate a 3-6 panel Symbology Board. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction, unless they explicitly choose to proceed unconfirmed.
 5. Define Style Direction after symbology is selected or narrowed.
 6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
 7. If style is unresolved, ask whether the artist has a specific visual style or wants exploration.
-8. If exploring, ask for rough direction and recommend a Style Exploration Board before forcing Style Direction. Default to six square tiles in a 2x3 grid.
+8. If exploring, ask for rough direction and recommend a Style Exploration Board before forcing Style Direction. Default to six square tiles in a 2x3 grid. Wait for the artist to select, combine, reject, or revise options before locking Style Direction, unless they explicitly choose to proceed unconfirmed.
 9. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
 10. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
 11. Surface Style/Visual Conflicts and propose Style Adaptations.
@@ -58,7 +58,7 @@ Use this only after Art Critic Review and Brief Approval.
 7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
 8. Mark any Derived Symbols and trace them to Artist Meaning, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
 9. Include critique criteria for each Prompt Variant Plan.
-10. Set `layout_plan` to `single_image`, `symbology_board`, `style_mosaic_board`, `three_panel_variant_triptych`, `series_calibration_image`, or `series_image` as appropriate.
+10. Record Symbology and Style exploration boards in `visual_boards`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych`, `series_calibration_image`, or `series_image`.
 11. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
 
 ## Traceability Rules

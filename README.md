@@ -117,10 +117,12 @@ Text Reference
   -> Source Record
   -> Meaning Interview
   -> Creative Brief Document
+  -> Symbology Direction
   -> Style Direction
   -> Series Recommendation
   -> Art Critic Review
   -> Brief Approval
+  -> Minimalist-to-Maximalist Direction
   -> Creative Brief Record
   -> Provider-Neutral Image Prompt Plan
 ```
