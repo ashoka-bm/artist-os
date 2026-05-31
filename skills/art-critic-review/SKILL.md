@@ -1,6 +1,6 @@
 ---
 name: artist-os-art-critic-review
-description: Use when an Artist OS Creative Brief Document needs mandatory art-critic review before Brief Approval or final Prompt Plan creation.
+description: Use when Artist OS needs standalone or delegated critic review of a draft Creative Brief before approval or final Prompt Plan creation. Deepens poetic density, resolves avoidable ambiguity, and strengthens Style Direction and Visual Dynamics without overriding Artist Meaning.
 ---
 
 # Art Critic Review
@@ -22,6 +22,8 @@ Read:
 - Open Questions and Interpretive Confidence notes.
 
 ## Critical Heuristics
+
+For the canonical definitions of the terms used below — Core Tension Pairs, the Core Visual Tension Pairs library, Poetic Density, Target Visual Engine, and the Style Interview — read `THEORY.md` (paths are relative to the repo root) rather than improvising. Your job is to apply them more deeply, not to redefine them.
 
 Apply Critical Heuristics in this order:
 

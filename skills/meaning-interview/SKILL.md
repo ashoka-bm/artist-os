@@ -1,6 +1,6 @@
 ---
 name: artist-os-meaning-interview
-description: Use when Artist OS needs the artist's stated meaning, transformation intent, and must-preserve details before analysis or prompt planning.
+description: Use when Artist OS needs standalone or delegated artist meaning before analysis or prompt planning. Captures what the reference means, what must survive transformation, allowed changes, forbidden changes, success criteria, and the artist's own emotional language.
 ---
 
 # Meaning Interview
@@ -41,7 +41,7 @@ Ask only the followups needed to clarify:
 
 ## Output
 
-Return:
+Return a compact Artist Meaning block with these fields (Markdown is fine for a standalone run; the orchestrator and the translation director consume it inline, so keep the field names exact so downstream steps can pick them up reliably):
 
 - `why_it_matters`,
 - `must_preserve`,
@@ -52,4 +52,4 @@ Return:
 - `success_criteria`,
 - `contradictions_or_overrides`.
 
-If the user's answers contradict the agent's likely interpretation, record the contradiction and let the user's meaning win.
+If the user's answers contradict the agent's likely interpretation, record the contradiction and let the user's meaning win. This is why the interview runs first: Artist Meaning has final authority over analysis, so it must be captured before any interpretation can quietly override it.

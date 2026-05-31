@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-image-plan
-description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles Symbology Direction, Style Direction, Visual Dynamics, Beat Map, Series Recommendation, and Faithful/Amplified/Minimal variants. Prefer artist-os for the whole flow.
+description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles visual gates for Symbology Direction, Style Direction, Minimal/Faithful/Amplified intensity, Visual Dynamics, Beat Map, Series Recommendation, and Prompt Variant Plans. Prefer artist-os for the whole flow.
 ---
 
 # Text To Image Plan
@@ -32,7 +32,7 @@ Before Art Critic Review, build a substantive draft without pretending uncertain
 1. Identify formal observations from the text.
 2. Map all eight Core Tension Pairs with evidence and translation notes.
 3. Define Symbology Direction: what the image shows as the core symbolic representation.
-4. If Symbology Direction is unresolved, ask whether to draft or generate a 3-6 panel Symbology Board. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction, unless they explicitly choose to proceed unconfirmed.
+4. If Symbology Direction is unresolved, ask whether to generate a six-panel line-drawing Symbology Board that depicts six different symbolic ways to portray the Artist Meaning. If drafting instead, still write it as one provider-neutral line-drawing comparison image prompt. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction, unless they explicitly choose to proceed unconfirmed.
 5. Define Style Direction after symbology is selected or narrowed.
 6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
 7. If style is unresolved, ask whether the artist has a specific visual style or wants exploration.

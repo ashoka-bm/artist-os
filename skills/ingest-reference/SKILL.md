@@ -1,6 +1,6 @@
 ---
 name: artist-os-ingest-reference
-description: Use when starting Artist OS with a user-provided Reference that needs a Source Record before interpretation, briefing, prompting, or generation.
+description: Use when Artist OS needs standalone or delegated reference intake for text, image, audio, video, or mixed media before interpretation. Captures title, media type, source, context, and rights notes. Prefer artist-os for the whole text-to-image flow.
 ---
 
 # Ingest Reference
@@ -36,8 +36,11 @@ If rights are unclear, record the uncertainty in `rights_notes`. Do not assume t
 
 ## Output
 
-Return a Source Record matching `schemas/source-record.schema.json`.
+Return a Source Record matching `schemas/source-record.schema.json` (paths are relative to the repo root).
 
-## Required Closing
+## Closing
 
-After returning the Source Record, tell the user the next step is `artist-os-meaning-interview`.
+What happens after the Source Record depends on who is running you:
+
+- **Standalone:** the meaning interview comes next — it must capture Artist Meaning before any analysis hardens. Tell the user that is the recommended next step.
+- **Inside the artist-os orchestrator:** return the Source Record and stop. The orchestrator continues to the Meaning Interview automatically, so do not instruct the user to invoke another skill.

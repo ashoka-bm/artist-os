@@ -1,6 +1,6 @@
 ---
 name: artist-os
-description: Use when an artist wants to turn writing — a poem, story, song lyric, journal entry, monologue, or other text — into visual art prompts, even if they do not mention Artist OS. Prefer this orchestrator for the whole text-to-image flow; use role skills only for isolated or delegated steps.
+description: "Use when an artist wants to turn writing — a poem, story, song lyric, journal entry, monologue, or other text — into visual art prompts, even if they do not mention Artist OS. Runs the visual-gated First Slice flow: Source Record, Meaning Interview, Symbology Gate, Style Gate, intensity gate, Creative Brief, Prompt Plan, and critique."
 ---
 
 # First Slice Flow
@@ -29,7 +29,7 @@ Move forward automatically unless the next step needs artist input. Ask only for
 
 Default visual gates:
 
-1. **Symbology Gate**: decide what the image shows. If unresolved, ask whether to draft or generate a 3-6 panel Symbology Board.
+1. **Symbology Gate**: decide what the image shows. If unresolved, ask whether to draft or generate a six-panel Symbology Board as one line-drawing comparison image.
 2. **Style Gate**: decide the artistic language for the selected Symbology Direction. If unresolved, ask whether the artist has a specific visual style or wants a Style Exploration Board.
 3. **Minimalist-to-Maximalist Gate**: decide visual intensity after symbology and style are selected. If unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison.
 
@@ -71,7 +71,7 @@ Capture what must survive, allowed transformations, forbidden transformations, i
 
 Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep gates in this order: Symbology, Style, then intensity later.
 
-If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
+If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation. Default to six distinct symbolic branches depicted together as one provider-neutral line-drawing comparison image. Ask whether the artist wants you to generate that line-drawing board for review; do not generate without explicit approval. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 
 If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style or wants exploration. Recommend a Style Exploration Board before forcing Style Direction. Do not lock Style Direction until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 

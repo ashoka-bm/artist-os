@@ -73,7 +73,7 @@ Required fields:
 - `rationale`
 - `avoid`
 
-When unresolved, ask whether to draft or generate a 3-6 panel Symbology Board before locking style. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
+When unresolved, ask whether to generate a six-panel line-drawing Symbology Board before locking style. If drafting instead of generating, still draft it as one provider-neutral line-drawing comparison image prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
 
 ## Style Direction
 
@@ -125,7 +125,7 @@ For text-to-image work, Visual Dynamics describes the Target Visual Engine of th
 
 The default First Slice has three visual gates:
 
-1. Symbology Board: three to six image panels comparing symbolic representations before style is locked.
+1. Symbology Board: default six image panels comparing symbolic representations before style is locked, depicted as one line-drawing comparison image.
 2. Style Exploration Board: six square tiles comparing art styles for the selected symbolic representation.
 3. Minimalist-to-Maximalist Gate: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 
@@ -145,7 +145,7 @@ Each `options[]` entry includes label, visual prompt, decision focus, traceabili
 
 ## Prompt Variant Plans
 
-Before Style Direction is locked, use a Symbology Board when multiple symbolic or compositional strategies remain plausible. The board contains three to six drafted or generated visual representations for the same Artist Meaning, Creative Brief, and Target Visual Engine. Wait for the artist to select, combine, reject, or revise options before confirming Symbology Direction. Each branch should include:
+Before Style Direction is locked, use a Symbology Board when multiple symbolic or compositional strategies remain plausible. The board contains six drafted or generated visual representations for the same Artist Meaning, Creative Brief, and Target Visual Engine unless the artist asks for fewer. It must be one line-drawing comparison image so the artist compares symbolic representation before art style. Wait for the artist to select, combine, reject, or revise options before confirming Symbology Direction. Each branch should include:
 
 - branch label,
 - symbolic or compositional strategy,

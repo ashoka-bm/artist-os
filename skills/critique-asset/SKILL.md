@@ -1,6 +1,6 @@
 ---
 name: artist-os-critique-asset
-description: Use when Artist OS needs to critique a Prompt Plan or Generated Work against the approved Creative Brief, emotional function, and Target Visual Engine.
+description: Use when Artist OS needs standalone or delegated critique of a Prompt Plan or generated work against the approved Creative Brief, emotional function, and Target Visual Engine. Judges whether meaning is preserved, not whether the source was copied literally.
 ---
 
 # Critique Asset
@@ -41,10 +41,10 @@ Evaluate:
 
 ## Output
 
-Return:
+Return a compact critique block with these fields (keep the field names exact so the orchestrator and any later revision step can act on them):
 
-- `matched`,
-- `drifted`,
-- `revision_prompt`,
-- `accept_reject_revise`,
-- `taste_memory_note`.
+- `matched` — what the plan or work preserves well, traced to the brief,
+- `drifted` — where it drifts from Artist Meaning, the Target Visual Engine, or a Beat,
+- `revision_prompt` — concrete guidance for the strongest next revision,
+- `accept_reject_revise` — one of `accept`, `revise`, or `reject`,
+- `taste_memory_note` — a durable note about the artist's taste worth carrying to future work.
