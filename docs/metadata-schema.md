@@ -111,7 +111,7 @@ If the artist does not name a specific style directly, ask whether they already 
 3. Polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
 4. Contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
 
-When Style Direction is unresolved, recommend a Style Exploration Board as the first option. The board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+When Style Direction is unresolved, ask whether the artist wants to see style options before moving forward. If yes, offer either to generate a Style Exploration Board or to write a provider-neutral image-generator prompt for that board. The board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
 
 ## Visual Dynamics
 
@@ -126,7 +126,7 @@ For text-to-image work, Visual Dynamics describes the Target Visual Engine of th
 The default First Slice has three visual gates:
 
 1. Symbology Board: default six image panels comparing symbolic representations before style is locked, depicted as one line-drawing comparison image.
-2. Style Exploration Board: six square tiles comparing art styles for the selected symbolic representation.
+2. Style Exploration Board: six square tiles comparing art styles for the selected symbolic representation, shown only after asking whether the artist wants to see style options before moving forward. If yes, provide either a generated board or a provider-neutral image-generator prompt for that board.
 3. Minimalist-to-Maximalist Gate: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 
 Exploration boards are stored in `visual_boards`, not `layout_plan`. Each board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.

@@ -47,7 +47,7 @@ Provider-Neutral Image Prompt Plan records should validate against `schemas/prom
 - When the artist has not named a specific style directly, ask whether they have a specific vision or want to explore what art style to use.
 - Run visual choice gates in this default order: Symbology Gate, Style Gate, then Minimalist-to-Maximalist Gate.
 - At the Symbology Gate, ask whether to generate a six-panel line-drawing board of symbolic representations before locking what the image shows.
-- Recommend a six-tile Style Exploration Board as the first option when Style Direction is unresolved; do not call a provider-backed generator without explicit approval.
+- At the Style Gate, ask whether the artist wants to see style options before moving forward. If yes, offer either a generated six-tile Style Exploration Board or a provider-neutral image-generator prompt for that board; do not call a provider-backed generator without explicit approval.
 - Surface Style/Visual Conflicts and record proposed Style Adaptations instead of silently letting style override Visual Dynamics.
 - Use the Wondermint Category Reference only as seed vocabulary unless preparing a Wondermint upload, where exact accepted subcategory names are required.
 - Recommend a Series Plan when multiple significant Beats would be flattened into one image, but do not create multiple image prompt plans without artist approval.

@@ -30,7 +30,7 @@ Move forward automatically unless the next step needs artist input. Ask only for
 Default visual gates:
 
 1. **Symbology Gate**: decide what the image shows. If unresolved, ask whether to draft or generate a six-panel Symbology Board as one line-drawing comparison image.
-2. **Style Gate**: decide the artistic language for the selected Symbology Direction. If unresolved, ask whether the artist has a specific visual style or wants a Style Exploration Board.
+2. **Style Gate**: decide the artistic language for the selected Symbology Direction. Ask whether the artist wants to see style options before moving forward; if yes, offer either a generated six-tile Style Exploration Board or a provider-neutral image-generator prompt for that board.
 3. **Minimalist-to-Maximalist Gate**: decide visual intensity after symbology and style are selected. If unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison.
 
 Each generated board or triptych requires explicit provider-backed generation approval. Drafted boards are allowed without provider calls.
@@ -73,7 +73,7 @@ Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep gates 
 
 If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation. Default to six distinct symbolic branches depicted together as one provider-neutral line-drawing comparison image. Ask whether the artist wants you to generate that line-drawing board for review; do not generate without explicit approval. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 
-If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style or wants exploration. Recommend a Style Exploration Board before forcing Style Direction. Do not lock Style Direction until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
+If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style in mind or wants to see style options before moving forward. If they want to see options, offer either to generate a six-tile Style Exploration Board or to write a provider-neutral image-generator prompt for that board. Do not generate without explicit approval. Do not lock Style Direction until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
 
 Then continue to Art Critic Review.
 

@@ -35,8 +35,8 @@ Before Art Critic Review, build a substantive draft without pretending uncertain
 4. If Symbology Direction is unresolved, ask whether to generate a six-panel line-drawing Symbology Board that depicts six different symbolic ways to portray the Artist Meaning. If drafting instead, still write it as one provider-neutral line-drawing comparison image prompt. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction, unless they explicitly choose to proceed unconfirmed.
 5. Define Style Direction after symbology is selected or narrowed.
 6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
-7. If style is unresolved, ask whether the artist has a specific visual style or wants exploration.
-8. If exploring, ask for rough direction and recommend a Style Exploration Board before forcing Style Direction. Default to six square tiles in a 2x3 grid. Wait for the artist to select, combine, reject, or revise options before locking Style Direction, unless they explicitly choose to proceed unconfirmed.
+7. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
+8. If they want to see options, ask for rough direction if needed, then offer either to generate a six-tile Style Exploration Board or to write a provider-neutral image-generator prompt for that board. Default to six square tiles in a 2x3 grid using the selected Symbology Direction as the shared subject. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Style Direction, unless they explicitly choose to proceed unconfirmed.
 9. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
 10. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
 11. Surface Style/Visual Conflicts and propose Style Adaptations.
