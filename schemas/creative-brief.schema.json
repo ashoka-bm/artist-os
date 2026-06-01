@@ -204,12 +204,19 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["image_role", "beat_or_tension_point", "emotional_payload", "target_visual_engine"],
+            "required": [
+              "image_role",
+              "beat_or_tension_point",
+              "emotional_payload",
+              "target_visual_engine",
+              "amplitude_profile"
+            ],
             "properties": {
               "image_role": { "type": "string" },
               "beat_or_tension_point": { "type": "string" },
               "emotional_payload": { "type": "string" },
-              "target_visual_engine": { "type": "string" }
+              "target_visual_engine": { "type": "string" },
+              "amplitude_profile": { "$ref": "#/$defs/series_amplitude_profile" }
             }
           }
         },
@@ -308,6 +315,65 @@
         "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
         "evidence": { "type": "array", "items": { "type": "string" } },
         "translation_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "series_amplitude_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "framing_distance",
+        "subject_scale",
+        "visual_density",
+        "motion_energy",
+        "spatial_openness",
+        "detail_intensity",
+        "emotional_pressure",
+        "rationale"
+      ],
+      "properties": {
+        "framing_distance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = extreme close-up/intimate crop, 1 = panoramic or very wide framing."
+        },
+        "subject_scale": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = tiny or fragile subject presence, 1 = monumental or dominant subject presence."
+        },
+        "visual_density": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = sparse/minimal field, 1 = crowded/maximal field."
+        },
+        "motion_energy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = still/static, 1 = active/turbulent."
+        },
+        "spatial_openness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = enclosed/compressed, 1 = open/expansive."
+        },
+        "detail_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = stripped down/minimal detail, 1 = highly detailed/layered."
+        },
+        "emotional_pressure": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "0 = quiet/low pressure, 1 = overwhelming/high pressure."
+        },
+        "rationale": { "type": "string" }
       }
     }
   }

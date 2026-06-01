@@ -1,0 +1,28 @@
+{
+  "asset_id": "asset_symbology_board_001",
+  "project_id": "proj_door_left_lit",
+  "asset_type": "board",
+  "stage": "visualization_symbolic",
+  "path": "workspace-library/artist-os/projects/proj_door_left_lit/assets/boards/symbology-board-001.png",
+  "created_at": "2026-05-31T00:00:00Z",
+  "provenance": {
+    "origin": "provider_generated",
+    "source_record_id": "src_door_left_lit",
+    "brief_id": "brief_door_left_lit",
+    "visual_board_type": "symbology_board",
+    "event_id": "evt_symbology_board_generated_001"
+  },
+  "generation": {
+    "provider": "example-provider",
+    "model": "example-image-model",
+    "prompt": "A single 2x3 black-and-white line-art grid comparing six symbolic representations of a threshold scene.",
+    "settings": {
+      "aspect_ratio": "3:2"
+    },
+    "seed": null
+  },
+  "rights_notes": "Example metadata only; no real user media.",
+  "critique_status": "not_reviewed",
+  "status": "generated",
+  "notes": "Comparison board for selecting symbolic representation before style."
+}

@@ -1,0 +1,47 @@
+{
+  "project_id": "proj_door_left_lit",
+  "title": "Door Left Lit",
+  "status": "active",
+  "current_stage": "prompt_plan",
+  "created_at": "2026-05-31T00:00:00Z",
+  "updated_at": "2026-05-31T00:00:00Z",
+  "summary": "A text-to-image project about a threshold, absence, and fragile agency.",
+  "paths": {
+    "project_dir": "workspace-library/artist-os/projects/proj_door_left_lit",
+    "events": "workspace-library/artist-os/projects/proj_door_left_lit/events.jsonl",
+    "source_record": "workspace-library/artist-os/projects/proj_door_left_lit/source/source-record.json",
+    "reference_text": "workspace-library/artist-os/projects/proj_door_left_lit/source/reference.txt",
+    "meaning_interview": "workspace-library/artist-os/projects/proj_door_left_lit/meaning/meaning-interview.json",
+    "interpretation_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/interpretation.json",
+    "symbology_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/symbology.json",
+    "style_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/style.json",
+    "detail_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/detail.json",
+    "creative_brief_draft": "workspace-library/artist-os/projects/proj_door_left_lit/briefs/creative-brief.draft.md",
+    "creative_brief_record": "workspace-library/artist-os/projects/proj_door_left_lit/briefs/creative-brief.record.json",
+    "prompt_plan": "workspace-library/artist-os/projects/proj_door_left_lit/prompt-plans/prompt-plan.json",
+    "critiques_dir": "workspace-library/artist-os/projects/proj_door_left_lit/critiques",
+    "assets_dir": "workspace-library/artist-os/projects/proj_door_left_lit/assets",
+    "exports_dir": "workspace-library/artist-os/projects/proj_door_left_lit/exports"
+  },
+  "decisions": {
+    "interpretation_status": "complete",
+    "symbology_status": "complete",
+    "style_status": "complete",
+    "detail_status": "complete",
+    "selected_symbology": "threshold scene with a lit doorway and a held key",
+    "presentation_mode": "single_image",
+    "selected_style": "cinematic photoreal",
+    "selected_detail_mode": "faithful_balanced"
+  },
+  "assets": [
+    {
+      "asset_id": "asset_symbology_board_001",
+      "asset_type": "board",
+      "stage": "visualization_symbolic",
+      "path": "workspace-library/artist-os/projects/proj_door_left_lit/assets/boards/symbology-board-001.png",
+      "metadata_path": "workspace-library/artist-os/projects/proj_door_left_lit/assets/boards/symbology-board-001.json",
+      "status": "generated",
+      "created_at": "2026-05-31T00:00:00Z"
+    }
+  ]
+}

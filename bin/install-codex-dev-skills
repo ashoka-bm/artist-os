@@ -4,6 +4,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
 prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
+library_root="${ARTIST_OS_LIBRARY_ROOT:-$repo_root/workspace-library/artist-os}"
 
 skills=(
   "ingest-reference"
@@ -58,10 +59,15 @@ for skill in "${skills[@]}"; do
   install_skill "$source_dir" "$target"
 done
 
+"$repo_root/bin/artist-os-db" setup --library-root "$library_root"
+
 cat <<EOF
 
 Artist OS dev skills installed into:
   $skills_dir
+
+Workspace Library initialized at:
+  $library_root
 
 Installed skill names:
   - artist-os

@@ -55,13 +55,19 @@ Current structure:
 ├── THEORY.md
 ├── examples/
 │   ├── text-source.md
+│   ├── asset-metadata.example.json
 │   ├── text-creative-brief.example.json
-│   └── text-prompt-plan.example.json
+│   ├── text-prompt-plan.example.json
+│   └── project-manifest.example.json
 ├── schemas/
 │   ├── source-record.schema.json
+│   ├── artist-os-library.sql
+│   ├── asset-metadata.schema.json
 │   ├── creative-brief.schema.json
-│   └── prompt-plan.schema.json
+│   ├── prompt-plan.schema.json
+│   └── project-manifest.schema.json
 ├── bin/
+│   ├── artist-os-db
 │   ├── install-codex-dev-skills
 │   └── uninstall-codex-dev-skills
 ├── skills/
@@ -75,7 +81,34 @@ Current structure:
 └── docs/superpowers/plans/
 ```
 
-Do not add `setup`, `hosts/`, `lib/`, provider adapters, or generated media directories until the manual First Slice proves the workflow.
+Do not add `setup`, `hosts/`, `lib/`, or provider adapters until the manual First Slice proves the workflow.
+
+## Workspace Library
+
+Real Artist OS project work is stored outside git in:
+
+```text
+workspace-library/artist-os/
+```
+
+This local library stores project manifests, event logs, source records, meaning interviews, gate decisions, Creative Brief records, Prompt Plans, critiques, generated images, and image sidecar metadata. See `docs/storage.md`.
+
+Generated media and private artist work must not be committed. The repository only commits schemas, examples, and skill instructions.
+
+Each real project has a `project.json` manifest and `events.jsonl` history. Images live under `assets/reference`, `assets/boards`, `assets/generated`, or `assets/final`, and each image gets a same-basename `.json` sidecar that validates against `schemas/asset-metadata.schema.json`.
+
+The searchable local database is:
+
+```text
+workspace-library/artist-os/artist-os.sqlite
+```
+
+It uses SQLite through Python's standard library and does not require an additional package install. Create or refresh it with:
+
+```bash
+bin/artist-os-db setup
+bin/artist-os-db sync
+```
 
 ## Codex Dev Install
 
@@ -102,6 +135,8 @@ For the normal end-to-end dry run, start with `artist-os`. The other skills are 
 
 The repo remains the source of truth. Editing files under `skills/` updates the installed Codex skills immediately through the symlinks. Codex may still require a new thread or app reload to refresh skill discovery.
 
+The installer also creates the local Workspace Library folders and initializes `artist-os.sqlite`. Set `ARTIST_OS_LIBRARY_ROOT` before running it to use a different storage location.
+
 Uninstall only these dev links with:
 
 ```bash
@@ -127,12 +162,11 @@ Text Reference
   -> Provider-Neutral Image Prompt Plan
 ```
 
-This milestone does not call paid providers. It produces a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans. The default visual gates are Symbology, Style, then Minimalist-to-Maximalist intensity. At each gate, show concise options first and keep the full image prompt internal unless the artist asks for it. Symbology uses six symbolic options, Style uses six suggested styles, and intensity uses three Minimal/Faithful-Balanced/Amplified-Maximal options. Series Recommendation can propose single image, triptych, or image series without executing a series until the artist approves it.
+This milestone does not call paid providers. It produces a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans. The default visual gates are Symbology, Style, then Minimalist-to-Maximalist intensity. At each gate, show concise options first and keep the full image prompt internal unless the artist asks for it. Symbology uses six symbolic options and asks whether the work should become a single image, emotional arc, or multi-image presentation. Style uses six suggested styles, and intensity uses three Minimal/Faithful-Balanced/Amplified-Maximal options. Series Recommendation can propose single image, triptych, or image series without executing a series until the artist approves it.
 
 ## Open Questions
 
 - Which agent host should be packaged for first beyond the current Codex dev symlink install?
-- Should generated assets be stored in this repo, outside the repo, or in a managed asset store?
 - Which media models and APIs are in scope for the first version?
 - When should we add a full Series Plan or Calibration Choice schema?
 - Should the next workflow run use a new artist-provided text Reference or the included example fixture?
@@ -142,4 +176,4 @@ This milestone does not call paid providers. It produces a Provider-Neutral Imag
 - Keep early changes small and reversible.
 - Document decisions before encoding broad conventions.
 - Put disposable experiments in `.tmp/`.
-- Do not commit generated media, secrets, API keys, or paid-service credentials.
+- Do not commit generated media, private artist references, secrets, API keys, or paid-service credentials.

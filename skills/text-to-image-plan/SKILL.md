@@ -13,6 +13,7 @@ Load details only when needed:
 
 - `THEORY.md` for Core Tension Pairs, Visual Dynamics, Poetic Density, gates, and series logic.
 - `docs/metadata-schema.md` for required record fields and layout plans.
+- `docs/storage.md` when writing or updating project records in the Workspace Library.
 - Wondermint Category Reference only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
 
 ## Hard Gates
@@ -20,6 +21,8 @@ Load details only when needed:
 - Do not call an image generation provider without explicit approval.
 - Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete.
 - Do not create multiple series image prompts until the artist approves a Series Plan.
+- Do not treat chat context as durable storage. When records or gate decisions are created, write them to the Workspace Library if a project folder is available and refresh `workspace-library/artist-os/artist-os.sqlite`.
+- Store generated or imported board images with same-basename sidecar metadata that validates against `schemas/asset-metadata.schema.json`.
 
 ## Inputs
 
@@ -31,17 +34,18 @@ Before Art Critic Review, build a substantive draft without pretending uncertain
 
 1. Identify formal observations from the text.
 2. Map all eight Core Tension Pairs with evidence and translation notes.
-3. Define Symbology Direction: what the image shows as the core symbolic representation.
-4. If Symbology Direction is unresolved, build a Symbology Board as a single-image Comparison Board (see `THEORY.md` → "Visual Gate Boards"). Write **one** internal `composite_image_prompt` that renders a 2x3 grid of six cells in one image; every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — each cell a different symbolic representation, with a small number label. Show the artist only six concise symbolic option labels or one-line descriptions and ask: "Which one would you like? Would you like it visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Do not call a provider without explicit approval. Store each cell's content as the option's `visual_prompt`. Wait for the artist to select, combine, reject, or revise before locking Symbology Direction, unless they explicitly proceed unconfirmed.
-5. Define Style Direction after symbology is selected or narrowed.
-6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
-7. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
-8. If they want to see options, build a Style Exploration Board as a single-image Comparison Board. Write **one** internal `composite_image_prompt` rendering a 2x3 grid of six tiles in one image, where every tile holds the same locked Symbology subject, pose, and framing and varies only the style. Show the artist only six concise suggested styles and ask: "Do you want some of these? Do you have something else in mind? Would you like this visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Do not write one prompt per tile, and do not generate without explicit approval. Store each tile's content as the option's `visual_prompt`. Wait for the artist to select, combine, reject, or revise before locking Style Direction, unless they explicitly proceed unconfirmed.
-9. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
-10. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
-11. Surface Style/Visual Conflicts and propose Style Adaptations.
-12. Add Emotional Qualities, Beats, Tension Points, value shifts, transformation constraints, and Series Recommendation.
-13. Produce the draft Creative Brief Document.
+3. Confirm Interpretation is complete: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured or explicitly marked safe to proceed unconfirmed.
+4. Define Symbology Direction: what the image shows as the core symbolic representation.
+5. If Symbology Direction is unresolved, build a Symbology Board as a single-image Comparison Board (see `THEORY.md` → "Visual Gate Boards"). Write **one** internal `composite_image_prompt` that renders a 2x3 grid of six cells in one image; every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — each cell a different symbolic representation, with a small number label. Show the artist only six concise symbolic option labels or one-line descriptions and ask: "Which one would you like? Should this become a single image, an emotional arc, or a multi-image presentation? Would you like it visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Do not call a provider without explicit approval. Store each cell's content as the option's `visual_prompt`. Visualization is not complete until the artist chooses or combines a symbolic option, chooses single image / emotional arc / multi-image presentation, and accepts, declines, or requests visualization. Do not move to Style before that unless the artist explicitly proceeds unconfirmed.
+6. Define Style Direction after Visualization is complete.
+7. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
+8. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
+9. If they want to see options, build a Style Exploration Board as a single-image Comparison Board. Write **one** internal `composite_image_prompt` rendering a 2x3 grid of six tiles in one image, where every tile holds the same locked Symbology subject, pose, and framing and varies only the style. Show the artist only six concise suggested styles and ask: "Do you want some of these? Do you have something else in mind? Would you like this visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Do not write one prompt per tile, and do not generate without explicit approval. Store each tile's content as the option's `visual_prompt`. Style is not complete until the artist chooses, combines, names another style, declines style visualization, requests a style prompt, or explicitly proceeds unconfirmed.
+10. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
+11. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
+12. Surface Style/Visual Conflicts and propose Style Adaptations.
+13. Add Emotional Qualities, Beats, Tension Points, value shifts, transformation constraints, and Series Recommendation. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+14. Produce the draft Creative Brief Document only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
 
 If running standalone, recommend Art Critic Review. If the `artist-os` orchestrator is running, return the draft and stop; the orchestrator advances automatically.
 
@@ -49,7 +53,7 @@ If running standalone, recommend Art Critic Review. If the `artist-os` orchestra
 
 Use this only after Art Critic Review and Brief Approval.
 
-1. If intensity is unresolved, build the Minimalist-to-Maximalist Gate as a single-image Comparison Board: write **one** internal prompt rendering three side-by-side panels (Minimal, Faithful/Balanced, Amplified/Maximal) in one image, same locked subject and style throughout. Show the artist only three concise detail/intensity options and ask: "Would you like them represented or visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Store it as the layout plan's `composite_image_prompt` with `layout_type: three_panel_variant_triptych`. Do not write three separate prompts here, and do not generate without explicit approval.
+1. If intensity is unresolved, build the Minimalist-to-Maximalist Gate as a single-image Comparison Board: write **one** internal prompt rendering three side-by-side panels (Minimal, Faithful/Balanced, Amplified/Maximal) in one image, same locked subject and style throughout. Show the artist only three concise detail/intensity options and ask: "Would you like them represented or visualized?" Do not show the full prompt unless the artist asks for an image-generator prompt. Store it as the layout plan's `composite_image_prompt` with `layout_type: three_panel_variant_triptych`. Do not write three separate prompts here, and do not generate without explicit approval. Detail is not complete until the artist chooses an intensity direction, combines directions, declines visualization, requests a prompt, or explicitly skips the detail choice.
 2. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`.
 3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`.
 4. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
@@ -67,7 +71,7 @@ Every prompt choice must trace back to Artist Meaning, Reference evidence, a Cor
 
 Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Map, Symbology Direction, and Visual Dynamics.
 
-Series recommendations must trace back to the Beat Map or Tension Points.
+Series recommendations must trace back to the Beat Map or Tension Points. For series work, verify that suggested image roles vary across the internal amplitude profile. Adjacent images should usually differ on at least two dimensions unless sameness is intentional and traced to the Emotional Arc.
 
 ## Outputs
 

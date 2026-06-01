@@ -40,20 +40,29 @@ Provider-Neutral Image Prompt Plan records should validate against `schemas/prom
 - Artist Meaning overrides agent interpretation.
 - Preserve provenance before optimizing for speed.
 - Use Dry Runs before invoking media generation providers.
+- Persist real Artist OS project work in `workspace-library/artist-os/`; do not leave project state only in the chat context.
+- Store images in the matching `assets/` subfolder and create a same-basename sidecar that validates against `schemas/asset-metadata.schema.json`.
+- If the Workspace Library is missing, initialize it with `bin/artist-os-db setup` before starting or resuming project work.
+- Use `workspace-library/artist-os/artist-os.sqlite` as the local query index; refresh it with `bin/artist-os-db sync` after project manifests, events, or assets change.
+- Treat SQLite projects with `status = missing` as historical references whose project folder was not found during the latest sync; do not resume them until the files are restored.
+- Do not commit generated media, private artist references, or Workspace Library project folders.
 - Keep Derived Symbols marked and traceable.
 - Keep Visual Dynamics separate from Emotional Structure.
 - Keep Style Direction separate from Emotional Structure and Visual Dynamics.
 - Treat Style Direction as the last priority after Artist Meaning, Emotional Structure, Beat Map, and Visual Dynamics.
 - When the artist has not named a specific style directly, ask whether they have a specific vision or want to explore what art style to use.
 - Run visual choice gates in this default order: Symbology Gate, Style Gate, then Minimalist-to-Maximalist Gate.
-- At the Symbology Gate, show six concise symbolic representations, ask which one the artist wants, and ask whether they want it visualized.
+- Do not move from Interpretation to Visualization/Symbolic, Visualization/Symbolic to Style, or Style to Detail until the current stage is complete or the artist explicitly says to proceed unconfirmed.
+- At the Symbology Gate, show six concise symbolic representations, ask which one the artist wants, ask whether the work should be a single image, emotional arc, or multi-image presentation, and ask whether they want it visualized.
 - At the Style Gate, show six concise suggested styles, ask whether the artist wants some of them or has something else in mind, and ask whether they want the styles visualized.
 - Surface Style/Visual Conflicts and record proposed Style Adaptations instead of silently letting style override Visual Dynamics.
 - Use the Wondermint Category Reference only as seed vocabulary unless preparing a Wondermint upload, where exact accepted subcategory names are required.
 - Recommend a Series Plan when multiple significant Beats would be flattened into one image, but do not create multiple image prompt plans without artist approval.
+- For triptych or image-series recommendations, capture an internal 0-1 Series Amplitude Plan for each suggested image and vary adjacent images on at least two dimensions unless sameness is intentional.
 - For an approved Series Plan, produce three calibration Prompt Variant Plans for one Series Calibration Image first and wait for artist approval before producing the remaining series.
 - Use Prompt Variant Plans to test named unresolved creative axes when that is more useful than simple intensity variation.
 - Before locking final Prompt Variant Plans, use the Minimalist-to-Maximalist Gate to compare visual intensity once symbology and style are selected.
+- After every meaningful Artist OS phase, update the project manifest, write the stage record, append an event to `events.jsonl`, store any images with sidecar metadata in the Workspace Library, and refresh the SQLite index.
 
 ## First Slice
 

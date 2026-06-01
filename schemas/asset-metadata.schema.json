@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/asset-metadata.schema.json",
+  "title": "ArtistOSAssetMetadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "asset_id",
+    "project_id",
+    "asset_type",
+    "stage",
+    "path",
+    "created_at",
+    "provenance",
+    "rights_notes",
+    "status"
+  ],
+  "properties": {
+    "asset_id": { "type": "string" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "asset_type": {
+      "type": "string",
+      "enum": ["reference", "board", "generated", "final", "export"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "source",
+        "interpretation",
+        "visualization_symbolic",
+        "style",
+        "detail",
+        "brief_review",
+        "prompt_plan",
+        "generation",
+        "critique",
+        "complete"
+      ]
+    },
+    "path": { "type": "string" },
+    "created_at": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin"],
+      "properties": {
+        "origin": {
+          "type": "string",
+          "enum": ["user_provided", "agent_drafted", "provider_generated", "imported"]
+        },
+        "source_record_id": { "type": "string" },
+        "brief_id": { "type": "string" },
+        "prompt_plan_id": { "type": "string" },
+        "visual_board_type": { "type": "string" },
+        "prompt_variant_id": { "type": "string" },
+        "event_id": { "type": "string" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "prompt": { "type": "string" },
+        "settings": { "type": "object" },
+        "seed": { "type": ["string", "number", "null"] }
+      }
+    },
+    "rights_notes": { "type": "string" },
+    "critique_status": {
+      "type": "string",
+      "enum": ["not_reviewed", "passed", "needs_revision", "rejected"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "generated", "imported", "accepted", "rejected", "archived"]
+    },
+    "notes": { "type": "string" }
+  }
+}

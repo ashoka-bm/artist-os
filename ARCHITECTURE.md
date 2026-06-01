@@ -21,7 +21,7 @@ Text Reference
   -> Creative Brief Record
   -> Provider-Neutral Image Prompt Plan
   -> critique checklist
-  -> archive record
+  -> Workspace Library persistence
 ```
 
 No paid generation call is required for the First Slice.
@@ -34,7 +34,7 @@ Use `artist-os` as the normal orchestration skill for this workflow. It moves th
 2. `artist-os-ingest-reference` creates a Source Record.
 3. `artist-os-meaning-interview` captures Artist Meaning and transformation constraints.
 4. `artist-os-text-to-image-plan` creates the first pass of Artist Meaning, Emotional Structure, and Beat Map.
-5. `artist-os-text-to-image-plan` defines Symbology Direction first, using six concise symbolic options when unresolved and keeping the full board prompt internal unless the artist asks for it.
+5. `artist-os-text-to-image-plan` defines Symbology Direction first, using six concise symbolic options when unresolved, asking whether the work should become a single image, emotional arc, or multi-image presentation, and keeping the full board prompt internal unless the artist asks for it.
 6. `artist-os-text-to-image-plan` uses Style Direction directly if specific, or asks whether the artist has a specific vision or wants style exploration.
 7. If style remains broad or unresolved, `artist-os-text-to-image-plan` shows six concise suggested styles, asks whether the artist wants one of them or something else, and keeps the full board prompt internal unless requested.
 8. `artist-os-text-to-image-plan` adds Symbology Direction, Style Direction, and Series Recommendation to the draft Creative Brief Document.
@@ -44,7 +44,7 @@ Use `artist-os` as the normal orchestration skill for this workflow. It moves th
 12. If the artist approves a Series Plan, `artist-os-text-to-image-plan` creates three calibration Prompt Variant Plans for the Series Calibration Image first.
 13. After the artist approves one calibration direction, `artist-os-text-to-image-plan` records the Calibration Choice and can create one Provider-Neutral Image Prompt Plan per remaining Image Role.
 14. `artist-os-critique-asset` compares the Prompt Plan or Generated Work against the approved Creative Brief.
-15. The archive records prompts, settings, outputs, and review notes.
+15. The Workspace Library records prompts, settings, outputs, image paths, sidecar metadata, and review notes. Image sidecars validate against `schemas/asset-metadata.schema.json`, and the SQLite index at `workspace-library/artist-os/artist-os.sqlite` is refreshed from those files.
 
 ## State Model
 
@@ -70,6 +70,8 @@ Artist OS separates build-process documentation from product behavior.
 - `README.md`, `PROGRESS.md`, and planning docs guide how this repository is being built.
 - `THEORY.md`, `ARCHITECTURE.md`, `CONTEXT.md`, schemas, examples, and `skills/` define product behavior.
 - Provider setup, API keys, host adapters, setup scripts, and media ingestion come after the manual workflow is proven.
+- `workspace-library/artist-os/` stores private project records and media locally and is ignored by git.
+- `workspace-library/artist-os/artist-os.sqlite` is the local query index for resuming projects across sessions; the project folders remain the durable source artifacts.
 
 ## Provenance Invariant
 

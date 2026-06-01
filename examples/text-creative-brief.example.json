@@ -349,19 +349,49 @@
         "image_role": "opening image",
         "beat_or_tension_point": "erasure to invitation",
         "emotional_payload": "hope that hurts because it may not be trustworthy",
-        "target_visual_engine": "empty room, lit doorway, cool shadows, sparse domestic evidence"
+        "target_visual_engine": "empty room, lit doorway, cool shadows, sparse domestic evidence",
+        "amplitude_profile": {
+          "framing_distance": 0.72,
+          "subject_scale": 0.28,
+          "visual_density": 0.24,
+          "motion_energy": 0.12,
+          "spatial_openness": 0.66,
+          "detail_intensity": 0.32,
+          "emotional_pressure": 0.48,
+          "rationale": "A wider, sparse opening lets the room's absence carry the first emotional pressure."
+        }
       },
       {
         "image_role": "threshold image",
         "beat_or_tension_point": "agency to paralysis",
         "emotional_payload": "the pain of having a choice that cannot be safely made",
-        "target_visual_engine": "still figure at the edge of light, key visible, rain haze outside"
+        "target_visual_engine": "still figure at the edge of light, key visible, rain haze outside",
+        "amplitude_profile": {
+          "framing_distance": 0.36,
+          "subject_scale": 0.62,
+          "visual_density": 0.44,
+          "motion_energy": 0.28,
+          "spatial_openness": 0.38,
+          "detail_intensity": 0.58,
+          "emotional_pressure": 0.78,
+          "rationale": "A closer threshold image increases pressure and makes the key and hesitation physically present."
+        }
       },
       {
         "image_role": "resonance image",
         "beat_or_tension_point": "presence and absence remain unresolved",
         "emotional_payload": "absence becoming active and almost embodied",
-        "target_visual_engine": "untouched chairs and lit threshold without showing whether she enters"
+        "target_visual_engine": "untouched chairs and lit threshold without showing whether she enters",
+        "amplitude_profile": {
+          "framing_distance": 0.56,
+          "subject_scale": 0.18,
+          "visual_density": 0.36,
+          "motion_energy": 0.18,
+          "spatial_openness": 0.52,
+          "detail_intensity": 0.46,
+          "emotional_pressure": 0.64,
+          "rationale": "The final image pulls back from the body but keeps pressure higher than the opening, letting absence become the subject."
+        }
       }
     ],
     "style_progression": {

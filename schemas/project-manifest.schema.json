@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/project-manifest.schema.json",
+  "title": "ArtistOSProjectManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "project_id",
+    "title",
+    "status",
+    "current_stage",
+    "created_at",
+    "updated_at",
+    "paths",
+    "decisions",
+    "assets"
+  ],
+  "properties": {
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "title": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "complete", "archived"]
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "source",
+        "interpretation",
+        "visualization_symbolic",
+        "style",
+        "detail",
+        "brief_review",
+        "prompt_plan",
+        "generation",
+        "critique",
+        "complete"
+      ]
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "summary": { "type": "string" },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_dir",
+        "events",
+        "source_record",
+        "meaning_interview",
+        "creative_brief_record",
+        "prompt_plan"
+      ],
+      "properties": {
+        "project_dir": { "type": "string" },
+        "events": { "type": "string" },
+        "source_record": { "type": "string" },
+        "reference_text": { "type": "string" },
+        "meaning_interview": { "type": "string" },
+        "interpretation_gate": { "type": "string" },
+        "symbology_gate": { "type": "string" },
+        "style_gate": { "type": "string" },
+        "detail_gate": { "type": "string" },
+        "creative_brief_draft": { "type": "string" },
+        "creative_brief_record": { "type": "string" },
+        "prompt_plan": { "type": "string" },
+        "critiques_dir": { "type": "string" },
+        "assets_dir": { "type": "string" },
+        "exports_dir": { "type": "string" }
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interpretation_status",
+        "symbology_status",
+        "style_status",
+        "detail_status"
+      ],
+      "properties": {
+        "interpretation_status": { "$ref": "#/$defs/stage_status" },
+        "symbology_status": { "$ref": "#/$defs/stage_status" },
+        "style_status": { "$ref": "#/$defs/stage_status" },
+        "detail_status": { "$ref": "#/$defs/stage_status" },
+        "selected_symbology": { "type": "string" },
+        "presentation_mode": {
+          "type": "string",
+          "enum": ["single_image", "emotional_arc", "multi_image", "unselected"]
+        },
+        "selected_style": { "type": "string" },
+        "selected_detail_mode": {
+          "type": "string",
+          "enum": ["minimal", "faithful_balanced", "amplified_maximal", "combined", "unselected"]
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/asset_record" }
+    }
+  },
+  "$defs": {
+    "stage_status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "complete", "skipped", "unconfirmed"]
+    },
+    "asset_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "asset_type", "stage", "path", "metadata_path", "status"],
+      "properties": {
+        "asset_id": { "type": "string" },
+        "asset_type": {
+          "type": "string",
+          "enum": ["reference", "board", "generated", "final", "export"]
+        },
+        "stage": { "type": "string" },
+        "path": { "type": "string" },
+        "metadata_path": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["proposed", "generated", "imported", "accepted", "rejected", "archived"]
+        },
+        "created_at": { "type": "string" }
+      }
+    }
+  }
+}

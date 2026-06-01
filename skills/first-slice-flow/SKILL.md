@@ -13,6 +13,7 @@ Load detailed definitions only when needed:
 
 - `THEORY.md` for product theory and gate definitions.
 - `docs/metadata-schema.md` for record fields and layout plans.
+- `docs/storage.md` for Workspace Library paths and persistence rules.
 - `AGENTS.md` for repository invariants.
 
 Use sibling skills as phase references when needed: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/art-critic-review`, and `skills/critique-asset`.
@@ -22,10 +23,39 @@ Use sibling skills as phase references when needed: `skills/ingest-reference`, `
 - Do not call a generation provider without explicit approval.
 - Do not create the Creative Brief Record or Provider-Neutral Image Prompt Plan until Art Critic Review has revised the Creative Brief Document and the artist has approved it.
 - Do not create multiple series image prompts until the artist approves a Series Plan.
+- Do not leave project state only in chat context. Persist each phase to the Workspace Library before moving to the next stage.
+
+## Workspace Library
+
+Use `workspace-library/artist-os/` for durable project state. For each project, create or update:
+
+- `project.json` for the current manifest,
+- `events.jsonl` for process history,
+- `source/source-record.json` and `source/reference.txt`,
+- `meaning/meaning-interview.json`,
+- `gates/interpretation.json`, `gates/symbology.json`, `gates/style.json`, and `gates/detail.json`,
+- `briefs/creative-brief.draft.md` and `briefs/creative-brief.record.json`,
+- `prompt-plans/prompt-plan.json`,
+- `assets/reference`, `assets/boards`, `assets/generated`, and `assets/final` for images with `.json` sidecars.
+
+Use `workspace-library/artist-os/artist-os.sqlite` as the searchable index. If the Workspace Library is missing, run `bin/artist-os-db setup`. Refresh the index with `bin/artist-os-db sync` after writing manifests, events, or asset sidecars.
+
+When a user returns to prior work, query `workspace-library/artist-os/artist-os.sqlite` first, then read the relevant `project.json` before asking them to restate context. If the database is missing, run `bin/artist-os-db setup` and `bin/artist-os-db sync`, then fall back to project manifests if needed. If SQLite shows `status = missing`, treat the row as historical and ask for the project files to be restored before resuming it.
+
+Image sidecars must use the same basename as the image and validate against `schemas/asset-metadata.schema.json`.
 
 ## Autopilot
 
 Move forward automatically unless the next step needs artist input. Ask only for missing reference, Artist Meaning, Symbology choice, Style choice, intensity choice, Brief Approval, Series Plan approval, layout choice, or calibration approval.
+
+## Stage Completion Criteria
+
+Do not move to the next stage until the current stage is done. A stage is done only when the artist has selected, revised, rejected, or explicitly skipped the open choice.
+
+1. **Interpretation is done** when Artist Meaning is captured, must-preserve meaning is named, emotional language or emotional arc is noted when present, and unresolved interpretation questions are either answered or marked as safe to proceed unconfirmed.
+2. **Visualization / Symbolic is done** when the artist has chosen or combined a symbolic representation from the six concise options, chosen single image / emotional arc / multi-image presentation, and decided whether the symbolic options should be visualized. Do not move to Style while any of these are unanswered unless the artist explicitly says to proceed without deciding.
+3. **Style is done** when the artist has chosen a style, chosen or combined one of the six suggested styles, named another style, or explicitly allowed an unconfirmed style recommendation to proceed. If visualization was offered, wait for the artist to accept, decline, or ask for a prompt before moving on.
+4. **Detail is done** when the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice. If visualization was offered, wait for the artist to accept, decline, or ask for a prompt before final prompt locking.
 
 ### Visual gates produce ONE image, not a list
 
@@ -49,7 +79,7 @@ Drafting a board (writing its `composite_image_prompt`) needs no provider call a
 Do not show the full `composite_image_prompt` at a gate unless the artist explicitly asks for an image-generator prompt. Present only short option labels or one-line descriptions, then ask the gate question:
 
 - **General:** "Here are 6 different options for how we can represent this. Would you like this to be displayed as an image?"
-- **Symbology:** "Here are 6 symbolic representations of this information. Which one would you like? Would you like it visualized?"
+- **Symbology:** "Here are 6 symbolic representations of this information. Which one would you like? Should this become a single image, an emotional arc, or a multi-image presentation? Would you like it visualized?"
 - **Style:** "Here are 6 suggested styles. Do you want some of these? Do you have something else in mind? Would you like this visualized?"
 - **Intensity:** "Here are 3 different representations of detail. Would you like them represented or visualized?"
 
@@ -81,17 +111,21 @@ Infer safe placeholders for title, rights notes, and source context unless right
 ### Source Record
 
 Return source id, title, media type, source reference, user context, rights notes, and created date. Then continue to Artist Meaning if incomplete.
+Persist `source/source-record.json`, `source/reference.txt` when applicable, update `project.json`, append an event, and refresh the SQLite index.
 
 ### Meaning Interview
 
 Capture what must survive, allowed transformations, forbidden transformations, intended use, and personal symbols only when needed. Then continue to the draft brief.
+Persist `meaning/meaning-interview.json`, update `project.json`, append an event, and refresh the SQLite index.
 
 ### Draft Creative Brief
 
 Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep the gates in order: Symbology first, then Style, then intensity later. Each gate uses the single-image Comparison Board described above and in `THEORY.md`.
 
-- **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Show six concise symbolic options and ask which one the artist wants, plus whether they want it visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
+- **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Show six concise symbolic options and ask which one the artist wants. Also ask whether the work should become a single image, an emotional arc, or a multi-image presentation, plus whether they want it visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
 - **Style:** once symbology is selected or narrowed, ask whether the artist already has a style in mind or wants to see options. If they want options, show six concise style options and ask whether they want some of these, have something else in mind, or want the options visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Style Direction until the artist responds, unless they explicitly proceed unconfirmed.
+
+Persist each gate decision under `gates/`. Store generated or imported board images in `assets/boards/` with sidecar metadata. Refresh the SQLite index after each persisted gate.
 
 Never call a provider-backed generator without explicit approval. Then continue to Art Critic Review.
 
@@ -100,6 +134,7 @@ Never call a provider-backed generator without explicit approval. Then continue 
 Use `skills/art-critic-review/SKILL.md`. Preserve Artist Meaning, deepen Poetic Density, strengthen Symbology Direction, Style Direction, and Visual Dynamics, and resolve avoidable ambiguity.
 
 Present the revised Creative Brief Document and ask for Brief Approval.
+Persist the draft brief under `briefs/creative-brief.draft.md`, update `project.json`, append an event, and refresh the SQLite index.
 
 ### Brief Approval
 
@@ -116,8 +151,11 @@ Create records only after the applicable gates are resolved or deliberately left
 - Faithful, Amplified, and Minimal Prompt Variant Plans
 
 Base the variants on approved Symbology Direction and Style Direction. Variants test intensity from minimalist to maximalist, not new symbolic representations.
+Persist `briefs/creative-brief.record.json`, `prompt-plans/prompt-plan.json`, update `project.json`, append an event, and refresh the SQLite index.
 
 If the Series Recommendation is `triptych` or `image_series`, explain the recommendation and ask for Series Plan approval before creating multiple image prompt plans.
+
+For triptych or image-series recommendations, make sure the underlying Series Amplitude Plan is captured internally for every suggested image. Do not present it as a user-facing gate by default.
 
 ### Prompt Plan Critique
 

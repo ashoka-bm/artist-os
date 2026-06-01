@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.pyc
+
+# Private Artist OS project state and generated media.
+workspace-library/
+artist-os-library/
+
+# Disposable local intermediates.
+.tmp/

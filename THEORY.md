@@ -133,15 +133,40 @@ For the First Slice, record only the active 6 to 8 visual tensions with evidence
 
 Use Monumental / Intimate only when scale, embodiment, installation, performance, or immersive environments matter.
 
+### Series Amplitude Plan
+
+When recommending a triptych or image series, add an internal Series Amplitude Plan to each suggested image. This is not a user-facing gate. It is a 0-1 numeric profile that keeps the series from repeating the same visual distance, density, motion, and scale.
+
+Each suggested image gets:
+
+- `framing_distance`: 0 = extreme close-up/intimate crop, 1 = panoramic or very wide framing.
+- `subject_scale`: 0 = tiny or fragile subject presence, 1 = monumental or dominant subject presence.
+- `visual_density`: 0 = sparse/minimal field, 1 = crowded/maximal field.
+- `motion_energy`: 0 = still/static, 1 = active/turbulent.
+- `spatial_openness`: 0 = enclosed/compressed, 1 = open/expansive.
+- `detail_intensity`: 0 = stripped down/minimal detail, 1 = highly detailed/layered.
+- `emotional_pressure`: 0 = quiet/low pressure, 1 = overwhelming/high pressure.
+
+Across a series, adjacent images should usually change amplitude on at least two dimensions unless continuity is intentional. Tie amplitude changes to the Beat Map or Emotional Arc: intimate pressure can move closer, expansive consequence can move wider, rupture can increase motion, and aftermath can reduce density or motion while keeping pressure high.
+
 ## Layer 6: Style Direction
 
 Style Direction defines the artistic language used to express the Creative Brief. It is separate from Emotional Structure and Visual Dynamics.
+
+### Stage Completion
+
+Artist OS moves through four artist-facing stages: Interpretation, Visualization/Symbolic, Style, and Detail. Do not advance while the current stage still has an unanswered choice unless the artist explicitly says to proceed unconfirmed.
+
+- **Interpretation complete**: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
+- **Visualization/Symbolic complete**: the artist has selected or combined a symbolic representation, selected single image / emotional arc / multi-image presentation, and accepted, declined, or requested visualization.
+- **Style complete**: the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
+- **Detail complete**: the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 
 Before choosing Style Direction by default, choose Symbology Direction: what the image shows as the core symbolic representation of Artist Meaning. Symbology is closer to meaning than style, so unresolved symbology should be explored visually before style is locked.
 
 Explore it with a Symbology Board, built as a Comparison Board (see "Visual Gate Boards" below): one single image, a 2x3 grid of six cells, where every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — so style does not obscure the symbolic choice. The six cells compare distinct symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction unless they explicitly choose to proceed unconfirmed.
 
-At the gate, show only six concise symbolic representations and ask: "Which one would you like? Would you like it visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
+At the gate, show only six concise symbolic representations and ask: "Which one would you like? Should this become a single image, an emotional arc, or a multi-image presentation? Would you like it visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
 
 ### Visual Gate Boards
 
@@ -227,6 +252,8 @@ A multi-Beat Reference does not automatically become a series. Recommend a singl
 Use a triptych when the Beat Map has a clear three-part emotional structure, such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath. Use an image series for extended sequence, motif evolution, or world exploration.
 
 When the Reference warrants it, a Series Recommendation may propose Style Progression, where the visual language changes across images to express emotional movement. Style Progression must be intentional and trace back to the Beat Map.
+
+Series Recommendation must also include the internal Series Amplitude Plan for each suggested image. Use it to verify that image roles move across visual spectra such as close/wide, sparse/dense, still/active, enclosed/open, minimal/detailed, and quiet/pressurized. If every suggested image has similar amplitude values, revise the series unless sameness is intentional and traced to the Emotional Arc.
 
 Do not create multiple image prompt plans by default. A Series Plan requires artist approval, and Style Progression becomes executable only after that approval.
 

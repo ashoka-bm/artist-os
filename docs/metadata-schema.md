@@ -4,6 +4,52 @@ Artist OS uses records to preserve meaning, provenance, and review history as a 
 
 ## Record Types
 
+### Project Manifest
+
+A Project Manifest tracks one Artist OS project across sessions. It lives in the local Workspace Library at `workspace-library/artist-os/projects/<project_id>/project.json` and validates against `schemas/project-manifest.schema.json`.
+
+Required sections:
+
+- `project_id`
+- `title`
+- `status`
+- `current_stage`
+- `created_at`
+- `updated_at`
+- `paths`
+- `decisions`
+- `assets`
+
+The manifest points to the current records and assets. The process history lives in `events.jsonl`.
+
+### Artist OS Library Database
+
+The local SQLite database lives at `workspace-library/artist-os/artist-os.sqlite` and uses `schemas/artist-os-library.sql`.
+
+It is the searchable index for agents returning to earlier sessions. It stores project summaries, current stage, selected decisions, record paths, asset paths, sidecar-derived metadata, and event rows. It should not store binary image data.
+
+Use `bin/artist-os-db sync` after writing project manifests, event logs, or asset sidecars.
+
+When a previously indexed project is not found during sync, the database marks its project row as `missing`. A `missing` project is historical search context, not a resumable project, until its files are restored.
+
+### Asset Metadata
+
+Asset Metadata is the sidecar record stored next to a reference image, visual board, Generated Work, final image, or export. It validates against `schemas/asset-metadata.schema.json`.
+
+Required fields:
+
+- `asset_id`
+- `project_id`
+- `asset_type`
+- `stage`
+- `path`
+- `created_at`
+- `provenance`
+- `rights_notes`
+- `status`
+
+The sidecar keeps image files traceable without committing the image itself. It records origin, related Source Record / Brief / Prompt Plan / visual board, provider details when applicable, rights notes, and critique status.
+
 ### Source Record
 
 A Source Record describes the Reference before interpretation.
@@ -73,7 +119,7 @@ Required fields:
 - `rationale`
 - `avoid`
 
-When unresolved, show six concise symbolic options and ask which one the artist wants, plus whether they want it visualized. Keep the full board prompt internal unless the artist explicitly asks for an image-generator prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
+When unresolved, show six concise symbolic options and ask which one the artist wants. Also ask whether the work should become a single image, an emotional arc, or a multi-image presentation, plus whether they want it visualized. Keep the full board prompt internal unless the artist explicitly asks for an image-generator prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
 
 ## Style Direction
 
@@ -121,9 +167,28 @@ Use `visual_dynamics.conditional_visual_tensions` for `Monumental / Intimate` wh
 
 For text-to-image work, Visual Dynamics describes the Target Visual Engine of the generated image. It must not pretend the text literally has visual properties.
 
+For triptych or image-series recommendations, each `series_recommendation.suggested_images[]` entry must include an internal `amplitude_profile` with 0-1 values:
+
+- `framing_distance`: close-up to panoramic
+- `subject_scale`: fragile/tiny to monumental/dominant
+- `visual_density`: sparse to crowded
+- `motion_energy`: still to turbulent
+- `spatial_openness`: enclosed to expansive
+- `detail_intensity`: minimal to layered
+- `emotional_pressure`: quiet to overwhelming
+
+Use amplitude values to verify that a series changes visual rhythm across image roles. Adjacent images should usually differ on at least two amplitude dimensions unless continuity is intentional and justified in `rationale`.
+
 ## Visual Gates
 
 The default First Slice has three visual gates. Each gate is a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images. The `composite_image_prompt` is internal by default; show concise options to the artist unless they explicitly ask for an image-generator prompt.
+
+Stage completion criteria:
+
+- Interpretation is complete when Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
+- Visualization/Symbolic is complete when the artist has selected or combined a symbolic representation, chosen single image / emotional arc / multi-image presentation, and accepted, declined, or requested visualization.
+- Style is complete when the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
+- Detail is complete when the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 
 1. Symbology Board: one image, 2x3 grid of six cells, each cell plain black-and-white line art of the subject only (no style) comparing symbolic representations, before style is locked.
 2. Style Exploration Board: one image, 2x3 grid of six tiles, each tile the same locked symbology subject in a different style, shown only after asking whether the artist wants to see style options.
@@ -194,7 +259,7 @@ Required fields:
 
 - `mode`: `single_image`, `triptych`, or `image_series`
 - `reason`
-- `suggested_images`
+- `suggested_images`, each with `amplitude_profile`
 - `style_progression`
 - `calibration`
 - `requires_artist_approval`

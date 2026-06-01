@@ -153,7 +153,7 @@ What the image shows as the core symbolic representation of Artist Meaning, such
 _Avoid_: Choosing art style before deciding what the image represents
 
 **Symbology Gate**:
-The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented.
+The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented and whether the work should become a single image, emotional arc, or multi-image presentation.
 _Avoid_: Hiding symbolic representation inside final prompt variants
 
 **Symbology Board**:
@@ -183,6 +183,10 @@ _Avoid_: Color labels, composition tags
 **Active Visual Tensions**:
 The selected Core Visual Tension Pairs that materially shape a specific Creative Brief.
 _Avoid_: Scoring every visual pair by default in the First Slice
+
+**Series Amplitude Plan**:
+The internal 0-1 visual amplitude profile for each suggested image in a triptych or image series, covering framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+_Avoid_: Letting every image in a series use the same distance, density, and motion by accident
 
 **Conditional Visual Tension Pair**:
 A Visual Dynamics pair that appears only when relevant to the Reference or target medium.
@@ -361,8 +365,24 @@ Committed sample References and records that are safe to share.
 _Avoid_: Workspace Library
 
 **Workspace Library**:
-Local uncommitted storage for real artist References, Creative Briefs, Generated Works, and Output Records.
+Local uncommitted storage for real artist References, Creative Briefs, gate decisions, Prompt Plans, Generated Works, image files, sidecar metadata, and Output Records.
 _Avoid_: Example Corpus
+
+**Artist OS Library Database**:
+The SQLite query index at `workspace-library/artist-os/artist-os.sqlite`, refreshed from project manifests, event logs, and asset sidecars.
+_Avoid_: Source of truth for binary media
+
+**Missing Project**:
+A project row in the Artist OS Library Database whose project folder or `project.json` was not found during the latest sync.
+_Avoid_: Archived Project
+
+**Project Manifest**:
+The `project.json` record that lets an agent reload one Artist OS project across sessions.
+_Avoid_: Chat memory
+
+**Asset Metadata**:
+The same-basename `.json` sidecar stored next to an image or export in the Workspace Library.
+_Avoid_: Loose notes
 
 **First Slice**:
 The first complete Dry Run path through Artist OS: Text Reference to Image Prompt Plan.
@@ -417,7 +437,7 @@ _Avoid_: Generated Work, Source Record
 - **Art Critic Review** may propose a default **Style Adaptation** and only ask for explicit approval when it materially changes the named style.
 - **Style Interview** first asks whether the artist has a specific visual vision or wants to explore what art style to use when the artist has not named a specific style.
 - **Symbology Gate** comes before **Style Gate** by default because symbolic representation is closer to **Artist Meaning** than art style.
-- **Symbology Board** compares six concise symbolic options and asks for artist selection before style is locked.
+- **Symbology Board** compares six concise symbolic options, asks for artist selection, and asks whether the work should become a single image, emotional arc, or multi-image presentation before style is locked.
 - **Style Interview** is adaptive, with **Style Interview Fallback Order** used when the Reference and **Artist Meaning** do not already narrow the next question.
 - **Style Interview** stops early when **Style Interview Stop Condition** is met.
 - **Style Interview** produces a **Style Recommendation** for artist confirmation.
@@ -430,6 +450,8 @@ _Avoid_: Generated Work, Source Record
 - Wondermint subcategories are useful mapping metadata, but required only when preparing Wondermint uploads.
 - **Visual Dynamics** contains **Active Visual Tensions** chosen from the **Core Visual Tension Pairs** library.
 - The First Slice outputs only **Active Visual Tensions** rather than all **Core Visual Tension Pairs**.
+- A **Series Amplitude Plan** gives each suggested series image 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+- In a triptych or image series, adjacent image roles should usually differ on at least two **Series Amplitude Plan** dimensions unless visual sameness is intentional and traced to the **Emotional Arc**.
 - In text-to-image work, **Visual Dynamics** describes the **Target Visual Engine**, not literal visual properties of the text.
 - Every **Target Visual Engine** choice must trace back to **Artist Meaning**, **Reference** evidence, **Emotional Structure**, **Beat Map**, or **Critical Heuristics**.
 - **Monumental / Intimate** is a **Conditional Visual Tension Pair** for scale, embodiment, installation, performance, and immersive work.
@@ -474,6 +496,9 @@ _Avoid_: Generated Work, Source Record
 - A **Provider Adapter** translates a **Provider-Neutral Prompt Plan** for a provider.
 - The **Example Corpus** contains safe committed examples.
 - The **Workspace Library** contains real artist work and is not committed by default.
+- The **Artist OS Library Database** indexes the **Workspace Library** so agents can find old projects, prompts, image paths, and resume points.
+- A **Missing Project** can be searched as historical context but cannot be resumed until its files are restored.
+- Each project in the **Workspace Library** has a **Project Manifest** and image files use **Asset Metadata** sidecars.
 - The **First Slice** transforms a text **Reference** into an image **Prompt Plan** through a **Dry Run**.
 - A **Prompt Plan** can produce one or more **Variants**.
 - A **Variant** is a **Generated Work**.
@@ -737,6 +762,6 @@ _Avoid_: Generated Work, Source Record
 - Each **Prompt Variant Plan** must name concrete **Variant Differentiators** so the three prompts produce meaningfully different visual options.
 - Use a **Single-Generation Variant Triptych** when the artist wants Minimal, Faithful/Balanced, and Amplified/Maximal intensity directions compared in one generated image.
 - Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
-- "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted.
+- "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted, with an **Artist OS Library Database**, a **Project Manifest** per project, and **Asset Metadata** sidecars for images and exports.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.
 - "accepted" needed a boundary. Resolved: a **Generated Work** becomes an **Accepted Work** only through **Acceptance Review**.

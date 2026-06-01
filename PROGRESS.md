@@ -88,13 +88,14 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Hardened Style Exploration as the default unresolved-style path: ask whether the artist has a specific visual vision or wants exploration, ask for a rough direction instead of presenting a fixed menu, then recommend a six-tile Style Exploration Board before locking Style Direction.
 - Added Symbology Board as the first visual human-input gate: compare three to six visual branches for symbolic or compositional expression before style is locked.
 - Refined the visual gates into the default order Symbology Gate, Style Gate, and Minimalist-to-Maximalist Gate. Symbology now asks whether to draft or generate a 3-6 image grid before style is locked.
+- Added the Workspace Library storage model and SQLite query index so agents can return to project manifests, events, prompt plans, and image paths across sessions.
 
 ## Working Assumptions
 
 - We are borrowing GStack's repository and workflow shape, not vendoring or copying it directly.
 - The first build target is an agent plugin/skill bundle, not a user-facing generation app.
 - Image, audio, and video generation all need provenance metadata from the start.
-- Generated assets should not be committed until storage policy is decided.
+- Generated assets should not be committed. Real Artist OS project work belongs in the local, ignored Workspace Library at `workspace-library/artist-os/`, indexed by `workspace-library/artist-os/artist-os.sqlite`.
 - `README.md`, `PROGRESS.md`, `docs/IMPLEMENTATION_PLAN.md`, and `docs/gstack-repo-map.md` currently guide the process of building the repo. They are not final artist-facing product documentation.
 - Product docs such as `AGENTS.md`, `ARCHITECTURE.md`, `THEORY.md`, `docs/metadata-schema.md`, and `skills/` are now the source of truth for the first manual Artist OS workflow.
 

@@ -1,0 +1,375 @@
+#!/usr/bin/env python3
+"""Manage the local Artist OS SQLite library index."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sqlite3
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_LIBRARY_ROOT = REPO_ROOT / "workspace-library" / "artist-os"
+SCHEMA_PATH = REPO_ROOT / "schemas" / "artist-os-library.sql"
+PROJECT_SUBDIRS = [
+    "projects",
+    "imports",
+    "exports",
+]
+
+
+def connect(db_path: Path) -> sqlite3.Connection:
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(db_path)
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
+def apply_schema(conn: sqlite3.Connection) -> None:
+    schema = SCHEMA_PATH.read_text(encoding="utf-8")
+    conn.executescript(schema)
+
+
+def setup_library(library_root: Path, db_path: Path) -> None:
+    library_root.mkdir(parents=True, exist_ok=True)
+    for subdir in PROJECT_SUBDIRS:
+        (library_root / subdir).mkdir(parents=True, exist_ok=True)
+    with connect(db_path) as conn:
+        apply_schema(conn)
+
+
+def init_db(args: argparse.Namespace) -> None:
+    db_path = db_path_for(args)
+    with connect(db_path) as conn:
+        apply_schema(conn)
+    print(f"initialized {db_path}")
+
+
+def setup_db(args: argparse.Namespace) -> None:
+    library_root = Path(args.library_root)
+    db_path = db_path_for(args)
+    setup_library(library_root, db_path)
+    print(f"created Workspace Library folders under {library_root}")
+    print(f"initialized {db_path}")
+
+
+def read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def resolve_path(path_value: str | None, project_dir: Path, library_root: Path) -> Path | None:
+    if not path_value:
+        return None
+    path = Path(path_value)
+    candidates = [path]
+    if not path.is_absolute():
+        candidates.append(REPO_ROOT / path)
+        candidates.append(project_dir / path)
+        candidates.append(library_root / path)
+        if path.parts[:2] == ("workspace-library", "artist-os"):
+            candidates.append(library_root.joinpath(*path.parts[2:]))
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def optional_json(path_value: str | None, project_dir: Path, library_root: Path) -> dict:
+    path = resolve_path(path_value, project_dir, library_root)
+    if path:
+        return read_json(path)
+    return {}
+
+
+def event_key(payload: dict, fallback_index: int) -> tuple:
+    event_id = payload.get("event_id")
+    if event_id:
+        return ("event_id", event_id)
+    return ("row", fallback_index)
+
+
+def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root: Path) -> None:
+    manifest = read_json(manifest_path)
+    project_id = manifest["project_id"]
+    paths = manifest.get("paths", {})
+    decisions = manifest.get("decisions", {})
+    project_dir = paths.get("project_dir", str(manifest_path.parent))
+
+    conn.execute(
+        """
+        INSERT INTO projects (
+          project_id, title, status, current_stage, summary, project_dir,
+          manifest_path, created_at, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(project_id) DO UPDATE SET
+          title = excluded.title,
+          status = excluded.status,
+          current_stage = excluded.current_stage,
+          summary = excluded.summary,
+          project_dir = excluded.project_dir,
+          manifest_path = excluded.manifest_path,
+          created_at = excluded.created_at,
+          updated_at = excluded.updated_at
+        """,
+        (
+            project_id,
+            manifest["title"],
+            manifest["status"],
+            manifest["current_stage"],
+            manifest.get("summary"),
+            project_dir,
+            str(manifest_path),
+            manifest["created_at"],
+            manifest["updated_at"],
+        ),
+    )
+
+    conn.execute("DELETE FROM project_paths WHERE project_id = ?", (project_id,))
+    conn.executemany(
+        "INSERT INTO project_paths (project_id, path_key, path_value) VALUES (?, ?, ?)",
+        [(project_id, key, value) for key, value in paths.items()],
+    )
+
+    conn.execute(
+        """
+        INSERT INTO project_decisions (
+          project_id, interpretation_status, symbology_status, style_status,
+          detail_status, selected_symbology, presentation_mode, selected_style,
+          selected_detail_mode
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(project_id) DO UPDATE SET
+          interpretation_status = excluded.interpretation_status,
+          symbology_status = excluded.symbology_status,
+          style_status = excluded.style_status,
+          detail_status = excluded.detail_status,
+          selected_symbology = excluded.selected_symbology,
+          presentation_mode = excluded.presentation_mode,
+          selected_style = excluded.selected_style,
+          selected_detail_mode = excluded.selected_detail_mode
+        """,
+        (
+            project_id,
+            decisions["interpretation_status"],
+            decisions["symbology_status"],
+            decisions["style_status"],
+            decisions["detail_status"],
+            decisions.get("selected_symbology"),
+            decisions.get("presentation_mode"),
+            decisions.get("selected_style"),
+            decisions.get("selected_detail_mode"),
+        ),
+    )
+
+    conn.execute("DELETE FROM assets WHERE project_id = ?", (project_id,))
+    project_dir_path = Path(project_dir)
+    for asset in manifest.get("assets", []):
+        sidecar = optional_json(asset.get("metadata_path"), project_dir_path, library_root)
+        provenance = sidecar.get("provenance", {})
+        generation = sidecar.get("generation", {})
+        conn.execute(
+            """
+            INSERT INTO assets (
+              asset_id, project_id, asset_type, stage, path, metadata_path,
+              status, created_at, critique_status, origin, provider, model,
+              source_record_id, brief_id, prompt_plan_id, visual_board_type,
+              prompt_variant_id
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                asset["asset_id"],
+                project_id,
+                asset["asset_type"],
+                asset["stage"],
+                asset["path"],
+                asset["metadata_path"],
+                asset["status"],
+                asset.get("created_at"),
+                sidecar.get("critique_status"),
+                provenance.get("origin"),
+                generation.get("provider"),
+                generation.get("model"),
+                provenance.get("source_record_id"),
+                provenance.get("brief_id"),
+                provenance.get("prompt_plan_id"),
+                provenance.get("visual_board_type"),
+                provenance.get("prompt_variant_id"),
+            ),
+        )
+
+    conn.execute("DELETE FROM records WHERE project_id = ?", (project_id,))
+    record_keys = {
+        "source_record": "source_record",
+        "reference_text": "reference_text",
+        "meaning_interview": "meaning_interview",
+        "interpretation_gate": "interpretation_gate",
+        "symbology_gate": "symbology_gate",
+        "style_gate": "style_gate",
+        "detail_gate": "detail_gate",
+        "creative_brief_draft": "creative_brief_draft",
+        "creative_brief_record": "creative_brief_record",
+        "prompt_plan": "prompt_plan",
+    }
+    for key, record_type in record_keys.items():
+        value = paths.get(key)
+        if value:
+            conn.execute(
+                """
+                INSERT INTO records (project_id, record_type, path, status, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (project_id, record_type, value, None, manifest["updated_at"]),
+            )
+
+    events_path_value = paths.get("events")
+    if events_path_value:
+        events_path = resolve_path(events_path_value, project_dir_path, library_root)
+        conn.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
+        if events_path and events_path.exists():
+            for index, line in enumerate(events_path.read_text(encoding="utf-8").splitlines(), 1):
+                if not line.strip():
+                    continue
+                payload = json.loads(line)
+                key_type, key_value = event_key(payload, index)
+                event_id = key_value if key_type == "event_id" else None
+                conn.execute(
+                    """
+                    INSERT INTO events (
+                      event_id, project_id, occurred_at, stage, event_type,
+                      summary, payload_json
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        event_id,
+                        payload.get("project_id", project_id),
+                        payload.get("occurred_at") or payload.get("created_at") or payload.get("timestamp"),
+                        payload.get("stage"),
+                        payload.get("event_type") or payload.get("type"),
+                        payload.get("summary"),
+                        json.dumps(payload, sort_keys=True),
+                    ),
+                )
+
+
+def sync_db(args: argparse.Namespace) -> None:
+    library_root = Path(args.library_root)
+    db_path = db_path_for(args)
+    manifests = sorted((library_root / "projects").glob("*/project.json"))
+    with connect(db_path) as conn:
+        apply_schema(conn)
+        found_project_ids = set()
+        for manifest_path in manifests:
+            upsert_manifest(conn, manifest_path, library_root)
+            found_project_ids.add(read_json(manifest_path)["project_id"])
+        if found_project_ids:
+            placeholders = ",".join("?" for _ in found_project_ids)
+            conn.execute(
+                f"""
+                UPDATE projects
+                SET status = 'missing',
+                    updated_at = ?
+                WHERE project_id NOT IN ({placeholders})
+                  AND status != 'archived'
+                """,
+                (datetime.now(timezone.utc).isoformat(), *sorted(found_project_ids)),
+            )
+        else:
+            conn.execute(
+                """
+                UPDATE projects
+                SET status = 'missing',
+                    updated_at = ?
+                WHERE status != 'archived'
+                """,
+                (datetime.now(timezone.utc).isoformat(),),
+            )
+    print(f"synced {len(manifests)} project(s) into {db_path}")
+
+
+def list_projects(args: argparse.Namespace) -> None:
+    with connect(db_path_for(args)) as conn:
+        apply_schema(conn)
+        rows = conn.execute(
+            """
+            SELECT project_id, status, current_stage, updated_at, title
+            FROM projects
+            ORDER BY updated_at DESC
+            """
+        ).fetchall()
+    for row in rows:
+        print("\t".join(str(value or "") for value in row))
+
+
+def show_project(args: argparse.Namespace) -> None:
+    with connect(db_path_for(args)) as conn:
+        apply_schema(conn)
+        conn.row_factory = sqlite3.Row
+        project = conn.execute(
+            "SELECT * FROM projects WHERE project_id = ?", (args.project_id,)
+        ).fetchone()
+        if project is None:
+            raise SystemExit(f"project not found: {args.project_id}")
+        decisions = conn.execute(
+            "SELECT * FROM project_decisions WHERE project_id = ?", (args.project_id,)
+        ).fetchone()
+        assets = conn.execute(
+            """
+            SELECT asset_id, asset_type, stage, status, path
+            FROM assets
+            WHERE project_id = ?
+            ORDER BY created_at, asset_id
+            """,
+            (args.project_id,),
+        ).fetchall()
+    print(json.dumps({
+        "project": dict(project),
+        "decisions": dict(decisions) if decisions else None,
+        "assets": [dict(asset) for asset in assets],
+    }, indent=2))
+
+
+def parser() -> argparse.ArgumentParser:
+    root = argparse.ArgumentParser(description=__doc__)
+    root.add_argument("--db", default=None)
+    sub = root.add_subparsers(required=True)
+
+    init = sub.add_parser("init", help="create or migrate the SQLite library database")
+    init.set_defaults(func=init_db)
+
+    setup = sub.add_parser("setup", help="create Workspace Library folders and initialize SQLite")
+    setup.add_argument("--library-root", default=str(DEFAULT_LIBRARY_ROOT))
+    setup.set_defaults(func=setup_db)
+
+    sync = sub.add_parser("sync", help="sync project manifests into the SQLite index")
+    sync.add_argument("--library-root", default=str(DEFAULT_LIBRARY_ROOT))
+    sync.set_defaults(func=sync_db)
+
+    list_cmd = sub.add_parser("list", help="list indexed projects")
+    list_cmd.set_defaults(func=list_projects)
+
+    show = sub.add_parser("show", help="show one indexed project")
+    show.add_argument("project_id")
+    show.set_defaults(func=show_project)
+
+    return root
+
+
+def db_path_for(args: argparse.Namespace) -> Path:
+    if args.db:
+        return Path(args.db)
+    library_root = Path(getattr(args, "library_root", DEFAULT_LIBRARY_ROOT))
+    return library_root / "artist-os.sqlite"
+
+
+def main() -> None:
+    args = parser().parse_args()
+    args.func(args)
+
+
+if __name__ == "__main__":
+    main()
