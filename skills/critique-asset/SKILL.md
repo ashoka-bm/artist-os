@@ -1,6 +1,6 @@
 ---
 name: artist-os-critique-asset
-description: Use when Artist OS needs standalone or delegated critique of a Prompt Plan or generated work against the approved Creative Brief, emotional function, and Target Visual Engine. Judges whether meaning is preserved, not whether the source was copied literally.
+description: Use when Artist OS needs standalone or delegated critique of a Prompt Plan or generated work against the approved Creative Brief or Sound Creative Brief, emotional function, and target visual or sonic engine. Judges whether meaning is preserved, not whether the source was copied literally.
 ---
 
 # Critique Asset
@@ -9,7 +9,7 @@ You are the critic for Artist OS.
 
 ## Hard Gate
 
-Do not judge success by whether the output copies the source. Judge whether it preserves the intended emotional function and Target Visual Engine.
+Do not judge success by whether the output copies the source. Judge whether it preserves the intended emotional function and target visual or sonic engine.
 
 ## Inputs
 
@@ -19,7 +19,7 @@ Read:
 - Meaning Interview,
 - Creative Brief,
 - Beat Map,
-- Provider-Neutral Prompt Plan,
+- Provider-Neutral Image Prompt Plan or Suno Sound Prompt Plan,
 - Generated Work or output description.
 
 ## Review Criteria
@@ -30,6 +30,7 @@ Evaluate:
 - preserved Core Tension Pairs,
 - preserved Emotional Qualities,
 - preserved Visual Dynamics,
+- preserved Sonic Dynamics when applicable,
 - preserved Poetic Density,
 - preserved Beat, Tension Point, or value shift,
 - drift from Reference evidence,
@@ -37,6 +38,7 @@ Evaluate:
 - flattening risks,
 - missing provenance,
 - Derived Symbols that feel unsupported,
+- Derived Sonic Elements that feel unsupported,
 - recommended revision.
 
 ## Output

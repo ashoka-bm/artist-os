@@ -80,6 +80,10 @@ _Avoid_: Emotional analysis
 The formal forces that make a visual work active, coherent, tense, immersive, unstable, or memorable.
 _Avoid_: Technicality, visual style only
 
+**Sonic Dynamics**:
+The formal forces that make a sound work active, coherent, tense, immersive, unstable, or memorable.
+_Avoid_: Emotional Structure, genre only
+
 **Style Direction**:
 The artistic language or rendering mode used to express a Creative Brief, such as photoreal, cinematic, painterly, manga, cartoon, sketch, pixel art, folk, or surreal.
 _Avoid_: Emotional Structure, Visual Dynamics
@@ -175,6 +179,58 @@ _Avoid_: Extra approval gate before Art Critic Review
 **Target Visual Engine**:
 The intended visual construction of a Generated Work, especially when the Reference is not already visual.
 _Avoid_: Pretending text has literal visual properties
+
+**Target Sonic Engine**:
+The intended sound construction of a Generated Work, especially when the Reference is text.
+_Avoid_: Treating genre or tempo as the whole sound direction
+
+**Sonic Concept Direction**:
+The core sound-world, sonic metaphor, or musical premise used to express Artist Meaning.
+_Avoid_: Genre Direction
+
+**Genre Direction**:
+The musical language or genre frame used to express a Sound Creative Brief, represented as one Primary Genre plus bounded modifiers.
+_Avoid_: Equal-weight genre pileup
+
+**Tempo / Groove Direction**:
+The target pace, felt motion, meter, rhythmic feel, and groove stability for a sound work.
+_Avoid_: BPM only
+
+**Vocal / Lyric Policy**:
+The required decision about whether a sound work has lyrics or intelligible words, and whether those words are absent, source-verbatim, adapted, newly written, spoken, phonetic, or wordless.
+_Avoid_: Silently inventing lyrics inside a final prompt
+
+**Lyrics Draft**:
+Reviewable lyrics created when the artist asks for adapted or new lyrics in a text-to-sound workflow.
+_Avoid_: Hidden provider prompt text
+
+**Arrangement / Form Direction**:
+The time structure of a sound work, including sections, dynamic arc, entries, removals, silence, and ending behavior.
+_Avoid_: Layout Plan
+
+**Song Structure**:
+The nested time architecture of a song: Song, Sections, Phrases, and Bars or beats.
+_Avoid_: Treating a song as only a duration
+
+**Section Function**:
+The role one song section plays, such as invitation, grounding, build, release, development, contrast, rupture, return, closure, or residue.
+_Avoid_: Section label only
+
+**Section Tension Map**:
+The section-by-section mapping of active Emotional Tension Pairs and Sonic Tension Pairs across a song.
+_Avoid_: One static tension score for the whole song
+
+**Text-To-Sound Slice**:
+The dry-run workflow that transforms a text Reference into a Suno Sound Prompt Plan for the first sound version.
+_Avoid_: Provider-backed music generation
+
+**Suno Sound Prompt Plan**:
+A Prompt Plan expressed as Artist OS traceable sound concepts plus Suno Custom Mode outputs.
+_Avoid_: Cross-platform provider abstraction in the first sound version
+
+**Derived Sonic Element**:
+A new motif, sound, instrument, texture, hook, lyric image, or production gesture introduced by a Prompt Variant Plan because it strengthens approved Artist Meaning, Sonic Dynamics, Beat Map, or Poetic Density.
+_Avoid_: Unmarked invention
 
 **Core Visual Tension Pairs**:
 The standard Visual Dynamics library: Light/Dark, Saturated/Muted, Warm/Cool, Harmonious/Discordant, Dense/Sparse, Geometric/Organic, Sharp/Diffuse, Linear/Painterly, Textured/Smooth, Representational/Non-Representational, Flat/Deep, Balanced/Unbalanced, Centered/Decentered, and Singular/Repetitive.

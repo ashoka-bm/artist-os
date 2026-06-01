@@ -39,7 +39,7 @@ This repo borrows from GStack's shape, not by copying implementation wholesale, 
 There are two documentation tracks:
 
 - Build-process docs help us build this repository: `README.md`, `PROGRESS.md`, `docs/IMPLEMENTATION_PLAN.md`, `docs/gstack-repo-map.md`, and `docs/superpowers/plans/2026-05-28-build-artist-os.md`.
-- Product docs define the artist operating system itself: `AGENTS.md`, `ARCHITECTURE.md`, `THEORY.md`, `CONTEXT.md`, `docs/metadata-schema.md`, `schemas/`, `examples/`, and `skills/`.
+- Product docs define the artist operating system itself: `AGENTS.md`, `ARCHITECTURE.md`, `THEORY.md`, `CONTEXT.md`, `docs/metadata-schema.md`, `docs/text-to-sound/`, `schemas/`, `examples/`, and `skills/`.
 
 When a product document exists, it should become the source of truth for that area. Build-process docs should link to it rather than duplicate it.
 
@@ -58,6 +58,8 @@ Current structure:
 │   ├── asset-metadata.example.json
 │   ├── text-creative-brief.example.json
 │   ├── text-prompt-plan.example.json
+│   ├── text-sound-creative-brief.example.json
+│   ├── text-sound-prompt-plan.example.json
 │   └── project-manifest.example.json
 ├── schemas/
 │   ├── source-record.schema.json
@@ -65,6 +67,8 @@ Current structure:
 │   ├── asset-metadata.schema.json
 │   ├── creative-brief.schema.json
 │   ├── prompt-plan.schema.json
+│   ├── sound-creative-brief.schema.json
+│   ├── sound-prompt-plan.schema.json
 │   └── project-manifest.schema.json
 ├── bin/
 │   ├── artist-os-db
@@ -75,9 +79,14 @@ Current structure:
 │   ├── ingest-reference/
 │   ├── meaning-interview/
 │   ├── text-to-image-plan/
+│   ├── text-to-suno-plan/
 │   ├── art-critic-review/
 │   └── critique-asset/
 ├── docs/
+│   ├── text-to-sound/
+│   │   ├── THEORY.md
+│   │   └── ARCHITECTURE.md
+│   └── ...
 └── docs/superpowers/plans/
 ```
 
@@ -125,13 +134,14 @@ artist-os
 artist-os-ingest-reference
 artist-os-meaning-interview
 artist-os-text-to-image-plan
+artist-os-text-to-suno-plan
 artist-os-art-critic-review
 artist-os-critique-asset
 ```
 
-The `name:` field inside each skill uses the same namespaced value, so invoke them with the `artist-os-*` names above.
+The `name:` field inside each role skill uses the same namespaced value, so invoke them with the `artist-os-*` names above.
 
-For the normal end-to-end dry run, start with `artist-os`. The other skills are role-specific entry points for debugging or resuming a single phase.
+For the normal end-to-end dry run, start with `artist-os`. It asks whether unclear text should become visual art or a Suno music prompt. The other skills are role-specific entry points for debugging or resuming a single phase.
 
 The repo remains the source of truth. Editing files under `skills/` updates the installed Codex skills immediately through the symlinks. Codex may still require a new thread or app reload to refresh skill discovery.
 
@@ -163,6 +173,8 @@ Text Reference
 ```
 
 This milestone does not call paid providers. It produces a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans. The default visual gates are Symbology, Style, then Minimalist-to-Maximalist intensity. At each gate, show concise options first and keep the full image prompt internal unless the artist asks for it. Symbology uses six symbolic options and asks whether the work should become a single image, emotional arc, or multi-image presentation. Style uses six suggested styles, and intensity uses three Minimal/Faithful-Balanced/Amplified-Maximal options. Series Recommendation can propose single image, triptych, or image series without executing a series until the artist approves it.
+
+The next planned medium slice is text-to-sound for Suno, documented in `docs/text-to-sound/`. It reuses the shared Artist OS workflow, but replaces visual gates with Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, and Arrangement / Form gates. The Vocal / Lyric Gate is required: Artist OS must ask whether the work should have lyrics or intelligible words, and if adapted or new lyrics are requested, the lyrics must be drafted and reviewed before final prompt locking. The first sound prompt output targets Suno Custom Mode fields: title, lyrics or instrumental choice, Style of Music, Exclude, and optional advanced notes.
 
 ## Open Questions
 

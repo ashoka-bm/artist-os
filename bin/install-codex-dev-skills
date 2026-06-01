@@ -10,6 +10,7 @@ skills=(
   "ingest-reference"
   "meaning-interview"
   "text-to-image-plan"
+  "text-to-suno-plan"
   "art-critic-review"
   "critique-asset"
 )
@@ -19,14 +20,31 @@ mkdir -p "$skills_dir"
 install_skill() {
   local source_dir="$1"
   local target="$2"
+  local skill_name
+  skill_name="$(awk -F': ' '/^name: / {print $2; exit}' "$source_dir/SKILL.md" | tr -d '"')"
 
   if [[ ! -f "$source_dir/SKILL.md" ]]; then
     echo "missing skill source: $source_dir/SKILL.md" >&2
     exit 1
   fi
 
+  if [[ -d "$target" && ! -L "$target" ]]; then
+    if [[ ! -f "$target/SKILL.md" ]]; then
+      echo "refusing to update non-skill directory: $target" >&2
+      exit 1
+    fi
+    target_name="$(awk -F': ' '/^name: / {print $2; exit}' "$target/SKILL.md" | tr -d '"')"
+    if [[ "$target_name" != "$skill_name" ]]; then
+      echo "refusing to update mismatched skill: $target has name '$target_name', expected '$skill_name'" >&2
+      exit 1
+    fi
+    cp "$source_dir/SKILL.md" "$target/SKILL.md"
+    echo "updated copied skill: $target/SKILL.md"
+    return
+  fi
+
   if [[ -e "$target" && ! -L "$target" ]]; then
-    echo "refusing to overwrite non-symlink: $target" >&2
+    echo "refusing to overwrite non-symlink file: $target" >&2
     exit 1
   fi
 
@@ -73,6 +91,6 @@ Installed skill names:
   - artist-os
 $(for skill in "${skills[@]}"; do printf '  - %s%s\n' "$prefix" "$skill"; done)
 
-These are symlinks to this repo, so edits in skills/ update the installed files immediately.
+Existing copied Artist OS skill directories were updated in place; missing skills were installed as symlinks to this repo.
 Codex may require a new thread or app reload to refresh skill discovery.
 EOF

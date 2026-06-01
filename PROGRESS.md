@@ -1,10 +1,10 @@
 # Progress
 
-Last updated: 2026-05-30
+Last updated: 2026-06-01
 
 ## Current State
 
-This repository now has the first product-layer Artist OS documentation, schemas, examples, and manual skills for the dry-run text-to-image First Slice.
+This repository now has the first product-layer Artist OS documentation, schemas, examples, and manual skills for the dry-run text-to-image First Slice, plus an initial product documentation track for the dry-run text-to-sound slice.
 
 The project direction is to build a GStack-inspired plugin and skill system for agents that help artists generate images, audio, video, and related digital assets.
 
@@ -89,6 +89,14 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Added Symbology Board as the first visual human-input gate: compare three to six visual branches for symbolic or compositional expression before style is locked.
 - Refined the visual gates into the default order Symbology Gate, Style Gate, and Minimalist-to-Maximalist Gate. Symbology now asks whether to draft or generate a 3-6 image grid before style is locked.
 - Added the Workspace Library storage model and SQLite query index so agents can return to project manifests, events, prompt plans, and image paths across sessions.
+- Added `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md` for a complete dry-run Text-to-Sound Slice.
+- Added the required Vocal / Lyric Gate: Artist OS must ask whether a sound work should have lyrics or intelligible words, and adapted or new lyrics must be drafted and reviewed before final prompt locking.
+- Added shared glossary terms for Sonic Dynamics, Sonic Concept Direction, Genre Direction, Tempo / Groove Direction, Vocal / Lyric Policy, Lyrics Draft, Arrangement / Form Direction, Text-To-Sound Slice, Suno Sound Prompt Plan, and Derived Sonic Element.
+- Added `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json` so the text-to-sound slice has JSON record parity with the text-to-image slice, including active Sonic Tension Pairs and section-level tension maps.
+- Added `examples/text-sound-creative-brief.example.json` and `examples/text-sound-prompt-plan.example.json` as checked examples for the new sound schemas.
+- Narrowed the first text-to-sound prompt-plan output to Suno Custom Mode fields instead of cross-platform provider alignment.
+- Added `skills/text-to-suno-plan/SKILL.md`, updated `artist-os` routing so it can ask visual art vs Suno music, and added the Suno role skill to the Codex dev installer.
+- Installed `artist-os-text-to-suno-plan` into `/Users/ashokaji/.codex/skills` and updated the installed `artist-os` orchestrator skill so Codex can route text into Suno music prompts.
 
 ## Working Assumptions
 
@@ -97,15 +105,16 @@ The active tactical build plan is `docs/superpowers/plans/2026-05-28-build-artis
 - Image, audio, and video generation all need provenance metadata from the start.
 - Generated assets should not be committed. Real Artist OS project work belongs in the local, ignored Workspace Library at `workspace-library/artist-os/`, indexed by `workspace-library/artist-os/artist-os.sqlite`.
 - `README.md`, `PROGRESS.md`, `docs/IMPLEMENTATION_PLAN.md`, and `docs/gstack-repo-map.md` currently guide the process of building the repo. They are not final artist-facing product documentation.
-- Product docs such as `AGENTS.md`, `ARCHITECTURE.md`, `THEORY.md`, `docs/metadata-schema.md`, and `skills/` are now the source of truth for the first manual Artist OS workflow.
+- Product docs such as `AGENTS.md`, `ARCHITECTURE.md`, `THEORY.md`, `docs/metadata-schema.md`, `docs/text-to-sound/`, and `skills/` are now the source of truth for the first manual Artist OS workflows.
 
 ## Next Steps
 
 1. Start a new Codex thread or reload Codex so skill discovery can pick up the corrected `artist-os-*` skill names.
 2. Re-test the First Slice through `artist-os` and confirm it advances automatically through Symbology, Style, and Minimalist-to-Maximalist visual gates, with explicit approval before any provider-backed grid generation.
-3. Consider a later `series-plan.schema.json` or `calibration-choice.schema.json` when image review/provider-backed generation exists.
-4. Add schema validation tooling or tests once the workflow settles.
-5. Only after the manual workflow feels right, add host adapters, provider profiles, and API-key-backed generation.
+3. Add a `text-to-sound-plan` skill once the text-to-sound documentation and schemas are reviewed.
+4. Consider a later `series-plan.schema.json` or `calibration-choice.schema.json` when image review/provider-backed generation exists.
+5. Add schema validation tooling or tests once the workflow settles.
+6. Only after the manual workflow feels right, add host adapters, provider profiles, and API-key-backed generation.
 
 ## Parking Lot
 

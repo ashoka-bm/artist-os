@@ -1,11 +1,11 @@
 ---
 name: artist-os
-description: "Use when an artist wants to turn writing — a poem, story, song lyric, journal entry, monologue, or other text — into visual art prompts, even if they do not mention Artist OS. Runs the visual-gated First Slice flow: Source Record, Meaning Interview, Symbology Gate, Style Gate, intensity gate, Creative Brief, Prompt Plan, and critique."
+description: "Use when an artist wants to transform writing — a poem, story, song lyric, journal entry, monologue, or other text — into visual art prompts or Suno music prompts, even if they do not mention Artist OS. Routes text to image or text to Suno music, then runs Source Record, Meaning Interview, medium gates, Creative Brief, Prompt Plan, and critique."
 ---
 
-# First Slice Flow
+# Artist OS Flow
 
-You are the Artist OS workflow conductor. Run the dry-run First Slice without asking the user to invoke role skills manually.
+You are the Artist OS workflow conductor. Route the artist into the dry-run text-to-image or text-to-Suno flow without asking the user to invoke role skills manually.
 
 ## References
 
@@ -13,16 +13,19 @@ Load detailed definitions only when needed:
 
 - `THEORY.md` for product theory and gate definitions.
 - `docs/metadata-schema.md` for record fields and layout plans.
+- `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md` for the Suno music flow.
 - `docs/storage.md` for Workspace Library paths and persistence rules.
 - `AGENTS.md` for repository invariants.
 
-Use sibling skills as phase references when needed: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/art-critic-review`, and `skills/critique-asset`.
+Use sibling skills as phase references when needed: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/text-to-suno-plan`, `skills/art-critic-review`, and `skills/critique-asset`.
 
 ## Hard Gates
 
 - Do not call a generation provider without explicit approval.
 - Do not create the Creative Brief Record or Provider-Neutral Image Prompt Plan until Art Critic Review has revised the Creative Brief Document and the artist has approved it.
+- Do not create the Sound Creative Brief Record or Suno Sound Prompt Plan until Music / Sound Critic Review has revised the Sound Creative Brief Document and the artist has approved it.
 - Do not create multiple series image prompts until the artist approves a Series Plan.
+- Do not create multiple Suno sequence prompt plans until the artist approves a sequence recommendation.
 - Do not leave project state only in chat context. Persist each phase to the Workspace Library before moving to the next stage.
 
 ## Workspace Library
@@ -34,6 +37,7 @@ Use `workspace-library/artist-os/` for durable project state. For each project, 
 - `source/source-record.json` and `source/reference.txt`,
 - `meaning/meaning-interview.json`,
 - `gates/interpretation.json`, `gates/symbology.json`, `gates/style.json`, and `gates/detail.json`,
+- for Suno music: `gates/sonic-concept.json`, `gates/genre-production.json`, `gates/tempo-groove.json`, `gates/vocal-lyric.json`, and `gates/arrangement-form.json`,
 - `briefs/creative-brief.draft.md` and `briefs/creative-brief.record.json`,
 - `prompt-plans/prompt-plan.json`,
 - `assets/reference`, `assets/boards`, `assets/generated`, and `assets/final` for images with `.json` sidecars.
@@ -44,9 +48,17 @@ When a user returns to prior work, query `workspace-library/artist-os/artist-os.
 
 Image sidecars must use the same basename as the image and validate against `schemas/asset-metadata.schema.json`.
 
+## Target Routing
+
+If the target medium is unclear, ask one concise routing question before analysis hardens:
+
+> Do you want to turn this text into visual art, or into a Suno music prompt?
+
+If the user says music, song, lyrics, audio, Suno, or sound, route to the text-to-Suno flow. If they say image, visual, illustration, art prompt, or picture, route to the text-to-image flow. If they want both, run one full flow first and ask which one should come first.
+
 ## Autopilot
 
-Move forward automatically unless the next step needs artist input. Ask only for missing reference, Artist Meaning, Symbology choice, Style choice, intensity choice, Brief Approval, Series Plan approval, layout choice, or calibration approval.
+Move forward automatically unless the next step needs artist input. Ask only for missing reference, target medium, Artist Meaning, medium gate choices, Brief Approval, Series/Sequence approval, layout choice, or calibration approval.
 
 ## Stage Completion Criteria
 
@@ -56,6 +68,7 @@ Do not move to the next stage until the current stage is done. A stage is done o
 2. **Visualization / Symbolic is done** when the artist has chosen or combined a symbolic representation from the six concise options, chosen single image / emotional arc / multi-image presentation, and decided whether the symbolic options should be visualized. Do not move to Style while any of these are unanswered unless the artist explicitly says to proceed without deciding.
 3. **Style is done** when the artist has chosen a style, chosen or combined one of the six suggested styles, named another style, or explicitly allowed an unconfirmed style recommendation to proceed. If visualization was offered, wait for the artist to accept, decline, or ask for a prompt before moving on.
 4. **Detail is done** when the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice. If visualization was offered, wait for the artist to accept, decline, or ask for a prompt before final prompt locking.
+5. **Suno sound direction is done** when Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, and Sonic Dynamics are selected, drafted, or explicitly allowed to proceed unconfirmed. Do not lock final Suno outputs while Vocal / Lyric Policy is unresolved.
 
 ### Visual gates produce ONE image, not a list
 
@@ -85,6 +98,8 @@ Do not show the full `composite_image_prompt` at a gate unless the artist explic
 
 ## Phase Order
 
+### Text To Image
+
 1. Create a compact Source Record.
 2. Capture Artist Meaning.
 3. Draft the Creative Brief Document with Symbology Direction, Style Direction, Visual Dynamics, Beat Map, Series Recommendation, transformation constraints, and open questions.
@@ -94,9 +109,19 @@ Do not show the full `composite_image_prompt` at a gate unless the artist explic
 7. Create the Creative Brief Record and Provider-Neutral Image Prompt Plan.
 8. Critique the Prompt Plan against the approved Creative Brief.
 
+### Text To Suno Music
+
+1. Create a compact Source Record.
+2. Capture Artist Meaning.
+3. Draft the Sound Creative Brief Document with Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Lyrics Draft when needed, Arrangement / Form, Sonic Dynamics, Beat Map, Sequence Recommendation, transformation constraints, and open questions.
+4. Run Music / Sound Critic Review.
+5. Ask for Brief Approval or targeted revisions.
+6. After approval, create the Sound Creative Brief Record and Suno Sound Prompt Plan.
+7. Critique the Suno Sound Prompt Plan against the approved Sound Creative Brief.
+
 ## Start Conditions
 
-If the Text Reference is missing, start with a short, non-technical orientation before asking for text. Say that Artist OS can take any kind of text and turn it into one or multiple images that show the meaning, feeling, emotional arc, and significance of that text.
+If the Text Reference is missing, start with a short, non-technical orientation before asking for text. Say that Artist OS can take any kind of text and turn it into visual art prompts or Suno music prompts that preserve the meaning, feeling, emotional arc, and significance of that text.
 
 Then ask for the Text Reference: poem, lyrics, journal entry, monologue, story excerpt, letter, memory, dream, or any other writing.
 
@@ -120,7 +145,7 @@ Persist `meaning/meaning-interview.json`, update `project.json`, append an event
 
 ### Draft Creative Brief
 
-Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep the gates in order: Symbology first, then Style, then intensity later. Each gate uses the single-image Comparison Board described above and in `THEORY.md`.
+For image work, use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep the gates in order: Symbology first, then Style, then intensity later. Each gate uses the single-image Comparison Board described above and in `THEORY.md`.
 
 - **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Show six concise symbolic options and ask which one the artist wants. Also ask whether the work should become a single image, an emotional arc, or a multi-image presentation, plus whether they want it visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
 - **Style:** once symbology is selected or narrowed, ask whether the artist already has a style in mind or wants to see options. If they want options, show six concise style options and ask whether they want some of these, have something else in mind, or want the options visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Style Direction until the artist responds, unless they explicitly proceed unconfirmed.
@@ -129,9 +154,19 @@ Persist each gate decision under `gates/`. Store generated or imported board ima
 
 Never call a provider-backed generator without explicit approval. Then continue to Art Critic Review.
 
+For Suno music work, use `skills/text-to-suno-plan/SKILL.md` for the detailed checklist.
+
+- **Sonic Concept:** ask what sound-world should carry the meaning. If unclear, show concise options.
+- **Genre / Production:** ask whether the artist has a genre or production style in mind. If not, recommend concise options.
+- **Tempo / Groove:** ask for BPM, BPM range, or felt motion if missing; otherwise recommend from the brief.
+- **Vocal / Lyric:** always ask whether the work should have lyrics or intelligible words. If adapted or new lyrics are requested, draft lyrics before final prompt locking.
+- **Arrangement / Form:** define song structure, section functions, section tension roles, and dynamic arc.
+
+Persist each Suno gate decision under `gates/`. Do not call Suno without explicit approval. Then continue to Music / Sound Critic Review.
+
 ### Art Critic Review
 
-Use `skills/art-critic-review/SKILL.md`. Preserve Artist Meaning, deepen Poetic Density, strengthen Symbology Direction, Style Direction, and Visual Dynamics, and resolve avoidable ambiguity.
+Use `skills/art-critic-review/SKILL.md`. For image work, preserve Artist Meaning, deepen Poetic Density, strengthen Symbology Direction, Style Direction, and Visual Dynamics, and resolve avoidable ambiguity. For Suno music work, preserve Artist Meaning, deepen Poetic Density, strengthen Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Lyrics Draft, Arrangement / Form, and Sonic Dynamics.
 
 Present the revised Creative Brief Document and ask for Brief Approval.
 Persist the draft brief under `briefs/creative-brief.draft.md`, update `project.json`, append an event, and refresh the SQLite index.
@@ -148,9 +183,13 @@ Create records only after the applicable gates are resolved or deliberately left
 
 - Creative Brief Record matching `schemas/creative-brief.schema.json`
 - Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`
+- or Sound Creative Brief Record matching `schemas/sound-creative-brief.schema.json`
+- and Suno Sound Prompt Plan matching `schemas/sound-prompt-plan.schema.json`
 - Faithful, Amplified, and Minimal Prompt Variant Plans
 
-Base the variants on approved Symbology Direction and Style Direction. Variants test intensity from minimalist to maximalist, not new symbolic representations.
+For image work, base variants on approved Symbology Direction and Style Direction. Variants test intensity from minimalist to maximalist, not new symbolic representations.
+
+For Suno music work, base variants on approved Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Lyrics Draft, Arrangement / Form, and Sonic Dynamics. Each variant must include Suno-ready title, lyrics or instrumental setting, Style of Music, and Exclude.
 Persist `briefs/creative-brief.record.json`, `prompt-plans/prompt-plan.json`, update `project.json`, append an event, and refresh the SQLite index.
 
 If the Series Recommendation is `triptych` or `image_series`, explain the recommendation and ask for Series Plan approval before creating multiple image prompt plans.
@@ -159,7 +198,9 @@ For triptych or image-series recommendations, make sure the underlying Series Am
 
 ### Prompt Plan Critique
 
-Critique against Artist Meaning, approved Creative Brief, Core Tension Pairs, Active Visual Tensions, Beat Map, Poetic Density, Symbology Direction, Style Direction, and transformation constraints.
+Critique image plans against Artist Meaning, approved Creative Brief, Core Tension Pairs, Active Visual Tensions, Beat Map, Poetic Density, Symbology Direction, Style Direction, and transformation constraints.
+
+Critique Suno plans against Artist Meaning, approved Sound Creative Brief, Core Tension Pairs, Active Sonic Tensions, Beat Map, Poetic Density, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Lyrics Draft when present, Arrangement / Form, Suno Style of Music, and Exclude.
 
 ## Output Style
 

@@ -1,0 +1,394 @@
+{
+  "brief_id": "brief_door_left_lit_sound",
+  "source_id": "src_door_left_lit",
+  "artist_meaning": {
+    "why_it_matters": "The text is about grief at a threshold: the desire to return to intimacy and the knowledge that return would reopen the wound.",
+    "must_preserve": [
+      "the threshold between returning and leaving",
+      "the coexistence of tenderness and threat",
+      "the sense that absence is active and present",
+      "the key as fragile agency"
+    ],
+    "may_transform": [
+      "the literal room",
+      "the cup and chairs",
+      "the rain",
+      "the narrator's exact wording"
+    ]
+  },
+  "formal_observations": [
+    "The text uses domestic objects as emotional pressure points.",
+    "The pacing slows around the threshold through repeated refusal.",
+    "The final key image carries agency, tenderness, and fear."
+  ],
+  "sound_work_type": "song",
+  "sonic_concept_direction": {
+    "selection_method": "agent_recommended",
+    "primary_sonic_concept": "an intimate nocturnal song where room tone, breath, and a fragile piano motif carry the unresolved threshold",
+    "target_sonic_engine": "sparse piano, close vocal, low sub pressure, soft rain-like texture, and unresolved harmonic color",
+    "confirmation_status": "unconfirmed",
+    "alternatives_considered": [
+      "instrumental piano and static soundscape",
+      "spoken-word bed over ambient drone",
+      "minimal trip-hop pulse"
+    ],
+    "rationale": "A close song form can preserve the human threshold while using sparse sound to make absence active.",
+    "avoid": [
+      "large triumphant chorus",
+      "literal haunted-house sound effects",
+      "upbeat dance resolution"
+    ]
+  },
+  "genre_direction": {
+    "selection_method": "agent_recommended",
+    "primary_genre": "alt-R&B",
+    "subgenres": ["downtempo", "ambient pop"],
+    "production_style": "minimal nocturnal studio production",
+    "style_modifiers": ["intimate", "sparse", "grainy"],
+    "reference_artists_or_works": [],
+    "confirmation_status": "unconfirmed",
+    "rationale": "Alt-R&B supports close vocal tenderness while downtempo ambient production preserves threat and absence.",
+    "avoid": ["EDM drop", "arena pop", "bright acoustic folk"],
+    "genre_conflicts": [
+      {
+        "conflict": "Alt-R&B warmth could over-resolve the grief.",
+        "proposed_adaptation": "Keep the vocal warm but hold harmony unresolved and leave negative space around the pulse.",
+        "requires_artist_approval": false
+      }
+    ]
+  },
+  "tempo_groove_direction": {
+    "selection_method": "agent_recommended",
+    "bpm": 82,
+    "bpm_range": { "min": 78, "max": 86 },
+    "tempo_feel": "slow-burning and suspended",
+    "tempo_stability": "steady pulse with slight perceived drag",
+    "meter": "4/4",
+    "groove_feel": "laid-back half-time pulse",
+    "swing_or_shuffle": "subtle swing",
+    "rhythmic_density": 0.35,
+    "tempo_changes": [
+      {
+        "section": "Pre-Chorus",
+        "change": "perceived acceleration through denser vocal rhythm and tighter percussion",
+        "rationale": "The threshold pressure increases without changing the actual BPM."
+      }
+    ],
+    "rationale": "A slow tempo preserves stillness while the pulse keeps the decision physically present."
+  },
+  "vocal_lyric_policy": {
+    "lyrics_mode": "new_lyrics",
+    "requires_lyrics_draft": true,
+    "lyrics_approval_status": "drafted",
+    "vocal_direction": "close, restrained lead vocal with almost-whispered verses and a clearer but still unresolved chorus",
+    "language": "English",
+    "pronunciation_notes": [],
+    "rights_notes": "New lyrics are drafted from the approved brief, not copied from the source text.",
+    "rationale": "New lyrics can preserve the source's emotional structure while becoming singable."
+  },
+  "lyrics_draft": {
+    "present": true,
+    "title": "Where the Light Ends",
+    "sections": [
+      {
+        "section_name": "Verse 1",
+        "section_function": "Grounding",
+        "tension_role": "introduce threshold and fragile agency",
+        "bars_or_phrase_count": "8 bars",
+        "lyrics": "I came back quiet to the step I knew / The room was warm but it would not move / I held the metal like it had a heart / Too small to keep, too scared to start",
+        "hook_or_refrain_line": "",
+        "preserved_source_details": ["threshold", "room", "key as fragile agency"],
+        "transformed_source_details": ["the literal room becomes a sung emotional address"],
+        "delivery_notes": "near-whispered, close mic, restrained vibrato",
+        "traceability_notes": [
+          {
+            "source_type": "artist_meaning",
+            "source_ref": "must_preserve[0]",
+            "note": "Keeps the threshold between returning and leaving."
+          }
+        ]
+      },
+      {
+        "section_name": "Chorus",
+        "section_function": "Release",
+        "tension_role": "state the unresolved emotional thesis",
+        "bars_or_phrase_count": "8 bars",
+        "lyrics": "Where the light ends, I am almost home / Where the light ends, I am still alone / If I turn the key, I lose the door / If I walk away, I keep it more",
+        "hook_or_refrain_line": "Where the light ends, I am almost home",
+        "preserved_source_details": ["lit threshold", "unresolved entry", "active absence"],
+        "transformed_source_details": ["the threshold becomes a repeated hook"],
+        "delivery_notes": "clearer vocal, doubled lightly on the hook, no triumphant lift",
+        "traceability_notes": [
+          {
+            "source_type": "poetic_density_note",
+            "source_ref": "the lit threshold",
+            "note": "The hook carries invitation, danger, and memory at once."
+          }
+        ]
+      }
+    ],
+    "review_notes": [
+      "Lyrics are drafted for review and should not be treated as approved until Brief Approval."
+    ]
+  },
+  "arrangement_plan": {
+    "duration_seconds": 120,
+    "duration_range_seconds": { "min": 110, "max": 130 },
+    "meter": "4/4",
+    "estimated_bpm": 82,
+    "estimated_bars": 41,
+    "sections": [
+      {
+        "section_name": "Intro",
+        "time_range": "0:00-0:08",
+        "bar_range": "1-4",
+        "phrase_count": 1,
+        "section_function": "Invitation",
+        "tension_role": "establish the room without resolving it",
+        "emotional_tensions": [
+          {
+            "name": "Presence / Absence",
+            "poles": {
+              "presence": { "presence": 0.55 },
+              "absence": { "presence": 0.85 }
+            },
+            "tension_intensity": 0.8,
+            "evidence": ["absence is active and present"],
+            "translation_notes": ["Start with room tone, rain texture, and one fragile piano motif."]
+          }
+        ],
+        "sonic_tensions": [
+          {
+            "name": "Sparse / Dense",
+            "poles": {
+              "sparse": { "presence": 0.9 },
+              "dense": { "presence": 0.1 }
+            },
+            "tension_intensity": 0.55,
+            "evidence": ["few domestic objects carry most of the emotional weight"],
+            "translation_notes": ["Keep only piano, room tone, and a low distant pulse."]
+          }
+        ],
+        "transformation_notes": ["The introduction should feel like standing just outside the song."]
+      },
+      {
+        "section_name": "Pre-Chorus",
+        "time_range": "0:32-0:48",
+        "bar_range": "13-20",
+        "phrase_count": 2,
+        "section_function": "Build",
+        "tension_role": "tighten the decision pressure",
+        "emotional_tensions": [
+          {
+            "name": "Control / Surrender",
+            "poles": {
+              "control": { "presence": 0.65 },
+              "surrender": { "presence": 0.75 }
+            },
+            "tension_intensity": 0.85,
+            "evidence": ["holding the key", "not entering, not leaving"],
+            "translation_notes": ["Add tighter percussion but keep the vocal restrained."]
+          }
+        ],
+        "sonic_tensions": [
+          {
+            "name": "Stable / Unstable",
+            "poles": {
+              "stable": { "presence": 0.4 },
+              "unstable": { "presence": 0.8 }
+            },
+            "tension_intensity": 0.8,
+            "evidence": ["the decision does not resolve"],
+            "translation_notes": ["Use suspended chords and avoid a clean cadence."]
+          }
+        ],
+        "transformation_notes": ["Build tension through density and harmony rather than speed."]
+      }
+    ],
+    "dynamic_arc": "quiet invitation, tightening pre-chorus, restrained chorus release, exposed bridge, unresolved final return",
+    "instrument_entry_exit_notes": ["piano starts alone", "sub enters under verse", "percussion tightens in pre-chorus"],
+    "silence_and_space_notes": ["leave breath-length gaps before hook returns"],
+    "ending_behavior": "end on an unresolved piano fragment and room tone"
+  },
+  "sonic_dynamics": {
+    "active_sonic_tensions": [
+      {
+        "name": "Sparse / Dense",
+        "poles": {
+          "sparse": { "presence": 0.85 },
+          "dense": { "presence": 0.35 }
+        },
+        "tension_intensity": 0.65,
+        "evidence": ["few details carry most of the emotional weight"],
+        "translation_notes": ["Let negative space carry grief."]
+      },
+      {
+        "name": "Soft / Loud",
+        "poles": {
+          "soft": { "presence": 0.9 },
+          "loud": { "presence": 0.25 }
+        },
+        "tension_intensity": 0.55,
+        "evidence": ["the scene is still and restrained"],
+        "translation_notes": ["Keep the vocal close and quiet; avoid belting."]
+      },
+      {
+        "name": "Stable / Unstable",
+        "poles": {
+          "stable": { "presence": 0.4 },
+          "unstable": { "presence": 0.8 }
+        },
+        "tension_intensity": 0.8,
+        "evidence": ["not entering, not leaving"],
+        "translation_notes": ["Use unresolved harmony."]
+      },
+      {
+        "name": "Dry / Reverberant",
+        "poles": {
+          "dry": { "presence": 0.65 },
+          "reverberant": { "presence": 0.45 }
+        },
+        "tension_intensity": 0.45,
+        "evidence": ["intimate threshold and active room memory"],
+        "translation_notes": ["Keep vocal dry and close; let piano and room tone carry space."]
+      },
+      {
+        "name": "Near / Far",
+        "poles": {
+          "near": { "presence": 0.8 },
+          "far": { "presence": 0.55 }
+        },
+        "tension_intensity": 0.75,
+        "evidence": ["the figure is physically close but emotionally separated"],
+        "translation_notes": ["Close vocal against distant texture."]
+      },
+      {
+        "name": "Consonant / Dissonant",
+        "poles": {
+          "consonant": { "presence": 0.45 },
+          "dissonant": { "presence": 0.65 }
+        },
+        "tension_intensity": 0.7,
+        "evidence": ["tenderness and threat coexist"],
+        "translation_notes": ["Use tender chords with unresolved extensions."]
+      }
+    ]
+  },
+  "core_tension_pairs": {
+    "attraction_repulsion": {
+      "salience": "high",
+      "poles": {
+        "attraction": { "presence": 0.7 },
+        "repulsion": { "presence": 0.65 }
+      },
+      "tension_intensity": 0.85,
+      "evidence": ["the doorway kept its lamp on", "not entering"],
+      "translation_notes": ["Make the hook inviting but unresolved."]
+    },
+    "proximity_distance": {
+      "salience": "high",
+      "poles": {
+        "proximity": { "presence": 0.75 },
+        "distance": { "presence": 0.8 }
+      },
+      "tension_intensity": 0.9,
+      "evidence": ["standing at the threshold"],
+      "translation_notes": ["Use close vocal against distant texture."]
+    },
+    "order_chaos": {
+      "salience": "medium",
+      "poles": {
+        "order": { "presence": 0.65 },
+        "chaos": { "presence": 0.3 }
+      },
+      "tension_intensity": 0.45,
+      "evidence": ["controlled domestic scene"],
+      "translation_notes": ["Keep pulse steady but harmony uncertain."]
+    },
+    "stillness_motion": {
+      "salience": "high",
+      "poles": {
+        "stillness": { "presence": 0.9 },
+        "motion": { "presence": 0.35 }
+      },
+      "tension_intensity": 0.7,
+      "evidence": ["She stood", "rain worried"],
+      "translation_notes": ["Use a slow pulse with rain-like movement."]
+    },
+    "legibility_opacity": {
+      "salience": "medium",
+      "poles": {
+        "legibility": { "presence": 0.55 },
+        "opacity": { "presence": 0.7 }
+      },
+      "tension_intensity": 0.75,
+      "evidence": ["the story remains unresolved"],
+      "translation_notes": ["Keep lyrics clear but avoid explaining the backstory."]
+    },
+    "control_surrender": {
+      "salience": "medium",
+      "poles": {
+        "control": { "presence": 0.6 },
+        "surrender": { "presence": 0.55 }
+      },
+      "tension_intensity": 0.7,
+      "evidence": ["holding the key"],
+      "translation_notes": ["Let rhythm tighten while harmony refuses closure."]
+    },
+    "safety_threat": {
+      "salience": "high",
+      "poles": {
+        "safety": { "presence": 0.65 },
+        "threat": { "presence": 0.55 }
+      },
+      "tension_intensity": 0.8,
+      "evidence": ["lit interior feels inviting and dangerous"],
+      "translation_notes": ["Use warm vocal tone over uneasy low end."]
+    },
+    "presence_absence": {
+      "salience": "high",
+      "poles": {
+        "presence": { "presence": 0.7 },
+        "absence": { "presence": 0.9 }
+      },
+      "tension_intensity": 0.9,
+      "evidence": ["two untouched chairs"],
+      "translation_notes": ["Use silence and dropouts as active material."]
+    }
+  },
+  "emotional_qualities": ["threshold grief", "tender dread", "active absence"],
+  "poetic_density_notes": {
+    "layered_meanings": [
+      {
+        "detail": "the key",
+        "meanings": ["agency", "fragility", "permission", "danger of return"]
+      }
+    ],
+    "flattening_risks": ["turning grief into a simple breakup ballad"]
+  },
+  "beats": [
+    {
+      "before": "the speaker approaches return",
+      "after": "the speaker remains suspended",
+      "value_shift": "agency becomes paralysis",
+      "emotional_payload": "the key gives power and makes the wound sharper",
+      "evidence": "holding the key like a small animal"
+    }
+  ],
+  "sequence_recommendation": {
+    "mode": "single_track",
+    "reason": "The core emotional movement is strongest as one compact unresolved song.",
+    "suggested_tracks": [],
+    "calibration": {
+      "required": false,
+      "calibration_track_role": "",
+      "uses_three_prompt_variants": false
+    },
+    "requires_artist_approval": false
+  },
+  "transformation_constraints": {
+    "target_media_type": "sound",
+    "preserve": ["threshold", "tenderness and threat", "active absence", "fragile agency"],
+    "avoid": ["triumphant resolution", "literal horror effects", "explaining the absent person"]
+  }
+}

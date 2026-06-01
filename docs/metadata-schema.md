@@ -106,6 +106,73 @@ Required sections:
 - `traceability_summary`
 - `critique_checklist`
 
+### Sound Creative Brief Record
+
+A Sound Creative Brief Record is the structured agent handoff created after Music / Sound Critic Review and Brief Approval. It validates against `schemas/sound-creative-brief.schema.json`.
+
+It mirrors the image Creative Brief Record structure where the concepts are shared:
+
+- `brief_id`
+- `source_id`
+- `artist_meaning`
+- `formal_observations`
+- `core_tension_pairs`
+- `emotional_qualities`
+- `poetic_density_notes`
+- `beats`
+- `transformation_constraints`
+
+It replaces image-specific sections with sound-specific sections:
+
+- `sound_work_type`
+- `sonic_concept_direction`
+- `genre_direction`
+- `tempo_groove_direction`
+- `vocal_lyric_policy`
+- `lyrics_draft`
+- `arrangement_plan`
+- `sonic_dynamics`
+- `sequence_recommendation`
+
+`sonic_dynamics.active_sonic_tensions` records the active 6 to 8 Sonic Tension Pairs using the same pair-record shape as Visual Dynamics: name, two independent pole presences, tension intensity, evidence, and translation notes.
+
+`arrangement_plan.sections[]` records the section-level tension map. Each section includes section name, time range, bar range, section function, tension role, active emotional tensions, active sonic tensions, and transformation notes.
+
+### Suno Sound Prompt Plan
+
+A Suno Sound Prompt Plan is the structured dry-run generation plan created from an approved Sound Creative Brief Record. It validates against `schemas/sound-prompt-plan.schema.json`.
+
+Required sections:
+
+- `prompt_plan_id`
+- `brief_id`
+- `source_id`
+- `target_media_type`
+- `plan_mode`
+- `sound_work_type`
+- `target_platform`
+- `description`
+- `style_of_music`
+- `sonic_concept_summary`
+- `genre_direction_summary`
+- `tempo_groove_summary`
+- `vocal_lyric_policy`
+- `lyrics`
+- `arrangement_plan`
+- `song_structure`
+- `instrumentation_plan`
+- `production_direction`
+- `sonic_dynamics_summary`
+- `prompt_variants`
+- `sequence_calibration`
+- `suno_custom_mode_outputs`
+- `traceability_summary`
+- `critique_checklist`
+
+The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `suno_outputs` so the variant can be pasted into Suno Custom Mode.
+
+For the first text-to-sound version, `suno_custom_mode_outputs` is the final platform-facing contract. It contains `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform adapters can be added after the Suno flow works.
+
 ## Symbology Direction
 
 `symbology_direction` records what the image shows as its core symbolic representation before style is selected.

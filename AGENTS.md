@@ -10,6 +10,8 @@ Use these product docs as durable references:
 
 - `THEORY.md`
 - `ARCHITECTURE.md`
+- `docs/text-to-sound/THEORY.md`
+- `docs/text-to-sound/ARCHITECTURE.md`
 - `docs/metadata-schema.md`
 - `schemas/`
 - `skills/`
@@ -24,13 +26,17 @@ Every Prompt Variant Plan and Generated Work must trace back to:
 - evidence from the Reference,
 - the Creative Brief,
 - Emotional Structure,
-- Visual Dynamics,
+- Visual Dynamics or Sonic Dynamics, depending on target medium,
 - the Beat or Tension Point,
 - the Transformation Plan,
 - the Provider-Neutral Prompt Plan,
 - and the Output Record when generation exists.
 
 Provider-Neutral Image Prompt Plan records should validate against `schemas/prompt-plan.schema.json`.
+
+Sound Creative Brief records should validate against `schemas/sound-creative-brief.schema.json`.
+
+Suno Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.
 
 ## Operating Rules
 
@@ -48,6 +54,7 @@ Provider-Neutral Image Prompt Plan records should validate against `schemas/prom
 - Do not commit generated media, private artist references, or Workspace Library project folders.
 - Keep Derived Symbols marked and traceable.
 - Keep Visual Dynamics separate from Emotional Structure.
+- Keep Sonic Dynamics separate from Emotional Structure.
 - Keep Style Direction separate from Emotional Structure and Visual Dynamics.
 - Treat Style Direction as the last priority after Artist Meaning, Emotional Structure, Beat Map, and Visual Dynamics.
 - When the artist has not named a specific style directly, ask whether they have a specific vision or want to explore what art style to use.
@@ -81,6 +88,26 @@ The First Slice is Text Reference to Image Prompt Plan:
 11. Produce a Creative Brief Record.
 12. Produce a Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
 13. Critique the Prompt Plan against the approved Creative Brief.
+
+## Text-To-Sound Slice
+
+The Text-to-Sound Slice is Text Reference to Suno Sound Prompt Plan:
+
+1. Ingest a Text Reference.
+2. Run a Meaning Interview.
+3. Produce a Source Record.
+4. Produce a draft Sound Creative Brief Document.
+5. Define Sonic Concept Direction.
+6. Define Genre / Production Direction.
+7. Define Tempo / Groove Direction.
+8. Ask whether the work should have lyrics or intelligible words.
+9. If adapted or new lyrics are requested, draft the lyrics and include them in brief review before prompt locking.
+10. Define Arrangement / Form Direction and Sonic Dynamics.
+11. Run Music / Sound Critic Review.
+12. Get Brief Approval.
+13. Produce a Sound Creative Brief Record.
+14. Produce a Suno Sound Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans.
+15. Critique the Prompt Plan against the approved Sound Creative Brief.
 
 ## Provider Boundary
 
