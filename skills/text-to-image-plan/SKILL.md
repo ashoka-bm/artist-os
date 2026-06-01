@@ -18,11 +18,12 @@ Load details only when needed:
 
 ## Hard Gates
 
-- Do not call an image generation provider without explicit approval.
-- Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete.
-- Do not create multiple series image prompts until the artist approves a Series Plan.
-- Do not treat chat context as durable storage. When records or gate decisions are created, write them to the Workspace Library if a project folder is available and refresh `workspace-library/artist-os/artist-os.sqlite`.
-- Store generated or imported board images with same-basename sidecar metadata that validates against `schemas/asset-metadata.schema.json`.
+These hold whether you run standalone or under the `artist-os` conductor — a standalone run has no conductor to enforce them, so they live here too:
+
+- Never call an image generation provider without explicit approval. Drafting prompts and boards is always allowed; sending one to a provider is not — that is the line between a free dry run and a billable generation.
+- Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete, so a record never locks in an unreviewed direction.
+- Do not create multiple series image prompts until the artist approves a Series Plan — a series is a much larger commitment than one image.
+- Persist records, gate decisions, and board images as you create them, following `docs/storage.md` (board sidecars validate against `schemas/asset-metadata.schema.json`). Chat context is not durable storage.
 
 ## Inputs
 
