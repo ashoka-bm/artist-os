@@ -141,6 +141,8 @@ Before choosing Style Direction by default, choose Symbology Direction: what the
 
 Explore it with a Symbology Board, built as a Comparison Board (see "Visual Gate Boards" below): one single image, a 2x3 grid of six cells, where every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — so style does not obscure the symbolic choice. The six cells compare distinct symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction unless they explicitly choose to proceed unconfirmed.
 
+At the gate, show only six concise symbolic representations and ask: "Which one would you like? Would you like it visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
+
 ### Visual Gate Boards
 
 The Symbology Gate, the Style Gate, and the Minimalist-to-Maximalist Gate all resolve an open decision the same way: by showing the artist the options laid out together in **one image** so they can compare and choose. This shared mechanic is the Comparison Board.
@@ -156,6 +158,7 @@ The contract for every board:
   - **Style Exploration Board** — vary the style; every tile shows the same locked Symbology subject, pose, and framing so only style language changes.
   - **Minimalist-to-Maximalist Gate** — vary visual intensity; three panels hold the same locked subject and style while density, layering, complexity, scale, drama, ornament, and negative space change.
 - **Draft versus generate.** Drafting a board means writing its `composite_image_prompt` as text; this needs no provider call and is always allowed. Generating a board means sending that one prompt to a provider to render the image, which requires explicit, per-board generation approval. Both paths produce the same single prompt.
+- **Prompt is internal by default.** Do not show `composite_image_prompt` to the artist at a gate unless they explicitly ask for an image-generator prompt. Show concise option labels or one-line descriptions, then ask the gate question.
 
 A fillable skeleton for a Symbology Board prompt:
 
@@ -190,6 +193,8 @@ Stop the Style Interview early when either Primary Style, bounded Style Modifier
 After the Style Interview or Style Exploration Board, synthesize a Style Recommendation and ask the artist to use it, adjust it, or name a different style. Do not make the artist assemble taxonomy from raw answers.
 
 When Style Direction is unresolved, make Style a visual gate: ask whether the artist wants to see style options before moving forward. If yes, build a Style Exploration Board as a Comparison Board (see "Visual Gate Boards"): one single image, a 2x3 grid of six tiles, where every tile renders the same locked Symbology subject, pose, and framing in a different candidate style, so only the style language varies. Store the single grid prompt as `composite_image_prompt`. The board lets the artist compare style language without committing to separate full generations, and it does not replace Brief Approval. Default to six tiles, no more than three per row unless the artist asks otherwise. Do not call a provider-backed generator until the artist explicitly approves that generation call. Wait for artist response before locking Style Direction unless they explicitly choose to proceed unconfirmed.
+
+At the gate, show only six concise suggested styles and ask: "Do you want some of these? Do you have something else in mind? Would you like this visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
 
 Use the Wondermint Category Reference as initial category vocabulary, but do not treat upload categories as the entire art ontology. Style Direction must serve the Creative Brief.
 
@@ -244,6 +249,8 @@ Do not preserve surface form by default. Preserve emotional function. Change the
 ## Prompt Variant Plans
 
 Before final Prompt Variant Plans are locked, Artist OS should give the artist a visual intensity choice when Minimal, Faithful, and Amplified would materially change the work. By this point Symbology Direction and Style Direction should be selected or narrowed. Use a Minimalist-to-Maximalist Gate, built as a Comparison Board (see "Visual Gate Boards"): one single image of three side-by-side panels that keep the same approved meaning, symbology, Style Direction, and Target Visual Engine, while density, symbolic layering, visual complexity, scale, drama, ornament, and negative space change from Minimal to Faithful/Balanced to Amplified/Maximal. Store the single three-panel prompt as the layout plan's `composite_image_prompt`.
+
+At the gate, show only three concise detail/intensity options and ask: "Would you like them represented or visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
 
 The Minimalist-to-Maximalist Gate is not a Series Plan and should not reopen symbology or style unless the artist explicitly asks to go back. Ask the artist to select, combine, reject, or revise intensity directions before final prompt locking whenever intensity would materially affect the image.
 

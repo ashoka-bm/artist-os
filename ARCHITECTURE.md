@@ -34,12 +34,12 @@ Use `artist-os` as the normal orchestration skill for this workflow. It moves th
 2. `artist-os-ingest-reference` creates a Source Record.
 3. `artist-os-meaning-interview` captures Artist Meaning and transformation constraints.
 4. `artist-os-text-to-image-plan` creates the first pass of Artist Meaning, Emotional Structure, and Beat Map.
-5. `artist-os-text-to-image-plan` defines Symbology Direction first, using a Symbology Board with three to six visual representations when unresolved.
+5. `artist-os-text-to-image-plan` defines Symbology Direction first, using six concise symbolic options when unresolved and keeping the full board prompt internal unless the artist asks for it.
 6. `artist-os-text-to-image-plan` uses Style Direction directly if specific, or asks whether the artist has a specific vision or wants style exploration.
-7. If style remains broad or unresolved, `artist-os-text-to-image-plan` recommends a Style Exploration Board, then synthesizes a Style Recommendation from the artist's direction or board choice.
+7. If style remains broad or unresolved, `artist-os-text-to-image-plan` shows six concise suggested styles, asks whether the artist wants one of them or something else, and keeps the full board prompt internal unless requested.
 8. `artist-os-text-to-image-plan` adds Symbology Direction, Style Direction, and Series Recommendation to the draft Creative Brief Document.
 9. `artist-os-art-critic-review` is mandatory. It strengthens the Creative Brief Document, resolves Open Questions, improves Symbology Direction, Style Direction, and Visual Dynamics, and increases Poetic Density without overriding Artist Meaning.
-10. After Brief Approval, if intensity remains open, `artist-os-text-to-image-plan` recommends a Minimalist-to-Maximalist Gate before prompt locking.
+10. After Brief Approval, if intensity remains open, `artist-os-text-to-image-plan` shows three concise Minimal / Faithful-Balanced / Amplified-Maximal detail options before prompt locking.
 11. `artist-os-text-to-image-plan` creates the Creative Brief Record and one Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans based on the approved Symbology Direction and Style Direction.
 12. If the artist approves a Series Plan, `artist-os-text-to-image-plan` creates three calibration Prompt Variant Plans for the Series Calibration Image first.
 13. After the artist approves one calibration direction, `artist-os-text-to-image-plan` records the Calibration Choice and can create one Provider-Neutral Image Prompt Plan per remaining Image Role.

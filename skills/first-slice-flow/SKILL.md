@@ -44,6 +44,15 @@ The three gates:
 
 Drafting a board (writing its `composite_image_prompt`) needs no provider call and is always allowed. Generating it (sending that one prompt to a provider) requires explicit, per-board approval — approving one board never implies approval for any other generation. After a board is drafted or generated, wait for the artist to select, combine, reject, or revise before locking that gate and moving on.
 
+### Gate presentation is concise
+
+Do not show the full `composite_image_prompt` at a gate unless the artist explicitly asks for an image-generator prompt. Present only short option labels or one-line descriptions, then ask the gate question:
+
+- **General:** "Here are 6 different options for how we can represent this. Would you like this to be displayed as an image?"
+- **Symbology:** "Here are 6 symbolic representations of this information. Which one would you like? Would you like it visualized?"
+- **Style:** "Here are 6 suggested styles. Do you want some of these? Do you have something else in mind? Would you like this visualized?"
+- **Intensity:** "Here are 3 different representations of detail. Would you like them represented or visualized?"
+
 ## Phase Order
 
 1. Create a compact Source Record.
@@ -81,8 +90,8 @@ Capture what must survive, allowed transformations, forbidden transformations, i
 
 Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep the gates in order: Symbology first, then Style, then intensity later. Each gate uses the single-image Comparison Board described above and in `THEORY.md`.
 
-- **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Ask whether the artist wants it generated; draft the `composite_image_prompt` either way. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
-- **Style:** once symbology is selected or narrowed, ask whether the artist already has a style in mind or wants to see options. If they want options, build the Style Exploration Board (same locked subject across tiles). Do not lock Style Direction until the artist responds, unless they explicitly proceed unconfirmed.
+- **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Show six concise symbolic options and ask which one the artist wants, plus whether they want it visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
+- **Style:** once symbology is selected or narrowed, ask whether the artist already has a style in mind or wants to see options. If they want options, show six concise style options and ask whether they want some of these, have something else in mind, or want the options visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Do not lock Style Direction until the artist responds, unless they explicitly proceed unconfirmed.
 
 Never call a provider-backed generator without explicit approval. Then continue to Art Critic Review.
 
@@ -96,7 +105,7 @@ Present the revised Creative Brief Document and ask for Brief Approval.
 
 If the artist requests changes, revise the Creative Brief Document and re-run Art Critic Review only for changed areas that affect meaning, symbology, style, Visual Dynamics, Beat Map, or transformation constraints.
 
-If approved, continue. If intensity is unresolved, run the Minimalist-to-Maximalist Gate before final prompt locking: one single image of three side-by-side panels (Minimal / Faithful-Balanced / Amplified-Maximal) holding the locked subject and style constant. Draft its single prompt; generate only with explicit approval.
+If approved, continue. If intensity is unresolved, run the Minimalist-to-Maximalist Gate before final prompt locking: show three concise detail/intensity options (Minimal / Faithful-Balanced / Amplified-Maximal) and ask whether the artist wants them represented or visualized. Keep the `composite_image_prompt` internal unless they ask for a generator prompt. Generate only with explicit approval.
 
 ### Final Records And Prompt Plan
 

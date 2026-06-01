@@ -73,7 +73,7 @@ Required fields:
 - `rationale`
 - `avoid`
 
-When unresolved, ask whether to generate a six-panel line-drawing Symbology Board before locking style. If drafting instead of generating, still draft it as one provider-neutral line-drawing comparison image prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
+When unresolved, show six concise symbolic options and ask which one the artist wants, plus whether they want it visualized. Keep the full board prompt internal unless the artist explicitly asks for an image-generator prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
 
 ## Style Direction
 
@@ -111,7 +111,7 @@ If the artist does not name a specific style directly, ask whether they already 
 3. Polished/glossy, raw/grainy, painterly/textured, or flat/minimal?
 4. Contemporary/everyday, surreal/dreamlike, fantasy/mythic, sci-fi/futuristic, historical, dark/horror, playful/whimsical, or folk/traditional?
 
-When Style Direction is unresolved, ask whether the artist wants to see style options before moving forward. If yes, offer either to generate a Style Exploration Board or to write a provider-neutral image-generator prompt for that board. The board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+When Style Direction is unresolved, ask whether the artist wants to see style options before moving forward. If yes, show six concise suggested styles, ask whether the artist wants some of them or has something else in mind, and ask whether they want the styles visualized. Keep the board prompt internal unless the artist explicitly asks for an image-generator prompt.
 
 ## Visual Dynamics
 
@@ -123,7 +123,7 @@ For text-to-image work, Visual Dynamics describes the Target Visual Engine of th
 
 ## Visual Gates
 
-The default First Slice has three visual gates. Each gate is a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images.
+The default First Slice has three visual gates. Each gate is a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images. The `composite_image_prompt` is internal by default; show concise options to the artist unless they explicitly ask for an image-generator prompt.
 
 1. Symbology Board: one image, 2x3 grid of six cells, each cell plain black-and-white line art of the subject only (no style) comparing symbolic representations, before style is locked.
 2. Style Exploration Board: one image, 2x3 grid of six tiles, each tile the same locked symbology subject in a different style, shown only after asking whether the artist wants to see style options.
@@ -142,7 +142,7 @@ Exploration boards are stored in `visual_boards`, not `layout_plan`. The Minimal
 - `selected_option_label`
 - `options[]`
 
-Each `options[]` entry includes label, `visual_prompt` (the content of that one cell, composed into `composite_image_prompt` — not a standalone image), decision focus, traceability notes, and risks. A board should use six options unless the artist asks otherwise.
+Each `options[]` entry includes label, `visual_prompt` (the content of that one cell, composed into `composite_image_prompt` — not a standalone image), decision focus, traceability notes, and risks. A board should use six options unless the artist asks otherwise. User-facing gate output should show option labels or one-line descriptions, not the full prompt.
 
 ## Prompt Variant Plans
 
