@@ -27,14 +27,22 @@ Use sibling skills as phase references when needed: `skills/ingest-reference`, `
 
 Move forward automatically unless the next step needs artist input. Ask only for missing reference, Artist Meaning, Symbology choice, Style choice, intensity choice, Brief Approval, Series Plan approval, layout choice, or calibration approval.
 
-Default visual gates:
+### Visual gates produce ONE image, not a list
 
-1. **Symbology Gate**: decide what the image shows. If unresolved, ask whether to draft or generate a six-panel Symbology Board as one line-drawing comparison image.
-2. **Style Gate**: decide the artistic language for the selected Symbology Direction. Ask whether the artist wants to see style options before moving forward; if yes, offer either a generated six-tile Style Exploration Board or a provider-neutral image-generator prompt for that board.
-3. **Minimalist-to-Maximalist Gate**: decide visual intensity after symbology and style are selected. If unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison.
+The three visual gates all resolve their decision the same way: with a Comparison Board — a single provider-neutral prompt that renders every option together inside **one image** as a labeled grid. This is the part that is easy to get wrong, so be exact:
 
-Each generated board or triptych requires explicit provider-backed generation approval. Drafted boards are allowed without provider calls.
-After a Symbology or Style board is drafted or generated, wait for the artist to select, combine, reject, or revise options before locking that gate and moving forward.
+- Produce exactly **one** `composite_image_prompt` describing the whole grid as a single generated image. Do not write one prompt per option, do not return a prose list of options, and do not plan multiple generations. One board = one image = one prompt.
+- Default to **six cells in a 2x3 grid** (three side-by-side panels for the intensity gate). Equal cells, max three per row, a small number label (1..N) in each.
+- Hold everything constant except the dimension being chosen.
+- `THEORY.md` → "Visual Gate Boards" has the full contract and a fillable prompt skeleton. Use it; do not improvise the format.
+
+The three gates:
+
+1. **Symbology Gate** — *what the image shows.* Every cell is plain black-and-white **line art of the subject only** — no color, shading, style, or background — so the artist picks the symbolic representation before any style. Six distinct symbolic takes (e.g. figure, object, threshold, vessel, ritual scene, abstraction).
+2. **Style Gate** — *the artistic language*, chosen after symbology. Every tile renders the **same locked symbology subject, pose, and framing** in a different candidate style, so only style varies.
+3. **Minimalist-to-Maximalist Gate** — *visual intensity*, chosen after symbology and style. Three panels hold the same subject and style while density, layering, scale, drama, ornament, and negative space change from Minimal to Faithful/Balanced to Amplified/Maximal.
+
+Drafting a board (writing its `composite_image_prompt`) needs no provider call and is always allowed. Generating it (sending that one prompt to a provider) requires explicit, per-board approval — approving one board never implies approval for any other generation. After a board is drafted or generated, wait for the artist to select, combine, reject, or revise before locking that gate and moving on.
 
 ## Phase Order
 
@@ -49,7 +57,9 @@ After a Symbology or Style board is drafted or generated, wait for the artist to
 
 ## Start Conditions
 
-If the Text Reference is missing, ask for it.
+If the Text Reference is missing, start with a short, non-technical orientation before asking for text. Say that Artist OS can take any kind of text and turn it into one or multiple images that show the meaning, feeling, emotional arc, and significance of that text.
+
+Then ask for the Text Reference: poem, lyrics, journal entry, monologue, story excerpt, letter, memory, dream, or any other writing.
 
 If Artist Meaning is missing, ask:
 
@@ -69,13 +79,12 @@ Capture what must survive, allowed transformations, forbidden transformations, i
 
 ### Draft Creative Brief
 
-Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep gates in this order: Symbology, Style, then intensity later.
+Use `skills/text-to-image-plan/SKILL.md` for the detailed checklist. Keep the gates in order: Symbology first, then Style, then intensity later. Each gate uses the single-image Comparison Board described above and in `THEORY.md`.
 
-If Symbology Direction is unclear, recommend a Symbology Board before forcing the final symbolic representation. Default to six distinct symbolic branches depicted together as one provider-neutral line-drawing comparison image. Ask whether the artist wants you to generate that line-drawing board for review; do not generate without explicit approval. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
+- **Symbology:** if the symbolic representation is unclear, build a Symbology Board before forcing a choice. Ask whether the artist wants it generated; draft the `composite_image_prompt` either way. Do not lock Symbology Direction or move to Style until the artist responds, unless they explicitly choose to proceed unconfirmed.
+- **Style:** once symbology is selected or narrowed, ask whether the artist already has a style in mind or wants to see options. If they want options, build the Style Exploration Board (same locked subject across tiles). Do not lock Style Direction until the artist responds, unless they explicitly proceed unconfirmed.
 
-If Style Direction is unclear after symbology is selected or narrowed, ask whether the artist has a specific style in mind or wants to see style options before moving forward. If they want to see options, offer either to generate a six-tile Style Exploration Board or to write a provider-neutral image-generator prompt for that board. Do not generate without explicit approval. Do not lock Style Direction until the artist responds, unless they explicitly choose to proceed with an unconfirmed direction.
-
-Then continue to Art Critic Review.
+Never call a provider-backed generator without explicit approval. Then continue to Art Critic Review.
 
 ### Art Critic Review
 
@@ -87,7 +96,7 @@ Present the revised Creative Brief Document and ask for Brief Approval.
 
 If the artist requests changes, revise the Creative Brief Document and re-run Art Critic Review only for changed areas that affect meaning, symbology, style, Visual Dynamics, Beat Map, or transformation constraints.
 
-If approved, continue. If intensity is unresolved, ask whether to draft or generate the Minimalist-to-Maximalist comparison before final prompt locking.
+If approved, continue. If intensity is unresolved, run the Minimalist-to-Maximalist Gate before final prompt locking: one single image of three side-by-side panels (Minimal / Faithful-Balanced / Amplified-Maximal) holding the locked subject and style constant. Draft its single prompt; generate only with explicit approval.
 
 ### Final Records And Prompt Plan
 

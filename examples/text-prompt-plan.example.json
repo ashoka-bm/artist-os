@@ -5,7 +5,73 @@
   "target_media_type": "image",
   "plan_mode": "single_image",
   "provider_neutral": true,
-  "visual_boards": [],
+  "visual_boards": [
+    {
+      "board_type": "symbology_board",
+      "status": "selected",
+      "panel_count": 6,
+      "layout": "2x3",
+      "composite_image_prompt": "One single image. A 2x3 grid of six equal square cells with thin gutters and a small number in each cell's corner. Black-and-white line art only — no shading, no color, plain white background. Each cell shows a different symbolic representation of returning to a home that is no longer shared. Cell 1: a still figure at the edge of an open, lit doorway. Cell 2: two empty chairs facing each other across a small table with one cooling cup. Cell 3: a single key held in a cupped hand. Cell 4: a doorway as a threshold splitting interior light from outer dark. Cell 5: rain falling on empty front steps. Cell 6: an abstract line dividing a bright field from a shadowed one. Render as one image; do not output six separate images.",
+      "requires_generation_approval": true,
+      "selected_option_label": "figure at the threshold",
+      "options": [
+        {
+          "label": "figure at the threshold",
+          "visual_prompt": "a still figure at the edge of an open, lit doorway",
+          "decision_focus": "Keeps the human at the unresolved point of return.",
+          "traceability_notes": [
+            { "source_type": "artist_meaning", "source_ref": "must_preserve[0]", "note": "Centers the threshold between returning and leaving." }
+          ],
+          "risks": ["could read as simply waiting rather than suspended"]
+        },
+        {
+          "label": "empty chairs",
+          "visual_prompt": "two empty chairs facing each other across a small table with one cooling cup",
+          "decision_focus": "Makes absence the subject instead of the figure.",
+          "traceability_notes": [
+            { "source_type": "core_tension_pair", "source_ref": "presence_absence", "note": "Absence carried by what is unused." }
+          ],
+          "risks": ["may lose the act of return entirely"]
+        },
+        {
+          "label": "the key",
+          "visual_prompt": "a single key held in a cupped hand",
+          "decision_focus": "Concentrates fragile agency into one object.",
+          "traceability_notes": [
+            { "source_type": "poetic_density_note", "source_ref": "the key", "note": "The key already carries agency and the burden of choosing." }
+          ],
+          "risks": ["risks turning the key into a literal artifact"]
+        },
+        {
+          "label": "doorway as threshold",
+          "visual_prompt": "a doorway as a threshold splitting interior light from outer dark",
+          "decision_focus": "Reads the whole meaning as a boundary.",
+          "traceability_notes": [
+            { "source_type": "active_visual_tension", "source_ref": "Light / Dark", "note": "The lit doorway against dark is the formal anchor." }
+          ],
+          "risks": ["can feel architectural rather than emotional"]
+        },
+        {
+          "label": "rain on the steps",
+          "visual_prompt": "rain falling on empty front steps",
+          "decision_focus": "Lets weather hold the grief at a distance.",
+          "traceability_notes": [
+            { "source_type": "emotional_quality", "source_ref": "threshold grief", "note": "Quiet exterior evidence of an arrival not yet made." }
+          ],
+          "risks": ["may read as generic melancholy"]
+        },
+        {
+          "label": "abstract threshold",
+          "visual_prompt": "an abstract line dividing a bright field from a shadowed one",
+          "decision_focus": "Pushes furthest from literal scene toward pure tension.",
+          "traceability_notes": [
+            { "source_type": "critical_heuristic", "source_ref": "preserve contradiction", "note": "Holds light and dark without resolving either." }
+          ],
+          "risks": ["may be too abstract to carry the personal grief"]
+        }
+      ]
+    }
+  ],
   "symbology_direction_summary": {
     "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
     "avoid": [

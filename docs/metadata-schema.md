@@ -123,25 +123,26 @@ For text-to-image work, Visual Dynamics describes the Target Visual Engine of th
 
 ## Visual Gates
 
-The default First Slice has three visual gates:
+The default First Slice has three visual gates. Each gate is a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images.
 
-1. Symbology Board: default six image panels comparing symbolic representations before style is locked, depicted as one line-drawing comparison image.
-2. Style Exploration Board: six square tiles comparing art styles for the selected symbolic representation, shown only after asking whether the artist wants to see style options before moving forward. If yes, provide either a generated board or a provider-neutral image-generator prompt for that board.
-3. Minimalist-to-Maximalist Gate: three panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+1. Symbology Board: one image, 2x3 grid of six cells, each cell plain black-and-white line art of the subject only (no style) comparing symbolic representations, before style is locked.
+2. Style Exploration Board: one image, 2x3 grid of six tiles, each tile the same locked symbology subject in a different style, shown only after asking whether the artist wants to see style options.
+3. Minimalist-to-Maximalist Gate: one image, three side-by-side panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity, after symbology and style are selected.
 
-Exploration boards are stored in `visual_boards`, not `layout_plan`. Each board may be drafted as provider-neutral text or generated only after explicit artist approval for provider-backed generation.
+Exploration boards are stored in `visual_boards`, not `layout_plan`. The Minimalist-to-Maximalist Gate is a final-output layout, stored as `layout_plan` with `layout_type: three_panel_variant_triptych` and its own `composite_image_prompt`. Each board may be drafted as provider-neutral text or generated only after explicit, per-board artist approval for provider-backed generation.
 
 `visual_boards[]` records pre-locking exploration artifacts:
 
 - `board_type`: `symbology_board` or `style_mosaic_board`
 - `status`: `proposed`, `drafted`, `generated`, `selected`, or `skipped`
 - `panel_count`: 3 to 6
-- `layout`
+- `layout`: the grid, e.g. `2x3` (max three cells per row)
+- `composite_image_prompt`: the single prompt that renders the whole grid as one image — the board's primary deliverable
 - `requires_generation_approval`
 - `selected_option_label`
 - `options[]`
 
-Each `options[]` entry includes label, visual prompt, decision focus, traceability notes, and risks. A Style Exploration Board should use six options unless the artist asks otherwise.
+Each `options[]` entry includes label, `visual_prompt` (the content of that one cell, composed into `composite_image_prompt` — not a standalone image), decision focus, traceability notes, and risks. A board should use six options unless the artist asks otherwise.
 
 ## Prompt Variant Plans
 

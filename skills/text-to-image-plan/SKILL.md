@@ -32,11 +32,11 @@ Before Art Critic Review, build a substantive draft without pretending uncertain
 1. Identify formal observations from the text.
 2. Map all eight Core Tension Pairs with evidence and translation notes.
 3. Define Symbology Direction: what the image shows as the core symbolic representation.
-4. If Symbology Direction is unresolved, ask whether to generate a six-panel line-drawing Symbology Board that depicts six different symbolic ways to portray the Artist Meaning. If drafting instead, still write it as one provider-neutral line-drawing comparison image prompt. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction, unless they explicitly choose to proceed unconfirmed.
+4. If Symbology Direction is unresolved, build a Symbology Board as a single-image Comparison Board (see `THEORY.md` → "Visual Gate Boards"). Write **one** `composite_image_prompt` that renders a 2x3 grid of six cells in one image; every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — each cell a different symbolic representation, with a small number label. Do not write six separate prompts or a prose list, and do not call a provider without explicit approval. Store each cell's content as the option's `visual_prompt`. Wait for the artist to select, combine, reject, or revise before locking Symbology Direction, unless they explicitly proceed unconfirmed.
 5. Define Style Direction after symbology is selected or narrowed.
 6. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
 7. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
-8. If they want to see options, ask for rough direction if needed, then offer either to generate a six-tile Style Exploration Board or to write a provider-neutral image-generator prompt for that board. Default to six square tiles in a 2x3 grid using the selected Symbology Direction as the shared subject. Do not generate without explicit approval. Wait for the artist to select, combine, reject, or revise options before locking Style Direction, unless they explicitly choose to proceed unconfirmed.
+8. If they want to see options, build a Style Exploration Board as a single-image Comparison Board. Write **one** `composite_image_prompt` rendering a 2x3 grid of six tiles in one image, where every tile holds the same locked Symbology subject, pose, and framing and varies only the style. Do not write one prompt per tile, and do not generate without explicit approval. Store each tile's content as the option's `visual_prompt`. Wait for the artist to select, combine, reject, or revise before locking Style Direction, unless they explicitly proceed unconfirmed.
 9. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
 10. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
 11. Surface Style/Visual Conflicts and propose Style Adaptations.
@@ -49,7 +49,7 @@ If running standalone, recommend Art Critic Review. If the `artist-os` orchestra
 
 Use this only after Art Critic Review and Brief Approval.
 
-1. If intensity is unresolved, ask whether to draft or generate a three-panel Minimal / Faithful-Balanced / Amplified-Maximal comparison. Do not generate without explicit approval.
+1. If intensity is unresolved, build the Minimalist-to-Maximalist Gate as a single-image Comparison Board: write **one** prompt rendering three side-by-side panels (Minimal, Faithful/Balanced, Amplified/Maximal) in one image, same locked subject and style throughout. Store it as the layout plan's `composite_image_prompt` with `layout_type: three_panel_variant_triptych`. Do not write three separate prompts here, and do not generate without explicit approval.
 2. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`.
 3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`.
 4. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
@@ -58,7 +58,7 @@ Use this only after Art Critic Review and Brief Approval.
 7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
 8. Mark any Derived Symbols and trace them to Artist Meaning, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
 9. Include critique criteria for each Prompt Variant Plan.
-10. Record Symbology and Style exploration boards in `visual_boards`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych`, `series_calibration_image`, or `series_image`.
+10. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
 11. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
 
 ## Traceability Rules

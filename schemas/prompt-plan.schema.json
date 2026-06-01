@@ -86,10 +86,14 @@
         },
         "panel_count": { "type": "integer", "minimum": 1 },
         "aspect_ratio": { "type": "string" },
+        "composite_image_prompt": {
+          "type": "string",
+          "description": "Required when layout_type is three_panel_variant_triptych: the single provider-neutral prompt that renders all three intensity panels (Minimal, Faithful/Balanced, Amplified/Maximal) as ONE image, same subject and style throughout. Omit for single_image and series layouts."
+        },
         "instructions": {
           "type": "string",
           "minLength": 1,
-          "description": "Final output layout only. Exploration boards are stored in visual_boards. For three_panel_variant_triptych, compare Minimal, Faithful/Balanced, and Amplified/Maximal intensity."
+          "description": "Final output layout only. Exploration boards are stored in visual_boards. For three_panel_variant_triptych, compare Minimal, Faithful/Balanced, and Amplified/Maximal intensity as one image via composite_image_prompt."
         }
       }
     },
@@ -101,6 +105,7 @@
         "status",
         "panel_count",
         "layout",
+        "composite_image_prompt",
         "requires_generation_approval",
         "selected_option_label",
         "options"
@@ -109,7 +114,12 @@
         "board_type": { "type": "string", "enum": ["symbology_board", "style_mosaic_board"] },
         "status": { "type": "string", "enum": ["proposed", "drafted", "generated", "selected", "skipped"] },
         "panel_count": { "type": "integer", "minimum": 3, "maximum": 6 },
-        "layout": { "type": "string" },
+        "layout": { "type": "string", "description": "Grid layout for the single comparison image, e.g. \"2x3\". No more than three cells per row." },
+        "composite_image_prompt": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The single provider-neutral prompt that renders the whole board as ONE image: a labeled grid with one option per cell. This is the board's primary deliverable. Never one prompt per option, never multiple images. Symbology boards: every cell is black-and-white line art of the subject only, no style. Style boards: every tile holds the same locked symbology subject and varies only style."
+        },
         "requires_generation_approval": { "type": "boolean" },
         "selected_option_label": { "type": "string" },
         "options": {
@@ -132,7 +142,7 @@
       ],
       "properties": {
         "label": { "type": "string" },
-        "visual_prompt": { "type": "string" },
+        "visual_prompt": { "type": "string", "description": "The content of this single cell within the composite grid image — what cell N depicts. Not a standalone image prompt; it is composed into composite_image_prompt." },
         "decision_focus": { "type": "string" },
         "traceability_notes": {
           "type": "array",
