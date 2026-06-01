@@ -67,21 +67,7 @@ Use this only after Music / Sound Critic Review and Brief Approval.
 
 ## Suno Output Rules
 
-`style_of_music` should be Suno-ready:
-
-- concise but dense,
-- comma-separated,
-- musical rather than analytical,
-- includes genre, tempo, meter, groove, instrumentation, vocal direction, mood, arrangement movement, production finish, and dynamic contrast,
-- avoids Artist OS field names, pair scores, traceability language, or schema terms.
-
-Separate Suno fields cleanly:
-
-- Title goes in `title`.
-- Lyrics go in `lyrics.text` when custom lyrics are used.
-- Instrumental mode sets `instrumental: true` and `lyrics.mode: "none"`.
-- Avoided elements go in `exclude`, not only in prose.
-- Leave model, Inspo, and Persona blank unless the artist chooses them and rights are clear.
+The Suno-facing output contract is canonical in `docs/text-to-sound/ARCHITECTURE.md` → "Suno Custom Mode Outputs": the required Custom Mode fields, how to compose `style_of_music` (and what must stay out of it), and how `title`, `lyrics`, `instrumental`, `exclude`, model, Inspo, and Persona are filled. Follow it; do not restate the field rules here.
 
 ## Traceability Rules
 
