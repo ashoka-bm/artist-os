@@ -16,7 +16,7 @@ Use these product docs as durable references:
 - `schemas/`
 - `skills/`
 
-Use `README.md`, `PROGRESS.md`, and `docs/superpowers/plans/` for build-process context.
+Use `README.md` for public install and sharing instructions.
 
 ## Product Invariant
 

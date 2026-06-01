@@ -1,6 +1,6 @@
 # Artist Generation
 
-Artist Generation is the project and repository that builds Artist OS. This context defines the domain language for the artist-facing operating system and keeps build-process terms separate from product terms.
+Artist Generation is the repository for Artist OS. This context defines the domain language for the artist-facing operating system.
 
 ## Language
 
@@ -777,7 +777,7 @@ _Avoid_: Generated Work, Source Record
 - First Slice creates the **Creative Brief Document** first. After **Brief Approval**, Artist OS creates the **Creative Brief Record**.
 - **Brief Approval** requires explicit approval or proceed language. If the artist says to proceed despite uncertainty, record **Rough Brief Approval**.
 - Uncertainty is allowed as a review handoff, not as a final state. **Interpretive Confidence** and **Open Questions** must be resolved before final Prompt Plans.
-- **Art Critic Review** is the GStack-style reviewer stage for Artist OS. It makes the Creative Brief more robust, layered, and decisive before prompt planning.
+- **Art Critic Review** is the reviewer stage for Artist OS. It makes the Creative Brief more robust, layered, and decisive before prompt planning.
 - In the First Slice, **Art Critic Review** is mandatory and runs before **Brief Approval**.
 - **Critical Heuristics** are the explicit best-practice rules used by **Art Critic Review** when artist feedback leaves gaps.
 - **Visual Dynamics** is a second interpretive layer beside **Emotional Structure**. The First Slice uses a library of 14 **Core Visual Tension Pairs** but records only **Active Visual Tensions**.

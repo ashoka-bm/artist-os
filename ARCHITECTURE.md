@@ -65,11 +65,11 @@ archived
 
 ## Product Boundaries
 
-Artist OS separates build-process documentation from product behavior.
+Artist OS keeps public product behavior separate from local project state.
 
-- `README.md`, `PROGRESS.md`, and planning docs guide how this repository is being built.
-- `THEORY.md`, `ARCHITECTURE.md`, `CONTEXT.md`, schemas, examples, and `skills/` define product behavior.
-- Provider setup, API keys, host adapters, setup scripts, and media ingestion come after the manual workflow is proven.
+- `README.md` explains installation and usage.
+- `THEORY.md`, `ARCHITECTURE.md`, `CONTEXT.md`, `docs/text-to-sound/`, schemas, examples, and `skills/` define product behavior.
+- Provider setup, API keys, host adapters, and media ingestion come after the manual image and Suno workflows are proven.
 - `workspace-library/artist-os/` stores private project records and media locally and is ignored by git.
 - `workspace-library/artist-os/artist-os.sqlite` is the local query index for resuming projects across sessions; the project folders remain the durable source artifacts.
 
@@ -82,12 +82,12 @@ Every Prompt Variant Plan and Generated Work must trace back to:
 - the Creative Brief,
 - Style Direction,
 - Emotional Structure,
-- Visual Dynamics,
+- Visual Dynamics or Sonic Dynamics,
 - the Beat or Tension Point,
 - the Transformation Plan,
-- the Provider-Neutral Prompt Plan,
+- the Prompt Plan,
 - and the Output Record when generation exists.
 
 ## Provider Boundary
 
-Generation providers come later. The first implementation produces Provider-Neutral Prompt Plans. A later Provider Adapter may call an image model, but it must record provider, model, prompt, settings, seed if available, output path, and cost-bearing approval.
+Generation providers come later. The current implementation produces Provider-Neutral Image Prompt Plans and Suno Sound Prompt Plans as dry-run artifacts. A later Provider Adapter may call a media model, but it must record provider, model, prompt, settings, seed if available, output path, and cost-bearing approval.
