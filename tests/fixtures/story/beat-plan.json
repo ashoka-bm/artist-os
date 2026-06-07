@@ -1,0 +1,81 @@
+{
+  "beat_plan_id": "bp_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "story_mode": "single_beat",
+  "story_gate_status": "approved",
+  "beats": [
+    {
+      "beat_id": "beat_threshold_001",
+      "beat_role": "threshold",
+      "one_move_summary": "A figure remains at the doorway, feeling the pull to cross without crossing.",
+      "before_state": "The figure approaches the threshold.",
+      "after_state": "The figure remains suspended at the threshold.",
+      "value_shift": "Approach becomes held presence.",
+      "emotional_payload": "The force is in the refusal to resolve.",
+      "source_evidence": ["The reference centers on an uncrossed doorway."],
+      "must_preserve": ["held motion", "unresolved ending"],
+      "pivot_options": [
+        {
+          "label": "residue",
+          "next_move": "Stay after the decision is deferred.",
+          "rationale": "This would extend the threshold into aftermath without resolving it."
+        }
+      ],
+      "medium_translation_notes": {
+        "image": "One still threshold composition.",
+        "video": "A short held shot with almost no crossing motion.",
+        "sound": "A suspended build that never releases.",
+        "text": "A fragment that stops before the decision.",
+        "mixed_media": "Image holds the threshold while sound carries pressure."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_interview",
+          "note": "The artist wanted the unresolved threshold to survive."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_held_motion",
+      "summary": "Stillness that feels ready to move.",
+      "emotional_payload": "Suspense without release.",
+      "source_evidence": ["The figure is close to action but does not act."],
+      "traceability_notes": [
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "stillness_motion",
+          "note": "Stillness and motion are both active."
+        }
+      ]
+    }
+  ],
+  "arc_summary": {
+    "beginning": "Approach.",
+    "turn": "The threshold becomes the whole event.",
+    "ending_or_residue": "The work stays unresolved.",
+    "scale_rationale": "A single beat is enough because resolution would betray the Artist Meaning."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_door_left_lit",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-04T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "transformation_brief",
+      "source_ref": "tb_sample_text_001",
+      "note": "The Beat Plan uses the recommended single_beat mode."
+    }
+  ]
+}

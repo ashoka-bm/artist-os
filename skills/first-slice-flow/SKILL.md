@@ -13,10 +13,12 @@ This skill is deliberately thin. The "how" of each phase lives in canonical docs
 
 - `THEORY.md` — the canonical source for gate definitions, the Visual Gate Board contract, Stage Completion, Series logic, and Prompt Variant Plans. When a phase needs a board format, a gate question, or a "stage is done" rule, read it there rather than improvising.
 - `docs/storage.md` — Workspace Library layout and the persistence rule.
+- `docs/story/THEORY.md` and `docs/story/ARCHITECTURE.md` — the shared Story / Beat Plan layer.
+- `docs/writing/README.md` and `docs/writing/references/` — high-authority writing methods for fragments, beat-by-beat journeys, and finished written shape.
 - `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md` — the Suno music flow.
 - `AGENTS.md` — repository invariants and the traceability rule every plan must satisfy.
 
-Delegate each phase's detailed checklist to the sibling skill that owns it: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/text-to-suno-plan`, `skills/art-critic-review`, and `skills/critique-asset`.
+Delegate each phase's detailed checklist to the sibling skill that owns it: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/text-to-suno-plan`, `skills/art-critic-review`, `skills/writing-method-review`, and `skills/critique-asset`.
 
 ## Hard Gates
 
@@ -25,6 +27,8 @@ These are the conductor's safety rails — the things only you can enforce becau
 - Never call a generation provider (image or Suno) without explicit, per-call artist approval. Drafting a prompt or a board is always allowed; sending it to a provider is not.
 - Do not create a Creative Brief Record or Prompt Plan until the critic review has revised the Creative Brief Document and the artist has approved it. The same holds for the Sound Creative Brief Record and Suno Sound Prompt Plan.
 - Do not produce multiple series image prompts, or multiple Suno sequence plans, until the artist approves the Series/Sequence Plan.
+- After generation, import, drafting, or human editing creates a concrete Output Artifact, create an Output Record before Output Critic Review or Output Acceptance Gate.
+- Do not advance a blocked Output Critic Review to Output Acceptance Gate unless the artist explicitly waives the blocking finding and the waiver is recorded in the Review Record.
 - Do not leave project state only in chat. Persist each phase before advancing (see Persisting State).
 
 ## Routing
@@ -38,6 +42,12 @@ Music, song, lyrics, audio, Suno, or sound → text-to-Suno flow. Image, visual,
 ## Autopilot
 
 Move forward automatically. Stop only when the next step genuinely needs the artist: missing reference, target medium, Artist Meaning, a medium gate choice, Brief Approval, Series/Sequence approval, layout choice, or calibration approval. A stage is complete only when the artist has selected, revised, rejected, or explicitly skipped its open choice. For the exact per-stage definitions, see `THEORY.md` → "Stage Completion" (the visual stages) and the medium sub-skill's draft process (the Suno gates); do not restate or improvise them here. For Suno, Vocal / Lyric is never complete until lyrics, spoken/phonetic vocals, or instrumental mode is selected.
+
+When a project uses multiple beats, a journey-shaped output, or a written artifact, apply the writing methods from `docs/writing/README.md` during creation, not only review. Use `writing-fragments` when source material is underdeveloped, `writing-beats` when building a Beat Plan or sequence, and `writing-shape` when producing a reader-facing written piece.
+
+For writing/text and exploratory story development, preserve the strict `writing-beats` rhythm: propose 2-3 starting beats, let the artist choose, define only that beat, then offer 2-3 next beats. For image and Suno dry-run flows, you may draft a full recommended Beat Plan when Story Mode is obvious or the artist has approved autopilot, but any multi-beat, sequence, image-series, or lyric-bearing plan still requires a separate Beat Reviewer sub-agent before the medium critic review.
+
+All reviewer stages are mandatory bounded sub-agent reviews. Do not self-review the work you just created. Pass the reviewer only the relevant review packet and require a Review Record that validates against `schemas/review-record.schema.json`. Apply blocking findings before advancing unless the artist explicitly waives them.
 
 ## Start Conditions
 
@@ -66,21 +76,38 @@ This is the conductor's core sequence. Run the phases in order; for each, hand o
 
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview`.
-3. **Draft Creative Brief** — `skills/text-to-image-plan`. Run the visual gates in order (Symbology → Style; intensity comes later). Persist each gate decision under `gates/`.
-4. **Art Critic Review** — `skills/art-critic-review`, then present the revised Creative Brief Document and ask for Brief Approval.
-5. **Brief Approval** — on changes, revise and re-run the critic only for affected areas. After approval, run the Minimalist-to-Maximalist Gate if intensity is unresolved.
-6. **Final Records** — `skills/text-to-image-plan` produces the Creative Brief Record and Provider-Neutral Image Prompt Plan against their schemas. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval before creating multiple prompts.
-7. **Prompt Plan Critique** — `skills/critique-asset`, against the approved brief.
+3. **Transformation Brief** — `skills/text-to-image-plan` creates the shared Transformation Brief against `schemas/transformation-brief.schema.json`.
+4. **Beat Plan** — `skills/text-to-image-plan` creates the shared Beat Plan against `schemas/beat-plan.schema.json`; for writing/text and exploratory story development, preserve strict `writing-beats` choice rhythm.
+5. **Story / Beat Review** — for multi-beat, series, or ambiguous Beat Plans, spawn a bounded sub-agent running `skills/writing-method-review` in Beat Reviewer mode before medium planning. Persist the returned Review Record.
+6. **Image Medium Plan** — `skills/text-to-image-plan` consumes the shared Beat Plan, runs visual gates in order (Symbology → Presentation → Style → Detail), and creates the Image Medium Plan against `schemas/image-medium-plan.schema.json`. Persist each gate decision under `gates/`.
+7. **Draft Creative Brief** — `skills/text-to-image-plan` consumes the Image Medium Plan and produces the draft Creative Brief Document.
+8. **Art Critic Review** — spawn a bounded sub-agent running `skills/art-critic-review`, persist the returned Review Record, then present the revised Creative Brief Document and ask for Brief Approval.
+9. **Brief Approval** — on changes, revise and re-run the critic only for affected areas. After approval, run the Minimalist-to-Maximalist Gate if intensity is unresolved.
+10. **Final Records** — `skills/text-to-image-plan` produces the Creative Brief Record with `transformation_brief_id` and `beat_plan_id`, then the Provider-Neutral Image Prompt Plan against their schemas. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval before creating multiple prompts.
+11. **Optional Prompt Branch Set** — when the artist wants a curator batch or broad exploration, `skills/text-to-image-plan` creates a Prompt Branch Set against `schemas/prompt-branch-set.schema.json`, usually five branches that preserve the same meaning kernel while varying style, setting, symbol, composition, and palette/light.
+12. **Prompt Plan Critique** — spawn a bounded sub-agent running `skills/critique-asset`, against the approved brief and Prompt Plan or Prompt Branch Set, and persist the returned Review Record.
+13. **Generation Approval Gate** — only if the artist wants provider-backed generation or another external action. Approval is explicit per call or approved batch.
+14. **Output Record** — after generation, import, drafting, or human editing creates a concrete Output Artifact, persist an Output Record against `schemas/output-record.schema.json` before review or acceptance.
+15. **Output Critic Review** — spawn a bounded sub-agent running `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records. Persist the returned Review Record.
+16. **Output Acceptance Gate** — present the Output Critic Review result and ask whether to accept, revise, reject, archive, export, or extend the Output Artifact. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
 
 ### Text to Suno Music
 
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview`.
-3. **Draft Sound Creative Brief** — `skills/text-to-suno-plan`. Work the Suno gates (Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form). Always resolve Vocal/Lyric before locking; draft lyrics before final locking if requested. Persist each gate under `gates/`.
-4. **Music / Sound Critic Review** — `skills/art-critic-review`, then present the revised Sound Creative Brief Document and ask for Brief Approval.
-5. **Brief Approval** — on changes, revise and re-run the critic only for affected areas.
-6. **Final Records** — `skills/text-to-suno-plan` produces the Sound Creative Brief Record and Suno Sound Prompt Plan against their schemas. Get sequence approval before multiple sequence plans.
-7. **Prompt Plan Critique** — `skills/critique-asset`, against the approved Sound Creative Brief.
+3. **Transformation Brief** — `skills/text-to-suno-plan` creates the shared Transformation Brief against `schemas/transformation-brief.schema.json`.
+4. **Beat Plan** — `skills/text-to-suno-plan` creates the shared Beat Plan against `schemas/beat-plan.schema.json`.
+5. **Story / Beat Review** — for multi-section, sequence, or lyric-bearing plans, spawn a bounded sub-agent running `skills/writing-method-review` in Beat Reviewer mode before medium planning. Persist the returned Review Record.
+6. **Sound Medium Plan** — `skills/text-to-suno-plan` consumes the shared Beat Plan, works the Suno gates (Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form), and creates the Sound Medium Plan against `schemas/sound-medium-plan.schema.json`. Persist each gate under `gates/`.
+7. **Draft Sound Creative Brief** — `skills/text-to-suno-plan` consumes the Sound Medium Plan and produces the draft Sound Creative Brief Document. Always resolve Vocal/Lyric before locking; draft lyrics before final locking if requested.
+8. **Music / Sound Critic Review** — spawn a bounded sub-agent running `skills/art-critic-review`, persist the returned Review Record, then present the revised Sound Creative Brief Document and ask for Brief Approval.
+9. **Brief Approval** — on changes, revise and re-run the critic only for affected areas.
+10. **Final Records** — `skills/text-to-suno-plan` produces the Sound Creative Brief Record with `transformation_brief_id` and `beat_plan_id`, then the Suno Sound Prompt Plan against their schemas. Get sequence approval before multiple sequence plans.
+11. **Prompt Plan Critique** — spawn a bounded sub-agent running `skills/critique-asset`, against the approved Sound Creative Brief, and persist the returned Review Record.
+12. **Generation Approval Gate** — only if the artist wants provider-backed generation or another external action. Approval is explicit per call or approved batch.
+13. **Output Record** — after generation, import, drafting, or human editing creates a concrete Output Artifact, persist an Output Record against `schemas/output-record.schema.json` before review or acceptance.
+14. **Output Critic Review** — spawn a bounded sub-agent running `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records. Persist the returned Review Record.
+15. **Output Acceptance Gate** — present the Output Critic Review result and ask whether to accept, revise, reject, archive, export, or extend the Output Artifact. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
 
 ## Persisting State
 

@@ -1,0 +1,9 @@
+{
+  "source_id": "src_door_left_lit",
+  "title": "Door Left Lit",
+  "media_type": "text",
+  "source_ref": "examples/text-source.md",
+  "user_context": "Artist-provided text reference for dry-run transformation.",
+  "rights_notes": "Artist-provided text; no provider-backed generation approved.",
+  "created_at": "2026-06-04T12:00:00Z"
+}

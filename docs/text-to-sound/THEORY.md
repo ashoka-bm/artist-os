@@ -1,6 +1,6 @@
 # Text To Sound Theory
 
-Text-to-sound is a meaning-preserving transformation from a Text Reference into a Suno Sound Prompt Plan for the first sound version. It reuses the shared Artist OS layers: Reference, Artist Meaning, Formal Analysis, Emotional Structure, Beat Map, Poetic Density, Transformation Plan, Brief Approval, Prompt Variant Plans, critique, and provenance.
+Text-to-sound is a meaning-preserving transformation from a Text Reference into a Suno Sound Prompt Plan for the first sound version. It reuses the shared Artist OS layers: Reference, Artist Meaning, Formal Analysis, Emotional Structure, Beat Plan, Poetic Density, Transformation Brief, Sound Medium Plan, Brief Approval, Prompt Variant Plans, Review Records, and provenance.
 
 This layer defines the sound-specific translation model. It should not duplicate the shared Artist OS theory unless the sound workflow needs a medium-specific rule.
 
@@ -33,7 +33,7 @@ It should answer:
 
 ## Genre And Production Direction
 
-Genre Direction is the musical equivalent of Style Direction. It must remain subordinate to Artist Meaning, Emotional Structure, Beat Map, and Sonic Dynamics.
+Genre Direction is the musical equivalent of Style Direction. It must remain subordinate to Artist Meaning, Emotional Structure, Beat Plan, and Sonic Dynamics.
 
 Represent genre as one Primary Genre plus bounded modifiers:
 
@@ -64,7 +64,7 @@ Recommended fields:
 - `swing_or_shuffle`
 - `rhythmic_density`
 
-Tempo choices must trace back to Artist Meaning, Reference evidence, Emotional Structure, Beat Map, or Sonic Dynamics.
+Tempo choices must trace back to Artist Meaning, Reference evidence, Emotional Structure, Beat Plan, or Sonic Dynamics.
 
 ## Vocal And Lyric Policy
 
@@ -84,14 +84,14 @@ If the artist chooses `source_text_adapted` or `new_lyrics`, Artist OS must draf
 - Artist Meaning,
 - must-preserve details,
 - Emotional Structure,
-- Beat Map,
+- Beat Plan,
 - Poetic Density,
 - constraints around forbidden changes,
 - rights notes for source text.
 
 Do not invent lyrics when the artist has not approved lyrics. Do not use private or copyrighted source text as lyrics beyond the artist's stated rights and intended use.
 
-When lyrics are requested, write them against the Arrangement Plan. Lyrics should not be drafted as loose poem text unless the artist explicitly wants unstructured lyrics. Each lyric section should have a structural function, a tension role, and traceability back to Artist Meaning, Beat Map, and Poetic Density Notes.
+When lyrics are requested, write them against the Arrangement Plan. Lyrics should not be drafted as loose poem text unless the artist explicitly wants unstructured lyrics. Each lyric section should have a structural function, a tension role, and traceability back to Artist Meaning, Beat Plan, and Poetic Density Notes.
 
 Recommended lyric section fields:
 
@@ -134,7 +134,7 @@ For a sound prompt plan, record the active 6 to 8 Sonic Tension Pairs with evide
 
 ## Arrangement And Form
 
-Sound unfolds over time, so the Beat Map should translate into an Arrangement Plan.
+Sound unfolds over time, so the Beat Plan should translate into an Arrangement Plan.
 
 Think about song structure at three nested levels:
 
@@ -246,4 +246,4 @@ For the first sound version, each Prompt Variant Plan must also produce Suno-rea
 
 ## Dry Run Boundary
 
-The text-to-sound slice is dry-run first. Drafting lyrics, briefs, prompt plans, and critique checklists is allowed. Calling a sound, music, or voice generation provider requires explicit artist approval.
+The text-to-sound slice is dry-run first. Drafting lyrics, briefs, prompt plans, critique checklists, and Review Records is allowed. Calling a sound, music, or voice generation provider requires explicit artist approval.

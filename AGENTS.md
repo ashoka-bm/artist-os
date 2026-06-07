@@ -10,6 +10,14 @@ Use these product docs as durable references:
 
 - `THEORY.md`
 - `ARCHITECTURE.md`
+- `docs/progress.md`
+- `docs/pipeline-contract.md`
+- `docs/gates-and-reviews.md`
+- `docs/story/THEORY.md`
+- `docs/story/ARCHITECTURE.md`
+- `docs/output-journeys/`
+- `docs/writing/README.md`
+- `docs/writing/references/`
 - `docs/text-to-sound/THEORY.md`
 - `docs/text-to-sound/ARCHITECTURE.md`
 - `docs/metadata-schema.md`
@@ -28,15 +36,29 @@ Every Prompt Variant Plan and Generated Work must trace back to:
 - Emotional Structure,
 - Visual Dynamics or Sonic Dynamics, depending on target medium,
 - the Beat or Tension Point,
-- the Transformation Plan,
+- the Transformation Brief,
 - the Prompt Plan,
-- and the Output Record when generation exists.
+- and the Output Record when an Output Artifact exists.
 
 Provider-Neutral Image Prompt Plan records should validate against `schemas/prompt-plan.schema.json`.
 
 Sound Creative Brief records should validate against `schemas/sound-creative-brief.schema.json`.
 
 Suno Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.
+
+Prompt Branch Set records should validate against `schemas/prompt-branch-set.schema.json`.
+
+Output Records should validate against `schemas/output-record.schema.json`.
+
+Artist Meaning records should validate against `schemas/artist-meaning.schema.json`.
+
+Gate Decision records should validate against `schemas/gate-decision.schema.json`.
+
+Transformation Brief records should validate against `schemas/transformation-brief.schema.json`.
+
+Beat Plan records should validate against `schemas/beat-plan.schema.json`.
+
+Review Records should validate against `schemas/review-record.schema.json`.
 
 ## Operating Rules
 

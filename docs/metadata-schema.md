@@ -34,7 +34,7 @@ When a previously indexed project is not found during sync, the database marks i
 
 ### Asset Metadata
 
-Asset Metadata is the sidecar record stored next to a reference image, visual board, Generated Work, final image, or export. It validates against `schemas/asset-metadata.schema.json`.
+Asset Metadata is the sidecar record stored next to a reference image, visual board, Output Artifact, final image, or export. It validates against `schemas/asset-metadata.schema.json`.
 
 Required fields:
 
@@ -64,6 +64,161 @@ Required fields:
 - `rights_notes`
 - `created_at`
 
+### Artist Meaning
+
+Artist Meaning is the artist-authored authority record created by the Meaning Interview. It validates against `schemas/artist-meaning.schema.json`.
+
+Required sections:
+
+- `artist_meaning_id`
+- `source_id`
+- `version`
+- `supersedes_artist_meaning_id`
+- `why_it_matters`
+- `must_preserve`
+- `may_transform`
+- `avoid`
+- `target_media_type`
+- `artist_emotional_language`
+- `success_criteria`
+- `contradictions_or_overrides`
+- `confirmation_status`
+- `created_at`
+
+Artist Meaning overrides agent interpretation. Later records should trace meaning-preserving decisions back to this record rather than to the agent's inferred analysis alone.
+
+### Gate Decision
+
+A Gate Decision records one artist-facing choice or explicit permission to proceed unconfirmed. It validates against `schemas/gate-decision.schema.json`.
+
+Required sections:
+
+- `gate_decision_id`
+- `project_id`
+- `source_id`
+- `artist_meaning_id`
+- `gate_type`
+- `gate_status`
+- `decision`
+- `options_presented`
+- `selected_option`
+- `artist_response`
+- `proceed_unconfirmed`
+- `upstream_refs`
+- `created_at`
+
+Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions.
+
+### Transformation Brief
+
+A Transformation Brief is the cross-medium interpretation record created after Artist Meaning and before Story / Beat planning. It validates against `schemas/transformation-brief.schema.json`.
+
+Required sections:
+
+- `transformation_brief_id`
+- `source_id`
+- `artist_meaning_id`
+- `artist_meaning`
+- `formal_observations`
+- `emotional_structure`
+- `poetic_density_notes`
+- `transformation_constraints`
+- `candidate_story_modes`
+- `medium_routing_recommendation`
+- `traceability_summary`
+
+### Beat Plan
+
+A Beat Plan is the shared story spine consumed by image, video, sound, text, and mixed-media journeys. It validates against `schemas/beat-plan.schema.json`.
+
+Required sections:
+
+- `beat_plan_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `story_mode`
+- `story_gate_status`
+- `beats`
+- `tension_points`
+- `arc_summary`
+- `story_critic_review`
+- `story_approval`
+- `traceability_summary`
+
+Each Beat must do one move. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
+
+### Image Medium Plan
+
+An Image Medium Plan is the typed image translation layer between the shared Beat Plan and the image Creative Brief. It validates against `schemas/image-medium-plan.schema.json`.
+
+Required sections:
+
+- `image_medium_plan_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `target_media_type`
+- `story_mode`
+- `symbology_direction`
+- `presentation_mode`
+- `style_direction`
+- `visual_dynamics`
+- `image_roles`
+- `series_plan`
+- `gates`
+- `review_requirements`
+- `traceability_summary`
+
+### Sound Medium Plan
+
+A Sound Medium Plan is the typed sound translation layer between the shared Beat Plan and the Sound Creative Brief. It validates against `schemas/sound-medium-plan.schema.json`.
+
+Required sections:
+
+- `sound_medium_plan_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `target_media_type`
+- `story_mode`
+- `sound_work_type`
+- `sonic_concept_direction`
+- `genre_direction`
+- `tempo_groove_direction`
+- `vocal_lyric_policy`
+- `arrangement_direction`
+- `sonic_dynamics`
+- `sequence_plan`
+- `gates`
+- `review_requirements`
+- `traceability_summary`
+
+### Review Record
+
+A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
+
+Required sections:
+
+- `review_record_id`
+- `project_id`
+- `review_role`
+- `reviewer_execution`
+- `artifact_under_review`
+- `upstream_context`
+- `matched`
+- `drifted`
+- `findings`
+- `recommended_revision`
+- `approval_status`
+- `created_at`
+
+All critic and reviewer records include drift checking. A blocking finding must be revised or explicitly waived by the artist before the journey advances.
+
+`upstream_context` must include the governing `artist_meaning_id` so reviews remain traceable to the Artist Meaning version they evaluated.
+
 ### Creative Brief Record
 
 A Creative Brief Record is the structured agent handoff created after Art Critic Review and Brief Approval.
@@ -72,6 +227,9 @@ Required sections:
 
 - `brief_id`
 - `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
 - `artist_meaning`
 - `formal_observations`
 - `symbology_direction`
@@ -84,6 +242,8 @@ Required sections:
 - `series_recommendation`
 - `transformation_constraints`
 
+`beats` remains transitional now that image prompts use the shared Beat Plan. New records should keep `beat_plan_id` authoritative and use embedded `beats` only as medium-local summaries.
+
 ### Provider-Neutral Image Prompt Plan
 
 A Provider-Neutral Image Prompt Plan is the structured dry-run generation plan created from an approved Creative Brief Record.
@@ -93,6 +253,10 @@ Required sections:
 - `prompt_plan_id`
 - `brief_id`
 - `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `image_medium_plan_id`
 - `target_media_type`
 - `plan_mode`
 - `provider_neutral`
@@ -106,6 +270,61 @@ Required sections:
 - `traceability_summary`
 - `critique_checklist`
 
+Prompt Plans must preserve the lineage IDs from the approved Creative Brief and Image Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
+
+### Prompt Branch Set
+
+A Prompt Branch Set is a curator-facing batch of deliberately different prompts derived from one approved Prompt Plan. It validates against `schemas/prompt-branch-set.schema.json`.
+
+Required sections:
+
+- `prompt_branch_set_id`
+- `prompt_plan_id`
+- `brief_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `medium_plan_id`
+- `target_media_type`
+- `branching_mode`
+- `branch_count_requested`
+- `branch_count_actual`
+- `meaning_kernel`
+- `variation_strategy`
+- `branches`
+- `curation_plan`
+- `review_requirements`
+- `traceability_summary`
+
+Each branch must preserve the same meaning kernel while varying approved axes such as style, setting, symbol, composition, viewpoint, palette/light, texture, world, camera distance, or abstraction level. For image batches, five branches is the default curator batch size unless the artist asks for another count.
+
+### Output Record
+
+An Output Record is the metadata and provenance record for an Output Artifact. It validates against `schemas/output-record.schema.json`.
+
+Required sections:
+
+- `output_record_id`
+- `project_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `medium_plan_id`
+- `brief_id`
+- `prompt_plan_id`
+- `target_media_type`
+- `output_artifact`
+- `origin`
+- `generation`
+- `review_state`
+- `acceptance_state`
+- `traceability_summary`
+- `created_at`
+
+Output Records cover provider-generated media, artist imports, agent-drafted text, and human-edited outputs. When an output comes from a Prompt Branch Set, the record should include both `prompt_branch_set_id` and `prompt_branch_id` as well as the parent `prompt_plan_id`.
+
 ### Sound Creative Brief Record
 
 A Sound Creative Brief Record is the structured agent handoff created after Music / Sound Critic Review and Brief Approval. It validates against `schemas/sound-creative-brief.schema.json`.
@@ -114,6 +333,8 @@ It mirrors the image Creative Brief Record structure where the concepts are shar
 
 - `brief_id`
 - `source_id`
+- `transformation_brief_id`
+- `beat_plan_id`
 - `artist_meaning`
 - `formal_observations`
 - `core_tension_pairs`
@@ -138,6 +359,8 @@ It replaces image-specific sections with sound-specific sections:
 
 `arrangement_plan.sections[]` records the section-level tension map. Each section includes section name, time range, bar range, section function, tension role, active emotional tensions, active sonic tensions, and transformation notes.
 
+`beats` remains transitional now that sound prompts use the shared Beat Plan. New records should keep `beat_plan_id` authoritative and use embedded `beats` only as medium-local summaries.
+
 ### Suno Sound Prompt Plan
 
 A Suno Sound Prompt Plan is the structured dry-run generation plan created from an approved Sound Creative Brief Record. It validates against `schemas/sound-prompt-plan.schema.json`.
@@ -147,6 +370,10 @@ Required sections:
 - `prompt_plan_id`
 - `brief_id`
 - `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `sound_medium_plan_id`
 - `target_media_type`
 - `plan_mode`
 - `sound_work_type`
@@ -172,6 +399,8 @@ Required sections:
 The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `suno_outputs` so the variant can be pasted into Suno Custom Mode.
 
 For the first text-to-sound version, `suno_custom_mode_outputs` is the final platform-facing contract. It contains `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform adapters can be added after the Suno flow works.
+
+Suno Sound Prompt Plans must preserve the lineage IDs from the approved Sound Creative Brief and Sound Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
 
 ## Symbology Direction
 

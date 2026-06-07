@@ -1,0 +1,40 @@
+{
+  "artist_meaning_id": "meaning_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "version": 1,
+  "supersedes_artist_meaning_id": null,
+  "why_it_matters": "The piece is about returning to a place that is no longer emotionally safe, while still feeling tenderness for it.",
+  "must_preserve": [
+    "the threshold between returning and leaving",
+    "the key as fragile agency",
+    "absence as an active presence"
+  ],
+  "may_transform": [
+    "the exact room can become another threshold setting",
+    "the key can become an equivalent object of choice"
+  ],
+  "avoid": [
+    "resolving whether the speaker enters",
+    "showing the absent person",
+    "turning the grief into explicit horror"
+  ],
+  "target_media_type": "image",
+  "artist_emotional_language": [
+    "tender and dangerous",
+    "almost home",
+    "holding still because choosing would break something"
+  ],
+  "success_criteria": [
+    "the output keeps the threshold unresolved",
+    "the image feels specific rather than generically sad",
+    "the agency remains small and fragile"
+  ],
+  "contradictions_or_overrides": [
+    {
+      "agent_assumption": "The lit doorway might imply welcome or resolution.",
+      "artist_override": "The light should feel inviting and unsafe at the same time."
+    }
+  ],
+  "confirmation_status": "confirmed",
+  "created_at": "2026-06-04T11:40:00Z"
+}

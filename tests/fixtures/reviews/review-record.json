@@ -1,0 +1,63 @@
+{
+  "review_record_id": "review_story_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "story_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-writing-method-review"
+  },
+  "artifact_under_review": {
+    "artifact_type": "beat_plan",
+    "artifact_id": "bp_door_left_lit",
+    "path_or_ref": "tests/fixtures/story/beat-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve an unresolved threshold and held motion.",
+    "governing_refs": [
+      {
+        "ref_type": "transformation_brief",
+        "ref_id": "tb_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/transformation-brief.json"
+      },
+      {
+        "ref_type": "writing_reference",
+        "ref_id": "writing-beats",
+        "path_or_ref": "docs/writing/references/writing-beats.SKILL.md"
+      }
+    ],
+    "open_questions": []
+  },
+  "matched": [
+    {
+      "summary": "The Beat Plan keeps the work to one clear threshold move.",
+      "traces_to": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_interview",
+          "note": "The artist wanted unresolved threshold pressure."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "The single beat is coherent.",
+      "evidence": "The beat does one move: approach becomes held presence.",
+      "recommendation": "Proceed to medium translation."
+    }
+  ],
+  "recommended_revision": "No revision required before medium translation.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-04T12:01:00Z"
+}

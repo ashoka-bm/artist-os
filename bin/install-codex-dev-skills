@@ -12,6 +12,7 @@ skills=(
   "text-to-image-plan"
   "text-to-suno-plan"
   "art-critic-review"
+  "writing-method-review"
   "critique-asset"
 )
 
@@ -39,6 +40,10 @@ install_skill() {
       exit 1
     fi
     cp "$source_dir/SKILL.md" "$target/SKILL.md"
+    if [[ -d "$source_dir/references" ]]; then
+      rm -rf "$target/references"
+      cp -R "$source_dir/references" "$target/references"
+    fi
     echo "updated copied skill: $target/SKILL.md"
     return
   fi

@@ -30,6 +30,12 @@ workspace-library/artist-os/projects/<project_id>/
 │   └── media/
 ├── meaning/
 │   └── meaning-interview.json
+├── story/
+│   ├── transformation-brief.json
+│   └── beat-plan.json
+├── medium-plans/
+│   ├── image-medium-plan.json
+│   └── sound-medium-plan.json
 ├── gates/
 │   ├── interpretation.json
 │   ├── symbology.json
@@ -132,13 +138,19 @@ Use these destinations for each asset type:
 - Text Reference: `source/reference.txt`
 - Source Record: `source/source-record.json`
 - user-provided reference media: `source/media/` or `assets/reference/` with sidecar metadata
-- Meaning Interview: `meaning/meaning-interview.json`
-- Interpretation, Symbology, Style, and Detail gate decisions: `gates/*.json`
+- Artist Meaning / Meaning Interview: `meaning/artist-meaning.json`
+- Transformation Brief: `story/transformation-brief.json`
+- Beat Plan: `story/beat-plan.json`
+- Image Medium Plan: `medium-plans/image-medium-plan.json`
+- Sound Medium Plan: `medium-plans/sound-medium-plan.json`
+- gate decisions: `gates/*.json`
 - generated or imported visual boards: `assets/boards/` with sidecar metadata
 - draft Creative Brief: `briefs/creative-brief.draft.md`
 - approved Creative Brief Record: `briefs/creative-brief.record.json`
 - Provider-Neutral Prompt Plan: `prompt-plans/prompt-plan.json`
-- critique records: `critiques/`
+- Prompt Branch Set: `prompt-plans/prompt-branch-set.json`
+- Output Records: `outputs/*.json`
+- Review Records and critique records: `critiques/`
 - intermediate Generated Works: `assets/generated/` with sidecar metadata
 - accepted final images: `assets/final/` with sidecar metadata
 - shareable packages or exports: `exports/`

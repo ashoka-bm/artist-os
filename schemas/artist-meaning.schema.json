@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/artist-meaning.schema.json",
+  "title": "ArtistMeaning",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artist_meaning_id",
+    "source_id",
+    "version",
+    "supersedes_artist_meaning_id",
+    "why_it_matters",
+    "must_preserve",
+    "may_transform",
+    "avoid",
+    "target_media_type",
+    "artist_emotional_language",
+    "success_criteria",
+    "contradictions_or_overrides",
+    "confirmation_status",
+    "created_at"
+  ],
+  "properties": {
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "supersedes_artist_meaning_id": { "type": ["string", "null"], "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "why_it_matters": { "type": "string", "minLength": 1 },
+    "must_preserve": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "may_transform": { "type": "array", "items": { "type": "string" } },
+    "avoid": { "type": "array", "items": { "type": "string" } },
+    "target_media_type": {
+      "type": "string",
+      "enum": ["image", "sound", "video", "text", "mixed_media", "multi_output", "unselected"]
+    },
+    "artist_emotional_language": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "success_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "contradictions_or_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["agent_assumption", "artist_override"],
+        "properties": {
+          "agent_assumption": { "type": "string" },
+          "artist_override": { "type": "string" }
+        }
+      }
+    },
+    "confirmation_status": {
+      "type": "string",
+      "enum": ["confirmed", "rough_approved", "unconfirmed"]
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

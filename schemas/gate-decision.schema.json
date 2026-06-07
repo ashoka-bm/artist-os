@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/gate-decision.schema.json",
+  "title": "GateDecision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gate_decision_id",
+    "project_id",
+    "source_id",
+    "artist_meaning_id",
+    "gate_type",
+    "gate_status",
+    "decision",
+    "options_presented",
+    "selected_option",
+    "artist_response",
+    "proceed_unconfirmed",
+    "upstream_refs",
+    "created_at"
+  ],
+  "properties": {
+    "gate_decision_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "gate_type": {
+      "type": "string",
+      "enum": [
+        "routing",
+        "meaning_confirmation",
+        "interpretation",
+        "story",
+        "story_approval",
+        "symbology",
+        "presentation_mode",
+        "style",
+        "detail_intensity",
+        "sound_work_type",
+        "sonic_concept",
+        "genre_production",
+        "tempo_groove",
+        "vocal_lyric",
+        "arrangement_form",
+        "prompt_branch",
+        "prompt_lock",
+        "generation_approval",
+        "output_acceptance"
+      ]
+    },
+    "gate_status": {
+      "type": "string",
+      "enum": ["not_started", "proposed", "selected", "revised", "skipped", "unconfirmed", "approved", "blocked"]
+    },
+    "decision": { "type": "string", "minLength": 1 },
+    "options_presented": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["option_id", "label", "summary"],
+        "properties": {
+          "option_id": { "type": "string" },
+          "label": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "selected_option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["option_id", "label"],
+      "properties": {
+        "option_id": { "type": "string" },
+        "label": { "type": "string" }
+      }
+    },
+    "artist_response": { "type": "string" },
+    "proceed_unconfirmed": { "type": "boolean" },
+    "upstream_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref_type", "ref_id", "path_or_ref"],
+        "properties": {
+          "ref_type": {
+            "type": "string",
+            "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
+          },
+          "ref_id": { "type": "string" },
+          "path_or_ref": { "type": "string" }
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

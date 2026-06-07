@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/beat-plan.schema.json",
+  "title": "BeatPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "beat_plan_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "story_mode",
+    "story_gate_status",
+    "beats",
+    "tension_points",
+    "arc_summary",
+    "story_critic_review",
+    "story_approval",
+    "traceability_summary"
+  ],
+  "properties": {
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "story_mode": { "$ref": "#/$defs/story_mode" },
+    "story_gate_status": { "$ref": "#/$defs/approval_status" },
+    "beats": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/beat_record" }
+    },
+    "tension_points": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tension_point_record" }
+    },
+    "arc_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beginning", "turn", "ending_or_residue", "scale_rationale"],
+      "properties": {
+        "beginning": { "type": "string" },
+        "turn": { "type": "string" },
+        "ending_or_residue": { "type": "string" },
+        "scale_rationale": { "type": "string" }
+      }
+    },
+    "story_critic_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "review_record_id", "approval_status"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "review_record_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "approval_status": { "$ref": "#/$defs/review_approval_status" }
+      }
+    },
+    "story_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "approved_by", "approved_at", "waived_blocks"],
+      "properties": {
+        "status": { "$ref": "#/$defs/approval_status" },
+        "approved_by": { "type": ["string", "null"] },
+        "approved_at": { "type": ["string", "null"], "format": "date-time" },
+        "waived_blocks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    }
+  },
+  "$defs": {
+    "story_mode": {
+      "type": "string",
+      "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+    },
+    "approval_status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "approved", "unconfirmed", "waived", "rejected"]
+    },
+    "review_approval_status": {
+      "type": "string",
+      "enum": ["not_required", "pending", "approve", "revise", "block", "waived"]
+    },
+    "beat_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "beat_id",
+        "beat_role",
+        "one_move_summary",
+        "before_state",
+        "after_state",
+        "value_shift",
+        "emotional_payload",
+        "source_evidence",
+        "must_preserve",
+        "pivot_options",
+        "traceability_notes"
+      ],
+      "properties": {
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "beat_role": {
+          "type": "string",
+          "enum": [
+            "invitation",
+            "grounding",
+            "encounter",
+            "threshold",
+            "build",
+            "rupture",
+            "reveal",
+            "concealment",
+            "reversal",
+            "surrender",
+            "transformation",
+            "consequence",
+            "return",
+            "closure",
+            "residue",
+            "unresolved_echo"
+          ]
+        },
+        "one_move_summary": { "type": "string" },
+        "before_state": { "type": "string" },
+        "after_state": { "type": "string" },
+        "value_shift": { "type": "string" },
+        "emotional_payload": { "type": "string" },
+        "source_evidence": { "type": "array", "items": { "type": "string" } },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "pivot_options": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "next_move", "rationale"],
+            "properties": {
+              "label": { "type": "string" },
+              "next_move": { "type": "string" },
+              "rationale": { "type": "string" }
+            }
+          }
+        },
+        "medium_translation_notes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "image": { "type": "string" },
+            "video": { "type": "string" },
+            "sound": { "type": "string" },
+            "text": { "type": "string" },
+            "mixed_media": { "type": "string" }
+          }
+        },
+        "traceability_notes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        }
+      }
+    },
+    "tension_point_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tension_point_id", "summary", "emotional_payload", "source_evidence", "traceability_notes"],
+      "properties": {
+        "tension_point_id": { "type": "string", "pattern": "^tp_[a-zA-Z0-9_-]+$" },
+        "summary": { "type": "string" },
+        "emotional_payload": { "type": "string" },
+        "source_evidence": { "type": "array", "items": { "type": "string" } },
+        "traceability_notes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "core_tension_pair", "poetic_density_note", "prior_beat", "story_gate"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

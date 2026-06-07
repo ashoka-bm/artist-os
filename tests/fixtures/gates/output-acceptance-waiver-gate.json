@@ -1,0 +1,45 @@
+{
+  "gate_decision_id": "gate_door_left_lit_output_acceptance_waiver_001",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "gate_type": "output_acceptance",
+  "gate_status": "approved",
+  "decision": "Accept the blocked output as an artist-waived alternate ending candidate.",
+  "options_presented": [
+    {
+      "option_id": "revise",
+      "label": "revise",
+      "summary": "Resolve the blocking drift before acceptance."
+    },
+    {
+      "option_id": "waive_and_accept",
+      "label": "waive and accept",
+      "summary": "Record the artist waiver and accept the output despite the blocking drift."
+    },
+    {
+      "option_id": "archive",
+      "label": "archive",
+      "summary": "Keep the output for provenance without accepting it."
+    }
+  ],
+  "selected_option": {
+    "option_id": "waive_and_accept",
+    "label": "waive and accept"
+  },
+  "artist_response": "I understand the critic block and waive it; accept this as an alternate ending candidate.",
+  "proceed_unconfirmed": false,
+  "upstream_refs": [
+    {
+      "ref_type": "output_record",
+      "ref_id": "out_door_left_lit_branch_station_001",
+      "path_or_ref": "tests/fixtures/outputs/output-record.json"
+    },
+    {
+      "ref_type": "review_record",
+      "ref_id": "review_output_door_left_lit_branch_station_blocked_001",
+      "path_or_ref": "tests/fixtures/reviews/output-review-blocked-waived-record.json"
+    }
+  ],
+  "created_at": "2026-06-06T12:13:00Z"
+}

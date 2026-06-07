@@ -6,6 +6,10 @@ The Text-to-Sound Slice is a complete dry-run Artist OS workflow from Text Refer
 Text Reference
   -> Source Record
   -> Meaning Interview
+  -> Transformation Brief
+  -> Beat Plan
+  -> Story / Beat Review, when required
+  -> Sound Medium Plan
   -> Draft Sound Creative Brief Document
   -> Sonic Concept Direction
   -> Genre / Production Direction
@@ -20,7 +24,11 @@ Text Reference
   -> Brief Approval
   -> Sound Creative Brief Record
   -> Suno Sound Prompt Plan
-  -> critique checklist
+  -> Prompt Critic Review
+  -> optional Generation Approval Gate
+  -> Output Record, when an artifact exists
+  -> Output Critic Review
+  -> Output Acceptance Gate
   -> Workspace Library persistence
 ```
 
@@ -33,14 +41,14 @@ Reuse the existing Artist OS stages where they are medium-neutral:
 1. Ingest the Text Reference and create a Source Record.
 2. Run a Meaning Interview.
 3. Preserve Artist Meaning as final authority.
-4. Analyze text formally.
-5. Map Emotional Structure with Core Tension Pairs.
-6. Build a Beat Map and Poetic Density Notes.
-7. Produce an artist-readable Creative Brief Document first.
-8. Run a critic review before Brief Approval.
+4. Create the shared Transformation Brief.
+5. Create the shared Beat Plan and Poetic Density Notes.
+6. Translate the Beat Plan into a Sound Medium Plan.
+7. Produce an artist-readable Sound Creative Brief Document before the structured Sound Creative Brief Record.
+8. Run Music / Sound Critic Review as a bounded sub-agent before Brief Approval.
 9. Create structured records only after Brief Approval. Sound Creative Brief Records validate against `schemas/sound-creative-brief.schema.json`.
 10. Produce Faithful, Amplified, and Minimal Prompt Variant Plans.
-11. Preserve traceability from every prompt choice back to the approved brief.
+11. Preserve traceability from every prompt choice back to the approved brief, Beat Plan, and Sound Medium Plan.
 12. Produce Suno Custom Mode fields directly for this first sound version.
 
 ## Sound-Specific Gates
@@ -68,7 +76,7 @@ Record one Primary Genre or production mode plus bounded modifiers. Surface Genr
 
 ### Tempo / Groove Gate
 
-Ask whether the artist has a tempo, BPM range, or felt motion in mind. If not, recommend one from the Beat Map and Emotional Structure.
+Ask whether the artist has a tempo, BPM range, or felt motion in mind. If not, recommend one from the Beat Plan and Emotional Structure.
 
 Record BPM or range, meter, groove feel, tempo stability, rhythmic density, and tempo-change rationale.
 
@@ -122,7 +130,7 @@ Invitation -> Grounding -> Build -> Release -> Development -> Stronger Build -> 
 
 Adapt the template for the medium. Modern short-form songs may start with a hook; folk, singer-songwriter, ceremonial, and lyric-forward works may need longer verses and a less compressed chorus cycle.
 
-When the Beat Map has several significant turns, recommend whether the work should be a single continuous track, a multi-section track, a suite, or separate alternate sound directions. Do not create multiple final sound prompt plans until the artist approves the sequence recommendation.
+When the Beat Plan has several significant turns, recommend whether the work should be a single continuous track, a multi-section track, a suite, or separate alternate sound directions. Do not create multiple final sound prompt plans until the artist approves the sequence recommendation.
 
 ## Suno Prompt Plan Contract
 
@@ -133,6 +141,10 @@ A Suno Sound Prompt Plan should include:
 - `prompt_plan_id`
 - `brief_id`
 - `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `sound_medium_plan_id`
 - `target_media_type: "sound"`
 - `sound_work_type`
 - `target_platform: "suno"`
@@ -205,7 +217,7 @@ Critique sound prompt plans against:
 - evidence from the Text Reference,
 - Emotional Structure,
 - Sonic Dynamics,
-- Beat Map,
+- Beat Plan,
 - Poetic Density,
 - Genre / Production Direction,
 - Tempo / Groove Direction,

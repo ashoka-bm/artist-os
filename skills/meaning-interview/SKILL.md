@@ -41,8 +41,14 @@ Ask only the followups needed to clarify:
 
 ## Output
 
-Return a compact Artist Meaning block with these fields (Markdown is fine for a standalone run; the orchestrator and the translation director consume it inline, so keep the field names exact so downstream steps can pick them up reliably):
+Return an Artist Meaning record that validates against `schemas/artist-meaning.schema.json`. For standalone conversation you may also include a short readable summary, but the schema-valid record is the machine-readable output.
 
+Required fields:
+
+- `artist_meaning_id`,
+- `source_id`,
+- `version`,
+- `supersedes_artist_meaning_id`,
 - `why_it_matters`,
 - `must_preserve`,
 - `may_transform`,
@@ -50,6 +56,8 @@ Return a compact Artist Meaning block with these fields (Markdown is fine for a 
 - `target_media_type`,
 - `artist_emotional_language`,
 - `success_criteria`,
-- `contradictions_or_overrides`.
+- `contradictions_or_overrides`,
+- `confirmation_status`,
+- `created_at`.
 
 If the user's answers contradict the agent's likely interpretation, record the contradiction and let the user's meaning win. This is why the interview runs first: Artist Meaning has final authority over analysis, so it must be captured before any interpretation can quietly override it.

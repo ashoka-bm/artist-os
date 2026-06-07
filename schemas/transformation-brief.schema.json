@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/transformation-brief.schema.json",
+  "title": "TransformationBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "transformation_brief_id",
+    "source_id",
+    "artist_meaning_id",
+    "artist_meaning",
+    "formal_observations",
+    "emotional_structure",
+    "poetic_density_notes",
+    "transformation_constraints",
+    "candidate_story_modes",
+    "medium_routing_recommendation",
+    "traceability_summary"
+  ],
+  "properties": {
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "artist_meaning": { "$ref": "#/$defs/artist_meaning" },
+    "formal_observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["media_type", "observations"],
+      "properties": {
+        "media_type": { "type": "string", "enum": ["text", "image", "audio", "video", "mixed"] },
+        "observations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "emotional_structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core_tension_pairs", "emotional_qualities", "open_questions"],
+      "properties": {
+        "core_tension_pairs": { "$ref": "#/$defs/core_tension_pairs" },
+        "emotional_qualities": { "type": "array", "items": { "type": "string" } },
+        "open_questions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "poetic_density_notes": { "$ref": "#/$defs/poetic_density_notes" },
+    "transformation_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preserve", "may_transform", "avoid", "rights_notes"],
+      "properties": {
+        "preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } },
+        "avoid": { "type": "array", "items": { "type": "string" } },
+        "rights_notes": { "type": "string" }
+      }
+    },
+    "candidate_story_modes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/candidate_story_mode" }
+    },
+    "medium_routing_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended_media", "rationale", "alternate_media"],
+      "properties": {
+        "recommended_media": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["image", "video", "sound", "text", "mixed_media"] }
+        },
+        "rationale": { "type": "string" },
+        "alternate_media": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["image", "video", "sound", "text", "mixed_media"] }
+        }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    }
+  },
+  "$defs": {
+    "artist_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_it_matters", "must_preserve", "may_transform", "avoid", "success_criteria"],
+      "properties": {
+        "why_it_matters": { "type": "string" },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } },
+        "avoid": { "type": "array", "items": { "type": "string" } },
+        "artist_emotional_language": { "type": "array", "items": { "type": "string" } },
+        "success_criteria": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "candidate_story_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["story_mode", "rationale", "risks"],
+      "properties": {
+        "story_mode": { "$ref": "#/$defs/story_mode" },
+        "rationale": { "type": "string" },
+        "risks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "story_mode": {
+      "type": "string",
+      "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+    },
+    "poetic_density_notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layered_meanings", "flattening_risks"],
+      "properties": {
+        "layered_meanings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["detail", "meanings"],
+            "properties": {
+              "detail": { "type": "string" },
+              "meanings": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "flattening_risks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "core_tension_pairs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attraction_repulsion",
+        "proximity_distance",
+        "order_chaos",
+        "stillness_motion",
+        "legibility_opacity",
+        "control_surrender",
+        "safety_threat",
+        "presence_absence"
+      ],
+      "properties": {
+        "attraction_repulsion": { "$ref": "#/$defs/tension_pair_record" },
+        "proximity_distance": { "$ref": "#/$defs/tension_pair_record" },
+        "order_chaos": { "$ref": "#/$defs/tension_pair_record" },
+        "stillness_motion": { "$ref": "#/$defs/tension_pair_record" },
+        "legibility_opacity": { "$ref": "#/$defs/tension_pair_record" },
+        "control_surrender": { "$ref": "#/$defs/tension_pair_record" },
+        "safety_threat": { "$ref": "#/$defs/tension_pair_record" },
+        "presence_absence": { "$ref": "#/$defs/tension_pair_record" }
+      }
+    },
+    "tension_pair_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["salience", "pole_a", "pole_b", "tension_intensity", "evidence", "translation_notes"],
+      "properties": {
+        "salience": { "type": "number", "minimum": 0, "maximum": 1 },
+        "pole_a": { "$ref": "#/$defs/pole_record" },
+        "pole_b": { "$ref": "#/$defs/pole_record" },
+        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "type": "string" } },
+        "artist_note": { "type": "string" },
+        "translation_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "pole_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["presence", "evidence"],
+      "properties": {
+        "presence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["reference_evidence", "artist_meaning", "formal_observation", "core_tension_pair", "poetic_density_note", "transformation_constraint"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

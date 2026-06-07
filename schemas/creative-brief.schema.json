@@ -7,6 +7,9 @@
   "required": [
     "brief_id",
     "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
     "artist_meaning",
     "formal_observations",
     "symbology_direction",
@@ -22,6 +25,9 @@
   "properties": {
     "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
     "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
     "artist_meaning": {
       "type": "object",
       "additionalProperties": false,

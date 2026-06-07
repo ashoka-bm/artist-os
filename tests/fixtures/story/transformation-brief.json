@@ -1,0 +1,123 @@
+{
+  "transformation_brief_id": "tb_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "artist_meaning": {
+    "why_it_matters": "The reference is about staying present with an unresolved threshold instead of rushing to resolution.",
+    "must_preserve": ["threshold feeling", "quiet pressure", "unresolved ending"],
+    "may_transform": ["literal setting", "speaker identity"],
+    "avoid": ["heroic triumph", "clean closure"],
+    "artist_emotional_language": ["held breath", "almost crossing", "soft dread"],
+    "success_criteria": ["The transformed work should feel suspended rather than solved."]
+  },
+  "formal_observations": {
+    "media_type": "text",
+    "observations": ["Short lines create pauses.", "The central image is a doorway that is not crossed."]
+  },
+  "emotional_structure": {
+    "core_tension_pairs": {
+      "attraction_repulsion": {
+        "salience": 0.7,
+        "pole_a": { "presence": 0.7, "evidence": ["The doorway invites approach."] },
+        "pole_b": { "presence": 0.6, "evidence": ["The speaker hesitates."] },
+        "tension_intensity": 0.8,
+        "evidence": ["The reference keeps the speaker at the threshold."],
+        "translation_notes": ["Keep invitation and resistance active together."]
+      },
+      "proximity_distance": {
+        "salience": 0.6,
+        "pole_a": { "presence": 0.6, "evidence": ["The speaker is physically close to the door."] },
+        "pole_b": { "presence": 0.5, "evidence": ["The other side remains unreachable."] },
+        "tension_intensity": 0.7,
+        "evidence": ["Nearness does not become arrival."],
+        "translation_notes": ["Use near framing without full entry."]
+      },
+      "order_chaos": {
+        "salience": 0.3,
+        "pole_a": { "presence": 0.4, "evidence": ["The threshold gives structure."] },
+        "pole_b": { "presence": 0.2, "evidence": ["The unknown beyond the door destabilizes the scene."] },
+        "tension_intensity": 0.3,
+        "evidence": ["The scene is controlled but uncertain."],
+        "translation_notes": ["Keep the world restrained."]
+      },
+      "stillness_motion": {
+        "salience": 0.9,
+        "pole_a": { "presence": 0.9, "evidence": ["The speaker does not cross."] },
+        "pole_b": { "presence": 0.5, "evidence": ["The possibility of crossing is active."] },
+        "tension_intensity": 0.9,
+        "evidence": ["The reference is charged by held motion."],
+        "translation_notes": ["Make stillness feel ready to move."]
+      },
+      "legibility_opacity": {
+        "salience": 0.8,
+        "pole_a": { "presence": 0.4, "evidence": ["The doorway is concrete."] },
+        "pole_b": { "presence": 0.8, "evidence": ["The other side is unknown."] },
+        "tension_intensity": 0.8,
+        "evidence": ["The meaning is intentionally not fully explained."],
+        "translation_notes": ["Preserve mystery."]
+      },
+      "control_surrender": {
+        "salience": 0.5,
+        "pole_a": { "presence": 0.6, "evidence": ["The speaker chooses not to cross yet."] },
+        "pole_b": { "presence": 0.4, "evidence": ["The threshold exerts pressure."] },
+        "tension_intensity": 0.5,
+        "evidence": ["The speaker holds position under pressure."],
+        "translation_notes": ["Avoid decisive action."]
+      },
+      "safety_threat": {
+        "salience": 0.4,
+        "pole_a": { "presence": 0.3, "evidence": ["The known side is stable."] },
+        "pole_b": { "presence": 0.5, "evidence": ["The unknown side carries soft dread."] },
+        "tension_intensity": 0.5,
+        "evidence": ["Threat is atmospheric, not explicit."],
+        "translation_notes": ["Keep threat quiet."]
+      },
+      "presence_absence": {
+        "salience": 0.7,
+        "pole_a": { "presence": 0.6, "evidence": ["The speaker is present at the threshold."] },
+        "pole_b": { "presence": 0.7, "evidence": ["What waits beyond is absent."] },
+        "tension_intensity": 0.7,
+        "evidence": ["The absent other side shapes the scene."],
+        "translation_notes": ["Let absence feel active."]
+      }
+    },
+    "emotional_qualities": ["suspended", "intimate", "unresolved"],
+    "open_questions": []
+  },
+  "poetic_density_notes": {
+    "layered_meanings": [
+      { "detail": "doorway", "meanings": ["threshold", "choice", "withheld transformation"] }
+    ],
+    "flattening_risks": ["Turning the threshold into a simple before/after triumph."]
+  },
+  "transformation_constraints": {
+    "preserve": ["unresolved threshold", "held motion"],
+    "may_transform": ["setting", "visual or sonic representation"],
+    "avoid": ["crossing the doorway", "victory language"],
+    "rights_notes": "Artist-provided text for private dry-run transformation."
+  },
+  "candidate_story_modes": [
+    {
+      "story_mode": "single_beat",
+      "rationale": "One compressed beat can preserve the suspended threshold.",
+      "risks": ["May lose the sense of approaching pressure."]
+    },
+    {
+      "story_mode": "triptych",
+      "rationale": "Before / threshold / residue could show the pressure around the held moment.",
+      "risks": ["May over-explain the unresolved ending."]
+    }
+  ],
+  "medium_routing_recommendation": {
+    "recommended_media": ["image"],
+    "rationale": "A still image can hold the threshold without forcing resolution.",
+    "alternate_media": ["sound", "video"]
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_interview",
+      "note": "The artist asked to preserve the unresolved threshold."
+    }
+  ]
+}

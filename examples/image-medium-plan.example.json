@@ -1,0 +1,89 @@
+{
+  "image_medium_plan_id": "imp_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "target_media_type": "image",
+  "story_mode": "single_beat",
+  "symbology_direction": {
+    "selection_method": "agent_recommended",
+    "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
+    "confirmation_status": "unconfirmed",
+    "rationale": "The threshold scene preserves the central pressure between return and refusal.",
+    "avoid": ["literalizing the absent person", "resolving whether the figure enters"]
+  },
+  "presentation_mode": "single_image",
+  "style_direction": {
+    "selection_method": "style_interview",
+    "primary_style": "cinematic photoreal",
+    "style_modifiers": ["grainy / film-grain", "surreal / dreamlike", "dark / moody"],
+    "confirmation_status": "unconfirmed",
+    "rationale": "Cinematic photoreal grounding keeps the domestic threshold physically real while restrained surreal lighting preserves opacity.",
+    "avoid": ["glossy fantasy rendering", "generic horror poster styling"]
+  },
+  "visual_dynamics": {
+    "target_visual_engine": "sparse cinematic threshold composition with active absence and held motion",
+    "active_visual_tensions": [
+      {
+        "name": "Light / Dark",
+        "tension_intensity": 0.9,
+        "translation_notes": ["Use a lit doorway as the bright anchor inside a darker concrete environment."]
+      },
+      {
+        "name": "Flat / Deep",
+        "tension_intensity": 0.7,
+        "translation_notes": ["Build a clear inside/outside depth axis through the doorway."]
+      }
+    ],
+    "style_visual_conflicts": [
+      {
+        "conflict": "Photoreal style could over-literalize the room and reduce the text's opacity.",
+        "adaptation": "Use photoreal grounding with restrained surreal lighting and symbolic treatment of the key.",
+        "requires_artist_approval": false
+      }
+    ]
+  },
+  "image_roles": [
+    {
+      "image_role_id": "imgrole_threshold_001",
+      "beat_id": "beat_threshold_001",
+      "role_label": "threshold image",
+      "composition_intent": "Hold the figure at the edge of the lit doorway without resolving entry or departure.",
+      "emotional_payload": "Approach becomes held presence.",
+      "amplitude_profile": {
+        "framing_distance": 0.35,
+        "subject_scale": 0.55,
+        "visual_density": 0.25,
+        "motion_energy": 0.2,
+        "spatial_openness": 0.45,
+        "detail_intensity": 0.45,
+        "emotional_pressure": 0.8
+      }
+    }
+  ],
+  "series_plan": {
+    "is_series": false,
+    "requires_series_approval": false,
+    "calibration_required": false,
+    "style_progression": "No progression; one compressed threshold beat."
+  },
+  "gates": {
+    "symbology_gate": "unconfirmed",
+    "presentation_gate": "complete",
+    "style_gate": "unconfirmed",
+    "detail_gate": "not_started"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": false,
+    "art_critic_required": true,
+    "prompt_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The image plan translates the shared threshold beat into one still composition."
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/review-record.schema.json",
+  "title": "ReviewRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_record_id",
+    "project_id",
+    "review_role",
+    "reviewer_execution",
+    "artifact_under_review",
+    "upstream_context",
+    "matched",
+    "drifted",
+    "findings",
+    "recommended_revision",
+    "approval_status",
+    "created_at"
+  ],
+  "properties": {
+    "review_record_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "review_role": {
+      "type": "string",
+      "enum": [
+        "meaning_reviewer",
+        "story_critic",
+        "art_critic",
+        "video_critic",
+        "sound_critic",
+        "writing_critic",
+        "mixed_media_critic",
+        "prompt_critic",
+        "output_critic",
+        "fragment_reviewer",
+        "beat_reviewer",
+        "shape_reviewer"
+      ]
+    },
+    "reviewer_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_mode", "sub_agent_required", "source_skill"],
+      "properties": {
+        "execution_mode": { "type": "string", "const": "bounded_sub_agent" },
+        "sub_agent_required": { "type": "boolean", "const": true },
+        "source_skill": { "type": "string" }
+      }
+    },
+    "artifact_under_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_type", "artifact_id", "path_or_ref"],
+      "properties": {
+        "artifact_type": {
+          "type": "string",
+          "enum": ["transformation_brief", "beat_plan", "medium_plan", "creative_brief", "sound_creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
+        },
+        "artifact_id": { "type": "string" },
+        "path_or_ref": { "type": "string" }
+      }
+    },
+    "upstream_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "artist_meaning_id", "artist_meaning_summary", "governing_refs", "open_questions"],
+      "properties": {
+        "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+        "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+        "artist_meaning_summary": { "type": "string" },
+        "governing_refs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref_type", "ref_id", "path_or_ref"],
+            "properties": {
+              "ref_type": {
+                "type": "string",
+                "enum": ["source_record", "transformation_brief", "beat_plan", "medium_plan", "prompt_plan", "approved_output", "writing_reference"]
+              },
+              "ref_id": { "type": "string" },
+              "path_or_ref": { "type": "string" }
+            }
+          }
+        },
+        "open_questions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "matched": { "type": "array", "items": { "$ref": "#/$defs/review_note" } },
+    "drifted": { "type": "array", "items": { "$ref": "#/$defs/drift_note" } },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "recommended_revision": { "type": "string" },
+    "approval_status": { "type": "string", "enum": ["approve", "revise", "block"] },
+    "artist_waiver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["waived", "reason", "waived_by", "waived_at"],
+      "properties": {
+        "waived": { "type": "boolean" },
+        "reason": { "type": "string" },
+        "waived_by": { "type": ["string", "null"] },
+        "waived_at": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "review_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "traces_to"],
+      "properties": {
+        "summary": { "type": "string" },
+        "traces_to": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/traceability_note" } }
+      }
+    },
+    "drift_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["drift_from", "where", "severity", "artist_approved", "revision_needed"],
+      "properties": {
+        "drift_from": { "type": "string" },
+        "where": { "type": "string" },
+        "severity": { "type": "string", "enum": ["none", "low", "medium", "high", "blocking"] },
+        "artist_approved": { "type": "boolean" },
+        "revision_needed": { "type": "string" }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "summary", "evidence", "recommendation"],
+      "properties": {
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "blocking"] },
+        "summary": { "type": "string" },
+        "evidence": { "type": "string" },
+        "recommendation": { "type": "string" }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "prompt_plan", "approved_output", "writing_reference", "review_record"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

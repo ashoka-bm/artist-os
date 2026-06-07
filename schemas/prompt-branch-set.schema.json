@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/prompt-branch-set.schema.json",
+  "title": "PromptBranchSet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "prompt_branch_set_id",
+    "prompt_plan_id",
+    "brief_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "medium_plan_id",
+    "target_media_type",
+    "branching_mode",
+    "branch_count_requested",
+    "branch_count_actual",
+    "meaning_kernel",
+    "variation_strategy",
+    "branches",
+    "curation_plan",
+    "review_requirements",
+    "traceability_summary"
+  ],
+  "properties": {
+    "prompt_branch_set_id": { "type": "string", "pattern": "^pbs_[a-zA-Z0-9_-]+$" },
+    "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
+    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "medium_plan_id": { "type": "string", "pattern": "^(imp|smp|vmp|tmp|mmp)_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "enum": ["image", "sound", "video", "text", "mixed_media"] },
+    "branching_mode": {
+      "type": "string",
+      "enum": ["curator_batch", "style_sweep", "symbol_sweep", "setting_sweep", "mixed_axis_sweep"]
+    },
+    "branch_count_requested": { "type": "integer", "minimum": 1, "maximum": 50 },
+    "branch_count_actual": { "type": "integer", "minimum": 1, "maximum": 50 },
+    "meaning_kernel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kernel_summary", "must_preserve", "must_not_change"],
+      "properties": {
+        "kernel_summary": { "type": "string", "minLength": 1 },
+        "must_preserve": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "must_not_change": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "variation_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vary_axes", "hold_constant", "minimum_distinction_rule", "slot_machine_note"],
+      "properties": {
+        "vary_axes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["style", "setting", "symbol", "composition", "viewpoint", "palette_light", "texture", "era_world", "camera_distance", "abstraction_level"]
+          }
+        },
+        "hold_constant": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "minimum_distinction_rule": { "type": "string", "minLength": 1 },
+        "slot_machine_note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "branches": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": { "$ref": "#/$defs/prompt_branch" }
+    },
+    "curation_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["curator_role", "selection_criteria", "accepted_output_next_step"],
+      "properties": {
+        "curator_role": { "type": "string" },
+        "selection_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "accepted_output_next_step": { "type": "string" }
+      }
+    },
+    "review_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_critic_required", "drift_check_required", "review_record_required"],
+      "properties": {
+        "prompt_critic_required": { "type": "boolean" },
+        "drift_check_required": { "type": "boolean", "const": true },
+        "review_record_required": { "type": "boolean", "const": true }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    }
+  },
+  "$defs": {
+    "prompt_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch_id",
+        "branch_label",
+        "branch_role",
+        "variation_axes",
+        "preserved_kernel",
+        "differentiators",
+        "prompt_text",
+        "negative_constraints",
+        "traceability_notes",
+        "curator_notes"
+      ],
+      "properties": {
+        "branch_id": { "type": "string", "pattern": "^branch_[a-zA-Z0-9_-]+$" },
+        "branch_label": { "type": "string", "minLength": 1 },
+        "branch_role": { "type": "string", "minLength": 1 },
+        "variation_axes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "style_direction",
+            "setting",
+            "symbolic_representation",
+            "composition",
+            "palette_light",
+            "degree_of_departure"
+          ],
+          "properties": {
+            "style_direction": { "type": "string" },
+            "setting": { "type": "string" },
+            "symbolic_representation": { "type": "string" },
+            "composition": { "type": "string" },
+            "palette_light": { "type": "string" },
+            "degree_of_departure": { "type": "string", "enum": ["near", "moderate", "far"] }
+          }
+        },
+        "preserved_kernel": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "differentiators": { "type": "array", "minItems": 3, "items": { "type": "string" } },
+        "prompt_text": { "type": "string", "minLength": 1 },
+        "negative_constraints": { "type": "array", "items": { "type": "string" } },
+        "traceability_notes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        },
+        "curator_notes": { "type": "string" }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "prompt_plan", "reference_evidence", "review_record"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

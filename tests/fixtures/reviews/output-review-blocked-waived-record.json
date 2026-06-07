@@ -1,0 +1,76 @@
+{
+  "review_record_id": "review_output_door_left_lit_branch_station_blocked_001",
+  "project_id": "proj_door_left_lit",
+  "review_role": "output_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "output_record",
+    "artifact_id": "out_door_left_lit_branch_station_001",
+    "path_or_ref": "tests/fixtures/outputs/output-record.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve an unresolved threshold and held motion.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "imp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/image-medium-plan.json"
+      },
+      {
+        "ref_type": "prompt_plan",
+        "ref_id": "plan_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/prompt-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "matched": [
+    {
+      "summary": "The output keeps the approved branch's station setting.",
+      "traces_to": [
+        {
+          "source_type": "prompt_plan",
+          "source_ref": "plan_door_left_lit",
+          "note": "The output remains tied to the approved prompt plan lineage."
+        }
+      ]
+    }
+  ],
+  "drifted": [
+    {
+      "drift_from": "Artist Meaning and Beat Plan",
+      "where": "The output resolves the figure leaving the threshold instead of preserving held uncertainty.",
+      "severity": "blocking",
+      "artist_approved": false,
+      "revision_needed": "Revise the output so the figure remains suspended at the threshold."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "blocking",
+      "summary": "The output resolves the central tension.",
+      "evidence": "The output description shows completed departure, which contradicts the required unresolved threshold.",
+      "recommendation": "Block acceptance unless the artist explicitly waives this drift."
+    }
+  ],
+  "recommended_revision": "Regenerate or revise with the figure held in the threshold state rather than departing.",
+  "approval_status": "block",
+  "artist_waiver": {
+    "waived": true,
+    "reason": "Artist explicitly wants to keep this resolved version as a useful alternate ending candidate.",
+    "waived_by": "artist",
+    "waived_at": "2026-06-06T12:12:00Z"
+  },
+  "created_at": "2026-06-06T12:11:00Z"
+}

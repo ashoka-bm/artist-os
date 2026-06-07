@@ -205,7 +205,12 @@ def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root:
     record_keys = {
         "source_record": "source_record",
         "reference_text": "reference_text",
+        "artist_meaning": "artist_meaning",
         "meaning_interview": "meaning_interview",
+        "transformation_brief": "transformation_brief",
+        "beat_plan": "beat_plan",
+        "image_medium_plan": "image_medium_plan",
+        "sound_medium_plan": "sound_medium_plan",
         "interpretation_gate": "interpretation_gate",
         "symbology_gate": "symbology_gate",
         "style_gate": "style_gate",
@@ -213,6 +218,8 @@ def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root:
         "creative_brief_draft": "creative_brief_draft",
         "creative_brief_record": "creative_brief_record",
         "prompt_plan": "prompt_plan",
+        "prompt_branch_set": "prompt_branch_set",
+        "output_records_dir": "output_records_dir",
     }
     for key, record_type in record_keys.items():
         value = paths.get(key)

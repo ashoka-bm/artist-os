@@ -1,0 +1,7 @@
+# Typed Transformation Pipeline
+
+Artist OS will model creation as a typed transformation pipeline where major steps emit schema-valid records before the next step begins. Artist Meaning, Beat Plan, Medium Plan, Creative Brief Record, Prompt Plan, Prompt Branch Set, Review Record, Gate Decision, and Output Record stay separate because they carry different authority boundaries: artist authority, story structure, medium translation, approval handoff, generation instructions, curator exploration, review judgment, artist gate choice, and output-artifact provenance.
+
+Output Record tracks review and acceptance state for a concrete Output Artifact, but it does not own taste-memory promotion, calibration promotion, accepted-work promotion, or batch grouping yet. Those remain future records until curation and provider batch workflows exist.
+
+We chose this over a simpler direct brief-to-prompt flow because Artist OS needs traceability, drift checks, curator batches, output acceptance gates, artist waivers, and mandatory bounded sub-agent reviews across multiple output journeys. The cost is more intermediate records and tests; the benefit is that every branch can preserve Artist Meaning, validate its output format, and prove where a generated, imported, drafted, or edited Output Artifact came from before review, acceptance, or provider-backed generation proceeds.

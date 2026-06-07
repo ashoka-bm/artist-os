@@ -1,0 +1,81 @@
+{
+  "review_record_id": "review_output_door_left_lit_branch_station_001",
+  "project_id": "proj_door_left_lit",
+  "review_role": "output_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "output_record",
+    "artifact_id": "out_door_left_lit_branch_station_001",
+    "path_or_ref": "tests/fixtures/outputs/output-record.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve an unresolved threshold and held motion.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "imp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/image-medium-plan.json"
+      },
+      {
+        "ref_type": "prompt_plan",
+        "ref_id": "plan_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/prompt-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "matched": [
+    {
+      "summary": "The output keeps the approved threshold beat while translating the setting to the Empty Station branch.",
+      "traces_to": [
+        {
+          "source_type": "beat_plan",
+          "source_ref": "bp_door_left_lit",
+          "note": "The single beat remains a held threshold rather than a resolved departure."
+        },
+        {
+          "source_type": "prompt_plan",
+          "source_ref": "plan_door_left_lit",
+          "note": "The output follows the approved prompt plan and branch strategy."
+        }
+      ]
+    }
+  ],
+  "drifted": [
+    {
+      "drift_from": "prompt branch setting",
+      "where": "Generated output description notes a station setting rather than the doorway symbol from the primary brief.",
+      "severity": "low",
+      "artist_approved": true,
+      "revision_needed": "No revision needed because this variation is explicitly allowed by branch_empty_station."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "The branch variation is visible but still traceable.",
+      "evidence": "The station setting changes the literal location while preserving the unresolved threshold function.",
+      "recommendation": "Proceed to Output Acceptance Gate as a candidate accepted work."
+    }
+  ],
+  "recommended_revision": "No revision required before artist acceptance.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-06T12:05:00Z"
+}

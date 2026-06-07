@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/image-medium-plan.schema.json",
+  "title": "ImageMediumPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "image_medium_plan_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "target_media_type",
+    "story_mode",
+    "symbology_direction",
+    "presentation_mode",
+    "style_direction",
+    "visual_dynamics",
+    "image_roles",
+    "series_plan",
+    "gates",
+    "review_requirements",
+    "traceability_summary"
+  ],
+  "properties": {
+    "image_medium_plan_id": { "type": "string", "pattern": "^imp_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "const": "image" },
+    "story_mode": { "$ref": "#/$defs/story_mode" },
+    "symbology_direction": { "$ref": "#/$defs/symbology_direction" },
+    "presentation_mode": {
+      "type": "string",
+      "enum": ["single_image", "compressed_arc", "triptych", "image_series"]
+    },
+    "style_direction": { "$ref": "#/$defs/style_direction" },
+    "visual_dynamics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_visual_engine", "active_visual_tensions", "style_visual_conflicts"],
+      "properties": {
+        "target_visual_engine": { "type": "string" },
+        "active_visual_tensions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/tension_pair_summary" }
+        },
+        "style_visual_conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["conflict", "adaptation", "requires_artist_approval"],
+            "properties": {
+              "conflict": { "type": "string" },
+              "adaptation": { "type": "string" },
+              "requires_artist_approval": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "image_roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/image_role" }
+    },
+    "series_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["is_series", "requires_series_approval", "calibration_required", "style_progression"],
+      "properties": {
+        "is_series": { "type": "boolean" },
+        "requires_series_approval": { "type": "boolean" },
+        "calibration_required": { "type": "boolean" },
+        "style_progression": { "type": "string" }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symbology_gate", "presentation_gate", "style_gate", "detail_gate"],
+      "properties": {
+        "symbology_gate": { "$ref": "#/$defs/gate_status" },
+        "presentation_gate": { "$ref": "#/$defs/gate_status" },
+        "style_gate": { "$ref": "#/$defs/gate_status" },
+        "detail_gate": { "$ref": "#/$defs/gate_status" }
+      }
+    },
+    "review_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beat_reviewer_required", "art_critic_required", "prompt_critic_required"],
+      "properties": {
+        "beat_reviewer_required": { "type": "boolean" },
+        "art_critic_required": { "type": "boolean", "const": true },
+        "prompt_critic_required": { "type": "boolean", "const": true }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    }
+  },
+  "$defs": {
+    "story_mode": {
+      "type": "string",
+      "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+    },
+    "gate_status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "complete", "skipped", "unconfirmed"]
+    },
+    "symbology_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection_method", "primary_symbolic_representation", "confirmation_status", "rationale", "avoid"],
+      "properties": {
+        "selection_method": { "type": "string", "enum": ["artist_specified", "symbology_board", "agent_recommended"] },
+        "primary_symbolic_representation": { "type": "string" },
+        "confirmation_status": { "type": "string", "enum": ["artist_specified", "confirmed", "unconfirmed"] },
+        "rationale": { "type": "string" },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "style_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection_method", "primary_style", "style_modifiers", "confirmation_status", "rationale", "avoid"],
+      "properties": {
+        "selection_method": { "type": "string", "enum": ["artist_specified", "style_interview", "style_board", "agent_recommended"] },
+        "primary_style": { "type": "string" },
+        "style_modifiers": { "type": "array", "maxItems": 4, "items": { "type": "string" } },
+        "confirmation_status": { "type": "string", "enum": ["artist_specified", "confirmed", "unconfirmed"] },
+        "rationale": { "type": "string" },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tension_pair_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "tension_intensity", "translation_notes"],
+      "properties": {
+        "name": { "type": "string" },
+        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "translation_notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "image_role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_role_id", "beat_id", "role_label", "composition_intent", "emotional_payload", "amplitude_profile"],
+      "properties": {
+        "image_role_id": { "type": "string", "pattern": "^imgrole_[a-zA-Z0-9_-]+$" },
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "role_label": { "type": "string" },
+        "composition_intent": { "type": "string" },
+        "emotional_payload": { "type": "string" },
+        "amplitude_profile": { "$ref": "#/$defs/amplitude_profile" }
+      }
+    },
+    "amplitude_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["framing_distance", "subject_scale", "visual_density", "motion_energy", "spatial_openness", "detail_intensity", "emotional_pressure"],
+      "properties": {
+        "framing_distance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "subject_scale": { "type": "number", "minimum": 0, "maximum": 1 },
+        "visual_density": { "type": "number", "minimum": 0, "maximum": 1 },
+        "motion_energy": { "type": "number", "minimum": 0, "maximum": 1 },
+        "spatial_openness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "detail_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "emotional_pressure": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "reference_evidence", "transformation_brief", "beat_plan", "beat", "tension_point", "gate_decision"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

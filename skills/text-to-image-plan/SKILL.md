@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-image-plan
-description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles visual gates for Symbology Direction, Style Direction, Minimal/Faithful/Amplified intensity, Visual Dynamics, Beat Map, Series Recommendation, and Prompt Variant Plans. Prefer artist-os for the whole flow.
+description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles visual gates for Symbology Direction, Style Direction, Minimal/Faithful/Amplified intensity, Visual Dynamics, Beat Plan, Series Recommendation, and Prompt Variant Plans. Prefer artist-os for the whole flow.
 ---
 
 # Text To Image Plan
@@ -12,6 +12,11 @@ You are the translation director for Artist OS.
 Load details only when needed:
 
 - `THEORY.md` for Core Tension Pairs, Visual Dynamics, Poetic Density, gates, and series logic.
+- `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and mandatory reviewer rules.
+- `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, image-series progression, or any journey-shaped plan.
+- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
+- `schemas/image-medium-plan.schema.json` for image-specific translation decisions before Creative Brief creation.
+- `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
 - `docs/metadata-schema.md` for required record fields and layout plans.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 - Wondermint Category Reference only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
@@ -29,24 +34,46 @@ These hold whether you run standalone or under the `artist-os` conductor — a s
 
 Use the Text Reference, Source Record, Meaning Interview output, revised Creative Brief Document when available, and Brief Approval when creating final records.
 
-## Draft Creative Brief Process
+## Shared Story Records
 
-Before Art Critic Review, build a substantive draft without pretending uncertain choices are final:
+Before creating the image-specific Creative Brief, produce:
+
+1. A Transformation Brief matching `schemas/transformation-brief.schema.json`.
+2. A Beat Plan matching `schemas/beat-plan.schema.json`.
+3. An Image Medium Plan matching `schemas/image-medium-plan.schema.json`.
+
+The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Its embedded `beats` field is transitional and should only summarize medium-local image implications from the shared Beat Plan.
+
+For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious image target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-beat, series, or ambiguous plans still require a bounded Beat Reviewer sub-agent before Art Critic Review.
+
+## Image Medium Plan Process
+
+Use this only after the shared Transformation Brief and Beat Plan exist.
 
 1. Identify formal observations from the text.
-2. Map all eight Core Tension Pairs with evidence and translation notes.
-3. Confirm Interpretation is complete: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured or explicitly marked safe to proceed unconfirmed.
-4. Define Symbology Direction: what the image shows as the core symbolic representation.
-5. If Symbology Direction is unresolved, build a Symbology Board. The board format, the gate question, the internal-prompt rule, and the draft-vs-generate approval rule all live in `THEORY.md` → "Visual Gate Boards" — follow it, do not restate it. Store each cell's content as the option's `visual_prompt`. Visualization is not complete until the artist chooses or combines a symbolic option, chooses single image / emotional arc / multi-image presentation, and accepts, declines, or requests visualization. Do not move to Style before that unless the artist explicitly proceeds unconfirmed.
-6. Define Style Direction after Visualization is complete.
-7. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
-8. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
-9. If they want to see options, build a Style Exploration Board (format and gate question in `THEORY.md` → "Visual Gate Boards"; every tile holds the same locked Symbology subject, pose, and framing and varies only the style). Store each tile's content as the option's `visual_prompt`. Style is not complete until the artist chooses, combines, names another style, declines style visualization, requests a style prompt, or explicitly proceeds unconfirmed.
-10. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
-11. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
-12. Surface Style/Visual Conflicts and propose Style Adaptations.
-13. Add Emotional Qualities, Beats, Tension Points, value shifts, transformation constraints, and Series Recommendation. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
-14. Produce the draft Creative Brief Document only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
+2. Consume the shared Beat Plan for Beats, Tension Points, Story Mode, and story scale. Do not invent a separate image-only Beat Map.
+3. Map all eight Core Tension Pairs with evidence and translation notes, reusing the Transformation Brief where possible.
+4. Confirm Interpretation is complete: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured or explicitly marked safe to proceed unconfirmed.
+5. Define Symbology Direction: what the image shows as the core symbolic representation.
+6. If Symbology Direction is unresolved, build a Symbology Board. The board format, the gate question, the internal-prompt rule, and the draft-vs-generate approval rule all live in `THEORY.md` → "Visual Gate Boards" — follow it, do not restate it. Store each cell's content as the option's `visual_prompt`. Visualization is not complete until the artist chooses or combines a symbolic option, chooses single image / emotional arc / multi-image presentation, and accepts, declines, or requests visualization. Do not move to Style before that unless the artist explicitly proceeds unconfirmed.
+7. Define Style Direction after Visualization is complete.
+8. If a specific style was named, use it; ask at most one clarifier if broad or ambiguous.
+9. If style is unresolved, ask whether the artist has a specific visual style or wants to see style options before moving forward.
+10. If they want to see options, build a Style Exploration Board (format and gate question in `THEORY.md` → "Visual Gate Boards"; every tile holds the same locked Symbology subject, pose, and framing and varies only the style). Store each tile's content as the option's `visual_prompt`. Style is not complete until the artist chooses, combines, names another style, declines style visualization, requests a style prompt, or explicitly proceeds unconfirmed.
+11. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
+12. Select 6 to 8 Active Visual Tensions for the Target Visual Engine.
+13. Surface Style/Visual Conflicts and propose Style Adaptations.
+14. Define image roles from the shared Beat Plan. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+15. Produce the Image Medium Plan only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
+
+## Draft Creative Brief Process
+
+Use this only after the Image Medium Plan exists. Before Art Critic Review, build a substantive draft from the Image Medium Plan without pretending uncertain choices are final:
+
+1. Preserve `transformation_brief_id` and `beat_plan_id`.
+2. Use the Image Medium Plan as the source of truth for Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, and Series Recommendation.
+3. Add Emotional Qualities, medium-local Beat summaries, Tension Point summaries, value shifts, and transformation constraints from the shared Beat Plan and Image Medium Plan.
+4. Produce the draft Creative Brief Document only after required medium gates are complete or explicitly allowed to proceed unconfirmed.
 
 If running standalone, recommend Art Critic Review. If the `artist-os` orchestrator is running, return the draft and stop; the orchestrator advances automatically.
 
@@ -55,29 +82,46 @@ If running standalone, recommend Art Critic Review. If the `artist-os` orchestra
 Use this only after Art Critic Review and Brief Approval.
 
 1. If intensity is unresolved, build the Minimalist-to-Maximalist Gate (three-panel Comparison Board; format and gate question in `THEORY.md` → "Visual Gate Boards"). Store it as the layout plan's `composite_image_prompt` with `layout_type: three_panel_variant_triptych`. Detail is not complete until the artist chooses an intensity direction, combines directions, declines visualization, requests a prompt, or explicitly skips the detail choice.
-2. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`.
-3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`.
+2. Produce the Creative Brief Record matching `schemas/creative-brief.schema.json`, including `transformation_brief_id` and `beat_plan_id`.
+3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`, including `transformation_brief_id`, `beat_plan_id`, and `image_medium_plan_id`.
 4. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
 5. Keep the same Artist Meaning, Symbology Direction, Style Direction, and Target Visual Engine across all three variants.
 6. Make variants distinct along the Minimalist-to-Maximalist axis using concrete differentiators: composition, scale, viewpoint, density, negative space, symbolic layering, abstraction, light/color strategy, texture, ornament, drama, or focal hierarchy.
 7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
-8. Mark any Derived Symbols and trace them to Artist Meaning, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
+8. Mark any Derived Symbols and trace them to Artist Meaning, Transformation Brief, Beat Plan, Image Medium Plan, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
 9. Include critique criteria for each Prompt Variant Plan.
 10. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
 11. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
 
+## Prompt Branch Set Process
+
+Use this only after an approved Provider-Neutral Image Prompt Plan exists and the artist wants a curator batch, prompt exploration, mass production, or several meaning-equivalent prompts.
+
+1. Preserve `prompt_plan_id`, `brief_id`, `source_id`, `transformation_brief_id`, `beat_plan_id`, and `image_medium_plan_id`.
+2. Define the Meaning Kernel: what must stay identical across all branches.
+3. Define `must_preserve` and `must_not_change` from Artist Meaning, the Beat Plan, Image Medium Plan, and approved Prompt Plan.
+4. Choose variation axes. For image batches, default to varying at least style, setting, symbol, composition, and palette/light unless the artist narrows the request.
+5. Create five branches by default. Use a different count only when the artist asks.
+6. Each branch must differ from every other branch on at least three major axes. Do not create five prompts that are only adjective swaps.
+7. Each branch must include `variation_axes`, `preserved_kernel`, at least three `differentiators`, `prompt_text`, `negative_constraints`, traceability notes, and curator notes.
+8. Branches may depart far from the literal setting if they preserve the kernel and trace the departure.
+9. Before provider-backed generation from any branch, require explicit Generation Approval.
+10. When the branch set will drive broad curator selection, run Prompt Critic Review as a bounded sub-agent and persist the Review Record.
+
+The branch set is not a new Creative Brief and does not reopen Artist Meaning. It is a controlled spread around the approved kernel so AI generation has useful variance and the human can curate.
+
 ## Traceability Rules
 
-Every prompt choice must trace back to Artist Meaning, Reference evidence, a Core Tension Pair, Emotional Quality, Beat, Tension Point, Symbology Direction, Style Direction, or Visual Dynamics.
+Every prompt choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Image Medium Plan, a Core Tension Pair, Emotional Quality, Beat, Tension Point, Symbology Direction, Style Direction, or Visual Dynamics.
 
-Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Map, Symbology Direction, and Visual Dynamics.
+Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Plan, Symbology Direction, and Visual Dynamics.
 
-Series recommendations must trace back to the Beat Map or Tension Points. For series work, verify that suggested image roles vary across the internal amplitude profile. Adjacent images should usually differ on at least two dimensions unless sameness is intentional and traced to the Emotional Arc.
+Series recommendations must trace back to the Beat Plan or Tension Points. For series work, verify that suggested image roles vary across the internal amplitude profile. Adjacent images should usually differ on at least two dimensions unless sameness is intentional and traced to the Emotional Arc.
 
 ## Outputs
 
-Before Art Critic Review, return the Creative Brief Document, Beat Map, Symbology Direction, Style Direction, Series Recommendation, and open questions.
+Before Art Critic Review, return the Image Medium Plan, Creative Brief Document, Beat Plan reference, Symbology Direction, Style Direction, Series Recommendation, and open questions.
 
-After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist.
+After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist for Prompt Critic Review. When requested, also return a Prompt Branch Set for curator batches.
 
-When emitted as records, JSON must validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`.
+When emitted as records, JSON must validate against `schemas/creative-brief.schema.json`, `schemas/prompt-plan.schema.json`, and `schemas/prompt-branch-set.schema.json` when branch sets are produced.

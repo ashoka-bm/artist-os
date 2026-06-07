@@ -1,0 +1,166 @@
+{
+  "prompt_branch_set_id": "pbs_door_left_lit_image_batch",
+  "prompt_plan_id": "plan_door_left_lit",
+  "brief_id": "brief_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "imp_door_left_lit",
+  "target_media_type": "image",
+  "branching_mode": "curator_batch",
+  "branch_count_requested": 5,
+  "branch_count_actual": 5,
+  "meaning_kernel": {
+    "kernel_summary": "A figure remains suspended at the threshold of return, holding fragile agency while a lit interior feels both inviting and dangerous.",
+    "must_preserve": [
+      "threshold remains unresolved",
+      "the key or equivalent object carries fragile agency",
+      "absence is active without showing the absent person"
+    ],
+    "must_not_change": [
+      "do not show the figure entering",
+      "do not turn the scene into explicit horror",
+      "do not resolve the grief as triumph"
+    ]
+  },
+  "variation_strategy": {
+    "vary_axes": ["style", "setting", "symbol", "composition", "palette_light"],
+    "hold_constant": ["Artist Meaning", "Beat Plan", "threshold tension", "fragile agency"],
+    "minimum_distinction_rule": "Every branch must differ from every other branch on at least three major axes, including either style or symbolic representation.",
+    "slot_machine_note": "The set is designed for AI generation variance: branches should be meaning-equivalent but visually non-identical, so curator selection has real range."
+  },
+  "branches": [
+    {
+      "branch_id": "branch_threshold_photoreal",
+      "branch_label": "Lit Door Photoreal",
+      "branch_role": "closest reading of the approved prompt plan",
+      "variation_axes": {
+        "style_direction": "cinematic photoreal",
+        "setting": "dark concrete domestic doorway during rain",
+        "symbolic_representation": "figure holding a key at a lit threshold",
+        "composition": "medium-wide doorway composition",
+        "palette_light": "warm interior light against blue-black exterior shadow",
+        "degree_of_departure": "near"
+      },
+      "preserved_kernel": ["unresolved threshold", "fragile agency", "active absence"],
+      "differentiators": ["photoreal domestic setting", "key is literal", "doorway is central"],
+      "prompt_text": "Create a cinematic photoreal image of a still figure at the edge of a lit doorway in a dark concrete home. Rain softens the outside steps, two untouched chairs sit inside, and a small key is held with tenderness and dread. Keep the threshold unresolved and the absent person unseen.",
+      "negative_constraints": ["no visible absent person", "no horror antagonist", "do not show entry"],
+      "traceability_notes": [
+        { "source_type": "prompt_plan", "source_ref": "plan_door_left_lit", "note": "Closest branch to the approved image prompt plan." }
+      ],
+      "curator_notes": "Use when the curator wants the safest baseline."
+    },
+    {
+      "branch_id": "branch_ritual_vessel",
+      "branch_label": "Ritual Vessel",
+      "branch_role": "symbolic object-led alternative",
+      "variation_axes": {
+        "style_direction": "painterly surreal realism",
+        "setting": "bare ritual room with a shallow basin of light",
+        "symbolic_representation": "a small key resting in a water vessel at the room's edge",
+        "composition": "low close still life with doorway blurred behind",
+        "palette_light": "muted amber, oxidized green, and deep charcoal",
+        "degree_of_departure": "moderate"
+      },
+      "preserved_kernel": ["fragile agency", "threshold pressure", "absence carried by objects"],
+      "differentiators": ["key moves into vessel symbol", "human figure is implied", "painterly ritual setting"],
+      "prompt_text": "Create a painterly surreal realist still life in a bare ritual room: a small key rests inside a shallow vessel of warm light near the edge of a dark doorway. The absent figure is implied by a coat shadow at the frame edge. Make the key feel fragile and consequential without becoming magical.",
+      "negative_constraints": ["no fantasy glow", "no literal ceremony", "no extra symbolic clutter"],
+      "traceability_notes": [
+        { "source_type": "medium_plan", "source_ref": "imp_door_left_lit", "note": "Preserves the approved symbolic function while changing representation." }
+      ],
+      "curator_notes": "Use when object symbolism may outperform a human figure."
+    },
+    {
+      "branch_id": "branch_empty_station",
+      "branch_label": "Empty Station",
+      "branch_role": "setting transposition",
+      "variation_axes": {
+        "style_direction": "cinematic noir illustration",
+        "setting": "late-night train platform with one lit doorway to a waiting room",
+        "symbolic_representation": "ticket and key held together as return and refusal",
+        "composition": "wide lonely platform with small figure off-center",
+        "palette_light": "sodium yellow, wet black, muted teal",
+        "degree_of_departure": "far"
+      },
+      "preserved_kernel": ["return held in suspension", "agency is small and tactile", "the destination is emotionally unsafe"],
+      "differentiators": ["public transit setting", "ticket joins the key", "no domestic room"],
+      "prompt_text": "Create a cinematic noir illustration of a late-night train platform after rain. A small figure stands off-center near a lit waiting-room doorway, holding a key and a worn ticket together. The platform is empty, reflective, and quiet; the image should feel like return is possible but not chosen.",
+      "negative_constraints": ["no train arrival", "no crowd", "no triumphant travel poster mood"],
+      "traceability_notes": [
+        { "source_type": "beat_plan", "source_ref": "bp_door_left_lit", "note": "Transposes the same beat into a new setting without resolving it." }
+      ],
+      "curator_notes": "Use when the domestic doorway feels too literal."
+    },
+    {
+      "branch_id": "branch_paper_cut",
+      "branch_label": "Paper-Cut Threshold",
+      "branch_role": "graphic style swing",
+      "variation_axes": {
+        "style_direction": "layered paper-cut illustration",
+        "setting": "abstract house cross-section made of paper layers",
+        "symbolic_representation": "tiny cut-paper figure and key suspended between two paper planes",
+        "composition": "flat centered symbolic tableau",
+        "palette_light": "cream paper, black shadow, single warm gold light",
+        "degree_of_departure": "moderate"
+      },
+      "preserved_kernel": ["threshold split", "small agency", "warmth and threat coexist"],
+      "differentiators": ["flat paper-cut medium", "abstracted house", "reduced palette"],
+      "prompt_text": "Create a layered paper-cut illustration of an abstract house cross-section. A tiny cut-paper figure holds a small gold key between a warm lit interior plane and a black shadow plane. Keep the composition quiet, precise, and unresolved, as if the paper layers cannot close.",
+      "negative_constraints": ["no cute storybook tone", "no excessive ornament", "no resolved doorway"],
+      "traceability_notes": [
+        { "source_type": "transformation_brief", "source_ref": "tb_door_left_lit", "note": "Uses abstraction to preserve the threshold tension." }
+      ],
+      "curator_notes": "Use when a graphic asset direction is more useful than cinematic realism."
+    },
+    {
+      "branch_id": "branch_desert_phonebooth",
+      "branch_label": "Desert Phone Booth",
+      "branch_role": "high-contrast surreal transposition",
+      "variation_axes": {
+        "style_direction": "surreal editorial photography",
+        "setting": "isolated desert phone booth lit from within at dusk",
+        "symbolic_representation": "a key hanging from a phone cord inside a booth",
+        "composition": "distant centered object with vast negative space",
+        "palette_light": "dusk violet, sodium orange, dry beige sand",
+        "degree_of_departure": "far"
+      },
+      "preserved_kernel": ["invitation and danger", "return without entry", "absence as active space"],
+      "differentiators": ["no house", "phone booth replaces doorway", "vast exterior emptiness"],
+      "prompt_text": "Create a surreal editorial photograph of an isolated phone booth in a vast desert at dusk, lit warmly from within. A small key hangs from the phone cord like a choice waiting to be made. Keep the booth closed, the surrounding space empty, and the mood tender but unsafe.",
+      "negative_constraints": ["no visible caller", "no sci-fi machinery", "no comedic roadside tone"],
+      "traceability_notes": [
+        { "source_type": "artist_meaning", "source_ref": "must_preserve", "note": "Keeps return, fragile agency, and active absence while changing the symbol system." }
+      ],
+      "curator_notes": "Use when the batch needs a more surprising outlier."
+    }
+  ],
+  "curation_plan": {
+    "curator_role": "Human curator chooses generated outputs that best preserve the kernel while expanding usable visual range.",
+    "selection_criteria": [
+      "preserves unresolved threshold pressure",
+      "does not collapse into generic melancholy",
+      "feels visually distinct from the other accepted outputs"
+    ],
+    "accepted_output_next_step": "Accepted outputs can become calibration references, series seeds, or taste-memory notes before further generation."
+  },
+  "review_requirements": {
+    "prompt_critic_required": true,
+    "drift_check_required": true,
+    "review_record_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "prompt_plan",
+      "source_ref": "plan_door_left_lit",
+      "note": "All branches derive from the approved Provider-Neutral Image Prompt Plan."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "imp_door_left_lit",
+      "note": "All branches preserve the approved image translation kernel while varying style, setting, and symbol."
+    }
+  ]
+}

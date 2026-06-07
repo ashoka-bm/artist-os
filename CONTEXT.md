@@ -32,21 +32,25 @@ _Avoid_: Reference, asset record
 The artist's stated interpretation of what a Reference means and what must survive transformation.
 _Avoid_: Meaning, intent, vibe
 
+**Artist Meaning Record**:
+The first-class structured record created by the Meaning Interview before agent interpretation. It preserves Artist Meaning independently so later Transformation Briefs, Beat Plans, Medium Plans, Prompt Plans, and reviews can trace back to the artist's own authority.
+_Avoid_: Burying Artist Meaning only inside a Creative Brief or Transformation Brief
+
 **Meaning Interview**:
 The short artist-facing interview that captures Artist Meaning and transformation constraints before analysis and planning.
 _Avoid_: Grill me, interrogation
 
 **Creative Brief**:
-The structured interpretation of a Reference before generation, combining Artist Meaning, Formal Analysis, Emotional Structure, Beat Map, and Transformation Plan.
-_Avoid_: Emotional brief when referring to the full artifact
+The approved medium-specific creative handoff before prompt planning. It compiles the relevant Artist Meaning, Transformation Brief, Beat Plan, and Medium Plan after critic review and Brief Approval.
+_Avoid_: Transformation Brief, Beat Plan, Medium Plan, Emotional Brief
 
 **Creative Brief Document**:
 The artist-readable Markdown version of a Creative Brief.
 _Avoid_: Creative Brief Record
 
 **Creative Brief Record**:
-The structured JSON version of a Creative Brief for agent handoff and validation.
-_Avoid_: Creative Brief Document
+The structured JSON version of an approved Creative Brief for agent handoff, validation, and Prompt Plan creation.
+_Avoid_: Creative Brief Document, Transformation Brief, Beat Plan, Medium Plan
 
 **Brief Approval**:
 The artist's approval of a Creative Brief Document before Artist OS generates the Creative Brief Record.
@@ -67,6 +71,10 @@ _Avoid_: Final prompt ambiguity
 **Art Critic Review**:
 A reviewer stage that strengthens the Creative Brief by resolving weak interpretations, increasing Poetic Density, and turning low-confidence notes into decisive artistic direction.
 _Avoid_: Critique Asset, Acceptance Review
+
+**Review Record**:
+The universal machine-readable output of any bounded reviewer sub-agent. It records reviewer role, reviewed artifact, upstream context, matched material, drift, findings, recommended revision, and approval status.
+_Avoid_: Reviewer-specific machine-readable schemas unless a real downstream need appears
 
 **Critical Heuristics**:
 Reusable art-critical rules that Art Critic Review uses to deepen a Creative Brief without inventing new Artist Meaning.
@@ -164,6 +172,10 @@ _Avoid_: Hiding symbolic representation inside final prompt variants
 One internal comparison-board prompt for six symbolic representations of the same Artist Meaning and Creative Brief. At the gate, the artist sees concise symbolic option labels first; the full prompt stays internal unless requested.
 _Avoid_: Showing the full image prompt by default or choosing style before symbolic representation
 
+**Gate Decision**:
+The durable record of an artist-facing gate choice, revision, rejection, skip, approval, or explicit permission to proceed unconfirmed. Gate-specific detail belongs in the relevant stage record, board, Medium Plan, Prompt Plan, or Prompt Branch Set.
+_Avoid_: Separate specialized decision schemas before a gate proves it needs one
+
 **Style Gate**:
 The second visual choice gate, where the artist chooses the artistic language for the selected Symbology Direction.
 _Avoid_: Style overriding symbolic meaning
@@ -171,6 +183,10 @@ _Avoid_: Style overriding symbolic meaning
 **Minimalist-to-Maximalist Gate**:
 The third visual choice gate, where the artist compares Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 _Avoid_: Reopening symbology or style unless the artist asks
+
+**Prompt Branch Gate**:
+The gate that approves a Prompt Branch Set strategy before generation: branch count, meaning kernel, variation axes, hold-constant rules, and minimum distinction rule.
+_Avoid_: Generation Approval Gate, provider-backed generation approval
 
 **Style Confirmation Status**:
 Whether Style Direction is artist specified, confirmed, or unconfirmed before Brief Approval.
@@ -360,13 +376,21 @@ _Avoid_: Variant
 A meaningful contrast or unresolved pressure that carries emotion but does not imply before/after change.
 _Avoid_: Beat when no change is present
 
+**Beat Plan**:
+The required story-spine record for every output, including a single image. It may be compact when the output is one compressed beat, but it cannot be skipped.
+_Avoid_: Optional story layer, image-only shortcut
+
 **Transformation Plan**:
-The plan for preserving meaning while changing medium or form.
-_Avoid_: Prompt plan
+The legacy conceptual term for preserving meaning while changing medium or form. The typed pipeline records this as a **Transformation Brief**.
+_Avoid_: Prompt Plan, new schema names using Transformation Plan
 
 **Meaning-Preserving Transformation**:
 Changing medium or form while preserving Artist Meaning, selected Formal Analysis, Emotional Structure, and relevant Beats or Tension Points.
 _Avoid_: Format conversion, style transfer
+
+**Medium Plan**:
+The medium-specific translation record that explains how an approved Beat Plan becomes a specific medium. Image Medium Plan, Sound Medium Plan, Video Medium Plan, Text Medium Plan, and Mixed-Media Plan are specializations of this concept.
+_Avoid_: Creative Brief, Prompt Plan, provider settings
 
 **Prompt Plan**:
 The generation-facing prompts and constraints for a specific model or medium.
@@ -379,6 +403,14 @@ _Avoid_: Provider prompt
 **Prompt Variant Plan**:
 One provider-neutral prompt direction inside a Provider-Neutral Prompt Plan.
 _Avoid_: Generated Work, Variant before provider-backed generation
+
+**Prompt Branch Set**:
+A pre-generation batch of prompt branches derived from one approved Prompt Plan. It preserves the same Artist Meaning and meaning kernel while deliberately varying approved axes for human curation. Image Prompt Branch Sets currently vary axes such as style, setting, symbol, composition, and palette/light; other media can add medium-specific axes later.
+_Avoid_: Variant, Generated Work, Prompt Variant Plan
+
+**Actionable Prompt Branch Set**:
+A Prompt Branch Set that will be used for provider-backed generation or serious curator selection. It requires Prompt Critic Review before use.
+_Avoid_: Treating a draft branch set as generation-ready
 
 **Faithful Prompt Variant**:
 The Prompt Variant Plan that stays closest to the approved Creative Brief.
@@ -445,24 +477,36 @@ The first complete Dry Run path through Artist OS: Text Reference to Image Promp
 _Avoid_: MVP
 
 **Generated Work**:
-Any media object created by Artist OS from a Creative Brief.
-_Avoid_: Asset, output
+An Output Artifact created by Artist OS or a provider from an approved Prompt Plan or Prompt Branch Set.
+_Avoid_: Output Artifact when the origin was imported or human-authored
 
 **Variant**:
 One generated option within a generation set.
-_Avoid_: Generated Work when referring to a specific option among alternatives
+_Avoid_: Generated Work when referring to a specific option among alternatives; Prompt Branch, Prompt Variant Plan
 
 **Accepted Work**:
-A Generated Work the artist approves as matching the intended meaning.
+An Output Artifact the artist approves as matching the intended meaning and use.
 _Avoid_: Final asset
 
-**Acceptance Review**:
-The artist's decision about whether a Generated Work preserves the Creative Brief well enough to become an Accepted Work.
-_Avoid_: Critique, quality score
+**Output Acceptance Gate**:
+The artist-facing gate where the artist accepts, rejects, revises, archives, exports, or extends an Output Artifact after any required Output Critic Review.
+_Avoid_: Acceptance Review, Critique, quality score
+
+**Output Critic Review**:
+The bounded sub-agent review that checks a drafted, generated, imported, or edited Output Artifact against Artist Meaning, Story Approval, Medium Plan, Prompt Plan, approved branch or variant, and provenance before the Output Acceptance Gate.
+_Avoid_: Artist acceptance, taste memory, calibration choice
+
+**Output Artifact**:
+Any concrete output that Artist OS can review, accept, archive, export, or use as calibration context, including Generated Works, artist imports, agent-drafted text, and human-edited outputs.
+_Avoid_: Generated Work when origin matters
 
 **Output Record**:
-The metadata and provenance record for a Generated Work.
-_Avoid_: Generated Work, Source Record
+The metadata and provenance record for any concrete output artifact Artist OS may review, accept, archive, export, or use as future calibration context, including provider-generated media, artist imports, agent-drafted text, or human-edited outputs.
+_Avoid_: Generated Work, Source Record, provider-only metadata
+
+**Output Batch**:
+A future grouping record for comparing, costing, and managing multiple Output Records produced from the same Prompt Plan, Prompt Branch Set, provider run, or curation pass.
+_Avoid_: Adding batch-only fields to each Output Record before provider batch workflows exist
 
 ## Relationships
 
@@ -472,7 +516,10 @@ _Avoid_: Generated Work, Source Record
 - A **Reference** has one **Source Record**.
 - A **Reference** has **Artist Meaning** supplied by the artist.
 - A **Meaning Interview** captures **Artist Meaning**.
-- A **Reference** can produce one or more **Creative Briefs**.
+- A confirmed **Artist Meaning Record** is versioned, not silently mutable. If the artist changes meaning later, create a superseding record and keep existing downstream records traceable to the version they used.
+- Downstream records should reference the governing `artist_meaning_id` directly. `source_id` alone is not enough once a Reference can have multiple Artist Meaning versions.
+- Downstream records may embed Artist Meaning summaries for readability and review packets, but `artist_meaning_id` is the authority. If an embedded summary conflicts with the referenced **Artist Meaning Record**, the referenced record wins.
+- A **Reference** can produce one or more **Creative Briefs** after Artist Meaning, story, and medium planning are established.
 - A **Creative Brief** can be represented as a **Creative Brief Document** and a **Creative Brief Record**.
 - A **Creative Brief Document** requires **Brief Approval** before producing the **Creative Brief Record**.
 - **Rough Brief Approval** permits producing a **Creative Brief Record** while preserving uncertainty notes.
@@ -482,7 +529,7 @@ _Avoid_: Generated Work, Source Record
 - The First Slice runs **Art Critic Review** after the draft **Creative Brief Document** and before **Brief Approval**.
 - **Art Critic Review** is mandatory in the First Slice.
 - **Art Critic Review** applies **Critical Heuristics** in this order: preserve **Artist Meaning**, stay anchored to **Reference** evidence, deepen salient **Core Tension Pairs**, strengthen **Active Visual Tensions**, increase **Poetic Density**, use medium-specific translation principles, then apply art-critical rules such as avoiding literalism, preserving contradiction, making form carry meaning, and preferring layered specificity over generic mood.
-- A **Creative Brief** contains **Artist Meaning**, **Formal Analysis**, **Style Direction**, **Visual Dynamics**, **Emotional Structure**, a **Beat Map**, **Series Recommendation**, and a **Transformation Plan**.
+- A **Creative Brief** compiles approved upstream records into a medium-specific handoff; it does not own **Artist Meaning**, **Beat Plan**, or **Medium Plan**.
 - **Style Direction** defines the artistic language of the generated work and must serve **Artist Meaning**.
 - **Style Direction** is chosen after the first pass of **Artist Meaning**, **Emotional Structure**, **Beat Map**, and **Symbology Direction**, and before **Art Critic Review**.
 - **Style Direction** can be hybrid, but it must have one **Primary Style** and bounded **Style Modifiers**.
@@ -535,12 +582,17 @@ _Avoid_: Generated Work, Source Record
 - **Calibration Choice** cannot update **Artist Meaning**, **Core Tension Pairs**, or **Beat Map** unless the artist explicitly says the calibration revealed a better meaning.
 - A **Symbology Board** gives the artist human input before style and prompt locking by comparing six symbolic or compositional branches with concise option labels.
 - A **Prompt Variant Plan** explores one approved image direction; a **Series Plan** creates multiple related images with distinct **Image Roles**.
+- A **Prompt Branch Set** explores multiple meaning-equivalent prompt branches from one approved **Prompt Plan** for curator selection; it does not create **Variants** until provider-backed generation is explicitly approved.
+- A draft **Prompt Branch Set** may be created without review, but an **Actionable Prompt Branch Set** requires **Prompt Critic Review** before generation or serious curator selection.
+- A **Prompt Branch Set** remains a child of one approved **Prompt Plan**. A selected prompt branch can become a new **Prompt Plan** only after artist selection or direction approval.
+- Every branch in a **Prompt Branch Set** preserves the same **Beat Plan**. If a branch changes the story movement, return to **Story Gate** or create a separate journey.
+- A generated result from a prompt branch becomes taste memory, calibration context, or a promoted direction only after explicit artist confirmation.
 - In the single-image First Slice, three **Prompt Variant Plans** should preserve the approved **Symbology Direction** and **Style Direction**, then vary minimalist-to-maximalist intensity.
 - **Prompt Variant Plan** labels stay Faithful, Amplified, and Minimal even when using **Variant Test Axis Labels**.
 - A **Series Plan** may include **Style Progression** when the Reference warrants a changing visual language across Beats.
 - The First Slice may include **Style Progression** inside **Series Recommendation**, but it becomes executable only after **Series Plan** approval.
 - **Series Calibration Fields** live in **Series Recommendation** before the full **Calibration Choice** workflow exists.
-- A **Transformation Plan** defines a **Meaning-Preserving Transformation**.
+- A **Transformation Brief** defines the current **Meaning-Preserving Transformation** for the typed pipeline.
 - A **Meaning-Preserving Transformation** can produce one or more **Provider-Neutral Prompt Plans**.
 - The First Slice produces one **Provider-Neutral Prompt Plan** containing three **Prompt Variant Plans**: **Faithful Prompt Variant**, **Amplified Prompt Variant**, and **Minimal Prompt Variant**.
 - Every **Prompt Variant Plan** must trace back to the same approved **Creative Brief**.
@@ -558,9 +610,16 @@ _Avoid_: Generated Work, Source Record
 - The **First Slice** transforms a text **Reference** into an image **Prompt Plan** through a **Dry Run**.
 - A **Prompt Plan** can produce one or more **Variants**.
 - A **Variant** is a **Generated Work**.
-- An **Acceptance Review** approves, rejects, or requests revisions to a **Generated Work**.
-- An **Accepted Work** is a **Generated Work** approved through **Acceptance Review**.
-- A **Generated Work** has one **Output Record**.
+- The **Output Acceptance Gate** approves, rejects, requests revisions, archives, exports, or extends an **Output Artifact**.
+- An **Accepted Work** is an **Output Artifact** approved through the **Output Acceptance Gate**.
+- By default, **Output Critic Review** happens before the **Output Acceptance Gate**. The artist can explicitly accept or waive critic drift findings, and that waiver should be recorded.
+- An **Output Artifact** has one **Output Record**.
+- A **Generated Work** is one kind of **Output Artifact**; its **Output Record** is the durable metadata and provenance record.
+- The schema for output provenance should be named `output-record.schema.json`, not `generated-work.schema.json`, because it records any **Output Artifact** origin.
+- When relevant, an **Output Record** includes provider, model, settings, seed, generation approval reference, and estimated or actual cost. The event log preserves chronology; the Output Record preserves artifact provenance.
+- When an **Output Artifact** comes from a **Prompt Branch Set**, its **Output Record** references both the parent **Prompt Plan** and the exact prompt branch that produced it.
+- **Output Record** tracks review and acceptance state, but it does not yet own taste-memory promotion, calibration promotion, or accepted-work promotion fields. Those may become separate records when the curation loop is implemented.
+- Individual **Output Records** are sufficient until provider adapters or batch-generation workflows create a real need for an **Output Batch** record.
 
 ## Example dialogue
 
@@ -748,14 +807,14 @@ _Avoid_: Generated Work, Source Record
 > **Domain expert:** "No. Keep a **Provider-Neutral Prompt Plan** in the core and use a **Provider Adapter** to translate later."
 >
 > **Dev:** "The prettiest Variant misses the Artist Meaning. Should we accept it?"
-> **Domain expert:** "No. **Acceptance Review** decides whether the work preserves the **Creative Brief**, not whether it is merely beautiful."
+> **Domain expert:** "No. **Output Acceptance Gate** decides whether the **Output Artifact** preserves the approved meaning and upstream plan, not whether it is merely beautiful."
 
 ## Flagged ambiguities
 
 - "artist repository", "artist operating system", "artist OS", "plugin", and "skill collection" were used interchangeably. Resolved: **Artist Generation** is the repository/project, **Artist OS** is the product, **Skill** is a workflow, and **Plugin** is the later packaged form.
 - "source", "source object", "reference", "creative input", and "input" were used for the same user-provided material. Resolved: the artist-facing term is **Reference**; the stored metadata is a **Source Record**.
 - "emotional brief", "creative brief", "formal analysis", "beat map", "transformation plan", and "prompt plan" were overlapping. Resolved: **Creative Brief** is the umbrella artifact; the others are named components or downstream generation-facing plans. **Emotional Brief** is retired; use **Emotional Structure** for the emotional section.
-- "asset", "generated asset", "output", "artifact", and "digital asset" were ambiguous. Resolved: use **Generated Work** for created media, **Variant** for one generated option, **Accepted Work** for artist-approved media, and **Output Record** for metadata.
+- "asset", "generated asset", "output", "artifact", and "digital asset" were ambiguous. Resolved: use **Output Artifact** for concrete reviewable outputs, **Generated Work** for created media, **Variant** for one generated option, **Accepted Work** for artist-approved media, and **Output Record** for metadata.
 - "meaning", "intent", and "vibe" were too broad. Resolved: **Artist Meaning** is the artist's stated interpretation and has final authority over agent interpretation.
 - "emotional components", "emotional structure", "vibe", "order and chaos", and "emotion" were overlapping. Resolved: **Emotional Structure** is the umbrella, with **Core Tension Pairs**, **Emotional Qualities**, **Emotional Arc**, and **Emotional Payload** as parts.
 - The emotional model needs both repeatable structure and artist-specific language. Resolved: **Core Tension Pairs** are fixed; **Emotional Qualities** are freeform descriptors.
@@ -820,4 +879,4 @@ _Avoid_: Generated Work, Source Record
 - Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
 - "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted, with an **Artist OS Library Database**, a **Project Manifest** per project, and **Asset Metadata** sidecars for images and exports.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.
-- "accepted" needed a boundary. Resolved: a **Generated Work** becomes an **Accepted Work** only through **Acceptance Review**.
+- "accepted" needed a boundary. Resolved: an **Output Artifact** becomes an **Accepted Work** only through the **Output Acceptance Gate**.

@@ -1,0 +1,63 @@
+{
+  "output_record_id": "out_door_left_lit_branch_station_001",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "imp_door_left_lit",
+  "brief_id": "brief_door_left_lit",
+  "prompt_plan_id": "plan_door_left_lit",
+  "prompt_branch_set_id": "pbs_door_left_lit_image_batch",
+  "prompt_branch_id": "branch_empty_station",
+  "prompt_variant_type": null,
+  "target_media_type": "image",
+  "output_artifact": {
+    "artifact_id": "artifact_door_left_lit_branch_station_001",
+    "artifact_kind": "image",
+    "uri_or_path": "workspace-library/artist-os/projects/proj_door_left_lit/assets/generated/empty-station-001.png",
+    "mime_type": "image/png",
+    "description": "Generated image from the Empty Station prompt branch.",
+    "rights_notes": "Example record only; no real user media."
+  },
+  "origin": {
+    "origin_type": "provider_generated",
+    "created_by": "example-provider",
+    "generation_approval_ref": "gate_door_left_lit_generation_branch_batch"
+  },
+  "generation": {
+    "provider": "example-provider",
+    "model": "example-image-model",
+    "settings": {
+      "aspect_ratio": "16:9",
+      "quality": "draft"
+    },
+    "seed": null,
+    "estimated_cost": 0.04,
+    "actual_cost": null
+  },
+  "review_state": {
+    "output_critic_review_required": true,
+    "review_record_id": null,
+    "review_status": "not_reviewed"
+  },
+  "acceptance_state": {
+    "output_acceptance_status": "pending",
+    "accepted_work": false,
+    "artist_decision_ref": null,
+    "waiver_reason": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "prompt_plan",
+      "source_ref": "plan_door_left_lit",
+      "note": "The output came from the approved parent Prompt Plan."
+    },
+    {
+      "source_type": "prompt_branch",
+      "source_ref": "branch_empty_station",
+      "note": "The exact prompt branch transposed the threshold beat into a late-night station setting."
+    }
+  ],
+  "created_at": "2026-06-06T12:00:00Z"
+}
