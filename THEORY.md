@@ -171,13 +171,35 @@ Across a series, adjacent images should usually change amplitude on at least two
 
 For series work, also create a per-image tension profile for the active emotional and visual tensions. Adjacent images should not carry the same tension shape unless repetition is the point and is explicitly traced to Artist Meaning. For example, if one image carries high attraction and high threat, the next might hold low attraction and high threat, or high attraction and low threat, so the series produces a felt shift rather than repeating the same charge.
 
+### Shot Design
+
+Every Image Role must include a Shot Design: shot scale, camera angle, visual emphasis, composition strategy, emotional rationale, and what to avoid. Shot Design is part of Visual Dynamics because the camera distance and viewpoint decide what the audience feels first.
+
+Use shot scale as emotional grammar:
+
+- Extreme close-up or close-up: use for internal pressure, reaction, fragile detail, embodied fear, symbolic objects, or a decision point that should feel unavoidable.
+- Medium close-up or medium shot: use when face, gesture, body language, and immediate context must all stay readable.
+- Medium wide: use when the body, threshold, relationship, or action needs space but should still feel personally attached.
+- Wide or extreme wide: use for environment, isolation, scale, consequence, aftermath, active absence, or a subject overwhelmed by place.
+
+Use camera angle as pressure:
+
+- Eye-level keeps the viewer intimate, present, or observational.
+- High angle can weaken, isolate, expose, or make a subject feel vulnerable.
+- Low angle can make a subject, object, place, or threat feel powerful.
+- Overhead can turn a scene into fate, pattern, ritual, or evidence.
+- Dutch/canted angle can express instability, dread, rupture, or moral unease.
+- Over-the-shoulder and point-of-view can make the audience share a relationship or subjective perception.
+
+Do not default to a full-body shot. A full-body or medium-wide frame is correct only when the Beat needs the whole posture, spatial relationship, action, or threshold. If the emotional payload lives in a face, hand, object, absence, or environmental consequence, crop or pull back accordingly.
+
 ### Minimum Tension Criteria
 
 Every Beat Plan and Medium Plan must define minimum tension criteria before prompt planning. These criteria are not universal taste scores; they are project-local thresholds that tell reviewers how much contrast or movement the work needs to satisfy Artist Meaning.
 
 For a single image, the criteria should require enough internal contrast that the image creates pressure without needing explanation. Default when the artist has not specified otherwise: at least two active tensions, with one primary emotional or visual tension at `0.7` or higher.
 
-For a triptych or image series, the criteria should require movement between adjacent images. Default when the artist has not specified otherwise: adjacent images shift at least two amplitude dimensions and at least one active emotional or visual tension, while changing composition and communication intent.
+For a triptych or image series, the criteria should require movement between adjacent images. Default when the artist has not specified otherwise: adjacent images shift at least two amplitude dimensions and at least one active emotional or visual tension, while changing composition, communication intent, and at least one Shot Design axis: shot scale, camera angle, visual emphasis, or composition strategy.
 
 Reviewers should block when an artifact falls below its own minimum tension criteria unless the artist explicitly approves low-contrast repetition as the point.
 
@@ -290,7 +312,7 @@ When the Reference warrants it, a Series Recommendation may propose Style Progre
 
 Series Recommendation must also include the internal Series Amplitude Plan for each suggested image. Use it to verify that image roles move across visual spectra such as close/wide, sparse/dense, still/active, enclosed/open, minimal/detailed, and quiet/pressurized. If every suggested image has similar amplitude values, revise the series unless sameness is intentional and traced to the Emotional Arc.
 
-Each image role in a triptych or series must communicate a different emotional claim, not merely show the same subject in a different pose. Vary composition, scale, focal hierarchy, spatial relationship, symbolic action, color/light logic, density, and active tension profile as needed so each frame changes what the audience feels and understands. Adjacent roles must state how they differ from the previous role in both visual composition and emotional communication.
+Each image role in a triptych or series must communicate a different emotional claim, not merely show the same subject in a different pose. Vary Shot Design, composition, scale, focal hierarchy, spatial relationship, symbolic action, color/light logic, density, and active tension profile as needed so each frame changes what the audience feels and understands. Adjacent roles must state how they differ from the previous role in visual composition, emotional communication, and at least one Shot Design axis.
 
 Do not create multiple image prompt plans by default. A Series Plan requires artist approval, and Style Progression becomes executable only after that approval.
 

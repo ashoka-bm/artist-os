@@ -375,6 +375,14 @@
           "communication_difference": "communicates invitation through absence before the figure's choice appears",
           "tension_difference": "high presence/absence, lower safety/threat than the threshold image"
         },
+        "shot_design": {
+          "shot_scale": "wide",
+          "camera_angle": "eye_level",
+          "visual_emphasis": "absence_negative_space",
+          "composition_strategy": "Hold the empty room and lit doorway in a wide sparse frame with no body present.",
+          "emotional_rationale": "A wide shot lets environment and absence create the invitation before the figure's choice becomes visible.",
+          "avoid": ["introducing the figure too early", "full-body character framing"]
+        },
         "amplitude_profile": {
           "framing_distance": 0.72,
           "subject_scale": 0.28,
@@ -413,6 +421,14 @@
           "communication_difference": "turns invitation into paralysis by making the choice visible",
           "tension_difference": "raises control/surrender and safety/threat pressure sharply from the opening"
         },
+        "shot_design": {
+          "shot_scale": "medium_close_up",
+          "camera_angle": "eye_level",
+          "visual_emphasis": "hands_or_object",
+          "composition_strategy": "Frame the figure from chest to hand so the key, frozen grip, and lit threshold all compete for attention.",
+          "emotional_rationale": "The closer scale converts possible action into felt paralysis by making the key impossible to ignore.",
+          "avoid": ["neutral full-body doorway pose", "cropping out the key"]
+        },
         "amplitude_profile": {
           "framing_distance": 0.36,
           "subject_scale": 0.62,
@@ -450,6 +466,14 @@
           "composition_difference": "pulls away from the body again but keeps more pressure than the opening",
           "communication_difference": "communicates aftermath without confirming the decision",
           "tension_difference": "drops control/surrender while raising presence/absence and opacity"
+        },
+        "shot_design": {
+          "shot_scale": "medium_wide",
+          "camera_angle": "high_angle",
+          "visual_emphasis": "absence_negative_space",
+          "composition_strategy": "Look slightly down on the untouched chairs and threshold so the missing body becomes the frame's active subject.",
+          "emotional_rationale": "The pulled-back high angle weakens bodily agency and makes absence feel like aftermath rather than empty space.",
+          "avoid": ["showing the decision directly", "repeating the opening wide shot exactly"]
         },
         "amplitude_profile": {
           "framing_distance": 0.56,

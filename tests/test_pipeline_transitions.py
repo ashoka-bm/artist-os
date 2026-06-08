@@ -63,6 +63,8 @@ class PipelineTransitionTests(unittest.TestCase):
         }
         for role in image_plan["image_roles"]:
             self.assertIn(role["key_emotional_movement_id"], key_movement_ids)
+            self.assertIn("shot_design", role)
+            self.assertTrue(role["shot_design"]["emotional_rationale"])
 
     def test_image_medium_plan_to_image_creative_brief(self) -> None:
         beat_plan = load("tests/fixtures/story/beat-plan.json")
@@ -81,6 +83,20 @@ class PipelineTransitionTests(unittest.TestCase):
         }
         for suggested_image in creative_brief["series_recommendation"]["suggested_images"]:
             self.assertIn(suggested_image["key_emotional_movement_id"], key_movement_ids)
+            self.assertIn("shot_design", suggested_image)
+            self.assertTrue(suggested_image["shot_design"]["emotional_rationale"])
+
+        suggested_images = creative_brief["series_recommendation"]["suggested_images"]
+        shot_signatures = [
+            (
+                image["shot_design"]["shot_scale"],
+                image["shot_design"]["camera_angle"],
+                image["shot_design"]["visual_emphasis"],
+            )
+            for image in suggested_images
+        ]
+        for previous, current in zip(shot_signatures, shot_signatures[1:]):
+            self.assertNotEqual(previous, current)
 
     def test_beat_key_movement_references_are_valid(self) -> None:
         beat_plan = load("tests/fixtures/story/beat-plan.json")

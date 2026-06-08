@@ -112,6 +112,26 @@ _Avoid_: Emotional analysis
 The formal forces that make a visual work active, coherent, tense, immersive, unstable, or memorable.
 _Avoid_: Technicality, visual style only
 
+**Shot Design**:
+The image-role decision that names shot scale, camera angle, visual emphasis, and composition strategy for one still image. Shot Design serves Intended Feeling and the governing Expectation Turn; it is not a default full-body depiction of the subject.
+_Avoid_: Generic full-body framing, camera variety for its own sake
+
+**Shot Scale**:
+The planned distance of the frame from the subject, such as extreme close-up, close-up, medium close-up, medium shot, medium wide, wide, or extreme wide. Close shots concentrate emotional pressure or symbolic detail; medium shots balance body language, action, and context; wide shots carry place, isolation, consequence, and scale.
+_Avoid_: Treating every character image as a full-body shot
+
+**Camera Angle**:
+The planned viewpoint relationship to the subject, such as eye-level, high angle, low angle, overhead, Dutch/canted, profile, over-the-shoulder, or point-of-view. Camera Angle should express power, vulnerability, instability, intimacy, observation, or subjectivity when those forces matter.
+_Avoid_: Neutral eye-level framing by default when the Beat needs a stronger perspective
+
+**Visual Emphasis**:
+The thing a Shot Design makes dominant: face or reaction, hands or object, body action, relationship between figures, environment, absence or negative space, symbolic detail, or scale/consequence.
+_Avoid_: Centering the whole subject when the Beat needs one pressure point
+
+**Shot Progression**:
+The intentional change of Shot Design across adjacent Image Roles in a triptych or image series. Adjacent roles should vary shot scale, camera angle, visual emphasis, or composition strategy unless repetition is artist-approved and tied to Artist Meaning.
+_Avoid_: A series where every frame has the same full-body composition
+
 **Sonic Dynamics**:
 The formal forces that make a sound work active, coherent, tense, immersive, unstable, or memorable.
 _Avoid_: Emotional Structure, genre only
@@ -417,7 +437,7 @@ The Provider-Neutral Prompt Plan field that records pre-locking Symbology Boards
 _Avoid_: Stuffing exploration-board options into Layout Plan prose
 
 **Image Role**:
-The function of one image inside a Series Plan, such as opening image, threshold image, rupture image, return image, or resolution image.
+The function of one image inside a Series Plan, such as opening image, threshold image, rupture image, return image, or resolution image. Each Image Role carries its own Shot Design so the frame's distance, angle, emphasis, and composition serve that role's Intended Feeling.
 _Avoid_: Variant
 
 **Tension Point**:

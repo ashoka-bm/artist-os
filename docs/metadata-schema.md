@@ -180,7 +180,18 @@ Required sections:
 - `review_requirements`
 - `traceability_summary`
 
-Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, and `amplitude_profile`. For triptychs and image series, adjacent roles should also use `distinction_notes` to state composition, communication, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
+Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, `shot_design`, and `amplitude_profile`. For triptychs and image series, adjacent roles should also use `distinction_notes` to state composition, communication, shot-design, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
+
+`shot_design` names the frame's camera grammar:
+
+- `shot_scale`: `extreme_close_up`, `close_up`, `medium_close_up`, `medium_shot`, `medium_wide`, `wide`, or `extreme_wide`
+- `camera_angle`: `eye_level`, `high_angle`, `low_angle`, `overhead`, `dutch_angle`, `profile`, `over_the_shoulder`, or `point_of_view`
+- `visual_emphasis`: `face_reaction`, `hands_or_object`, `body_action`, `relationship`, `environment`, `absence_negative_space`, `symbolic_detail`, or `scale_consequence`
+- `composition_strategy`
+- `emotional_rationale`
+- `avoid`
+
+Do not let `shot_design` default to full-body character framing. Close shots should be used when emotion, reaction, or symbolic detail carries the Beat. Medium shots should be used when body language, action, and context all matter. Wide shots should be used when environment, absence, isolation, threshold, or consequence carries the feeling.
 
 `visual_dynamics.minimum_tension_criteria` defines the minimum visible contrast for the image plan. For single images, it should name the internal contrast requirement. For series, it should name the required adjacent amplitude and tension shifts.
 
@@ -486,7 +497,7 @@ For triptych or image-series recommendations, each `series_recommendation.sugges
 - `detail_intensity`: minimal to layered
 - `emotional_pressure`: quiet to overwhelming
 
-Use amplitude values and each role's `tension_profile` to verify that a series changes visual rhythm and emotional pressure across image roles. Adjacent images should usually differ on at least two amplitude dimensions and one active tension dimension unless continuity is intentional and justified in `rationale`.
+Use amplitude values, each role's `tension_profile`, and each role's `shot_design` to verify that a series changes visual rhythm and emotional pressure across image roles. Adjacent images should usually differ on at least two amplitude dimensions, one active tension dimension, and one Shot Design axis unless continuity is intentional and justified in `rationale`.
 
 ## Visual Gates
 
@@ -570,7 +581,7 @@ Required fields:
 
 - `mode`: `single_image`, `triptych`, or `image_series`
 - `reason`
-- `suggested_images`, each with `key_emotional_movement_id`, `expectation_turn_translation`, `amplitude_profile`, and a distinct communication role
+- `suggested_images`, each with `key_emotional_movement_id`, `expectation_turn_translation`, `shot_design`, `amplitude_profile`, and a distinct communication role
 - `minimum_tension_criteria`
 - `style_progression`
 - `calibration`
@@ -582,7 +593,7 @@ Style Progression can appear inside a Series Recommendation, but it becomes exec
 
 Use `triptych` for a clear three-part emotional transformation. Use `image_series` for extended sequence, motif evolution, or world exploration.
 
-Each suggested image should differ from adjacent images in visual composition, communication intent, and tension profile. A series should not repeat the same emotional claim with only surface style or pose changes unless repetition is intentional and artist-approved.
+Each suggested image should differ from adjacent images in Shot Design, visual composition, communication intent, and tension profile. A series should not repeat the same emotional claim with only surface style, pose changes, or repeated full-body framing unless repetition is intentional and artist-approved.
 
 After Series Plan approval, produce one Series Calibration Image before producing the rest of the series. Use artist feedback on that image to lock Style Direction and Target Visual Engine.
 

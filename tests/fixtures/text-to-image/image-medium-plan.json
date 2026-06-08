@@ -76,6 +76,14 @@
           "translation_notes": ["The lit doorway suggests someone or something missing beyond the frame."]
         }
       ],
+      "shot_design": {
+        "shot_scale": "medium_close_up",
+        "camera_angle": "eye_level",
+        "visual_emphasis": "hands_or_object",
+        "composition_strategy": "Crop close enough for the key and frozen hand to dominate while the lit doorway remains legible behind the figure.",
+        "emotional_rationale": "A closer frame makes agency feel physically present and painful instead of turning the Beat into a generic full-body doorway pose.",
+        "avoid": ["default full-body character framing", "wide frame that makes the key unreadable"]
+      },
       "distinction_notes": {
         "from_previous_role": "opening role; no previous image role",
         "composition_shift": "single compressed threshold composition",

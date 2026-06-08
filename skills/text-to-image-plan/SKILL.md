@@ -46,7 +46,7 @@ The Beat Plan is authoritative for story shape. The Image Medium Plan is authori
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. The medium translation should express that feeling, not explain the fact.
 
-Every Beat Plan must define minimum tension criteria. For a single image, require enough internal contrast to create pressure before explanation; default to at least two active tensions with one primary tension at `0.7` or higher. For a triptych or image series, require adjacent roles to shift at least two amplitude dimensions and at least one active emotional or visual tension unless repetition is artist-approved.
+Every Beat Plan must define minimum tension criteria. For a single image, require enough internal contrast to create pressure before explanation; default to at least two active tensions with one primary tension at `0.7` or higher. For a triptych or image series, require adjacent roles to shift at least two amplitude dimensions, at least one active emotional or visual tension, and at least one Shot Design axis unless repetition is artist-approved.
 
 Every Beat Plan must identify Key Emotional Movements. For a single image, choose the primary movement to compress. For a triptych or image series, map image roles to the key movements that should be staged or expanded.
 
@@ -71,9 +71,10 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 11. Represent hybrid style as one Primary Style plus no more than four Style Modifiers.
 12. Select 6 to 8 Active Visual Tensions for the Target Visual Engine and define the Image Medium Plan's minimum tension criteria.
 13. Surface Style/Visual Conflicts and propose Style Adaptations.
-14. Define image roles from the shared Beat Plan. Each role must include the governing `beat_id`, `key_emotional_movement_id`, composition intent, communication intent, Expectation Turn Translation, emotional payload, intended feeling, active tension profile, and traceable symbolic representation. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
-15. For triptych or image-series recommendations, verify adjacent image roles differ in both composition and communication intent. Adjacent roles should usually shift at least two amplitude dimensions and at least one active emotional or visual tension dimension unless repetition is intentional and traced to Artist Meaning.
-16. Produce the Image Medium Plan only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
+14. Define image roles from the shared Beat Plan. Each role must include the governing `beat_id`, `key_emotional_movement_id`, composition intent, communication intent, Expectation Turn Translation, emotional payload, intended feeling, active tension profile, Shot Design, and traceable symbolic representation. Shot Design must name shot scale, camera angle, visual emphasis, composition strategy, emotional rationale, and avoid notes. Do not default to full-body character framing; use close shots for reaction, emotional pressure, and symbolic detail; medium shots for body language, action, and immediate context; and wide shots for environment, isolation, active absence, consequence, and scale.
+15. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+16. For triptych or image-series recommendations, verify adjacent image roles differ in composition, communication intent, and at least one Shot Design axis: shot scale, camera angle, visual emphasis, or composition strategy. Adjacent roles should usually shift at least two amplitude dimensions and at least one active emotional or visual tension dimension unless repetition is intentional and traced to Artist Meaning.
+17. Produce the Image Medium Plan only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
 
 ## Draft Creative Brief Process
 
@@ -95,10 +96,10 @@ Use this only after Art Critic Review and Brief Approval.
 3. Produce one Provider-Neutral Image Prompt Plan matching `schemas/prompt-plan.schema.json`, including `transformation_brief_id`, `beat_plan_id`, and `image_medium_plan_id`.
 4. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
 5. Keep the same Artist Meaning, Symbology Direction, Style Direction, and Target Visual Engine across all three variants.
-6. Make variants distinct along the Minimalist-to-Maximalist axis using concrete differentiators: composition, scale, viewpoint, density, negative space, symbolic layering, abstraction, light/color strategy, texture, ornament, drama, focal hierarchy, and emotional intensity.
+6. Make variants distinct along the Minimalist-to-Maximalist axis using concrete differentiators: composition, shot scale, camera angle, viewpoint, density, negative space, symbolic layering, abstraction, light/color strategy, texture, ornament, drama, focal hierarchy, and emotional intensity.
 7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
 8. Mark any Derived Symbols and trace them to Artist Meaning, Transformation Brief, Beat Plan, Image Medium Plan, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
-9. Preserve the governing Expectation Turn Translation in each Prompt Variant Plan, either directly in `prompt_text` or explicitly in `critique_checklist`, with traceability back to the Beat Plan or Image Medium Plan.
+9. Preserve the governing Expectation Turn Translation and approved Shot Design in each Prompt Variant Plan, either directly in `prompt_text` or explicitly in `critique_checklist`, with traceability back to the Beat Plan or Image Medium Plan.
 10. Include critique criteria for each Prompt Variant Plan.
 11. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
 12. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
@@ -126,7 +127,7 @@ Every prompt choice must trace back to Artist Meaning, Reference evidence, Trans
 
 Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Plan, Symbology Direction, and Visual Dynamics.
 
-Series recommendations must trace back to the Beat Plan or Tension Points. For series work, verify that suggested image roles vary across the internal amplitude profile, active tension profile, composition intent, and communication intent. Adjacent images should usually differ on at least two amplitude dimensions and at least one active emotional or visual tension dimension unless sameness is intentional and traced to the Emotional Arc. Record the minimum tension criteria in both the Image Medium Plan and Creative Brief Record so Prompt Critic Review can enforce it.
+Series recommendations must trace back to the Beat Plan or Tension Points. For series work, verify that suggested image roles vary across Shot Design, the internal amplitude profile, active tension profile, composition intent, and communication intent. Adjacent images should usually differ on at least two amplitude dimensions, at least one Shot Design axis, and at least one active emotional or visual tension dimension unless sameness is intentional and traced to the Emotional Arc. Record the minimum tension criteria in both the Image Medium Plan and Creative Brief Record so Prompt Critic Review can enforce it.
 
 The Symbology Gate is mandatory before style, detail, or final prompt locking unless the artist explicitly proceeds unconfirmed. If Symbology Direction is weak, vague, or only decorative, return to the gate instead of compensating with style.
 

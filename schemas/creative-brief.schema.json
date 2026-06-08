@@ -221,6 +221,7 @@
               "emotional_payload",
               "target_visual_engine",
               "tension_profile",
+              "shot_design",
               "series_role_distinction",
               "amplitude_profile"
             ],
@@ -238,6 +239,7 @@
                 "minItems": 1,
                 "items": { "$ref": "#/$defs/series_tension_profile" }
               },
+              "shot_design": { "$ref": "#/$defs/shot_design" },
               "series_role_distinction": { "$ref": "#/$defs/series_role_distinction" },
               "amplitude_profile": { "$ref": "#/$defs/series_amplitude_profile" }
             }
@@ -412,6 +414,61 @@
           "minItems": 1,
           "items": { "type": "string", "minLength": 1 }
         }
+      }
+    },
+    "shot_design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shot_scale",
+        "camera_angle",
+        "visual_emphasis",
+        "composition_strategy",
+        "emotional_rationale",
+        "avoid"
+      ],
+      "properties": {
+        "shot_scale": {
+          "type": "string",
+          "enum": [
+            "extreme_close_up",
+            "close_up",
+            "medium_close_up",
+            "medium_shot",
+            "medium_wide",
+            "wide",
+            "extreme_wide"
+          ]
+        },
+        "camera_angle": {
+          "type": "string",
+          "enum": [
+            "eye_level",
+            "high_angle",
+            "low_angle",
+            "overhead",
+            "dutch_angle",
+            "profile",
+            "over_the_shoulder",
+            "point_of_view"
+          ]
+        },
+        "visual_emphasis": {
+          "type": "string",
+          "enum": [
+            "face_reaction",
+            "hands_or_object",
+            "body_action",
+            "relationship",
+            "environment",
+            "absence_negative_space",
+            "symbolic_detail",
+            "scale_consequence"
+          ]
+        },
+        "composition_strategy": { "type": "string", "minLength": 1 },
+        "emotional_rationale": { "type": "string", "minLength": 1 },
+        "avoid": { "type": "array", "items": { "type": "string" } }
       }
     },
     "minimum_series_tension_criteria": {

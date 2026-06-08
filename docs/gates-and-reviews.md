@@ -168,11 +168,11 @@ Block when Beats name only facts, events, or symbols without an intended feeling
 
 ### Art Critic
 
-Checks visual translation: Symbology Direction, Style Direction, Visual Dynamics, composition, image-role distinction, visual series coherence, and whether visual choices preserve Artist Meaning.
+Checks visual translation: Symbology Direction, Style Direction, Visual Dynamics, Shot Design, composition, image-role distinction, visual series coherence, and whether visual choices preserve Artist Meaning.
 
-Drift check: compare visual choices against Artist Meaning, Beat Plan, Symbology Direction, Style Direction, Visual Dynamics, and Reference evidence. Flag style drift especially when style starts replacing meaning.
+Drift check: compare visual choices against Artist Meaning, Beat Plan, Symbology Direction, Style Direction, Visual Dynamics, Shot Design, and Reference evidence. Flag style drift especially when style starts replacing meaning.
 
-Block when the Symbology Gate was skipped without explicit permission, when the image plan expresses information but no clear feeling, when image roles do not translate the governing Expectation Turn, when the visual plan falls below its minimum tension criteria, or when a series repeats the same composition, communication intent, or tension profile across adjacent image roles without an artist-approved reason.
+Block when the Symbology Gate was skipped without explicit permission, when the image plan expresses information but no clear feeling, when image roles do not translate the governing Expectation Turn, when the visual plan falls below its minimum tension criteria, when Shot Design defaults to repeated full-body framing without emotional need, or when a series repeats the same shot scale, camera angle, visual emphasis, composition, communication intent, or tension profile across adjacent image roles without an artist-approved reason.
 
 ### Video Critic
 
@@ -208,7 +208,7 @@ Checks provider-neutral prompt quality, traceability, variant distinctness, miss
 
 Drift check: compare prompt language against Artist Meaning, Beat Plan, Medium Plan, review decisions, and provider boundary constraints. Flag prompt drift when fluent prompt wording adds unsupported symbols, style, plot, lyrics, genre, camera logic, or emotional claims.
 
-Block when a prompt can render a factual scene but does not direct the emotional effect, when it drops the approved Expectation Turn Translation, when it drops the approved minimum tension criteria, or when series prompts are visually different only by surface adjectives instead of composition, symbolic action, communication intent, and tension profile.
+Block when a prompt can render a factual scene but does not direct the emotional effect, when it drops the approved Expectation Turn Translation, when it drops the approved Shot Design, when it drops the approved minimum tension criteria, or when series prompts are visually different only by surface adjectives instead of shot scale, camera angle, composition, symbolic action, communication intent, and tension profile.
 
 ### Output Critic
 
