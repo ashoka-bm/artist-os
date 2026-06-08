@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-image-plan
-description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Creative Brief or provider-neutral image Prompt Plan. Handles visual gates for Symbology Direction, Style Direction, Minimal/Faithful/Amplified intensity, Visual Dynamics, Beat Plan, Series Recommendation, and Prompt Variant Plans. Prefer artist-os for the whole flow.
+description: Use when Artist OS needs standalone or delegated image planning after Artist Meaning exists, especially for image Creative Briefs, Image Medium Plans, visual gates, series plans, or provider-neutral image Prompt Plans. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Text To Image Plan
@@ -59,7 +59,7 @@ When a story, symbology, presentation, style, or series choice is ambiguous, use
 Use this only after the shared Transformation Brief and Beat Plan exist.
 
 1. Identify formal observations from the text.
-2. Consume the shared Beat Plan for Beats, Tension Points, Story Mode, and story scale. Do not invent a separate image-only Beat Map.
+2. Consume the shared Beat Plan for Beats, Tension Points, Story Mode, and story scale. Do not fork a separate image-only beat structure.
 3. Map all eight Core Tension Pairs with evidence and translation notes, reusing the Transformation Brief where possible.
 4. Confirm Interpretation is complete: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured or explicitly marked safe to proceed unconfirmed.
 5. Define Symbology Direction: what the image shows as the core symbolic representation.

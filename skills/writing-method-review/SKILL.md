@@ -1,6 +1,6 @@
 ---
 name: artist-os-writing-method-review
-description: Use when Artist OS needs a bounded reviewer for writing fragments, beat-by-beat journey structure, or finished written shape. Reviews against the high-authority writing-fragments, writing-beats, and writing-shape reference skills without rewriting their methods.
+description: Use when Artist OS needs standalone or delegated review of writing fragments, beat-by-beat journey structure, lyric movement, story beats, or finished written shape. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Writing Method Review
@@ -74,7 +74,7 @@ Every review must emit a Review Record JSON object that validates against `schem
 Set Review Record fields as follows:
 
 - `review_role`: `fragment_reviewer`, `beat_reviewer`, `shape_reviewer`, or `writing_critic` for hybrid writing reviews.
-- `reviewer_execution.execution_mode`: `bounded_sub_agent`.
+- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-writing-method-review`.
 - `artifact_under_review.artifact_type`: `fragment_file`, `beat_plan`, or `text_draft`.

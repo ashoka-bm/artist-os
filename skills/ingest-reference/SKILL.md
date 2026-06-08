@@ -1,6 +1,6 @@
 ---
 name: artist-os-ingest-reference
-description: Use when Artist OS needs standalone or delegated reference intake for text, image, audio, video, or mixed media before interpretation. Captures title, media type, source, context, and rights notes. Prefer artist-os for the whole text-to-image flow.
+description: Use when Artist OS needs standalone or delegated intake for a text, image, audio, video, or mixed-media Reference before interpretation. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Ingest Reference

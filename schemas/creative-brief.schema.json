@@ -247,11 +247,11 @@
         "style_progression": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["proposed", "progression_summary", "beat_map_rationale"],
+          "required": ["proposed", "progression_summary", "beat_plan_rationale"],
           "properties": {
             "proposed": { "type": "boolean" },
             "progression_summary": { "type": "string" },
-            "beat_map_rationale": { "type": "string" }
+            "beat_plan_rationale": { "type": "string" }
           }
         },
         "calibration": {

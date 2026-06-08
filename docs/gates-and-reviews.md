@@ -117,19 +117,21 @@ Reviewer sub-agents receive:
 - artifact under review,
 - Artist Meaning,
 - Source Record or Reference summary when needed,
-- Beat Plan or Beat Map when relevant,
+- Beat Plan when relevant,
 - Medium Plan or Prompt Plan when relevant,
 - open questions,
 - desired output format.
 
 Reviewer sub-agents return a Review Record that validates against `schemas/review-record.schema.json`.
 
+If the host cannot spawn a sub-agent, the conductor may use a fallback separated review pass. The fallback must be clearly labeled, use only the same bounded review packet, keep `reviewer_execution.sub_agent_required: true`, and set `reviewer_execution.execution_mode: fallback_separated_pass`. This records that the sub-agent requirement still exists even though the host could not satisfy it.
+
 The Review Record is the machine-readable output of the review stage. It must include:
 
 - `review_record_id`,
 - `project_id`,
 - `review_role`,
-- `reviewer_execution.execution_mode: bounded_sub_agent`,
+- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when sub-agents are unavailable,
 - `reviewer_execution.sub_agent_required: true`,
 - `reviewer_execution.source_skill`,
 - `artifact_under_review`,

@@ -133,7 +133,7 @@ Updated examples:
 
 Updated skills:
 
-- `skills/first-slice-flow/SKILL.md`
+- `skills/artist-os/SKILL.md`
 - `skills/text-to-image-plan/SKILL.md`
 - `skills/text-to-suno-plan/SKILL.md`
 
@@ -371,7 +371,7 @@ Reason:
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
 - transition tests now check emotional movement references across Beat Plan, Image Medium Plan, and Creative Brief fixtures,
 - `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs,
-- `skills/first-slice-flow/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
+- `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas.
 

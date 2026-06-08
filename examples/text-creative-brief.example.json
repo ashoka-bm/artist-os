@@ -475,7 +475,7 @@
     "style_progression": {
       "proposed": true,
       "progression_summary": "Move from restrained cinematic realism toward slightly more symbolic and dreamlike composition across the triptych.",
-      "beat_map_rationale": "The Beat Map moves from concrete domestic erasure, to threshold paralysis, to unresolved presence/absence; a subtle style progression can make the final image feel more haunted without abandoning photoreal grounding."
+      "beat_plan_rationale": "The Beat Plan moves from concrete domestic erasure, to threshold paralysis, to unresolved presence/absence; a subtle style progression can make the final image feel more haunted without abandoning photoreal grounding."
     },
     "calibration": {
       "required": true,

@@ -43,7 +43,7 @@
       "additionalProperties": false,
       "required": ["execution_mode", "sub_agent_required", "source_skill"],
       "properties": {
-        "execution_mode": { "type": "string", "const": "bounded_sub_agent" },
+        "execution_mode": { "type": "string", "enum": ["bounded_sub_agent", "fallback_separated_pass"] },
         "sub_agent_required": { "type": "boolean", "const": true },
         "source_skill": { "type": "string" }
       }

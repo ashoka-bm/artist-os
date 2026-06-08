@@ -449,7 +449,7 @@ Required fields:
 
 Hybrid style is allowed, but it must be represented as one `primary_style` plus bounded `style_modifiers`. Avoid equal-weight style pileups.
 
-Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Map, or Visual Dynamics. If style conflicts with the Target Visual Engine, record the conflict and proposed style adaptation.
+Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Plan, or Visual Dynamics. If style conflicts with the Target Visual Engine, record the conflict and proposed style adaptation.
 
 Minimal style conflict fields:
 
@@ -564,7 +564,7 @@ For `single_image` and `series_calibration` plans, include Faithful, Amplified, 
 
 ## Series Recommendation
 
-`series_recommendation` records whether the Beat Map would be better served by a single image, triptych, or image series.
+`series_recommendation` records whether the Beat Plan would be better served by a single image, triptych, or image series.
 
 Required fields:
 
@@ -592,7 +592,7 @@ Minimal series calibration fields:
 
 - `style_progression.proposed`
 - `style_progression.progression_summary`
-- `style_progression.beat_map_rationale`
+- `style_progression.beat_plan_rationale`
 - `calibration.required`
 - `calibration.calibration_image_role`
 - `calibration.uses_three_prompt_variants`

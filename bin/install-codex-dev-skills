@@ -43,6 +43,8 @@ install_skill() {
     if [[ -d "$source_dir/references" ]]; then
       rm -rf "$target/references"
       cp -R "$source_dir/references" "$target/references"
+    else
+      rm -rf "$target/references"
     fi
     echo "updated copied skill: $target/SKILL.md"
     return
@@ -68,7 +70,7 @@ install_skill() {
   ln -s "$source_dir" "$target"
 }
 
-install_skill "$repo_root/skills/first-slice-flow" "$skills_dir/artist-os"
+install_skill "$repo_root/skills/artist-os" "$skills_dir/artist-os"
 
 legacy_orchestrator="$skills_dir/${prefix}first-slice-flow"
 if [[ -L "$legacy_orchestrator" && "$(readlink "$legacy_orchestrator")" == "$repo_root/skills/first-slice-flow" ]]; then

@@ -1,6 +1,6 @@
 ---
 name: artist-os-meaning-interview
-description: Use when Artist OS needs standalone or delegated artist meaning before analysis or prompt planning. Captures what the reference means, what must survive transformation, allowed changes, forbidden changes, success criteria, and the artist's own emotional language.
+description: Use when Artist OS needs standalone or delegated Artist Meaning before analysis, transformation, beat planning, medium planning, or prompt planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Meaning Interview

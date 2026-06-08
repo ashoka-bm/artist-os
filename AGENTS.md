@@ -74,7 +74,7 @@ Everything else an agent needs at runtime is canonical elsewhere — point to it
 
 - **Gates, boards, stage completion, style/series logic, Prompt Variant Plans** → `THEORY.md` (and `docs/text-to-sound/THEORY.md` + `ARCHITECTURE.md` for sound). This is the home for the gate order, the gate question wording, the Visual Gate Board contract, the four-stage completion rules, the separation of Emotional Structure / Visual Dynamics / Sonic Dynamics / Style Direction, Style-as-last-priority, the Wondermint Category Reference rule, and the Series Amplitude Plan.
 - **Persistence and storage** → `docs/storage.md`: persist each phase before advancing (manifest, stage record, event, sidecar-tagged assets, SQLite refresh), use `artist-os.sqlite` as the query index, initialize with `bin/artist-os-db setup` when missing, and treat `status = missing` projects as historical until their files are restored.
-- **The runtime phase order for each slice** → the `artist-os` conductor skill, `skills/first-slice-flow`.
+- **The runtime phase order for each slice** → the `artist-os` conductor skill, `skills/artist-os`.
 
 ## Slices
 
@@ -83,7 +83,7 @@ Artist OS ships two dry-run slices (no provider-backed generation):
 - **First Slice** — Text Reference → Provider-Neutral Image Prompt Plan.
 - **Text-to-Sound Slice** — Text Reference → Suno Sound Prompt Plan.
 
-The authoritative phase order for each is owned by the `artist-os` conductor skill, `skills/first-slice-flow/SKILL.md` → "Phase Order". Read it there rather than maintaining a second copy here.
+The authoritative phase order for each is owned by the `artist-os` conductor skill, `skills/artist-os/SKILL.md` → "Phase Order". Read it there rather than maintaining a second copy here.
 
 ## Provider Boundary
 

@@ -129,7 +129,7 @@ A secondary style, finish, mood, production, or genre influence that modifies th
 _Avoid_: Unbounded hybrid style list
 
 **Style Priority**:
-The rule that Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Map, and Visual Dynamics.
+The rule that Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Plan, and Visual Dynamics.
 _Avoid_: Style overriding the Creative Brief
 
 **Style/Visual Conflict**:
@@ -297,7 +297,7 @@ A Prompt Plan expressed as Artist OS traceable sound concepts plus Suno Custom M
 _Avoid_: Cross-platform provider abstraction in the first sound version
 
 **Derived Sonic Element**:
-A new motif, sound, instrument, texture, hook, lyric image, or production gesture introduced by a Prompt Variant Plan because it strengthens approved Artist Meaning, Sonic Dynamics, Beat Map, or Poetic Density.
+A new motif, sound, instrument, texture, hook, lyric image, or production gesture introduced by a Prompt Variant Plan because it strengthens approved Artist Meaning, Sonic Dynamics, Beat Plan, or Poetic Density.
 _Avoid_: Unmarked invention
 
 **Core Visual Tension Pairs**:
@@ -350,7 +350,7 @@ _Avoid_: Emotional Dimensions
 
 **Emotional Arc**:
 The emotional change over time or implied movement inside a Reference.
-_Avoid_: Beat Map
+_Avoid_: Beat Plan
 
 **Emotional Payload**:
 The felt meaning carried by one Beat.
@@ -360,16 +360,12 @@ _Avoid_: Emotion, vibe
 The smallest meaningful change, contrast, turn, or pressure point in a Reference that carries Emotional Payload.
 _Avoid_: Plot point, scene
 
-**Beat Map**:
-The changes, value shifts, and emotional payloads identified in a Reference.
-_Avoid_: Story, plot
-
 **Series Recommendation**:
 A Creative Brief recommendation for whether a Reference should become a single image, triptych, or image series.
 _Avoid_: Generating a series by default without artist approval
 
 **Series Plan**:
-An approved plan for multiple related images that preserve a larger Beat Map or sequence of Tension Points.
+An approved plan for multiple related images that preserve a larger Beat Plan or sequence of Tension Points.
 _Avoid_: Prompt variants
 
 **Triptych**:
@@ -583,9 +579,9 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Art Critic Review** applies **Critical Heuristics** in this order: preserve **Artist Meaning**, stay anchored to **Reference** evidence, deepen salient **Core Tension Pairs**, strengthen **Active Visual Tensions**, increase **Poetic Density**, use medium-specific translation principles, then apply art-critical rules such as avoiding literalism, preserving contradiction, making form carry meaning, and preferring layered specificity over generic mood.
 - A **Creative Brief** compiles approved upstream records into a medium-specific handoff; it does not own **Artist Meaning**, **Beat Plan**, or **Medium Plan**.
 - **Style Direction** defines the artistic language of the generated work and must serve **Artist Meaning**.
-- **Style Direction** is chosen after the first pass of **Artist Meaning**, **Emotional Structure**, **Beat Map**, and **Symbology Direction**, and before **Art Critic Review**.
+- **Style Direction** is chosen after the first pass of **Artist Meaning**, **Emotional Structure**, **Beat Plan**, and **Symbology Direction**, and before **Art Critic Review**.
 - **Style Direction** can be hybrid, but it must have one **Primary Style** and bounded **Style Modifiers**.
-- **Style Priority** makes **Style Direction** the last priority after **Artist Meaning**, **Emotional Structure**, **Beat Map**, and **Visual Dynamics**.
+- **Style Priority** makes **Style Direction** the last priority after **Artist Meaning**, **Emotional Structure**, **Beat Plan**, and **Visual Dynamics**.
 - A **Style/Visual Conflict** must be surfaced to the artist instead of silently letting style override **Visual Dynamics**.
 - A **Style/Visual Conflict** can produce **Style Adaptation**, where the chosen style is modified to preserve the **Target Visual Engine**.
 - **Style Conflict Fields** preserve **Style/Visual Conflicts** and proposed **Style Adaptations** in the **Creative Brief Record**.
@@ -608,7 +604,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Series Amplitude Plan** gives each suggested series image 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
 - In a triptych or image series, adjacent image roles should usually differ on at least two **Series Amplitude Plan** dimensions unless visual sameness is intentional and traced to the **Emotional Arc**.
 - In text-to-image work, **Visual Dynamics** describes the **Target Visual Engine**, not literal visual properties of the text.
-- Every **Target Visual Engine** choice must trace back to **Artist Meaning**, **Reference** evidence, **Emotional Structure**, **Beat Map**, or **Critical Heuristics**.
+- Every **Target Visual Engine** choice must trace back to **Artist Meaning**, **Reference** evidence, **Emotional Structure**, **Beat Plan**, or **Critical Heuristics**.
 - **Monumental / Intimate** is a **Conditional Visual Tension Pair** for scale, embodiment, installation, performance, and immersive work.
 - **Emotional Structure** contains **Core Tension Pairs**, **Emotional Qualities**, an **Emotional Arc**, and **Emotional Payloads**.
 - **Poetic Density** increases when a single element carries multiple meanings without collapsing them into one message.
@@ -617,10 +613,10 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Tension Pair** is stored as a **Tension Pair Record** in a **Creative Brief Record**.
 - Every **Creative Brief Record** includes all eight **Core Tension Pairs**, each with **Tension Pair Salience**.
 - A **Tension Pair Record** can describe either a **Core Tension Pair** or an **Active Visual Tension**.
-- A **Beat Map** contains one or more **Beats** or **Tension Points**.
+- A **Beat Plan** contains one or more **Beats** or **Tension Points**.
 - A **Beat** carries one **Emotional Payload**.
 - A **Tension Point** carries one **Emotional Payload** without requiring before/after change.
-- A **Series Recommendation** is required when a **Beat Map** has more than one meaningful **Beat** or **Tension Point**.
+- A **Series Recommendation** is required when a **Beat Plan** has more than one meaningful **Beat** or **Tension Point**.
 - A **Series Recommendation** can still choose single image when compression preserves the work better than sequence.
 - A **Triptych** fits a clear three-part emotional structure such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath.
 - An **Image Series** fits extended sequence, motif evolution, or world exploration.
@@ -631,7 +627,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - After calibration approval, remaining series images get one prompt per **Image Role** by default.
 - **Calibration Choice** updates the **Creative Brief Record** or **Series Plan** with accepted style traits, rejected style traits, locked visual rules, and notes for remaining images.
 - **Calibration Choice** can update visual language, **Style Direction**, **Visual Dynamics** translation notes, locked visual rules, and series continuity rules.
-- **Calibration Choice** cannot update **Artist Meaning**, **Core Tension Pairs**, or **Beat Map** unless the artist explicitly says the calibration revealed a better meaning.
+- **Calibration Choice** cannot update **Artist Meaning**, **Core Tension Pairs**, or **Beat Plan** unless the artist explicitly says the calibration revealed a better meaning.
 - A **Symbology Board** gives the artist human input before style and prompt locking by comparing six symbolic or compositional branches with concise option labels.
 - A **Prompt Variant Plan** explores one approved image direction; a **Series Plan** creates multiple related images with distinct **Image Roles**.
 - A **Prompt Branch Set** explores multiple meaning-equivalent prompt branches from one approved **Prompt Plan** for curator selection; it does not create **Variants** until provider-backed generation is explicitly approved.
@@ -769,7 +765,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 > **Domain expert:** "Use a short **Style Interview** with a **Style Decision Tree**. The **Wondermint Category Reference** can seed vocabulary, but **Style Direction** must serve the Creative Brief."
 >
 > **Dev:** "When should Style Direction be chosen?"
-> **Domain expert:** "After the first pass of **Artist Meaning**, **Emotional Structure**, and **Beat Map**, but before **Art Critic Review**."
+> **Domain expert:** "After the first pass of **Artist Meaning**, **Emotional Structure**, and **Beat Plan**, but before **Art Critic Review**."
 >
 > **Dev:** "If the artist says 'manga' or 'cinematic photoreal,' do we still run the Style Interview?"
 > **Domain expert:** "No. Accept the named style. Ask only one **Style Clarifier** if the style is too broad or ambiguous."
@@ -895,7 +891,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Style Direction** is a separate layer from **Emotional Structure** and **Visual Dynamics**.
 - **Style Direction** is selected after the first meaning/emotional/beat/symbology pass and before **Art Critic Review**.
 - Hybrid style is allowed only as one **Primary Style** plus bounded **Style Modifiers**.
-- **Style Direction** is the last priority. It must not override **Artist Meaning**, **Emotional Structure**, **Beat Map**, or **Visual Dynamics**.
+- **Style Direction** is the last priority. It must not override **Artist Meaning**, **Emotional Structure**, **Beat Plan**, or **Visual Dynamics**.
 - **Style/Visual Conflicts** should be shown to the artist and can become **Style Adaptations**.
 - **Art Critic Review** may propose default **Style Adaptations** and only ask for explicit approval when the named style materially changes.
 - Use a **Style Interview** and **Style Decision Tree** when the artist has not specified style directly.
@@ -914,13 +910,13 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Derived Symbol Review** is part of reviewing the full Prompt Plan; it is not a separate First Slice approval gate.
 - If a Reference has multiple significant Beats, Artist OS should include a **Series Recommendation** for single image, triptych, or image series. Do not create multiple image prompt plans until the artist approves a **Series Plan**.
 - Multi-Beat References do not automatically become series. The recommendation can be single image when compression is more powerful.
-- A **Series Plan** can use **Style Progression** when the Beat Map supports a meaningful shift in visual language across images.
+- A **Series Plan** can use **Style Progression** when the Beat Plan supports a meaningful shift in visual language across images.
 - **Style Progression** can be recommended in the First Slice, but not executed until **Series Plan** approval.
 - An approved **Series Plan** must produce one **Series Calibration Image** first, then use artist feedback to lock the series direction before producing remaining image prompts or images.
 - The **Series Calibration Image** should use the most representative **Calibration Image Role**, often the threshold or central image.
 - **Series Calibration Image** uses three prompt variants. Remaining approved series images use one prompt per **Image Role** by default.
 - **Calibration Choice** is durable project context for the remaining series, not a temporary preference.
-- **Calibration Choice** does not rewrite **Artist Meaning**, **Core Tension Pairs**, or **Beat Map** without explicit artist direction.
+- **Calibration Choice** does not rewrite **Artist Meaning**, **Core Tension Pairs**, or **Beat Plan** without explicit artist direction.
 - Add minimal **Series Calibration Fields** to the Creative Brief Record now; defer full **Calibration Choice** schema until image review exists.
 - Add compact **Style Conflict Fields** to the Creative Brief Record now.
 - Three single-image **Prompt Variant Plans** may test unresolved **Variant Test Axes** instead of only varying intensity.

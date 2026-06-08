@@ -130,7 +130,7 @@ Visual Dynamics names the formal forces that make a visual work active, coherent
 
 Keep Visual Dynamics separate from Emotional Structure. Emotional Structure describes the felt charge. Visual Dynamics describes the formal engine.
 
-For text-to-image, Visual Dynamics describes the Target Visual Engine of the generated image. It does not pretend the text literally has visual properties. Each visual choice must trace back to Artist Meaning, Reference evidence, Emotional Structure, Beat Map, or Critical Heuristics.
+For text-to-image, Visual Dynamics describes the Target Visual Engine of the generated image. It does not pretend the text literally has visual properties. Each visual choice must trace back to Artist Meaning, Reference evidence, Emotional Structure, Beat Plan, or Critical Heuristics.
 
 The Core Visual Tension Pairs library is:
 
@@ -167,7 +167,7 @@ Each suggested image gets:
 - `detail_intensity`: 0 = stripped down/minimal detail, 1 = highly detailed/layered.
 - `emotional_pressure`: 0 = quiet/low pressure, 1 = overwhelming/high pressure.
 
-Across a series, adjacent images should usually change amplitude on at least two dimensions unless continuity is intentional. Tie amplitude changes to the Beat Map or Emotional Arc: intimate pressure can move closer, expansive consequence can move wider, rupture can increase motion, and aftermath can reduce density or motion while keeping pressure high.
+Across a series, adjacent images should usually change amplitude on at least two dimensions unless continuity is intentional. Tie amplitude changes to the Beat Plan or Emotional Arc: intimate pressure can move closer, expansive consequence can move wider, rupture can increase motion, and aftermath can reduce density or motion while keeping pressure high.
 
 For series work, also create a per-image tension profile for the active emotional and visual tensions. Adjacent images should not carry the same tension shape unless repetition is the point and is explicitly traced to Artist Meaning. For example, if one image carries high attraction and high threat, the next might hold low attraction and high threat, or high attraction and low threat, so the series produces a felt shift rather than repeating the same charge.
 
@@ -232,9 +232,9 @@ Style Direction should answer:
 
 Style Direction may be hybrid, but it must have one Primary Style and bounded Style Modifiers. Do not combine many styles at equal weight.
 
-Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Map, or Visual Dynamics. When a chosen style conflicts with the Target Visual Engine, surface the conflict and adapt the style instead of silently weakening the brief.
+Style Direction is the last priority. It must not override Artist Meaning, Emotional Structure, Beat Plan, or Visual Dynamics. When a chosen style conflicts with the Target Visual Engine, surface the conflict and adapt the style instead of silently weakening the brief.
 
-Choose Style Direction after the first pass of Artist Meaning, Emotional Structure, Beat Map, and Symbology Direction, and before Art Critic Review. If the artist names a specific style directly, use it and record the reason. Do not run the full Style Interview unless no style was named. Ask at most one Style Clarifier if the named style is broad or internally ambiguous.
+Choose Style Direction after the first pass of Artist Meaning, Emotional Structure, Beat Plan, and Symbology Direction, and before Art Critic Review. If the artist names a specific style directly, use it and record the reason. Do not run the full Style Interview unless no style was named. Ask at most one Style Clarifier if the named style is broad or internally ambiguous.
 
 If the artist has not named a specific style, the first style gate is not a menu of styles. Ask whether they already have a specific visual vision or want to explore what art style to use. If they want exploration, ask for a rough direction in their own words, then use that direction to build candidate styles.
 
@@ -284,9 +284,9 @@ When a Reference contains more than one meaningful Beat or Tension Point, Artist
 
 A multi-Beat Reference does not automatically become a series. Recommend a single image when compression into one symbol, threshold, or contradiction preserves the work more strongly than sequence.
 
-Use a triptych when the Beat Map has a clear three-part emotional structure, such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath. Use an image series for extended sequence, motif evolution, or world exploration.
+Use a triptych when the Beat Plan has a clear three-part emotional structure, such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath. Use an image series for extended sequence, motif evolution, or world exploration.
 
-When the Reference warrants it, a Series Recommendation may propose Style Progression, where the visual language changes across images to express emotional movement. Style Progression must be intentional and trace back to the Beat Map.
+When the Reference warrants it, a Series Recommendation may propose Style Progression, where the visual language changes across images to express emotional movement. Style Progression must be intentional and trace back to the Beat Plan.
 
 Series Recommendation must also include the internal Series Amplitude Plan for each suggested image. Use it to verify that image roles move across visual spectra such as close/wide, sparse/dense, still/active, enclosed/open, minimal/detailed, and quiet/pressurized. If every suggested image has similar amplitude values, revise the series unless sameness is intentional and traced to the Emotional Arc.
 
@@ -302,7 +302,7 @@ Series Calibration uses three Prompt Variant Plans for the selected Calibration 
 
 The selected calibration direction becomes a Calibration Choice. Record accepted style traits, rejected style traits, locked visual rules, and notes for remaining images in the Creative Brief Record or Series Plan.
 
-Calibration Choice can update visual language, Style Direction, Visual Dynamics translation notes, locked visual rules, and series continuity rules. It cannot update Artist Meaning, Core Tension Pairs, or Beat Map unless the artist explicitly says the calibration revealed a better meaning.
+Calibration Choice can update visual language, Style Direction, Visual Dynamics translation notes, locked visual rules, and series continuity rules. It cannot update Artist Meaning, Core Tension Pairs, or Beat Plan unless the artist explicitly says the calibration revealed a better meaning.
 
 ## Layer 9: Meaning-Preserving Transformation
 

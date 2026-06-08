@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-suno-plan
-description: Use when Artist OS needs standalone or delegated translation from text plus Artist Meaning into a Sound Creative Brief or Suno Sound Prompt Plan. Handles Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form, Sonic Dynamics, section tension maps, lyrics drafting, Faithful/Amplified/Minimal variants, and Suno Custom Mode outputs. Prefer artist-os for the whole flow.
+description: Use when Artist OS needs standalone or delegated sound planning after Artist Meaning exists, especially for Sound Creative Briefs, Sound Medium Plans, Suno prompts, lyrics, or sequence planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Text To Suno Plan
@@ -61,7 +61,7 @@ When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyr
 Use this only after the shared Transformation Brief and Beat Plan exist.
 
 1. Identify formal observations from the text: voice, diction, imagery, pacing, structure, conflict, repetition, reversal, and lyric potential.
-2. Consume the shared Beat Plan for Beats, Tension Points, Story Mode, and story scale. Do not invent a separate sound-only Beat Map.
+2. Consume the shared Beat Plan for Beats, Tension Points, Story Mode, and story scale. Do not fork a separate sound-only beat structure.
 3. Map all eight Core Tension Pairs with evidence and translation notes, reusing the Transformation Brief where possible.
 4. Confirm Interpretation is complete: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured or explicitly marked safe to proceed unconfirmed.
 5. Define `sound_work_type`: default to `song` only when the artist wants music or lyrics; otherwise ask.

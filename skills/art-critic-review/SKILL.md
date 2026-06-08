@@ -1,6 +1,6 @@
 ---
 name: artist-os-art-critic-review
-description: Use when Artist OS needs standalone or delegated critic review of a draft Creative Brief or Sound Creative Brief before approval or final Prompt Plan creation. Deepens poetic density, resolves avoidable ambiguity, and strengthens visual or sonic direction without overriding Artist Meaning.
+description: Use when Artist OS needs standalone or delegated review of a draft Creative Brief or Sound Creative Brief before artist approval or final prompt planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
 ---
 
 # Art Critic Review
@@ -13,7 +13,7 @@ Your job is to deepen and revise the draft brief, not to finalize it or replace 
 
 Review only the packet passed by the creating agent: Reference context, Artist Meaning, Source Record, draft brief, open questions, and the relevant medium direction.
 
-Always check for drift: where the brief or medium direction has moved away from the Reference, Artist Meaning, Beat Map or Beat Plan, Visual Dynamics or Sonic Dynamics, Style Direction or Genre Direction, and transformation constraints.
+Always check for drift: where the brief or medium direction has moved away from the Reference, Artist Meaning, Beat Plan, Visual Dynamics or Sonic Dynamics, Style Direction or Genre Direction, and transformation constraints.
 
 ## Inputs
 
@@ -52,8 +52,8 @@ Apply Critical Heuristics in this order:
 8. Ask for explicit approval only when an adaptation materially changes the artist's named style or genre.
 9. Strengthen Active Visual Tensions or Active Sonic Tensions and target engine notes.
 10. For Suno music, review Vocal / Lyric Policy, Lyrics Draft, Arrangement / Form, section tension maps, Style of Music readiness, and Exclude clarity.
-11. Review Series or Sequence Recommendation when the Beat Map has multiple significant Beats or Tension Points.
-12. If a Series or Sequence Plan could benefit from progression, name the progression and trace it to the Beat Map.
+11. Review Series or Sequence Recommendation when the Beat Plan has multiple significant Beats or Tension Points.
+12. If a Series or Sequence Plan could benefit from progression, name the progression and trace it to the Beat Plan.
 13. Remove final ambiguity from the brief.
 14. Produce a revised Creative Brief Document or Sound Creative Brief Document.
 15. Ask for Brief Approval.
@@ -67,7 +67,7 @@ Every review must emit a Review Record JSON object that validates against `schem
 Set Review Record fields as follows:
 
 - `review_role`: `art_critic` for visual briefs, `sound_critic` for sound briefs.
-- `reviewer_execution.execution_mode`: `bounded_sub_agent`.
+- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-art-critic-review`.
 - `artifact_under_review.artifact_type`: `creative_brief` or `sound_creative_brief`.
