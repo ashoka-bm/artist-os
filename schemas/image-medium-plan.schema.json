@@ -39,7 +39,7 @@
     "visual_dynamics": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["target_visual_engine", "active_visual_tensions", "style_visual_conflicts"],
+      "required": ["target_visual_engine", "active_visual_tensions", "minimum_tension_criteria", "style_visual_conflicts"],
       "properties": {
         "target_visual_engine": { "type": "string" },
         "active_visual_tensions": {
@@ -48,6 +48,7 @@
           "maxItems": 8,
           "items": { "$ref": "#/$defs/tension_pair_summary" }
         },
+        "minimum_tension_criteria": { "$ref": "#/$defs/minimum_visual_tension_criteria" },
         "style_visual_conflicts": {
           "type": "array",
           "items": {
@@ -150,17 +151,72 @@
         "translation_notes": { "type": "array", "items": { "type": "string" } }
       }
     },
+    "minimum_visual_tension_criteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "single_image_requirement",
+        "series_requirement",
+        "minimum_active_visual_tensions",
+        "minimum_primary_tension_intensity",
+        "minimum_adjacent_amplitude_shift_count",
+        "minimum_adjacent_tension_shift_count",
+        "reviewer_instruction"
+      ],
+      "properties": {
+        "single_image_requirement": { "type": "string", "minLength": 1 },
+        "series_requirement": { "type": "string", "minLength": 1 },
+        "minimum_active_visual_tensions": { "type": "integer", "minimum": 1 },
+        "minimum_primary_tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimum_adjacent_amplitude_shift_count": { "type": "integer", "minimum": 0 },
+        "minimum_adjacent_tension_shift_count": { "type": "integer", "minimum": 0 },
+        "reviewer_instruction": { "type": "string", "minLength": 1 }
+      }
+    },
     "image_role": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["image_role_id", "beat_id", "role_label", "composition_intent", "emotional_payload", "amplitude_profile"],
+      "required": [
+        "image_role_id",
+        "beat_id",
+        "key_emotional_movement_id",
+        "role_label",
+        "composition_intent",
+        "communication_intent",
+        "expectation_turn_translation",
+        "intended_feeling",
+        "emotional_payload",
+        "tension_profile",
+        "amplitude_profile"
+      ],
       "properties": {
         "image_role_id": { "type": "string", "pattern": "^imgrole_[a-zA-Z0-9_-]+$" },
         "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
         "role_label": { "type": "string" },
-        "composition_intent": { "type": "string" },
-        "emotional_payload": { "type": "string" },
+        "composition_intent": { "type": "string", "minLength": 1 },
+        "communication_intent": { "type": "string", "minLength": 1 },
+        "expectation_turn_translation": { "type": "string", "minLength": 1 },
+        "intended_feeling": { "type": "string", "minLength": 1 },
+        "emotional_payload": { "type": "string", "minLength": 1 },
+        "tension_profile": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/tension_pair_summary" }
+        },
+        "distinction_notes": { "$ref": "#/$defs/distinction_notes" },
         "amplitude_profile": { "$ref": "#/$defs/amplitude_profile" }
+      }
+    },
+    "distinction_notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_previous_role", "composition_shift", "communication_shift", "tension_shift"],
+      "properties": {
+        "from_previous_role": { "type": "string", "minLength": 1 },
+        "composition_shift": { "type": "string", "minLength": 1 },
+        "communication_shift": { "type": "string", "minLength": 1 },
+        "tension_shift": { "type": "string", "minLength": 1 }
       }
     },
     "amplitude_profile": {

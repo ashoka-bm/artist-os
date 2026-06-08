@@ -46,7 +46,15 @@ Before creating the sound-specific Creative Brief, produce:
 
 The Beat Plan is authoritative for story shape. The Sound Medium Plan is authoritative for sound translation decisions: sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, sequence planning, gate statuses, and review requirements. The later Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Its embedded `beats` field is transitional and should only summarize medium-local sound or lyric implications from the shared Beat Plan.
 
+Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. Sound translation should express that feeling through sonic pressure, motion, voice, arrangement, or silence, not merely describe the fact.
+
+Every Beat Plan must define minimum tension criteria. For a single-track or single-section sound plan, require enough internal contrast to create pressure before lyrical explanation. For multi-section or sequence plans, require adjacent sections to shift tension through arrangement, density, proximity, rhythm, silence, vocal presence, or harmonic pressure unless repetition is artist-approved.
+
+Every Beat Plan must identify Key Emotional Movements. For a single track, choose the primary movement to compress into the song's core turn. For multi-section or suite plans, map sections to the key movements that should be staged or expanded.
+
 For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious Suno target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-section, sequence, or lyric-bearing plans still require a bounded Beat Reviewer sub-agent before Music / Sound Critic Review.
+
+When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview: ask one concrete question, include your recommended answer, and wait for the artist's response. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning.
 
 ## Sound Medium Plan Process
 

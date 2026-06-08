@@ -10,10 +10,30 @@
       "beat_id": "beat_threshold_001",
       "beat_role": "threshold",
       "one_move_summary": "A figure remains at the doorway, feeling the pull to cross without crossing.",
+      "builds_toward_key_movement_id": null,
       "before_state": "The figure approaches the threshold.",
       "after_state": "The figure remains suspended at the threshold.",
       "value_shift": "Approach becomes held presence.",
+      "expectation_turn": {
+        "expected_direction": "A lit doorway and a key suggest entry, welcome, or resolution.",
+        "actual_result": "The figure does not enter; the light makes the choice feel more dangerous.",
+        "surprise_function": "The expected symbol of welcome becomes a source of paralysis.",
+        "emotional_counterpoint": "Tenderness turns into threat without losing tenderness."
+      },
+      "intended_feeling": "the ache of being close to release but unable to choose it",
       "emotional_payload": "The force is in the refusal to resolve.",
+      "tension_profile": [
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.86,
+          "emotional_function": "keeps the body frozen while the possibility of crossing stays alive"
+        },
+        {
+          "name": "Control / Surrender",
+          "tension_intensity": 0.72,
+          "emotional_function": "makes the key feel like agency that cannot be used"
+        }
+      ],
       "source_evidence": ["The reference centers on an uncrossed doorway."],
       "must_preserve": ["held motion", "unresolved ending"],
       "pivot_options": [
@@ -43,6 +63,7 @@
     {
       "tension_point_id": "tp_held_motion",
       "summary": "Stillness that feels ready to move.",
+      "intended_feeling": "suspense held in the body without release",
       "emotional_payload": "Suspense without release.",
       "source_evidence": ["The figure is close to action but does not act."],
       "traceability_notes": [
@@ -54,6 +75,34 @@
       ]
     }
   ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_threshold_001",
+      "role": "threshold",
+      "beat_ids": ["beat_threshold_001"],
+      "emotional_shift": "welcome becomes danger without losing tenderness",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_interview",
+          "note": "The artist wanted the unresolved threshold and tender danger to survive compression."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "A single compressed beat should hold strong internal contrast between possible movement and refused action.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 0,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "For single-beat work, adjacent shift is not required, but internal contrast must be visible and reviewable."
+    },
+    "adjacent_beat_shifts": [],
+    "reviewer_instruction": "Block if the beat reads as a factual doorway scene without strong stillness/motion or control/surrender pressure."
+  },
   "arc_summary": {
     "beginning": "Approach.",
     "turn": "The threshold becomes the whole event.",

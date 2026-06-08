@@ -8,6 +8,8 @@ The story layer answers one question:
 What changes, holds, intensifies, breaks, returns, or remains unresolved?
 ```
 
+It must also answer what the audience is meant to feel. A Beat is not complete when it only names an event, object, or idea; it must name the intended feeling or emotional pressure that the medium will express.
+
 Every medium consumes that answer differently. A single image can hold one story beat. A video can unfold a sequence of beats. A song can translate beats into sections, tension movement, lyrics, motif, and arrangement. A text output can rewrite the beats as prose, poetry, dialogue, or narrative structure.
 
 ## Story Layer Position
@@ -60,6 +62,12 @@ A Beat may be:
 - an unresolved pressure.
 
 Each Beat should preserve traceability to Artist Meaning, Reference evidence, Emotional Structure, and transformation constraints. A Beat should not be added only because a medium needs more content.
+
+Each Beat should express a feeling before it expresses a fact. The factual content can be simple, but the mental link should be immediate: a symbol, action, contrast, or sensory condition that makes the intended feeling legible.
+
+Each Beat must include an Expectation Turn: the expected direction, actual result, surprise function, and emotional counterpoint. Even when one emotion builds across multiple Beats, each Beat needs some unexpected result, withholding, reversal, complication, or changed pressure.
+
+Each Beat should also record a tension profile: the active emotional tensions, their 0-1 intensity, and what emotional job each tension performs. A Beat Plan should include minimum tension criteria so reviewers can tell whether the planned contrast is strong enough for the intended feeling.
 
 Artist OS uses `docs/writing/references/writing-beats.SKILL.md` as the high-authority method for journey-shaped beat creation. When the Story Journey is uncertain, create candidate starting beats, let the artist choose, define only that beat, then offer 2-3 candidate next beats. Do not write or lock later beats ahead of the artist's choice unless the artist explicitly asks for an agent-recommended full outline.
 
@@ -143,8 +151,14 @@ The Story Critic reviews:
 
 - whether Artist Meaning remains dominant,
 - whether each Beat has evidence or artist confirmation,
+- whether each Beat names an intended feeling and not only factual content,
+- whether each Beat has a real Expectation Turn,
 - whether the Beat Roles form a coherent shape,
 - whether tension movement is legible without being over-explained,
+- whether the Beat Plan meets its minimum tension criteria,
+- whether Key Emotional Movements identify the major shifts that should survive compression or expansion,
+- whether supporting Beats build toward, complicate, or delay a Key Emotional Movement rather than padding the arc,
+- whether adjacent Beats shift tension profiles enough to produce felt movement,
 - whether unresolved pressure is preserved when it matters,
 - whether the selected Story Mode is too short, too long, or correctly scaled,
 - whether any beat was added only to satisfy a medium format,

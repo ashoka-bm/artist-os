@@ -81,11 +81,14 @@ Required sections:
 - `target_media_type`
 - `artist_emotional_language`
 - `success_criteria`
+- `decision_interview`
 - `contradictions_or_overrides`
 - `confirmation_status`
 - `created_at`
 
 Artist Meaning overrides agent interpretation. Later records should trace meaning-preserving decisions back to this record rather than to the agent's inferred analysis alone.
+
+`decision_interview` persists the early artist participation loop. Each entry stores one question, the agent's recommended answer, the artist's response, the decision area, and whether the recommendation was accepted, revised, rejected, rough-approved, or left unconfirmed.
 
 ### Gate Decision
 
@@ -141,12 +144,18 @@ Required sections:
 - `story_gate_status`
 - `beats`
 - `tension_points`
+- `key_emotional_movements`
+- `tension_movement_plan`
 - `arc_summary`
 - `story_critic_review`
 - `story_approval`
 - `traceability_summary`
 
-Each Beat must do one move. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
+Each Beat must do one move, name `intended_feeling` separately from factual content, include `expectation_turn`, and include a `tension_profile`. `expectation_turn` records the expected direction, actual result, surprise function, and emotional counterpoint. `tension_movement_plan.minimum_tension_criteria` defines the project-local contrast threshold reviewers use to decide whether the plan has enough pressure. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
+
+`key_emotional_movements[]` identifies the major emotional shift points that should survive compression or expansion. Single-image plans usually identify one primary movement; triptychs and longer arcs may identify several.
+
+Beats may optionally include `builds_toward_key_movement_id` when they are supporting Beats that build toward, complicate, or delay a Key Emotional Movement.
 
 ### Image Medium Plan
 
@@ -170,6 +179,10 @@ Required sections:
 - `gates`
 - `review_requirements`
 - `traceability_summary`
+
+Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, and `amplitude_profile`. For triptychs and image series, adjacent roles should also use `distinction_notes` to state composition, communication, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
+
+`visual_dynamics.minimum_tension_criteria` defines the minimum visible contrast for the image plan. For single images, it should name the internal contrast requirement. For series, it should name the required adjacent amplitude and tension shifts.
 
 ### Sound Medium Plan
 
@@ -473,7 +486,7 @@ For triptych or image-series recommendations, each `series_recommendation.sugges
 - `detail_intensity`: minimal to layered
 - `emotional_pressure`: quiet to overwhelming
 
-Use amplitude values to verify that a series changes visual rhythm across image roles. Adjacent images should usually differ on at least two amplitude dimensions unless continuity is intentional and justified in `rationale`.
+Use amplitude values and each role's `tension_profile` to verify that a series changes visual rhythm and emotional pressure across image roles. Adjacent images should usually differ on at least two amplitude dimensions and one active tension dimension unless continuity is intentional and justified in `rationale`.
 
 ## Visual Gates
 
@@ -534,6 +547,8 @@ Each Prompt Variant Plan should include:
 
 The three Prompt Variant Plans must be visually distinct along the Minimalist-to-Maximalist axis. Do not create variants that only change adjectives. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, symbolic layering, representation/abstraction, light/color strategy, texture/finish, negative space, ornament, scale, drama, or focal hierarchy. Each Prompt Variant Plan should preserve the selected Symbology Direction and Style Direction unless the artist explicitly asks to revisit an earlier gate.
 
+Each Prompt Variant Plan must preserve the governing Expectation Turn Translation either in `prompt_text` or in `critique_checklist`, with traceability back to the Beat Plan or Image Medium Plan. This is enforced by Prompt Critic Review rather than a dedicated Prompt Plan field.
+
 Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan and do not require a separate First Slice approval gate.
 
 `schemas/prompt-plan.schema.json` records the Provider-Neutral Image Prompt Plan. It is provider-neutral by design and must not include provider-specific settings, model names, seeds, cost metadata, or output paths.
@@ -555,7 +570,8 @@ Required fields:
 
 - `mode`: `single_image`, `triptych`, or `image_series`
 - `reason`
-- `suggested_images`, each with `amplitude_profile`
+- `suggested_images`, each with `key_emotional_movement_id`, `expectation_turn_translation`, `amplitude_profile`, and a distinct communication role
+- `minimum_tension_criteria`
 - `style_progression`
 - `calibration`
 - `requires_artist_approval`
@@ -565,6 +581,8 @@ If the Reference has multiple significant Beats or Tension Points, include a rea
 Style Progression can appear inside a Series Recommendation, but it becomes executable only after Series Plan approval.
 
 Use `triptych` for a clear three-part emotional transformation. Use `image_series` for extended sequence, motif evolution, or world exploration.
+
+Each suggested image should differ from adjacent images in visual composition, communication intent, and tension profile. A series should not repeat the same emotional claim with only surface style or pose changes unless repetition is intentional and artist-approved.
 
 After Series Plan approval, produce one Series Calibration Image before producing the rest of the series. Use artist feedback on that image to lock Style Direction and Target Visual Engine.
 

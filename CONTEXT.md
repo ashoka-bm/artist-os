@@ -32,6 +32,22 @@ _Avoid_: Reference, asset record
 The artist's stated interpretation of what a Reference means and what must survive transformation.
 _Avoid_: Meaning, intent, vibe
 
+**Emotional Primacy**:
+The rule that creating the intended feeling is the governing goal of an Artist OS transformation. Beat Plans, tension profiles, Symbology Direction, Style Direction, Medium Plans, Prompt Plans, and reviews exist to support the intended feeling while preserving Artist Meaning.
+_Avoid_: Treating beats, style, composition, or prompt detail as successful when they do not create the intended emotion
+
+**Intended Feeling**:
+The audience feeling the transformation is trying to create as the emotional expression of Artist Meaning. A Beat Plan serves Intended Feeling; it is not successful merely because it has interesting structure.
+_Avoid_: Mood label, style mood, factual theme
+
+**Minimum Tension Criteria**:
+The project-local reviewer threshold that defines how much contrast or movement a work needs to create its Intended Feeling. Defaults can seed the criteria, but the approved criteria belong to the specific work and can be raised, lowered, or redirected when Artist Meaning requires it.
+_Avoid_: Universal taste score, global quality number, tension for its own sake
+
+**Active Absence**:
+The use of absence, omission, silence, negative space, missing figures, withheld resolution, or unseen causes as an active carrier of tension and Intended Feeling. Active Absence is not empty content; it is a deliberate pressure source.
+_Avoid_: Treating minimal content as automatically weak, filling every gap with explanation
+
 **Artist Meaning Record**:
 The first-class structured record created by the Meaning Interview before agent interpretation. It preserves Artist Meaning independently so later Transformation Briefs, Beat Plans, Medium Plans, Prompt Plans, and reviews can trace back to the artist's own authority.
 _Avoid_: Burying Artist Meaning only inside a Creative Brief or Transformation Brief
@@ -39,6 +55,14 @@ _Avoid_: Burying Artist Meaning only inside a Creative Brief or Transformation B
 **Meaning Interview**:
 The short artist-facing interview that captures Artist Meaning and transformation constraints before analysis and planning.
 _Avoid_: Grill me, interrogation
+
+**Decision Interview**:
+A bounded, one-question-at-a-time clarification sequence inside the Meaning Interview and major gates. Each question includes the agent's recommended answer, then waits for the artist's response before proceeding. It flushes out meaning, emotional target, must-preserve constraints, avoid constraints, medium direction, and success criteria before analysis hardens.
+_Avoid_: Silent agent defaults, long surveys, generic brainstorming
+
+**Recommended Answer**:
+The agent's concrete proposed answer to a Decision Interview question, based on the Reference, Artist Meaning so far, and product rules. The artist can accept, revise, or reject it.
+_Avoid_: Neutral multiple-choice menus when the agent has enough context to recommend
 
 **Creative Brief**:
 The approved medium-specific creative handoff before prompt planning. It compiles the relevant Artist Meaning, Transformation Brief, Beat Plan, and Medium Plan after critic review and Brief Approval.
@@ -124,6 +148,30 @@ _Avoid_: Abandoning the style without review
 An intentional change in Style Direction across images in a Series Plan, such as realism shifting toward cartoon, fantasy, abstraction, or another visual language.
 _Avoid_: Inconsistent series style by accident
 
+**Emotional Movement**:
+The ordered change in Intended Feeling across Beats, sections, images, or outputs. In a Series Plan, Emotional Movement is the primary optimization; visual variety, amplitude shifts, composition changes, and style progression serve the emotional movement.
+_Avoid_: Visual variety without a changed emotional pressure
+
+**Arc Scale**:
+The rule that the same underlying Emotional Movement can be compressed or expanded depending on output length. A single image usually compresses one key movement such as a climax, threshold, or residue. A triptych stages a few key movements. A longer arc can let one emotion build across several Beats before a major change, while still requiring each Beat to create some meaningful change.
+_Avoid_: Forcing every micro-beat in a long arc to change emotion immediately, or letting long arcs repeat without movement
+
+**Key Emotional Movement**:
+A major emotional shift point in an arc. Key Emotional Movements are the emotional movements that must survive compression or expansion: a single image may compress one key movement, a triptych may stage three key movements, and a longer arc may organize many smaller Beats around several key movements.
+_Avoid_: Treating every Beat as equally structurally important, mirroring every Beat into a Key Emotional Movement, losing the major emotional shifts when compressing or expanding the work
+
+**Substantial Beat Difference**:
+The rule that adjacent Beats or image roles should differ enough to create real movement at the current Arc Scale. In short arcs and image series, adjacent Beats should differ on at least three meaningful axes, with at least one difference in Intended Feeling, active tension profile, or communication intent. In longer arcs, one larger emotion may build across multiple Beats, but each Beat still needs an Expectation Turn, and key movements carry the major emotional shifts. Composition, amplitude, symbol, light/color, density, motion, and spatial openness can support the difference, but surface variation alone is not enough.
+_Avoid_: Different-looking beats that create the same emotional pressure in the same way, or long arcs where beats repeat without expectation/result movement
+
+**Expectation Turn**:
+The required beat-level change where a Beat sets, bends, frustrates, reverses, withholds, or complicates an expectation. Even when one emotion builds across several Beats, each Beat should create some unexpected result so the tension between expectation and outcome sharpens the Intended Feeling.
+_Avoid_: Beats that merely continue, restate, or decorate the previous emotional state
+
+**Expectation Turn Translation**:
+The medium-specific expression of a Beat's Expectation Turn. The Beat Plan owns the expected direction, actual result, surprise function, and emotional counterpoint; the Medium Plan owns how that turn becomes visible, sonic, textual, or otherwise perceivable.
+_Avoid_: Duplicating the Beat's Expectation Turn without explaining how the medium expresses it
+
 **Style Interview**:
 A short narrowing interview that starts by asking whether the artist has a specific visual vision or wants to explore what art style to use. It helps the artist choose Style Direction without needing to know style taxonomy.
 _Avoid_: Long category survey or fixed menu of styles
@@ -163,6 +211,10 @@ _Avoid_: Showing the full image prompt by default or treating style samples as s
 **Symbology Direction**:
 What the image shows as the core symbolic representation of Artist Meaning, such as a figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction.
 _Avoid_: Choosing art style before deciding what the image represents
+
+**Active Absence Symbology**:
+A Symbology Direction where absence itself is the symbolic representation: an omitted figure, empty room, untouched object, silence, negative space, withheld event, missing cause, or unresolved gap carries the work's Intended Feeling.
+_Avoid_: Filling in missing subjects just because the medium can show them
 
 **Symbology Gate**:
 The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented and whether the work should become a single image, emotional arc, or multi-image presentation.

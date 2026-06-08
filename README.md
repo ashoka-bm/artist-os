@@ -1,6 +1,6 @@
 # Artist OS
 
-Artist OS is a Codex skill bundle for transforming artist-provided text into structured creative prompt plans while preserving the artist's meaning, emotional arc, and provenance.
+Artist OS is a Codex skill bundle for transforming artist-provided text into structured creative prompt plans while preserving the artist's meaning, intended feeling, emotional arc, and provenance.
 
 The current dry-run workflows are:
 
@@ -118,7 +118,9 @@ bin/                         Local install and workspace helpers
 
 ## Architecture Direction
 
-Artist OS now has a shared story layer for the implemented image and Suno dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed beat; a video, song, text piece, or mixed-media package can unfold more beats over time.
+Artist OS now has a shared story layer for the implemented image and Suno dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; a triptych or series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
+
+The governing rule is emotional primacy. Artist OS should grab attention, trigger a strong emotion, and forge a simple mental link. Plans must express a feeling rather than only communicate a fact, so Beat Plans, Medium Plans, and briefs now track Intended Feeling, Key Emotional Movements, Expectation Turns, and Minimum Tension Criteria.
 
 The current dry-run slices remain text-to-image and text-to-Suno. The planned cross-medium architecture lives in:
 
@@ -128,7 +130,7 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The first shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image and Sound Medium Plans, Review Records, Gate Decisions, Prompt Branch Sets, and Output Records. The existing image and Suno dry-run slices translate the shared Beat Plan through image-specific and sound-specific Medium Plans before producing their final brief records.
+The first shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image and Sound Medium Plans, Review Records, Gate Decisions, Prompt Branch Sets, and Output Records. The existing image and Suno dry-run slices translate the shared Beat Plan through image-specific and sound-specific Medium Plans before producing their final brief records. The current plan is to harden emotional movement and tension checks across sound, prompt plans, branch sets, and reviewer packets before adding a new medium branch or provider adapter.
 
 ## Local State And Privacy
 

@@ -58,8 +58,14 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(image_plan["artist_meaning_id"], beat_plan["artist_meaning_id"])
         self.assertEqual(image_plan["transformation_brief_id"], beat_plan["transformation_brief_id"])
         self.assertEqual(image_plan["target_media_type"], "image")
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        for role in image_plan["image_roles"]:
+            self.assertIn(role["key_emotional_movement_id"], key_movement_ids)
 
     def test_image_medium_plan_to_image_creative_brief(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
         image_plan = load("tests/fixtures/text-to-image/image-medium-plan.json")
         creative_brief = load("tests/fixtures/text-to-image/creative-brief.json")
 
@@ -70,6 +76,28 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertIn("beat_plan_id", creative_brief)
         self.assertIn("transformation_brief_id", creative_brief)
         self.assertGreaterEqual(len(creative_brief["beats"]), 1)
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        for suggested_image in creative_brief["series_recommendation"]["suggested_images"]:
+            self.assertIn(suggested_image["key_emotional_movement_id"], key_movement_ids)
+
+    def test_beat_key_movement_references_are_valid(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+
+        beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+
+        for movement in beat_plan["key_emotional_movements"]:
+            for beat_id in movement["beat_ids"]:
+                self.assertIn(beat_id, beat_ids)
+
+        for beat in beat_plan["beats"]:
+            builds_toward = beat.get("builds_toward_key_movement_id")
+            if builds_toward is not None:
+                self.assertIn(builds_toward, key_movement_ids)
 
     def test_beat_plan_to_sound_medium_plan(self) -> None:
         beat_plan = load("tests/fixtures/story/beat-plan.json")

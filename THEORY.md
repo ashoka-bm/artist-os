@@ -2,6 +2,20 @@
 
 Artist Generation treats an artwork as layered evidence. Artist OS should not turn a Reference into a prompt directly. It should first identify what the Reference is, what it does formally, what it seems to feel like, what changes inside it, and what it means to the artist.
 
+## Core Algorithm
+
+Every transformation should satisfy this algorithm:
+
+```text
+grab attention
+trigger a strong emotion
+forge a simple mental link
+```
+
+The output should express a feeling, not explain a fact. If a plan cannot name the feeling it is trying to make the audience experience, it is not ready for prompt planning.
+
+Every Beat, Tension Point, image role, Prompt Variant Plan, and Generated Work must target at least one clear emotion or emotional pressure. The emotion can be quiet, conflicted, unresolved, or indirect, but it cannot be absent. Facts, plot points, symbols, objects, style references, and genre choices are useful only when they help create that felt response.
+
 ## Layer 1: Reference
 
 The Reference is the user-provided material: text, image, video, audio, or mixed media.
@@ -18,6 +32,10 @@ Record:
 ## Layer 2: Artist Meaning
 
 Artist Meaning is the artist's stated interpretation of what a Reference means and what must survive transformation. Artist Meaning has final authority over agent interpretation.
+
+Capture Artist Meaning through a bounded Decision Interview. Ask one concrete question at a time, provide the agent's recommended answer, and wait for the artist to accept, revise, reject, rough-approve, or leave it unconfirmed. The purpose is not to interrogate the artist; it is to resolve the few decisions that would otherwise become silent agent defaults.
+
+At minimum, resolve what the work means, the intended feeling, what must survive, what must be avoided, the target medium or story shape, and success criteria before analysis hardens. If the artist explicitly wants speed, mark unresolved decisions as rough-approved or unconfirmed instead of pretending they were answered.
 
 ## Layer 3: Formal Analysis
 
@@ -104,6 +122,8 @@ Each Tension Pair records:
 
 Emotional Qualities capture freeform artist language that does not fit the core set.
 
+For each Beat or Tension Point, name the intended audience feeling separately from the factual content. "A locked door" is content; "being close to something forbidden but unable to enter" is the feeling.
+
 ## Layer 5: Visual Dynamics
 
 Visual Dynamics names the formal forces that make a visual work active, coherent, tense, immersive, unstable, or memorable.
@@ -148,6 +168,18 @@ Each suggested image gets:
 - `emotional_pressure`: 0 = quiet/low pressure, 1 = overwhelming/high pressure.
 
 Across a series, adjacent images should usually change amplitude on at least two dimensions unless continuity is intentional. Tie amplitude changes to the Beat Map or Emotional Arc: intimate pressure can move closer, expansive consequence can move wider, rupture can increase motion, and aftermath can reduce density or motion while keeping pressure high.
+
+For series work, also create a per-image tension profile for the active emotional and visual tensions. Adjacent images should not carry the same tension shape unless repetition is the point and is explicitly traced to Artist Meaning. For example, if one image carries high attraction and high threat, the next might hold low attraction and high threat, or high attraction and low threat, so the series produces a felt shift rather than repeating the same charge.
+
+### Minimum Tension Criteria
+
+Every Beat Plan and Medium Plan must define minimum tension criteria before prompt planning. These criteria are not universal taste scores; they are project-local thresholds that tell reviewers how much contrast or movement the work needs to satisfy Artist Meaning.
+
+For a single image, the criteria should require enough internal contrast that the image creates pressure without needing explanation. Default when the artist has not specified otherwise: at least two active tensions, with one primary emotional or visual tension at `0.7` or higher.
+
+For a triptych or image series, the criteria should require movement between adjacent images. Default when the artist has not specified otherwise: adjacent images shift at least two amplitude dimensions and at least one active emotional or visual tension, while changing composition and communication intent.
+
+Reviewers should block when an artifact falls below its own minimum tension criteria unless the artist explicitly approves low-contrast repetition as the point.
 
 ## Layer 6: Style Direction
 
@@ -235,7 +267,10 @@ Each Beat records:
 - after state,
 - what changed,
 - value shift,
+- expectation turn,
+- intended feeling,
 - emotional payload,
+- tension profile,
 - source evidence,
 - user confirmation.
 
@@ -254,6 +289,8 @@ Use a triptych when the Beat Map has a clear three-part emotional structure, suc
 When the Reference warrants it, a Series Recommendation may propose Style Progression, where the visual language changes across images to express emotional movement. Style Progression must be intentional and trace back to the Beat Map.
 
 Series Recommendation must also include the internal Series Amplitude Plan for each suggested image. Use it to verify that image roles move across visual spectra such as close/wide, sparse/dense, still/active, enclosed/open, minimal/detailed, and quiet/pressurized. If every suggested image has similar amplitude values, revise the series unless sameness is intentional and traced to the Emotional Arc.
+
+Each image role in a triptych or series must communicate a different emotional claim, not merely show the same subject in a different pose. Vary composition, scale, focal hierarchy, spatial relationship, symbolic action, color/light logic, density, and active tension profile as needed so each frame changes what the audience feels and understands. Adjacent roles must state how they differ from the previous role in both visual composition and emotional communication.
 
 Do not create multiple image prompt plans by default. A Series Plan requires artist approval, and Style Progression becomes executable only after that approval.
 

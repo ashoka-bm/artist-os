@@ -36,6 +36,15 @@
         "translation_notes": ["Build a clear inside/outside depth axis through the doorway."]
       }
     ],
+    "minimum_tension_criteria": {
+      "single_image_requirement": "The image must hold at least two visible tensions, with one primary tension at 0.7 or higher, so the viewer feels pressure before reading details.",
+      "series_requirement": "Adjacent series images must shift composition, communication intent, and tension profile rather than repeating the same emotional claim.",
+      "minimum_active_visual_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_amplitude_shift_count": 2,
+      "minimum_adjacent_tension_shift_count": 1,
+      "reviewer_instruction": "Block if the image reads as a factual doorway scene without visible contrast between stillness/motion, presence/absence, light/dark, or flat/deep space."
+    },
     "style_visual_conflicts": [
       {
         "conflict": "Photoreal style could over-literalize the room and reduce the text's opacity.",
@@ -48,9 +57,31 @@
     {
       "image_role_id": "imgrole_threshold_001",
       "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
       "role_label": "threshold image",
       "composition_intent": "Hold the figure at the edge of the lit doorway without resolving entry or departure.",
+      "communication_intent": "Make the audience understand that nearness has become a trap rather than a solution.",
+      "expectation_turn_translation": "The lit doorway appears to promise welcome, but the figure's frozen stance and the key's tiny scale make the light feel dangerous instead of resolving.",
+      "intended_feeling": "the ache of being close to release but unable to choose it",
       "emotional_payload": "Approach becomes held presence.",
+      "tension_profile": [
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.85,
+          "translation_notes": ["The figure is physically still, but the doorway implies imminent motion."]
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.75,
+          "translation_notes": ["The lit doorway suggests someone or something missing beyond the frame."]
+        }
+      ],
+      "distinction_notes": {
+        "from_previous_role": "opening role; no previous image role",
+        "composition_shift": "single compressed threshold composition",
+        "communication_shift": "establishes unresolved nearness as the whole image claim",
+        "tension_shift": "holds high stillness/motion pressure without release"
+      },
       "amplitude_profile": {
         "framing_distance": 0.35,
         "subject_scale": 0.55,

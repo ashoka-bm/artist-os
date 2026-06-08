@@ -39,13 +39,13 @@ Complete when the artist chooses a target road or explicitly asks Artist OS to r
 
 Confirms what the Reference means to the artist and what must survive transformation.
 
-Complete when Artist Meaning, must-preserve details, may-transform details, avoid list, and success criteria are captured or explicitly marked safe to proceed unconfirmed.
+Complete when Artist Meaning, must-preserve details, may-transform details, avoid list, intended feeling, target medium/story-shape direction, and success criteria are captured through the Decision Interview or explicitly marked safe to proceed unconfirmed.
 
 ### Interpretation Gate
 
 Confirms the cross-medium interpretation before Story or Medium planning hardens.
 
-Complete when formal observations, Emotional Structure, Core Tension Pairs, Poetic Density notes, and transformation constraints are coherent enough to proceed.
+Complete when formal observations, Emotional Structure, Core Tension Pairs, Poetic Density notes, transformation constraints, and the intended audience feeling are coherent enough to proceed.
 
 ### Story Gate
 
@@ -53,11 +53,15 @@ Chooses the Story Mode: one compressed beat, beat pair, triptych, sequence, scen
 
 Complete when the artist selects, combines, revises, rejects, or explicitly allows an unconfirmed Story Mode to proceed.
 
+When multiple Story Modes are plausible, ask one direct Decision Interview question with a recommended Story Mode before drafting the Beat Plan. Do not silently choose between single image, emotional arc, and series when more than one would preserve Artist Meaning.
+
 ### Story Approval Gate
 
 Approves the Beat Plan before medium translation.
 
-Complete when Story Mode, Beat Roles, tension movement, symbolic progression, and known open questions are accepted or explicitly waived.
+Complete when Story Mode, Beat Roles, intended feeling, tension movement, symbolic progression, and known open questions are accepted or explicitly waived.
+
+The Beat Plan must include minimum tension criteria before Story Approval. These criteria define the minimum active tensions and adjacent-beat movement required for the work to create enough contrast.
 
 ### Medium Gate
 
@@ -72,6 +76,8 @@ Examples:
 - mixed media: Scope, Medium Selection, Role Assignment, Cross-Media Continuity, Production Order.
 
 Complete when the medium-specific gates required for that output are selected, revised, rejected, or explicitly allowed to proceed unconfirmed.
+
+At medium gates, present the strongest recommendation first, then ask for artist confirmation or correction. Avoid broad menus unless the artist asks to explore.
 
 ### Prompt Lock Gate
 
@@ -156,11 +162,15 @@ Boundary: Story Critic owns meaning preservation, scale, arc, and symbolic progr
 
 Drift check: compare the Beat Plan against the Reference, Artist Meaning, Transformation Brief, Emotional Structure, and must-preserve constraints.
 
+Block when Beats name only facts, events, or symbols without an intended feeling, when a Beat lacks a real Expectation Turn, when the Beat Plan does not define minimum tension criteria, when a Beat falls below the required primary tension intensity, or when adjacent Beats in a sequence repeat the same tension profile without an artist-approved reason.
+
 ### Art Critic
 
 Checks visual translation: Symbology Direction, Style Direction, Visual Dynamics, composition, image-role distinction, visual series coherence, and whether visual choices preserve Artist Meaning.
 
 Drift check: compare visual choices against Artist Meaning, Beat Plan, Symbology Direction, Style Direction, Visual Dynamics, and Reference evidence. Flag style drift especially when style starts replacing meaning.
+
+Block when the Symbology Gate was skipped without explicit permission, when the image plan expresses information but no clear feeling, when image roles do not translate the governing Expectation Turn, when the visual plan falls below its minimum tension criteria, or when a series repeats the same composition, communication intent, or tension profile across adjacent image roles without an artist-approved reason.
 
 ### Video Critic
 
@@ -195,6 +205,8 @@ Drift check: compare each medium's role against Artist Meaning, Beat Plan, cross
 Checks provider-neutral prompt quality, traceability, variant distinctness, missing constraints, medium readiness, platform readiness, and generation risks.
 
 Drift check: compare prompt language against Artist Meaning, Beat Plan, Medium Plan, review decisions, and provider boundary constraints. Flag prompt drift when fluent prompt wording adds unsupported symbols, style, plot, lyrics, genre, camera logic, or emotional claims.
+
+Block when a prompt can render a factual scene but does not direct the emotional effect, when it drops the approved Expectation Turn Translation, when it drops the approved minimum tension criteria, or when series prompts are visually different only by surface adjectives instead of composition, symbolic action, communication intent, and tension profile.
 
 ### Output Critic
 

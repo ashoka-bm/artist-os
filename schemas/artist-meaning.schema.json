@@ -16,6 +16,7 @@
     "target_media_type",
     "artist_emotional_language",
     "success_criteria",
+    "decision_interview",
     "contradictions_or_overrides",
     "confirmation_status",
     "created_at"
@@ -35,6 +36,44 @@
     },
     "artist_emotional_language": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "success_criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "decision_interview": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decision_area",
+          "question",
+          "recommended_answer",
+          "artist_response",
+          "status"
+        ],
+        "properties": {
+          "decision_area": {
+            "type": "string",
+            "enum": [
+              "meaning",
+              "intended_feeling",
+              "must_preserve",
+              "avoid",
+              "target_medium",
+              "story_shape",
+              "style_direction",
+              "success_criteria",
+              "other"
+            ]
+          },
+          "question": { "type": "string", "minLength": 1 },
+          "recommended_answer": { "type": "string", "minLength": 1 },
+          "artist_response": { "type": "string", "minLength": 1 },
+          "status": {
+            "type": "string",
+            "enum": ["accepted", "revised", "rejected", "rough_approved", "unconfirmed"]
+          }
+        }
+      }
+    },
     "contradictions_or_overrides": {
       "type": "array",
       "items": {

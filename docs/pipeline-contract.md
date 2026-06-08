@@ -56,6 +56,8 @@ No step advances unless its output validates against the declared schema. Review
 - Gate: Meaning Confirmation Gate.
 - Next: `story.transformation_brief`.
 
+The Meaning Interview uses a bounded Decision Interview: one question at a time, each with the agent's recommended answer, persisted in `decision_interview`. Do not advance to transformation brief while meaning, intended feeling, must-preserve constraints, avoid constraints, medium/story-shape direction, or success criteria are silently unresolved.
+
 ### `gate.decision`
 
 - Input: current stage record, options presented, and artist response.

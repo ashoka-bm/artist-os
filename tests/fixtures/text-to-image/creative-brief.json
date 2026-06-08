@@ -351,8 +351,30 @@
       {
         "image_role": "opening image",
         "beat_or_tension_point": "erasure to invitation",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "communication_intent": "Make absence feel like an invitation that may be unsafe to trust.",
+        "expectation_turn_translation": "The lit doorway appears to promise welcome, but the empty room makes the welcome feel unreliable.",
+        "intended_feeling": "wounded hope in a place that almost remembers you",
         "emotional_payload": "hope that hurts because it may not be trustworthy",
         "target_visual_engine": "empty room, lit doorway, cool shadows, sparse domestic evidence",
+        "tension_profile": [
+          {
+            "name": "Presence / Absence",
+            "tension_intensity": 0.82,
+            "translation_notes": ["The empty room dominates, while the doorway implies a waiting presence."]
+          },
+          {
+            "name": "Safety / Threat",
+            "tension_intensity": 0.42,
+            "translation_notes": ["The lamp offers safety, but the emptiness keeps trust uncertain."]
+          }
+        ],
+        "series_role_distinction": {
+          "role_in_series": "opens the triptych with low pressure and wide absence",
+          "composition_difference": "widest, sparsest frame; the body is absent and the room carries the image",
+          "communication_difference": "communicates invitation through absence before the figure's choice appears",
+          "tension_difference": "high presence/absence, lower safety/threat than the threshold image"
+        },
         "amplitude_profile": {
           "framing_distance": 0.72,
           "subject_scale": 0.28,
@@ -367,8 +389,30 @@
       {
         "image_role": "threshold image",
         "beat_or_tension_point": "agency to paralysis",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "communication_intent": "Make choice feel physically possible but emotionally impossible.",
+        "expectation_turn_translation": "The visible key suggests agency, but the figure's stillness turns agency into paralysis.",
+        "intended_feeling": "the pain of having a choice that cannot be safely made",
         "emotional_payload": "the pain of having a choice that cannot be safely made",
         "target_visual_engine": "still figure at the edge of light, key visible, rain haze outside",
+        "tension_profile": [
+          {
+            "name": "Control / Surrender",
+            "tension_intensity": 0.88,
+            "translation_notes": ["The key gives agency, while the frozen stance shows surrender to fear."]
+          },
+          {
+            "name": "Safety / Threat",
+            "tension_intensity": 0.78,
+            "translation_notes": ["The lit doorway looks safe and threatening at the same time."]
+          }
+        ],
+        "series_role_distinction": {
+          "role_in_series": "central pressure point and calibration candidate",
+          "composition_difference": "closer and more compressed than the opening; the figure and key become focal",
+          "communication_difference": "turns invitation into paralysis by making the choice visible",
+          "tension_difference": "raises control/surrender and safety/threat pressure sharply from the opening"
+        },
         "amplitude_profile": {
           "framing_distance": 0.36,
           "subject_scale": 0.62,
@@ -383,8 +427,30 @@
       {
         "image_role": "resonance image",
         "beat_or_tension_point": "presence and absence remain unresolved",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "communication_intent": "Make the unresolved absence feel active after the body leaves the frame.",
+        "expectation_turn_translation": "The viewer expects resolution after the threshold, but the missing body and untouched objects withhold the answer.",
+        "intended_feeling": "absence becoming active and almost embodied",
         "emotional_payload": "absence becoming active and almost embodied",
         "target_visual_engine": "untouched chairs and lit threshold without showing whether she enters",
+        "tension_profile": [
+          {
+            "name": "Presence / Absence",
+            "tension_intensity": 0.9,
+            "translation_notes": ["The missing figure becomes more present through untouched objects."]
+          },
+          {
+            "name": "Legibility / Opacity",
+            "tension_intensity": 0.76,
+            "translation_notes": ["The image refuses to reveal whether entry or departure happened."]
+          }
+        ],
+        "series_role_distinction": {
+          "role_in_series": "closing residue that refuses resolution",
+          "composition_difference": "pulls away from the body again but keeps more pressure than the opening",
+          "communication_difference": "communicates aftermath without confirming the decision",
+          "tension_difference": "drops control/surrender while raising presence/absence and opacity"
+        },
         "amplitude_profile": {
           "framing_distance": 0.56,
           "subject_scale": 0.18,
@@ -397,6 +463,15 @@
         }
       }
     ],
+    "minimum_tension_criteria": {
+      "single_image_requirement": "A single image must keep at least two active tensions visible, with one primary tension at 0.7 or higher.",
+      "series_requirement": "Each adjacent triptych image must shift at least two amplitude dimensions and at least one active tension, while changing what the image communicates.",
+      "minimum_active_tensions_per_image": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_amplitude_shift_count": 2,
+      "minimum_adjacent_tension_shift_count": 1,
+      "waiver_rule": "Repetition is allowed only if the artist explicitly approves repetition as the emotional point."
+    },
     "style_progression": {
       "proposed": true,
       "progression_summary": "Move from restrained cinematic realism toward slightly more symbolic and dreamlike composition across the triptych.",

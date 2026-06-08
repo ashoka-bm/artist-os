@@ -11,6 +11,7 @@ artist-os-library/
 
 # Local build-process notes; not part of the public skill bundle.
 PROGRESS.md
+!docs/progress.md
 docs/IMPLEMENTATION_PLAN.md
 docs/gstack-repo-map.md
 docs/superpowers/

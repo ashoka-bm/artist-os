@@ -13,6 +13,8 @@
     "story_gate_status",
     "beats",
     "tension_points",
+    "key_emotional_movements",
+    "tension_movement_plan",
     "arc_summary",
     "story_critic_review",
     "story_approval",
@@ -34,6 +36,12 @@
       "type": "array",
       "items": { "$ref": "#/$defs/tension_point_record" }
     },
+    "key_emotional_movements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/key_emotional_movement" }
+    },
+    "tension_movement_plan": { "$ref": "#/$defs/tension_movement_plan" },
     "arc_summary": {
       "type": "object",
       "additionalProperties": false,
@@ -95,7 +103,10 @@
         "before_state",
         "after_state",
         "value_shift",
+        "expectation_turn",
+        "intended_feeling",
         "emotional_payload",
+        "tension_profile",
         "source_evidence",
         "must_preserve",
         "pivot_options",
@@ -125,10 +136,18 @@
           ]
         },
         "one_move_summary": { "type": "string" },
+        "builds_toward_key_movement_id": { "type": ["string", "null"], "pattern": "^kem_[a-zA-Z0-9_-]+$" },
         "before_state": { "type": "string" },
         "after_state": { "type": "string" },
         "value_shift": { "type": "string" },
-        "emotional_payload": { "type": "string" },
+        "expectation_turn": { "$ref": "#/$defs/expectation_turn" },
+        "intended_feeling": { "type": "string", "minLength": 1 },
+        "emotional_payload": { "type": "string", "minLength": 1 },
+        "tension_profile": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/tension_profile_entry" }
+        },
         "source_evidence": { "type": "array", "items": { "type": "string" } },
         "must_preserve": { "type": "array", "items": { "type": "string" } },
         "pivot_options": {
@@ -166,17 +185,160 @@
     "tension_point_record": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["tension_point_id", "summary", "emotional_payload", "source_evidence", "traceability_notes"],
+      "required": ["tension_point_id", "summary", "intended_feeling", "emotional_payload", "source_evidence", "traceability_notes"],
       "properties": {
         "tension_point_id": { "type": "string", "pattern": "^tp_[a-zA-Z0-9_-]+$" },
         "summary": { "type": "string" },
-        "emotional_payload": { "type": "string" },
+        "intended_feeling": { "type": "string", "minLength": 1 },
+        "emotional_payload": { "type": "string", "minLength": 1 },
         "source_evidence": { "type": "array", "items": { "type": "string" } },
         "traceability_notes": {
           "type": "array",
           "minItems": 1,
           "items": { "$ref": "#/$defs/traceability_note" }
         }
+      }
+    },
+    "tension_movement_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contrast_goal",
+        "minimum_tension_criteria",
+        "adjacent_beat_shifts",
+        "reviewer_instruction"
+      ],
+      "properties": {
+        "contrast_goal": { "type": "string", "minLength": 1 },
+        "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
+        "adjacent_beat_shifts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjacent_beat_shift" }
+        },
+        "reviewer_instruction": { "type": "string", "minLength": 1 }
+      }
+    },
+    "key_emotional_movement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "movement_id",
+        "role",
+        "beat_ids",
+        "emotional_shift",
+        "compression_priority",
+        "traceability_notes"
+      ],
+      "properties": {
+        "movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "role": {
+          "type": "string",
+          "enum": [
+            "opening_pressure",
+            "inciting_shift",
+            "threshold",
+            "midpoint_turn",
+            "rupture",
+            "revelation",
+            "penultimate_climax",
+            "climax",
+            "aftermath",
+            "residue",
+            "unresolved_echo"
+          ]
+        },
+        "beat_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" }
+        },
+        "emotional_shift": { "type": "string", "minLength": 1 },
+        "compression_priority": {
+          "type": "string",
+          "enum": ["primary", "secondary", "supporting"]
+        },
+        "traceability_notes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/traceability_note" }
+        }
+      }
+    },
+    "expectation_turn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_direction",
+        "actual_result",
+        "surprise_function",
+        "emotional_counterpoint"
+      ],
+      "properties": {
+        "expected_direction": { "type": "string", "minLength": 1 },
+        "actual_result": { "type": "string", "minLength": 1 },
+        "surprise_function": { "type": "string", "minLength": 1 },
+        "emotional_counterpoint": { "type": "string", "minLength": 1 }
+      }
+    },
+    "minimum_tension_criteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_active_tensions",
+        "minimum_primary_tension_intensity",
+        "minimum_adjacent_shift_count",
+        "minimum_adjacent_shift_delta",
+        "waiver_rule"
+      ],
+      "properties": {
+        "minimum_active_tensions": { "type": "integer", "minimum": 1 },
+        "minimum_primary_tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimum_adjacent_shift_count": { "type": "integer", "minimum": 0 },
+        "minimum_adjacent_shift_delta": { "type": "number", "minimum": 0, "maximum": 1 },
+        "waiver_rule": { "type": "string", "minLength": 1 }
+      }
+    },
+    "adjacent_beat_shift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_beat_id",
+        "to_beat_id",
+        "shift_summary",
+        "shifted_tensions",
+        "meets_minimum"
+      ],
+      "properties": {
+        "from_beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "to_beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "shift_summary": { "type": "string", "minLength": 1 },
+        "shifted_tensions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/tension_shift_entry" }
+        },
+        "meets_minimum": { "type": "boolean" }
+      }
+    },
+    "tension_shift_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "from_intensity", "to_intensity", "delta", "direction"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "from_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "to_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "delta": { "type": "number", "minimum": 0, "maximum": 1 },
+        "direction": { "type": "string", "enum": ["increases", "decreases", "holds", "inverts"] }
+      }
+    },
+    "tension_profile_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "tension_intensity", "emotional_function"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "emotional_function": { "type": "string", "minLength": 1 }
       }
     },
     "traceability_note": {
