@@ -27,7 +27,7 @@ Read:
 
 ## Critical Heuristics
 
-For canonical definitions, read `THEORY.md`. For Suno music work, also read `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md`. Your job is to apply the theory more deeply, not to redefine it.
+For canonical definitions, read `THEORY.md`. For Suno music work, also read `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md`. For the blocking rules you must enforce — including Shot Design, the governing Expectation Turn, and the plan's minimum tension criteria — read the Art Critic and Sound Critic sections of `docs/gates-and-reviews.md` and apply them. Those rules live in the contract so every reviewer holds the same line; your job is to apply the theory and those rules more deeply, not to redefine them.
 
 Apply Critical Heuristics in this order:
 
@@ -79,7 +79,7 @@ Set Review Record fields as follows:
 - `recommended_revision`: the smallest useful revision before approval.
 - `approval_status`: `approve`, `revise`, or `block`.
 
-Use `block` when the brief violates Artist Meaning, invents unsupported meaning, breaks the Beat Plan, ignores a required Medium Plan decision, or contains harmful unapproved drift. Only the artist can waive a block.
+Use `block` when the brief violates Artist Meaning, invents unsupported meaning, breaks the Beat Plan, ignores a required Medium Plan decision such as Shot Design, falls below the plan's minimum tension criteria, or otherwise meets an Art Critic or Sound Critic blocking condition in `docs/gates-and-reviews.md`, as well as for harmful unapproved drift. Only the artist can waive a block.
 
 ## Output
 

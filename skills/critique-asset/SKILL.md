@@ -31,6 +31,8 @@ Read:
 
 ## Review Criteria
 
+For canonical definitions, read `THEORY.md` (and `docs/text-to-sound/THEORY.md` for Suno work). For the blocking rules you must enforce — including the approved Shot Design, the Expectation Turn Translation, and the approved minimum tension criteria — read the Prompt Critic and Output Critic sections of `docs/gates-and-reviews.md` and apply them. Those rules live in the contract so every reviewer holds the same line.
+
 Evaluate:
 
 - preserved Artist Meaning,
@@ -68,7 +70,7 @@ Set Review Record fields as follows:
 - `recommended_revision`: concrete guidance for the strongest next revision.
 - `approval_status`: map `accept` to `approve`, `revise` to `revise`, and `reject` to `block`.
 
-Use `block` when the Prompt Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work violates Artist Meaning, drops required provenance, invents unsupported material, breaks provider boundaries, or drifts into a different work. Only the artist can waive a block. When the artist waives a blocking output finding, set `artist_waiver.waived` to `true` in the Review Record before the Output Acceptance Gate proceeds.
+Use `block` when the Prompt Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work violates Artist Meaning, drops required provenance, invents unsupported material, breaks provider boundaries, drifts into a different work, or otherwise meets a Prompt Critic or Output Critic blocking condition in `docs/gates-and-reviews.md` — including dropping the approved Shot Design, Expectation Turn Translation, or minimum tension criteria. Only the artist can waive a block. When the artist waives a blocking output finding, set `artist_waiver.waived` to `true` in the Review Record before the Output Acceptance Gate proceeds.
 
 ## Output
 
