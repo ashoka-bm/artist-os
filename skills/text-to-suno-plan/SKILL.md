@@ -69,7 +69,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 7. Define Genre / Production Direction. If unresolved, ask whether the artist has a genre or production vision. If not, show concise candidate directions.
 8. Define Tempo / Groove Direction. Ask for BPM, BPM range, or felt motion if absent; otherwise recommend from Beat Plan, Emotional Structure, and Sonic Dynamics.
 9. Run the Vocal / Lyric Gate: ask whether the work should have lyrics or intelligible words.
-10. If the artist chooses source-text adapted, new lyrics, spoken word, or another lyrics-bearing mode, draft lyrics against the Arrangement Plan. Each lyric section must have section function, tension role, preserved source details, transformed source details, delivery notes, and traceability.
+10. If the artist chooses source-text adapted, new lyrics, spoken word, or another lyrics-bearing mode, draft lyrics against the Arrangement Plan, following the lyric-writing rules and lyric section fields in `docs/text-to-sound/THEORY.md` → lyrics; do not restate them here.
 11. Define Arrangement / Form Direction using `Song -> Sections -> Phrases -> Bars / beats` when the output is a song. Include section functions and section tension roles.
 12. Select 6 to 8 Active Sonic Tension Pairs. Use evidence, independent pole presences, tension intensity, and translation notes.
 13. Add Sequence Recommendation from the shared Beat Plan.
