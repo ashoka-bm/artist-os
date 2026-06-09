@@ -16,7 +16,7 @@ Load details only when needed:
 - `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, image-series progression, or any journey-shaped plan.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
 - `schemas/image-medium-plan.schema.json` for image-specific translation decisions before Creative Brief creation.
-- `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
+- `docs/prompt-branch-set.md` and `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
 - `docs/metadata-schema.md` for required record fields and layout plans.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 - Wondermint Category Reference only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
@@ -106,20 +106,7 @@ Use this only after Art Critic Review and Brief Approval.
 
 ## Prompt Branch Set Process
 
-Use this only after an approved Provider-Neutral Image Prompt Plan exists and the artist wants a curator batch, prompt exploration, mass production, or several meaning-equivalent prompts.
-
-1. Preserve `prompt_plan_id`, `brief_id`, `source_id`, `transformation_brief_id`, `beat_plan_id`, and `image_medium_plan_id`.
-2. Define the Meaning Kernel: what must stay identical across all branches.
-3. Define `must_preserve` and `must_not_change` from Artist Meaning, the Beat Plan, Image Medium Plan, and approved Prompt Plan.
-4. Choose variation axes. For image batches, default to varying at least style, setting, symbol, composition, and palette/light unless the artist narrows the request.
-5. Create five branches by default. Use a different count only when the artist asks.
-6. Each branch must differ from every other branch on at least three major axes. Do not create five prompts that are only adjective swaps.
-7. Each branch must include `variation_axes`, `preserved_kernel`, at least three `differentiators`, `prompt_text`, `negative_constraints`, traceability notes, and curator notes.
-8. Branches may depart far from the literal setting if they preserve the kernel and trace the departure.
-9. Before provider-backed generation from any branch, require explicit Generation Approval.
-10. When the branch set will drive broad curator selection, run Prompt Critic Review as a bounded sub-agent and persist the Review Record.
-
-The branch set is not a new Creative Brief and does not reopen Artist Meaning. It is a controlled spread around the approved kernel so AI generation has useful variance and the human can curate.
+Use only after an approved Provider-Neutral Image Prompt Plan exists and the artist wants a curator batch, prompt exploration, mass production, or several meaning-equivalent prompts. The full build procedure — Meaning Kernel, default five branches, the three-axis distinctness rule, required branch fields, Generation Approval, and the Prompt Critic Review trigger — lives in `docs/prompt-branch-set.md`. Follow it; do not restate it here. Emit the set against `schemas/prompt-branch-set.schema.json`.
 
 ## Traceability Rules
 
