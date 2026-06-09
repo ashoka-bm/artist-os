@@ -1,6 +1,6 @@
 ---
 name: artist-os-writing-method-review
-description: Use when the artist wants writing reviewed — a Beat Plan or beat-by-beat journey structure, story beats, lyric movement, writing fragments, or the finished written shape of a piece. Choose this directly when the request is to review beats or writing. Use artist-os only for a full from-scratch transformation or resume.
+description: Use when the artist wants writing reviewed — a Beat Plan or beat-by-beat journey structure, story beats, lyric movement, writing fragments, or the finished written shape of a piece. Choose this directly when the request is to review beats or writing.
 ---
 
 # Writing Method Review

@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-image-plan
-description: Use when the artist wants the image-planning phase once Artist Meaning exists — building or revising an image Creative Brief, Image Medium Plan, visual gates, a series or triptych plan, or a provider-neutral image Prompt Plan with its Faithful/Amplified/Minimal variants. Choose this directly, not the artist-os conductor, when the request is just this image step. Use artist-os only for a full from-scratch transformation or a multi-phase resume.
+description: Use when the artist wants the image-planning phase once Artist Meaning exists — building or revising an image Creative Brief, Image Medium Plan, visual gates, a series or triptych plan, or a provider-neutral image Prompt Plan with its Faithful/Amplified/Minimal variants. Choose this directly, not the artist-os conductor, when the request is just this image step.
 ---
 
 # Text To Image Plan
