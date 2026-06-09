@@ -1,0 +1,4 @@
+# Generated run artifacts — snapshots and traces from a run, not version-controlled.
+baseline/
+trimmed/
+*-SKILL.md

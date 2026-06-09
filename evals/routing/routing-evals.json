@@ -1,0 +1,52 @@
+{
+  "purpose": "Multi-class routing eval for the Artist OS skill family. Each query is labeled with the ONE skill that should win. Used to build a confusion matrix and tune competing descriptions together.",
+  "skills": [
+    "artist-os",
+    "ingest-reference",
+    "meaning-interview",
+    "text-to-image-plan",
+    "text-to-suno-plan",
+    "art-critic-review",
+    "critique-asset",
+    "writing-method-review",
+    "none"
+  ],
+  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project.",
+  "evals": [
+    { "id": 1, "query": "i wrote this breakup poem last night and i want to turn it into a set of images for my instagram, no idea where to start", "target": "artist-os", "rationale": "Cold full transformation, no records yet.", "probe": false },
+    { "id": 2, "query": "can we pick back up on the 'tidewrack' project? i think we left off right after the style board", "target": "artist-os", "rationale": "Resume/continue an existing project.", "probe": false },
+    { "id": 3, "query": "i made this track in suno from my journal entry and something feels off vs what i was going for, can you look at it", "target": "artist-os", "rationale": "Cold output-review with no loaded records; conductor sets up the Output Record then delegates.", "probe": true },
+    { "id": 4, "query": "turn my grandmother's last letter into a piece of music", "target": "artist-os", "rationale": "Cold full text->Suno transformation.", "probe": false },
+    { "id": 5, "query": "here's a monologue from a play i'm writing. eventually i want both an image series and a suno track out of it", "target": "artist-os", "rationale": "Whole multi-medium flow.", "probe": false },
+    { "id": 6, "query": "continue the artist os project for my dream journal, you already have the brief", "target": "artist-os", "rationale": "Resume.", "probe": false },
+
+    { "id": 7, "query": "before we do anything else, i just want to log the source. it's a 1998 voicemail transcript from my dad, i own the rights since it's mine", "target": "ingest-reference", "rationale": "Explicit isolated reference intake before interpretation.", "probe": false },
+    { "id": 8, "query": "add this reference photo to the project, it's a scan of an old polaroid, not totally sure about the rights", "target": "ingest-reference", "rationale": "Isolated intake on an existing project.", "probe": false },
+
+    { "id": 9, "query": "i don't want to make anything yet. help me get clear on what this poem actually means to me and what has to survive if we change it", "target": "meaning-interview", "rationale": "Explicit meaning capture, no production requested.", "probe": false },
+    { "id": 10, "query": "lets just do the meaning part for now. what's the emotional core here, what am i allowed to change, what's off-limits", "target": "meaning-interview", "rationale": "Isolated Artist Meaning phase.", "probe": false },
+
+    { "id": 11, "query": "meaning's locked for the 'ash & salt' piece, now build the image creative brief and the visual prompt plan", "target": "text-to-image-plan", "rationale": "Isolated image planning after meaning exists.", "probe": false },
+    { "id": 12, "query": "i want a triptych for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "text-to-image-plan", "rationale": "Image planning, meaning already captured.", "probe": false },
+    { "id": 13, "query": "give me the faithful / amplified / minimal prompt variants for the approved image brief", "target": "text-to-image-plan", "rationale": "Post-approval prompt plan is owned by the image planner, NOT the critic.", "probe": true },
+
+    { "id": 14, "query": "redo just the sound brief for the existing project, i want to push the genre more toward ambient drone", "target": "text-to-suno-plan", "rationale": "Isolated sound planning on existing project.", "probe": false },
+    { "id": 15, "query": "write the suno custom-mode prompt and the lyrics now that the sound brief is approved", "target": "text-to-suno-plan", "rationale": "Isolated Suno prompt/lyrics phase.", "probe": false },
+
+    { "id": 16, "query": "before i approve this creative brief draft, can you do the art critic pass on it and deepen it", "target": "art-critic-review", "rationale": "Reviews a DRAFT brief pre-approval - the art-critic's exact job.", "probe": false },
+    { "id": 17, "query": "review my sound creative brief document and strengthen it before we lock anything", "target": "art-critic-review", "rationale": "art-critic-review covers both visual and sound briefs (sound_critic role).", "probe": true },
+
+    { "id": 18, "query": "critique these 4 generated images against the approved brief. did they actually keep the meaning", "target": "critique-asset", "rationale": "Output-stage critique of generated work vs approved records.", "probe": false },
+    { "id": 19, "query": "run the prompt critic on my provider-neutral prompt plan and the branch set before i generate", "target": "critique-asset", "rationale": "Prompt Plan / Branch Set critique is critique-asset, not art-critic.", "probe": true },
+
+    { "id": 20, "query": "review the beat plan for my image series. does each beat actually carry an emotional turn", "target": "writing-method-review", "rationale": "Beat Reviewer mode.", "probe": false },
+    { "id": 21, "query": "i drafted the written shape of the final piece, can you review the beats and fragments", "target": "writing-method-review", "rationale": "Writing-method review of shape/beats/fragments.", "probe": false },
+
+    { "id": 22, "query": "can you review my image", "target": "artist-os", "rationale": "PROBE: ambiguous cold output-review with no project context; policy routes output-review to the conductor. Tests artist-os vs critique-asset vs art-critic collision.", "probe": true },
+    { "id": 23, "query": "review my brief", "target": "art-critic-review", "rationale": "PROBE: brief review (not output review) is the art-critic's domain even standalone; tests whether it loses to artist-os.", "probe": true },
+
+    { "id": 24, "query": "summarize this 30-page PDF research report into bullet points for my monday standup", "target": "none", "rationale": "Off-domain; no Artist OS skill should win.", "probe": false },
+    { "id": 25, "query": "help me debug why my stripe webhook keeps returning a 400 in the backend repo", "target": "none", "rationale": "Off-domain near-miss (backend work).", "probe": false },
+    { "id": 26, "query": "i need to write a short artist statement about my painting for a gallery submission this week", "target": "none", "rationale": "PROBE: art-adjacent and mentions 'artist' + a creative work, but it's prose writing, not the text->art transformation pipeline. A naive keyword match would wrongly fire Artist OS.", "probe": true }
+  ]
+}
