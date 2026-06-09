@@ -1,6 +1,6 @@
 ---
 name: artist-os-meaning-interview
-description: Use when Artist OS needs standalone or delegated Artist Meaning before analysis, transformation, beat planning, medium planning, or prompt planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
+description: Use when the artist wants to capture or clarify what their text means and what must survive transformation — the meaning phase — before any beat, image, or sound planning. Choose this directly, not the artist-os conductor, when the request is just to do the meaning work. Use artist-os only for a full from-scratch transformation or a multi-phase resume.
 ---
 
 # Meaning Interview

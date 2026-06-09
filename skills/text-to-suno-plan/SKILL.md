@@ -1,6 +1,6 @@
 ---
 name: artist-os-text-to-suno-plan
-description: Use when Artist OS needs standalone or delegated sound planning after Artist Meaning exists, especially for Sound Creative Briefs, Sound Medium Plans, Suno prompts, lyrics, or sequence planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
+description: Use when the artist wants the sound-planning phase once Artist Meaning exists — building or revising a Sound Creative Brief, Sound Medium Plan, Suno prompts, lyrics, or a sequence plan. Choose this directly, not the artist-os conductor, when the request is just this sound step. Use artist-os only for a full from-scratch transformation or a multi-phase resume.
 ---
 
 # Text To Suno Plan

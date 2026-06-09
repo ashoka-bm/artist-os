@@ -1,6 +1,6 @@
 ---
 name: artist-os
-description: Use when an artist wants to turn a poem, story, song lyric, journal entry, monologue, letter, memory, dream, or other text into visual art prompts or Suno music prompts; resume or continue an Artist OS project; or review an existing output against its brief, even if they do not mention Artist OS. Use this for the whole flow; use a sub-skill only for one isolated phase.
+description: Use when an artist wants to take raw text — a poem, story, song lyric, journal entry, monologue, letter, memory, or dream — through the full transformation into visual-art or Suno-music prompts, to resume or continue an existing Artist OS project, or to review or look at an existing output such as an image or track against its brief — even if they do not mention Artist OS, and even when the project's records are not loaded yet. This is the multi-phase conductor and the default entry point. Hand off to a phase skill when the request clearly targets one specific phase of an existing or in-progress project — logging or adding a reference or source, capturing meaning, planning images or sound, or reviewing a draft brief.
 ---
 
 # Artist OS Flow

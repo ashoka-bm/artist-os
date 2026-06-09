@@ -1,6 +1,6 @@
 ---
 name: artist-os-art-critic-review
-description: Use when Artist OS needs standalone or delegated review of a draft Creative Brief or Sound Creative Brief before artist approval or final prompt planning. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
+description: Use when the artist wants a draft Creative Brief or Sound Creative Brief reviewed, deepened, or strengthened before they approve it and before final prompt planning. Choose this directly when the request is to review or improve a brief. This is not for finished outputs or prompt plans — use critique-asset for those — and use artist-os only for a full from-scratch transformation or resume.
 ---
 
 # Art Critic Review
