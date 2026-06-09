@@ -4,6 +4,8 @@ Artist OS uses records to preserve meaning, provenance, and review history as a 
 
 ## Record Types
 
+Lineage id fields follow one naming convention. A record that exists for a single medium names the reference after that medium, matching the producing record's primary key: the Image Prompt Plan carries `image_medium_plan_id`, the Suno Sound Prompt Plan carries `sound_medium_plan_id`. A record that can sit downstream of any medium — the Prompt Branch Set and the Output Record — carries the same value generically as `medium_plan_id`. The value is identical either way; only the field name changes with the record's scope. Do not "fix" this asymmetry when emitting records — each schema rejects the other spelling.
+
 ### Project Manifest
 
 A Project Manifest tracks one Artist OS project across sessions. It lives in the local Workspace Library at `workspace-library/artist-os/projects/<project_id>/project.json` and validates against `schemas/project-manifest.schema.json`.
