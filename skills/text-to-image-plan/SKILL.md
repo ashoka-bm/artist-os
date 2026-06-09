@@ -19,7 +19,7 @@ Load details only when needed:
 - `docs/prompt-branch-set.md` and `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
 - `docs/metadata-schema.md` for required record fields and layout plans.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
-- Wondermint Category Reference only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
+- Wondermint Category Reference (path under `docs/metadata-schema.md` → Style Direction) only when style/category vocabulary is needed; exact names are required only for Wondermint uploads.
 
 ## Hard Gates
 
