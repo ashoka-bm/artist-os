@@ -49,8 +49,6 @@ Keep the core algorithm visible throughout the flow: grab attention, trigger a s
 
 When a project uses multiple beats, a journey-shaped output, or a written artifact, apply the writing methods from `docs/writing/README.md` during creation, not only review. Use `writing-fragments` when source material is underdeveloped, `writing-beats` when building a Beat Plan or sequence, and `writing-shape` when producing a reader-facing written piece.
 
-For writing/text and exploratory story development, preserve the strict `writing-beats` rhythm: propose 2-3 starting beats, let the artist choose, define only that beat, then offer 2-3 next beats. For image and Suno dry-run flows, you may draft a full recommended Beat Plan when Story Mode is obvious or the artist has approved autopilot, but any multi-beat, sequence, image-series, or lyric-bearing plan still requires a separate Beat Reviewer sub-agent before the medium critic review.
-
 All reviewer stages are mandatory bounded sub-agent reviews. Do not self-review the work you just created. Pass the reviewer only the relevant review packet and require a Review Record that validates against `schemas/review-record.schema.json`. Apply blocking findings before advancing unless the artist explicitly waives them.
 
 If the current host cannot spawn a sub-agent, run a degraded reviewer fallback: start a fresh, clearly separated review pass, state that it is a fallback because sub-agents are unavailable, review only the bounded packet, and still emit a Review Record. Treat this as a portability fallback, not the preferred path.
@@ -78,44 +76,37 @@ As conductor, hold two rules at every gate:
 
 ## Phase Order
 
-This is the conductor's core sequence. Run the phases in order; for each, hand off to the owning skill for the detailed work and advance automatically once its stage is complete.
-
-### Text to Image
+Both media share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image and `skills/text-to-suno-plan` for Suno. Reviewer steps (5, 8, 11, 14) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
 
 1. **Source Record** — `skills/ingest-reference`.
-2. **Artist Meaning** — `skills/meaning-interview`.
-3. **Transformation Brief** — `skills/text-to-image-plan` creates the shared Transformation Brief against `schemas/transformation-brief.schema.json`.
-4. **Beat Plan** — `skills/text-to-image-plan` creates the shared Beat Plan against `schemas/beat-plan.schema.json`; for writing/text and exploratory story development, preserve strict `writing-beats` choice rhythm.
-5. **Story / Beat Review** — for multi-beat, series, or ambiguous Beat Plans, spawn a bounded sub-agent running `skills/writing-method-review` in Beat Reviewer mode before medium planning. Persist the returned Review Record.
-6. **Image Medium Plan** — `skills/text-to-image-plan` consumes the shared Beat Plan, runs visual gates in order (Symbology → Style), and creates the Image Medium Plan against `schemas/image-medium-plan.schema.json`. Presentation Mode is resolved during the Symbology Gate. Persist each gate decision under `gates/`. The Minimalist-to-Maximalist (intensity) gate is not part of this step — it runs later, at Brief Approval (step 9), once symbology and style are locked.
-7. **Draft Creative Brief** — `skills/text-to-image-plan` consumes the Image Medium Plan and produces the draft Creative Brief Document.
-8. **Art Critic Review** — spawn a bounded sub-agent running `skills/art-critic-review`, persist the returned Review Record, then present the revised Creative Brief Document and ask for Brief Approval.
-9. **Brief Approval** — on changes, revise and re-run the critic only for affected areas. After approval, run the Minimalist-to-Maximalist Gate if intensity is unresolved.
-10. **Final Records** — `skills/text-to-image-plan` produces the Creative Brief Record against `schemas/creative-brief.schema.json` with `transformation_brief_id` and `beat_plan_id`, then the Provider-Neutral Image Prompt Plan against `schemas/prompt-plan.schema.json`. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval before creating multiple prompts. After Series Plan approval, create only the Series Calibration Image variants first and stop for calibration approval before creating remaining series image-role prompts.
-11. **Optional Prompt Branch Set** — when the artist wants a curator batch or broad exploration, `skills/text-to-image-plan` creates a Prompt Branch Set against `schemas/prompt-branch-set.schema.json`, usually five branches that preserve the same meaning kernel while varying style, setting, symbol, composition, and palette/light.
-12. **Prompt Plan Critique** — spawn a bounded sub-agent running `skills/critique-asset`, against the approved brief and Prompt Plan or Prompt Branch Set, and persist the returned Review Record.
-13. **Generation Approval Gate** — only if the artist wants provider-backed generation or another external action. Approval is explicit per call or approved batch.
-14. **Output Record** — after generation, import, drafting, or human editing creates a concrete Output Artifact, persist an Output Record against `schemas/output-record.schema.json` before review or acceptance.
-15. **Output Critic Review** — spawn a bounded sub-agent running `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records. Persist the returned Review Record.
-16. **Output Acceptance Gate** — present the Output Critic Review result and ask whether to accept, revise, reject, archive, export, or extend the Output Artifact. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
+2. **Artist Meaning** — `skills/meaning-interview` (bounded Decision Interview).
+3. **Transformation Brief** — medium skill; `schemas/transformation-brief.schema.json`.
+4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat names its intended feeling.
+5. **Story / Beat Review** — `skills/writing-method-review` in Beat Reviewer mode, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan.
+6. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), and produces the Medium Plan. Persist each gate decision under `gates/`.
+7. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
+8. **Critic Review** — `skills/art-critic-review` (art critic for image, sound critic for Suno); then present the revised brief and ask for Brief Approval.
+9. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas. (Image only: then run the Minimalist-to-Maximalist intensity gate if unresolved — see Medium Specifics.)
+10. **Final Records** — medium skill produces the (Sound) Creative Brief Record and Provider-Neutral (Image or Suno Sound) Prompt Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
+11. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan (or Prompt Branch Set).
+12. **Generation Approval Gate** — only for provider-backed generation or another external action; approval is explicit per call or approved batch.
+13. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance.
+14. **Output Critic Review** — `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records.
+15. **Output Acceptance Gate** — present the result; ask whether to accept, revise, reject, archive, export, or extend. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
 
-### Text to Suno Music
+### Medium Specifics
 
-1. **Source Record** — `skills/ingest-reference`.
-2. **Artist Meaning** — `skills/meaning-interview`.
-3. **Transformation Brief** — `skills/text-to-suno-plan` creates the shared Transformation Brief against `schemas/transformation-brief.schema.json`.
-4. **Beat Plan** — `skills/text-to-suno-plan` creates the shared Beat Plan against `schemas/beat-plan.schema.json`.
-5. **Story / Beat Review** — for multi-section, sequence, or lyric-bearing plans, spawn a bounded sub-agent running `skills/writing-method-review` in Beat Reviewer mode before medium planning. Persist the returned Review Record.
-6. **Sound Medium Plan** — `skills/text-to-suno-plan` consumes the shared Beat Plan, works the Suno gates (Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form), and creates the Sound Medium Plan against `schemas/sound-medium-plan.schema.json`. Persist each gate under `gates/`.
-7. **Draft Sound Creative Brief** — `skills/text-to-suno-plan` consumes the Sound Medium Plan and produces the draft Sound Creative Brief Document. Always resolve Vocal/Lyric before locking; draft lyrics before final locking if requested.
-8. **Music / Sound Critic Review** — spawn a bounded sub-agent running `skills/art-critic-review`, persist the returned Review Record, then present the revised Sound Creative Brief Document and ask for Brief Approval.
-9. **Brief Approval** — on changes, revise and re-run the critic only for affected areas.
-10. **Final Records** — `skills/text-to-suno-plan` produces the Sound Creative Brief Record against `schemas/sound-creative-brief.schema.json` with `transformation_brief_id` and `beat_plan_id`, then the Suno Sound Prompt Plan against `schemas/sound-prompt-plan.schema.json`. Get sequence approval before multiple sequence plans. Do not add an image-style Prompt Branch Set here; the current Prompt Branch Set contract is image-oriented.
-11. **Prompt Plan Critique** — spawn a bounded sub-agent running `skills/critique-asset`, against the approved Sound Creative Brief, and persist the returned Review Record.
-12. **Generation Approval Gate** — only if the artist wants provider-backed generation or another external action. Approval is explicit per call or approved batch.
-13. **Output Record** — after generation, import, drafting, or human editing creates a concrete Output Artifact, persist an Output Record against `schemas/output-record.schema.json` before review or acceptance.
-14. **Output Critic Review** — spawn a bounded sub-agent running `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records. Persist the returned Review Record.
-15. **Output Acceptance Gate** — present the Output Critic Review result and ask whether to accept, revise, reject, archive, export, or extend the Output Artifact. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
+**Image** — owning skill `skills/text-to-image-plan`:
+
+- Step 6 runs two visual gates in order, Symbology → Style; Presentation Mode is decided inside the Symbology Gate, not as a separate gate. Medium Plan validates against `schemas/image-medium-plan.schema.json`.
+- The Minimalist-to-Maximalist (intensity) gate runs at **Brief Approval (step 9), after symbology and style are locked** — never during the Medium Plan.
+- Step 10 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
+- Optional after step 10: a Prompt Branch Set (`schemas/prompt-branch-set.schema.json`), usually five branches that hold the meaning kernel while varying style, setting, symbol, composition, and palette/light, when the artist wants a curator batch or broad exploration.
+
+**Suno** — owning skill `skills/text-to-suno-plan`:
+
+- Step 6 works the Suno gates: Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form. Always resolve Vocal/Lyric (lyrics, spoken/phonetic vocals, or instrumental mode) before locking; draft lyrics before final locking if requested. Medium Plan validates against `schemas/sound-medium-plan.schema.json`.
+- Step 10 records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`. Get sequence approval before multiple sequence plans. Do not add an image-style Prompt Branch Set; the current Prompt Branch Set contract is image-oriented.
 
 ## Persisting State
 
