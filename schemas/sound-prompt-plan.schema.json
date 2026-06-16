@@ -28,6 +28,7 @@
     "instrumentation_plan",
     "production_direction",
     "sonic_dynamics_summary",
+    "emotional_tension_contract",
     "prompt_variants",
     "sequence_calibration",
     "suno_custom_mode_outputs",
@@ -193,6 +194,7 @@
       "maxItems": 8,
       "items": { "$ref": "#/$defs/sonic_tension_pair_record" }
     },
+    "emotional_tension_contract": { "$ref": "#/$defs/emotional_tension_contract" },
     "prompt_variants": {
       "type": "array",
       "minItems": 1,
@@ -284,15 +286,60 @@
     "song_section": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["section_name", "time_range", "bar_range", "section_function", "tension_role", "section_tags"],
+      "required": [
+        "section_name",
+        "time_range",
+        "bar_range",
+        "beat_id",
+        "key_emotional_movement_id",
+        "section_function",
+        "expectation_turn_translation",
+        "intended_feeling",
+        "tension_profile",
+        "tension_role",
+        "section_tags"
+      ],
       "properties": {
         "section_name": { "type": "string" },
         "time_range": { "type": "string" },
         "bar_range": { "type": "string" },
         "phrase_count": { "type": ["integer", "null"], "minimum": 1 },
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
         "section_function": { "type": "string" },
+        "expectation_turn_translation": { "type": "string", "minLength": 1 },
+        "intended_feeling": { "type": "string", "minLength": 1 },
+        "tension_profile": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section_tension_profile" } },
         "tension_role": { "type": "string" },
         "section_tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "emotional_tension_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "governing_intended_feeling",
+        "key_emotional_movement_ids",
+        "minimum_tension_criteria",
+        "expectation_turn_preservation",
+        "section_mapping_required",
+        "variant_preservation_required"
+      ],
+      "properties": {
+        "governing_intended_feeling": { "type": "string", "minLength": 1 },
+        "key_emotional_movement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
+        },
+        "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
+        "expectation_turn_preservation": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/expectation_turn_preservation" }
+        },
+        "section_mapping_required": { "type": "boolean", "const": true },
+        "variant_preservation_required": { "type": "boolean", "const": true }
       }
     },
     "prompt_variant_plan": {
@@ -302,6 +349,7 @@
         "variant_type",
         "variant_test_axis_label",
         "sonic_differentiators",
+        "emotional_tension_preservation",
         "prompt_text",
         "suno_outputs",
         "negative_constraints",
@@ -316,6 +364,28 @@
           "type": "array",
           "minItems": 2,
           "items": { "type": "string", "minLength": 1 }
+        },
+        "emotional_tension_preservation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intended_feeling",
+            "key_emotional_movement_ids",
+            "expectation_turn_translation",
+            "minimum_tension_criteria",
+            "variant_tension_strategy"
+          ],
+          "properties": {
+            "intended_feeling": { "type": "string", "minLength": 1 },
+            "key_emotional_movement_ids": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
+            },
+            "expectation_turn_translation": { "type": "string", "minLength": 1 },
+            "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
+            "variant_tension_strategy": { "type": "string", "minLength": 1 }
+          }
         },
         "prompt_text": { "type": "string", "minLength": 1 },
         "suno_outputs": {
@@ -370,6 +440,38 @@
           "minItems": 1,
           "items": { "$ref": "#/$defs/traceability_note" }
         }
+      }
+    },
+    "minimum_tension_criteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criteria", "minimum_intensity", "reviewer_check"],
+      "properties": {
+        "criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "minimum_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reviewer_check": { "type": "string", "minLength": 1 }
+      }
+    },
+    "expectation_turn_preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beat_id", "key_emotional_movement_id", "expected_direction", "actual_result", "sonic_translation"],
+      "properties": {
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "expected_direction": { "type": "string", "minLength": 1 },
+        "actual_result": { "type": "string", "minLength": 1 },
+        "sonic_translation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "section_tension_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tension_name", "intensity", "sonic_expression"],
+      "properties": {
+        "tension_name": { "type": "string", "minLength": 1 },
+        "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "sonic_expression": { "type": "string", "minLength": 1 }
       }
     },
     "pole_record": {

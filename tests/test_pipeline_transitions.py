@@ -77,7 +77,7 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(creative_brief["transformation_brief_id"], image_plan["transformation_brief_id"])
         self.assertIn("beat_plan_id", creative_brief)
         self.assertIn("transformation_brief_id", creative_brief)
-        self.assertGreaterEqual(len(creative_brief["beats"]), 1)
+        self.assertNotIn("beats", creative_brief)
         key_movement_ids = {
             movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
         }
@@ -134,7 +134,7 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(sound_brief["artist_meaning_id"], sound_plan["artist_meaning_id"])
         self.assertEqual(sound_brief["transformation_brief_id"], sound_plan["transformation_brief_id"])
         self.assertIn("transformation_brief_id", sound_brief)
-        self.assertGreaterEqual(len(sound_brief["beats"]), 1)
+        self.assertNotIn("beats", sound_brief)
 
     def test_image_creative_brief_to_prompt_plan(self) -> None:
         creative_brief = load("tests/fixtures/text-to-image/creative-brief.json")
@@ -161,6 +161,16 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(branch_set["medium_plan_id"], prompt_plan["image_medium_plan_id"])
         self.assertEqual(branch_set["branch_count_actual"], len(branch_set["branches"]))
         self.assertEqual(branch_set["branch_count_actual"], 5)
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        self.assertTrue(set(branch_set["meaning_kernel"]["key_emotional_movement_ids"]).issubset(key_movement_ids))
+        for branch in branch_set["branches"]:
+            preservation = branch["emotional_tension_preservation"]
+            self.assertIn(preservation["key_emotional_movement_id"], key_movement_ids)
+            self.assertTrue(preservation["expectation_turn_translation"])
+            self.assertGreaterEqual(len(preservation["tension_profile"]), 1)
 
         styles = {branch["variation_axes"]["style_direction"] for branch in branch_set["branches"]}
         settings = {branch["variation_axes"]["setting"] for branch in branch_set["branches"]}
@@ -197,6 +207,12 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(review["upstream_context"]["source_id"], output["source_id"])
         self.assertEqual(review["upstream_context"]["artist_meaning_id"], output["artist_meaning_id"])
         self.assertEqual(review["approval_status"], "approve")
+        for assessment in review["emotional_tension_review"]["tension_intensity_assessments"]:
+            self.assertGreaterEqual(
+                assessment["reviewer_assessed_intensity"],
+                assessment["minimum_required_intensity"],
+            )
+            self.assertTrue(assessment["meets_minimum"])
         self.assertEqual(gate["gate_type"], "output_acceptance")
         self.assertEqual(gate["gate_status"], "approved")
         self.assertEqual(gate["artist_meaning_id"], output["artist_meaning_id"])
@@ -215,6 +231,17 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(review["approval_status"], "block")
         self.assertTrue(review["artist_waiver"]["waived"])
         self.assertEqual(review["artist_waiver"]["waived_by"], "artist")
+        failed_assessments = [
+            assessment
+            for assessment in review["emotional_tension_review"]["tension_intensity_assessments"]
+            if not assessment["meets_minimum"]
+        ]
+        self.assertGreaterEqual(len(failed_assessments), 1)
+        for assessment in failed_assessments:
+            self.assertLess(
+                assessment["reviewer_assessed_intensity"],
+                assessment["minimum_required_intensity"],
+            )
         self.assertEqual(gate["gate_type"], "output_acceptance")
         self.assertEqual(gate["gate_status"], "approved")
         self.assertIn("waive", gate["artist_response"].lower())
@@ -234,9 +261,32 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(sound_prompt["transformation_brief_id"], sound_brief["transformation_brief_id"])
         self.assertEqual(sound_prompt["beat_plan_id"], sound_brief["beat_plan_id"])
         self.assertEqual(sound_prompt["sound_medium_plan_id"], sound_plan["sound_medium_plan_id"])
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        contract = sound_prompt["emotional_tension_contract"]
+        self.assertTrue(set(contract["key_emotional_movement_ids"]).issubset(key_movement_ids))
+        for preserved_turn in contract["expectation_turn_preservation"]:
+            self.assertIn(preserved_turn["beat_id"], beat_ids)
+            self.assertIn(preserved_turn["key_emotional_movement_id"], key_movement_ids)
+        for section in sound_prompt["song_structure"]["sections"]:
+            self.assertIn(section["beat_id"], beat_ids)
+            self.assertIn(section["key_emotional_movement_id"], key_movement_ids)
+            self.assertTrue(section["expectation_turn_translation"])
+            self.assertGreaterEqual(len(section["tension_profile"]), 1)
+        for variant in sound_prompt["prompt_variants"]:
+            variant_movement_ids = variant["emotional_tension_preservation"]["key_emotional_movement_ids"]
+            self.assertTrue(set(variant_movement_ids).issubset(key_movement_ids))
 
     def test_review_record_reviews_declared_artifact(self) -> None:
         review = load("tests/fixtures/reviews/review-record.json")
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
 
         self.assertEqual(review["reviewer_execution"]["execution_mode"], "bounded_sub_agent")
         self.assertTrue(review["reviewer_execution"]["sub_agent_required"])
@@ -246,6 +296,17 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertIn("findings", review)
         self.assertIn("recommended_revision", review)
         self.assertIn(review["approval_status"], {"approve", "revise", "block"})
+        self.assertIn("emotional_tension_review", review)
+        for assessment in review["emotional_tension_review"]["tension_intensity_assessments"]:
+            expected_meets_minimum = (
+                assessment["reviewer_assessed_intensity"]
+                >= assessment["minimum_required_intensity"]
+            )
+            self.assertEqual(assessment["meets_minimum"], expected_meets_minimum)
+        for movement in review["emotional_tension_review"]["key_emotional_movements_reviewed"]:
+            self.assertIn(movement["movement_id"], key_movement_ids)
+        for turn in review["emotional_tension_review"]["expectation_turns_reviewed"]:
+            self.assertIn(turn["beat_id"], beat_ids)
 
 
 if __name__ == "__main__":

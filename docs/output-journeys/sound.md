@@ -54,4 +54,4 @@ Approved Beat Plan
 
 ## Current Implementation
 
-The current text-to-Suno slice implements this route through the Suno Sound Prompt Plan, Output Record, Output Critic Review, and Output Acceptance Gate contracts. Embedded `beats` remain in the Sound Creative Brief only as transitional medium-local summaries; `beat_plan_id` is authoritative.
+The current text-to-Suno slice implements this route through the Suno Sound Prompt Plan, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The Sound Creative Brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.

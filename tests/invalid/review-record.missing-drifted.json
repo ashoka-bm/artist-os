@@ -19,6 +19,37 @@
     "governing_refs": [],
     "open_questions": []
   },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "Preserve unresolved threshold pressure.",
+    "minimum_tension_criteria_reviewed": [
+      "The beat must keep withheld entry as pressure."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "beat_threshold_001",
+        "tension_name": "withheld entry pressure",
+        "claimed_intensity": 0.7,
+        "reviewer_assessed_intensity": 0.7,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "The beat meets the minimum pressure threshold."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The compressed threshold movement is present."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The expected return is withheld."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "Enough context exists to evaluate the tension contract."
+  },
   "matched": [],
   "findings": [],
   "recommended_revision": "No revision.",

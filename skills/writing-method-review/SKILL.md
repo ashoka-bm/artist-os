@@ -80,6 +80,7 @@ Set Review Record fields as follows:
 - `artifact_under_review.artifact_type`: `fragment_file`, `beat_plan`, or `text_draft`.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
 - `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, Beat Plan when applicable, prior approved beat or opening promise when applicable, and the high-authority writing reference used.
+- `emotional_tension_review`: state the Intended Feeling reviewed, Minimum Tension Criteria checked, Key Emotional Movements reviewed, Expectation Turns reviewed, missing context, and reviewer conclusion. Include `tension_intensity_assessments` for the reviewed tension claims; do not copy the claimed number silently. Set `reviewer_assessed_intensity`, `minimum_required_intensity`, and `meets_minimum` from your independent judgment.
 - `matched`: what follows the selected writing method well, traced to the method reference and source context.
 - `drifted`: every drift finding from source material, Artist Meaning, Beat Plan, selected journey path, opening promise, or prior approved beat; use an empty array when there is no drift.
 - `findings`: actionable issues ordered by severity.

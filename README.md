@@ -130,7 +130,7 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The first shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image and Sound Medium Plans, Review Records, Gate Decisions, Prompt Branch Sets, and Output Records. The existing image and Suno dry-run slices translate the shared Beat Plan through image-specific and sound-specific Medium Plans before producing their final brief records. The current plan is to harden emotional movement and tension checks across sound, prompt plans, branch sets, and reviewer packets before adding a new medium branch or provider adapter.
+The first shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image and Sound Medium Plans, Review Records, Gate Decisions, Prompt Branch Sets, and Output Records. The existing image and Suno dry-run slices translate the shared Beat Plan through image-specific and sound-specific Medium Plans before producing final brief records, prompt plans, and review records that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run an end-to-end dry-run rehearsal before adding a new medium branch or provider adapter.
 
 ## Local State And Privacy
 

@@ -23,7 +23,6 @@
     "core_tension_pairs",
     "emotional_qualities",
     "poetic_density_notes",
-    "beats",
     "sequence_recommendation",
     "transformation_constraints"
   ],
@@ -74,10 +73,6 @@
     "core_tension_pairs": { "$ref": "#/$defs/core_tension_pairs" },
     "emotional_qualities": { "type": "array", "items": { "type": "string" } },
     "poetic_density_notes": { "$ref": "#/$defs/poetic_density_notes" },
-    "beats": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/beat_record" }
-    },
     "sequence_recommendation": { "$ref": "#/$defs/sequence_recommendation" },
     "transformation_constraints": {
       "type": "object",
@@ -427,18 +422,6 @@
           }
         },
         "flattening_risks": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "beat_record": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["before", "after", "value_shift", "emotional_payload", "evidence"],
-      "properties": {
-        "before": { "type": "string" },
-        "after": { "type": "string" },
-        "value_shift": { "type": "string" },
-        "emotional_payload": { "type": "string" },
-        "evidence": { "type": "string" }
       }
     },
     "sequence_recommendation": {

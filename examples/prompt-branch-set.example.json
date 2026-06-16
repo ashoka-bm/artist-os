@@ -13,6 +13,17 @@
   "branch_count_actual": 5,
   "meaning_kernel": {
     "kernel_summary": "A figure remains suspended at the threshold of return, holding fragile agency while a lit interior feels both inviting and dangerous.",
+    "governing_intended_feeling": "the ache of being close to release but unable to choose it",
+    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "minimum_tension_criteria": {
+      "criteria": [
+        "Every branch must keep the threshold unresolved.",
+        "Every branch must preserve fragile agency through a tactile object or equivalent choice point.",
+        "Every branch must make absence active rather than decorative empty space."
+      ],
+      "minimum_intensity": 0.65,
+      "reviewer_check": "Prompt Critic must block branches that resolve the threshold, remove agency, or convert absence into generic mood."
+    },
     "must_preserve": [
       "threshold remains unresolved",
       "the key or equivalent object carries fragile agency",
@@ -44,6 +55,23 @@
         "degree_of_departure": "near"
       },
       "preserved_kernel": ["unresolved threshold", "fragile agency", "active absence"],
+      "emotional_tension_preservation": {
+        "intended_feeling": "the ache of being close to release but unable to choose it",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expectation_turn_translation": "The lit doorway seems to invite return, but the still figure and untouched chairs keep return unresolved.",
+        "tension_profile": [
+          {
+            "tension_name": "Invitation / Danger",
+            "intensity": 0.7,
+            "expression": "Warm interior light presses against blue-black exterior shadow."
+          }
+        ],
+        "minimum_tension_criteria": {
+          "criteria": ["Threshold remains unresolved.", "The object of agency stays visible and emotionally weighted."],
+          "minimum_intensity": 0.65,
+          "reviewer_check": "Baseline branch must not become a simple homecoming image."
+        }
+      },
       "differentiators": ["photoreal domestic setting", "key is literal", "doorway is central"],
       "prompt_text": "Create a cinematic photoreal image of a still figure at the edge of a lit doorway in a dark concrete home. Rain softens the outside steps, two untouched chairs sit inside, and a small key is held with tenderness and dread. Keep the threshold unresolved and the absent person unseen.",
       "negative_constraints": ["no visible absent person", "no horror antagonist", "do not show entry"],
@@ -65,6 +93,23 @@
         "degree_of_departure": "moderate"
       },
       "preserved_kernel": ["fragile agency", "threshold pressure", "absence carried by objects"],
+      "emotional_tension_preservation": {
+        "intended_feeling": "the pain of having a choice that cannot be safely made",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expectation_turn_translation": "The key appears removed from the body and placed for ritual action, but the vessel keeps the choice suspended.",
+        "tension_profile": [
+          {
+            "tension_name": "Agency / Paralysis",
+            "intensity": 0.68,
+            "expression": "The key rests in light but is not held or used."
+          }
+        ],
+        "minimum_tension_criteria": {
+          "criteria": ["The vessel must preserve fragile agency.", "Ritual symbolism must not become magical resolution."],
+          "minimum_intensity": 0.65,
+          "reviewer_check": "Object-led branch must still create threshold pressure."
+        }
+      },
       "differentiators": ["key moves into vessel symbol", "human figure is implied", "painterly ritual setting"],
       "prompt_text": "Create a painterly surreal realist still life in a bare ritual room: a small key rests inside a shallow vessel of warm light near the edge of a dark doorway. The absent figure is implied by a coat shadow at the frame edge. Make the key feel fragile and consequential without becoming magical.",
       "negative_constraints": ["no fantasy glow", "no literal ceremony", "no extra symbolic clutter"],
@@ -86,6 +131,23 @@
         "degree_of_departure": "far"
       },
       "preserved_kernel": ["return held in suspension", "agency is small and tactile", "the destination is emotionally unsafe"],
+      "emotional_tension_preservation": {
+        "intended_feeling": "wounded hope in a place that almost remembers you",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expectation_turn_translation": "The ticket and waiting-room door promise departure or return, but the empty platform withholds arrival.",
+        "tension_profile": [
+          {
+            "tension_name": "Return / Refusal",
+            "intensity": 0.72,
+            "expression": "A small off-center figure faces a lit public threshold with no train arriving."
+          }
+        ],
+        "minimum_tension_criteria": {
+          "criteria": ["The public setting must preserve the same unresolved return.", "The destination must feel emotionally unsafe."],
+          "minimum_intensity": 0.65,
+          "reviewer_check": "Setting transposition must not turn the beat into ordinary travel."
+        }
+      },
       "differentiators": ["public transit setting", "ticket joins the key", "no domestic room"],
       "prompt_text": "Create a cinematic noir illustration of a late-night train platform after rain. A small figure stands off-center near a lit waiting-room doorway, holding a key and a worn ticket together. The platform is empty, reflective, and quiet; the image should feel like return is possible but not chosen.",
       "negative_constraints": ["no train arrival", "no crowd", "no triumphant travel poster mood"],
@@ -107,6 +169,23 @@
         "degree_of_departure": "moderate"
       },
       "preserved_kernel": ["threshold split", "small agency", "warmth and threat coexist"],
+      "emotional_tension_preservation": {
+        "intended_feeling": "the ache of being close to release but unable to choose it",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expectation_turn_translation": "The simple paper layers imply clarity, but the split planes keep the figure between incompatible states.",
+        "tension_profile": [
+          {
+            "tension_name": "Warmth / Threat",
+            "intensity": 0.66,
+            "expression": "A tiny gold key sits between warm paper and black shadow planes."
+          }
+        ],
+        "minimum_tension_criteria": {
+          "criteria": ["Graphic reduction must retain emotional pressure.", "The two paper planes must remain unresolved."],
+          "minimum_intensity": 0.6,
+          "reviewer_check": "Graphic style must not become cute or merely decorative."
+        }
+      },
       "differentiators": ["flat paper-cut medium", "abstracted house", "reduced palette"],
       "prompt_text": "Create a layered paper-cut illustration of an abstract house cross-section. A tiny cut-paper figure holds a small gold key between a warm lit interior plane and a black shadow plane. Keep the composition quiet, precise, and unresolved, as if the paper layers cannot close.",
       "negative_constraints": ["no cute storybook tone", "no excessive ornament", "no resolved doorway"],
@@ -128,6 +207,23 @@
         "degree_of_departure": "far"
       },
       "preserved_kernel": ["invitation and danger", "return without entry", "absence as active space"],
+      "emotional_tension_preservation": {
+        "intended_feeling": "absence becoming active and almost embodied",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expectation_turn_translation": "The lit phone booth offers contact, but the hanging key and empty desert turn contact into withheld return.",
+        "tension_profile": [
+          {
+            "tension_name": "Near / Far",
+            "intensity": 0.78,
+            "expression": "The tiny booth glows inside vast empty distance."
+          }
+        ],
+        "minimum_tension_criteria": {
+          "criteria": ["The surreal setting must still preserve invitation and danger.", "The empty space must act as pressure, not scenery."],
+          "minimum_intensity": 0.7,
+          "reviewer_check": "Far branch must remain meaning-equivalent despite the changed symbol system."
+        }
+      },
       "differentiators": ["no house", "phone booth replaces doorway", "vast exterior emptiness"],
       "prompt_text": "Create a surreal editorial photograph of an isolated phone booth in a vast desert at dusk, lit warmly from within. A small key hangs from the phone cord like a choice waiting to be made. Keep the booth closed, the surrounding space empty, and the mood tender but unsafe.",
       "negative_constraints": ["no visible caller", "no sci-fi machinery", "no comedic roadside tone"],

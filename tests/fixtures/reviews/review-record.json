@@ -30,6 +30,38 @@
     ],
     "open_questions": []
   },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "Preserve unresolved threshold pressure and held motion.",
+    "minimum_tension_criteria_reviewed": [
+      "The beat must create pressure through withheld entry rather than factual description alone.",
+      "The expectation turn must make closeness intensify uncertainty instead of resolving it."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "beat_threshold_001",
+        "tension_name": "withheld entry pressure",
+        "claimed_intensity": 0.7,
+        "reviewer_assessed_intensity": 0.72,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "The beat earns the claimed pressure because closeness increases uncertainty instead of resolving the threshold."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The plan preserves one compressed emotional movement: approach becomes suspended choice."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The expected return is withheld, creating the intended unresolved pressure."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The artifact has enough emotional and tension context to proceed."
+  },
   "matched": [
     {
       "summary": "The Beat Plan keeps the work to one clear threshold move.",

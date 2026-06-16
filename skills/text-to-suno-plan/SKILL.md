@@ -44,7 +44,7 @@ Before creating the sound-specific Creative Brief, produce:
 2. A Beat Plan matching `schemas/beat-plan.schema.json`.
 3. A Sound Medium Plan matching `schemas/sound-medium-plan.schema.json`.
 
-The Beat Plan is authoritative for story shape. The Sound Medium Plan is authoritative for sound translation decisions: sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, sequence planning, gate statuses, and review requirements. The later Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Its embedded `beats` field is transitional and should only summarize medium-local sound or lyric implications from the shared Beat Plan.
+The Beat Plan is authoritative for story shape. The Sound Medium Plan is authoritative for sound translation decisions: sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, sequence planning, gate statuses, and review requirements. The later Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. Sound translation should express that feeling through sonic pressure, motion, voice, arrangement, or silence, not merely describe the fact.
 
@@ -97,10 +97,13 @@ Use this only after Music / Sound Critic Review and Brief Approval.
 4. Keep the same Artist Meaning, Sonic Concept Direction, Genre / Production Direction, Tempo / Groove Direction, Vocal / Lyric Policy, and Arrangement Plan across variants unless the artist approved a Variant Test Axis.
 5. Make variants distinct using concrete sonic differentiators: groove, density, instrumentation, vocal treatment, arrangement movement, dynamic contrast, harmony, texture, mix perspective, production finish, silence, or section behavior.
 6. If all three variants could generate the same song with minor adjective changes, rewrite them.
-7. Mark any Derived Sonic Elements and trace them to Artist Meaning, Transformation Brief, Beat Plan, Sound Medium Plan, Core Tension Pairs, Active Sonic Tensions, Beats, Tension Points, Poetic Density Notes, Lyrics Draft, or Arrangement Plan.
-8. For each variant, include `suno_outputs` with title, instrumental toggle, lyrics mode/text, Style of Music, and Exclude.
-9. Include top-level `suno_custom_mode_outputs` for the recommended default variant.
-10. Include critique criteria for each Prompt Variant Plan.
+7. Include `emotional_tension_contract` at the plan level: governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and Expectation Turn preservation from the Beat Plan and Sound Medium Plan.
+8. In every `song_structure.sections[]` entry, include `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile`.
+9. In every Prompt Variant Plan, include `emotional_tension_preservation` so the Faithful, Amplified, and Minimal variants can vary sonically without dropping the approved feeling or tension criteria.
+10. Mark any Derived Sonic Elements and trace them to Artist Meaning, Transformation Brief, Beat Plan, Sound Medium Plan, Core Tension Pairs, Active Sonic Tensions, Beats, Tension Points, Poetic Density Notes, Lyrics Draft, or Arrangement Plan.
+11. For each variant, include `suno_outputs` with title, instrumental toggle, lyrics mode/text, Style of Music, and Exclude.
+12. Include top-level `suno_custom_mode_outputs` for the recommended default variant.
+13. Include critique criteria for each Prompt Variant Plan.
 
 ## Suno Output Rules
 

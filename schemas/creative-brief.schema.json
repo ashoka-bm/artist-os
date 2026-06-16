@@ -18,7 +18,6 @@
     "core_tension_pairs",
     "emotional_qualities",
     "poetic_density_notes",
-    "beats",
     "series_recommendation",
     "transformation_constraints"
   ],
@@ -174,21 +173,6 @@
           }
         },
         "flattening_risks": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "beats": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["before", "after", "value_shift", "emotional_payload", "evidence"],
-        "properties": {
-          "before": { "type": "string" },
-          "after": { "type": "string" },
-          "value_shift": { "type": "string" },
-          "emotional_payload": { "type": "string" },
-          "evidence": { "type": "string" }
-        }
       }
     },
     "series_recommendation": {

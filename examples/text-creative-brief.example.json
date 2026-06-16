@@ -328,22 +328,6 @@
       "overexplaining the missing person"
     ]
   },
-  "beats": [
-    {
-      "before": "The room is framed as having forgotten her.",
-      "after": "The doorway still keeps a light for her.",
-      "value_shift": "erasure to invitation",
-      "emotional_payload": "hope that hurts because it may not be trustworthy",
-      "evidence": "The room had forgotten her name, / but the doorway kept its lamp on."
-    },
-    {
-      "before": "She has the means to enter.",
-      "after": "She remains suspended at the threshold.",
-      "value_shift": "agency to paralysis",
-      "emotional_payload": "the pain of having a choice that cannot be safely made",
-      "evidence": "not entering, not leaving, / holding the key"
-    }
-  ],
   "series_recommendation": {
     "mode": "triptych",
     "reason": "The text has at least two major Beats: the room's erasure against the doorway's invitation, then the figure's agency collapsing into paralysis. A triptych could preserve the larger emotional movement better than one compressed image.",

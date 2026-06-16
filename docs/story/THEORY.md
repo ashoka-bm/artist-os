@@ -29,7 +29,7 @@ Reference
   -> Output Acceptance Gate
 ```
 
-The current image and Suno workflows now use a first-class Beat Plan before medium planning. Embedded Beat summaries remain in medium-specific briefs only as transitional compatibility fields.
+The current image and Suno workflows now use a first-class Beat Plan before medium planning. Medium-specific briefs carry `beat_plan_id`; they do not embed duplicate Beat summaries.
 
 ## Story Is Not Only Narrative
 

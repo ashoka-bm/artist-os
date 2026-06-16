@@ -73,6 +73,7 @@ Set Review Record fields as follows:
 - `artifact_under_review.artifact_type`: `creative_brief` or `sound_creative_brief`.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
 - `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, Transformation Brief, Beat Plan, Medium Plan when available, and any draft brief path or reference.
+- `emotional_tension_review`: state the Intended Feeling reviewed, Minimum Tension Criteria checked, Key Emotional Movements reviewed, Expectation Turns reviewed, missing context, and reviewer conclusion. Include `tension_intensity_assessments` for the reviewed tension claims; do not copy the claimed number silently. Set `reviewer_assessed_intensity`, `minimum_required_intensity`, and `meets_minimum` from your independent judgment.
 - `matched`: what the brief preserves well, traced to Artist Meaning, Reference evidence, Beat Plan, Medium Plan, Visual Dynamics, or Sonic Dynamics.
 - `drifted`: every drift finding, including `severity: none` only when there is an explicit no-drift note worth preserving; use an empty array when there is no drift.
 - `findings`: actionable issues ordered by severity.

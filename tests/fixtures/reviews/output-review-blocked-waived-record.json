@@ -35,6 +35,38 @@
     ],
     "open_questions": []
   },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "Preserve unresolved threshold pressure and held motion in the concrete output.",
+    "minimum_tension_criteria_reviewed": [
+      "The output must keep the threshold unresolved.",
+      "The output must not resolve fragile agency into completed departure."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "out_door_left_lit_branch_station_001",
+        "tension_name": "unresolved threshold",
+        "claimed_intensity": 0.72,
+        "reviewer_assessed_intensity": 0.35,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": false,
+        "assessment_note": "The completed departure collapses the required unresolved threshold, so the output falls below the minimum despite the artist waiver."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The output breaks the compressed movement by resolving the suspended choice."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The expected withheld return is not preserved because the figure has departed."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The output fails the emotional/tension contract; acceptance requires an explicit artist waiver."
+  },
   "matched": [
     {
       "summary": "The output keeps the approved branch's station setting.",

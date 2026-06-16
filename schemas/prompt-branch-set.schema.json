@@ -43,9 +43,23 @@
     "meaning_kernel": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kernel_summary", "must_preserve", "must_not_change"],
+      "required": [
+        "kernel_summary",
+        "governing_intended_feeling",
+        "key_emotional_movement_ids",
+        "minimum_tension_criteria",
+        "must_preserve",
+        "must_not_change"
+      ],
       "properties": {
         "kernel_summary": { "type": "string", "minLength": 1 },
+        "governing_intended_feeling": { "type": "string", "minLength": 1 },
+        "key_emotional_movement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
+        },
+        "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
         "must_preserve": { "type": "array", "minItems": 1, "items": { "type": "string" } },
         "must_not_change": { "type": "array", "items": { "type": "string" } }
       }
@@ -110,6 +124,7 @@
         "branch_role",
         "variation_axes",
         "preserved_kernel",
+        "emotional_tension_preservation",
         "differentiators",
         "prompt_text",
         "negative_constraints",
@@ -141,6 +156,28 @@
           }
         },
         "preserved_kernel": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "emotional_tension_preservation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intended_feeling",
+            "key_emotional_movement_id",
+            "expectation_turn_translation",
+            "tension_profile",
+            "minimum_tension_criteria"
+          ],
+          "properties": {
+            "intended_feeling": { "type": "string", "minLength": 1 },
+            "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+            "expectation_turn_translation": { "type": "string", "minLength": 1 },
+            "tension_profile": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/tension_profile_item" }
+            },
+            "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" }
+          }
+        },
         "differentiators": { "type": "array", "minItems": 3, "items": { "type": "string" } },
         "prompt_text": { "type": "string", "minLength": 1 },
         "negative_constraints": { "type": "array", "items": { "type": "string" } },
@@ -150,6 +187,26 @@
           "items": { "$ref": "#/$defs/traceability_note" }
         },
         "curator_notes": { "type": "string" }
+      }
+    },
+    "minimum_tension_criteria": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criteria", "minimum_intensity", "reviewer_check"],
+      "properties": {
+        "criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "minimum_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reviewer_check": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tension_profile_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tension_name", "intensity", "expression"],
+      "properties": {
+        "tension_name": { "type": "string", "minLength": 1 },
+        "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "expression": { "type": "string", "minLength": 1 }
       }
     },
     "traceability_note": {

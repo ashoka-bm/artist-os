@@ -234,6 +234,7 @@ Required sections:
 - `reviewer_execution`
 - `artifact_under_review`
 - `upstream_context`
+- `emotional_tension_review`
 - `matched`
 - `drifted`
 - `findings`
@@ -244,6 +245,8 @@ Required sections:
 All critic and reviewer records include drift checking. A blocking finding must be revised or explicitly waived by the artist before the journey advances.
 
 `upstream_context` must include the governing `artist_meaning_id` so reviews remain traceable to the Artist Meaning version they evaluated.
+
+`emotional_tension_review` must state the Intended Feeling reviewed, Minimum Tension Criteria checked, numeric `tension_intensity_assessments`, Key Emotional Movements reviewed, Expectation Turns reviewed, any missing context, and the reviewer conclusion. Each intensity assessment records the source, tension name, claimed intensity, reviewer-assessed intensity, minimum required intensity, `meets_minimum`, and an assessment note. Reviewers should not copy the claimed number silently; they independently judge whether the artifact earns that intensity. Do not hide this assessment only in `findings`; downstream gates need a stable field to verify that emotional primacy was reviewed.
 
 ### Creative Brief Record
 
@@ -264,11 +267,10 @@ Required sections:
 - `core_tension_pairs`
 - `emotional_qualities`
 - `poetic_density_notes`
-- `beats`
 - `series_recommendation`
 - `transformation_constraints`
 
-`beats` remains transitional now that image prompts use the shared Beat Plan. New records should keep `beat_plan_id` authoritative and use embedded `beats` only as medium-local summaries.
+Creative Brief Records do not embed Beat summaries. Use `beat_plan_id` to read the authoritative Beat Plan.
 
 ### Provider-Neutral Image Prompt Plan
 
@@ -325,6 +327,8 @@ Required sections:
 
 Each branch must preserve the same meaning kernel while varying approved axes such as style, setting, symbol, composition, viewpoint, palette/light, texture, world, camera distance, or abstraction level. For image batches, five branches is the default curator batch size unless the artist asks for another count.
 
+`meaning_kernel` must include `governing_intended_feeling`, `key_emotional_movement_ids`, and `minimum_tension_criteria`. Each branch must include `emotional_tension_preservation`: Intended Feeling, one Key Emotional Movement id, the branch's Expectation Turn Translation, a tension profile, and branch-local minimum criteria. This keeps curator batches meaning-equivalent even when a branch departs far from the baseline prompt.
+
 ### Output Record
 
 An Output Record is the metadata and provenance record for an Output Artifact. It validates against `schemas/output-record.schema.json`.
@@ -366,7 +370,6 @@ It mirrors the image Creative Brief Record structure where the concepts are shar
 - `core_tension_pairs`
 - `emotional_qualities`
 - `poetic_density_notes`
-- `beats`
 - `transformation_constraints`
 
 It replaces image-specific sections with sound-specific sections:
@@ -385,7 +388,7 @@ It replaces image-specific sections with sound-specific sections:
 
 `arrangement_plan.sections[]` records the section-level tension map. Each section includes section name, time range, bar range, section function, tension role, active emotional tensions, active sonic tensions, and transformation notes.
 
-`beats` remains transitional now that sound prompts use the shared Beat Plan. New records should keep `beat_plan_id` authoritative and use embedded `beats` only as medium-local summaries.
+Sound Creative Brief Records do not embed Beat summaries. Use `beat_plan_id` to read the authoritative Beat Plan.
 
 ### Suno Sound Prompt Plan
 
@@ -416,13 +419,16 @@ Required sections:
 - `instrumentation_plan`
 - `production_direction`
 - `sonic_dynamics_summary`
+- `emotional_tension_contract`
 - `prompt_variants`
 - `sequence_calibration`
 - `suno_custom_mode_outputs`
 - `traceability_summary`
 - `critique_checklist`
 
-The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `suno_outputs` so the variant can be pasted into Suno Custom Mode.
+`emotional_tension_contract` records the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and Expectation Turn preservation that the Suno prompt plan must carry from the Beat Plan and Sound Medium Plan. Each `song_structure.sections[]` entry must name its `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile` so the arrangement does not become a genre-only plan.
+
+The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `emotional_tension_preservation` and `suno_outputs` so the variant can be reviewed against the approved emotional/tension contract and then pasted into Suno Custom Mode.
 
 For the first text-to-sound version, `suno_custom_mode_outputs` is the final platform-facing contract. It contains `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform adapters can be added after the Suno flow works.
 

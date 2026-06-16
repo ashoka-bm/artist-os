@@ -42,7 +42,7 @@ Before creating the image-specific Creative Brief, produce:
 2. A Beat Plan matching `schemas/beat-plan.schema.json`.
 3. An Image Medium Plan matching `schemas/image-medium-plan.schema.json`.
 
-The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Its embedded `beats` field is transitional and should only summarize medium-local image implications from the shared Beat Plan.
+The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. The medium translation should express that feeling, not explain the fact.
 

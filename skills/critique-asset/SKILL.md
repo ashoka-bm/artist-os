@@ -64,6 +64,7 @@ Set Review Record fields as follows:
 - `artifact_under_review.artifact_type`: `prompt_plan`, `prompt_branch_set`, `output_record`, or `generated_work`. Prefer `output_record` whenever one exists.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
 - `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, approved Creative Brief or Sound Creative Brief, Beat Plan, Medium Plan, Prompt Plan when applicable, and approved prior output when applicable.
+- `emotional_tension_review`: state the Intended Feeling reviewed, Minimum Tension Criteria checked, Key Emotional Movements reviewed, Expectation Turns reviewed, missing context, and reviewer conclusion. Include `tension_intensity_assessments` for the reviewed tension claims; do not copy the claimed number silently. Set `reviewer_assessed_intensity`, `minimum_required_intensity`, and `meets_minimum` from your independent judgment.
 - `matched`: what the plan or work preserves well, traced to the approved brief and upstream records.
 - `drifted`: every drift finding from Artist Meaning, approved brief, Beat Plan, Medium Plan, Prompt Plan, approved prompt branch or variant, Output Record provenance, or prior accepted output; use an empty array when there is no drift.
 - `findings`: actionable issues ordered by severity.

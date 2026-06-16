@@ -51,4 +51,4 @@ Approved Beat Plan
 
 ## Current Implementation
 
-The current First Slice implements this route through the Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, Output Record, Output Critic Review, and Output Acceptance Gate contracts. Embedded `beats` remain in the image brief only as transitional medium-local summaries; `beat_plan_id` is authoritative.
+The current First Slice implements this route through the Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The image brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.

@@ -242,4 +242,4 @@ Text Reference
   -> Output Acceptance Gate Decision
 ```
 
-The image and Suno workflows now consume the approved Beat Plan instead of each owning its own story model. Embedded `beats` remain in medium-specific brief records only as transitional medium-local summaries.
+The image and Suno workflows now consume the approved Beat Plan instead of each owning its own story model. Medium-specific brief records carry `beat_plan_id` and do not embed duplicate Beat summaries.

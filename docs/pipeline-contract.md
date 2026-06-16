@@ -98,6 +98,8 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: any required review gate.
 - Next: continue if `approval_status` is `approve`; revise if `revise`; stop unless artist waives if `block`.
 
+The Review Record must include numeric tension intensity assessments. Reviewers compare claimed intensity against their own assessed intensity and the minimum required intensity, then set `meets_minimum`; downstream gates use that verdict when deciding whether a block can be waived or whether revision is required.
+
 ### `output.record`
 
 - Input: Prompt Plan or Prompt Branch Set, generated/imported/drafted/edited output artifact, generation approval when provider-backed.
@@ -130,7 +132,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: Symbology Gate, Style Gate, Brief Approval Gate.
 - Next: `image.prompt_plan`.
 
-The Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Embedded `beats` are transitional medium-local summaries.
+The Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. It does not embed Beat summaries; the referenced Beat Plan is authoritative for story shape and emotional movement.
 
 ### `image.prompt_plan`
 
@@ -156,6 +158,8 @@ The Provider-Neutral Image Prompt Plan must include `transformation_brief_id`, `
 
 The Prompt Branch Set preserves the same meaning kernel while deliberately varying style, setting, symbol, composition, and other approved axes. It is for curator batches, not for replacing the approved Prompt Plan.
 
+The Prompt Branch Set must carry the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and branch-level emotional/tension preservation. Each branch names the Key Emotional Movement and Expectation Turn Translation it preserves, so branch variation cannot drift into style-only exploration.
+
 ## Text-To-Suno Steps
 
 ### `sound.medium_plan`
@@ -178,7 +182,7 @@ The Prompt Branch Set preserves the same meaning kernel while deliberately varyi
 - Gate: Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form, Brief Approval Gate.
 - Next: `sound.prompt_plan`.
 
-The Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. Embedded `beats` are transitional medium-local summaries.
+The Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. It does not embed Beat summaries; the referenced Beat Plan is authoritative for story shape and emotional movement.
 
 ### `sound.prompt_plan`
 
@@ -191,6 +195,8 @@ The Sound Creative Brief Record must include `transformation_brief_id` and `beat
 - Next: dry-run completion, Generation Approval Gate, or Output Review.
 
 The Suno Sound Prompt Plan must include `transformation_brief_id`, `beat_plan_id`, and `sound_medium_plan_id`.
+
+The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-level Beat and Key Emotional Movement mapping, section-level Expectation Turn Translation, and variant-level `emotional_tension_preservation`. Prompt variants may vary sonic execution, but they must preserve the approved Intended Feeling and Minimum Tension Criteria.
 
 ## Transition Rules
 

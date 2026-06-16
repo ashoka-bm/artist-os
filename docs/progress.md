@@ -181,23 +181,26 @@ Updated schemas so this rule is durable:
 - `schemas/beat-plan.schema.json` requires `key_emotional_movements`, `tension_movement_plan`, beat `expectation_turn`, beat `intended_feeling`, and beat `tension_profile`,
 - `schemas/image-medium-plan.schema.json` requires `visual_dynamics.minimum_tension_criteria`; image roles now carry `key_emotional_movement_id`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile`,
 - `schemas/creative-brief.schema.json` requires the image-series recommendation to carry role-level emotional movement, tension, expectation-turn translation, and series distinction fields.
+- `schemas/sound-prompt-plan.schema.json` requires `emotional_tension_contract`, section-level Beat and Key Emotional Movement mapping, section-level Expectation Turn Translation, and variant-level emotional/tension preservation,
+- `schemas/prompt-branch-set.schema.json` requires the meaning kernel and every branch to preserve Intended Feeling, Key Emotional Movement, Expectation Turn Translation, and Minimum Tension Criteria,
+- `schemas/review-record.schema.json` requires `emotional_tension_review` with numeric tension intensity assessments, so every critic packet explicitly reviews Intended Feeling, Minimum Tension Criteria, claimed vs reviewer-assessed intensity, Key Emotional Movements, and Expectation Turns.
 
-Updated examples and fixtures for Artist Meaning, Beat Plans, Image Medium Plans, and Creative Brief Records to validate against the new contracts.
+Updated examples and fixtures for Artist Meaning, Beat Plans, Image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Prompt Branch Sets, and Review Records to validate against the hardened contracts.
 
-## Transitional Decisions
+### Embedded Beat Summary Cleanup
 
-### Embedded Beats
+Removed transitional embedded `beats` from:
 
-`creative-brief.schema.json` and `sound-creative-brief.schema.json` still require embedded `beats`.
+- `schemas/creative-brief.schema.json`,
+- `schemas/sound-creative-brief.schema.json`,
+- matching examples and fixtures.
 
 Current rule:
 
 - `beat_plan_id` is authoritative.
-- embedded `beats` are transitional medium-local summaries.
+- medium-specific brief records do not duplicate Beat summaries.
 
-Later cleanup:
-
-- remove embedded `beats` from medium-specific brief schemas once downstream consumers and examples are stable.
+## Transitional Decisions
 
 ### Review Records
 
@@ -344,6 +347,9 @@ Added emotional movement integrity coverage:
 
 - Image Medium Plan image roles must reference Key Emotional Movements that exist in the governing Beat Plan.
 - Creative Brief suggested images must reference Key Emotional Movements that exist in the governing Beat Plan.
+- Suno Sound Prompt Plan sections and variants must reference Beat Plan beats and Key Emotional Movements.
+- Prompt Branch Set meaning kernels and branches must reference Key Emotional Movements from the governing Beat Plan.
+- Review Records must include numeric tension intensity assessments and reviewer verdicts against minimum intensity.
 - Key Emotional Movement `beat_ids` must point to existing Beat Plan beats.
 - Beat `builds_toward_key_movement_id`, when present, must point to an existing Key Emotional Movement.
 
@@ -360,16 +366,16 @@ These make the output lifecycle concrete without expanding Output Record into ta
 
 ## Current Best Next Step
 
-This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should harden the emotional-primacy contract across sound, prompt plans, and reviewer packets before adding a new medium branch or provider adapter.
+This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run an end-to-end dry-run rehearsal from Reference to Prompt Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding a new medium branch or provider adapter.
 
 Reason:
 
 - Transformation Brief, Beat Plan, Medium Plan, Review Record, Prompt Branch Set, Gate Decision, and Output Record schemas now exist,
 - Artist Meaning now records a Decision Interview instead of relying on silent defaults,
 - Beat Plans now carry Intended Feeling, Key Emotional Movements, Expectation Turns, and tension profiles,
-- image Medium Plans and Creative Brief Records now preserve role-level emotional movement and tension,
+- image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
-- transition tests now check emotional movement references across Beat Plan, Image Medium Plan, and Creative Brief fixtures,
+- transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Prompt Branch Set, and Review Record fixtures,
 - `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs,
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
@@ -377,10 +383,10 @@ Reason:
 
 Near-term plan:
 
-1. Extend the same Intended Feeling, Key Emotional Movement, Expectation Turn, and Minimum Tension Criteria language into the sound-side schemas and examples where the current contracts are still looser than image.
-2. Add Prompt Plan and Prompt Branch Set integrity checks so prompt variants preserve the approved Beat Plan, Medium Plan, tension criteria, and role distinctions.
-3. Add reviewer fixture tests that fail when a review packet omits Intended Feeling, governing tension criteria, symbolic gate status, or emotional movement references.
-4. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan and update any docs or skill instructions that still feel under-specified.
+1. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan for image and Suno, and update any docs or skill instructions that still feel under-specified.
+2. Add reviewer fixture tests for symbolic gate status and medium-gate completeness when review packets omit required gate context.
+3. Add the next Medium Plan schema and journey tests only after the rehearsal confirms the current image and sound contracts are stable.
+4. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
 
 Final verification for this pass:
 
@@ -419,16 +425,14 @@ Not implemented yet:
 - Video Medium Plan, Text Medium Plan, and Mixed-Media Plan schemas,
 - provider adapters and real provider-backed generation calls,
 - import adapters for artist-provided output artifacts,
-- durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records,
-- removal of transitional embedded `beats` from medium-specific brief schemas.
+- durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records.
 
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
-- harden sound, prompt-plan, branch-set, and reviewer contracts against the emotional-primacy model,
+- rehearse the image and Suno dry-run flows end to end against the hardened emotional-primacy model,
 - add the next Medium Plan schema and journey tests once the current image and sound contracts stabilize,
 - build provider/import adapter contracts that emit Output Records,
-- design curation records after real accepted outputs exist,
-- remove embedded `beats` once downstream consumers only use `beat_plan_id`.
+- design curation records after real accepted outputs exist.
 
 ## Future Follow-Ups
 

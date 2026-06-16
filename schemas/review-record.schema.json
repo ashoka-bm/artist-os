@@ -11,6 +11,7 @@
     "reviewer_execution",
     "artifact_under_review",
     "upstream_context",
+    "emotional_tension_review",
     "matched",
     "drifted",
     "findings",
@@ -86,6 +87,81 @@
           }
         },
         "open_questions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "emotional_tension_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intended_feeling_reviewed",
+        "minimum_tension_criteria_reviewed",
+        "tension_intensity_assessments",
+        "key_emotional_movements_reviewed",
+        "expectation_turns_reviewed",
+        "missing_context",
+        "reviewer_conclusion"
+      ],
+      "properties": {
+        "intended_feeling_reviewed": { "type": "string", "minLength": 1 },
+        "minimum_tension_criteria_reviewed": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "tension_intensity_assessments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source_ref",
+              "tension_name",
+              "claimed_intensity",
+              "reviewer_assessed_intensity",
+              "minimum_required_intensity",
+              "meets_minimum",
+              "assessment_note"
+            ],
+            "properties": {
+              "source_ref": { "type": "string", "minLength": 1 },
+              "tension_name": { "type": "string", "minLength": 1 },
+              "claimed_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+              "reviewer_assessed_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+              "minimum_required_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+              "meets_minimum": { "type": "boolean" },
+              "assessment_note": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "key_emotional_movements_reviewed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["movement_id", "review_note"],
+            "properties": {
+              "movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+              "review_note": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "expectation_turns_reviewed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["beat_id", "review_note"],
+            "properties": {
+              "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+              "review_note": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "missing_context": { "type": "array", "items": { "type": "string" } },
+        "reviewer_conclusion": { "type": "string", "minLength": 1 }
       }
     },
     "matched": { "type": "array", "items": { "$ref": "#/$defs/review_note" } },
