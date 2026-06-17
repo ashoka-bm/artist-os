@@ -26,11 +26,14 @@ No step advances unless its output validates against the declared schema. Review
 | Beat Plan | `schemas/beat-plan.schema.json` | `examples/beat-plan.example.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
+| Text Medium Plan | `schemas/text-medium-plan.schema.json` | `tests/fixtures/text-journey/text-medium-plan.json` |
 | Creative Brief Record | `schemas/creative-brief.schema.json` | `examples/text-creative-brief.example.json` |
 | Sound Creative Brief Record | `schemas/sound-creative-brief.schema.json` | `examples/text-sound-creative-brief.example.json` |
+| Text Creative Brief Record | `schemas/text-creative-brief.schema.json` | `tests/fixtures/text-journey/text-creative-brief.json` |
 | Provider-Neutral Image Prompt Plan | `schemas/prompt-plan.schema.json` | `examples/text-prompt-plan.example.json` |
 | Prompt Branch Set | `schemas/prompt-branch-set.schema.json` | `examples/prompt-branch-set.example.json` |
 | Suno Sound Prompt Plan | `schemas/sound-prompt-plan.schema.json` | `examples/text-sound-prompt-plan.example.json` |
+| Text Generation Plan | `schemas/text-generation-plan.schema.json` | `tests/fixtures/text-journey/text-generation-plan.json` |
 | Output Record | `schemas/output-record.schema.json` | `examples/output-record.example.json` |
 | Review Record | `schemas/review-record.schema.json` | `examples/review-record.example.json` |
 
@@ -102,7 +105,7 @@ The Review Record must include numeric tension intensity assessments. Reviewers 
 
 ### `output.record`
 
-- Input: Prompt Plan or Prompt Branch Set, generated/imported/drafted/edited output artifact, generation approval when provider-backed.
+- Input: Prompt Plan, Text Generation Plan, or Prompt Branch Set; generated, imported, drafted, rewritten, or edited output artifact; generation or Draft Generation Approval when required.
 - Output: Output Record.
 - Schema: `schemas/output-record.schema.json`.
 - Skill: conductor, provider adapter, import adapter, or drafting skill.
@@ -198,6 +201,44 @@ The Suno Sound Prompt Plan must include `transformation_brief_id`, `beat_plan_id
 
 The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-level Beat and Key Emotional Movement mapping, section-level Expectation Turn Translation, and variant-level `emotional_tension_preservation`. Prompt variants may vary sonic execution, but they must preserve the approved Intended Feeling and Minimum Tension Criteria.
 
+## Text Journey Steps
+
+### `text.medium_plan`
+
+- Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, text gate decisions.
+- Output: Text Medium Plan.
+- Schema: `schemas/text-medium-plan.schema.json`.
+- Skill: `skills/text-journey`.
+- Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, scene, arc, or structurally ambiguous plans.
+- Gate: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
+- Next: `text.creative_brief`.
+
+Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Movement, name a section job, state the Intended Feeling, translate the Expectation Turn, and explain how the section differs from adjacent sections.
+
+### `text.creative_brief`
+
+- Input: Text Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, text gate decisions.
+- Output: Text Creative Brief Record.
+- Schema: `schemas/text-creative-brief.schema.json`.
+- Skill: `skills/text-journey`.
+- Reviewer required: Writing Critic sub-agent.
+- Gate: Brief Approval Gate.
+- Next: `text.generation_plan`.
+
+The Text Creative Brief Record must include `transformation_brief_id`, `beat_plan_id`, and `text_medium_plan_id`. It does not embed Beat records; the referenced Beat Plan is authoritative for story shape and emotional movement.
+
+### `text.generation_plan`
+
+- Input: approved Text Creative Brief Record and Text Medium Plan.
+- Output: Text Generation Plan.
+- Schema: `schemas/text-generation-plan.schema.json`.
+- Skill: `skills/text-journey`.
+- Reviewer required: Prompt Critic sub-agent.
+- Gate: Prompt Lock Gate and Draft Generation Approval Gate.
+- Next: fresh-context draft Output Record, editorial rewrite Output Records, Output Critic Review, or Output Acceptance Gate.
+
+The Text Generation Plan must require fresh-context drafting, a returned draft trace, main-agent conformance review, editorial pass policies, and Output Records for every concrete draft or rewrite artifact.
+
 ## Transition Rules
 
 Allowed structural transitions:
@@ -209,11 +250,14 @@ Artist Meaning -> Transformation Brief
 Transformation Brief -> Beat Plan
 Beat Plan -> Image Medium Plan
 Beat Plan -> Sound Medium Plan
+Beat Plan -> Text Medium Plan
 Image Medium Plan -> Creative Brief Record
 Sound Medium Plan -> Sound Creative Brief Record
+Text Medium Plan -> Text Creative Brief Record
 Creative Brief Record -> Provider-Neutral Image Prompt Plan
+Text Creative Brief Record -> Text Generation Plan
 Provider-Neutral Image Prompt Plan -> Prompt Branch Set
-Prompt Plan / Prompt Branch Set -> Output Record
+Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
 Sound Creative Brief Record -> Suno Sound Prompt Plan

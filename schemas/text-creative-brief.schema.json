@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/text-creative-brief.schema.json",
+  "title": "TextCreativeBriefRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "brief_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "text_medium_plan_id",
+    "target_media_type",
+    "artist_meaning",
+    "formal_observations",
+    "primary_text_form",
+    "text_form_modifiers",
+    "voice_direction",
+    "structure_summary",
+    "fidelity_policy",
+    "source_wording_constraints",
+    "emotional_qualities",
+    "poetic_density_notes",
+    "editorial_pass_recommendations",
+    "transformation_constraints"
+  ],
+  "properties": {
+    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "text_medium_plan_id": { "type": "string", "pattern": "^tmp_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "const": "text" },
+    "artist_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_it_matters", "must_preserve", "may_transform"],
+      "properties": {
+        "why_it_matters": { "type": "string" },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "formal_observations": { "type": "array", "items": { "type": "string" } },
+    "primary_text_form": { "$ref": "#/$defs/text_form" },
+    "text_form_modifiers": { "type": "array", "items": { "$ref": "#/$defs/text_form" } },
+    "voice_direction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["speaker", "point_of_view", "register", "authority", "voice_constraints"],
+      "properties": {
+        "speaker": { "type": "string" },
+        "point_of_view": { "type": "string" },
+        "register": { "type": "string" },
+        "authority": { "type": "string" },
+        "voice_constraints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "structure_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structure_type", "sections"],
+      "properties": {
+        "structure_type": { "type": "string" },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/brief_section" }
+        }
+      }
+    },
+    "fidelity_policy": { "$ref": "#/$defs/fidelity_policy" },
+    "source_wording_constraints": { "type": "array", "items": { "type": "string" } },
+    "emotional_qualities": { "type": "array", "items": { "type": "string" } },
+    "poetic_density_notes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layered_meanings", "flattening_risks"],
+      "properties": {
+        "layered_meanings": { "type": "array", "items": { "type": "string" } },
+        "flattening_risks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "editorial_pass_recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clear_writing_pass", "human_voice_pass"],
+      "properties": {
+        "clear_writing_pass": { "$ref": "#/$defs/pass_recommendation" },
+        "human_voice_pass": { "$ref": "#/$defs/pass_recommendation" }
+      }
+    },
+    "transformation_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_media_type", "preserve", "avoid"],
+      "properties": {
+        "target_media_type": { "type": "string", "const": "text" },
+        "preserve": { "type": "array", "items": { "type": "string" } },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "text_form": {
+      "type": "string",
+      "enum": ["poem", "prose_scene", "short_story", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+    },
+    "fidelity_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "source_wording_constraints", "transformation_allowed", "rights_notes", "rationale"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["preserve_source_wording", "adapt_source_wording", "invert", "expand", "compress", "translate", "new_from_meaning"] },
+        "source_wording_constraints": { "type": "array", "items": { "type": "string" } },
+        "transformation_allowed": { "type": "array", "items": { "type": "string" } },
+        "rights_notes": { "type": "string" },
+        "rationale": { "type": "string" }
+      }
+    },
+    "brief_section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section_id", "section_label", "structure_role", "section_job", "intended_feeling"],
+      "properties": {
+        "section_id": { "type": "string", "pattern": "^txtsec_[a-zA-Z0-9_-]+$" },
+        "section_label": { "type": "string" },
+        "structure_role": { "type": "string" },
+        "section_job": { "type": "string" },
+        "intended_feeling": { "type": "string" }
+      }
+    },
+    "pass_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "degree", "rationale", "protected_features"],
+      "properties": {
+        "status": { "type": "string", "enum": ["required", "recommended", "optional", "skip"] },
+        "degree": { "type": ["string", "null"], "enum": ["light", "standard", "deep", null] },
+        "rationale": { "type": "string" },
+        "protected_features": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

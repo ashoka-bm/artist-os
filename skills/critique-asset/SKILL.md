@@ -1,6 +1,6 @@
 ---
 name: artist-os-critique-asset
-description: Use when the artist wants a Prompt Plan, Prompt Branch Set, or generated output critiqued and an approved brief plus Artist OS upstream records already exist. Choose this directly when those records exist and the request names prompts, a prompt plan, a branch set, or generated work to critique. If no Artist OS project or approved records exist yet — for example a bare "review my image" or "look at this track" with no loaded brief — use artist-os instead, which sets up the records first. For reviewing an unapproved draft brief, use art-critic-review.
+description: Use when the artist wants a Prompt Plan, Text Generation Plan, Prompt Branch Set, or generated/drafted output critiqued and an approved brief plus Artist OS upstream records already exist. Choose this directly when those records exist and the request names prompts, a prompt plan, a text generation plan, a branch set, or generated/drafted work to critique. If no Artist OS project or approved records exist yet — for example a bare "review my image" or "look at this track" with no loaded brief — use artist-os instead, which sets up the records first. For reviewing an unapproved draft brief, use art-critic-review.
 ---
 
 # Critique Asset
@@ -11,9 +11,9 @@ You are the critic for Artist OS.
 
 You must run as a bounded reviewer sub-agent, separate from the creating agent. Do not judge success by whether the output copies the source. Judge whether it preserves the intended emotional function and target visual or sonic engine.
 
-Review only the packet passed by the creating agent: approved brief, Beat Plan, Medium Plan, Prompt Plan or Prompt Branch Set, Output Record when a concrete artifact exists, output description or Generated Work when no Output Record exists yet, and open questions.
+Review only the packet passed by the creating agent: approved brief, Beat Plan, Medium Plan, Prompt Plan, Text Generation Plan, or Prompt Branch Set, Output Record when a concrete artifact exists, output description or Generated Work when no Output Record exists yet, and open questions.
 
-Always check for drift: where the Prompt Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work moved away from the Reference, Artist Meaning, approved brief, Beat Plan, Medium Plan, Prompt Plan, approved branch or variant, or prior accepted output.
+Always check for drift: where the Prompt Plan, Text Generation Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work moved away from the Reference, Artist Meaning, approved brief, Beat Plan, Medium Plan, Prompt Plan or Text Generation Plan, approved branch or variant, or prior accepted output.
 
 ## Inputs
 
@@ -24,7 +24,7 @@ Read:
 - Creative Brief,
 - Beat Plan,
 - Medium Plan when available,
-- Provider-Neutral Image Prompt Plan or Suno Sound Prompt Plan,
+- Provider-Neutral Image Prompt Plan, Suno Sound Prompt Plan, or Text Generation Plan,
 - Prompt Branch Set when reviewing branch strategy or branch-generated output,
 - Output Record for any concrete generated, imported, drafted, or edited Output Artifact,
 - Generated Work or output description only when no Output Record exists yet.
@@ -57,21 +57,21 @@ Every critique must emit a Review Record JSON object that validates against `sch
 
 Set Review Record fields as follows:
 
-- `review_role`: `prompt_critic` for Prompt Plans or Prompt Branch Sets, `output_critic` for Output Records, Output Artifacts, Generated Works, or output descriptions.
+- `review_role`: `prompt_critic` for Prompt Plans, Text Generation Plans, or Prompt Branch Sets, `output_critic` for Output Records, Output Artifacts, Generated Works, or output descriptions.
 - `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-critique-asset`.
-- `artifact_under_review.artifact_type`: `prompt_plan`, `prompt_branch_set`, `output_record`, or `generated_work`. Prefer `output_record` whenever one exists.
+- `artifact_under_review.artifact_type`: `prompt_plan`, `text_generation_plan`, `prompt_branch_set`, `output_record`, or `generated_work`. Prefer `output_record` whenever one exists.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
-- `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, approved Creative Brief or Sound Creative Brief, Beat Plan, Medium Plan, Prompt Plan when applicable, and approved prior output when applicable.
+- `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, approved Creative Brief, Sound Creative Brief, or Text Creative Brief, Beat Plan, Medium Plan, Prompt Plan or Text Generation Plan when applicable, and approved prior output when applicable.
 - `emotional_tension_review`: state the Intended Feeling reviewed, Minimum Tension Criteria checked, Key Emotional Movements reviewed, Expectation Turns reviewed, missing context, and reviewer conclusion. Include `tension_intensity_assessments` for the reviewed tension claims; do not copy the claimed number silently. Set `reviewer_assessed_intensity`, `minimum_required_intensity`, and `meets_minimum` from your independent judgment.
 - `matched`: what the plan or work preserves well, traced to the approved brief and upstream records.
-- `drifted`: every drift finding from Artist Meaning, approved brief, Beat Plan, Medium Plan, Prompt Plan, approved prompt branch or variant, Output Record provenance, or prior accepted output; use an empty array when there is no drift.
+- `drifted`: every drift finding from Artist Meaning, approved brief, Beat Plan, Medium Plan, Prompt Plan, Text Generation Plan, approved prompt branch or variant, Output Record provenance, or prior accepted output; use an empty array when there is no drift.
 - `findings`: actionable issues ordered by severity.
 - `recommended_revision`: concrete guidance for the strongest next revision.
 - `approval_status`: map `accept` to `approve`, `revise` to `revise`, and `reject` to `block`.
 
-Use `block` when the Prompt Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work violates Artist Meaning, drops required provenance, invents unsupported material, breaks provider boundaries, drifts into a different work, or otherwise meets a Prompt Critic or Output Critic blocking condition in `docs/gates-and-reviews.md` — including dropping the approved Shot Design, Expectation Turn Translation, or minimum tension criteria. Only the artist can waive a block. When the artist waives a blocking output finding, set `artist_waiver.waived` to `true` in the Review Record before the Output Acceptance Gate proceeds.
+Use `block` when the Prompt Plan, Text Generation Plan, Prompt Branch Set, Output Record, Output Artifact, or Generated Work violates Artist Meaning, drops required provenance, invents unsupported material, breaks provider boundaries, drifts into a different work, or otherwise meets a Prompt Critic or Output Critic blocking condition in `docs/gates-and-reviews.md` — including dropping the approved Shot Design, Expectation Turn Translation, approved structure, source-wording policy, or minimum tension criteria. Only the artist can waive a block. When the artist waives a blocking output finding, set `artist_waiver.waived` to `true` in the Review Record before the Output Acceptance Gate proceeds.
 
 ## Output
 

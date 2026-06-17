@@ -1,5 +1,6 @@
 {
   "output_record_id": "out_door_left_lit_branch_station_001",
+  "previous_output_record_id": null,
   "project_id": "proj_door_left_lit",
   "source_id": "src_door_left_lit",
   "artist_meaning_id": "meaning_door_left_lit",

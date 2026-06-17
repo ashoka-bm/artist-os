@@ -25,6 +25,7 @@
   ],
   "properties": {
     "output_record_id": { "type": "string", "pattern": "^out_[a-zA-Z0-9_-]+$" },
+    "previous_output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
     "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
     "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
     "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
@@ -33,6 +34,7 @@
     "medium_plan_id": { "type": "string", "pattern": "^(imp|smp|vmp|tmp|mmp)_[a-zA-Z0-9_-]+$" },
     "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
     "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
+    "text_generation_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
     "prompt_branch_set_id": { "type": ["string", "null"], "pattern": "^pbs_[a-zA-Z0-9_-]+$" },
     "prompt_branch_id": { "type": ["string", "null"], "pattern": "^branch_[a-zA-Z0-9_-]+$" },
     "prompt_variant_type": { "type": ["string", "null"], "enum": ["faithful", "amplified", "minimal", null] },
@@ -57,7 +59,7 @@
       "properties": {
         "origin_type": {
           "type": "string",
-          "enum": ["provider_generated", "artist_imported", "agent_drafted", "human_edited"]
+          "enum": ["provider_generated", "artist_imported", "agent_drafted", "agent_rewritten", "human_edited"]
         },
         "created_by": { "type": "string" },
         "generation_approval_ref": { "type": ["string", "null"] }
@@ -112,7 +114,7 @@
       "properties": {
         "source_type": {
           "type": "string",
-          "enum": ["artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "prompt_branch", "prompt_variant", "review_record", "gate_decision"]
+          "enum": ["artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "prompt_branch", "prompt_variant", "review_record", "gate_decision", "output_record"]
         },
         "source_ref": { "type": "string" },
         "note": { "type": "string" }

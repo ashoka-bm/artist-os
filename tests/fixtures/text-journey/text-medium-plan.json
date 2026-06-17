@@ -1,0 +1,105 @@
+{
+  "text_medium_plan_id": "tmp_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "target_media_type": "text",
+  "story_mode": "single_beat",
+  "writing_method": {
+    "primary_method": "shape",
+    "method_modifiers": ["beats"],
+    "rationale": "The output needs a compact reader-facing fragment that still follows the approved threshold beat."
+  },
+  "text_form": {
+    "primary_text_form": "essay_artist_statement",
+    "text_form_modifiers": ["monologue"],
+    "confirmation_status": "confirmed",
+    "rationale": "An artist statement can name the meaning while the monologue influence keeps the threshold intimate.",
+    "avoid": ["explaining away the unresolved ending", "turning the key into a lesson"]
+  },
+  "voice_point_of_view": {
+    "speaker": "the artist",
+    "point_of_view": "first person plural avoided; direct first person singular allowed sparingly",
+    "distance": "close but not confessional",
+    "register": "plain, image-led, restrained",
+    "authority": "reflective without resolving the threshold",
+    "voice_constraints": ["avoid therapeutic summary", "avoid promotional artist-statement language"]
+  },
+  "structure_plan": {
+    "structure_type": "sections",
+    "structure_rationale": "Three short sections let the text move from object, to pressure, to refusal without pretending the decision resolves.",
+    "sections": [
+      {
+        "section_id": "txtsec_key_001",
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_label": "The key",
+        "structure_role": "opening image",
+        "section_job": "Introduce the key as agency that cannot yet be used.",
+        "intended_feeling": "the ache of being close to release but unable to choose it",
+        "expectation_turn_translation": "The object that should unlock entry becomes proof that entry is still impossible.",
+        "source_wording_notes": ["May adapt the source image of the key; do not quote private lines verbatim."],
+        "paragraph_distinction": "This section stays tactile and object-focused."
+      },
+      {
+        "section_id": "txtsec_light_001",
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_label": "The light",
+        "structure_role": "pressure turn",
+        "section_job": "Make welcome feel dangerous without losing tenderness.",
+        "intended_feeling": "tender danger",
+        "expectation_turn_translation": "The lit doorway promises safety but increases the risk of crossing.",
+        "source_wording_notes": ["Keep the doorway image; adapt surrounding language."],
+        "paragraph_distinction": "This section shifts from object to atmosphere."
+      },
+      {
+        "section_id": "txtsec_stop_001",
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_label": "The stop",
+        "structure_role": "withheld resolution",
+        "section_job": "Stop before the decision and let the refusal carry the ending.",
+        "intended_feeling": "unresolved held motion",
+        "expectation_turn_translation": "The expected crossing never arrives; the ending preserves suspended choice.",
+        "source_wording_notes": ["Do not invent a decision or aftermath."],
+        "paragraph_distinction": "This section should be shorter and more withheld than the first two."
+      }
+    ]
+  },
+  "fidelity_policy": {
+    "mode": "adapt_source_wording",
+    "source_wording_constraints": ["preserve threshold, key, and active absence as images"],
+    "transformation_allowed": ["compress", "paraphrase", "shift into artist-statement prose"],
+    "rights_notes": "Use only artist-provided source material inside this project.",
+    "rationale": "The new text should preserve the source images without copying private phrasing verbatim."
+  },
+  "publication_use": {
+    "use_case": "artist_statement",
+    "audience": "viewers encountering the work beside an image or installation",
+    "privacy_notes": "Keep personal biography implied rather than explicit.",
+    "rights_notes": "Artist-owned draft for private review."
+  },
+  "gates": {
+    "writing_method_gate": "complete",
+    "text_form_gate": "complete",
+    "voice_point_of_view_gate": "complete",
+    "structure_gate": "complete",
+    "fidelity_transformation_gate": "complete",
+    "publication_use_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": false,
+    "writing_critic_required": true,
+    "prompt_critic_required": true,
+    "output_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "All sections preserve the threshold beat and its withheld crossing."
+    }
+  ]
+}

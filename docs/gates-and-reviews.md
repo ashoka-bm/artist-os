@@ -81,9 +81,9 @@ At medium gates, present the strongest recommendation first, then ask for artist
 
 ### Prompt Lock Gate
 
-Approves final provider-neutral prompt plans before generation or export.
+Approves final provider-neutral prompt plans or Text Generation Plans before generation, drafting, or export.
 
-Complete when Prompt Critic Review findings are resolved or explicitly waived, and the artist approves the prompt plan for dry-run completion or generation approval.
+Complete when Prompt Critic Review findings are resolved or explicitly waived, and the artist approves the prompt plan or Text Generation Plan for dry-run completion, generation approval, or Draft Generation Approval.
 
 ### Prompt Branch Gate
 
@@ -109,7 +109,7 @@ All review stages are mandatory bounded sub-agent reviews.
 
 The creating agent must not self-review its own Story, Medium, Prompt, or Output review stage. It must pass a narrow review packet to the reviewer sub-agent and apply blocking findings before advancing unless the artist explicitly waives the block.
 
-Every critic and reviewer must check for drift. Drift means the artifact has moved away from the governing upstream material: the Reference, Artist Meaning, Transformation Brief, Beat Plan, Medium Plan, Prompt Plan, or approved prior output. Reviewers should identify what the artifact drifted from, where the drift appears, whether it is harmful or artist-approved, and the smallest revision that restores alignment.
+Every critic and reviewer must check for drift. Drift means the artifact has moved away from the governing upstream material: the Reference, Artist Meaning, Transformation Brief, Beat Plan, Medium Plan, Prompt Plan, Text Generation Plan, or approved prior output. Reviewers should identify what the artifact drifted from, where the drift appears, whether it is harmful or artist-approved, and the smallest revision that restores alignment.
 
 Reviewer sub-agents receive:
 
@@ -118,7 +118,7 @@ Reviewer sub-agents receive:
 - Artist Meaning,
 - Source Record or Reference summary when needed,
 - Beat Plan when relevant,
-- Medium Plan or Prompt Plan when relevant,
+- Medium Plan, Prompt Plan, or Text Generation Plan when relevant,
 - open questions,
 - desired output format.
 
@@ -184,7 +184,7 @@ Drift check: compare shot and motion choices against Artist Meaning, Beat Plan, 
 
 Checks sound translation: Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, lyrics when present, and platform readiness.
 
-Drift check: compare sonic choices against Artist Meaning, Beat Plan, Sound Plan, Sonic Concept, Arrangement Plan, Vocal / Lyric Policy, and source-language rights constraints. Flag genre drift when genre starts replacing meaning.
+Drift check: compare sonic choices against Artist Meaning, Beat Plan, Sound Medium Plan, Sonic Concept, Arrangement Plan, Vocal / Lyric Policy, and source-language rights constraints. Flag genre drift when genre starts replacing meaning.
 
 ### Writing Critic
 
@@ -192,7 +192,7 @@ Checks written translation: form, voice, point of view, scene or section structu
 
 Writing Critic must use Fragment Reviewer, Beat Reviewer, or Shape Reviewer sub-agents when those method-specific concerns are present.
 
-Drift check: compare written choices against Artist Meaning, source material, Beat Plan, Text Plan, chosen voice, and the opening promise when using Writing Shape.
+Drift check: compare written choices against Artist Meaning, source material, Beat Plan, Text Medium Plan, chosen voice, and the opening promise when using Writing Shape.
 
 ### Mixed-Media Critic
 
@@ -204,17 +204,17 @@ Drift check: compare each medium's role against Artist Meaning, Beat Plan, cross
 
 ### Prompt Critic
 
-Checks provider-neutral prompt quality, traceability, variant distinctness, missing constraints, medium readiness, platform readiness, and generation risks.
+Checks provider-neutral prompt quality, Text Generation Plan quality, traceability, variant distinctness, missing constraints, medium readiness, platform readiness, drafting readiness, and generation risks.
 
-Drift check: compare prompt language against Artist Meaning, Beat Plan, Medium Plan, review decisions, and provider boundary constraints. Flag prompt drift when fluent prompt wording adds unsupported symbols, style, plot, lyrics, genre, camera logic, or emotional claims.
+Drift check: compare prompt language or drafting instructions against Artist Meaning, Beat Plan, Medium Plan, review decisions, source-wording policy, and provider or drafting boundary constraints. Flag drift when fluent wording adds unsupported symbols, style, plot, lyrics, genre, camera logic, structure, voice, or emotional claims.
 
-Block when a prompt can render a factual scene but does not direct the emotional effect, when it drops the approved Expectation Turn Translation, when it drops the approved Shot Design, when it drops the approved minimum tension criteria, or when series prompts are visually different only by surface adjectives instead of shot scale, camera angle, composition, symbolic action, communication intent, and tension profile.
+Block when a prompt or Text Generation Plan can render facts but does not direct the emotional effect, when it drops the approved Expectation Turn Translation, when it drops the approved Shot Design, when it drops approved text structure or source-wording policy, when it drops the approved minimum tension criteria, or when series prompts are visually different only by surface adjectives instead of shot scale, camera angle, composition, symbolic action, communication intent, and tension profile.
 
 ### Output Critic
 
-Checks whether the drafted or generated output preserves Artist Meaning, Story Approval, Medium Plan, Prompt Plan, and provenance.
+Checks whether the drafted or generated output preserves Artist Meaning, Story Approval, Medium Plan, Prompt Plan or Text Generation Plan, and provenance.
 
-Drift check: compare the output against Reference evidence, Artist Meaning, Beat Plan, Medium Plan, Prompt Plan, approved variants, and any prior accepted output in the same series.
+Drift check: compare the output against Reference evidence, Artist Meaning, Beat Plan, Medium Plan, Prompt Plan or Text Generation Plan, approved variants, source-wording policy, and any prior accepted output in the same series.
 
 ## Writing Method Reviewers
 

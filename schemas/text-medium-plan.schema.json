@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/text-medium-plan.schema.json",
+  "title": "TextMediumPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text_medium_plan_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "target_media_type",
+    "story_mode",
+    "writing_method",
+    "text_form",
+    "voice_point_of_view",
+    "structure_plan",
+    "fidelity_policy",
+    "publication_use",
+    "gates",
+    "review_requirements",
+    "traceability_summary"
+  ],
+  "properties": {
+    "text_medium_plan_id": { "type": "string", "pattern": "^tmp_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "const": "text" },
+    "story_mode": { "$ref": "#/$defs/story_mode" },
+    "writing_method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_method", "method_modifiers", "rationale"],
+      "properties": {
+        "primary_method": { "type": "string", "enum": ["fragments", "beats", "shape", "hybrid"] },
+        "method_modifiers": { "type": "array", "items": { "type": "string" } },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "text_form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_text_form", "text_form_modifiers", "confirmation_status", "rationale", "avoid"],
+      "properties": {
+        "primary_text_form": { "$ref": "#/$defs/text_form" },
+        "text_form_modifiers": { "type": "array", "items": { "$ref": "#/$defs/text_form" } },
+        "confirmation_status": { "type": "string", "enum": ["artist_specified", "confirmed", "unconfirmed"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "voice_point_of_view": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["speaker", "point_of_view", "distance", "register", "authority", "voice_constraints"],
+      "properties": {
+        "speaker": { "type": "string", "minLength": 1 },
+        "point_of_view": { "type": "string", "minLength": 1 },
+        "distance": { "type": "string", "minLength": 1 },
+        "register": { "type": "string", "minLength": 1 },
+        "authority": { "type": "string", "minLength": 1 },
+        "voice_constraints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "structure_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["structure_type", "structure_rationale", "sections"],
+      "properties": {
+        "structure_type": { "type": "string", "enum": ["fragment", "scene", "sequence", "arc", "acts", "sections", "verses", "argument", "hybrid"] },
+        "structure_rationale": { "type": "string", "minLength": 1 },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/text_section_plan" }
+        }
+      }
+    },
+    "fidelity_policy": { "$ref": "#/$defs/fidelity_policy" },
+    "publication_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["use_case", "audience", "privacy_notes", "rights_notes"],
+      "properties": {
+        "use_case": { "type": "string", "enum": ["private_draft", "performance_text", "lyrics", "social_post", "book_fragment", "prompt_source", "artist_statement", "other"] },
+        "audience": { "type": "string" },
+        "privacy_notes": { "type": "string" },
+        "rights_notes": { "type": "string" }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["writing_method_gate", "text_form_gate", "voice_point_of_view_gate", "structure_gate", "fidelity_transformation_gate", "publication_use_gate"],
+      "properties": {
+        "writing_method_gate": { "$ref": "#/$defs/gate_status" },
+        "text_form_gate": { "$ref": "#/$defs/gate_status" },
+        "voice_point_of_view_gate": { "$ref": "#/$defs/gate_status" },
+        "structure_gate": { "$ref": "#/$defs/gate_status" },
+        "fidelity_transformation_gate": { "$ref": "#/$defs/gate_status" },
+        "publication_use_gate": { "$ref": "#/$defs/gate_status" }
+      }
+    },
+    "review_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beat_reviewer_required", "writing_critic_required", "prompt_critic_required", "output_critic_required"],
+      "properties": {
+        "beat_reviewer_required": { "type": "boolean" },
+        "writing_critic_required": { "type": "boolean", "const": true },
+        "prompt_critic_required": { "type": "boolean", "const": true },
+        "output_critic_required": { "type": "boolean", "const": true }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    }
+  },
+  "$defs": {
+    "story_mode": {
+      "type": "string",
+      "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+    },
+    "gate_status": {
+      "type": "string",
+      "enum": ["not_started", "in_progress", "complete", "skipped", "unconfirmed"]
+    },
+    "text_form": {
+      "type": "string",
+      "enum": ["poem", "prose_scene", "short_story", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+    },
+    "fidelity_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "source_wording_constraints", "transformation_allowed", "rights_notes", "rationale"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["preserve_source_wording", "adapt_source_wording", "invert", "expand", "compress", "translate", "new_from_meaning"] },
+        "source_wording_constraints": { "type": "array", "items": { "type": "string" } },
+        "transformation_allowed": { "type": "array", "items": { "type": "string" } },
+        "rights_notes": { "type": "string" },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "text_section_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "section_id",
+        "beat_id",
+        "key_emotional_movement_id",
+        "section_label",
+        "structure_role",
+        "section_job",
+        "intended_feeling",
+        "expectation_turn_translation",
+        "source_wording_notes",
+        "paragraph_distinction"
+      ],
+      "properties": {
+        "section_id": { "type": "string", "pattern": "^txtsec_[a-zA-Z0-9_-]+$" },
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "section_label": { "type": "string" },
+        "structure_role": { "type": "string" },
+        "section_job": { "type": "string", "minLength": 1 },
+        "intended_feeling": { "type": "string", "minLength": 1 },
+        "expectation_turn_translation": { "type": "string", "minLength": 1 },
+        "source_wording_notes": { "type": "array", "items": { "type": "string" } },
+        "paragraph_distinction": { "type": "string", "minLength": 1 }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "reference_evidence", "transformation_brief", "beat_plan", "beat", "tension_point", "gate_decision"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

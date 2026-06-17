@@ -1,0 +1,66 @@
+{
+  "output_record_id": "out_text_door_left_lit_human_voice_001",
+  "previous_output_record_id": "out_text_door_left_lit_draft_001",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "tmp_door_left_lit",
+  "brief_id": "brief_text_door_left_lit",
+  "prompt_plan_id": "plan_text_door_left_lit",
+  "text_generation_plan_id": "plan_text_door_left_lit",
+  "prompt_branch_set_id": null,
+  "prompt_branch_id": null,
+  "prompt_variant_type": null,
+  "target_media_type": "text",
+  "output_artifact": {
+    "artifact_id": "artifact_text_door_left_lit_human_voice_001",
+    "artifact_kind": "text",
+    "uri_or_path": "workspace-library/artist-os/proj_door_left_lit/outputs/text/human-voice-001.md",
+    "mime_type": "text/markdown",
+    "description": "Human Voice Pass rewrite of the fresh-context draft.",
+    "rights_notes": "Artist-owned rewrite for private review."
+  },
+  "origin": {
+    "origin_type": "agent_rewritten",
+    "created_by": "human_voice_pass_sub_agent",
+    "generation_approval_ref": "gate_text_draft_generation_001"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "settings": {
+      "text_generation_plan_id": "plan_text_door_left_lit",
+      "human_voice_pass_policy": "recommended",
+      "degree": "standard"
+    },
+    "seed": null,
+    "estimated_cost": null,
+    "actual_cost": null
+  },
+  "review_state": {
+    "output_critic_review_required": true,
+    "review_record_id": null,
+    "review_status": "not_reviewed"
+  },
+  "acceptance_state": {
+    "output_acceptance_status": "pending",
+    "accepted_work": false,
+    "artist_decision_ref": null,
+    "waiver_reason": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_door_left_lit",
+      "note": "Original draft trace preserved: sections map to key, light, and stop roles from the Text Medium Plan."
+    },
+    {
+      "source_type": "output_record",
+      "source_ref": "out_text_door_left_lit_draft_001",
+      "note": "Human Voice Pass rewrite: removed AI-sounding polish, preserved source images, protected unresolved ending, and kept the three-section structure."
+    }
+  ],
+  "created_at": "2026-06-17T12:10:00Z"
+}

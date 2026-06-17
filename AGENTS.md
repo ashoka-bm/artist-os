@@ -28,16 +28,16 @@ Use `README.md` for public install and sharing instructions.
 
 ## Product Invariant
 
-Every Prompt Variant Plan and Generated Work must trace back to:
+Every Prompt Variant Plan, Text Generation Plan, and concrete Output Artifact must trace back to:
 
 - Artist Meaning,
 - evidence from the Reference,
-- the Creative Brief,
+- the governing Creative Brief,
 - Emotional Structure,
-- Visual Dynamics or Sonic Dynamics, depending on target medium,
+- Visual Dynamics, Sonic Dynamics, or Text Medium Plan structure, depending on target medium,
 - the Beat or Tension Point,
 - the Transformation Brief,
-- the Prompt Plan,
+- the Prompt Plan or Text Generation Plan,
 - and the Output Record when an Output Artifact exists.
 
 Provider-Neutral Image Prompt Plan records should validate against `schemas/prompt-plan.schema.json`.
@@ -45,6 +45,10 @@ Provider-Neutral Image Prompt Plan records should validate against `schemas/prom
 Sound Creative Brief records should validate against `schemas/sound-creative-brief.schema.json`.
 
 Suno Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.
+
+Text Creative Brief records should validate against `schemas/text-creative-brief.schema.json`.
+
+Text Generation Plan records should validate against `schemas/text-generation-plan.schema.json`.
 
 Prompt Branch Set records should validate against `schemas/prompt-branch-set.schema.json`.
 
@@ -70,6 +74,10 @@ These are the invariants that are not derivable from the product theory. The run
 - Artist Meaning overrides agent interpretation. Treat Emotional Structure as a hypothesis until the artist confirms it.
 - Preserve provenance before optimizing for speed. Keep Derived Symbols and Derived Sonic Elements marked and traceable to the Creative Brief.
 
+## Git Workflow
+
+This repository allows direct commits and pushes to `main` when the user explicitly asks for a direct `main` push or confirms it after being asked. Do not push to `main` by default when the target branch is ambiguous.
+
 Everything else an agent needs at runtime is canonical elsewhere — point to it, do not restate it:
 
 - **Gates, boards, stage completion, style/series logic, Prompt Variant Plans** → `THEORY.md` (and `docs/text-to-sound/THEORY.md` + `ARCHITECTURE.md` for sound). This is the home for the gate order, the gate question wording, the Visual Gate Board contract, the four-stage completion rules, the separation of Emotional Structure / Visual Dynamics / Sonic Dynamics / Style Direction, Style-as-last-priority, the Wondermint Category Reference rule, and the Series Amplitude Plan.
@@ -78,13 +86,14 @@ Everything else an agent needs at runtime is canonical elsewhere — point to it
 
 ## Slices
 
-Artist OS ships two dry-run slices (no provider-backed generation):
+Artist OS ships three dry-run slices:
 
 - **First Slice** — Text Reference → Provider-Neutral Image Prompt Plan.
 - **Text-to-Sound Slice** — Text Reference → Suno Sound Prompt Plan.
+- **Text Journey Slice** — Text Reference → Text Generation Plan and drafted written Output Records.
 
 The authoritative phase order for each is owned by the `artist-os` conductor skill, `skills/artist-os/SKILL.md` → "Phase Order". Read it there rather than maintaining a second copy here.
 
 ## Provider Boundary
 
-The current repository state is dry-run first. Provider Adapters, setup scripts, host adapters, and API-key-backed generation come after the manual image and Suno slices work.
+The current repository state is dry-run first. Provider Adapters, setup scripts, host adapters, and API-key-backed generation come after the manual image, Suno, and Text Journey slices work.

@@ -50,7 +50,7 @@ Approved Beat Plan
 - Beat Reviewer sub-agent is mandatory for multi-section, sequence, or lyric-bearing sound plans.
 - Sound Critic Review checks Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, lyrics when present, and platform readiness as a bounded sub-agent review.
 - Prompt Critic Review checks provider-neutral prompt quality, Suno readiness when applicable, variant distinction, traceability, and missing sonic constraints as a bounded sub-agent review.
-- Output Critic Review checks generated or drafted audio against Artist Meaning, Beat Plan, Sound Plan, and Prompt Plan as a bounded sub-agent review.
+- Output Critic Review checks generated or drafted audio against Artist Meaning, Beat Plan, Sound Medium Plan, and Prompt Plan as a bounded sub-agent review.
 
 ## Current Implementation
 

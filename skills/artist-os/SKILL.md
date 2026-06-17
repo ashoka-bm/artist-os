@@ -1,11 +1,11 @@
 ---
 name: artist-os
-description: Use when an artist wants to take raw text — a poem, story, song lyric, journal entry, monologue, letter, memory, or dream — through the full transformation into visual-art or Suno-music prompts, to resume or continue an existing Artist OS project, or to review or look at an existing output such as an image or track against its brief — even if they do not mention Artist OS, and even when the project's records are not loaded yet. This is the multi-phase conductor and the default entry point. Hand off to a phase skill when the request clearly targets one specific phase of an existing or in-progress project — logging or adding a reference or source, capturing meaning, planning images or sound, or reviewing a draft brief.
+description: Use when an artist wants to take raw text — a poem, story, song lyric, journal entry, monologue, letter, memory, dream, or source excerpt — through Artist OS into image prompts, audio/Suno prompts, written text, or output review; to resume an existing Artist OS project; or to inspect an existing output such as an image, track, or written draft against its brief, even when records are not loaded. This is the multi-phase conductor and default entry point. Hand off only when the request clearly targets one specific phase of an existing project.
 ---
 
 # Artist OS Flow
 
-You are the Artist OS workflow conductor. Your job is sequencing, not theory: route the artist into the dry-run text-to-image or text-to-Suno flow, run the phases in order, enforce the hard gates, and persist state — without asking the artist to invoke role skills manually.
+You are the Artist OS workflow conductor. Your job is sequencing, not theory: orient the artist toward the output they want, route them into the available dry-run flow, run the phases in order, enforce the hard gates, and persist state — without asking the artist to invoke role skills manually.
 
 ## References
 
@@ -18,7 +18,7 @@ This skill is deliberately thin. The "how" of each phase lives in canonical docs
 - `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md` — the Suno music flow.
 - `AGENTS.md` — repository invariants and the traceability rule every plan must satisfy.
 
-Delegate each phase's detailed checklist to the sibling skill that owns it: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/text-to-suno-plan`, `skills/art-critic-review`, `skills/writing-method-review`, and `skills/critique-asset`.
+Delegate each phase's detailed checklist to the sibling skill that owns it: `skills/ingest-reference`, `skills/meaning-interview`, `skills/text-to-image-plan`, `skills/text-to-suno-plan`, `skills/text-journey`, `skills/human-voice-pass`, `skills/clear-writing-pass`, `skills/art-critic-review`, `skills/writing-method-review`, and `skills/critique-asset`.
 
 ## Hard Gates
 
@@ -33,11 +33,75 @@ These are the conductor's safety rails — the things only you can enforce becau
 
 ## Routing
 
-If the target medium is unclear, ask one routing question before analysis hardens:
+If the target output is unclear, run a short Orientation before analysis hardens. Ask only the missing question. If the artist already named the medium or output kind clearly, treat Orientation as complete and do not repeat or confirm it.
 
-> Do you want to turn this text into visual art, or into a Suno music prompt?
+First ask:
 
-Music, song, lyrics, audio, Suno, or sound → text-to-Suno flow. Image, visual, illustration, art prompt, or picture → text-to-image flow. If they want both, ask which medium to start with, run that flow to completion, then run the other.
+> What do you want to create from this Reference?
+>
+> - **Image**: a single image, sequential image story, portfolio, or collection
+> - **Video**: the video path has not been created yet
+> - **Audio**: a song, instrumental track, soundscape, cinematic score, spoken-word bed, ritual audio, sound design piece, or sonic logo
+> - **Text**: a poem, prose scene, short story, lyrics, script, letter, monologue, essay, manifesto, treatment, or rewrite
+
+Then ask the medium-specific output-kind question for Image, Audio, or Text. Do not ask a second video question.
+
+**Image**:
+
+> What kind of image output do you want?
+>
+> - **Single image**: one strong visual translation of the Reference
+> - **Sequential image story**: multiple images that move in order, like story beats
+> - **Portfolio / collection**: multiple related images exploring the same meaning, not necessarily in sequence
+> - **Not sure**: recommend the best visual format from the Reference
+
+Route single image toward the standard image Prompt Plan. Route sequential image story toward Series Recommendation / Series Plan. Route portfolio / collection toward Prompt Branch Set by default unless the artist asks for ordered emotional movement.
+
+**Text**:
+
+> What kind of text do you want to create?
+>
+> - **Poem**
+> - **Prose scene or short story**
+> - **Monologue**
+> - **Script**
+> - **Lyrics**
+> - **Letter**
+> - **Essay / artist statement**
+> - **Manifesto**
+> - **Treatment / outline**
+> - **Rewrite or adaptation of the source**
+> - **Not sure**: recommend the best written form
+
+The artist may name multiple text forms, but identify or recommend one Primary Text Form before planning. Treat other named forms as Text Form Modifiers or constraints. If no primary form is clear, ask one clarifier.
+
+After the artist chooses a text kind, ask:
+
+> Should the new text preserve the source wording closely, adapt it, or create something new from its meaning?
+
+**Audio**:
+
+> What kind of audio do you want?
+>
+> - **Song**
+> - **Instrumental track**
+> - **Spoken word / voice-led piece**
+> - **Ambient soundscape**
+> - **Cinematic score**
+> - **Ritual audio**
+> - **Sound design piece**
+> - **Sonic logo**
+> - **Not sure**: recommend the best sound direction
+
+Keep this audio question shallow. The Sound Journey owns later decisions about sonic concept, genre/production, tempo/groove, vocal/lyric, and arrangement/form.
+
+If the artist chooses **Video**, say:
+
+> The video path has not been created yet. I can still help turn this into an image path, audio path, or text path, or capture the video idea as future planning notes.
+
+Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, soundscape, spoken word bed, ritual audio, sound design, or sonic logo → Sound Journey / text-to-Suno flow. Image, visual, illustration, art prompt, picture, portfolio, collection, gallery, storyboard, or sequential stills → text-to-image flow. Text, writing, poem, prose, story, lyrics as written text, script, letter, monologue, essay, manifesto, treatment, rewrite, or adaptation → `skills/text-journey`. If the artist says only "lyrics" without enough context, ask whether they want lyrics as a written text or a song prompt that uses lyrics. Video → unsupported for now; state that the video path has not been created yet and offer the available paths.
+
+If the artist wants more than one medium, ask which medium to start with, run that flow to completion, then run the next one.
 
 ## Autopilot
 
@@ -57,7 +121,7 @@ If the current host cannot spawn a sub-agent, run a degraded reviewer fallback: 
 
 If the artist arrives with an existing Output Artifact and asks for review, do not restart the full creation flow. First identify or ask for the governing project, Creative Brief or Sound Creative Brief, Prompt Plan or Prompt Branch Set, Medium Plan, Beat Plan, Artist Meaning, and Source Record. If no Output Record exists for the artifact, create one against `schemas/output-record.schema.json`; then jump to Output Critic Review and Output Acceptance Gate for the relevant medium. If the governing records are missing, ask for the brief, prompt, or project files before judging the artifact.
 
-If the Text Reference is missing for a new dry-run transformation, give a short, non-technical orientation first: Artist OS takes text and turns it into visual art prompts or Suno music prompts that preserve its meaning, feeling, emotional arc, and significance. Then ask for the text — poem, lyrics, journal entry, monologue, story excerpt, letter, memory, dream, or any other writing. If the artist provides a non-text Reference, ingest it as a Source Record first, then ask whether they want to provide a text description, transcript, or excerpt for the current text-to-image or text-to-Suno dry-run slice.
+If the Text Reference is missing for a new dry-run transformation, give a short, non-technical orientation first: Artist OS takes text and turns it into image, audio, or text outputs that preserve its meaning, feeling, emotional arc, and significance. Then ask for the text — poem, lyrics, journal entry, monologue, story excerpt, letter, memory, dream, or any other writing. If the artist provides a non-text Reference, ingest it as a Source Record first, then ask whether they want to provide a text description, transcript, or excerpt for the current image, audio, or text slice.
 
 If Artist Meaning is missing, ask:
 
@@ -76,7 +140,7 @@ As conductor, hold two rules at every gate:
 
 ## Phase Order
 
-Both media share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image and `skills/text-to-suno-plan` for Suno. Reviewer steps (5, 8, 11, 14) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
+Image, audio, and text share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image, `skills/text-to-suno-plan` for Sound Journey / Suno, and `skills/text-journey` for text. Reviewer steps (5, 8, 11, 14) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
 
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview` (bounded Decision Interview).
@@ -85,11 +149,11 @@ Both media share one spine. Run the phases in order, hand off to the owning skil
 5. **Story / Beat Review** — `skills/writing-method-review` in Beat Reviewer mode, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan.
 6. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), and produces the Medium Plan. Persist each gate decision under `gates/`.
 7. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
-8. **Critic Review** — `skills/art-critic-review` (art critic for image, sound critic for Suno); then present the revised brief and ask for Brief Approval.
+8. **Critic Review** — `skills/art-critic-review` for image or sound; `skills/writing-method-review` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
 9. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas. (Image only: then run the Minimalist-to-Maximalist intensity gate if unresolved — see Medium Specifics.)
-10. **Final Records** — medium skill produces the (Sound) Creative Brief Record and Provider-Neutral (Image or Suno Sound) Prompt Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
-11. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan (or Prompt Branch Set).
-12. **Generation Approval Gate** — only for provider-backed generation or another external action; approval is explicit per call or approved batch.
+10. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
+11. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set.
+12. **Generation Approval Gate** — only for provider-backed generation, text Draft Generation Approval, or another external action; approval is explicit per call, approved batch, or draft.
 13. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance.
 14. **Output Critic Review** — `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records.
 15. **Output Acceptance Gate** — present the result; ask whether to accept, revise, reject, archive, export, or extend. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
@@ -107,6 +171,16 @@ Both media share one spine. Run the phases in order, hand off to the owning skil
 
 - Step 6 works the Suno gates: Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form. Always resolve Vocal/Lyric (lyrics, spoken/phonetic vocals, or instrumental mode) before locking; draft lyrics before final locking if requested. Medium Plan validates against `schemas/sound-medium-plan.schema.json`.
 - Step 10 records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`. Get sequence approval before multiple sequence plans. Do not add an image-style Prompt Branch Set; the current Prompt Branch Set contract is image-oriented.
+
+**Text** — owning skill `skills/text-journey`:
+
+- Step 6 works the text gates: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, and Publication / Use. Medium Plan validates against `schemas/text-medium-plan.schema.json`.
+- Step 10 records validate against `schemas/text-creative-brief.schema.json` and `schemas/text-generation-plan.schema.json`.
+- Drafting the written Output Artifact requires Draft Generation Approval even when no paid provider call is made.
+- Draft the written Output Artifact in a fresh-context sub-agent using an internal Text Draft Packet. The drafting sub-agent returns draft text plus a compact draft trace; the Text Draft Packet itself is not a schema-backed record.
+- The main agent must run a conformance review before editorial passes. If structure, section jobs, Intended Feeling, source-wording policy, or Text Generation Plan constraints fail, correct the draft before polishing prose.
+- Run Clear Writing Pass before Human Voice Pass by default when their policies require or recommend them. Each pass runs as a separate bounded fresh-context sub-agent and each concrete rewrite gets a new Output Record.
+- Text rewrite Output Records use `origin.origin_type = "agent_rewritten"` and must set `previous_output_record_id`.
 
 ## Persisting State
 

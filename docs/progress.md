@@ -331,11 +331,12 @@ Added tests that verify allowed record transitions:
 ```text
 Source Record + Meaning Interview -> Transformation Brief
 Transformation Brief -> Beat Plan
-Beat Plan -> Image Medium Plan / Sound Medium Plan
+Beat Plan -> Image Medium Plan / Sound Medium Plan / Text Medium Plan
 Image Medium Plan -> Creative Brief
 Sound Medium Plan -> Sound Creative Brief
-Creative Brief + Medium Plan -> Prompt Plan
-Prompt Plan / Prompt Branch Set -> Output Record
+Text Medium Plan -> Text Creative Brief
+Creative Brief + Medium Plan -> Prompt Plan / Text Generation Plan
+Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
 Review Packet -> Review Record
@@ -348,6 +349,8 @@ Added emotional movement integrity coverage:
 - Image Medium Plan image roles must reference Key Emotional Movements that exist in the governing Beat Plan.
 - Creative Brief suggested images must reference Key Emotional Movements that exist in the governing Beat Plan.
 - Suno Sound Prompt Plan sections and variants must reference Beat Plan beats and Key Emotional Movements.
+- Text Medium Plan and Text Generation Plan sections must reference Beat Plan beats and Key Emotional Movements.
+- Text rewrite Output Records must point to a previous Output Record when `origin_type` is `agent_rewritten`.
 - Prompt Branch Set meaning kernels and branches must reference Key Emotional Movements from the governing Beat Plan.
 - Review Records must include numeric tension intensity assessments and reviewer verdicts against minimum intensity.
 - Key Emotional Movement `beat_ids` must point to existing Beat Plan beats.
@@ -366,26 +369,26 @@ These make the output lifecycle concrete without expanding Output Record into ta
 
 ## Current Best Next Step
 
-This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run an end-to-end dry-run rehearsal from Reference to Prompt Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding a new medium branch or provider adapter.
+This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run end-to-end dry-run rehearsals from Reference to Prompt Plan or Text Generation Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding a new medium branch or provider adapter.
 
 Reason:
 
 - Transformation Brief, Beat Plan, Medium Plan, Review Record, Prompt Branch Set, Gate Decision, and Output Record schemas now exist,
 - Artist Meaning now records a Decision Interview instead of relying on silent defaults,
 - Beat Plans now carry Intended Feeling, Key Emotional Movements, Expectation Turns, and tension profiles,
-- image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
+- image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Text Medium Plans, Text Creative Brief Records, Text Generation Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
-- transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Prompt Branch Set, and Review Record fixtures,
-- `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs,
+- transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Text Medium Plan, Text Generation Plan, Prompt Branch Set, Output Record, and Review Record fixtures,
+- `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas.
 
 Near-term plan:
 
-1. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan for image and Suno, and update any docs or skill instructions that still feel under-specified.
+1. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan or Text Generation Plan for image, Suno, and Text Journey, and update any docs or skill instructions that still feel under-specified.
 2. Add reviewer fixture tests for symbolic gate status and medium-gate completeness when review packets omit required gate context.
-3. Add the next Medium Plan schema and journey tests only after the rehearsal confirms the current image and sound contracts are stable.
+3. Add reviewer fixture tests for Text Generation Plan critique and text Output Critic packets once a full rehearsal produces natural review examples.
 4. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
 
 Final verification for this pass:
@@ -408,7 +411,7 @@ Reference
   -> Beat Plan
   -> Medium Plan
   -> Creative Brief Record
-  -> Prompt Plan
+  -> Prompt Plan / Text Generation Plan
   -> optional Prompt Branch Set
   -> Output Record
   -> Review Record
@@ -418,11 +421,12 @@ Reference
 Implemented branches:
 
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
-- text-to-Suno through Sound Medium Plan, Sound Creative Brief Record, Suno Sound Prompt Plan, and output lifecycle contracts.
+- text-to-Suno through Sound Medium Plan, Sound Creative Brief Record, Suno Sound Prompt Plan, and output lifecycle contracts,
+- Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures.
 
 Not implemented yet:
 
-- Video Medium Plan, Text Medium Plan, and Mixed-Media Plan schemas,
+- Video Medium Plan and Mixed-Media Plan schemas,
 - provider adapters and real provider-backed generation calls,
 - import adapters for artist-provided output artifacts,
 - durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records.
@@ -430,7 +434,7 @@ Not implemented yet:
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
 - rehearse the image and Suno dry-run flows end to end against the hardened emotional-primacy model,
-- add the next Medium Plan schema and journey tests once the current image and sound contracts stabilize,
+- rehearse the Text Journey end to end and harden any schema or skill gaps found in use,
 - build provider/import adapter contracts that emit Output Records,
 - design curation records after real accepted outputs exist.
 

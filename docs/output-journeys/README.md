@@ -11,8 +11,8 @@ Reference
   -> Transformation Brief
   -> Story / Beat Plan
   -> Medium Plan
-  -> Prompt Plan
-  -> Generation Approval Gate, if provider-backed
+  -> Prompt Plan or Text Generation Plan
+  -> Generation Approval Gate or Draft Generation Approval Gate, when required
   -> Output Record, when an artifact exists
   -> Output Critic Review
   -> Output Acceptance Gate

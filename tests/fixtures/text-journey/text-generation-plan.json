@@ -1,0 +1,100 @@
+{
+  "text_generation_plan_id": "plan_text_door_left_lit",
+  "brief_id": "brief_text_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "text_medium_plan_id": "tmp_door_left_lit",
+  "target_media_type": "text",
+  "generation_mode": "single_draft",
+  "primary_text_form": "essay_artist_statement",
+  "drafting_instructions": {
+    "task": "Draft a three-section artist statement that preserves the threshold, key, and withheld crossing.",
+    "voice_constraints": ["plain", "restrained", "image-led", "not promotional"],
+    "do_not_change": ["Artist Meaning", "three-section structure", "source-wording policy", "unresolved ending"],
+    "allowed_skills": ["writing-shape"]
+  },
+  "structure_execution": [
+    {
+      "section_id": "txtsec_key_001",
+      "section_label": "The key",
+      "drafting_job": "Open with the key as agency that cannot yet be used.",
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "intended_feeling": "the ache of being close to release but unable to choose it",
+      "must_feel_different_because": "It is tactile and object-focused."
+    },
+    {
+      "section_id": "txtsec_light_001",
+      "section_label": "The light",
+      "drafting_job": "Turn the doorway light from welcome into tender danger.",
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "intended_feeling": "tender danger",
+      "must_feel_different_because": "It shifts from object to atmosphere."
+    },
+    {
+      "section_id": "txtsec_stop_001",
+      "section_label": "The stop",
+      "drafting_job": "End before the crossing and preserve held motion.",
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "intended_feeling": "unresolved held motion",
+      "must_feel_different_because": "It is shorter and more withheld."
+    }
+  ],
+  "source_wording_policy": {
+    "mode": "adapt_source_wording",
+    "protected_source_phrases": [],
+    "forbidden_source_uses": ["do not quote private source lines verbatim"],
+    "rights_notes": "Artist-owned draft for private review."
+  },
+  "fresh_context_drafting": {
+    "required": true,
+    "packet_includes": [
+      "Artist Meaning",
+      "Text Medium Plan",
+      "Text Creative Brief",
+      "Text Generation Plan",
+      "source-wording policy"
+    ],
+    "return_trace_required": true,
+    "human_voice_pass_forbidden_during_draft": true
+  },
+  "clear_writing_pass_policy": {
+    "status": "recommended",
+    "degree": "light",
+    "default_order": 1,
+    "rationale": "Remove artist-statement clutter without flattening the image-led form.",
+    "protected_features": ["three-section structure", "withheld ending", "plain register"],
+    "sub_agent_required": true
+  },
+  "human_voice_pass_policy": {
+    "status": "recommended",
+    "degree": "standard",
+    "default_order": 2,
+    "rationale": "Reduce AI-sounding polish after clarity edits while preserving the plan.",
+    "protected_features": ["threshold image", "key image", "active absence", "unresolved ending"],
+    "sub_agent_required": true
+  },
+  "output_recording": {
+    "draft_output_record_required": true,
+    "rewrite_output_record_required": true,
+    "rewrite_origin_type": "agent_rewritten",
+    "previous_output_record_required_for_rewrite": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "text_creative_brief",
+      "source_ref": "brief_text_door_left_lit",
+      "note": "The draft must follow the approved Text Creative Brief and three-section structure."
+    }
+  ],
+  "critique_checklist": [
+    "Does each section do its assigned job?",
+    "Does the ending remain unresolved?",
+    "Does the draft avoid private source quotation?",
+    "Do editorial passes preserve protected features?"
+  ]
+}

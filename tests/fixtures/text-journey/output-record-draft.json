@@ -1,0 +1,65 @@
+{
+  "output_record_id": "out_text_door_left_lit_draft_001",
+  "previous_output_record_id": null,
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "tmp_door_left_lit",
+  "brief_id": "brief_text_door_left_lit",
+  "prompt_plan_id": "plan_text_door_left_lit",
+  "text_generation_plan_id": "plan_text_door_left_lit",
+  "prompt_branch_set_id": null,
+  "prompt_branch_id": null,
+  "prompt_variant_type": null,
+  "target_media_type": "text",
+  "output_artifact": {
+    "artifact_id": "artifact_text_door_left_lit_draft_001",
+    "artifact_kind": "text",
+    "uri_or_path": "workspace-library/artist-os/proj_door_left_lit/outputs/text/draft-001.md",
+    "mime_type": "text/markdown",
+    "description": "Fresh-context drafted artist statement before editorial passes.",
+    "rights_notes": "Artist-owned draft for private review."
+  },
+  "origin": {
+    "origin_type": "agent_drafted",
+    "created_by": "fresh_context_text_drafting_sub_agent",
+    "generation_approval_ref": "gate_text_draft_generation_001"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "settings": {
+      "text_generation_plan_id": "plan_text_door_left_lit",
+      "fresh_context_drafting": true
+    },
+    "seed": null,
+    "estimated_cost": null,
+    "actual_cost": null
+  },
+  "review_state": {
+    "output_critic_review_required": true,
+    "review_record_id": null,
+    "review_status": "not_reviewed"
+  },
+  "acceptance_state": {
+    "output_acceptance_status": "pending",
+    "accepted_work": false,
+    "artist_decision_ref": null,
+    "waiver_reason": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_door_left_lit",
+      "note": "Draft trace: section txtsec_key_001 maps to opening image; section txtsec_light_001 maps to pressure turn; section txtsec_stop_001 maps to withheld resolution."
+    },
+    {
+      "source_type": "text_generation_plan",
+      "source_ref": "plan_text_door_left_lit",
+      "note": "Fresh-context drafting returned a compact trace and did not run Human Voice Pass."
+    }
+  ],
+  "created_at": "2026-06-17T12:00:00Z"
+}

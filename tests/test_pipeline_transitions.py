@@ -280,6 +280,101 @@ class PipelineTransitionTests(unittest.TestCase):
             variant_movement_ids = variant["emotional_tension_preservation"]["key_emotional_movement_ids"]
             self.assertTrue(set(variant_movement_ids).issubset(key_movement_ids))
 
+    def test_beat_plan_to_text_medium_plan(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+
+        self.assertEqual(text_plan["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(text_plan["source_id"], beat_plan["source_id"])
+        self.assertEqual(text_plan["artist_meaning_id"], beat_plan["artist_meaning_id"])
+        self.assertEqual(text_plan["transformation_brief_id"], beat_plan["transformation_brief_id"])
+        self.assertEqual(text_plan["target_media_type"], "text")
+        self.assertEqual(text_plan["fidelity_policy"]["mode"], "adapt_source_wording")
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        for section in text_plan["structure_plan"]["sections"]:
+            self.assertIn(section["key_emotional_movement_id"], key_movement_ids)
+            self.assertTrue(section["section_job"])
+            self.assertTrue(section["paragraph_distinction"])
+
+    def test_text_medium_plan_to_text_creative_brief(self) -> None:
+        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+        text_brief = load("tests/fixtures/text-journey/text-creative-brief.json")
+
+        self.assertEqual(text_brief["text_medium_plan_id"], text_plan["text_medium_plan_id"])
+        self.assertEqual(text_brief["beat_plan_id"], text_plan["beat_plan_id"])
+        self.assertEqual(text_brief["source_id"], text_plan["source_id"])
+        self.assertEqual(text_brief["artist_meaning_id"], text_plan["artist_meaning_id"])
+        self.assertEqual(text_brief["transformation_brief_id"], text_plan["transformation_brief_id"])
+        self.assertEqual(text_brief["target_media_type"], "text")
+        self.assertEqual(text_brief["primary_text_form"], text_plan["text_form"]["primary_text_form"])
+        self.assertEqual(text_brief["fidelity_policy"]["mode"], text_plan["fidelity_policy"]["mode"])
+        self.assertNotIn("beats", text_brief)
+
+    def test_text_creative_brief_to_text_generation_plan(self) -> None:
+        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+        text_brief = load("tests/fixtures/text-journey/text-creative-brief.json")
+        generation_plan = load("tests/fixtures/text-journey/text-generation-plan.json")
+
+        self.assertEqual(generation_plan["brief_id"], text_brief["brief_id"])
+        self.assertEqual(generation_plan["source_id"], text_brief["source_id"])
+        self.assertEqual(generation_plan["artist_meaning_id"], text_brief["artist_meaning_id"])
+        self.assertEqual(generation_plan["transformation_brief_id"], text_brief["transformation_brief_id"])
+        self.assertEqual(generation_plan["beat_plan_id"], text_brief["beat_plan_id"])
+        self.assertEqual(generation_plan["text_medium_plan_id"], text_plan["text_medium_plan_id"])
+        self.assertTrue(generation_plan["fresh_context_drafting"]["required"])
+        self.assertEqual(generation_plan["human_voice_pass_policy"]["status"], "recommended")
+        self.assertEqual(generation_plan["clear_writing_pass_policy"]["status"], "recommended")
+        self.assertLess(
+            generation_plan["clear_writing_pass_policy"]["default_order"],
+            generation_plan["human_voice_pass_policy"]["default_order"],
+        )
+        trace_source_types = {note["source_type"] for note in generation_plan["traceability_summary"]}
+        self.assertIn("text_creative_brief", trace_source_types)
+
+    def test_text_generation_plan_to_draft_and_rewrite_output_records(self) -> None:
+        generation_plan = load("tests/fixtures/text-journey/text-generation-plan.json")
+        draft_output = load("tests/fixtures/text-journey/output-record-draft.json")
+        rewrite_output = load("tests/fixtures/text-journey/output-record-human-voice.json")
+
+        self.assertEqual(draft_output["prompt_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(draft_output["text_generation_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertIsNone(draft_output["previous_output_record_id"])
+        self.assertEqual(draft_output["target_media_type"], "text")
+        self.assertEqual(draft_output["origin"]["origin_type"], "agent_drafted")
+        draft_trace = [note for note in draft_output["traceability_summary"] if note["source_type"] == "medium_plan"]
+        self.assertGreaterEqual(len(draft_trace), 1)
+        self.assertIn("section", draft_trace[0]["note"].lower())
+        generation_plan_trace = [
+            note for note in draft_output["traceability_summary"]
+            if note["source_type"] == "text_generation_plan"
+        ]
+        self.assertGreaterEqual(len(generation_plan_trace), 1)
+
+        self.assertEqual(rewrite_output["prompt_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(rewrite_output["text_generation_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(rewrite_output["previous_output_record_id"], draft_output["output_record_id"])
+        self.assertEqual(rewrite_output["origin"]["origin_type"], "agent_rewritten")
+        rewrite_notes = [
+            note for note in rewrite_output["traceability_summary"]
+            if note["source_type"] == "output_record"
+        ]
+        self.assertGreaterEqual(len(rewrite_notes), 1)
+        self.assertIn("human voice", rewrite_notes[0]["note"].lower())
+
+    def test_agent_rewritten_outputs_reference_previous_output(self) -> None:
+        output_paths = [
+            "tests/fixtures/text-journey/output-record-draft.json",
+            "tests/fixtures/text-journey/output-record-human-voice.json",
+            "tests/fixtures/outputs/output-record.json",
+        ]
+
+        for path in output_paths:
+            output = load(path)
+            if output["origin"]["origin_type"] == "agent_rewritten":
+                self.assertIsNotNone(output["previous_output_record_id"], path)
+
     def test_review_record_reviews_declared_artifact(self) -> None:
         review = load("tests/fixtures/reviews/review-record.json")
         beat_plan = load("tests/fixtures/story/beat-plan.json")

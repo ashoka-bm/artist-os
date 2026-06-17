@@ -33,7 +33,7 @@ The artist's stated interpretation of what a Reference means and what must survi
 _Avoid_: Meaning, intent, vibe
 
 **Emotional Primacy**:
-The rule that creating the intended feeling is the governing goal of an Artist OS transformation. Beat Plans, tension profiles, Symbology Direction, Style Direction, Medium Plans, Prompt Plans, and reviews exist to support the intended feeling while preserving Artist Meaning.
+The rule that creating the intended feeling is the governing goal of an Artist OS transformation. Beat Plans, tension profiles, Symbology Direction, Style Direction, Medium Plans, Prompt Plans, Text Generation Plans, and reviews exist to support the intended feeling while preserving Artist Meaning.
 _Avoid_: Treating beats, style, composition, or prompt detail as successful when they do not create the intended emotion
 
 **Intended Feeling**:
@@ -49,7 +49,7 @@ The use of absence, omission, silence, negative space, missing figures, withheld
 _Avoid_: Treating minimal content as automatically weak, filling every gap with explanation
 
 **Artist Meaning Record**:
-The first-class structured record created by the Meaning Interview before agent interpretation. It preserves Artist Meaning independently so later Transformation Briefs, Beat Plans, Medium Plans, Prompt Plans, and reviews can trace back to the artist's own authority.
+The first-class structured record created by the Meaning Interview before agent interpretation. It preserves Artist Meaning independently so later Transformation Briefs, Beat Plans, Medium Plans, Prompt Plans, Text Generation Plans, and reviews can trace back to the artist's own authority.
 _Avoid_: Burying Artist Meaning only inside a Creative Brief or Transformation Brief
 
 **Meaning Interview**:
@@ -59,6 +59,14 @@ _Avoid_: Grill me, interrogation
 **Decision Interview**:
 A bounded, one-question-at-a-time clarification sequence inside the Meaning Interview and major gates. Each question includes the agent's recommended answer, then waits for the artist's response before proceeding. It flushes out meaning, emotional target, must-preserve constraints, avoid constraints, medium direction, and success criteria before analysis hardens.
 _Avoid_: Silent agent defaults, long surveys, generic brainstorming
+
+**Orientation**:
+The lightweight first-load exchange that identifies what kind of output the artist wants to create from a Reference before formal routing and planning harden.
+_Avoid_: Orientation Gate, approval checkpoint, full medium planning, silent routing default
+
+**Audio**:
+The artist-facing Orientation label for sound outputs such as songs, instrumental tracks, soundscapes, scores, spoken-word beds, ritual audio, sound design pieces, and sonic logos.
+_Avoid_: Renaming Sound Journey, Sound Medium Plan, or Sound Prompt Plan
 
 **Recommended Answer**:
 The agent's concrete proposed answer to a Decision Interview question, based on the Reference, Artist Meaning so far, and product rules. The artist can accept, revise, or reject it.
@@ -76,6 +84,14 @@ _Avoid_: Creative Brief Record
 The structured JSON version of an approved Creative Brief for agent handoff, validation, and Prompt Plan creation.
 _Avoid_: Creative Brief Document, Transformation Brief, Beat Plan, Medium Plan
 
+**Text Creative Brief**:
+The text-specific Creative Brief that compiles Artist Meaning, Transformation Brief, Beat Plan, and Text Medium Plan into an approved handoff for written output planning.
+_Avoid_: Text Medium Plan, Text Generation Plan
+
+**Text Creative Brief Record**:
+The structured JSON version of an approved Text Creative Brief for agent handoff, validation, and Text Generation Plan creation.
+_Avoid_: Text Creative Brief Document, Text Medium Plan, Text Generation Plan
+
 **Brief Approval**:
 The artist's approval of a Creative Brief Document before Artist OS generates the Creative Brief Record.
 _Avoid_: Acceptance Review
@@ -89,7 +105,7 @@ A handoff label that tells the review step how strongly an interpretation is sup
 _Avoid_: Final ambiguity
 
 **Open Question**:
-An unresolved interpretive gap that must be resolved before the final Prompt Plan.
+An unresolved interpretive gap that must be resolved before the final Prompt Plan or Text Generation Plan.
 _Avoid_: Final prompt ambiguity
 
 **Art Critic Review**:
@@ -147,6 +163,38 @@ _Avoid_: Equal-weight style pileup
 **Style Modifier**:
 A secondary style, finish, mood, production, or genre influence that modifies the Primary Style.
 _Avoid_: Unbounded hybrid style list
+
+**Primary Text Form**:
+The dominant written container for a Text Journey, such as poem, prose scene, short story, monologue, script, lyrics, letter, essay, manifesto, treatment, rewrite, or adaptation.
+_Avoid_: Equal-weight pileup of text forms
+
+**Text Form Modifier**:
+A secondary written form influence that shapes the Primary Text Form without replacing its governing structure.
+_Avoid_: Treating hybrid text forms as structureless
+
+**Text Generation Plan**:
+The structured post-brief plan for drafting or generating a written output while preserving the approved Text Medium Plan, voice, structure, source-wording policy, and review criteria.
+_Avoid_: Text Prompt Plan, provider-only prompt
+
+**Text Draft Packet**:
+An internal fresh-context sub-agent handoff assembled from approved Text Journey records, source constraints, and drafting instructions to produce or revise a written Output Artifact.
+_Avoid_: Schema-backed record, durable project artifact
+
+**Human Voice Pass**:
+A bounded skill-backed rewrite pass applied to a drafted written Output Artifact to make it sound less AI-written while preserving Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, and structure.
+_Avoid_: Generic warmth, untraceable rewrite, changing meaning to sound natural
+
+**Human Voice Pass Policy**:
+The Text Generation Plan decision that sets whether the Human Voice Pass is required, recommended, optional, or skipped, at what degree, and which formal features it must protect.
+_Avoid_: Running humanization blindly across every text form
+
+**Clear Writing Pass**:
+A bounded editorial pass that improves clarity, concision, paragraph force, and reader guidance when those qualities serve the approved text form.
+_Avoid_: Applying plainness to every written output, replacing voice with generic brevity
+
+**Clear Writing Pass Policy**:
+The Text Generation Plan decision that sets whether the Clear Writing Pass is required, recommended, optional, or skipped, at what degree, and which formal features it must protect.
+_Avoid_: Treating clarity and concision as universal goals
 
 **Style Priority**:
 The rule that Style Direction is subordinate to Artist Meaning, Emotional Structure, Beat Plan, and Visual Dynamics.
@@ -245,7 +293,7 @@ One internal comparison-board prompt for six symbolic representations of the sam
 _Avoid_: Showing the full image prompt by default or choosing style before symbolic representation
 
 **Gate Decision**:
-The durable record of an artist-facing gate choice, revision, rejection, skip, approval, or explicit permission to proceed unconfirmed. Gate-specific detail belongs in the relevant stage record, board, Medium Plan, Prompt Plan, or Prompt Branch Set.
+The durable record of an artist-facing gate choice, revision, rejection, skip, approval, or explicit permission to proceed unconfirmed. Gate-specific detail belongs in the relevant stage record, board, Medium Plan, Prompt Plan, Text Generation Plan, or Prompt Branch Set.
 _Avoid_: Separate specialized decision schemas before a gate proves it needs one
 
 **Style Gate**:
@@ -521,7 +569,7 @@ Committed sample References and records that are safe to share.
 _Avoid_: Workspace Library
 
 **Workspace Library**:
-Local uncommitted storage for real artist References, Creative Briefs, gate decisions, Prompt Plans, Generated Works, image files, sidecar metadata, and Output Records.
+Local uncommitted storage for real artist References, Creative Briefs, gate decisions, Prompt Plans, Text Generation Plans, Generated Works, image files, sidecar metadata, and Output Records.
 _Avoid_: Example Corpus
 
 **Artist OS Library Database**:
@@ -545,7 +593,7 @@ The first complete Dry Run path through Artist OS: Text Reference to Image Promp
 _Avoid_: MVP
 
 **Generated Work**:
-An Output Artifact created by Artist OS or a provider from an approved Prompt Plan or Prompt Branch Set.
+An Output Artifact created by Artist OS or a provider from an approved Prompt Plan, Text Generation Plan, or Prompt Branch Set.
 _Avoid_: Output Artifact when the origin was imported or human-authored
 
 **Variant**:
@@ -561,19 +609,19 @@ The artist-facing gate where the artist accepts, rejects, revises, archives, exp
 _Avoid_: Acceptance Review, Critique, quality score
 
 **Output Critic Review**:
-The bounded sub-agent review that checks a drafted, generated, imported, or edited Output Artifact against Artist Meaning, Story Approval, Medium Plan, Prompt Plan, approved branch or variant, and provenance before the Output Acceptance Gate.
+The bounded sub-agent review that checks a drafted, generated, imported, or edited Output Artifact against Artist Meaning, Story Approval, Medium Plan, Prompt Plan or Text Generation Plan, approved branch or variant, and provenance before the Output Acceptance Gate.
 _Avoid_: Artist acceptance, taste memory, calibration choice
 
 **Output Artifact**:
-Any concrete output that Artist OS can review, accept, archive, export, or use as calibration context, including Generated Works, artist imports, agent-drafted text, and human-edited outputs.
+Any concrete output that Artist OS can review, accept, archive, export, or use as calibration context, including Generated Works, artist imports, agent-drafted text, agent-rewritten text, and human-edited outputs.
 _Avoid_: Generated Work when origin matters
 
 **Output Record**:
-The metadata and provenance record for any concrete output artifact Artist OS may review, accept, archive, export, or use as future calibration context, including provider-generated media, artist imports, agent-drafted text, or human-edited outputs.
+The metadata and provenance record for any concrete output artifact Artist OS may review, accept, archive, export, or use as future calibration context, including provider-generated media, artist imports, agent-drafted text, agent-rewritten text, or human-edited outputs.
 _Avoid_: Generated Work, Source Record, provider-only metadata
 
 **Output Batch**:
-A future grouping record for comparing, costing, and managing multiple Output Records produced from the same Prompt Plan, Prompt Branch Set, provider run, or curation pass.
+A future grouping record for comparing, costing, and managing multiple Output Records produced from the same Prompt Plan, Text Generation Plan, Prompt Branch Set, provider run, or curation pass.
 _Avoid_: Adding batch-only fields to each Output Record before provider batch workflows exist
 
 ## Relationships
@@ -591,8 +639,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Creative Brief** can be represented as a **Creative Brief Document** and a **Creative Brief Record**.
 - A **Creative Brief Document** requires **Brief Approval** before producing the **Creative Brief Record**.
 - **Rough Brief Approval** permits producing a **Creative Brief Record** while preserving uncertainty notes.
-- **Interpretive Confidence** and **Open Questions** guide review, but final Prompt Plans should not preserve unresolved ambiguity.
-- **Art Critic Review** resolves **Open Questions** before final Prompt Plan generation.
+- **Interpretive Confidence** and **Open Questions** guide review, but final Prompt Plans and Text Generation Plans should not preserve unresolved ambiguity.
+- **Art Critic Review** or **Writing Critic Review** resolves **Open Questions** before final Prompt Plan or Text Generation Plan creation.
 - **Art Critic Review** may deepen and emphasize existing findings when the artist gives no additional feedback, but it cannot override **Artist Meaning**.
 - The First Slice runs **Art Critic Review** after the draft **Creative Brief Document** and before **Brief Approval**.
 - **Art Critic Review** is mandatory in the First Slice.
@@ -651,6 +699,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Symbology Board** gives the artist human input before style and prompt locking by comparing six symbolic or compositional branches with concise option labels.
 - A **Prompt Variant Plan** explores one approved image direction; a **Series Plan** creates multiple related images with distinct **Image Roles**.
 - A **Prompt Branch Set** explores multiple meaning-equivalent prompt branches from one approved **Prompt Plan** for curator selection; it does not create **Variants** until provider-backed generation is explicitly approved.
+- A requested image portfolio or collection routes toward **Prompt Branch Set** by default, while a requested ordered image story routes toward **Series Recommendation** or **Series Plan**.
 - A draft **Prompt Branch Set** may be created without review, but an **Actionable Prompt Branch Set** requires **Prompt Critic Review** before generation or serious curator selection.
 - A **Prompt Branch Set** remains a child of one approved **Prompt Plan**. A selected prompt branch can become a new **Prompt Plan** only after artist selection or direction approval.
 - Every branch in a **Prompt Branch Set** preserves the same **Beat Plan**. If a branch changes the story movement, return to **Story Gate** or create a separate journey.
@@ -661,7 +710,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - The First Slice may include **Style Progression** inside **Series Recommendation**, but it becomes executable only after **Series Plan** approval.
 - **Series Calibration Fields** live in **Series Recommendation** before the full **Calibration Choice** workflow exists.
 - A **Transformation Brief** defines the current **Meaning-Preserving Transformation** for the typed pipeline.
-- A **Meaning-Preserving Transformation** can produce one or more **Provider-Neutral Prompt Plans**.
+- A **Meaning-Preserving Transformation** can produce one or more **Provider-Neutral Prompt Plans** or **Text Generation Plans**.
+- A **Text Generation Plan** is the Text Journey's post-brief generation contract; it occupies the same pipeline position as a **Prompt Plan** but is not a provider prompt plan.
 - The First Slice produces one **Provider-Neutral Prompt Plan** containing three **Prompt Variant Plans**: **Faithful Prompt Variant**, **Amplified Prompt Variant**, and **Minimal Prompt Variant**.
 - Every **Prompt Variant Plan** must trace back to the same approved **Creative Brief**.
 - The **Amplified Prompt Variant** may introduce **Derived Symbols** if each one is marked and traced to **Artist Meaning**, a **Core Tension Pair**, an **Active Visual Tension**, a **Beat** or **Tension Point**, or a **Poetic Density Note**.

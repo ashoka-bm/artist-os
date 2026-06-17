@@ -1,0 +1,101 @@
+{
+  "brief_id": "brief_text_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "text_medium_plan_id": "tmp_door_left_lit",
+  "target_media_type": "text",
+  "artist_meaning": {
+    "why_it_matters": "The piece is about returning to a place that is no longer emotionally safe, while still feeling tenderness for it.",
+    "must_preserve": [
+      "the threshold between returning and leaving",
+      "the key as fragile agency",
+      "absence as an active presence"
+    ],
+    "may_transform": [
+      "the exact room can become another threshold setting",
+      "the key can become an equivalent object of choice"
+    ]
+  },
+  "formal_observations": [
+    "Short lines create pauses.",
+    "The central image is a doorway that is not crossed."
+  ],
+  "primary_text_form": "essay_artist_statement",
+  "text_form_modifiers": ["monologue"],
+  "voice_direction": {
+    "speaker": "the artist",
+    "point_of_view": "close first person allowed sparingly",
+    "register": "plain, image-led, restrained",
+    "authority": "reflective without resolving the threshold",
+    "voice_constraints": ["avoid promotional language", "avoid therapeutic closure"]
+  },
+  "structure_summary": {
+    "structure_type": "three short sections",
+    "sections": [
+      {
+        "section_id": "txtsec_key_001",
+        "section_label": "The key",
+        "structure_role": "opening image",
+        "section_job": "Introduce agency that cannot yet be used.",
+        "intended_feeling": "the ache of being close to release but unable to choose it"
+      },
+      {
+        "section_id": "txtsec_light_001",
+        "section_label": "The light",
+        "structure_role": "pressure turn",
+        "section_job": "Make welcome feel dangerous without losing tenderness.",
+        "intended_feeling": "tender danger"
+      },
+      {
+        "section_id": "txtsec_stop_001",
+        "section_label": "The stop",
+        "structure_role": "withheld resolution",
+        "section_job": "Stop before the decision and let refusal carry the ending.",
+        "intended_feeling": "unresolved held motion"
+      }
+    ]
+  },
+  "fidelity_policy": {
+    "mode": "adapt_source_wording",
+    "source_wording_constraints": ["preserve threshold, key, and active absence as images"],
+    "transformation_allowed": ["compress", "paraphrase", "shift into artist-statement prose"],
+    "rights_notes": "Use only artist-provided source material inside this project.",
+    "rationale": "Preserve the source images without copying private phrasing verbatim."
+  },
+  "source_wording_constraints": [
+    "Do not quote private lines verbatim.",
+    "Do not invent a crossed threshold."
+  ],
+  "emotional_qualities": ["tender danger", "suspended choice", "active absence"],
+  "poetic_density_notes": {
+    "layered_meanings": [
+      "The key is agency, permission, and failure to act.",
+      "The doorway is welcome and threat at once."
+    ],
+    "flattening_risks": [
+      "Explaining the threshold as a simple decision would weaken the work.",
+      "Ending with a lesson would break Artist Meaning."
+    ]
+  },
+  "editorial_pass_recommendations": {
+    "clear_writing_pass": {
+      "status": "recommended",
+      "degree": "light",
+      "rationale": "The artist statement should stay direct without becoming generic.",
+      "protected_features": ["withheld ending", "image-led structure", "restrained tone"]
+    },
+    "human_voice_pass": {
+      "status": "recommended",
+      "degree": "standard",
+      "rationale": "Artist statements often pick up AI polish and should be checked for natural voice.",
+      "protected_features": ["source images", "unresolved ending", "plain register"]
+    }
+  },
+  "transformation_constraints": {
+    "target_media_type": "text",
+    "preserve": ["threshold", "key as fragile agency", "active absence", "unresolved ending"],
+    "avoid": ["resolution", "new backstory", "promotional artist-statement language"]
+  }
+}

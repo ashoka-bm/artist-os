@@ -143,11 +143,14 @@ Use these destinations for each asset type:
 - Beat Plan: `story/beat-plan.json`
 - Image Medium Plan: `medium-plans/image-medium-plan.json`
 - Sound Medium Plan: `medium-plans/sound-medium-plan.json`
+- Text Medium Plan: `medium-plans/text-medium-plan.json`
 - gate decisions: `gates/*.json`
 - generated or imported visual boards: `assets/boards/` with sidecar metadata
 - draft Creative Brief: `briefs/creative-brief.draft.md`
 - approved Creative Brief Record: `briefs/creative-brief.record.json`
+- approved Text Creative Brief Record: `briefs/text-creative-brief.record.json`
 - Provider-Neutral Prompt Plan: `prompt-plans/prompt-plan.json`
+- Text Generation Plan: `prompt-plans/text-generation-plan.json`
 - Prompt Branch Set: `prompt-plans/prompt-branch-set.json`
 - Output Records: `outputs/*.json`
 - Review Records and critique records: `critiques/`

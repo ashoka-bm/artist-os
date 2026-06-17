@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/text-generation-plan.schema.json",
+  "title": "TextGenerationPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text_generation_plan_id",
+    "brief_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "text_medium_plan_id",
+    "target_media_type",
+    "generation_mode",
+    "primary_text_form",
+    "drafting_instructions",
+    "structure_execution",
+    "source_wording_policy",
+    "fresh_context_drafting",
+    "clear_writing_pass_policy",
+    "human_voice_pass_policy",
+    "output_recording",
+    "traceability_summary",
+    "critique_checklist"
+  ],
+  "properties": {
+    "text_generation_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
+    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "text_medium_plan_id": { "type": "string", "pattern": "^tmp_[a-zA-Z0-9_-]+$" },
+    "target_media_type": { "type": "string", "const": "text" },
+    "generation_mode": { "type": "string", "enum": ["single_draft", "revision_pass", "alternate_direction"] },
+    "primary_text_form": { "$ref": "#/$defs/text_form" },
+    "drafting_instructions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "voice_constraints", "do_not_change", "allowed_skills"],
+      "properties": {
+        "task": { "type": "string", "minLength": 1 },
+        "voice_constraints": { "type": "array", "items": { "type": "string" } },
+        "do_not_change": { "type": "array", "items": { "type": "string" } },
+        "allowed_skills": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "structure_execution": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/section_execution" }
+    },
+    "source_wording_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "protected_source_phrases", "forbidden_source_uses", "rights_notes"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["preserve_source_wording", "adapt_source_wording", "invert", "expand", "compress", "translate", "new_from_meaning"] },
+        "protected_source_phrases": { "type": "array", "items": { "type": "string" } },
+        "forbidden_source_uses": { "type": "array", "items": { "type": "string" } },
+        "rights_notes": { "type": "string" }
+      }
+    },
+    "fresh_context_drafting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "packet_includes", "return_trace_required", "human_voice_pass_forbidden_during_draft"],
+      "properties": {
+        "required": { "type": "boolean", "const": true },
+        "packet_includes": { "type": "array", "items": { "type": "string" } },
+        "return_trace_required": { "type": "boolean", "const": true },
+        "human_voice_pass_forbidden_during_draft": { "type": "boolean", "const": true }
+      }
+    },
+    "clear_writing_pass_policy": { "$ref": "#/$defs/editorial_pass_policy" },
+    "human_voice_pass_policy": { "$ref": "#/$defs/editorial_pass_policy" },
+    "output_recording": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["draft_output_record_required", "rewrite_output_record_required", "rewrite_origin_type", "previous_output_record_required_for_rewrite"],
+      "properties": {
+        "draft_output_record_required": { "type": "boolean", "const": true },
+        "rewrite_output_record_required": { "type": "boolean", "const": true },
+        "rewrite_origin_type": { "type": "string", "const": "agent_rewritten" },
+        "previous_output_record_required_for_rewrite": { "type": "boolean", "const": true }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "critique_checklist": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "text_form": {
+      "type": "string",
+      "enum": ["poem", "prose_scene", "short_story", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+    },
+    "section_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section_id", "section_label", "drafting_job", "beat_id", "key_emotional_movement_id", "intended_feeling", "must_feel_different_because"],
+      "properties": {
+        "section_id": { "type": "string", "pattern": "^txtsec_[a-zA-Z0-9_-]+$" },
+        "section_label": { "type": "string" },
+        "drafting_job": { "type": "string" },
+        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "intended_feeling": { "type": "string" },
+        "must_feel_different_because": { "type": "string" }
+      }
+    },
+    "editorial_pass_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "degree", "default_order", "rationale", "protected_features", "sub_agent_required"],
+      "properties": {
+        "status": { "type": "string", "enum": ["required", "recommended", "optional", "skip"] },
+        "degree": { "type": ["string", "null"], "enum": ["light", "standard", "deep", null] },
+        "default_order": { "type": "integer", "minimum": 1 },
+        "rationale": { "type": "string" },
+        "protected_features": { "type": "array", "items": { "type": "string" } },
+        "sub_agent_required": { "type": "boolean", "const": true }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "review_record", "gate_decision"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

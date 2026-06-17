@@ -55,7 +55,7 @@ Check:
 
 ### Shape Reviewer
 
-Use when reviewing a finished or in-progress written artifact that should become reader-facing.
+Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing.
 
 Check:
 
@@ -77,7 +77,7 @@ Set Review Record fields as follows:
 - `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-writing-method-review`.
-- `artifact_under_review.artifact_type`: `fragment_file`, `beat_plan`, or `text_draft`.
+- `artifact_under_review.artifact_type`: `fragment_file`, `beat_plan`, `text_creative_brief`, or `text_draft`.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
 - `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, Beat Plan when applicable, prior approved beat or opening promise when applicable, and the high-authority writing reference used.
 - `emotional_tension_review`: state the Intended Feeling reviewed, Minimum Tension Criteria checked, Key Emotional Movements reviewed, Expectation Turns reviewed, missing context, and reviewer conclusion. Include `tension_intensity_assessments` for the reviewed tension claims; do not copy the claimed number silently. Set `reviewer_assessed_intensity`, `minimum_required_intensity`, and `meets_minimum` from your independent judgment.

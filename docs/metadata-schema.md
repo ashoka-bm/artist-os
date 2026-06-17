@@ -222,6 +222,31 @@ Required sections:
 - `review_requirements`
 - `traceability_summary`
 
+### Text Medium Plan
+
+A Text Medium Plan is the typed writing translation layer between the shared Beat Plan and the Text Creative Brief. It validates against `schemas/text-medium-plan.schema.json`.
+
+Required sections:
+
+- `text_medium_plan_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `target_media_type`
+- `story_mode`
+- `writing_method`
+- `text_form`
+- `voice_point_of_view`
+- `structure_plan`
+- `fidelity_policy`
+- `publication_use`
+- `gates`
+- `review_requirements`
+- `traceability_summary`
+
+Each `structure_plan.sections[]` entry must name the governing Beat, Key Emotional Movement, structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and paragraph distinction. Text planning must make every section or paragraph group do a different job instead of producing a smooth summary of the source.
+
 ### Review Record
 
 A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
@@ -336,6 +361,7 @@ An Output Record is the metadata and provenance record for an Output Artifact. I
 Required sections:
 
 - `output_record_id`
+- `previous_output_record_id`, optional
 - `project_id`
 - `source_id`
 - `artist_meaning_id`
@@ -344,6 +370,7 @@ Required sections:
 - `medium_plan_id`
 - `brief_id`
 - `prompt_plan_id`
+- `text_generation_plan_id`, optional for Text Journey outputs
 - `target_media_type`
 - `output_artifact`
 - `origin`
@@ -353,7 +380,13 @@ Required sections:
 - `traceability_summary`
 - `created_at`
 
-Output Records cover provider-generated media, artist imports, agent-drafted text, and human-edited outputs. When an output comes from a Prompt Branch Set, the record should include both `prompt_branch_set_id` and `prompt_branch_id` as well as the parent `prompt_plan_id`.
+Output Records cover provider-generated media, artist imports, agent-drafted text, agent-rewritten text, and human-edited outputs. When an output comes from a Prompt Branch Set, the record should include both `prompt_branch_set_id` and `prompt_branch_id` as well as the parent `prompt_plan_id`. Text Journey outputs should set `text_generation_plan_id` to the governing Text Generation Plan while keeping `prompt_plan_id` populated for the current shared Output Record contract.
+
+For Text Journey drafts, persist the compact draft trace in `traceability_summary`: section or block, source Beat or structure role, Intended Feeling, and key constraint preserved. Text outputs may cite `text_generation_plan` directly in trace notes even while `prompt_plan_id` remains populated for the current shared contract. The Text Draft Packet is an internal sub-agent handoff, not a separate schema-backed record.
+
+For Text Journey rewrite Output Records, set `previous_output_record_id`, preserve the original draft trace, and add compact rewrite trace notes: pass used, policy authorization, prior Output Record, changed pattern or clarity issue, and protected features preserved.
+
+By contract, any Output Record with `origin.origin_type = "agent_rewritten"` must set `previous_output_record_id`. Text Journey transition tests enforce this for rewrite fixtures; add schema-level conditional enforcement only when the local schema validator supports conditionals.
 
 ### Sound Creative Brief Record
 
@@ -389,6 +422,34 @@ It replaces image-specific sections with sound-specific sections:
 `arrangement_plan.sections[]` records the section-level tension map. Each section includes section name, time range, bar range, section function, tension role, active emotional tensions, active sonic tensions, and transformation notes.
 
 Sound Creative Brief Records do not embed Beat summaries. Use `beat_plan_id` to read the authoritative Beat Plan.
+
+### Text Creative Brief Record
+
+A Text Creative Brief Record is the structured agent handoff created after Writing Critic Review and Brief Approval. It validates against `schemas/text-creative-brief.schema.json`.
+
+Required sections:
+
+- `brief_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `text_medium_plan_id`
+- `target_media_type`
+- `artist_meaning`
+- `formal_observations`
+- `primary_text_form`
+- `text_form_modifiers`
+- `voice_direction`
+- `structure_summary`
+- `fidelity_policy`
+- `source_wording_constraints`
+- `emotional_qualities`
+- `poetic_density_notes`
+- `editorial_pass_recommendations`
+- `transformation_constraints`
+
+Text Creative Brief Records do not embed Beat records. Use `beat_plan_id` to read the authoritative Beat Plan and `text_medium_plan_id` to read the authoritative writing structure.
 
 ### Suno Sound Prompt Plan
 
@@ -433,6 +494,34 @@ The three sound Prompt Variant Plans keep the same stable labels as image Prompt
 For the first text-to-sound version, `suno_custom_mode_outputs` is the final platform-facing contract. It contains `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform adapters can be added after the Suno flow works.
 
 Suno Sound Prompt Plans must preserve the lineage IDs from the approved Sound Creative Brief and Sound Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
+
+### Text Generation Plan
+
+A Text Generation Plan is the structured post-brief plan for drafting or generating a written Output Artifact. It validates against `schemas/text-generation-plan.schema.json`.
+
+Required sections:
+
+- `text_generation_plan_id`
+- `brief_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `text_medium_plan_id`
+- `target_media_type`
+- `generation_mode`
+- `primary_text_form`
+- `drafting_instructions`
+- `structure_execution`
+- `source_wording_policy`
+- `fresh_context_drafting`
+- `clear_writing_pass_policy`
+- `human_voice_pass_policy`
+- `output_recording`
+- `traceability_summary`
+- `critique_checklist`
+
+The Text Generation Plan owns the final draft instructions and editorial pass policies. It must require fresh-context drafting, forbid Human Voice Pass during first drafting, require a returned draft trace, and specify Output Record requirements for draft and rewrite artifacts. Its traceability notes may cite the approved Text Creative Brief as `text_creative_brief`.
 
 ## Symbology Direction
 
