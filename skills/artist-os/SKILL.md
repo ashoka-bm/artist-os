@@ -1,6 +1,6 @@
 ---
 name: artist-os
-description: Use when an artist wants to take raw text — a poem, story, song lyric, journal entry, monologue, letter, memory, dream, or source excerpt — through Artist OS into image prompts, audio/Suno prompts, written text, or output review; to resume an existing Artist OS project; or to inspect an existing output such as an image, track, or written draft against its brief, even when records are not loaded. This is the multi-phase conductor and default entry point. Hand off only when the request clearly targets one specific phase of an existing project.
+description: Use when an artist wants to take raw text — a poem, story, song lyric, journal entry, monologue, letter, memory, dream, or source excerpt — through Artist OS into image prompts, audio/Suno prompts, written text, or output review; to resume an existing Artist OS project; or to inspect an existing output such as an image, track, or written draft against its brief, even when records are not loaded. This is the multi-phase conductor and the default entry point for cold or whole-flow transformation, resuming a project, and ambiguous output-review. Hand off when meaning is already captured and the request names the artifacts of a single medium's planning or drafting phase — image, sound, or text — even when several artifacts of that one phase are requested together.
 ---
 
 # Artist OS Flow
