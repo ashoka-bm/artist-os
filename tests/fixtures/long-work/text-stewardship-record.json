@@ -1,0 +1,181 @@
+{
+  "long_work_stewardship_record_id": "lws_door_left_lit_text",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "tmp_door_left_lit",
+  "version": 1,
+  "supersedes_long_work_stewardship_record_id": null,
+  "target_media_type": "text",
+  "cumulative_work_type": "long_text",
+  "stewardship_status": "active",
+  "activation_reason": {
+    "story_mode": "arc",
+    "artist_requested_cumulative_work": true,
+    "requires_part_to_part_dependency": true,
+    "reason": "The three text sections build from object to atmosphere to withheld ending, so later sections depend on prior emotional pressure."
+  },
+  "governing_arc": {
+    "arc_summary": "The key introduces agency, the light turns welcome into danger, and the stop preserves unresolved motion.",
+    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "minimum_tension_criteria_ref": "bp_door_left_lit#tension_movement_plan.minimum_tension_criteria",
+    "story_authority_ref": "bp_door_left_lit",
+    "may_revise_story_authority": false
+  },
+  "part_plan": [
+    {
+      "part_id": "lwpart_text_key_001",
+      "part_index": 1,
+      "part_label": "The key",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_key_001",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[0]"
+      },
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "assigned_beat_role": "threshold",
+      "part_job": "Open with agency that cannot yet be used.",
+      "intended_feeling": "the ache of being close to release but unable to choose it",
+      "expected_state": "The key is tactile and unresolved.",
+      "must_preserve": ["key as unusable agency", "object-focused pressure"],
+      "must_not_resolve_yet": ["entry", "decision", "aftermath"],
+      "depends_on_part_ids": [],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_text_light_001",
+      "part_index": 2,
+      "part_label": "The light",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_light_001",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[1]"
+      },
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "assigned_beat_role": "threshold",
+      "part_job": "Turn welcome into tender danger.",
+      "intended_feeling": "tender danger",
+      "expected_state": "The doorway promises safety while increasing risk.",
+      "must_preserve": ["welcome turning dangerous", "tenderness without resolution"],
+      "must_not_resolve_yet": ["crossing", "explanation", "peaceful acceptance"],
+      "depends_on_part_ids": ["lwpart_text_key_001"],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_text_stop_001",
+      "part_index": 3,
+      "part_label": "The stop",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_stop_001",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[2]"
+      },
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "assigned_beat_role": "residue",
+      "part_job": "End by withholding the expected crossing.",
+      "intended_feeling": "unresolved held motion",
+      "expected_state": "The ending stops before the decision.",
+      "must_preserve": ["withheld resolution", "shorter final pressure"],
+      "must_not_resolve_yet": ["decision", "moral lesson", "afterward"],
+      "depends_on_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001"],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    }
+  ],
+  "continuity_rules": [
+    {
+      "rule_id": "lwcr_text_withheld_crossing",
+      "rule_type": "structure",
+      "rule": "Each section may deepen pressure, but the text must not narrate the crossing or its aftermath.",
+      "applies_to_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "source_ref": "tmp_door_left_lit#structure_plan",
+      "change_requires": "story_approval",
+      "status": "active"
+    },
+    {
+      "rule_id": "lwcr_text_voice_restraint",
+      "rule_type": "voice",
+      "rule": "Voice stays restrained and image-led; clarity edits must not turn the text into explanation.",
+      "applies_to_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "source_ref": "tmp_door_left_lit#voice_point_of_view",
+      "change_requires": "medium_approval",
+      "status": "active"
+    }
+  ],
+  "proposed_continuity_updates": [],
+  "checkpoints": [
+    {
+      "checkpoint_id": "lwcp_text_foundation",
+      "checkpoint_type": "foundation",
+      "after_part_id": null,
+      "required_before_continuing": true,
+      "status": "approved",
+      "gate_decision_id": "gate_story_approval_door_left_lit",
+      "review_record_id": "review_story_door_left_lit",
+      "affected_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "next_action": "Proceed to long-text drafting readiness before Draft Generation Approval.",
+      "summary": "The text arc preserves the threshold by moving from object to atmosphere to withheld ending."
+    },
+    {
+      "checkpoint_id": "lwcp_text_first_part",
+      "checkpoint_type": "first_part",
+      "after_part_id": "lwpart_text_key_001",
+      "required_before_continuing": true,
+      "status": "pending",
+      "gate_decision_id": null,
+      "review_record_id": null,
+      "affected_part_ids": ["lwpart_text_key_001"],
+      "next_action": "Draft the first section and check voice, fidelity, and unresolved pressure before drafting later sections.",
+      "summary": "The first section must prove the object-focused voice can carry the arc."
+    }
+  ],
+  "readiness_review": {
+    "required": true,
+    "status": "ready",
+    "review_record_id": null,
+    "checks": {
+      "story_authority_present": true,
+      "part_mapping_complete": true,
+      "part_job_clarity": true,
+      "expectation_turn_preserved": true,
+      "emotional_arc_movement": true,
+      "premature_resolution_checked": true,
+      "continuity_rules_clear": true,
+      "checkpoint_plan_exists": true,
+      "open_risks_surfaced": true,
+      "waiver_path_clear": true
+    },
+    "blocking_risks": [],
+    "repair_questions": []
+  },
+  "drift_management": {
+    "open_drift_items": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The stewardship record references the approved threshold beat as story authority."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_door_left_lit",
+      "note": "Each long-work part references a Text Medium Plan section without duplicating section execution or voice fields."
+    }
+  ],
+  "created_at": "2026-06-17T12:00:00Z",
+  "updated_at": "2026-06-17T12:00:00Z"
+}

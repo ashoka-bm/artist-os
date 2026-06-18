@@ -15,6 +15,7 @@
     "meaning_interview": "workspace-library/artist-os/projects/proj_door_left_lit/meaning/meaning-interview.json",
     "transformation_brief": "workspace-library/artist-os/projects/proj_door_left_lit/story/transformation-brief.json",
     "beat_plan": "workspace-library/artist-os/projects/proj_door_left_lit/story/beat-plan.json",
+    "long_work_stewardship_records_dir": "workspace-library/artist-os/projects/proj_door_left_lit/stewardship",
     "image_medium_plan": "workspace-library/artist-os/projects/proj_door_left_lit/medium-plans/image-medium-plan.json",
     "interpretation_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/interpretation.json",
     "symbology_gate": "workspace-library/artist-os/projects/proj_door_left_lit/gates/symbology.json",

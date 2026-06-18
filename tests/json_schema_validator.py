@@ -160,6 +160,9 @@ FIXTURE_SCHEMA_MAP = {
     "review-record.json": "review-record.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
+    "foundation-stewardship-record.json": "long-work-stewardship-record.schema.json",
+    "image-series-stewardship-record.json": "long-work-stewardship-record.schema.json",
+    "text-stewardship-record.json": "long-work-stewardship-record.schema.json",
 }
 
 

@@ -331,7 +331,9 @@ Added tests that verify allowed record transitions:
 ```text
 Source Record + Meaning Interview -> Transformation Brief
 Transformation Brief -> Beat Plan
+Beat Plan -> Long-Work Stewardship Record, when cumulative
 Beat Plan -> Image Medium Plan / Sound Medium Plan / Text Medium Plan
+Image Medium Plan / Text Medium Plan -> Long-Work Stewardship Record, when cumulative
 Image Medium Plan -> Creative Brief
 Sound Medium Plan -> Sound Creative Brief
 Text Medium Plan -> Text Creative Brief
@@ -355,6 +357,28 @@ Added emotional movement integrity coverage:
 - Review Records must include numeric tension intensity assessments and reviewer verdicts against minimum intensity.
 - Key Emotional Movement `beat_ids` must point to existing Beat Plan beats.
 - Beat `builds_toward_key_movement_id`, when present, must point to an existing Key Emotional Movement.
+
+### Long-Work Stewardship
+
+Added the first schema-backed Project Memory record for Cumulative Work:
+
+- `schemas/long-work-stewardship-record.schema.json`,
+- image-series and long-text stewardship fixtures,
+- schema validation coverage for both fixtures,
+- transition coverage from Beat Plan and Medium Plan into Long-Work Stewardship,
+- `long_work_reviewer` support in Review Records,
+- `long_work_checkpoint` support in Gate Decisions.
+
+This record applies to long text, triptychs, image series, and future cumulative sequences whose parts build on each other. It does not apply automatically to non-sequential portfolios, store collections, or curator batches. Beat Plan remains the story authority; the stewardship record tracks part-to-part readiness, continuity, checkpoints, progress, and drift.
+
+### Long-Work Stewardship Coherence Review
+
+Reviewed the through line across schemas, tests, conductor skill, medium skills, pipeline docs, story docs, gates, storage, and output journeys. Tightened the lifecycle so it now has two explicit states:
+
+- foundation stewardship after Story Approval, before a Medium Plan exists,
+- enriched stewardship after the Medium Plan maps beats into image roles, text sections, chapters, scenes, or movements.
+
+The schema now allows `medium_plan_id = null`, an empty `part_plan[]`, and `readiness_review.status = "pending"` for the foundation record. Review and Gate Decision schemas now let Long-Work Reviewer records and Long-Work Checkpoint gates point directly at `long_work_stewardship` records. Added fixture and transition coverage for this foundation state so the docs' "create after Story Approval" rule is mechanically valid.
 
 ### Output Lifecycle Fixtures
 

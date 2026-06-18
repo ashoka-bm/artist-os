@@ -1,0 +1,146 @@
+{
+  "long_work_stewardship_record_id": "lws_door_left_lit_image_series",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "medium_plan_id": "imp_door_left_lit",
+  "version": 1,
+  "supersedes_long_work_stewardship_record_id": null,
+  "target_media_type": "image",
+  "cumulative_work_type": "image_series",
+  "stewardship_status": "active",
+  "activation_reason": {
+    "story_mode": "sequence",
+    "artist_requested_cumulative_work": true,
+    "requires_part_to_part_dependency": true,
+    "reason": "The image series should preserve the threshold pressure as a cumulative visual sequence rather than a set of unrelated variants."
+  },
+  "governing_arc": {
+    "arc_summary": "Approach stays suspended at the threshold and must not resolve into entry.",
+    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "minimum_tension_criteria_ref": "bp_door_left_lit#tension_movement_plan.minimum_tension_criteria",
+    "story_authority_ref": "bp_door_left_lit",
+    "may_revise_story_authority": false
+  },
+  "part_plan": [
+    {
+      "part_id": "lwpart_image_threshold_001",
+      "part_index": 1,
+      "part_label": "Threshold image",
+      "part_kind": "image_role",
+      "medium_part_ref": {
+        "ref_type": "image_role",
+        "ref_id": "imgrole_threshold_001",
+        "path_or_ref": "medium-plans/image-medium-plan.json#image_roles[0]"
+      },
+      "beat_id": "beat_threshold_001",
+      "key_emotional_movement_id": "kem_threshold_001",
+      "assigned_beat_role": "threshold",
+      "part_job": "Prove that the visual language can hold unresolved nearness without crossing.",
+      "intended_feeling": "the ache of being close to release but unable to choose it",
+      "expected_state": "The figure remains suspended at the threshold.",
+      "must_preserve": ["held motion", "active absence", "unresolved ending"],
+      "must_not_resolve_yet": ["entry through the doorway", "clear reunion", "peaceful acceptance"],
+      "depends_on_part_ids": [],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    }
+  ],
+  "continuity_rules": [
+    {
+      "rule_id": "lwcr_threshold_unresolved",
+      "rule_type": "emotional_arc",
+      "rule": "The series may intensify nearness, but it must not show the figure crossing the threshold unless Story Approval changes.",
+      "applies_to_part_ids": ["lwpart_image_threshold_001"],
+      "source_ref": "bp_door_left_lit",
+      "change_requires": "story_approval",
+      "status": "active"
+    },
+    {
+      "rule_id": "lwcr_key_motif",
+      "rule_type": "motif",
+      "rule": "The key remains a small agency symbol rather than a solved object.",
+      "applies_to_part_ids": ["lwpart_image_threshold_001"],
+      "source_ref": "imgrole_threshold_001",
+      "change_requires": "medium_approval",
+      "status": "active"
+    }
+  ],
+  "proposed_continuity_updates": [
+    {
+      "update_id": "lwcu_cracked_light",
+      "source_output_record_id": null,
+      "proposal": "If calibration introduces cracked light as a stronger motif, propose it as a visual-language rule before applying it to later images.",
+      "evidence": "No output exists yet; this records the pending evaluation path for calibration discoveries.",
+      "supports_artist_meaning_because": "Cracked light could preserve tender danger without resolving the threshold.",
+      "conflicts_with": [],
+      "required_approval": "artist_confirmation",
+      "status": "proposed"
+    }
+  ],
+  "checkpoints": [
+    {
+      "checkpoint_id": "lwcp_image_foundation",
+      "checkpoint_type": "foundation",
+      "after_part_id": null,
+      "required_before_continuing": true,
+      "status": "approved",
+      "gate_decision_id": "gate_story_approval_door_left_lit",
+      "review_record_id": "review_story_door_left_lit",
+      "affected_part_ids": ["lwpart_image_threshold_001"],
+      "next_action": "Proceed to image medium planning and calibration before creating additional image prompts.",
+      "summary": "Story Approval established threshold suspension as the governing cumulative movement."
+    },
+    {
+      "checkpoint_id": "lwcp_image_calibration",
+      "checkpoint_type": "calibration",
+      "after_part_id": "lwpart_image_threshold_001",
+      "required_before_continuing": true,
+      "status": "pending",
+      "gate_decision_id": null,
+      "review_record_id": null,
+      "affected_part_ids": ["lwpart_image_threshold_001"],
+      "next_action": "Generate or draft calibration directions only after explicit approval.",
+      "summary": "Calibration must prove the selected visual language can hold unresolved threshold pressure."
+    }
+  ],
+  "readiness_review": {
+    "required": true,
+    "status": "ready_with_risks",
+    "review_record_id": null,
+    "checks": {
+      "story_authority_present": true,
+      "part_mapping_complete": true,
+      "part_job_clarity": true,
+      "expectation_turn_preserved": true,
+      "emotional_arc_movement": true,
+      "premature_resolution_checked": true,
+      "continuity_rules_clear": true,
+      "checkpoint_plan_exists": true,
+      "open_risks_surfaced": true,
+      "waiver_path_clear": true
+    },
+    "blocking_risks": [],
+    "repair_questions": []
+  },
+  "drift_management": {
+    "open_drift_items": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The stewardship record references the Beat Plan as story authority and tracks only cumulative execution state."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "imp_door_left_lit",
+      "note": "The first long-work part references the image role without duplicating shot design or amplitude fields."
+    }
+  ],
+  "created_at": "2026-06-17T12:00:00Z",
+  "updated_at": "2026-06-17T12:00:00Z"
+}

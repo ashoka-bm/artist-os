@@ -112,7 +112,7 @@ Required sections:
 - `upstream_refs`
 - `created_at`
 
-Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions.
+Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Long-Work Checkpoints, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions.
 
 ### Transformation Brief
 
@@ -158,6 +158,42 @@ Each Beat must do one move, name `intended_feeling` separately from factual cont
 `key_emotional_movements[]` identifies the major emotional shift points that should survive compression or expansion. Single-image plans usually identify one primary movement; triptychs and longer arcs may identify several.
 
 Beats may optionally include `builds_toward_key_movement_id` when they are supporting Beats that build toward, complicate, or delay a Key Emotional Movement.
+
+### Long-Work Stewardship Record
+
+A Long-Work Stewardship Record is per-project memory for Cumulative Work: a long written work, triptych, image series, song sequence, video sequence, or mixed-media sequence whose parts build on earlier parts. It validates against `schemas/long-work-stewardship-record.schema.json`.
+
+Required sections:
+
+- `long_work_stewardship_record_id`
+- `project_id`
+- `source_id`
+- `artist_meaning_id`
+- `transformation_brief_id`
+- `beat_plan_id`
+- `medium_plan_id`
+- `target_media_type`
+- `cumulative_work_type`
+- `stewardship_status`
+- `activation_reason`
+- `governing_arc`
+- `part_plan`
+- `continuity_rules`
+- `proposed_continuity_updates`
+- `checkpoints`
+- `readiness_review`
+- `drift_management`
+- `traceability_summary`
+- `created_at`
+- `updated_at`
+
+Create this record after Story Approval only when the project contains Cumulative Work. The foundation version may set `medium_plan_id` to `null` and leave `part_plan` empty because medium-specific parts do not exist yet. Enrich it after the Medium Plan maps approved beats into medium-specific parts. It does not replace Artist Meaning, the Beat Plan, or the Medium Plan: the Beat Plan remains the story authority, the Medium Plan owns medium execution details, and stewardship tracks part-to-part integrity, readiness, checkpoints, continuity rules, progress, and drift.
+
+Do not create a Long-Work Stewardship Record only because a project contains many related outputs. Non-sequential portfolios, store collections, style explorations, and curator batches should use lighter collection review behavior unless the parts build on each other.
+
+Long-Work Readiness may be `pending` before the readiness pass runs. After review, use `ready`, `ready_with_risks`, `repair_before_expansion`, or `waived`. `repair_before_expansion` blocks later-part expansion until the issue is repaired or the artist explicitly waives the block through a Gate Decision.
+
+Proposed continuity updates remain inactive until approved. If a proposed update changes Artist Meaning, Story Mode, Beat movement, or the emotional arc, return to Story Approval before making it active continuity.
 
 ### Image Medium Plan
 
@@ -272,6 +308,8 @@ All critic and reviewer records include drift checking. A blocking finding must 
 `upstream_context` must include the governing `artist_meaning_id` so reviews remain traceable to the Artist Meaning version they evaluated.
 
 `emotional_tension_review` must state the Intended Feeling reviewed, Minimum Tension Criteria checked, numeric `tension_intensity_assessments`, Key Emotional Movements reviewed, Expectation Turns reviewed, any missing context, and the reviewer conclusion. Each intensity assessment records the source, tension name, claimed intensity, reviewer-assessed intensity, minimum required intensity, `meets_minimum`, and an assessment note. Reviewers should not copy the claimed number silently; they independently judge whether the artifact earns that intensity. Do not hide this assessment only in `findings`; downstream gates need a stable field to verify that emotional primacy was reviewed.
+
+Use `review_role = "long_work_reviewer"` for Long-Work Stewardship readiness, checkpoint, drift, and proposed-continuity reviews.
 
 ### Creative Brief Record
 

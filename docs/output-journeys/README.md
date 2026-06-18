@@ -10,6 +10,7 @@ Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Story / Beat Plan
+  -> Long-Work Stewardship, when cumulative
   -> Medium Plan
   -> Prompt Plan or Text Generation Plan
   -> Generation Approval Gate or Draft Generation Approval Gate, when required
@@ -27,6 +28,8 @@ Journeys in this directory:
 - `mixed-media.md`: coordinated outputs across multiple media.
 
 Writing-method integration lives in `docs/writing/README.md`. Its referenced `writing-fragments`, `writing-beats`, and `writing-shape` skill files are high-authority for raw material capture, beat-by-beat journey creation, and finished written shape.
+
+Long-Work Stewardship applies only when outputs build on each other through sequence, dependency, emotional arc, or cumulative continuity. Related but non-sequential portfolios, collections, store sets, or broad prompt branches should stay on the lighter collection review path.
 
 ## Gates And Reviews
 

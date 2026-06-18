@@ -16,6 +16,7 @@ Load details only when needed:
 - `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, image-series progression, or any journey-shaped plan.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
 - `schemas/image-medium-plan.schema.json` for image-specific translation decisions before Creative Brief creation.
+- `schemas/long-work-stewardship-record.schema.json` for triptych or image-series Cumulative Work after Story Approval and Image Medium Plan mapping.
 - `docs/prompt-branch-set.md` and `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
 - `docs/metadata-schema.md` for required record fields and layout plans.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
@@ -28,6 +29,7 @@ These hold whether you run standalone or under the `artist-os` conductor — a s
 - Never call an image generation provider without explicit approval. Drafting prompts and boards is always allowed; sending one to a provider is not — that is the line between a free dry run and a billable generation.
 - Do not produce the Creative Brief Record or Provider-Neutral Prompt Plan until Art Critic Review and Brief Approval are complete, so a record never locks in an unreviewed direction.
 - Do not create multiple series image prompts until the artist approves a Series Plan — a series is a much larger commitment than one image.
+- For triptych or image-series Cumulative Work, do not expand multiple image prompts while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - Persist records, gate decisions, and board images as you create them, following `docs/storage.md` (board sidecars validate against `schemas/asset-metadata.schema.json`). Chat context is not durable storage.
 
 ## Inputs
@@ -43,6 +45,8 @@ Before creating the image-specific Creative Brief, produce:
 3. An Image Medium Plan matching `schemas/image-medium-plan.schema.json`.
 
 The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
+
+For triptychs and image series, the Long-Work Stewardship Record is the cumulative execution guard. The foundation record starts after Story Approval. Enrich it after Image Medium Plan, and center the enriched record on Long-Work Parts that reference `image_role_id` values. Do not duplicate Shot Design, amplitude profiles, or visual tension details inside the stewardship record; follow the Image Medium Plan refs when reviewing those details.
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. The medium translation should express that feeling, not explain the fact.
 
@@ -75,6 +79,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 15. For triptych or image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
 16. For triptych or image-series recommendations, verify adjacent image roles differ in composition, communication intent, and at least one Shot Design axis: shot scale, camera angle, visual emphasis, or composition strategy. Adjacent roles should usually shift at least two amplitude dimensions and at least one active emotional or visual tension dimension unless repetition is intentional and traced to Artist Meaning.
 17. Produce the Image Medium Plan only after Interpretation, Visualization, and Style are complete or explicitly allowed to proceed unconfirmed.
+18. For triptychs or image series, enrich the Long-Work Stewardship Record from the completed Image Medium Plan with one Long-Work Part per image role, continuity rules, checkpoint plan, and Long-Work Readiness before any multi-image prompt expansion.
 
 ## Draft Creative Brief Process
 
@@ -103,6 +108,7 @@ Use this only after Art Critic Review and Brief Approval.
 10. Include critique criteria for each Prompt Variant Plan.
 11. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_triptych` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
 12. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
+13. For an approved Series Plan, use Long-Work Checkpoints for calibration and any required interval or completion review before producing remaining image-role prompts.
 
 ## Prompt Branch Set Process
 
@@ -122,6 +128,6 @@ The Symbology Gate is mandatory before style, detail, or final prompt locking un
 
 Before Art Critic Review, return the Image Medium Plan, Creative Brief Document, Beat Plan reference, Symbology Direction, Style Direction, Series Recommendation, and open questions.
 
-After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist for Prompt Critic Review. When requested, also return a Prompt Branch Set for curator batches.
+After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist for Prompt Critic Review. For triptychs or image series, also return the Long-Work Stewardship Record and any Long-Work Checkpoint status. When requested, also return a Prompt Branch Set for curator batches.
 
-When emitted as records, JSON must validate against `schemas/creative-brief.schema.json`, `schemas/prompt-plan.schema.json`, and `schemas/prompt-branch-set.schema.json` when branch sets are produced.
+When emitted as records, JSON must validate against `schemas/creative-brief.schema.json`, `schemas/prompt-plan.schema.json`, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/prompt-branch-set.schema.json` when branch sets are produced.
