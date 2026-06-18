@@ -54,7 +54,7 @@ Every Beat Plan must identify Key Emotional Movements. For a single track, choos
 
 For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious Suno target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-section, sequence, or lyric-bearing plans still require a bounded Beat Reviewer sub-agent before Music / Sound Critic Review.
 
-When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview: ask one concrete question, include your recommended answer, and wait for the artist's response. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning.
+When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning.
 
 ## Sound Medium Plan Process
 

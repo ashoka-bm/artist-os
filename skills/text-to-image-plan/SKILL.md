@@ -50,13 +50,13 @@ For triptychs and image series, the Long-Work Stewardship Record is the cumulati
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. The medium translation should express that feeling, not explain the fact.
 
-Every Beat Plan must define minimum tension criteria. For a single image, require enough internal contrast to create pressure before explanation; default to at least two active tensions with one primary tension at `0.7` or higher. For a triptych or image series, require adjacent roles to shift at least two amplitude dimensions, at least one active emotional or visual tension, and at least one Shot Design axis unless repetition is artist-approved.
+Every Beat Plan must define minimum tension criteria. For a single image, require enough internal contrast to create pressure before explanation; use the single-image default in `THEORY.md` → minimum tension criteria. For a triptych or image series, require adjacent roles to shift at least two amplitude dimensions, at least one active emotional or visual tension, and at least one Shot Design axis unless repetition is artist-approved.
 
 Every Beat Plan must identify Key Emotional Movements. For a single image, choose the primary movement to compress. For a triptych or image series, map image roles to the key movements that should be staged or expanded.
 
 For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious image target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-beat, series, or ambiguous plans still require a bounded Beat Reviewer sub-agent before Art Critic Review.
 
-When a story, symbology, presentation, style, or series choice is ambiguous, use the Decision Interview pattern from the Meaning Interview: ask one concrete question, include your recommended answer, and wait for the artist's response. Do not silently choose between single image, compressed arc, triptych, and image series when more than one would preserve Artist Meaning.
+When a story, symbology, presentation, style, or series choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between single image, compressed arc, triptych, and image series when more than one would preserve Artist Meaning.
 
 ## Image Medium Plan Process
 
