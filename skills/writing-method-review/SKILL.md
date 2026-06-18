@@ -55,7 +55,7 @@ Check:
 
 ### Shape Reviewer
 
-Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing.
+Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing. This is the mode the `artist-os` conductor and `skills/text-journey` mean by "Writing Critic Review" (step 8 "Writing Critic mode" for text): run Shape Reviewer against the Text Creative Brief before Brief Approval, and against the written draft when reviewing a finished piece.
 
 Check:
 

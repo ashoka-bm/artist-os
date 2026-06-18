@@ -6,12 +6,15 @@
     "meaning-interview",
     "text-to-image-plan",
     "text-to-suno-plan",
+    "text-journey",
     "art-critic-review",
     "critique-asset",
     "writing-method-review",
+    "clear-writing-pass",
+    "human-voice-pass",
     "none"
   ],
-  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project.",
+  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project. text-journey owns the isolated text/writing phase once meaning exists (the written-output peer of text-to-image-plan and text-to-suno-plan). The editorial passes clear-writing-pass and human-voice-pass win only when the user explicitly asks to run that named pass on an in-flight text draft; a generic 'make this clearer / sound less AI' request with no Artist OS project is off-domain (none). A bare 'lyrics' request is ambiguous between text-journey (lyrics as written text) and text-to-suno-plan (a song prompt that uses lyrics), and the conductor disambiguates.",
   "evals": [
     { "id": 1, "query": "i wrote this breakup poem last night and i want to turn it into a set of images for my instagram, no idea where to start", "target": "artist-os", "rationale": "Cold full transformation, no records yet.", "probe": false },
     { "id": 2, "query": "can we pick back up on the 'tidewrack' project? i think we left off right after the style board", "target": "artist-os", "rationale": "Resume/continue an existing project.", "probe": false },
@@ -47,6 +50,14 @@
 
     { "id": 24, "query": "summarize this 30-page PDF research report into bullet points for my monday standup", "target": "none", "rationale": "Off-domain; no Artist OS skill should win.", "probe": false },
     { "id": 25, "query": "help me debug why my stripe webhook keeps returning a 400 in the backend repo", "target": "none", "rationale": "Off-domain near-miss (backend work).", "probe": false },
-    { "id": 26, "query": "i need to write a short artist statement about my painting for a gallery submission this week", "target": "none", "rationale": "PROBE: art-adjacent and mentions 'artist' + a creative work, but it's prose writing, not the text->art transformation pipeline. A naive keyword match would wrongly fire Artist OS.", "probe": true }
+    { "id": 26, "query": "i need to write a short artist statement about my painting for a gallery submission this week", "target": "none", "rationale": "PROBE: even though the text journey now produces written outputs, Artist OS transforms an existing source Reference's meaning into a new medium. This asks to write a statement ABOUT a painting from scratch, with no source text to transform, so it stays out of domain. Tests that the new text path does not over-trigger on generic from-scratch creative-writing requests.", "probe": true },
+
+    { "id": 27, "query": "i transcribed an old voice memo about my dad's workshop and i want to turn it into a short personal essay, no clue where to start", "target": "artist-os", "rationale": "Cold full text->text transformation of an existing source text; conductor orients to the text output, sets up records, then delegates to text-journey. Contrast with id 26, which has no source text to transform.", "probe": true },
+    { "id": 28, "query": "meaning's locked for the 'tidewrack' poem. now build the text medium plan and the writing brief for a prose-poem version", "target": "text-journey", "rationale": "Isolated text planning phase after meaning exists - the written-output peer of id 11.", "probe": false },
+    { "id": 29, "query": "the text brief is approved, draft the monologue now from the generation plan", "target": "text-journey", "rationale": "Isolated text drafting phase on an in-flight project.", "probe": false },
+    { "id": 30, "query": "can you run the human voice pass on the approved draft? it still reads a bit AI and the text gen plan already allows it", "target": "human-voice-pass", "rationale": "PROBE: explicit named editorial pass on an in-flight text draft with policy in place; sub-skill wins over the conductor. Tests human-voice-pass vs artist-os vs clear-writing-pass.", "probe": true },
+    { "id": 31, "query": "do the clear writing pass on the essay draft and tighten the saggy middle section, the plan marks it recommended", "target": "clear-writing-pass", "rationale": "PROBE: explicit named clear-writing pass on an in-flight draft; tests clear-writing-pass vs human-voice-pass vs artist-os.", "probe": true },
+    { "id": 32, "query": "can you tighten up these two paragraphs of my cover letter and cut the fluff", "target": "none", "rationale": "PROBE: clarity-editing keywords overlap clear-writing-pass, but there is no Artist OS project, source Reference, or text generation plan. A naive keyword match would wrongly fire the editorial pass.", "probe": true },
+    { "id": 33, "query": "i want the lyrics from my song written out as an actual poem on the page, not a song prompt", "target": "text-journey", "rationale": "PROBE: 'lyrics' overlaps text-to-suno-plan, but the user wants lyrics as written text, which is the text journey. Tests the conductor's lyrics disambiguation rule.", "probe": true }
   ]
 }
