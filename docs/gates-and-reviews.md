@@ -15,6 +15,7 @@ Routing Gate
   -> Story Gate
   -> Story Critic Review
   -> Story Approval Gate
+  -> Long-Work Readiness / Checkpoints, when the work is cumulative
   -> Medium Gates
   -> Medium Critic Review
   -> Prompt Critic Review
@@ -90,6 +91,14 @@ Complete when Prompt Critic Review findings are resolved or explicitly waived, a
 Approves a Prompt Branch Set for curator batches, mass prompt exploration, or broad AI generation runs.
 
 Complete when the artist accepts the branching goal, branch count, meaning kernel, axes allowed to vary, axes held constant, and minimum distinction rule. A Prompt Branch Set does not authorize provider-backed generation by itself; Generation Approval is still required per call or approved batch.
+
+### Long-Work Checkpoint Gate
+
+Approves or blocks a Long-Work Checkpoint inside a Cumulative Work.
+
+Complete when the artist approves, revises, waives, or blocks the checkpoint decision. Checkpoints can be foundation, medium mapping, calibration, first part, interval, pre-completion, or completion checks. Store the artist-facing decision as a Gate Decision with `gate_type = "long_work_checkpoint"` and summarize it in the Long-Work Stewardship Record for resume state.
+
+When Long-Work Readiness is `pending`, run the readiness pass before expansion. When Long-Work Readiness is `repair_before_expansion`, do not produce multiple downstream prompts, drafts, or outputs until the issue is repaired or the artist explicitly waives the block.
 
 ### Generation Approval Gate
 
@@ -201,6 +210,16 @@ Checks whether selected media work together instead of duplicating, flattening, 
 It owns cross-media role assignment, continuity, divergence, and production order.
 
 Drift check: compare each medium's role against Artist Meaning, Beat Plan, cross-media continuity decisions, and the other approved medium plans.
+
+### Long-Work Reviewer
+
+Checks Long-Work Stewardship for Cumulative Work: readiness before expansion, checkpoint status, part-to-part integrity, cumulative drift, continuity rules, proposed continuity updates, and whether a proposed change must return to Story Approval, Medium Plan approval, prompt revision, or artist confirmation.
+
+Boundary: Long-Work Reviewer owns cumulative execution integrity, not Artist Meaning, Beat Plan authority, Medium Plan authority, or Output Acceptance.
+
+Drift check: compare the Long-Work Stewardship Record and current part or output against Artist Meaning, Beat Plan, Medium Plan, active Long-Work Continuity Rules, approved prior parts, and relevant Output Records.
+
+Block when Long-Work Readiness is `repair_before_expansion`, when a checkpoint required before continuing is unresolved, when a part resolves a later emotional movement too early, when adjacent parts repeat without an active meaning-bearing continuity rule, when a proposed continuity update changes meaning or story movement without returning to Story Approval, or when project memory would cross Artist OS Project boundaries without explicit artist import or reuse.
 
 ### Prompt Critic
 

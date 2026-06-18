@@ -36,7 +36,8 @@
         "output_critic",
         "fragment_reviewer",
         "beat_reviewer",
-        "shape_reviewer"
+        "shape_reviewer",
+        "long_work_reviewer"
       ]
     },
     "reviewer_execution": {
@@ -56,7 +57,7 @@
       "properties": {
         "artifact_type": {
           "type": "string",
-          "enum": ["transformation_brief", "beat_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
+          "enum": ["transformation_brief", "beat_plan", "long_work_stewardship", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
         },
         "artifact_id": { "type": "string" },
         "path_or_ref": { "type": "string" }
@@ -79,7 +80,7 @@
             "properties": {
               "ref_type": {
                 "type": "string",
-                "enum": ["source_record", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
+                "enum": ["source_record", "transformation_brief", "beat_plan", "long_work_stewardship", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
               },
               "ref_id": { "type": "string" },
               "path_or_ref": { "type": "string" }
@@ -222,7 +223,7 @@
       "properties": {
         "source_type": {
           "type": "string",
-          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "beat_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference", "review_record"]
+          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference", "review_record"]
         },
         "source_ref": { "type": "string" },
         "note": { "type": "string" }

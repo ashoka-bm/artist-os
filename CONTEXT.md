@@ -444,6 +444,46 @@ _Avoid_: Generic three variants
 A multi-image Series Plan or Series Recommendation for extended sequence, motif evolution, or world exploration.
 _Avoid_: Prompt variants
 
+**Cumulative Work**:
+A multi-output or long-form Artist OS Project where each part builds on prior parts through sequence, emotional arc, escalation, transformation, or dependency.
+_Avoid_: Collection, portfolio, batch
+
+**Long-Work Stewardship**:
+The Artist OS guardrail layer for Cumulative Work that protects story structure, emotional arc, continuity, checkpoints, and approved part-to-part dependency.
+_Avoid_: Story bible, collection review
+
+**Long-Work Stewardship Record**:
+The schema-backed Project Memory record for a Cumulative Work, centered on planned parts, checkpoints, continuity rules, readiness, and drift while referencing the Beat Plan as story authority.
+_Avoid_: Beat Plan, story bible, Project Manifest
+
+**Long-Work Part**:
+One cumulative unit inside a Long-Work Stewardship Record, such as an image role, text section, chapter, scene, poem movement, song section, sound movement, video scene, or mixed-media movement.
+_Avoid_: Prompt Variant Plan, Variant
+
+**Long-Work Readiness**:
+The readiness state for expanding a Cumulative Work. It may be pending before the readiness pass runs; after review, it is marked ready, ready with risks, repair before expansion, or waived.
+_Avoid_: Quality score, taste score
+
+**Long-Work Checkpoint**:
+A required or optional stop in Long-Work Stewardship where Artist OS reviews cumulative integrity before continuing.
+_Avoid_: Generic progress note
+
+**Long-Work Reviewer**:
+The bounded reviewer role that applies Long-Work Stewardship to readiness, checkpoints, cumulative drift, and proposed continuity updates.
+_Avoid_: Story Critic, Art Critic, Output Critic
+
+**Long-Work Continuity Rule**:
+A first-class stewardship rule that preserves part-to-part continuity for emotional arc, symbol, visual language, voice, motif, character, setting, sonic language, structure, or pacing.
+_Avoid_: Story bible entry, loose note
+
+**Proposed Continuity Update**:
+A candidate change discovered from an Output Artifact, calibration, draft, or review that may become a Long-Work Continuity Rule only after the required approval.
+_Avoid_: Silent canon update, automatic story bible update
+
+**Collection Coherence Review**:
+A lighter review for non-sequential portfolios, store sets, and curator batches that checks cohesion, meaningful variation, shared rules, and drift without imposing a story sequence.
+_Avoid_: Long-Work Stewardship, Series Plan
+
 **Series Calibration Image**:
 The first generated image used to lock Style Direction, Target Visual Engine, and series language before producing the rest of an approved Series Plan.
 _Avoid_: Generating the whole series before visual approval
@@ -572,6 +612,10 @@ _Avoid_: Workspace Library
 Local uncommitted storage for real artist References, Creative Briefs, gate decisions, Prompt Plans, Text Generation Plans, Generated Works, image files, sidecar metadata, and Output Records.
 _Avoid_: Example Corpus
 
+**Artist OS Project**:
+One isolated Workspace Library unit for a single artist goal, which may be a single image, one song, a long written work, an image series, a store collection, or another bounded output journey.
+_Avoid_: Book, global workspace, chat thread
+
 **Artist OS Library Database**:
 The SQLite query index at `workspace-library/artist-os/artist-os.sqlite`, refreshed from project manifests, event logs, and asset sidecars.
 _Avoid_: Source of truth for binary media
@@ -583,6 +627,10 @@ _Avoid_: Archived Project
 **Project Manifest**:
 The `project.json` record that lets an agent reload one Artist OS project across sessions.
 _Avoid_: Chat memory
+
+**Project Memory**:
+The durable per-project records, decisions, events, and accepted continuity context that let Artist OS resume one Artist OS Project without mixing it with another.
+_Avoid_: Model memory, story bible, global memory
 
 **Asset Metadata**:
 The same-basename `.json` sidecar stored next to an image or export in the Workspace Library.
@@ -688,6 +736,43 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Series Recommendation** can still choose single image when compression preserves the work better than sequence.
 - A **Triptych** fits a clear three-part emotional structure such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath.
 - An **Image Series** fits extended sequence, motif evolution, or world exploration.
+- A **Cumulative Work** needs long-work stewardship because later parts depend on prior parts or on an approved emotional arc.
+- A portfolio, collection, curator batch, or store set is not automatically a **Cumulative Work** when the outputs are related but non-sequential.
+- **Long-Work Stewardship** applies to **Cumulative Work**.
+- **Collection Coherence Review** applies to related non-sequential sets without imposing **Long-Work Stewardship**.
+- **Long-Work Stewardship** is schema-backed by a **Long-Work Stewardship Record**.
+- **Collection Coherence Review** stays review behavior for now and should not get a separate schema until collection-level acceptance, store readiness, or batch-level promotion creates a real need.
+- **Long-Work Stewardship** owns part-to-part integrity: assigned Beat Roles, approved order, emotional arc legibility, continuity rules, checkpoint readiness, and whether a proposed change must return to **Story Approval**.
+- **Long-Work Stewardship** does not own **Artist Meaning**, **Core Tension Pairs**, **Beat Plan** authority, **Medium Plan** authority, or final acceptance.
+- A **Long-Work Stewardship Record** references the governing **Beat Plan** rather than duplicating it.
+- A **Long-Work Stewardship Record** is centered on one planned part per cumulative unit, such as an image role, text section, chapter, song section, video scene, or mixed-media movement.
+- An **Artist OS Project** may have multiple **Long-Work Stewardship Records**, but each **Long-Work Stewardship Record** governs one **Cumulative Work**.
+- A **Long-Work Stewardship Record** is updated in place for execution progress, but a governing Artist Meaning, Beat Plan, or Medium Plan change that alters cumulative structure creates a superseding stewardship record.
+- A **Long-Work Part** is not a **Prompt Variant Plan** or **Variant**; prompt variants test directions, while Long-Work Parts carry cumulative story or emotional structure.
+- A **Long-Work Part** stores generic stewardship state plus a reference to its medium-specific part; it does not duplicate Shot Design, amplitude profiles, section execution details, voice rules, or other Medium Plan-owned fields.
+- A **Single-Generation Variant Triptych** does not create Long-Work Parts unless it represents an approved triptych or series rather than a Minimal/Faithful/Amplified comparison.
+- Create the **Long-Work Stewardship Record** after **Story Approval**, then enrich it after the **Medium Plan** maps approved Beats into medium-specific parts.
+- For **Cumulative Work**, the route is Story Approval, then **Long-Work Stewardship Record** creation, then Medium Plan, then stewardship enrichment with Long-Work Parts, then Long-Work Readiness before expansion.
+- **Long-Work Readiness** can block expansion when the state is pending or repair before expansion; expansion may continue only after readiness runs, repair happens, or the artist explicitly waives the block.
+- **Long-Work Readiness** should use bands, not numeric quality scores.
+- **Long-Work Readiness** checks story authority, part mapping, part job clarity, Expectation Turn preservation, emotional arc movement, premature resolution, continuity rules, checkpoint plan, open risks, and waiver path.
+- **Long-Work Checkpoints** may be foundation, medium mapping, calibration, first part, interval, pre-completion, or completion checkpoints.
+- A **Long-Work Stewardship Record** supports all checkpoint types, but only the checkpoints relevant to the medium, size, and risk of the Cumulative Work are required.
+- A **Long-Work Checkpoint** decision is recorded as a **Gate Decision** and summarized in the **Long-Work Stewardship Record** for resume state.
+- **Long-Work Reviewer** returns a **Review Record** for readiness, checkpoints, cumulative drift, and proposed continuity updates.
+- **Long-Work Continuity Rules** are first-class objects in the **Long-Work Stewardship Record**.
+- Changing a **Long-Work Continuity Rule** requires artist confirmation, Story Approval, Medium Plan approval, or prompt revision according to the rule's authority level.
+- Output discoveries become **Proposed Continuity Updates** first; they become active **Long-Work Continuity Rules** only after the required artist confirmation or approval gate.
+- A **Proposed Continuity Update** that changes meaning or story movement must return to **Story Approval** before becoming active.
+- Artist-approved repetition, stillness, or reduced movement should become an explicit **Long-Work Continuity Rule** when it is meaning-bearing; use waiver only when the artist accepts a risk without changing the governing intent.
+- For image series, the **Series Plan** remains the image-medium plan for what images should exist and how they visually translate the Beat Plan.
+- For image series, the **Long-Work Stewardship Record** references Image Role ids and tracks cumulative execution state; it does not duplicate Shot Design, amplitude, or visual-tension details owned by the Image Medium Plan or Creative Brief.
+- For long text, the **Text Medium Plan** owns text form, voice, point of view, structure, fidelity, publication use, and section jobs.
+- For long text, the **Text Generation Plan** owns drafting instructions and editorial pass policy.
+- For long text, the **Long-Work Stewardship Record** references text section, chapter, scene, or movement ids and tracks cumulative progress, checkpoints, arc integrity, voice drift, fidelity drift, and whether editorial passes changed protected structure.
+- The first **Long-Work Stewardship** implementation should cover both image series and long text.
+- The first long-text **Long-Work Stewardship** scope covers cumulative text sections, chapters, scenes, and poem movements; scripts, lyric cycles, and treatments can use those part kinds until a real specialized need appears.
+- First-pass long-text readiness checks part mapping, distinct section jobs, emotional arc movement or intentional holding, premature resolution, voice continuity, fidelity continuity, and first-part checkpoint needs.
 - A **Series Plan** requires artist approval before Artist OS produces multiple image Prompt Plans.
 - An approved **Series Plan** starts with one **Series Calibration Image** before producing the rest of the series.
 - The **Series Calibration Image** should use the **Calibration Image Role**, not automatically the first sequential Beat.
@@ -722,6 +807,11 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Provider Adapter** translates a **Provider-Neutral Prompt Plan** for a provider.
 - The **Example Corpus** contains safe committed examples.
 - The **Workspace Library** contains real artist work and is not committed by default.
+- The **Workspace Library** contains many **Artist OS Projects**.
+- Each **Artist OS Project** has its own **Project Memory**.
+- **Project Memory** must not cross project boundaries unless the artist explicitly imports, references, or reuses material from another Artist OS Project.
+- A single **Artist OS Project** can contain many **Output Artifacts** when they share the same governing **Artist Meaning**, source **Reference**, audience/use, collection intent, and continuity rules.
+- Use separate **Artist OS Projects** when the governing meaning, source Reference, audience/use, or creative goal changes enough that shared Project Memory would create drift.
 - The **Artist OS Library Database** indexes the **Workspace Library** so agents can find old projects, prompts, image paths, and resume points.
 - A **Missing Project** can be searched as historical context but cannot be resumed until its files are restored.
 - Each project in the **Workspace Library** has a **Project Manifest** and image files use **Asset Metadata** sidecars.

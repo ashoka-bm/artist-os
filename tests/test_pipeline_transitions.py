@@ -403,6 +403,65 @@ class PipelineTransitionTests(unittest.TestCase):
         for turn in review["emotional_tension_review"]["expectation_turns_reviewed"]:
             self.assertIn(turn["beat_id"], beat_ids)
 
+    def test_beat_plan_to_foundation_long_work_stewardship(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        stewardship = load("tests/fixtures/long-work/foundation-stewardship-record.json")
+
+        self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(stewardship["source_id"], beat_plan["source_id"])
+        self.assertEqual(stewardship["artist_meaning_id"], beat_plan["artist_meaning_id"])
+        self.assertIsNone(stewardship["medium_plan_id"])
+        self.assertEqual(stewardship["part_plan"], [])
+        self.assertEqual(stewardship["stewardship_status"], "planned")
+        self.assertEqual(stewardship["readiness_review"]["status"], "pending")
+        self.assertEqual(stewardship["checkpoints"][0]["checkpoint_type"], "foundation")
+
+    def test_beat_plan_to_image_series_long_work_stewardship(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        image_plan = load("tests/fixtures/text-to-image/image-medium-plan.json")
+        stewardship = load("tests/fixtures/long-work/image-series-stewardship-record.json")
+
+        self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(stewardship["source_id"], beat_plan["source_id"])
+        self.assertEqual(stewardship["artist_meaning_id"], beat_plan["artist_meaning_id"])
+        self.assertEqual(stewardship["medium_plan_id"], image_plan["image_medium_plan_id"])
+        self.assertEqual(stewardship["target_media_type"], "image")
+        self.assertEqual(stewardship["cumulative_work_type"], "image_series")
+
+        image_role_ids = {role["image_role_id"] for role in image_plan["image_roles"]}
+        beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        for part in stewardship["part_plan"]:
+            self.assertEqual(part["medium_part_ref"]["ref_type"], "image_role")
+            self.assertIn(part["medium_part_ref"]["ref_id"], image_role_ids)
+            self.assertIn(part["beat_id"], beat_ids)
+            self.assertIn(part["key_emotional_movement_id"], key_movement_ids)
+            self.assertNotIn("shot_design", part)
+            self.assertNotIn("amplitude_profile", part)
+
+    def test_text_medium_plan_to_long_work_stewardship(self) -> None:
+        beat_plan = load("tests/fixtures/story/beat-plan.json")
+        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+        stewardship = load("tests/fixtures/long-work/text-stewardship-record.json")
+
+        self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(stewardship["medium_plan_id"], text_plan["text_medium_plan_id"])
+        self.assertEqual(stewardship["target_media_type"], "text")
+        self.assertEqual(stewardship["cumulative_work_type"], "long_text")
+
+        section_ids = {
+            section["section_id"]
+            for section in text_plan["structure_plan"]["sections"]
+        }
+        for part in stewardship["part_plan"]:
+            self.assertEqual(part["medium_part_ref"]["ref_type"], "text_section")
+            self.assertIn(part["medium_part_ref"]["ref_id"], section_ids)
+            self.assertTrue(part["part_job"])
+            self.assertNotIn("section_execution", part)
+            self.assertNotIn("voice_point_of_view", part)
+
 
 if __name__ == "__main__":
     unittest.main()

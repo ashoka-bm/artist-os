@@ -16,6 +16,7 @@ Load details only when needed:
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and reviewer rules.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific planning.
 - `schemas/text-medium-plan.schema.json` for text translation decisions before Text Creative Brief creation.
+- `schemas/long-work-stewardship-record.schema.json` for cumulative long text after Story Approval and Text Medium Plan mapping.
 - `schemas/text-creative-brief.schema.json` after Writing Critic Review and Brief Approval.
 - `schemas/text-generation-plan.schema.json` after Brief Approval and prompt/generation planning.
 - `schemas/output-record.schema.json` for every concrete draft or rewrite artifact.
@@ -29,6 +30,7 @@ These hold whether you run standalone or under the `artist-os` conductor:
 - Do not create a Text Creative Brief Record or Text Generation Plan until Writing Critic Review and Brief Approval are complete.
 - Do not draft the final written Output Artifact until Draft Generation Approval is explicit, even when the agent drafts locally without a paid provider call.
 - Draft the written Output Artifact in a fresh-context sub-agent using a bounded Text Draft Packet.
+- For cumulative long text, create and maintain a Long-Work Stewardship Record; do not draft later sections while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - The fresh-context drafting sub-agent must not run the Human Voice Pass or Clear Writing Pass during first drafting.
 - Run main-agent conformance review before any editorial pass. If the draft fails Artist Meaning, structure, section jobs, Intended Feeling, source-wording policy, or Text Generation Plan constraints, structure wins; correct the draft before editorial polishing.
 - Run Clear Writing Pass and Human Voice Pass as separate bounded fresh-context sub-agents only when the Text Generation Plan policy allows them.
@@ -49,6 +51,8 @@ Before creating the text-specific brief, produce:
 
 The Beat Plan is authoritative for story shape. The Text Medium Plan is authoritative for text translation decisions: writing method, Primary Text Form, Text Form Modifiers, voice / point of view, structure, fidelity policy, publication/use, gate statuses, and review requirements. The later Text Creative Brief Record must include `transformation_brief_id`, `beat_plan_id`, and `text_medium_plan_id`; do not embed duplicate Beat records.
 
+For cumulative long text, the Long-Work Stewardship Record protects execution across text sections, chapters, scenes, or poem movements. The foundation record starts after Story Approval. Enrich it after Text Medium Plan by referencing text section or other medium part ids. Do not duplicate section execution, voice, fidelity, or editorial policy fields inside the stewardship record; those remain owned by Text Medium Plan and Text Generation Plan.
+
 Every Beat must name an Intended Feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, themes, or facts. Text should make each section or paragraph do a different job in the reader's experience.
 
 For exploratory writing, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious compact text target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-beat, journey-shaped, or structurally ambiguous text still requires a bounded Beat Reviewer sub-agent before Text Medium Plan locking.
@@ -67,6 +71,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 8. Define Fidelity Policy: preserve source wording, adapt, invert, expand, compress, translate, or create new text from meaning.
 9. Define publication/use and rights/privacy notes.
 10. Produce the Text Medium Plan only after the writing method, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
+11. When the text structure is cumulative, enrich the Long-Work Stewardship Record from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval.
 
 ## Draft Text Creative Brief Process
 
@@ -117,6 +122,8 @@ The drafting sub-agent returns:
 
 Persist the concrete draft as an Output Record with `origin.origin_type = "agent_drafted"` and the compact draft trace in `traceability_summary`.
 
+For cumulative long text, update the Long-Work Stewardship Record when a section, chapter, scene, or poem movement is drafted, rewritten, reviewed, accepted, blocked, or skipped. First-part and interval checkpoints must be resolved before drafting later dependent parts when marked `required_before_continuing`.
+
 ## Editorial Passes
 
 Run editorial passes only after the main agent confirms the draft follows the Text Generation Plan.
@@ -143,4 +150,4 @@ After Writing Critic Review and Brief Approval, return the Text Creative Brief R
 
 After Draft Generation Approval, return the fresh-context draft Output Record, draft trace, main-agent conformance result, any editorial rewrite Output Records, and final-check notes for Output Critic Review.
 
-When emitted as records, JSON must validate against `schemas/text-medium-plan.schema.json`, `schemas/text-creative-brief.schema.json`, `schemas/text-generation-plan.schema.json`, and `schemas/output-record.schema.json`.
+When emitted as records, JSON must validate against `schemas/text-medium-plan.schema.json`, `schemas/text-creative-brief.schema.json`, `schemas/text-generation-plan.schema.json`, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/output-record.schema.json`.

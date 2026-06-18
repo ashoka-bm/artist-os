@@ -2,7 +2,7 @@
 
 The story architecture defines the shared route Artist OS uses before branching into image, sound, and future video, text, or mixed-media output.
 
-This is the planning contract for the shared story route. Formal schemas for Transformation Brief, Beat Plan, Review Record, Gate Decision, and Output Record now live in `schemas/`.
+This is the planning contract for the shared story route. Formal schemas for Transformation Brief, Beat Plan, Long-Work Stewardship Record, Review Record, Gate Decision, and Output Record now live in `schemas/`.
 
 ## Shared Journey
 
@@ -11,6 +11,7 @@ Reference Intake
   -> Meaning Journey
   -> Transformation Brief
   -> Story Journey
+  -> Long-Work Stewardship, when cumulative
   -> Medium Journey
   -> Prompt Journey
   -> Generation Journey
@@ -104,6 +105,31 @@ Review:
 
 - Story Critic Review.
 - Beat Reviewer sub-agent, when beat sequencing or beat size needs a dedicated pass.
+
+### Long-Work Stewardship
+
+Protects projects whose parts build on each other after Story Approval.
+
+Outputs:
+
+- Long-Work Stewardship Record,
+- planned Long-Work Parts,
+- continuity rules,
+- Long-Work Readiness,
+- checkpoint plan,
+- drift list.
+
+Gate:
+
+- Long-Work Checkpoint Gate.
+
+Review:
+
+- Long-Work Reviewer, used for readiness, checkpoints, cumulative drift, and proposed continuity updates.
+
+The Beat Plan remains the story authority. The foundation record references the approved Beat Plan before medium-specific parts exist; the enriched record references the medium-specific part ids. Long-Work Stewardship does not duplicate beat movement, shot design, text section execution, sonic arrangement, or final acceptance.
+
+Do not use Long-Work Stewardship for non-sequential portfolios, store collections, style explorations, or curator batches unless the parts build on each other.
 
 ### Medium Journey
 
@@ -209,6 +235,8 @@ Artist OS can branch after Story Approval:
 
 Do not branch earlier than needed. Artist Meaning and Story Approval should stay shared unless the artist wants different meanings for different outputs.
 
+A project can contain more than one Long-Work Stewardship Record, one per Cumulative Work. Keep them separate when outputs share a project but do not share sequence, dependency, emotional arc, or cumulative continuity.
+
 ## Writing Method Integration
 
 The writing methods are creation methods and review methods.
@@ -229,6 +257,7 @@ Text Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Beat Plan
+  -> Long-Work Stewardship Record, when cumulative
   -> Image Medium Plan
   -> draft image Creative Brief
   -> Art Critic Review (Review Record)
@@ -242,4 +271,4 @@ Text Reference
   -> Output Acceptance Gate Decision
 ```
 
-The image and Suno workflows now consume the approved Beat Plan instead of each owning its own story model. Medium-specific brief records carry `beat_plan_id` and do not embed duplicate Beat summaries.
+The image, Suno, and text workflows now consume the approved Beat Plan instead of each owning its own story model. Medium-specific brief records carry `beat_plan_id` and do not embed duplicate Beat summaries. Cumulative work also carries a Long-Work Stewardship Record so later parts stay traceable to the approved arc without turning non-sequential collections into heavy story projects.

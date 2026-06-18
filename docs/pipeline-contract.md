@@ -24,6 +24,7 @@ No step advances unless its output validates against the declared schema. Review
 | Gate Decision | `schemas/gate-decision.schema.json` | `examples/gate-decision.example.json` |
 | Transformation Brief | `schemas/transformation-brief.schema.json` | `examples/transformation-brief.example.json` |
 | Beat Plan | `schemas/beat-plan.schema.json` | `examples/beat-plan.example.json` |
+| Long-Work Stewardship Record | `schemas/long-work-stewardship-record.schema.json` | `tests/fixtures/long-work/foundation-stewardship-record.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
 | Text Medium Plan | `schemas/text-medium-plan.schema.json` | `tests/fixtures/text-journey/text-medium-plan.json` |
@@ -91,6 +92,22 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: Story Gate and Story Approval Gate.
 - Next: image, sound, video, text, or mixed-media medium planning.
 
+### `long_work.stewardship`
+
+- Input: approved Beat Plan; later enriched by Medium Plan, Output Records, Review Records, and Long-Work Checkpoint Gate Decisions.
+- Output: Long-Work Stewardship Record.
+- Schema: `schemas/long-work-stewardship-record.schema.json`.
+- Skill: conductor, active medium planner, or future long-work stewardship skill.
+- Reviewer required: Long-Work Reviewer for readiness, checkpoint, cumulative drift, and proposed continuity update reviews.
+- Gate: Long-Work Checkpoint Gate when a checkpoint requires artist confirmation or waiver.
+- Next: Medium Plan enrichment, Long-Work Readiness, prompt or draft expansion, checkpoint review, Output Review, or Story Approval if a proposed update changes story authority.
+
+Create the Long-Work Stewardship Record only for Cumulative Work: triptychs, image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative.
+
+The foundation Long-Work Stewardship Record is valid immediately after Story Approval. At that point `medium_plan_id` may be `null`, `part_plan[]` may be empty, and Long-Work Readiness may be `pending`. After the Medium Plan exists, enrich the same record with `medium_plan_id`, one `part_plan[]` entry per cumulative unit, continuity rules, checkpoints, and readiness before expansion.
+
+The Beat Plan remains the story authority. The Long-Work Stewardship Record references the Beat Plan and Medium Plan, records continuity rules and checkpoints, and blocks expansion when Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
+
 ### `review.record`
 
 - Input: review packet.
@@ -123,7 +140,7 @@ The Review Record must include numeric tension intensity assessments. Reviewers 
 - Skill: `skills/text-to-image-plan`.
 - Reviewer required: Beat Reviewer sub-agent when the image plan is multi-beat, series, or ambiguous.
 - Gate: Symbology Gate, Presentation Gate, Style Gate, Detail Gate.
-- Next: `image.creative_brief`.
+- Next: `long_work.stewardship` enrichment when the image work is cumulative, otherwise `image.creative_brief`.
 
 ### `image.creative_brief`
 
@@ -211,7 +228,7 @@ The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-le
 - Skill: `skills/text-journey`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, scene, arc, or structurally ambiguous plans.
 - Gate: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
-- Next: `text.creative_brief`.
+- Next: `long_work.stewardship` enrichment when the text work is cumulative, otherwise `text.creative_brief`.
 
 Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Movement, name a section job, state the Intended Feeling, translate the Expectation Turn, and explain how the section differs from adjacent sections.
 
@@ -248,9 +265,13 @@ Source Record -> Artist Meaning
 Gate Question -> Gate Decision
 Artist Meaning -> Transformation Brief
 Transformation Brief -> Beat Plan
+Beat Plan -> Long-Work Stewardship Record, when cumulative
+Long-Work Stewardship Record -> Long-Work Checkpoint Gate Decision, when a checkpoint requires artist decision
 Beat Plan -> Image Medium Plan
 Beat Plan -> Sound Medium Plan
 Beat Plan -> Text Medium Plan
+Image Medium Plan -> Long-Work Stewardship Record, when cumulative
+Text Medium Plan -> Long-Work Stewardship Record, when cumulative
 Image Medium Plan -> Creative Brief Record
 Sound Medium Plan -> Sound Creative Brief Record
 Text Medium Plan -> Text Creative Brief Record
@@ -258,6 +279,7 @@ Creative Brief Record -> Provider-Neutral Image Prompt Plan
 Text Creative Brief Record -> Text Generation Plan
 Provider-Neutral Image Prompt Plan -> Prompt Branch Set
 Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
+Output Record -> Long-Work Stewardship Record, when cumulative
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
 Sound Creative Brief Record -> Suno Sound Prompt Plan

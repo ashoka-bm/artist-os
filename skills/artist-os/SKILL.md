@@ -14,6 +14,7 @@ This skill is deliberately thin. The "how" of each phase lives in canonical docs
 - `THEORY.md` — the canonical source for gate definitions, the Visual Gate Board contract, Stage Completion, Series logic, and Prompt Variant Plans. When a phase needs a board format, a gate question, or a "stage is done" rule, read it there rather than improvising.
 - `docs/storage.md` — Workspace Library layout and the persistence rule.
 - `docs/story/THEORY.md` and `docs/story/ARCHITECTURE.md` — the shared Story / Beat Plan layer.
+- `schemas/long-work-stewardship-record.schema.json` — the stewardship record for Cumulative Work.
 - `docs/writing/README.md` and `docs/writing/references/` — high-authority writing methods for fragments, beat-by-beat journeys, and finished written shape.
 - `docs/text-to-sound/THEORY.md` and `docs/text-to-sound/ARCHITECTURE.md` — the Suno music flow.
 - `AGENTS.md` — repository invariants and the traceability rule every plan must satisfy.
@@ -27,6 +28,7 @@ These are the conductor's safety rails — the things only you can enforce becau
 - Never call a generation provider (image or Suno) without explicit, per-call artist approval. Drafting a prompt or a board is always allowed; sending it to a provider is not. The provider boundary is where cost, irreversibility, and external action live — the artist must never be surprised by spend or by work they did not sanction.
 - Do not create a Creative Brief Record or Prompt Plan until the critic review has revised the Creative Brief Document and the artist has approved it. The same holds for the Sound Creative Brief Record and Suno Sound Prompt Plan. The brief is the meaning contract everything downstream inherits; locking a plan on top of an unratified brief bakes in unreviewed interpretation that is expensive to unwind.
 - Do not produce multiple series image prompts, or multiple Suno sequence plans, until the artist approves the Series/Sequence Plan. A series multiplies generation cost and commits the artist to a direction, so each expansion stays a deliberate artist choice rather than a default.
+- For Cumulative Work, create a foundation Long-Work Stewardship Record after Story Approval, enrich it after Medium Plan, and do not expand while Long-Work Readiness is `pending` or `repair_before_expansion` unless the artist completes readiness, repairs, or explicitly waives the block.
 - After generation, import, drafting, or human editing creates a concrete Output Artifact, create an Output Record before Output Critic Review or Output Acceptance Gate. Review and acceptance must point at a fixed, traceable artifact — without a record there is nothing durable to critique or to tie the verdict to.
 - Do not advance a blocked Output Critic Review to Output Acceptance Gate unless the artist explicitly waives the blocking finding and the waiver is recorded in the Review Record. Blocking findings protect meaning; an unrecorded override erases the audit trail of what was knowingly shipped.
 - Do not leave project state only in chat. Persist each phase before advancing (see Persisting State). Chat is ephemeral — if state lives only in the conversation, a returning artist loses the thread and the pipeline's traceability guarantees break.
@@ -140,42 +142,45 @@ As conductor, hold two rules at every gate:
 
 ## Phase Order
 
-Image, audio, and text share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image, `skills/text-to-suno-plan` for Sound Journey / Suno, and `skills/text-journey` for text. Reviewer steps (5, 8, 11, 14) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
+Image, audio, and text share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image, `skills/text-to-suno-plan` for Sound Journey / Suno, and `skills/text-journey` for text. Reviewer steps (5, 9, 12, 15) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
 
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview` (bounded Decision Interview).
 3. **Transformation Brief** — medium skill; `schemas/transformation-brief.schema.json`.
 4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat names its intended feeling.
-5. **Story / Beat Review** — `skills/writing-method-review` in Beat Reviewer mode, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan.
-6. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), and produces the Medium Plan. Persist each gate decision under `gates/`.
-7. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
-8. **Critic Review** — `skills/art-critic-review` for image or sound; `skills/writing-method-review` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
-9. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas. (Image only: then run the Minimalist-to-Maximalist intensity gate if unresolved — see Medium Specifics.)
-10. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
-11. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set.
-12. **Generation Approval Gate** — only for provider-backed generation, text Draft Generation Approval, or another external action; approval is explicit per call, approved batch, or draft.
-13. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance.
-14. **Output Critic Review** — `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records.
-15. **Output Acceptance Gate** — present the result; ask whether to accept, revise, reject, archive, export, or extend. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
+5. **Story / Beat Review And Approval** — `skills/writing-method-review` in Beat Reviewer mode, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan; then present the revised Beat Plan for Story Approval.
+6. **Long-Work Stewardship Creation** — for Cumulative Work only, create a foundation Long-Work Stewardship Record after Story Approval. At this stage `medium_plan_id` may be `null` and `part_plan` may be empty because medium-specific parts do not exist yet. The Beat Plan remains story authority.
+7. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), and produces the Medium Plan. Persist each gate decision under `gates/`. For Cumulative Work, enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion.
+8. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
+9. **Critic Review** — `skills/art-critic-review` for image or sound; `skills/writing-method-review` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
+10. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas. (Image only: then run the Minimalist-to-Maximalist intensity gate if unresolved — see Medium Specifics.)
+11. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
+12. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set.
+13. **Generation Approval Gate** — only for provider-backed generation, text Draft Generation Approval, or another external action; approval is explicit per call, approved batch, or draft.
+14. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance. For Cumulative Work, update the Long-Work Stewardship Record with the relevant part status and output reference.
+15. **Output Critic Review** — `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records.
+16. **Output Acceptance Gate** — present the result; ask whether to accept, revise, reject, archive, export, or extend. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
 
 ### Medium Specifics
 
 **Image** — owning skill `skills/text-to-image-plan`:
 
-- Step 6 runs two visual gates in order, Symbology → Style; Presentation Mode is decided inside the Symbology Gate, not as a separate gate. Medium Plan validates against `schemas/image-medium-plan.schema.json`.
-- The Minimalist-to-Maximalist (intensity) gate runs at **Brief Approval (step 9), after symbology and style are locked** — never during the Medium Plan.
-- Step 10 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
-- Optional after step 10: a Prompt Branch Set (`schemas/prompt-branch-set.schema.json`), usually five branches that hold the meaning kernel while varying style, setting, symbol, composition, and palette/light, when the artist wants a curator batch or broad exploration.
+- Step 7 runs two visual gates in order, Symbology → Style; Presentation Mode is decided inside the Symbology Gate, not as a separate gate. Medium Plan validates against `schemas/image-medium-plan.schema.json`.
+- For triptych or image-series Cumulative Work, Long-Work Stewardship references Image Role ids and tracks readiness, checkpoints, continuity rules, and drift; it does not duplicate Shot Design, amplitude, or visual tension fields.
+- The Minimalist-to-Maximalist (intensity) gate runs at **Brief Approval (step 10), after symbology and style are locked** — never during the Medium Plan.
+- Step 11 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
+- Optional after step 11: a Prompt Branch Set (`schemas/prompt-branch-set.schema.json`), usually five branches that hold the meaning kernel while varying style, setting, symbol, composition, and palette/light, when the artist wants a curator batch or broad exploration.
 
 **Suno** — owning skill `skills/text-to-suno-plan`:
 
-- Step 6 works the Suno gates: Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form. Always resolve Vocal/Lyric (lyrics, spoken/phonetic vocals, or instrumental mode) before locking; draft lyrics before final locking if requested. Medium Plan validates against `schemas/sound-medium-plan.schema.json`.
-- Step 10 records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`. Get sequence approval before multiple sequence plans. Do not add an image-style Prompt Branch Set; the current Prompt Branch Set contract is image-oriented.
+- Step 7 works the Suno gates: Sound Work Type, Sonic Concept, Genre/Production, Tempo/Groove, Vocal/Lyric, Arrangement/Form. Always resolve Vocal/Lyric (lyrics, spoken/phonetic vocals, or instrumental mode) before locking; draft lyrics before final locking if requested. Medium Plan validates against `schemas/sound-medium-plan.schema.json`.
+- Step 11 records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`. Get sequence approval before multiple sequence plans. Do not add an image-style Prompt Branch Set; the current Prompt Branch Set contract is image-oriented.
 
 **Text** — owning skill `skills/text-journey`:
 
-- Step 6 works the text gates: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, and Publication / Use. Medium Plan validates against `schemas/text-medium-plan.schema.json`.
-- Step 10 records validate against `schemas/text-creative-brief.schema.json` and `schemas/text-generation-plan.schema.json`.
+- Step 7 works the text gates: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, and Publication / Use. Medium Plan validates against `schemas/text-medium-plan.schema.json`.
+- For cumulative long text, Long-Work Stewardship references text section, chapter, scene, or movement ids and tracks progress, checkpoints, arc integrity, voice drift, fidelity drift, and editorial-pass structural drift; it does not duplicate Text Medium Plan section execution.
+- Step 11 records validate against `schemas/text-creative-brief.schema.json` and `schemas/text-generation-plan.schema.json`.
 - Drafting the written Output Artifact requires Draft Generation Approval even when no paid provider call is made.
 - Draft the written Output Artifact in a fresh-context sub-agent using an internal Text Draft Packet. The drafting sub-agent returns draft text plus a compact draft trace; the Text Draft Packet itself is not a schema-backed record.
 - The main agent must run a conformance review before editorial passes. If structure, section jobs, Intended Feeling, source-wording policy, or Text Generation Plan constraints fail, correct the draft before polishing prose.

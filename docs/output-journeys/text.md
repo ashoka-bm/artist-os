@@ -21,6 +21,7 @@ Use the Text Journey when the final work should be:
 
 ```text
 Approved Beat Plan
+  -> Long-Work Stewardship Record, when the text structure is cumulative
   -> Writing Method Gate
   -> Text Form Gate
   -> Voice / Point Of View Gate
@@ -61,6 +62,7 @@ Approved Beat Plan
 - Shape Reviewer sub-agent checks reader-facing structure against `docs/writing/references/writing-shape.SKILL.md`.
 - Prompt Critic Review checks generation instructions, missing constraints, tone drift, rights-sensitive language reuse, and revision readiness as a bounded sub-agent review.
 - Output Critic Review checks the written draft against Artist Meaning, Beat Plan, Text Medium Plan, and any source-wording constraints as a bounded sub-agent review.
+- Long-Work Reviewer checks readiness, first-part or interval checkpoints, cumulative drift, voice/fidelity continuity, premature resolution, and proposed continuity updates for long text.
 
 ## Drafting Boundary
 
@@ -75,6 +77,8 @@ If the draft has strong prose but fails the approved structure, section jobs, In
 After a written Output Artifact exists, run a Clear Writing Pass when the Text Generation Plan requires or recommends it, then run a Human Voice Pass by default unless the Text Generation Plan marks it optional or skipped for form-sensitive reasons. Run each editorial pass in a bounded fresh-context sub-agent with only the current artifact text, the relevant pass skill and references, the Text Generation Plan policy for that pass, protected features, necessary Artist Meaning or brief constraints, and explicit do-not-change rules. The default order is Clear Writing Pass before Human Voice Pass, because clarity edits can make prose feel more generic and the Human Voice Pass can restore natural rhythm afterward. The Text Generation Plan may reverse or skip either pass when the form requires it.
 
 After editorial passes, the main agent performs a final check against Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, protected features, and structure before Output Critic Review.
+
+For long text where sections, chapters, scenes, or poem movements build cumulatively, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Text Medium Plan maps Beats to text sections or other medium parts. The Text Medium Plan owns text form, voice, structure, fidelity, publication use, and section jobs; the stewardship record references text section or chapter ids and tracks cumulative progress, readiness, checkpoints, continuity rules, and drift.
 
 The Text Generation Plan must set `human_voice_pass_policy` to `required`, `recommended`, `optional`, or `skip`, with `degree` set to `light`, `standard`, or `deep` when the pass is not skipped. It must also name protected features such as line breaks, character voice, source wording, rhetoric, meter, repetition, formal tone, or deliberate artificiality.
 

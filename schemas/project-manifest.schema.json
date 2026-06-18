@@ -60,6 +60,7 @@
         "meaning_interview": { "type": "string" },
         "transformation_brief": { "type": "string" },
         "beat_plan": { "type": "string" },
+        "long_work_stewardship_records_dir": { "type": "string" },
         "image_medium_plan": { "type": "string" },
         "sound_medium_plan": { "type": "string" },
         "interpretation_gate": { "type": "string" },

@@ -76,6 +76,50 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "missing required field 'tension_intensity_assessments'"):
             validate(record, schema, schema)
 
+    def test_long_work_stewardship_fixtures_validate(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        fixture_paths = [
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json",
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "image-series-stewardship-record.json",
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "text-stewardship-record.json",
+        ]
+        for data_path in fixture_paths:
+            with self.subTest(data=data_path.relative_to(REPO_ROOT)):
+                validate_file(schema_path, data_path)
+
+    def test_review_record_accepts_long_work_reviewer(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
+        record = load_json(data_path)
+        record["review_role"] = "long_work_reviewer"
+        record["artifact_under_review"] = {
+            "artifact_type": "long_work_stewardship",
+            "artifact_id": "lws_door_left_lit_foundation",
+            "path_or_ref": "tests/fixtures/long-work/foundation-stewardship-record.json",
+        }
+        record["upstream_context"]["governing_refs"].append(
+            {
+                "ref_type": "long_work_stewardship",
+                "ref_id": "lws_door_left_lit_foundation",
+                "path_or_ref": "tests/fixtures/long-work/foundation-stewardship-record.json",
+            }
+        )
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_gate_decision_accepts_long_work_checkpoint(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
+        record = load_json(data_path)
+        record["gate_type"] = "long_work_checkpoint"
+        record["upstream_refs"][0] = {
+            "ref_type": "long_work_stewardship",
+            "ref_id": "lws_door_left_lit_foundation",
+            "path_or_ref": "tests/fixtures/long-work/foundation-stewardship-record.json",
+        }
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
 
 if __name__ == "__main__":
     unittest.main()

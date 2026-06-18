@@ -33,6 +33,8 @@ workspace-library/artist-os/projects/<project_id>/
 ├── story/
 │   ├── transformation-brief.json
 │   └── beat-plan.json
+├── stewardship/
+│   └── long-work-stewardship-<id>.json
 ├── medium-plans/
 │   ├── image-medium-plan.json
 │   └── sound-medium-plan.json
@@ -141,6 +143,7 @@ Use these destinations for each asset type:
 - Artist Meaning / Meaning Interview: `meaning/artist-meaning.json`
 - Transformation Brief: `story/transformation-brief.json`
 - Beat Plan: `story/beat-plan.json`
+- Long-Work Stewardship Records: `stewardship/long-work-stewardship-*.json`
 - Image Medium Plan: `medium-plans/image-medium-plan.json`
 - Sound Medium Plan: `medium-plans/sound-medium-plan.json`
 - Text Medium Plan: `medium-plans/text-medium-plan.json`
