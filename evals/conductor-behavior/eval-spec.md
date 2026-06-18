@@ -15,6 +15,9 @@ grade the trace against a checklist. Baseline (current conductor) defines the
   Autopilot, I approve recommended choices and generation; take it to the end."
 - **T3 (review start-condition):** "I already generated an image for my 'saltmarsh'
   project and have the brief and prompt plan. Can you review the image against it?"
+- **T4 (text, full flow):** "Turn my journal entry about leaving home into a short
+  personal essay. Autopilot — I approve the recommended choice at every gate, and
+  approve drafting and the editorial passes; take it all the way."
 
 ## Checklist (assertions per trace)
 
@@ -38,6 +41,18 @@ grade the trace against a checklist. Baseline (current conductor) defines the
 3. Creates an Output Record (against output-record schema) if none exists.
 4. Jumps to Output Critic Review then Output Acceptance Gate.
 5. Output Critic runs as a bounded sub-agent (critique-asset) and emits a Review Record.
+
+### T4 — text
+1. Orientation resolves the output as Text, fixes one Primary Text Form (essay), and resolves the source-wording question (preserve / adapt / create new) before planning hardens.
+2. Phases in order: Source Record → Artist Meaning → Transformation Brief → Beat Plan → Beat Review (if multi-beat) → Text Medium Plan → Draft Text Creative Brief → Writing Critic Review → Brief Approval → Final Records → Prompt Plan Critique → Draft Generation Approval → Output Record (draft) → Output Critic Review → Output Acceptance.
+3. Delegates to: ingest-reference, meaning-interview, text-journey, writing-method-review (beat review AND Writing Critic Review), clear-writing-pass, human-voice-pass, critique-asset.
+4. Step 6 works the text gates in the medium plan: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use. Medium Plan validates against text-medium-plan; Final Records validate against text-creative-brief and text-generation-plan.
+5. TEXT QUIRK A: the Critic Review uses writing-method-review (Writing Critic / Shape Reviewer mode), NOT art-critic-review.
+6. TEXT QUIRK B: Draft Generation Approval is a hard gate even though no paid provider call is made — local drafting is still gated.
+7. TEXT QUIRK C: the written Output Artifact is drafted in a fresh-context sub-agent from a Text Draft Packet; that sub-agent does NOT run the editorial passes during first drafting.
+8. TEXT QUIRK D: the main agent runs a conformance review before any editorial pass; if structure, section jobs, Intended Feeling, source-wording policy, or Text Generation Plan constraints fail, it corrects the draft before polishing (structure wins over prose).
+9. TEXT QUIRK E: editorial passes run Clear Writing Pass before Human Voice Pass by default, each as a separate bounded fresh-context sub-agent, and each concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.
+10. Hard gates: brief-approval before Text Creative Brief Record and Text Generation Plan, Draft Generation Approval before drafting, Output Record before acceptance, persist each phase.
 
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.
@@ -66,7 +81,11 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > Presentation Mode and Minimalist-to-Maximalist timing) + "HARD GATES
 > ENFORCED". T2: "SUNO SPECIFICS" (Vocal/Lyric vs. brief lock; any image-style
 > Branch Set?) + "HARD GATES ENFORCED". T3: "START-CONDITION HANDLING" (restart
-> vs. review path; records requested; Output Record creation).
+> vs. review path; records requested; Output Record creation). T4: "TEXT
+> SPECIFICS" (which skill runs the Critic Review; Draft Generation Approval with
+> no provider call; fresh-context drafting vs. editorial passes; conformance
+> review before polishing; Clear→Human pass order and per-rewrite Output Records)
+> + "HARD GATES ENFORCED".
 >
 > Quote the skill line/section each major step comes from. Write the trace to
 > `<repo>/evals/conductor-behavior/<baseline|trimmed>/T<N>.md` and return it.
