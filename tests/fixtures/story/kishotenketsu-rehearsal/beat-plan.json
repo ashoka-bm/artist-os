@@ -1,0 +1,418 @@
+{
+  "beat_plan_id": "bp_window_fish_kishotenketsu",
+  "source_id": "src_window_fish_kishotenketsu",
+  "artist_meaning_id": "meaning_window_fish_kishotenketsu",
+  "transformation_brief_id": "tb_window_fish_kishotenketsu",
+  "story_mode": "arc",
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "kishotenketsu",
+    "name": "Kishotenketsu",
+    "grounding_status": "researched",
+    "grounding_tier": "canonical_framework",
+    "core_movement": "A precise Thursday cleaning routine is introduced and developed until an unexpected paper fish reframes the tower's glass, labor, river, and play into one reconciled image.",
+    "adaptation_summary": "The rehearsal adapts Ki/Sho/Ten/Ketsu into four Beat Plan beats: introduction, development, turn, and reconciliation. It preserves movement through pattern and recontextualization rather than conflict escalation.",
+    "turn_logic": "The audience first learns the cleaner's careful routine, then sees the paper fish reframe the work from maintenance into a way the building can briefly imagine water.",
+    "compression_rule": "Give each part one clear move: establish routine, deepen the reflective pattern, introduce the fish as turn, and let the final reflections reconcile the parts.",
+    "expansion_rule": "If expanded, repeat Thursday cleaning details across sections or floors before introducing a turn that recontextualizes the whole pattern without requiring an antagonist.",
+    "failure_modes": [
+      "the turn is treated as random whimsy and does not reframe the first parts",
+      "the structure is mistaken for nothing happening",
+      "conflict is forced into a piece that needs contrast instead",
+      "reconciliation explains the metaphor instead of letting the image click"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_window_ki",
+      "beat_role": "grounding",
+      "one_move_summary": "Before sunrise, the cleaner begins his Thursday route through the office tower's glass.",
+      "builds_toward_key_movement_id": "kem_window_ki",
+      "before_state": "The building is dark, empty, and marked by ordinary traces.",
+      "after_state": "The cleaner's routine gives the tower a cared-for rhythm before anyone arrives.",
+      "value_shift": "Anonymous labor becomes precise attention.",
+      "expectation_turn": {
+        "expected_direction": "Window cleaning may read as repetitive background labor.",
+        "actual_result": "The routine becomes intimate because the cleaner knows the city through reflections.",
+        "surprise_function": "The opening asks the audience to treat maintenance as perception.",
+        "emotional_counterpoint": "Solitude carries care rather than emptiness."
+      },
+      "intended_feeling": "quiet respect for precise unseen work",
+      "emotional_payload": "The world begins as routine attention.",
+      "tension_profile": [
+        {
+          "name": "Routine / Attention",
+          "tension_intensity": 0.72,
+          "emotional_function": "keeps repetition alive as care"
+        },
+        {
+          "name": "Visibility / Invisibility",
+          "tension_intensity": 0.68,
+          "emotional_function": "makes unseen labor emotionally present"
+        }
+      ],
+      "source_evidence": [
+        "The reference begins with a window cleaner visiting the same office tower before sunrise."
+      ],
+      "must_preserve": [
+        "precise routine",
+        "unseen work treated with care"
+      ],
+      "pivot_options": [
+        {
+          "label": "deepen-pattern",
+          "next_move": "Develop the route through repeated panes, marks, and reflections.",
+          "rationale": "Kishotenketsu needs the audience to learn the pattern before the turn can reframe it."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The Ki beat introduces the tower, Thursday route, and cared-for routine."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_window_sho",
+      "beat_role": "build",
+      "one_move_summary": "Floor by floor, the cleaner removes fingerprints, coffee steam, and weather marks while reading the city as layered reflection.",
+      "builds_toward_key_movement_id": "kem_window_sho",
+      "before_state": "The routine is established as one act of care.",
+      "after_state": "The pattern deepens into a way of seeing: glass holds work, weather, and city together.",
+      "value_shift": "Repetition becomes pattern.",
+      "expectation_turn": {
+        "expected_direction": "Development might escalate toward a work problem or interruption.",
+        "actual_result": "The beat deepens the existing pattern without forcing conflict.",
+        "surprise_function": "The audience learns how the work sees before the turn arrives.",
+        "emotional_counterpoint": "Sameness becomes increasingly attentive."
+      },
+      "intended_feeling": "calm absorption in a pattern becoming legible",
+      "emotional_payload": "The route teaches the audience how to look through glass and reflection.",
+      "tension_profile": [
+        {
+          "name": "Repetition / Discovery",
+          "tension_intensity": 0.78,
+          "emotional_function": "lets repeated labor gather new detail"
+        },
+        {
+          "name": "Inside / Outside",
+          "tension_intensity": 0.7,
+          "emotional_function": "keeps office interiors and city reflections layered together"
+        }
+      ],
+      "source_evidence": [
+        "The cleaner wipes fingerprints, coffee steam, and weather marks and knows the city through reflections."
+      ],
+      "must_preserve": [
+        "development without forced escalation",
+        "glass as layered perception"
+      ],
+      "pivot_options": [
+        {
+          "label": "introduce-turn",
+          "next_move": "Place the paper fish in the conference room window.",
+          "rationale": "The pattern is now clear enough for one unexpected image to reframe it."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_window_fish_kishotenketsu",
+          "note": "The Sho beat protects routine labor as meaningful rather than empty."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_window_ten",
+      "beat_role": "reveal",
+      "one_move_summary": "The cleaner finds a child's paper fish taped inside a conference room window, facing outward toward the river.",
+      "builds_toward_key_movement_id": "kem_window_ten",
+      "before_state": "The glass has been a surface of labor, city, and office traces.",
+      "after_state": "The paper fish makes the glass feel like a possible membrane between tower and river.",
+      "value_shift": "Pattern becomes playful reframe.",
+      "expectation_turn": {
+        "expected_direction": "A corporate conference room should continue the established office pattern.",
+        "actual_result": "A child's fish faces outward, introducing play and river logic into the tower.",
+        "surprise_function": "The Ten turn changes the frame without creating an enemy or crisis.",
+        "emotional_counterpoint": "The quiet routine is pierced by delight and slight ache."
+      },
+      "intended_feeling": "small wonder at an image that should not fit but does",
+      "emotional_payload": "The turn reveals that play was possible inside the routine all along.",
+      "tension_profile": [
+        {
+          "name": "Corporate / Play",
+          "tension_intensity": 0.84,
+          "emotional_function": "creates contrast without antagonist"
+        },
+        {
+          "name": "Glass / Water",
+          "tension_intensity": 0.82,
+          "emotional_function": "lets the fish reframe the building through river logic"
+        }
+      ],
+      "source_evidence": [
+        "A child's paper fish is taped inside a conference room window, facing outward toward the river."
+      ],
+      "must_preserve": [
+        "paper fish as juxtaposed turn",
+        "contrast without conflict"
+      ],
+      "pivot_options": [
+        {
+          "label": "reconcile",
+          "next_move": "Let the fish's reflection travel through the cleaned panes.",
+          "rationale": "Ketsu should connect the turn back to the whole route."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "kishotenketsu",
+          "note": "The Ten beat introduces contrast that changes the frame without requiring confrontation."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_window_ketsu",
+      "beat_role": "closure",
+      "one_move_summary": "By the end of the route, every cleaned pane briefly catches the fish's reflection and the tower seems full of water.",
+      "builds_toward_key_movement_id": "kem_window_ketsu",
+      "before_state": "The fish appears as one odd image inside one room.",
+      "after_state": "The entire cleaned route is reconciled as a hidden river of reflected play.",
+      "value_shift": "Juxtaposition becomes coherence.",
+      "expectation_turn": {
+        "expected_direction": "The fish might remain a quirky interruption.",
+        "actual_result": "Its reflection connects the tower, river, glass, labor, and play.",
+        "surprise_function": "The ending lets the whole prior routine click into a new pattern.",
+        "emotional_counterpoint": "Completion feels light without erasing the solitude of the work."
+      },
+      "intended_feeling": "gentle recognition that the work has been carrying a hidden shimmer",
+      "emotional_payload": "The routine is not escaped; it is newly visible.",
+      "tension_profile": [
+        {
+          "name": "Labor / Play",
+          "tension_intensity": 0.8,
+          "emotional_function": "reconciles the cleaner's work with the child's image"
+        },
+        {
+          "name": "Explanation / Click",
+          "tension_intensity": 0.75,
+          "emotional_function": "keeps the ending image-based rather than over-explained"
+        }
+      ],
+      "source_evidence": [
+        "Every cleaned pane briefly catches the fish's reflection, making the tower look like it is full of water."
+      ],
+      "must_preserve": [
+        "reconciliation through image",
+        "routine re-seen rather than escaped"
+      ],
+      "pivot_options": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_window_fish_kishotenketsu",
+          "note": "The Ketsu beat preserves hidden play changing the labor pattern without defeating the work."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_playful_reframe",
+      "summary": "One playful image changes the meaning of a precise labor pattern without creating conflict.",
+      "intended_feeling": "soft re-seeing rather than triumph",
+      "emotional_payload": "The tower becomes briefly waterlike because the work made it clean enough to reflect play.",
+      "source_evidence": [
+        "The paper fish's reflection appears across the cleaned panes."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_window_fish_kishotenketsu",
+          "note": "The tension point protects contrast and reconciliation without forced conflict."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_window_ki",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_window_ki"
+      ],
+      "emotional_shift": "routine labor becomes precise unseen care",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The Ki movement introduces the cleaner and Thursday route."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_window_sho",
+      "role": "threshold",
+      "beat_ids": [
+        "beat_window_sho"
+      ],
+      "emotional_shift": "repetition becomes an established perceptual pattern",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_window_fish_kishotenketsu",
+          "note": "The Sho movement deepens routine labor without turning it into conflict."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_window_ten",
+      "role": "revelation",
+      "beat_ids": [
+        "beat_window_ten"
+      ],
+      "emotional_shift": "a paper fish reframes the tower's glass through play and river logic",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "kishotenketsu",
+          "note": "The Ten movement introduces a turn that changes the frame without requiring escalation."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_window_ketsu",
+      "role": "aftermath",
+      "beat_ids": [
+        "beat_window_ketsu"
+      ],
+      "emotional_shift": "the entire cleaning route is reconciled as hidden waterlike play",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_window_fish_kishotenketsu",
+          "note": "The Ketsu movement lets the prior pattern click into a new emotional logic."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Teach the audience the cleaning pattern, introduce a contrast that reframes it, and reconcile the parts without forcing conflict escalation.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 3,
+      "minimum_adjacent_shift_delta": 0.18,
+      "waiver_rule": "A lower adjacent shift can be waived only if the artist explicitly wants a more meditative piece and the Ten turn still changes the frame."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_window_ki",
+        "to_beat_id": "beat_window_sho",
+        "shift_summary": "The routine deepens from one cared-for action into a legible reflective pattern.",
+        "shifted_tensions": [
+          {
+            "name": "Repetition / Discovery",
+            "from_intensity": 0.48,
+            "to_intensity": 0.78,
+            "delta": 0.3,
+            "direction": "increases"
+          },
+          {
+            "name": "Inside / Outside",
+            "from_intensity": 0.42,
+            "to_intensity": 0.7,
+            "delta": 0.28,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_window_sho",
+        "to_beat_id": "beat_window_ten",
+        "shift_summary": "The established office-glass pattern is reframed by a child's paper fish and river-facing play.",
+        "shifted_tensions": [
+          {
+            "name": "Corporate / Play",
+            "from_intensity": 0.32,
+            "to_intensity": 0.84,
+            "delta": 0.52,
+            "direction": "increases"
+          },
+          {
+            "name": "Glass / Water",
+            "from_intensity": 0.46,
+            "to_intensity": 0.82,
+            "delta": 0.36,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_window_ten",
+        "to_beat_id": "beat_window_ketsu",
+        "shift_summary": "The fish stops being a single odd object and reconciles the whole route as waterlike reflection.",
+        "shifted_tensions": [
+          {
+            "name": "Labor / Play",
+            "from_intensity": 0.5,
+            "to_intensity": 0.8,
+            "delta": 0.3,
+            "direction": "increases"
+          },
+          {
+            "name": "Explanation / Click",
+            "from_intensity": 0.38,
+            "to_intensity": 0.75,
+            "delta": 0.37,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the plan forces an antagonist or victory/defeat arc, if the Ten turn feels arbitrary, or if Ketsu explains the image instead of reconciling it through felt perception."
+  },
+  "arc_summary": {
+    "beginning": "A window cleaner's precise Thursday route introduces unseen labor as care.",
+    "turn": "A child's paper fish in a conference room window reframes the tower's glass through river and play.",
+    "ending_or_residue": "The cleaned panes catch the fish's reflection so the whole building briefly seems full of water.",
+    "scale_rationale": "A four-beat arc is necessary because the structure needs introduction, development, turn, and reconciliation rather than conflict escalation."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_window_fish_kishotenketsu",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-19T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "reference-and-meaning.md",
+      "note": "The Beat Plan adapts the invented reference's Thursday cleaning route, paper fish turn, and final reflection reconciliation."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_window_fish_kishotenketsu",
+      "note": "The adapted Kishotenketsu preserves hidden play re-seeing routine labor without forcing conflict."
+    },
+    {
+      "source_type": "story_gate",
+      "source_ref": "kishotenketsu",
+      "note": "Kishotenketsu guides Ki/Sho/Ten/Ketsu movement without choosing medium, output shape, asset count, or Cultural Format Structure."
+    }
+  ]
+}

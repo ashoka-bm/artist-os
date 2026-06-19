@@ -44,6 +44,10 @@ class StoryStructureContractTests(unittest.TestCase):
                 "entry_id": "hero_journey",
                 "roles": {"grounding", "threshold", "rupture", "transformation", "return"},
             },
+            "tests/fixtures/story/kishotenketsu-rehearsal/beat-plan.json": {
+                "entry_id": "kishotenketsu",
+                "roles": {"grounding", "build", "reveal", "closure"},
+            },
         }
 
         for fixture_path, expectation in fixture_expectations.items():
