@@ -83,12 +83,12 @@ Long narrative entries must preserve the existing Artist OS continuity boundary:
 Choose by the audience-facing promise and grammar, not by deep emotional movement.
 
 - Use article subtypes by reader promise: news for verified current development, explainer for understanding, service for practical action, feature/profile for revealed subject meaning, op-ed for accountable public argument, and hook-driven article when attention/payoff is the main grammar.
-- Use `interview_q_and_a` with `primary_text_form = "article"` or `other` for now; the CFS entry carries the interview grammar unless a future schema pass adds an interview text form.
+- Use `interview_q_and_a` with `primary_text_form = "article"` by default, or `other` when the interview is not editorial; the CFS entry carries the interview grammar unless a future schema pass adds an interview text form.
 - Use `personal_essay` for short memoir-like reflective prose unless a future memoir-specific entry is added.
-- Use internet-native entries when the publishing relationship changes the form: newsletter continuity, platform-era thought leadership, framework teaching, curated selection, teardown, trend read, field note, or serialized installment.
+- Use internet-native entries when the publishing relationship changes the form: newsletter continuity, platform-era thought leadership, framework teaching, curated selection, teardown, trend read, field note, or serialized installment. Use `newsletter_dispatch` with `primary_text_form = "article"`, `essay_artist_statement`, or `other` according to the issue's main thread; the CFS entry carries newsletter grammar.
 - Use argument/persuasion entries when the form must move a specific audience toward belief, alignment, accountability, or a decision.
-- Use creative/literary entries when form, voice, scene, image, line, address, or compression is the audience-facing grammar.
-- Use long-narrative entries for delivered planning artifacts or Stewardship Views over cumulative text. Do not let them replace Long-Work Stewardship.
+- Use creative/literary entries when form, voice, scene, image, line, address, or compression is the audience-facing grammar. Use `prose_poem` with `primary_text_form = "poem"`; the CFS entry carries the prose-shaped poem grammar.
+- Use long-narrative entries for delivered planning artifacts or Stewardship Views over cumulative text. Do not let them replace Long-Work Stewardship. Use `plot_tracker` with `primary_text_form = "other"` and `publication_use.use_case = "private_draft"` unless the tracker is being transformed into a true `treatment_outline`.
 
 ## Common Confusion Pairs
 
@@ -97,12 +97,16 @@ Choose by the audience-facing promise and grammar, not by deep emotional movemen
 - `op_ed` vs `thought_leadership_essay`: choose op-ed for accountable public argument; choose thought leadership for field POV, implications, and practitioner judgment.
 - `framework_post` vs `service_article_how_to`: choose framework when the model is the deliverable; choose service when practical action is the deliverable.
 - `newsletter_dispatch` vs `curated_roundup`: choose newsletter when recurring voice and relationship matter; choose roundup when selection and annotation are the main value.
+- `interview_q_and_a` vs `profile` or `feature_article`: choose interview when edited question-and-answer sequence is the grammar; choose profile or feature when narration, scene, reporting, and context carry the form.
+- `interview_q_and_a` vs `personal_essay`: choose interview when the subject's answers carry the piece; choose personal essay when the author's reflection carries the piece.
 - `letter` vs `open_letter`: choose letter for private or intimate address; choose open letter when public accountability, witness, or pressure on observers is part of the form.
 - `news_article` vs `feature_article`: choose news for timely verified development; choose feature when scene, context, and meaning carry the piece.
 - `explainer_article` vs `service_article_how_to`: choose explainer for understanding a system or issue; choose service when the reader needs to do, decide, fix, or improve something.
 - `profile` vs `feature_article`: choose profile when the subject's character, role, contradiction, or significance is the promise.
 - `literary_scene` vs `screenplay_scene`: choose literary scene for prose interiority and perception; choose screenplay scene for visible action and performable turn.
 - `short_story` vs `literary_scene`: choose short story for complete fictional pressure and residue; choose literary scene for one charged prose moment inside or outside a larger work.
+- `prose_poem` vs `lyric_poem`: choose prose poem when poetic pressure is carried by prose sentences and paragraph shape; choose lyric poem when lineation, stanza movement, or lyric address is part of the form.
+- `prose_poem` vs `narrative_poem` or `short_story`: choose prose poem for concentrated prose-poetic image logic; choose narrative poem for explicit event sequence, and short story for complete fictional arc.
 - `plot_tracker`, `subplot_tracker`, `open_thread_tracker`, `character_brief`, and `relationship_arc` vs Long-Work Stewardship: choose these as readable projections or delivered documents. Long-Work Stewardship remains authoritative.
 - Cultural Format Structure vs Story Structure: choose Cultural Format Structure for audience-facing form grammar. The Beat Plan's Story Structure still owns deep movement.
 
