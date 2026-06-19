@@ -44,7 +44,7 @@ Before creating the image-specific Creative Brief, produce:
 2. A Beat Plan matching `schemas/beat-plan.schema.json`.
 3. An Image Medium Plan matching `schemas/image-medium-plan.schema.json`.
 
-The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
+The Beat Plan is authoritative for story shape. The Image Medium Plan is authoritative for image translation decisions: Symbology Direction, optional Medium Output Shape Recommendation, Presentation Mode, Style Direction, Visual Dynamics, image roles, series planning, gate statuses, and review requirements. The later Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
 
 For image series, the Long-Work Stewardship Record is the cumulative execution guard. The foundation record starts after Story Approval. Enrich it after Image Medium Plan, and center the enriched record on Long-Work Parts that reference `image_role_id` values. Do not duplicate Shot Design, amplitude profiles, or visual tension details inside the stewardship record; follow the Image Medium Plan refs when reviewing those details.
 
@@ -56,7 +56,7 @@ Every Beat Plan must identify Key Emotional Movements. For a single image, choos
 
 For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious image target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-beat, series, or ambiguous plans still require a bounded Beat Reviewer sub-agent before Art Critic Review.
 
-When a story, symbology, presentation, style, or series choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between single image, compressed arc, and image series when more than one would preserve Artist Meaning.
+When a story, symbology, presentation, style, or series choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between single image, compressed arc, and image series when more than one would preserve Artist Meaning. When the Image Medium Plan includes `medium_output_shape_recommendation`, use it to record the requested shape, recommended shape, accepted shape, rationale, alternatives, tradeoffs, and any conflict; keep `presentation_mode` as the accepted concrete image shape.
 
 ## Image Medium Plan Process
 
@@ -86,7 +86,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 Use this only after the Image Medium Plan exists. Before Art Critic Review, build a substantive draft from the Image Medium Plan without pretending uncertain choices are final:
 
 1. Preserve `transformation_brief_id` and `beat_plan_id`.
-2. Use the Image Medium Plan as the source of truth for Symbology Direction, Presentation Mode, Style Direction, Visual Dynamics, image roles, and Series Recommendation.
+2. Use the Image Medium Plan as the source of truth for Symbology Direction, Medium Output Shape Recommendation, Presentation Mode, Style Direction, Visual Dynamics, image roles, and Series Recommendation.
 3. Add Emotional Qualities, medium-local Beat summaries, Tension Point summaries, value shifts, and transformation constraints from the shared Beat Plan and Image Medium Plan.
 4. Produce the draft Creative Brief Document only after required medium gates are complete or explicitly allowed to proceed unconfirmed.
 

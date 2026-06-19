@@ -7,7 +7,21 @@ It has two parts:
 - **Story Structure Library**: reusable deep movement patterns selected during Story Journey and adapted inside the Beat Plan.
 - **Cultural Format Structure Library**: reusable audience-facing format grammars selected during Medium Plan creation after Medium Output Shape Recommendation.
 
+There are currently only these two Structure Library families. Other repo libraries, such as Workspace Library or visual-tension vocabulary, are separate systems and are not Structure Library families.
+
 Library entries stay concise and operational. Research can ground an entry, but the entry itself should store the usable structure, not a citation list.
+
+## Interaction Order
+
+Use the libraries in this order:
+
+1. Select or adapt a **Story Structure** during Story Journey.
+2. Store the project-specific Adapted Story Structure in the Beat Plan.
+3. Let the Medium Plan recommend and accept an output shape from the approved Beat Plan.
+4. Select or adapt a **Cultural Format Structure** only when the medium form has recognizable audience-facing grammar.
+5. Map Cultural Format Structure parts to Medium Plan sections, scenes, movements, image roles, or other medium-owned parts.
+
+Story Structure owns movement. Medium Plan owns output shape. Cultural Format Structure owns recognizable form grammar.
 
 ## Story Structure Entry Format
 

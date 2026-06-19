@@ -72,6 +72,8 @@ Proposed continuity updates remain inactive until approved. If a proposed update
 
 An Image Medium Plan is the typed image translation layer between the shared Beat Plan and the image Creative Brief. It validates against `schemas/image-medium-plan.schema.json`.
 
+`medium_output_shape_recommendation`, when present, records why the image plan should become `single_image`, `compressed_arc`, or `image_series`. `presentation_mode` remains the accepted concrete image shape consumed downstream. Do not use Story Mode values such as `three_part_sequence` as image output shapes.
+
 Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, `shot_design`, and `amplitude_profile`. For image series, adjacent roles should also use `distinction_notes` to state composition, communication, shot-design, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
 
 `shot_design` names the frame's camera grammar:

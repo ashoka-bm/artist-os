@@ -180,6 +180,32 @@ class SchemaValidationTests(unittest.TestCase):
         validate_file(REPO_ROOT / "schemas" / "beat-plan.schema.json", beat_plan_path)
         validate_file(REPO_ROOT / "schemas" / "image-medium-plan.schema.json", image_plan_path)
 
+    def test_single_image_accepts_medium_output_shape_recommendation(self) -> None:
+        image_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "image-medium-plan.json"
+        )
+        image_plan = load_json(image_plan_path)
+        image_plan["medium_output_shape_recommendation"] = {
+            "requested_shape": None,
+            "recommended_shape": "single_image",
+            "accepted_shape": "single_image",
+            "rationale": "The emotional complexity compresses best into one threshold image.",
+            "alternatives_considered": ["compressed_arc", "image_series"],
+            "tradeoffs": [
+                "A series would over-explain the unresolved threshold.",
+                "A compressed arc would weaken the single held choice."
+            ],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+
+        schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
+        validate(image_plan, schema, schema)
+
     def test_three_image_fixture_is_image_series(self) -> None:
         beat_plan_path = (
             REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "beat-plan.json"
@@ -198,6 +224,90 @@ class SchemaValidationTests(unittest.TestCase):
 
         validate_file(REPO_ROOT / "schemas" / "beat-plan.schema.json", beat_plan_path)
         validate_file(REPO_ROOT / "schemas" / "image-medium-plan.schema.json", image_plan_path)
+
+    def test_image_series_accepts_medium_output_shape_recommendation(self) -> None:
+        image_plan_path = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "text-to-image"
+            / "three-image-series-rehearsal"
+            / "image-medium-plan.json"
+        )
+        image_plan = load_json(image_plan_path)
+        image_plan["medium_output_shape_recommendation"] = {
+            "requested_shape": "image_series",
+            "recommended_shape": "image_series",
+            "accepted_shape": "image_series",
+            "rationale": "The Beat Plan needs separate image roles for absence, pressure, and residue.",
+            "alternatives_considered": ["single_image", "compressed_arc"],
+            "tradeoffs": [
+                "A single image would collapse necessary emotional movement.",
+                "A compressed arc would preserve movement but lose role-level calibration."
+            ],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "accepted_recommendation",
+                "gate_decision_id": None
+            }
+        }
+
+        schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
+        validate(image_plan, schema, schema)
+
+    def test_image_output_shape_recommendation_must_match_presentation_mode(self) -> None:
+        image_plan_path = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "text-to-image"
+            / "three-image-series-rehearsal"
+            / "image-medium-plan.json"
+        )
+        image_plan = load_json(image_plan_path)
+        image_plan["medium_output_shape_recommendation"] = {
+            "requested_shape": "image_series",
+            "recommended_shape": "image_series",
+            "accepted_shape": "single_image",
+            "rationale": "Invalid: accepted shape must match the concrete presentation mode.",
+            "alternatives_considered": ["image_series"],
+            "tradeoffs": ["Invalid shape mismatch guard."],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+
+        schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
+        with self.assertRaisesRegex(ValidationError, "expected const 'single_image'"):
+            validate(image_plan, schema, schema)
+
+    def test_image_output_shape_recommendation_rejects_story_mode_as_shape(self) -> None:
+        image_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "image-medium-plan.json"
+        )
+        image_plan = load_json(image_plan_path)
+        image_plan["medium_output_shape_recommendation"] = {
+            "requested_shape": "three_part_sequence",
+            "recommended_shape": "three_part_sequence",
+            "accepted_shape": "three_part_sequence",
+            "rationale": "Invalid: Story Mode must not become an image output shape.",
+            "alternatives_considered": ["single_image"],
+            "tradeoffs": ["Invalid shape guard."],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+
+        schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(image_plan, schema, schema)
 
 
 if __name__ == "__main__":

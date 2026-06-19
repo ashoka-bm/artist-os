@@ -4,6 +4,59 @@
   "title": "ImageMediumPlan",
   "type": "object",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "required": ["medium_output_shape_recommendation"],
+        "properties": {
+          "medium_output_shape_recommendation": {
+            "properties": {
+              "accepted_shape": { "const": "single_image" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "presentation_mode": { "const": "single_image" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["medium_output_shape_recommendation"],
+        "properties": {
+          "medium_output_shape_recommendation": {
+            "properties": {
+              "accepted_shape": { "const": "compressed_arc" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "presentation_mode": { "const": "compressed_arc" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["medium_output_shape_recommendation"],
+        "properties": {
+          "medium_output_shape_recommendation": {
+            "properties": {
+              "accepted_shape": { "const": "image_series" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "presentation_mode": { "const": "image_series" }
+        }
+      }
+    }
+  ],
   "required": [
     "image_medium_plan_id",
     "source_id",
@@ -31,6 +84,7 @@
     "target_media_type": { "type": "string", "const": "image" },
     "story_mode": { "$ref": "#/$defs/story_mode" },
     "symbology_direction": { "$ref": "#/$defs/symbology_direction" },
+    "medium_output_shape_recommendation": { "$ref": "#/$defs/medium_output_shape_recommendation" },
     "presentation_mode": {
       "type": "string",
       "enum": ["single_image", "compressed_arc", "image_series"]
@@ -115,6 +169,52 @@
     "gate_status": {
       "type": "string",
       "enum": ["not_started", "in_progress", "complete", "skipped", "unconfirmed"]
+    },
+    "image_output_shape": {
+      "type": "string",
+      "enum": ["single_image", "compressed_arc", "image_series"]
+    },
+    "medium_output_shape_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_shape",
+        "recommended_shape",
+        "accepted_shape",
+        "rationale",
+        "alternatives_considered",
+        "tradeoffs",
+        "conflict"
+      ],
+      "properties": {
+        "requested_shape": { "type": ["string", "null"], "minLength": 1 },
+        "recommended_shape": { "$ref": "#/$defs/image_output_shape" },
+        "accepted_shape": { "$ref": "#/$defs/image_output_shape" },
+        "rationale": { "type": "string", "minLength": 1 },
+        "alternatives_considered": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/image_output_shape" }
+        },
+        "tradeoffs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "conflict": { "$ref": "#/$defs/medium_output_shape_conflict" }
+      }
+    },
+    "medium_output_shape_conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["has_conflict", "conflict_summary", "resolution", "gate_decision_id"],
+      "properties": {
+        "has_conflict": { "type": "boolean" },
+        "conflict_summary": { "type": ["string", "null"], "minLength": 1 },
+        "resolution": {
+          "type": "string",
+          "enum": ["not_needed", "accepted_recommendation", "kept_requested_shape", "revised_shape", "proceeded_unconfirmed", "waived"]
+        },
+        "gate_decision_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+      }
     },
     "symbology_direction": {
       "type": "object",

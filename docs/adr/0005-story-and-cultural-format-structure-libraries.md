@@ -10,6 +10,6 @@ This keeps story movement from becoming a rigid format template while still lett
 
 - Adapted Story Structure is now required in Beat Plan for non-`single_beat` story modes: `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, and `world`.
 - Adapted Story Structure remains optional for `single_beat` Beat Plans.
-- Medium Output Shape Recommendation and adapted Cultural Format Structure remain text-first Text Medium Plan fields while cross-medium behavior is rehearsed.
+- Medium Output Shape Recommendation is required in Text Medium Plan and optional in Image Medium Plan while sound, video, and mixed-media behavior is rehearsed. Adapted Cultural Format Structure remains Text Medium Plan first until other medium grammars prove they need it.
 - Cross-medium adoption for image, sound, video, and mixed media remains a follow-up decision after the Text Journey rehearsal hardens the fields.
 - Structure libraries should be research-informed, but library entries stay concise and operational rather than carrying citation lists.
