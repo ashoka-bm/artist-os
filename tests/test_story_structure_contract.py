@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 
@@ -32,6 +33,31 @@ class StoryStructureContractTests(unittest.TestCase):
         ):
             with self.subTest(required=required):
                 self.assertIn(required, text)
+
+    def test_promoted_story_structure_fixtures_cover_role_adaptation(self) -> None:
+        fixture_expectations = {
+            "tests/fixtures/story/three-act-rehearsal/beat-plan.json": {
+                "entry_id": "three_act_structure",
+                "roles": {"invitation", "threshold", "reversal", "closure"},
+            },
+            "tests/fixtures/story/hero-journey-rehearsal/beat-plan.json": {
+                "entry_id": "hero_journey",
+                "roles": {"grounding", "threshold", "rupture", "transformation", "return"},
+            },
+        }
+
+        for fixture_path, expectation in fixture_expectations.items():
+            with self.subTest(fixture=fixture_path):
+                data = json.loads((REPO_ROOT / fixture_path).read_text(encoding="utf-8"))
+                self.assertEqual(
+                    expectation["entry_id"],
+                    data["story_structure"]["library_entry_id"],
+                )
+                self.assertTrue(
+                    expectation["roles"].issubset(
+                        {beat["beat_role"] for beat in data["beats"]}
+                    )
+                )
 
 
 if __name__ == "__main__":

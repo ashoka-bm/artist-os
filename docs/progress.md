@@ -458,7 +458,7 @@ Not implemented yet:
 
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
-- rehearse additional Story Structure entries in the Story Journey / Beat Plan path, especially `hero_journey` and `kishotenketsu`,
+- rehearse `kishotenketsu` in the Story Journey / Beat Plan path as the next non-Western / conflict-light structure stress test,
 - rehearse the image and Suno dry-run flows end to end against the hardened emotional-primacy model,
 - rehearse the Text Journey end to end and harden any schema or skill gaps found in use,
 - build provider/import adapter contracts that emit Output Records,
@@ -468,7 +468,8 @@ Structure Library rehearsal status:
 
 - Service article / how-to, op-ed, and short story Cultural Format Structure entries all rehearsed cleanly against Text Journey without schema changes.
 - `three_act_structure` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/three-act-rehearsal/beat-plan.json`. The rehearsal confirmed that Story Structure can guide movement, turn logic, compression, expansion, and failure modes without choosing medium, output shape, asset count, or Cultural Format Structure.
-- `hero_journey` and `kishotenketsu` should be rehearsed before making Story Structure selection stricter because they stress less baseline movement patterns.
+- `hero_journey` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/hero-journey-rehearsal/beat-plan.json`. The rehearsal confirmed that `failure_modes` can carry anti-savior and anti-private-victory guardrails for canonical frameworks with stronger cultural baggage.
+- `kishotenketsu` should be rehearsed before making Story Structure selection stricter because it tests conflict-light movement and non-three-act turn logic.
 - `tests/fixtures/text-journey/op-ed-rehearsal/` is the representative promoted fixture because it proves `primary_text_form = "article"` can combine with `cultural_format_structure.library_entry_id = "op_ed"` without article subtype enums.
 
 ## Future Follow-Ups

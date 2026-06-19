@@ -1,0 +1,506 @@
+{
+  "beat_plan_id": "bp_erased_route_hero_journey",
+  "source_id": "src_erased_route_hero_journey",
+  "artist_meaning_id": "meaning_erased_route_hero_journey",
+  "transformation_brief_id": "tb_erased_route_hero_journey",
+  "story_mode": "arc",
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "hero_journey",
+    "name": "Hero's Journey",
+    "grounding_status": "researched",
+    "grounding_tier": "canonical_framework",
+    "core_movement": "An archivist begins inside institutional forgetfulness, crosses a sonic threshold into erased community memory, undergoes an ordeal that makes archiving morally charged, gains a burdened recording, and returns it to a community that must decide how to hear it.",
+    "adaptation_summary": "The rehearsal compresses Hero Journey into five Beat Plan beats: ordinary world, call/threshold, ordeal, boon, and return residue. Helper/trials are implied through the recorded voices and erased route rather than separate beats.",
+    "turn_logic": "The audience first expects a private archival discovery, then realizes the journey's force is whether recovered memory can re-enter public life without becoming comfort or accusation alone.",
+    "compression_rule": "Keep ordinary world, threshold, ordeal, boon, and return residue. Treat helper, trials, and road details as implied pressures unless expansion requires separate beats.",
+    "expansion_rule": "If expanded, split the erased route into trials where each vanished place tests a different assumption about preservation, complicity, and who the returned memory is for.",
+    "failure_modes": [
+      "the archivist becomes a heroic savior who owns the recovered memory",
+      "the boon becomes private victory without return pressure",
+      "the erased neighborhood becomes nostalgic atmosphere instead of an obligation",
+      "the return resolves community conflict too neatly"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_route_ordinary_world",
+      "beat_role": "grounding",
+      "one_move_summary": "The archivist receives unlabeled tapes inside a community institution that has learned to treat erased memory as obsolete storage.",
+      "builds_toward_key_movement_id": "kem_route_ordinary_world",
+      "before_state": "The tapes are presumed blank, obsolete, or merely administrative.",
+      "after_state": "The archivist senses that ordinary cataloging may not be enough.",
+      "value_shift": "Institutional order becomes moral incompleteness.",
+      "expectation_turn": {
+        "expected_direction": "Unlabeled tapes from a closed center should be sorted, discarded, or cataloged.",
+        "actual_result": "Their silence feels like a pressure before any content is heard.",
+        "surprise_function": "The ordinary world is exposed as forgetfulness, not neutral order.",
+        "emotional_counterpoint": "Professional calm carries shame before the journey begins."
+      },
+      "intended_feeling": "the discomfort of realizing a clean archive may hide abandonment",
+      "emotional_payload": "The ordinary world is safe because it has stopped listening.",
+      "tension_profile": [
+        {
+          "name": "Order / Obligation",
+          "tension_intensity": 0.71,
+          "emotional_function": "turns cataloging from routine into responsibility"
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.68,
+          "emotional_function": "makes the unlabeled tapes feel full of withheld presence"
+        }
+      ],
+      "source_evidence": [
+        "The reference begins with unlabeled cassette tapes from a closed neighborhood center."
+      ],
+      "must_preserve": [
+        "ordinary world of institutional forgetfulness",
+        "memory treated as obsolete storage"
+      ],
+      "pivot_options": [
+        {
+          "label": "play-tape",
+          "next_move": "The archivist listens after midnight and hears erased streets.",
+          "rationale": "This creates the call and sonic threshold without changing medium."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The opening grounds the ordinary world in the inherited tapes and closed center."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_route_threshold",
+      "beat_role": "threshold",
+      "one_move_summary": "At midnight the tape speaks vanished street names, pulling the archivist out of cataloging and into a sonic route.",
+      "builds_toward_key_movement_id": "kem_route_threshold",
+      "before_state": "The archivist can still treat the tapes as objects to preserve.",
+      "after_state": "She is summoned to follow memory as a field with different rules.",
+      "value_shift": "Listening becomes crossing.",
+      "expectation_turn": {
+        "expected_direction": "Playing the tape should reveal information that can be labeled.",
+        "actual_result": "The voices name streets that no longer exist and demand movement.",
+        "surprise_function": "The call makes archive work spatial, bodily, and irreversible.",
+        "emotional_counterpoint": "Wonder is edged by dread because the voices are children."
+      },
+      "intended_feeling": "the uncanny pull of being called by a place that official maps erased",
+      "emotional_payload": "The threshold is crossed through listening before walking.",
+      "tension_profile": [
+        {
+          "name": "Known / Unknown",
+          "tension_intensity": 0.82,
+          "emotional_function": "moves the archivist from labeled objects into mystery"
+        },
+        {
+          "name": "Safety / Exposure",
+          "tension_intensity": 0.76,
+          "emotional_function": "makes the sonic route feel emotionally irreversible"
+        }
+      ],
+      "source_evidence": [
+        "She hears children's voices naming streets that no longer exist."
+      ],
+      "must_preserve": [
+        "sonic threshold",
+        "emotionally irreversible call"
+      ],
+      "pivot_options": [
+        {
+          "label": "walk-route",
+          "next_move": "The archivist follows the erased route alone.",
+          "rationale": "The threshold must become ordeal rather than information gathering."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_erased_route_hero_journey",
+          "note": "The call begins the return obligation by making memory impossible to keep private."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_route_ordeal",
+      "beat_role": "rupture",
+      "one_move_summary": "Walking the erased route, the archivist realizes preservation is not neutral because every recovered place names a communal failure.",
+      "builds_toward_key_movement_id": "kem_route_ordeal",
+      "before_state": "She imagines recovery as an act of care that can remain gentle.",
+      "after_state": "She understands that returning memory will also accuse the living.",
+      "value_shift": "Discovery becomes accountability.",
+      "expectation_turn": {
+        "expected_direction": "The journey should reward listening with restorative discovery.",
+        "actual_result": "Each vanished place makes the archivist feel implicated in what was allowed to disappear.",
+        "surprise_function": "The ordeal strips away the fantasy of neutral archiving.",
+        "emotional_counterpoint": "Reverence turns into responsibility with no clean innocence."
+      },
+      "intended_feeling": "the exposed grief of learning that care arrives late",
+      "emotional_payload": "The old self who only preserves records cannot carry the truth alone.",
+      "tension_profile": [
+        {
+          "name": "Care / Complicity",
+          "tension_intensity": 0.9,
+          "emotional_function": "forces the symbolic death of neutral preservation"
+        },
+        {
+          "name": "Memory / Accusation",
+          "tension_intensity": 0.86,
+          "emotional_function": "keeps the recovered route from becoming nostalgia"
+        }
+      ],
+      "source_evidence": [
+        "She walks the erased route alone, finding each vanished place through sound."
+      ],
+      "must_preserve": [
+        "ordeal strips away neutral archiving",
+        "memory creates responsibility"
+      ],
+      "pivot_options": [
+        {
+          "label": "carry-boon",
+          "next_move": "She copies one tape knowing it will burden the room.",
+          "rationale": "The boon must be gained as responsibility, not possession."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_erased_route_hero_journey",
+          "note": "The ordeal preserves the constraint that the erased neighborhood is an obligation, not atmosphere."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_route_boon",
+      "beat_role": "transformation",
+      "one_move_summary": "At dawn she returns with a copied tape, carrying not proof of ownership but a burden that must be heard by others.",
+      "builds_toward_key_movement_id": "kem_route_boon",
+      "before_state": "The recovered voices could become her private discovery.",
+      "after_state": "The copy becomes a public obligation she cannot control.",
+      "value_shift": "Possession becomes stewardship.",
+      "expectation_turn": {
+        "expected_direction": "The boon should empower the archivist as the one who recovered the lost material.",
+        "actual_result": "The copied tape removes her authority by requiring communal hearing.",
+        "surprise_function": "The gain is a burden that must be returned, not a trophy.",
+        "emotional_counterpoint": "Achievement is shadowed by dread of what the room will hear."
+      },
+      "intended_feeling": "the solemn weight of bringing back something that will not belong to you",
+      "emotional_payload": "The boon matters because it must leave the hero's hands.",
+      "tension_profile": [
+        {
+          "name": "Possession / Stewardship",
+          "tension_intensity": 0.84,
+          "emotional_function": "blocks a savior frame by making the boon communal"
+        },
+        {
+          "name": "Power / Burden",
+          "tension_intensity": 0.8,
+          "emotional_function": "keeps transformation from becoming private victory"
+        }
+      ],
+      "source_evidence": [
+        "At dawn she returns with one copied tape."
+      ],
+      "must_preserve": [
+        "boon is burdened recording",
+        "no heroic ownership"
+      ],
+      "pivot_options": [
+        {
+          "label": "return-test",
+          "next_move": "Play the tape at the reopening meeting and let the room divide.",
+          "rationale": "The return must test whether the boon can enter ordinary life."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "hero_journey",
+          "note": "The boon is adapted as public obligation rather than private reward."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_route_return",
+      "beat_role": "return",
+      "one_move_summary": "At the reopening meeting, the tape makes some listeners feel restored and others accused, proving return is a communal test.",
+      "builds_toward_key_movement_id": "kem_route_return",
+      "before_state": "The community can reopen the center without confronting what vanished.",
+      "after_state": "The returned recording divides the room and changes what reopening means.",
+      "value_shift": "Recovery becomes public reckoning.",
+      "expectation_turn": {
+        "expected_direction": "Playing the recovered tape should create shared healing.",
+        "actual_result": "The room splits between restoration and accusation.",
+        "surprise_function": "The return refuses simple repair and tests the community's ability to receive memory.",
+        "emotional_counterpoint": "Belonging arrives with indictment."
+      },
+      "intended_feeling": "the hard dignity of a return that asks more than comfort",
+      "emotional_payload": "The gift changes the ordinary world by making forgetting impossible.",
+      "tension_profile": [
+        {
+          "name": "Restoration / Indictment",
+          "tension_intensity": 0.91,
+          "emotional_function": "keeps the return honest and unresolved"
+        },
+        {
+          "name": "Private / Communal",
+          "tension_intensity": 0.87,
+          "emotional_function": "turns the journey's gain into shared responsibility"
+        }
+      ],
+      "source_evidence": [
+        "Playing it at the reopening meeting makes the room divide."
+      ],
+      "must_preserve": [
+        "return tests community",
+        "memory is obligation, not celebration"
+      ],
+      "pivot_options": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_erased_route_hero_journey",
+          "note": "The ending preserves the artist meaning that memory matters only when returned to communal responsibility."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_return_obligation",
+      "summary": "The recovered memory restores belonging and accuses the community at the same time.",
+      "intended_feeling": "belonging that cannot avoid accountability",
+      "emotional_payload": "The gift is real because it makes forgetting impossible.",
+      "source_evidence": [
+        "The room divides when the copied tape is played."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_erased_route_hero_journey",
+          "note": "The tension point protects memory as return obligation rather than private discovery."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_route_ordinary_world",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_route_ordinary_world"
+      ],
+      "emotional_shift": "clean cataloging becomes evidence of abandonment",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The ordinary world adapts the inherited tapes and closed center."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_route_threshold",
+      "role": "threshold",
+      "beat_ids": [
+        "beat_route_threshold"
+      ],
+      "emotional_shift": "listening becomes crossing into erased memory",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "hero_journey",
+          "note": "The threshold is adapted as sonic and emotionally irreversible."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_route_ordeal",
+      "role": "rupture",
+      "beat_ids": [
+        "beat_route_ordeal"
+      ],
+      "emotional_shift": "restorative discovery becomes accountability",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_erased_route_hero_journey",
+          "note": "The ordeal strips away neutral archiving and keeps the journey from becoming self-improvement."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_route_boon",
+      "role": "revelation",
+      "beat_ids": [
+        "beat_route_boon"
+      ],
+      "emotional_shift": "boon becomes burdened stewardship",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "hero_journey",
+          "note": "The boon is preserved as a returned obligation rather than a reward."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_route_return",
+      "role": "aftermath",
+      "beat_ids": [
+        "beat_route_return"
+      ],
+      "emotional_shift": "private journey becomes communal reckoning",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_erased_route_hero_journey",
+          "note": "The return tests the community rather than celebrating the archivist."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Move from institutional forgetfulness through sonic threshold and ordeal into a returned memory that restores and indicts at the same time.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.72,
+      "minimum_adjacent_shift_count": 4,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "A lower adjacent shift can be waived only if the artist explicitly wants the journey to feel ritualistically steady and the return still creates communal pressure."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_route_ordinary_world",
+        "to_beat_id": "beat_route_threshold",
+        "shift_summary": "The tapes shift from storage objects into a sonic call that makes the archivist cross into erased memory.",
+        "shifted_tensions": [
+          {
+            "name": "Known / Unknown",
+            "from_intensity": 0.44,
+            "to_intensity": 0.82,
+            "delta": 0.38,
+            "direction": "increases"
+          },
+          {
+            "name": "Order / Obligation",
+            "from_intensity": 0.71,
+            "to_intensity": 0.78,
+            "delta": 0.07,
+            "direction": "holds"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_route_threshold",
+        "to_beat_id": "beat_route_ordeal",
+        "shift_summary": "The call stops being uncanny wonder and becomes accountability for what the community erased.",
+        "shifted_tensions": [
+          {
+            "name": "Care / Complicity",
+            "from_intensity": 0.5,
+            "to_intensity": 0.9,
+            "delta": 0.4,
+            "direction": "increases"
+          },
+          {
+            "name": "Memory / Accusation",
+            "from_intensity": 0.46,
+            "to_intensity": 0.86,
+            "delta": 0.4,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_route_ordeal",
+        "to_beat_id": "beat_route_boon",
+        "shift_summary": "The ordeal yields a copied tape, but the gain shifts from discovery to stewardship.",
+        "shifted_tensions": [
+          {
+            "name": "Possession / Stewardship",
+            "from_intensity": 0.52,
+            "to_intensity": 0.84,
+            "delta": 0.32,
+            "direction": "increases"
+          },
+          {
+            "name": "Power / Burden",
+            "from_intensity": 0.48,
+            "to_intensity": 0.8,
+            "delta": 0.32,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_route_boon",
+        "to_beat_id": "beat_route_return",
+        "shift_summary": "The boon leaves the archivist's hands and becomes a divisive public test.",
+        "shifted_tensions": [
+          {
+            "name": "Private / Communal",
+            "from_intensity": 0.58,
+            "to_intensity": 0.87,
+            "delta": 0.29,
+            "direction": "increases"
+          },
+          {
+            "name": "Restoration / Indictment",
+            "from_intensity": 0.57,
+            "to_intensity": 0.91,
+            "delta": 0.34,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the archivist becomes a heroic owner of recovered memory, if the boon is private victory, or if the return avoids communal pressure."
+  },
+  "arc_summary": {
+    "beginning": "The archivist inherits tapes inside an institution that has normalized forgetting.",
+    "turn": "The sonic threshold and erased route reveal that preservation is not neutral.",
+    "ending_or_residue": "The returned tape divides the community, making memory both restoration and indictment.",
+    "scale_rationale": "An arc is necessary because the structure needs ordinary world, threshold, ordeal, boon, and return pressure to test Hero Journey without importing a savior frame."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_erased_route_hero_journey",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-19T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "reference-and-meaning.md",
+      "note": "The Beat Plan adapts the invented reference's tapes, sonic threshold, erased route, copied tape, and divided return."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_erased_route_hero_journey",
+      "note": "The adapted Hero Journey preserves memory as return obligation rather than private discovery."
+    },
+    {
+      "source_type": "story_gate",
+      "source_ref": "hero_journey",
+      "note": "Hero Journey guides ordinary world, threshold, ordeal, boon, and return pressure without choosing medium, output shape, asset count, or Cultural Format Structure."
+    }
+  ]
+}
