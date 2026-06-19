@@ -44,7 +44,7 @@ Before creating the sound-specific Creative Brief, produce:
 2. A Beat Plan matching `schemas/beat-plan.schema.json`.
 3. A Sound Medium Plan matching `schemas/sound-medium-plan.schema.json`.
 
-The Beat Plan is authoritative for story shape. The Sound Medium Plan is authoritative for sound translation decisions: sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, sequence planning, gate statuses, and review requirements. The later Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
+The Beat Plan is authoritative for story shape. The Sound Medium Plan is authoritative for sound translation decisions: optional Medium Output Shape Recommendation, sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, sequence planning, gate statuses, and review requirements. The later Sound Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`; do not embed duplicate Beat summaries.
 
 Every Beat must name an intended feeling and include an Expectation Turn. Do not accept a Beat Plan that only lists events, symbols, or factual changes. The core algorithm is: grab attention, trigger a strong emotion, and forge a simple mental link. Sound translation should express that feeling through sonic pressure, motion, voice, arrangement, or silence, not merely describe the fact.
 
@@ -54,7 +54,7 @@ Every Beat Plan must identify Key Emotional Movements. For a single track, choos
 
 For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious Suno target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-section, sequence, or lyric-bearing plans still require a bounded Beat Reviewer sub-agent before Music / Sound Critic Review.
 
-When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning.
+When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning. When the Sound Medium Plan includes `medium_output_shape_recommendation`, use it to record the requested shape, recommended shape, accepted shape, rationale, alternatives, tradeoffs, and any conflict; keep `sound_work_type`, `arrangement_direction`, and `sequence_plan` as the concrete sound-planning fields.
 
 ## Sound Medium Plan Process
 
@@ -80,7 +80,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 Use this only after the Sound Medium Plan exists. Before critic review, build a substantive draft from the Sound Medium Plan without pretending uncertain choices are final:
 
 1. Preserve `transformation_brief_id` and `beat_plan_id`.
-2. Use the Sound Medium Plan as the source of truth for sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, and sequence planning.
+2. Use the Sound Medium Plan as the source of truth for Medium Output Shape Recommendation, sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, and sequence planning.
 3. Add Emotional Qualities, medium-local Beat summaries, Tension Point summaries, value shifts, transformation constraints, and Sequence Recommendation from the shared Beat Plan and Sound Medium Plan.
 4. If lyrics are required by the Sound Medium Plan, draft lyrics against the Arrangement Plan before final prompt locking.
 5. Produce the draft Sound Creative Brief Document only after required medium gates are complete or explicitly allowed to proceed unconfirmed.

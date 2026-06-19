@@ -147,6 +147,8 @@ A Sound Creative Brief Record is the structured agent handoff created after Musi
 
 It parallels the image Creative Brief Record, keeping the shared meaning-level sections and swapping the image-specific block for sound-specific sections (sonic concept, genre, tempo/groove, vocal/lyric, lyrics, arrangement, sonic dynamics, sequence). See the schema for exact fields.
 
+Sound Medium Plan records may include `medium_output_shape_recommendation` to explain the choice among sound-specific shapes such as `song`, `instrumental_track`, `ambient_soundscape`, `cinematic_score`, `spoken_word_bed`, `ritual_audio`, `sound_design_piece`, `sonic_logo`, or `sound_sequence`. For single sound works, `accepted_shape` must match `sound_work_type`. For `sound_sequence`, `sequence_plan.is_sequence` must be true. Arrangement sections, song structure, and section tension maps remain owned by arrangement and prompt planning, not by output-shape recommendation.
+
 `sonic_dynamics.active_sonic_tensions` records the active 6 to 8 Sonic Tension Pairs using the same pair-record shape as Visual Dynamics: name, two independent pole presences, tension intensity, evidence, and translation notes.
 
 `arrangement_plan.sections[]` records the section-level tension map. Each section includes section name, time range, bar range, section function, tension role, active emotional tensions, active sonic tensions, and transformation notes.

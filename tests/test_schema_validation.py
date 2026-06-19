@@ -49,6 +49,104 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "missing required field 'emotional_tension_contract'"):
             validate(record, schema, schema)
 
+    def test_sound_medium_plan_accepts_medium_output_shape_recommendation(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        record["medium_output_shape_recommendation"] = {
+            "requested_shape": None,
+            "recommended_shape": "song",
+            "accepted_shape": "song",
+            "rationale": "One compact song can hold the threshold beat without needing a sequence.",
+            "alternatives_considered": ["instrumental_track", "sound_sequence"],
+            "tradeoffs": [
+                "An instrumental track would preserve mood but lose the requested lyric-bearing pressure.",
+                "A sound sequence would over-expand a single threshold beat."
+            ],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_sound_output_shape_recommendation_accepts_sequence_when_sequence_plan_is_true(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        record["story_mode"] = "sequence"
+        record["sequence_plan"] = {
+            "is_sequence": True,
+            "requires_sequence_approval": True,
+            "sequence_summary": "Three related sound works preserve departure, rupture, and residue as separate movements."
+        }
+        record["medium_output_shape_recommendation"] = {
+            "requested_shape": "song",
+            "recommended_shape": "sound_sequence",
+            "accepted_shape": "sound_sequence",
+            "rationale": "The Beat Plan needs separate sound works rather than one track arrangement.",
+            "alternatives_considered": ["song", "cinematic_score"],
+            "tradeoffs": [
+                "A single song would compress too many turns into one hook.",
+                "A cinematic score would keep continuity but blur the separate movement approvals."
+            ],
+            "conflict": {
+                "has_conflict": True,
+                "conflict_summary": "The requested song is smaller than the story movement needs.",
+                "resolution": "accepted_recommendation",
+                "gate_decision_id": "gate_sound_shape_sequence"
+            }
+        }
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_sound_output_shape_recommendation_must_match_work_type_for_single_work(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        record["medium_output_shape_recommendation"] = {
+            "requested_shape": "song",
+            "recommended_shape": "instrumental_track",
+            "accepted_shape": "instrumental_track",
+            "rationale": "Invalid: accepted shape must match the concrete sound work type.",
+            "alternatives_considered": ["song"],
+            "tradeoffs": ["Invalid shape mismatch guard."],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'instrumental_track'"):
+            validate(record, schema, schema)
+
+    def test_sound_output_shape_recommendation_rejects_story_or_image_shape(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        record["medium_output_shape_recommendation"] = {
+            "requested_shape": "single_image",
+            "recommended_shape": "three_part_sequence",
+            "accepted_shape": "three_part_sequence",
+            "rationale": "Invalid: Story Mode and image shapes must not become sound output shapes.",
+            "alternatives_considered": ["song"],
+            "tradeoffs": ["Invalid shape guard."],
+            "conflict": {
+                "has_conflict": False,
+                "conflict_summary": None,
+                "resolution": "not_needed",
+                "gate_decision_id": None
+            }
+        }
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
     def test_prompt_branch_requires_branch_emotional_tension_preservation(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "prompt-branch-set.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "prompt-branch-set.json"
