@@ -145,7 +145,7 @@ The thing a Shot Design makes dominant: face or reaction, hands or object, body 
 _Avoid_: Centering the whole subject when the Beat needs one pressure point
 
 **Shot Progression**:
-The intentional change of Shot Design across adjacent Image Roles in a triptych or image series. Adjacent roles should vary shot scale, camera angle, visual emphasis, or composition strategy unless repetition is artist-approved and tied to Artist Meaning.
+The intentional change of Shot Design across adjacent Image Roles in an image series. Adjacent roles should vary shot scale, camera angle, visual emphasis, or composition strategy unless repetition is artist-approved and tied to Artist Meaning.
 _Avoid_: A series where every frame has the same full-body composition
 
 **Sonic Dynamics**:
@@ -221,11 +221,11 @@ The ordered change in Intended Feeling across Beats, sections, images, or output
 _Avoid_: Visual variety without a changed emotional pressure
 
 **Arc Scale**:
-The rule that the same underlying Emotional Movement can be compressed or expanded depending on output length. A single image usually compresses one key movement such as a climax, threshold, or residue. A triptych stages a few key movements. A longer arc can let one emotion build across several Beats before a major change, while still requiring each Beat to create some meaningful change.
+The rule that the same underlying Emotional Movement can be compressed or expanded depending on output length. A single image usually compresses one key movement such as a climax, threshold, or residue. An image series stages several key movements. A longer arc can let one emotion build across several Beats before a major change, while still requiring each Beat to create some meaningful change.
 _Avoid_: Forcing every micro-beat in a long arc to change emotion immediately, or letting long arcs repeat without movement
 
 **Key Emotional Movement**:
-A major emotional shift point in an arc. Key Emotional Movements are the emotional movements that must survive compression or expansion: a single image may compress one key movement, a triptych may stage three key movements, and a longer arc may organize many smaller Beats around several key movements.
+A major emotional shift point in an arc. Key Emotional Movements are the emotional movements that must survive compression or expansion: a single image may compress one key movement, an image series may stage several key movements, and a longer arc may organize many smaller Beats around several key movements.
 _Avoid_: Treating every Beat as equally structurally important, mirroring every Beat into a Key Emotional Movement, losing the major emotional shifts when compressing or expanding the work
 
 **Substantial Beat Difference**:
@@ -377,7 +377,7 @@ The selected Core Visual Tension Pairs that materially shape a specific Creative
 _Avoid_: Scoring every visual pair by default in the First Slice
 
 **Series Amplitude Plan**:
-The internal 0-1 visual amplitude profile for each suggested image in a triptych or image series, covering framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
+The internal 0-1 visual amplitude profile for each suggested image in an image series, covering framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
 _Avoid_: Letting every image in a series use the same distance, density, and motion by accident
 
 **Conditional Visual Tension Pair**:
@@ -462,7 +462,7 @@ _Avoid_: Replacing Medium Plan section structure, rigid template
 
 **Platform Container**:
 The publishing surface that packages an output for a specific platform or channel, such as Instagram Reel, TikTok photo post, YouTube Short, LinkedIn document carousel, Reddit AMA post, or Substack Note.
-_Avoid_: Cultural Format Structure, Story Structure, creative template
+_Avoid_: Cultural Format Structure, Story Structure, creative template, platform constraints
 
 **Audience Hook**:
 The opening attention mechanism that creates enough curiosity, tension, beauty, identification, surprise, or promise for the audience to keep going.
@@ -481,19 +481,19 @@ The smallest meaningful change, contrast, turn, or pressure point in a Reference
 _Avoid_: Plot point, scene
 
 **Series Recommendation**:
-A Creative Brief recommendation for whether a Reference should become a single image, triptych, or image series.
+A Creative Brief recommendation for whether a Reference should become a single image or image series. A three-image sequence is an image series with three suggested images.
 _Avoid_: Generating a series by default without artist approval
 
 **Series Plan**:
 An approved plan for multiple related images that preserve a larger Beat Plan or sequence of Tension Points.
 _Avoid_: Prompt variants
 
-**Triptych**:
-A three-image Series Plan or Series Recommendation for a clear three-part transformation.
-_Avoid_: Generic three variants
+**Three-Part Sequence**:
+A Story Mode for a clear three-part transformation, such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath. It does not decide image count or create a special image output class.
+_Avoid_: Triptych, image output shape, generic three variants
 
 **Image Series**:
-A multi-image Series Plan or Series Recommendation for extended sequence, motif evolution, or world exploration.
+A multi-image Series Plan or Series Recommendation. This includes a three-image output when three images best serve the approved Beat Plan.
 _Avoid_: Prompt variants
 
 **Cumulative Work**:
@@ -568,12 +568,12 @@ _Avoid_: Replacing Faithful, Amplified, and Minimal labels
 A concrete visual lever that makes one Prompt Variant Plan visually distinct from the others, such as composition, viewpoint, density, symbolic treatment, abstraction level, light/color strategy, texture, finish, or focal hierarchy.
 _Avoid_: Only changing adjectives or intensity words
 
-**Single-Generation Variant Triptych**:
+**Single-Generation Variant Comparison**:
 One horizontal image made of three equal square panels that compares Minimal/minimalist, Faithful/Balanced, and Amplified/Maximal intensity directions in a single generation after Symbology Direction and Style Direction are selected.
-_Avoid_: Treating the comparison triptych as a Series Plan
+_Avoid_: Treating the comparison image as a Series Plan
 
 **Layout Plan**:
-The Provider-Neutral Prompt Plan field that records final output arrangement: single image, three-panel variant triptych, series calibration image, or series image. Pre-locking exploration boards are recorded in visual boards, not Layout Plan.
+The Provider-Neutral Prompt Plan field that records final output arrangement: single image, three-panel variant comparison, series calibration image, or series image. Pre-locking exploration boards are recorded in visual boards, not Layout Plan.
 _Avoid_: Hiding generation layout inside prompt prose only
 
 **Visual Boards**:
@@ -605,7 +605,7 @@ The medium-specific translation record that explains how an approved Beat Plan b
 _Avoid_: Creative Brief, Prompt Plan, provider settings
 
 **Medium Output Shape Recommendation**:
-A Medium Plan recommendation for how an approved Beat Plan and adapted Story Structure should be realized in one medium, such as a text form, sound form, single compressed image, triptych, image series, short video, or longer sequence.
+A Medium Plan recommendation for how an approved Beat Plan and adapted Story Structure should be realized in one medium, such as a text form, sound form, single compressed image, image series, short video, or longer sequence.
 _Avoid_: Asset count, format decision before story structure, series-first recommendation
 
 **Accepted Output Shape**:
@@ -789,7 +789,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Visual Dynamics** contains **Active Visual Tensions** chosen from the **Core Visual Tension Pairs** library.
 - The First Slice outputs only **Active Visual Tensions** rather than all **Core Visual Tension Pairs**.
 - A **Series Amplitude Plan** gives each suggested series image 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
-- In a triptych or image series, adjacent image roles should usually differ on at least two **Series Amplitude Plan** dimensions unless visual sameness is intentional and traced to the **Emotional Arc**.
+- In an image series, adjacent image roles should usually differ on at least two **Series Amplitude Plan** dimensions unless visual sameness is intentional and traced to the **Emotional Arc**.
 - In text-to-image work, **Visual Dynamics** describes the **Target Visual Engine**, not literal visual properties of the text.
 - Every **Target Visual Engine** choice must trace back to **Artist Meaning**, **Reference** evidence, **Emotional Structure**, **Beat Plan**, or **Critical Heuristics**.
 - **Monumental / Intimate** is a **Conditional Visual Tension Pair** for scale, embodiment, installation, performance, and immersive work.
@@ -806,19 +806,20 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Library entries may include compact grounding metadata such as researched/provisional status and **Structure Grounding Tier**, but should not include citations or source-reference lists.
 - **Cultural Format Structure Library** complements **Story Structure Library**: Story Structure owns deep movement, while Cultural Format Structure owns culturally recognized audience-facing form.
 - Social-media patterns such as carousel lessons, threads, AMAs, launch posts, and hook-demo-payoff posts are **Cultural Format Structures** by default; only deeper movement patterns such as reveal loops, before/after transformation, or problem/reframe/return belong in the **Story Structure Library**.
+- External social platform limits such as Instagram, TikTok, YouTube, LinkedIn, Reddit, Substack, or X character counts, durations, API limits, and publishing restrictions are not first-class Artist OS validation rules; Wondermint upload requirements are the platform-specific exception.
 - A project can combine one adapted **Story Structure** with one or more adapted **Cultural Format Structures** when a medium form has established expectations.
 - **Cultural Format Structure** is selected or adapted during **Medium Plan** creation, not during **Story Journey**.
 - **Medium Plans** produce a **Medium Output Shape Recommendation** from the approved **Beat Plan** and adapted **Story Structure**; the **Story Structure Library** does not choose the number of outputs.
-- Every **Medium Plan** must include a **Medium Output Shape Recommendation**, even when the recommended shape is obvious or compact.
-- When the artist-requested output shape and the **Medium Output Shape Recommendation** materially diverge, record a **Medium Output Shape Conflict** and resolve it with one **Decision Interview** question before locking the **Medium Plan**.
+- Every **Text Medium Plan** must include a **Medium Output Shape Recommendation**, even when the recommended shape is obvious or compact; other media adopt this requirement through the cross-medium follow-up below.
+- When the artist-requested output shape and the **Medium Output Shape Recommendation** materially diverge, record a **Medium Output Shape Conflict** and resolve it with one **Decision Interview** question before locking the **Text Medium Plan**.
 - Select or adapt **Cultural Format Structure** after the **Medium Output Shape Recommendation** is accepted, revised, or explicitly allowed to proceed unconfirmed.
 - Each adapted **Cultural Format Structure** must include a **Cultural Format Adaptation Policy** so recognizable form can be preserved, merged, omitted, or inverted without becoming a rigid formula.
 - **Adapted Cultural Format Structure** parts map to Medium Plan sections, scenes, movements, or other parts; they do not replace the Medium Plan's execution structure.
 - Every **Cultural Format Structure** must define **Audience Hook** logic for its format, but the hook does not have to be a headline, first sentence, or clickbait device.
 - **Cultural Format Structure Library Entries** may recommend **Stewardship Views** for long or complex works, but those views remain projections over **Medium Plan** and **Long-Work Stewardship** state.
-- Adapted **Story Structure** is required in the **Beat Plan** when `story_mode` is `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
+- Adapted **Story Structure** is required in the **Beat Plan** when `story_mode` is `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
 - **Medium Output Shape Recommendation** and adapted **Cultural Format Structure** remain text-first Text Medium Plan fields while fixtures and tests harden cross-medium adoption; image, sound, video, and mixed-media adoption remains an explicit follow-up decision.
-- Image-specific **Series Recommendation** language should narrow toward **Medium Output Shape Recommendation** when the recommendation includes single compressed image, triptych, image series, video, or other visual forms.
+- Image-specific **Series Recommendation** language should narrow toward **Medium Output Shape Recommendation** when the recommendation includes single compressed image, image series, video, or other visual forms.
 - **Poetic Density** increases when a single element carries multiple meanings without collapsing them into one message.
 - **Poetic Density Notes** capture **Poetic Density** without reducing it to a numeric score.
 - **Core Tension Pairs** exist to support creative translation across media.
@@ -830,8 +831,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Tension Point** carries one **Emotional Payload** without requiring before/after change.
 - A **Series Recommendation** is required when a **Beat Plan** has more than one meaningful **Beat** or **Tension Point**.
 - A **Series Recommendation** can still choose single image when compression preserves the work better than sequence.
-- A **Triptych** fits a clear three-part emotional structure such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath.
-- An **Image Series** fits extended sequence, motif evolution, or world exploration.
+- A **Three-Part Sequence** fits a clear three-part emotional structure such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath, but it does not decide image count.
+- An **Image Series** fits any approved multi-image output, including exactly three images.
 - A **Cumulative Work** needs long-work stewardship because later parts depend on prior parts or on an approved emotional arc.
 - A portfolio, collection, curator batch, or store set is not automatically a **Cumulative Work** when the outputs are related but non-sequential.
 - **Long-Work Stewardship** applies to **Cumulative Work**.
@@ -850,7 +851,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Long-Work Stewardship Record** is updated in place for execution progress, but a governing Artist Meaning, Beat Plan, or Medium Plan change that alters cumulative structure creates a superseding stewardship record.
 - A **Long-Work Part** is not a **Prompt Variant Plan** or **Variant**; prompt variants test directions, while Long-Work Parts carry cumulative story or emotional structure.
 - A **Long-Work Part** stores generic stewardship state plus a reference to its medium-specific part; it does not duplicate Shot Design, amplitude profiles, section execution details, voice rules, or other Medium Plan-owned fields.
-- A **Single-Generation Variant Triptych** does not create Long-Work Parts unless it represents an approved triptych or series rather than a Minimal/Faithful/Amplified comparison.
+- A **Single-Generation Variant Comparison** does not create Long-Work Parts unless it represents an approved image series rather than a Minimal/Faithful/Amplified comparison.
 - Create the **Long-Work Stewardship Record** after **Story Approval**, then enrich it after the **Medium Plan** maps approved Beats into medium-specific parts.
 - For **Cumulative Work**, the route is Story Approval, then **Long-Work Stewardship Record** creation, then Medium Plan, then stewardship enrichment with Long-Work Parts, then Long-Work Readiness before expansion.
 - **Long-Work Readiness** can block expansion when the state is pending or repair before expansion; expansion may continue only after readiness runs, repair happens, or the artist explicitly waives the block.
@@ -1048,8 +1049,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 > **Dev:** "Does every multi-Beat Reference become a series?"
 > **Domain expert:** "No. Always evaluate series potential, but recommend single image when compression is stronger."
 >
-> **Dev:** "When is it a triptych instead of a larger image series?"
-> **Domain expert:** "Use **Triptych** for clear three-part transformation. Use **Image Series** for extended sequence, motif evolution, or world exploration."
+> **Dev:** "When should an image series have exactly three images instead of more?"
+> **Domain expert:** "Use three images when the approved Beat Plan has three necessary image roles. Still record the output as an **Image Series**, not as a separate image class."
 >
 > **Dev:** "If a Series Plan is approved, do we generate the whole series immediately?"
 > **Domain expert:** "No. First generate one **Series Calibration Image** to lock Style Direction and the Target Visual Engine."
@@ -1168,7 +1169,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - The First Slice's **Provider-Neutral Prompt Plan** contains three **Prompt Variant Plans**: Faithful, Amplified, and Minimal.
 - The **Amplified Prompt Variant** can add **Derived Symbols**, but they must be marked and justified through Creative Brief traceability.
 - **Derived Symbol Review** is part of reviewing the full Prompt Plan; it is not a separate First Slice approval gate.
-- If a Reference has multiple significant Beats, Artist OS should include a **Series Recommendation** for single image, triptych, or image series. Do not create multiple image prompt plans until the artist approves a **Series Plan**.
+- If a Reference has multiple significant Beats, Artist OS should include a **Series Recommendation** for single image or image series. Do not create multiple image prompt plans until the artist approves a **Series Plan**.
 - Multi-Beat References do not automatically become series. The recommendation can be single image when compression is more powerful.
 - A **Series Plan** can use **Style Progression** when the Beat Plan supports a meaningful shift in visual language across images.
 - **Style Progression** can be recommended in the First Slice, but not executed until **Series Plan** approval.
@@ -1183,7 +1184,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Before locking those three Prompt Variant Plans, use the **Minimalist-to-Maximalist Gate** when intensity, density, or complexity could materially change the image.
 - Keep **Prompt Variant Plan** labels stable. Use **Variant Test Axis Labels** to explain what each variant tests.
 - Each **Prompt Variant Plan** must name concrete **Variant Differentiators** so the three prompts produce meaningfully different visual options.
-- Use a **Single-Generation Variant Triptych** when the artist wants Minimal, Faithful/Balanced, and Amplified/Maximal intensity directions compared in one generated image.
+- Use a **Single-Generation Variant Comparison** when the artist wants Minimal, Faithful/Balanced, and Amplified/Maximal intensity directions compared in one generated image.
 - Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
 - "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted, with an **Artist OS Library Database**, a **Project Manifest** per project, and **Asset Metadata** sidecars for images and exports.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.

@@ -134,7 +134,7 @@ class SchemaValidationTests(unittest.TestCase):
         schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "freytag-rehearsal" / "beat-plan.json"
         schema = load_json(schema_path)
-        for story_mode in ["beat_pair", "triptych", "sequence", "scene", "arc", "world"]:
+        for story_mode in ["beat_pair", "three_part_sequence", "sequence", "scene", "arc", "world"]:
             with self.subTest(story_mode=story_mode):
                 record = load_json(data_path)
                 record["story_mode"] = story_mode
@@ -150,6 +150,54 @@ class SchemaValidationTests(unittest.TestCase):
         del record["story_structure"]
         schema = load_json(schema_path)
         validate(record, schema, schema)
+
+    def test_image_output_shapes_do_not_use_three_part_sequence(self) -> None:
+        image_schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
+        creative_schema = load_json(REPO_ROOT / "schemas" / "creative-brief.schema.json")
+
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate("three_part_sequence", image_schema["properties"]["presentation_mode"], image_schema)
+
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate("three_part_sequence", creative_schema["properties"]["series_recommendation"]["properties"]["mode"], creative_schema)
+
+    def test_single_image_fixture_keeps_story_structure_optional(self) -> None:
+        beat_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "beat-plan.json"
+        )
+        image_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "image-medium-plan.json"
+        )
+        beat_plan = load_json(beat_plan_path)
+        image_plan = load_json(image_plan_path)
+
+        self.assertEqual("single_beat", beat_plan["story_mode"])
+        self.assertNotIn("story_structure", beat_plan)
+        self.assertEqual("single_image", image_plan["presentation_mode"])
+        self.assertEqual(1, len(image_plan["image_roles"]))
+        self.assertFalse(image_plan["series_plan"]["is_series"])
+
+        validate_file(REPO_ROOT / "schemas" / "beat-plan.schema.json", beat_plan_path)
+        validate_file(REPO_ROOT / "schemas" / "image-medium-plan.schema.json", image_plan_path)
+
+    def test_three_image_fixture_is_image_series(self) -> None:
+        beat_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "beat-plan.json"
+        )
+        image_plan_path = (
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "image-medium-plan.json"
+        )
+        beat_plan = load_json(beat_plan_path)
+        image_plan = load_json(image_plan_path)
+
+        self.assertEqual("sequence", beat_plan["story_mode"])
+        self.assertIn("story_structure", beat_plan)
+        self.assertEqual("image_series", image_plan["presentation_mode"])
+        self.assertEqual(3, len(image_plan["image_roles"]))
+        self.assertTrue(image_plan["series_plan"]["is_series"])
+
+        validate_file(REPO_ROOT / "schemas" / "beat-plan.schema.json", beat_plan_path)
+        validate_file(REPO_ROOT / "schemas" / "image-medium-plan.schema.json", image_plan_path)
 
 
 if __name__ == "__main__":

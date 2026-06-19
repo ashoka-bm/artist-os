@@ -43,8 +43,8 @@ First ask:
 >
 > - **Image**: a single image, sequential image story, portfolio, or collection
 > - **Video**: the video path has not been created yet
-> - **Audio**: a song, instrumental track, soundscape, cinematic score, spoken-word bed, ritual audio, sound design piece, or sonic logo
-> - **Text**: a poem, prose scene, short story, lyrics, script, letter, monologue, essay, manifesto, treatment, or rewrite
+> - **Audio**: a song, instrumental, soundscape, score, spoken word, or other sound work
+> - **Text**: a poem, prose, story, script, lyrics, essay, letter, or other writing
 
 Then ask the medium-specific output-kind question for Image, Audio, or Text. Do not ask a second video question.
 
@@ -75,7 +75,7 @@ Route single image toward the standard image Prompt Plan. Route sequential image
 > - **Rewrite or adaptation of the source**
 > - **Not sure**: recommend the best written form
 
-The artist may name multiple text forms, but identify or recommend one Primary Text Form before planning, such as article, poem, monologue, scene, script, lyrics, essay, letter, or treatment. Treat other named forms as Text Form Modifiers or constraints. If no primary form is clear, ask one clarifier.
+The artist may name multiple text forms, but identify or recommend one Primary Text Form before planning. Treat other named forms as Text Form Modifiers or constraints. If no primary form is clear, ask one clarifier.
 
 After the artist chooses a text kind, ask:
 
@@ -147,7 +147,7 @@ Image, audio, and text share one spine. Run the phases in order, hand off to the
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview` (bounded Decision Interview).
 3. **Transformation Brief** — medium skill; `schemas/transformation-brief.schema.json`.
-4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`, read `docs/structure-library/README.md`, then `docs/structure-library/story/README.md`, then only the selected Story Structure entry; adapt it into `story_structure` on the Beat Plan rather than applying it unchanged. For `single_beat`, use Story Structure only when a reusable movement pattern would clarify the compressed moment. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat names its intended feeling.
+4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`, read `docs/structure-library/README.md`, then `docs/structure-library/story/README.md`, then only the selected Story Structure entry; adapt it into `story_structure` on the Beat Plan rather than applying it unchanged. For `single_beat`, use Story Structure only when a reusable movement pattern would clarify the compressed moment. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat names its intended feeling.
 5. **Story / Beat Review And Approval** — `skills/writing-method-review` in Beat Reviewer mode, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan; then present the revised Beat Plan for Story Approval.
 6. **Long-Work Stewardship Creation** — for Cumulative Work only, create a foundation Long-Work Stewardship Record after Story Approval. At this stage `medium_plan_id` may be `null` and `part_plan` may be empty because medium-specific parts do not exist yet. The Beat Plan remains story authority.
 7. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), and produces the Medium Plan. Persist each gate decision under `gates/`. For Cumulative Work, enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion.
@@ -166,9 +166,9 @@ Image, audio, and text share one spine. Run the phases in order, hand off to the
 **Image** — owning skill `skills/text-to-image-plan`:
 
 - Step 7 runs two visual gates in order, Symbology → Style; Presentation Mode is decided inside the Symbology Gate, not as a separate gate. Medium Plan validates against `schemas/image-medium-plan.schema.json`.
-- For triptych or image-series Cumulative Work, Long-Work Stewardship references Image Role ids and tracks readiness, checkpoints, continuity rules, and drift; it does not duplicate Shot Design, amplitude, or visual tension fields.
+- For image-series Cumulative Work, Long-Work Stewardship references Image Role ids and tracks readiness, checkpoints, continuity rules, and drift; it does not duplicate Shot Design, amplitude, or visual tension fields.
 - The Minimalist-to-Maximalist (intensity) gate runs at **Brief Approval (step 10), after symbology and style are locked** — never during the Medium Plan.
-- Step 11 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `triptych` or `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
+- Step 11 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
 - Optional after step 11: a Prompt Branch Set (`schemas/prompt-branch-set.schema.json`), usually five branches that hold the meaning kernel while varying style, setting, symbol, composition, and palette/light, when the artist wants a curator batch or broad exploration.
 
 **Suno** — owning skill `skills/text-to-suno-plan`:

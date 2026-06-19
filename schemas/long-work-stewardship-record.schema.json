@@ -48,7 +48,7 @@
     "target_media_type": { "type": "string", "enum": ["image", "text", "sound", "video", "mixed_media"] },
     "cumulative_work_type": {
       "type": "string",
-      "enum": ["image_series", "triptych", "long_text", "song_sequence", "video_sequence", "mixed_media_sequence"]
+      "enum": ["image_series", "long_text", "song_sequence", "video_sequence", "mixed_media_sequence"]
     },
     "stewardship_status": {
       "type": "string",
@@ -59,7 +59,7 @@
       "additionalProperties": false,
       "required": ["story_mode", "artist_requested_cumulative_work", "requires_part_to_part_dependency", "reason"],
       "properties": {
-        "story_mode": { "type": "string", "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"] },
+        "story_mode": { "type": "string", "enum": ["single_beat", "beat_pair", "three_part_sequence", "sequence", "scene", "arc", "world"] },
         "artist_requested_cumulative_work": { "type": "boolean" },
         "requires_part_to_part_dependency": { "type": "boolean" },
         "reason": { "type": "string", "minLength": 1 }

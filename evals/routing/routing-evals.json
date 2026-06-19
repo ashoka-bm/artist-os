@@ -30,7 +30,7 @@
     { "id": 10, "query": "lets just do the meaning part for now. what's the emotional core here, what am i allowed to change, what's off-limits", "target": "meaning-interview", "rationale": "Isolated Artist Meaning phase.", "probe": false },
 
     { "id": 11, "query": "meaning's locked for the 'ash & salt' piece, now build the image creative brief and the visual prompt plan", "target": "text-to-image-plan", "rationale": "Isolated image planning after meaning exists.", "probe": false },
-    { "id": 12, "query": "i want a triptych for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "text-to-image-plan", "rationale": "Image planning, meaning already captured.", "probe": false },
+    { "id": 12, "query": "i want a three-image series for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "text-to-image-plan", "rationale": "Image planning, meaning already captured.", "probe": false },
     { "id": 13, "query": "give me the faithful / amplified / minimal prompt variants for the approved image brief", "target": "text-to-image-plan", "rationale": "Post-approval prompt plan is owned by the image planner, NOT the critic.", "probe": true },
 
     { "id": 14, "query": "redo just the sound brief for the existing project, i want to push the genre more toward ambient drone", "target": "text-to-suno-plan", "rationale": "Isolated sound planning on existing project.", "probe": false },

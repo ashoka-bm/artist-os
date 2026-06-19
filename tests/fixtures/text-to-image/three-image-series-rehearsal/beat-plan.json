@@ -1,0 +1,314 @@
+{
+  "beat_plan_id": "bp_three_image_series",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "story_mode": "sequence",
+  "story_structure": {
+    "library_entry_id": "problem_reframe_return",
+    "name": "Problem / Reframe / Return",
+    "grounding_status": "provisional",
+    "grounding_tier": "platform_pattern_evidence",
+    "core_movement": "A felt problem is established, reframed through pressure at the threshold, then returned as residue rather than solved.",
+    "adaptation_summary": "The three-image series moves from empty invitation, to paralyzed nearness, to unresolved afterpressure.",
+    "turn_logic": "The sequence turns when the apparent invitation becomes an emotionally costly threshold instead of a route to closure.",
+    "compression_rule": "Use exactly three image roles for the fixture: absence, threshold, residue.",
+    "expansion_rule": "If expanded later, add intermediate beats only when each new image changes the emotional claim.",
+    "failure_modes": [
+      "the series becomes three poses of the same claim",
+      "the door opens and resolves the pressure",
+      "the final image explains the emotion instead of leaving residue"
+    ]
+  },
+  "story_gate_status": "approved",
+  "beats": [
+    {
+      "beat_id": "beat_series_absence",
+      "beat_role": "grounding",
+      "one_move_summary": "The empty room holds the first pressure before anyone appears.",
+      "builds_toward_key_movement_id": "kem_series_absence",
+      "before_state": "The image sequence has not yet made this movement visible.",
+      "after_state": "absence before return",
+      "value_shift": "presence becomes active absence",
+      "expectation_turn": {
+        "expected_direction": "The threshold should offer a readable path toward entry or closure.",
+        "actual_result": "The lit room should welcome someone, but the missing body makes the welcome unstable.",
+        "surprise_function": "Keeps the emotional movement active without resolving it too quickly.",
+        "emotional_counterpoint": "Tender light carries pressure instead of comfort."
+      },
+      "intended_feeling": "wounded hope before return",
+      "emotional_payload": "Wide absence creates the first emotional claim.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.72,
+          "emotional_function": "keeps what is missing emotionally active"
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.64,
+          "emotional_function": "keeps possible action charged but withheld"
+        }
+      ],
+      "source_evidence": [
+        "The reference centers on an unresolved threshold and a lit room."
+      ],
+      "must_preserve": [
+        "unresolved threshold pressure",
+        "no completed entry"
+      ],
+      "pivot_options": [
+        {
+          "label": "continue-series",
+          "next_move": "A figure reaches the lit doorway and cannot cross.",
+          "rationale": "The image series needs the next role to shift the emotional claim."
+        }
+      ],
+      "medium_translation_notes": {
+        "image": "Hold the room wide and sparse so absence becomes the subject."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The sequence preserves threshold pressure without resolution."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_series_threshold",
+      "beat_role": "threshold",
+      "one_move_summary": "A figure reaches the lit doorway and cannot cross.",
+      "builds_toward_key_movement_id": "kem_series_threshold",
+      "before_state": "absence before return",
+      "after_state": "threshold pressure",
+      "value_shift": "approach becomes paralysis",
+      "expectation_turn": {
+        "expected_direction": "The threshold should offer a readable path toward entry or closure.",
+        "actual_result": "The key should solve entry, but the frozen hand makes agency painful.",
+        "surprise_function": "Keeps the emotional movement active without resolving it too quickly.",
+        "emotional_counterpoint": "Tender light carries pressure instead of comfort."
+      },
+      "intended_feeling": "the ache of almost choosing",
+      "emotional_payload": "The body carries the central refusal to resolve.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.86,
+          "emotional_function": "keeps what is missing emotionally active"
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.78,
+          "emotional_function": "keeps possible action charged but withheld"
+        }
+      ],
+      "source_evidence": [
+        "The reference centers on an unresolved threshold and a lit room."
+      ],
+      "must_preserve": [
+        "unresolved threshold pressure",
+        "no completed entry"
+      ],
+      "pivot_options": [
+        {
+          "label": "continue-series",
+          "next_move": "The doorway remains lit after the choice is deferred.",
+          "rationale": "The image series needs the next role to shift the emotional claim."
+        }
+      ],
+      "medium_translation_notes": {
+        "image": "Place the figure at the doorway with the key visible but unused."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The sequence preserves threshold pressure without resolution."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_series_residue",
+      "beat_role": "residue",
+      "one_move_summary": "The doorway remains lit after the choice is deferred.",
+      "builds_toward_key_movement_id": "kem_series_residue",
+      "before_state": "threshold pressure",
+      "after_state": "afterimage of refusal",
+      "value_shift": "paralysis becomes residue",
+      "expectation_turn": {
+        "expected_direction": "The threshold should offer a readable path toward entry or closure.",
+        "actual_result": "An ending should close the scene, but the light keeps waiting.",
+        "surprise_function": "Keeps the emotional movement active without resolving it too quickly.",
+        "emotional_counterpoint": "Tender light carries pressure instead of comfort."
+      },
+      "intended_feeling": "quiet unresolved afterpressure",
+      "emotional_payload": "The final image preserves consequence without closure.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.68,
+          "emotional_function": "keeps what is missing emotionally active"
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.6,
+          "emotional_function": "keeps possible action charged but withheld"
+        }
+      ],
+      "source_evidence": [
+        "The reference centers on an unresolved threshold and a lit room."
+      ],
+      "must_preserve": [
+        "unresolved threshold pressure",
+        "no completed entry"
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "image": "Return to the threshold after the figure has left the frame or nearly disappeared."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The sequence preserves threshold pressure without resolution."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_series_threshold_pressure",
+      "summary": "The threshold offers entry while making entry impossible.",
+      "intended_feeling": "pressure at the edge of release",
+      "emotional_payload": "Nearness becomes harder than distance.",
+      "source_evidence": [
+        "The lit doorway and unused key remain unresolved."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The artist meaning protects unresolved threshold pressure."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_series_absence",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_series_absence"
+      ],
+      "emotional_shift": "space becomes active absence",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The first image preserves waiting absence."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_series_threshold",
+      "role": "threshold",
+      "beat_ids": [
+        "beat_series_threshold"
+      ],
+      "emotional_shift": "approach becomes paralysis",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The second image preserves the charged refusal to cross."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_series_residue",
+      "role": "residue",
+      "beat_ids": [
+        "beat_series_residue"
+      ],
+      "emotional_shift": "choice becomes afterpressure",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The third image preserves unresolved residue."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Each adjacent image must change the emotional claim while preserving unresolved threshold pressure.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.65,
+      "minimum_adjacent_shift_count": 2,
+      "minimum_adjacent_shift_delta": 0.15,
+      "waiver_rule": "Adjacent shift can be waived only if repetition is artist-approved and meaning-bearing."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_series_absence",
+        "to_beat_id": "beat_series_threshold",
+        "shift_summary": "Absence becomes embodied threshold pressure.",
+        "shifted_tensions": [
+          {
+            "name": "Stillness / Motion",
+            "from_intensity": 0.64,
+            "to_intensity": 0.78,
+            "delta": 0.14,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_series_threshold",
+        "to_beat_id": "beat_series_residue",
+        "shift_summary": "Embodied pressure becomes lingering residue.",
+        "shifted_tensions": [
+          {
+            "name": "Presence / Absence",
+            "from_intensity": 0.86,
+            "to_intensity": 0.68,
+            "delta": 0.18,
+            "direction": "decreases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the three images read as a special output class instead of an approved image series with distinct roles."
+  },
+  "arc_summary": {
+    "beginning": "Absence waits in the room.",
+    "turn": "The threshold becomes painful nearness.",
+    "ending_or_residue": "The unresolved choice remains as light and space.",
+    "scale_rationale": "Three image roles are enough to stage absence, threshold, and residue without creating a special output class."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_three_image_series",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-04T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "transformation_brief",
+      "source_ref": "tb_door_left_lit",
+      "note": "The Beat Plan uses sequence story mode for a three-image image series fixture."
+    }
+  ]
+}

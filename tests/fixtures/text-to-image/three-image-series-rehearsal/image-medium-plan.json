@@ -1,0 +1,255 @@
+{
+  "image_medium_plan_id": "imp_three_image_series",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_three_image_series",
+  "target_media_type": "image",
+  "story_mode": "sequence",
+  "symbology_direction": {
+    "selection_method": "agent_recommended",
+    "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
+    "confirmation_status": "unconfirmed",
+    "rationale": "The threshold scene preserves the central pressure between return and refusal.",
+    "avoid": [
+      "literalizing the absent person",
+      "resolving whether the figure enters"
+    ]
+  },
+  "presentation_mode": "image_series",
+  "style_direction": {
+    "selection_method": "style_interview",
+    "primary_style": "cinematic photoreal",
+    "style_modifiers": [
+      "grainy / film-grain",
+      "surreal / dreamlike",
+      "dark / moody"
+    ],
+    "confirmation_status": "unconfirmed",
+    "rationale": "Cinematic photoreal grounding keeps the domestic threshold physically real while restrained surreal lighting preserves opacity.",
+    "avoid": [
+      "glossy fantasy rendering",
+      "generic horror poster styling"
+    ]
+  },
+  "visual_dynamics": {
+    "target_visual_engine": "three-image threshold series moving from absence to pressure to residue",
+    "active_visual_tensions": [
+      {
+        "name": "Light / Dark",
+        "tension_intensity": 0.9,
+        "translation_notes": [
+          "Use a lit doorway as the bright anchor inside a darker concrete environment."
+        ]
+      },
+      {
+        "name": "Flat / Deep",
+        "tension_intensity": 0.7,
+        "translation_notes": [
+          "Build a clear inside/outside depth axis through the doorway."
+        ]
+      }
+    ],
+    "minimum_tension_criteria": {
+      "single_image_requirement": "The image must hold at least two visible tensions, with one primary tension at 0.7 or higher, so the viewer feels pressure before reading details.",
+      "series_requirement": "Each adjacent image-series role must shift composition, communication intent, amplitude, and at least one active visual tension.",
+      "minimum_active_visual_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_amplitude_shift_count": 2,
+      "minimum_adjacent_tension_shift_count": 1,
+      "reviewer_instruction": "Block if the image reads as a factual doorway scene without visible contrast between stillness/motion, presence/absence, light/dark, or flat/deep space."
+    },
+    "style_visual_conflicts": [
+      {
+        "conflict": "Photoreal style could over-literalize the room and reduce the text's opacity.",
+        "adaptation": "Use photoreal grounding with restrained surreal lighting and symbolic treatment of the key.",
+        "requires_artist_approval": false
+      }
+    ]
+  },
+  "image_roles": [
+    {
+      "image_role_id": "imgrole_three_image_series_1",
+      "beat_id": "beat_series_absence",
+      "key_emotional_movement_id": "kem_series_absence",
+      "role_label": "opening image",
+      "composition_intent": "Hold the room wide and sparse so absence becomes the subject.",
+      "communication_intent": "Make the audience feel a place waiting without promising comfort.",
+      "expectation_turn_translation": "The lit room should welcome someone, but the missing body makes the welcome unstable.",
+      "intended_feeling": "wounded hope before return",
+      "emotional_payload": "Wide absence creates the first emotional claim.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.72,
+          "translation_notes": [
+            "Keep the missing choice visually active."
+          ]
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.64,
+          "translation_notes": [
+            "Keep possible movement withheld."
+          ]
+        }
+      ],
+      "shot_design": {
+        "shot_scale": "wide",
+        "camera_angle": "eye_level",
+        "visual_emphasis": "absence_negative_space",
+        "composition_strategy": "Hold the room wide and sparse so absence becomes the subject.",
+        "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
+        "avoid": [
+            "treating this as a special three-image output class",
+          "repeating the same pose with surface variation only"
+        ]
+      },
+      "distinction_notes": {
+        "from_previous_role": "opening role; no previous image role",
+        "composition_shift": "Hold the room wide and sparse so absence becomes the subject.",
+        "communication_shift": "Make the audience feel a place waiting without promising comfort.",
+        "tension_shift": "changes pressure level and focal source from the previous image role"
+      },
+      "amplitude_profile": {
+        "framing_distance": 0.2,
+        "subject_scale": 0.2,
+        "visual_density": 0.25,
+        "motion_energy": 0.12,
+        "spatial_openness": 0.7,
+        "detail_intensity": 0.35,
+        "emotional_pressure": 0.72
+      }
+    },
+    {
+      "image_role_id": "imgrole_three_image_series_2",
+      "beat_id": "beat_series_threshold",
+      "key_emotional_movement_id": "kem_series_threshold",
+      "role_label": "threshold image",
+      "composition_intent": "Place the figure at the doorway with the key visible but unused.",
+      "communication_intent": "Make nearness feel like pressure rather than resolution.",
+      "expectation_turn_translation": "The key should solve entry, but the frozen hand makes agency painful.",
+      "intended_feeling": "the ache of almost choosing",
+      "emotional_payload": "The body carries the central refusal to resolve.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.86,
+          "translation_notes": [
+            "Keep the missing choice visually active."
+          ]
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.78,
+          "translation_notes": [
+            "Keep possible movement withheld."
+          ]
+        }
+      ],
+      "shot_design": {
+        "shot_scale": "medium_close_up",
+        "camera_angle": "eye_level",
+        "visual_emphasis": "hands_or_object",
+        "composition_strategy": "Place the figure at the doorway with the key visible but unused.",
+        "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
+        "avoid": [
+            "treating this as a special three-image output class",
+          "repeating the same pose with surface variation only"
+        ]
+      },
+      "distinction_notes": {
+        "from_previous_role": "shifts from opening image",
+        "composition_shift": "Place the figure at the doorway with the key visible but unused.",
+        "communication_shift": "Make nearness feel like pressure rather than resolution.",
+        "tension_shift": "changes pressure level and focal source from the previous image role"
+      },
+      "amplitude_profile": {
+        "framing_distance": 0.55,
+        "subject_scale": 0.55,
+        "visual_density": 0.4,
+        "motion_energy": 0.2,
+        "spatial_openness": 0.5499999999999999,
+        "detail_intensity": 0.44999999999999996,
+        "emotional_pressure": 0.86
+      }
+    },
+    {
+      "image_role_id": "imgrole_three_image_series_3",
+      "beat_id": "beat_series_residue",
+      "key_emotional_movement_id": "kem_series_residue",
+      "role_label": "residue image",
+      "composition_intent": "Return to the threshold after the figure has left the frame or nearly disappeared.",
+      "communication_intent": "Make the unresolved choice linger as atmosphere.",
+      "expectation_turn_translation": "An ending should close the scene, but the light keeps waiting.",
+      "intended_feeling": "quiet unresolved afterpressure",
+      "emotional_payload": "The final image preserves consequence without closure.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.68,
+          "translation_notes": [
+            "Keep the missing choice visually active."
+          ]
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.6,
+          "translation_notes": [
+            "Keep possible movement withheld."
+          ]
+        }
+      ],
+      "shot_design": {
+        "shot_scale": "medium_wide",
+        "camera_angle": "high_angle",
+        "visual_emphasis": "environment",
+        "composition_strategy": "Return to the threshold after the figure has left the frame or nearly disappeared.",
+        "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
+        "avoid": [
+            "treating this as a special three-image output class",
+          "repeating the same pose with surface variation only"
+        ]
+      },
+      "distinction_notes": {
+        "from_previous_role": "shifts from threshold image",
+        "composition_shift": "Return to the threshold after the figure has left the frame or nearly disappeared.",
+        "communication_shift": "Make the unresolved choice linger as atmosphere.",
+        "tension_shift": "changes pressure level and focal source from the previous image role"
+      },
+      "amplitude_profile": {
+        "framing_distance": 0.35,
+        "subject_scale": 0.35,
+        "visual_density": 0.55,
+        "motion_energy": 0.28,
+        "spatial_openness": 0.39999999999999997,
+        "detail_intensity": 0.55,
+        "emotional_pressure": 0.68
+      }
+    }
+  ],
+  "series_plan": {
+    "is_series": true,
+    "requires_series_approval": true,
+    "calibration_required": true,
+    "style_progression": "Three approved image-series roles move from wide absence to close threshold pressure to quieter environmental residue."
+  },
+  "gates": {
+    "symbology_gate": "unconfirmed",
+    "presentation_gate": "complete",
+    "style_gate": "unconfirmed",
+    "detail_gate": "not_started"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "art_critic_required": true,
+    "prompt_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_three_image_series",
+      "note": "The image plan treats three images as an approved image series."
+    }
+  ]
+}

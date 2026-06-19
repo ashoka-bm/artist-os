@@ -88,7 +88,7 @@
     "layout_type": "single_image",
     "panel_count": 1,
     "aspect_ratio": "open",
-    "instructions": "Generate one image from the selected Prompt Variant Plan. If the artist wants to compare variants in one generation, convert the three Prompt Variant Plans into a three-panel square triptych before provider translation."
+    "instructions": "Generate one image from the selected Prompt Variant Plan. If the artist wants to compare variants in one generation, convert the three Prompt Variant Plans into a three-panel square comparison image before provider translation."
   },
   "style_direction_summary": {
     "primary_style": "cinematic photoreal",

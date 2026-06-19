@@ -86,7 +86,7 @@ Review:
 
 Turns the Transformation Brief into a Story / Beat Plan.
 
-When `story_mode` is `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`, select or adapt a Story Structure from `docs/structure-library/story/README.md` and store the project-specific adaptation in `story_structure` on the Beat Plan. For `single_beat`, Story Structure remains optional and should be used only when a reusable movement pattern clarifies the compressed moment. The Story Structure guides movement, compression, expansion, and Beat Roles; it does not choose medium, output shape, asset count, or publication format.
+When `story_mode` is `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`, select or adapt a Story Structure from `docs/structure-library/story/README.md` and store the project-specific adaptation in `story_structure` on the Beat Plan. For `single_beat`, Story Structure remains optional and should be used only when a reusable movement pattern clarifies the compressed moment. The Story Structure guides movement, compression, expansion, and Beat Roles; it does not choose medium, output shape, asset count, or publication format.
 
 Outputs:
 

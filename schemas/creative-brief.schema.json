@@ -188,7 +188,7 @@
         "requires_artist_approval"
       ],
       "properties": {
-        "mode": { "type": "string", "enum": ["single_image", "triptych", "image_series"] },
+        "mode": { "type": "string", "enum": ["single_image", "image_series"] },
         "reason": { "type": "string" },
         "suggested_images": {
           "type": "array",

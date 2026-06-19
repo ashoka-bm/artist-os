@@ -1,6 +1,6 @@
 # Image Journey
 
-The Image Journey translates an approved Beat Plan into still visual work: one image, a triptych, an image series, or a calibration image for a larger series.
+The Image Journey translates an approved Beat Plan into still visual work: one image, an image series, or a calibration image for a larger series. A three-image sequence is treated as an image series, not as a separate output class.
 
 ## Best Fit
 
@@ -9,7 +9,6 @@ Use the Image Journey when the final work should be:
 - one compressed visual beat,
 - a symbolic portrait or object,
 - a threshold image,
-- a triptych,
 - an image series,
 - a visual style exploration,
 - a Wondermint-ready still asset.
@@ -18,9 +17,8 @@ Use the Image Journey when the final work should be:
 
 ```text
 Approved Beat Plan
-  -> Long-Work Stewardship Record, for triptych or image series
+  -> Long-Work Stewardship Record, for image series
   -> Symbology Gate
-  -> Presentation Mode Gate
   -> Style Gate
   -> Detail / Intensity Gate
   -> Art Critic Review
@@ -34,8 +32,7 @@ Approved Beat Plan
 
 ## Gates
 
-- Symbology Gate: what should the image show as the core symbolic representation?
-- Presentation Mode Gate: single image, compressed arc, triptych, or image series?
+- Symbology Gate: what should the image show as the core symbolic representation, and should it remain a single image or become an approved image series?
 - Style Gate: what visual language should carry the meaning?
 - Detail / Intensity Gate: Minimal, Faithful-Balanced, or Amplified-Maximal?
 - Series Approval Gate: required before multiple image prompt plans are created.
@@ -45,8 +42,8 @@ Approved Beat Plan
 ## Reviews
 
 - Story Critic Review happens before this journey as a bounded sub-agent review.
-- Beat Reviewer sub-agent is mandatory for triptychs, image series, or any ambiguous multi-beat image plan.
-- Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, and proposed continuity updates for triptychs and image series.
+- Beat Reviewer sub-agent is mandatory for image series or any ambiguous multi-beat image plan.
+- Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, and proposed continuity updates for image series.
 - Art Critic Review checks Symbology Direction, Style Direction, Visual Dynamics, image-role distinction, and series coherence as a bounded sub-agent review.
 - Prompt Critic Review checks provider-neutral prompt quality, variant distinction, traceability, and missing visual constraints as a bounded sub-agent review.
 - Prompt Branch Gate is used when the artist wants a curator batch: multiple meaning-equivalent prompts that vary style, setting, symbol, composition, and other approved axes.
@@ -56,4 +53,4 @@ Approved Beat Plan
 
 The current First Slice implements this route through the Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The image brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
 
-For triptychs and image series, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Image Medium Plan maps Beats to Image Roles. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.
+For image series, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Image Medium Plan maps Beats to Image Roles. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

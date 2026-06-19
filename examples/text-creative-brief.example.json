@@ -329,8 +329,8 @@
     ]
   },
   "series_recommendation": {
-    "mode": "triptych",
-    "reason": "The text has at least two major Beats: the room's erasure against the doorway's invitation, then the figure's agency collapsing into paralysis. A triptych could preserve the larger emotional movement better than one compressed image.",
+    "mode": "image_series",
+    "reason": "The text has at least two major Beats: the room's erasure against the doorway's invitation, then the figure's agency collapsing into paralysis. A three-image series could preserve the larger emotional movement better than one compressed image.",
     "suggested_images": [
       {
         "image_role": "opening image",
@@ -354,7 +354,7 @@
           }
         ],
         "series_role_distinction": {
-          "role_in_series": "opens the triptych with low pressure and wide absence",
+          "role_in_series": "opens the image series with low pressure and wide absence",
           "composition_difference": "widest, sparsest frame; the body is absent and the room carries the image",
           "communication_difference": "communicates invitation through absence before the figure's choice appears",
           "tension_difference": "high presence/absence, lower safety/threat than the threshold image"
@@ -473,7 +473,7 @@
     ],
     "minimum_tension_criteria": {
       "single_image_requirement": "A single image must keep at least two active tensions visible, with one primary tension at 0.7 or higher.",
-      "series_requirement": "Each adjacent triptych image must shift at least two amplitude dimensions and at least one active tension, while changing what the image communicates.",
+      "series_requirement": "Each adjacent image-series role must shift at least two amplitude dimensions and at least one active tension, while changing what the image communicates.",
       "minimum_active_tensions_per_image": 2,
       "minimum_primary_tension_intensity": 0.7,
       "minimum_adjacent_amplitude_shift_count": 2,
@@ -482,7 +482,7 @@
     },
     "style_progression": {
       "proposed": true,
-      "progression_summary": "Move from restrained cinematic realism toward slightly more symbolic and dreamlike composition across the triptych.",
+      "progression_summary": "Move from restrained cinematic realism toward slightly more symbolic and dreamlike composition across the image series.",
       "beat_plan_rationale": "The Beat Plan moves from concrete domestic erasure, to threshold paralysis, to unresolved presence/absence; a subtle style progression can make the final image feel more haunted without abandoning photoreal grounding."
     },
     "calibration": {

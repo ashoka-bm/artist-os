@@ -10,83 +10,27 @@ Lineage id fields follow one naming convention. A record that exists for a singl
 
 A Project Manifest tracks one Artist OS project across sessions. It lives in the local Workspace Library at `workspace-library/artist-os/projects/<project_id>/project.json` and validates against `schemas/project-manifest.schema.json`.
 
-Required sections:
-
-- `project_id`
-- `title`
-- `status`
-- `current_stage`
-- `created_at`
-- `updated_at`
-- `paths`
-- `decisions`
-- `assets`
-
 The manifest points to the current records and assets. The process history lives in `events.jsonl`.
 
 ### Artist OS Library Database
 
 The local SQLite database lives at `workspace-library/artist-os/artist-os.sqlite` and uses `schemas/artist-os-library.sql`.
 
-It is the searchable index for agents returning to earlier sessions. It stores project summaries, current stage, selected decisions, record paths, asset paths, sidecar-derived metadata, and event rows. It should not store binary image data.
-
-Use `bin/artist-os-db sync` after writing project manifests, event logs, or asset sidecars.
-
-When a previously indexed project is not found during sync, the database marks its project row as `missing`. A `missing` project is historical search context, not a resumable project, until its files are restored.
+It is the searchable index for agents resuming earlier sessions. Its indexed contents, the `bin/artist-os-db` commands, and the `missing`-project rule are defined in `docs/storage.md` → SQLite Index; do not restate them here.
 
 ### Asset Metadata
 
 Asset Metadata is the sidecar record stored next to a reference image, visual board, Output Artifact, final image, or export. It validates against `schemas/asset-metadata.schema.json`.
 
-Required fields:
-
-- `asset_id`
-- `project_id`
-- `asset_type`
-- `stage`
-- `path`
-- `created_at`
-- `provenance`
-- `rights_notes`
-- `status`
-
 The sidecar keeps image files traceable without committing the image itself. It records origin, related Source Record / Brief / Prompt Plan / visual board, provider details when applicable, rights notes, and critique status.
 
 ### Source Record
 
-A Source Record describes the Reference before interpretation.
-
-Required fields:
-
-- `source_id`
-- `title`
-- `media_type`
-- `source_ref`
-- `user_context`
-- `rights_notes`
-- `created_at`
+A Source Record describes the Reference before interpretation. It validates against `schemas/source-record.schema.json`.
 
 ### Artist Meaning
 
 Artist Meaning is the artist-authored authority record created by the Meaning Interview. It validates against `schemas/artist-meaning.schema.json`.
-
-Required sections:
-
-- `artist_meaning_id`
-- `source_id`
-- `version`
-- `supersedes_artist_meaning_id`
-- `why_it_matters`
-- `must_preserve`
-- `may_transform`
-- `avoid`
-- `target_media_type`
-- `artist_emotional_language`
-- `success_criteria`
-- `decision_interview`
-- `contradictions_or_overrides`
-- `confirmation_status`
-- `created_at`
 
 Artist Meaning overrides agent interpretation. Later records should trace meaning-preserving decisions back to this record rather than to the agent's inferred analysis alone.
 
@@ -96,96 +40,25 @@ Artist Meaning overrides agent interpretation. Later records should trace meanin
 
 A Gate Decision records one artist-facing choice or explicit permission to proceed unconfirmed. It validates against `schemas/gate-decision.schema.json`.
 
-Required sections:
-
-- `gate_decision_id`
-- `project_id`
-- `source_id`
-- `artist_meaning_id`
-- `gate_type`
-- `gate_status`
-- `decision`
-- `options_presented`
-- `selected_option`
-- `artist_response`
-- `proceed_unconfirmed`
-- `upstream_refs`
-- `created_at`
-
 Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Long-Work Checkpoints, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions.
 
 ### Transformation Brief
 
 A Transformation Brief is the cross-medium interpretation record created after Artist Meaning and before Story / Beat planning. It validates against `schemas/transformation-brief.schema.json`.
 
-Required sections:
-
-- `transformation_brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `artist_meaning`
-- `formal_observations`
-- `emotional_structure`
-- `poetic_density_notes`
-- `transformation_constraints`
-- `candidate_story_modes`
-- `medium_routing_recommendation`
-- `traceability_summary`
-
 ### Beat Plan
 
 A Beat Plan is the shared story spine consumed by image, video, sound, text, and mixed-media journeys. It validates against `schemas/beat-plan.schema.json`.
 
-Required sections:
-
-- `beat_plan_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `story_mode`
-- `story_gate_status`
-- `beats`
-- `tension_points`
-- `key_emotional_movements`
-- `tension_movement_plan`
-- `arc_summary`
-- `story_critic_review`
-- `story_approval`
-- `traceability_summary`
-
 Each Beat must do one move, name `intended_feeling` separately from factual content, include `expectation_turn`, and include a `tension_profile`. `expectation_turn` records the expected direction, actual result, surprise function, and emotional counterpoint. `tension_movement_plan.minimum_tension_criteria` defines the project-local contrast threshold reviewers use to decide whether the plan has enough pressure. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
 
-`key_emotional_movements[]` identifies the major emotional shift points that should survive compression or expansion. Single-image plans usually identify one primary movement; triptychs and longer arcs may identify several.
+`key_emotional_movements[]` identifies the major emotional shift points that should survive compression or expansion. Single-image plans usually identify one primary movement; image series and longer arcs may identify several.
 
 Beats may optionally include `builds_toward_key_movement_id` when they are supporting Beats that build toward, complicate, or delay a Key Emotional Movement.
 
 ### Long-Work Stewardship Record
 
-A Long-Work Stewardship Record is per-project memory for Cumulative Work: a long written work, triptych, image series, song sequence, video sequence, or mixed-media sequence whose parts build on earlier parts. It validates against `schemas/long-work-stewardship-record.schema.json`.
-
-Required sections:
-
-- `long_work_stewardship_record_id`
-- `project_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `medium_plan_id`
-- `target_media_type`
-- `cumulative_work_type`
-- `stewardship_status`
-- `activation_reason`
-- `governing_arc`
-- `part_plan`
-- `continuity_rules`
-- `proposed_continuity_updates`
-- `checkpoints`
-- `readiness_review`
-- `drift_management`
-- `traceability_summary`
-- `created_at`
-- `updated_at`
+A Long-Work Stewardship Record is per-project memory for Cumulative Work: a long written work, image series, song sequence, video sequence, or mixed-media sequence whose parts build on earlier parts. It validates against `schemas/long-work-stewardship-record.schema.json`.
 
 Create this record after Story Approval only when the project contains Cumulative Work. The foundation version may set `medium_plan_id` to `null` and leave `part_plan` empty because medium-specific parts do not exist yet. Enrich it after the Medium Plan maps approved beats into medium-specific parts. It does not replace Artist Meaning, the Beat Plan, or the Medium Plan: the Beat Plan remains the story authority, the Medium Plan owns medium execution details, and stewardship tracks part-to-part integrity, readiness, checkpoints, continuity rules, progress, and drift.
 
@@ -199,26 +72,7 @@ Proposed continuity updates remain inactive until approved. If a proposed update
 
 An Image Medium Plan is the typed image translation layer between the shared Beat Plan and the image Creative Brief. It validates against `schemas/image-medium-plan.schema.json`.
 
-Required sections:
-
-- `image_medium_plan_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `target_media_type`
-- `story_mode`
-- `symbology_direction`
-- `presentation_mode`
-- `style_direction`
-- `visual_dynamics`
-- `image_roles`
-- `series_plan`
-- `gates`
-- `review_requirements`
-- `traceability_summary`
-
-Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, `shot_design`, and `amplitude_profile`. For triptychs and image series, adjacent roles should also use `distinction_notes` to state composition, communication, shot-design, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
+Each `image_roles[]` entry must state `beat_id`, `key_emotional_movement_id`, `composition_intent`, `communication_intent`, `expectation_turn_translation`, `intended_feeling`, `emotional_payload`, `tension_profile`, `shot_design`, and `amplitude_profile`. For image series, adjacent roles should also use `distinction_notes` to state composition, communication, shot-design, and tension shifts. This keeps image planning focused on the feeling each frame creates, not only the object it depicts.
 
 `shot_design` names the frame's camera grammar:
 
@@ -237,71 +91,15 @@ Do not let `shot_design` default to full-body character framing. Close shots sho
 
 A Sound Medium Plan is the typed sound translation layer between the shared Beat Plan and the Sound Creative Brief. It validates against `schemas/sound-medium-plan.schema.json`.
 
-Required sections:
-
-- `sound_medium_plan_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `target_media_type`
-- `story_mode`
-- `sound_work_type`
-- `sonic_concept_direction`
-- `genre_direction`
-- `tempo_groove_direction`
-- `vocal_lyric_policy`
-- `arrangement_direction`
-- `sonic_dynamics`
-- `sequence_plan`
-- `gates`
-- `review_requirements`
-- `traceability_summary`
-
 ### Text Medium Plan
 
 A Text Medium Plan is the typed writing translation layer between the shared Beat Plan and the Text Creative Brief. It validates against `schemas/text-medium-plan.schema.json`.
-
-Required sections:
-
-- `text_medium_plan_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `target_media_type`
-- `story_mode`
-- `writing_method`
-- `text_form`
-- `voice_point_of_view`
-- `structure_plan`
-- `fidelity_policy`
-- `publication_use`
-- `gates`
-- `review_requirements`
-- `traceability_summary`
 
 Each `structure_plan.sections[]` entry must name the governing Beat, Key Emotional Movement, structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and paragraph distinction. Text planning must make every section or paragraph group do a different job instead of producing a smooth summary of the source.
 
 ### Review Record
 
 A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
-
-Required sections:
-
-- `review_record_id`
-- `project_id`
-- `review_role`
-- `reviewer_execution`
-- `artifact_under_review`
-- `upstream_context`
-- `emotional_tension_review`
-- `matched`
-- `drifted`
-- `findings`
-- `recommended_revision`
-- `approval_status`
-- `created_at`
 
 All critic and reviewer records include drift checking. A blocking finding must be revised or explicitly waived by the artist before the journey advances.
 
@@ -313,53 +111,13 @@ Use `review_role = "long_work_reviewer"` for Long-Work Stewardship readiness, ch
 
 ### Creative Brief Record
 
-A Creative Brief Record is the structured agent handoff created after Art Critic Review and Brief Approval.
-
-Required sections:
-
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `artist_meaning`
-- `formal_observations`
-- `symbology_direction`
-- `style_direction`
-- `visual_dynamics`
-- `core_tension_pairs`
-- `emotional_qualities`
-- `poetic_density_notes`
-- `series_recommendation`
-- `transformation_constraints`
+A Creative Brief Record is the structured agent handoff created after Art Critic Review and Brief Approval. It validates against `schemas/creative-brief.schema.json`.
 
 Creative Brief Records do not embed Beat summaries. Use `beat_plan_id` to read the authoritative Beat Plan.
 
 ### Provider-Neutral Image Prompt Plan
 
-A Provider-Neutral Image Prompt Plan is the structured dry-run generation plan created from an approved Creative Brief Record.
-
-Required sections:
-
-- `prompt_plan_id`
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `image_medium_plan_id`
-- `target_media_type`
-- `plan_mode`
-- `provider_neutral`
-- `visual_boards`
-- `symbology_direction_summary`
-- `style_direction_summary`
-- `target_visual_engine_summary`
-- `layout_plan`
-- `prompt_variants`
-- `series_calibration`
-- `traceability_summary`
-- `critique_checklist`
+A Provider-Neutral Image Prompt Plan is the structured dry-run generation plan created from an approved Creative Brief Record. It validates against `schemas/prompt-plan.schema.json`.
 
 Prompt Plans must preserve the lineage IDs from the approved Creative Brief and Image Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
 
@@ -367,56 +125,11 @@ Prompt Plans must preserve the lineage IDs from the approved Creative Brief and 
 
 A Prompt Branch Set is a curator-facing batch of deliberately different prompts derived from one approved Prompt Plan. It validates against `schemas/prompt-branch-set.schema.json`.
 
-Required sections:
-
-- `prompt_branch_set_id`
-- `prompt_plan_id`
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `medium_plan_id`
-- `target_media_type`
-- `branching_mode`
-- `branch_count_requested`
-- `branch_count_actual`
-- `meaning_kernel`
-- `variation_strategy`
-- `branches`
-- `curation_plan`
-- `review_requirements`
-- `traceability_summary`
-
-Each branch must preserve the same meaning kernel while varying approved axes such as style, setting, symbol, composition, viewpoint, palette/light, texture, world, camera distance, or abstraction level. For image batches, five branches is the default curator batch size unless the artist asks for another count.
-
-`meaning_kernel` must include `governing_intended_feeling`, `key_emotional_movement_ids`, and `minimum_tension_criteria`. Each branch must include `emotional_tension_preservation`: Intended Feeling, one Key Emotional Movement id, the branch's Expectation Turn Translation, a tension profile, and branch-local minimum criteria. This keeps curator batches meaning-equivalent even when a branch departs far from the baseline prompt.
+The build procedure, default branch count, meaning-kernel rules, and the `emotional_tension_preservation` anti-drift check are defined in `docs/prompt-branch-set.md`; do not restate them here.
 
 ### Output Record
 
 An Output Record is the metadata and provenance record for an Output Artifact. It validates against `schemas/output-record.schema.json`.
-
-Required sections:
-
-- `output_record_id`
-- `previous_output_record_id`, optional
-- `project_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `medium_plan_id`
-- `brief_id`
-- `prompt_plan_id`
-- `text_generation_plan_id`, optional for Text Journey outputs
-- `target_media_type`
-- `output_artifact`
-- `origin`
-- `generation`
-- `review_state`
-- `acceptance_state`
-- `traceability_summary`
-- `created_at`
 
 Output Records cover provider-generated media, artist imports, agent-drafted text, agent-rewritten text, and human-edited outputs. When an output comes from a Prompt Branch Set, the record should include both `prompt_branch_set_id` and `prompt_branch_id` as well as the parent `prompt_plan_id`. Text Journey outputs should set `text_generation_plan_id` to the governing Text Generation Plan while keeping `prompt_plan_id` populated for the current shared Output Record contract.
 
@@ -430,30 +143,7 @@ By contract, any Output Record with `origin.origin_type = "agent_rewritten"` mus
 
 A Sound Creative Brief Record is the structured agent handoff created after Music / Sound Critic Review and Brief Approval. It validates against `schemas/sound-creative-brief.schema.json`.
 
-It mirrors the image Creative Brief Record structure where the concepts are shared:
-
-- `brief_id`
-- `source_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `artist_meaning`
-- `formal_observations`
-- `core_tension_pairs`
-- `emotional_qualities`
-- `poetic_density_notes`
-- `transformation_constraints`
-
-It replaces image-specific sections with sound-specific sections:
-
-- `sound_work_type`
-- `sonic_concept_direction`
-- `genre_direction`
-- `tempo_groove_direction`
-- `vocal_lyric_policy`
-- `lyrics_draft`
-- `arrangement_plan`
-- `sonic_dynamics`
-- `sequence_recommendation`
+It parallels the image Creative Brief Record, keeping the shared meaning-level sections and swapping the image-specific block for sound-specific sections (sonic concept, genre, tempo/groove, vocal/lyric, lyrics, arrangement, sonic dynamics, sequence). See the schema for exact fields.
 
 `sonic_dynamics.active_sonic_tensions` records the active 6 to 8 Sonic Tension Pairs using the same pair-record shape as Visual Dynamics: name, two independent pole presences, tension intensity, evidence, and translation notes.
 
@@ -465,65 +155,11 @@ Sound Creative Brief Records do not embed Beat summaries. Use `beat_plan_id` to 
 
 A Text Creative Brief Record is the structured agent handoff created after Writing Critic Review and Brief Approval. It validates against `schemas/text-creative-brief.schema.json`.
 
-Required sections:
-
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `text_medium_plan_id`
-- `target_media_type`
-- `artist_meaning`
-- `formal_observations`
-- `primary_text_form`
-- `text_form_modifiers`
-- `voice_direction`
-- `structure_summary`
-- `fidelity_policy`
-- `source_wording_constraints`
-- `emotional_qualities`
-- `poetic_density_notes`
-- `editorial_pass_recommendations`
-- `transformation_constraints`
-
 Text Creative Brief Records do not embed Beat records. Use `beat_plan_id` to read the authoritative Beat Plan and `text_medium_plan_id` to read the authoritative writing structure.
 
 ### Suno Sound Prompt Plan
 
 A Suno Sound Prompt Plan is the structured dry-run generation plan created from an approved Sound Creative Brief Record. It validates against `schemas/sound-prompt-plan.schema.json`.
-
-Required sections:
-
-- `prompt_plan_id`
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `sound_medium_plan_id`
-- `target_media_type`
-- `plan_mode`
-- `sound_work_type`
-- `target_platform`
-- `description`
-- `style_of_music`
-- `sonic_concept_summary`
-- `genre_direction_summary`
-- `tempo_groove_summary`
-- `vocal_lyric_policy`
-- `lyrics`
-- `arrangement_plan`
-- `song_structure`
-- `instrumentation_plan`
-- `production_direction`
-- `sonic_dynamics_summary`
-- `emotional_tension_contract`
-- `prompt_variants`
-- `sequence_calibration`
-- `suno_custom_mode_outputs`
-- `traceability_summary`
-- `critique_checklist`
 
 `emotional_tension_contract` records the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and Expectation Turn preservation that the Suno prompt plan must carry from the Beat Plan and Sound Medium Plan. Each `song_structure.sections[]` entry must name its `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile` so the arrangement does not become a genre-only plan.
 
@@ -536,28 +172,6 @@ Suno Sound Prompt Plans must preserve the lineage IDs from the approved Sound Cr
 ### Text Generation Plan
 
 A Text Generation Plan is the structured post-brief plan for drafting or generating a written Output Artifact. It validates against `schemas/text-generation-plan.schema.json`.
-
-Required sections:
-
-- `text_generation_plan_id`
-- `brief_id`
-- `source_id`
-- `artist_meaning_id`
-- `transformation_brief_id`
-- `beat_plan_id`
-- `text_medium_plan_id`
-- `target_media_type`
-- `generation_mode`
-- `primary_text_form`
-- `drafting_instructions`
-- `structure_execution`
-- `source_wording_policy`
-- `fresh_context_drafting`
-- `clear_writing_pass_policy`
-- `human_voice_pass_policy`
-- `output_recording`
-- `traceability_summary`
-- `critique_checklist`
 
 The Text Generation Plan owns the final draft instructions and editorial pass policies. It must require fresh-context drafting, forbid Human Voice Pass during first drafting, require a returned draft trace, and specify Output Record requirements for draft and rewrite artifacts. Its traceability notes may cite the approved Text Creative Brief as `text_creative_brief`.
 
@@ -622,7 +236,7 @@ Use `visual_dynamics.conditional_visual_tensions` for `Monumental / Intimate` wh
 
 For text-to-image work, Visual Dynamics describes the Target Visual Engine of the generated image. It must not pretend the text literally has visual properties.
 
-For triptych or image-series recommendations, each `series_recommendation.suggested_images[]` entry must include an internal `amplitude_profile` with 0-1 values:
+For image-series recommendations, each `series_recommendation.suggested_images[]` entry must include an internal `amplitude_profile` with 0-1 values:
 
 - `framing_distance`: close-up to panoramic
 - `subject_scale`: fragile/tiny to monumental/dominant
@@ -649,7 +263,7 @@ Stage completion criteria:
 2. Style Exploration Board: one image, 2x3 grid of six tiles, each tile the same locked symbology subject in a different style, shown only after asking whether the artist wants to see style options.
 3. Minimalist-to-Maximalist Gate: one image, three side-by-side panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity, after symbology and style are selected.
 
-Exploration boards are stored in `visual_boards`, not `layout_plan`. The Minimalist-to-Maximalist Gate is a final-output layout, stored as `layout_plan` with `layout_type: three_panel_variant_triptych` and its own `composite_image_prompt`. Each board may be drafted as provider-neutral text or generated only after explicit, per-board artist approval for provider-backed generation.
+Exploration boards are stored in `visual_boards`, not `layout_plan`. The Minimalist-to-Maximalist Gate is a final-output layout, stored as `layout_plan` with `layout_type: three_panel_variant_comparison` and its own `composite_image_prompt`. Each board may be drafted as provider-neutral text or generated only after explicit, per-board artist approval for provider-backed generation.
 
 `visual_boards[]` records pre-locking exploration artifacts:
 
@@ -702,19 +316,19 @@ Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan 
 `layout_plan` records final output arrangement before provider translation. It does not store pre-locking exploration boards:
 
 - `single_image`: one generated image from one selected variant.
-- `three_panel_variant_triptych`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+- `three_panel_variant_comparison`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
 - `series_calibration_image`: one calibration image for an approved Series Plan.
 - `series_image`: one image role inside an approved Series Plan.
 
-For `single_image` and `series_calibration` plans, include Faithful, Amplified, and Minimal Prompt Variant Plans. For later approved `series_image` plans, use one prompt variant per Image Role by default unless the artist asks for variants.
+For `plan_mode = "single_image"` and `plan_mode = "series_calibration"` records, include Faithful, Amplified, and Minimal Prompt Variant Plans. Their layout types are usually `single_image` or `series_calibration_image`. For later approved `plan_mode = "series_image"` records, use one prompt variant per Image Role by default unless the artist asks for variants.
 
 ## Series Recommendation
 
-`series_recommendation` records whether the Beat Plan would be better served by a single image, triptych, or image series.
+`series_recommendation` records whether the Beat Plan would be better served by a single image or image series. A three-image sequence is an image series with three suggested images.
 
 Required fields:
 
-- `mode`: `single_image`, `triptych`, or `image_series`
+- `mode`: `single_image` or `image_series`
 - `reason`
 - `suggested_images`, each with `key_emotional_movement_id`, `expectation_turn_translation`, `shot_design`, `amplitude_profile`, and a distinct communication role
 - `minimum_tension_criteria`
@@ -726,7 +340,7 @@ If the Reference has multiple significant Beats or Tension Points, include a rea
 
 Style Progression can appear inside a Series Recommendation, but it becomes executable only after Series Plan approval.
 
-Use `triptych` for a clear three-part emotional transformation. Use `image_series` for extended sequence, motif evolution, or world exploration.
+Use `image_series` for any multi-image output, including a clear three-part emotional transformation, extended sequence, motif evolution, or world exploration.
 
 Each suggested image should differ from adjacent images in Shot Design, visual composition, communication intent, and tension profile. A series should not repeat the same emotional claim with only surface style, pose changes, or repeated full-body framing unless repetition is intentional and artist-approved.
 

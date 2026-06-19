@@ -369,7 +369,7 @@ Added the first schema-backed Project Memory record for Cumulative Work:
 - `long_work_reviewer` support in Review Records,
 - `long_work_checkpoint` support in Gate Decisions.
 
-This record applies to long text, triptychs, image series, and future cumulative sequences whose parts build on each other. It does not apply automatically to non-sequential portfolios, store collections, or curator batches. Beat Plan remains the story authority; the stewardship record tracks part-to-part readiness, continuity, checkpoints, progress, and drift.
+This record applies to long text, image series, and future cumulative sequences whose parts build on each other. It does not apply automatically to non-sequential portfolios, store collections, or curator batches. Beat Plan remains the story authority; the stewardship record tracks part-to-part readiness, continuity, checkpoints, progress, and drift.
 
 ### Long-Work Stewardship Coherence Review
 
@@ -470,7 +470,10 @@ Structure Library rehearsal status:
 - `hero_journey` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/hero-journey-rehearsal/beat-plan.json`. The rehearsal confirmed that `failure_modes` can carry anti-savior and anti-private-victory guardrails for canonical frameworks with stronger cultural baggage.
 - `kishotenketsu` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/kishotenketsu-rehearsal/beat-plan.json`. The rehearsal confirmed that Beat Plans can express contrast, recontextualization, and reconciliation without forcing conflict escalation.
 - `freytag_dramatic_arc` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/freytag-rehearsal/beat-plan.json`. The rehearsal confirmed that Beat Plans can preserve rise, peak turn, falling consequence, and residue; Freytag climax maps to Beat Plan `reversal` while Key Emotional Movement carries `role = "climax"`.
-- After four passing Story Structure rehearsals, `story_structure` is required in `schemas/beat-plan.schema.json` for `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, and `world`, and remains optional for `single_beat`.
+- After four passing Story Structure rehearsals, `story_structure` is required in `schemas/beat-plan.schema.json` for `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, and `world`, and remains optional for `single_beat`.
+- Image output shape no longer treats three-part structure as a separate image recommendation or presentation mode. Three images are modeled as `image_series`; the shared story-mode enum has been renamed from the legacy term to `three_part_sequence`.
+- `tests/fixtures/text-to-image/single-image-rehearsal/` protects the first-class single-image path: `story_mode = "single_beat"` validates without `story_structure`, and the Image Medium Plan uses `presentation_mode = "single_image"` with one image role and `series_plan.is_series = false`.
+- `tests/fixtures/text-to-image/three-image-series-rehearsal/` protects the three-image path as an image series: the Beat Plan uses `story_mode = "sequence"` with adapted `story_structure`, and the Image Medium Plan uses `presentation_mode = "image_series"` with three image roles.
 - `tests/fixtures/text-journey/op-ed-rehearsal/` is the representative promoted fixture because it proves `primary_text_form = "article"` can combine with `cultural_format_structure.library_entry_id = "op_ed"` without article subtype enums.
 
 ## Future Follow-Ups

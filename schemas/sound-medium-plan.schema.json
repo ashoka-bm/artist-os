@@ -177,7 +177,7 @@
   "$defs": {
     "story_mode": {
       "type": "string",
-      "enum": ["single_beat", "beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+      "enum": ["single_beat", "beat_pair", "three_part_sequence", "sequence", "scene", "arc", "world"]
     },
     "gate_status": {
       "type": "string",

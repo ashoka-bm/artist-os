@@ -88,7 +88,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Output: Beat Plan.
 - Schema: `schemas/beat-plan.schema.json`.
 - Skill: medium planner or future story planner.
-- Structure rule: `story_structure` is required when `story_mode` is `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
+- Structure rule: `story_structure` is required when `story_mode` is `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, series, lyric-bearing, scene, arc, or ambiguous plans.
 - Gate: Story Gate and Story Approval Gate.
 - Next: image, sound, video, text, or mixed-media medium planning.
@@ -103,7 +103,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: Long-Work Checkpoint Gate when a checkpoint requires artist confirmation or waiver.
 - Next: Medium Plan enrichment, Long-Work Readiness, prompt or draft expansion, checkpoint review, Output Review, or Story Approval if a proposed update changes story authority.
 
-Create the Long-Work Stewardship Record only for Cumulative Work: triptychs, image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative.
+Create the Long-Work Stewardship Record only for Cumulative Work: image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative.
 
 The foundation Long-Work Stewardship Record is valid immediately after Story Approval. At that point `medium_plan_id` may be `null`, `part_plan[]` may be empty, and Long-Work Readiness may be `pending`. After the Medium Plan exists, enrich the same record with `medium_plan_id`, one `part_plan[]` entry per cumulative unit, continuity rules, checkpoints, and readiness before expansion.
 

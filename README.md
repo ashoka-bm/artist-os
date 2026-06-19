@@ -118,7 +118,7 @@ bin/                         Local install and workspace helpers
 
 ## Architecture Direction
 
-Artist OS now has a shared story layer for the implemented image and Suno dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; a triptych or series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
+Artist OS now has a shared story layer for the implemented image and Suno dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; an image series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
 
 The governing rule is emotional primacy. Artist OS should grab attention, trigger a strong emotion, and forge a simple mental link. Plans must express a feeling rather than only communicate a fact, so Beat Plans, Medium Plans, and briefs now track Intended Feeling, Key Emotional Movements, Expectation Turns, and Minimum Tension Criteria.
 

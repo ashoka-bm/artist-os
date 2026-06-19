@@ -32,14 +32,14 @@ Reference
 
 The current image and Suno workflows now use a first-class Beat Plan before medium planning. Medium-specific briefs carry `beat_plan_id`; they do not embed duplicate Beat summaries.
 
-Long-Work Stewardship exists only for Cumulative Work: long text, triptychs, image series, songs or sound movements, video sequences, or mixed-media sequences where later parts depend on earlier parts. It protects continuity, readiness, checkpoints, emotional-arc expression, and drift across parts. It is not needed for a non-sequential portfolio, store collection, or curator batch whose pieces are related but do not build one after another.
+Long-Work Stewardship exists only for Cumulative Work: long text, image series, songs or sound movements, video sequences, or mixed-media sequences where later parts depend on earlier parts. It protects continuity, readiness, checkpoints, emotional-arc expression, and drift across parts. It is not needed for a non-sequential portfolio, store collection, or curator batch whose pieces are related but do not build one after another.
 
 ## Story Is Not Only Narrative
 
 Use story broadly.
 
 - An image is a single compressed beat, threshold, contradiction, or emotional pressure.
-- A triptych is three staged beats, often before / threshold / after.
+- A three-part sequence is three staged beats, often before / threshold / after.
 - An image series is a beat sequence with distinct image roles.
 - A video is a timed beat sequence with motion, shot logic, pacing, and transitions.
 - A song is a beat sequence translated into arrangement, tension map, lyric policy, and sonic development.
@@ -94,7 +94,7 @@ Story Mode describes how many beats the output needs and what kind of progressio
 
 - `single_beat`: one compressed moment, image, text fragment, sonic gesture, or short video beat.
 - `beat_pair`: a contrast, before / after, call / response, conceal / reveal, or rupture / consequence.
-- `triptych`: three staged beats, commonly before / threshold / after.
+- `three_part_sequence`: three staged beats, commonly before / threshold / after.
 - `sequence`: several linked beats with distinct roles.
 - `scene`: a contained unit with setting, action, pressure, and turn.
 - `arc`: a full emotional or symbolic journey across sections, shots, images, movements, or chapters.

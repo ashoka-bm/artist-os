@@ -54,8 +54,8 @@
     {
       "decision_area": "story_shape",
       "question": "Should this be one compressed image or a series?",
-      "recommended_answer": "Start as one image, but keep the triptych option open if the threshold needs a before/threshold/residue arc.",
-      "artist_response": "Start with image; a triptych could be useful if the beats need room.",
+      "recommended_answer": "Start as one image, but keep the image-series option open if the threshold needs a before/threshold/residue arc.",
+      "artist_response": "Start with image; a three-image series could be useful if the beats need room.",
       "status": "accepted"
     },
     {

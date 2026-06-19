@@ -21,7 +21,7 @@ Reference
 
 Journeys in this directory:
 
-- `image.md`: still images, triptychs, and image series.
+- `image.md`: still images and image series.
 - `video.md`: short clips, scenes, sequences, trailers, and longer arcs.
 - `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, and Suno prompt plans.
 - `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms.

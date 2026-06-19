@@ -16,11 +16,13 @@ Use these product docs as durable references:
 - `docs/story/THEORY.md`
 - `docs/story/ARCHITECTURE.md`
 - `docs/output-journeys/`
+- `docs/structure-library/`
 - `docs/writing/README.md`
 - `docs/writing/references/`
 - `docs/text-to-sound/THEORY.md`
 - `docs/text-to-sound/ARCHITECTURE.md`
 - `docs/metadata-schema.md`
+- `docs/adr/`
 - `schemas/`
 - `skills/`
 
@@ -80,7 +82,8 @@ This repository allows direct commits and pushes to `main` when the user explici
 
 Everything else an agent needs at runtime is canonical elsewhere — point to it, do not restate it:
 
-- **Gates, boards, stage completion, style/series logic, Prompt Variant Plans** → `THEORY.md` (and `docs/text-to-sound/THEORY.md` + `ARCHITECTURE.md` for sound). This is the home for the gate order, the gate question wording, the Visual Gate Board contract, the four-stage completion rules, the separation of Emotional Structure / Visual Dynamics / Sonic Dynamics / Style Direction, Style-as-last-priority, the Wondermint Category Reference rule, and the Series Amplitude Plan.
+- **Gate order, gate semantics, critic/reviewer roles, review execution, blocking findings** → `docs/gates-and-reviews.md`. This is the canonical contract for the shared gate order and review rules; medium-specific docs may add local gates but do not redefine them.
+- **Visual Gate Boards, stage completion, style/series logic, Prompt Variant Plans** → `THEORY.md` (and `docs/text-to-sound/THEORY.md` + `ARCHITECTURE.md` for sound). This is the home for the Visual Gate Board contract, the four-stage completion rules, the separation of Emotional Structure / Visual Dynamics / Sonic Dynamics / Style Direction, Style-as-last-priority, the Wondermint Category Reference rule, and the Series Amplitude Plan.
 - **Persistence and storage** → `docs/storage.md`: persist each phase before advancing (manifest, stage record, event, sidecar-tagged assets, SQLite refresh), use `artist-os.sqlite` as the query index, initialize with `bin/artist-os-db setup` when missing, and treat `status = missing` projects as historical until their files are restored.
 - **The runtime phase order for each slice** → the `artist-os` conductor skill, `skills/artist-os`.
 

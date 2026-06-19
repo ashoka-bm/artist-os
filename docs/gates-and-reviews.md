@@ -50,7 +50,7 @@ Complete when formal observations, Emotional Structure, Core Tension Pairs, Poet
 
 ### Story Gate
 
-Chooses the Story Mode: one compressed beat, beat pair, triptych, sequence, scene, arc, or world.
+Chooses the Story Mode: one compressed beat, beat pair, three-part sequence, sequence, scene, arc, or world.
 
 Complete when the artist selects, combines, revises, rejects, or explicitly allows an unconfirmed Story Mode to proceed.
 

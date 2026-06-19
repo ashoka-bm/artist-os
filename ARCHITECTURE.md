@@ -52,26 +52,7 @@ Shared schemas for the Transformation Brief, Beat Plan, Long-Work Stewardship Re
 
 ## Data Flow
 
-1. `artist-os` starts the workflow and conducts the phase handoffs.
-2. `artist-os-ingest-reference` creates a Source Record.
-3. `artist-os-meaning-interview` captures Artist Meaning and transformation constraints.
-4. `artist-os-text-to-image-plan` creates the shared Transformation Brief from Artist Meaning, Formal Analysis, Emotional Structure, Poetic Density, transformation constraints, candidate Story Modes, and medium routing.
-5. `artist-os-text-to-image-plan` creates the shared Beat Plan. This is the authoritative story spine consumed by image planning.
-6. For multi-beat, series, or ambiguous Beat Plans, `artist-os-writing-method-review` runs as a mandatory bounded Beat Reviewer sub-agent before medium planning.
-7. For Cumulative Work only, the workflow creates a foundation Long-Work Stewardship Record after Story Approval, then enriches it after the Medium Plan maps approved beats into image roles, text sections, chapters, scenes, or movements.
-8. `artist-os-text-to-image-plan` consumes the shared Beat Plan and creates the Image Medium Plan. It defines Symbology Direction first, using six concise symbolic options when unresolved, asks whether the work should become a single image, emotional arc, or multi-image presentation, and keeps the full board prompt internal unless the artist asks for it.
-9. `artist-os-text-to-image-plan` uses Style Direction directly if specific, or asks whether the artist has a specific vision or wants style exploration.
-10. If style remains broad or unresolved, `artist-os-text-to-image-plan` shows six concise suggested styles, asks whether the artist wants one of them or something else, and keeps the full board prompt internal unless requested.
-11. `artist-os-text-to-image-plan` consumes the Image Medium Plan and adds Symbology Direction, Style Direction, medium-local Beat summaries, and Series Recommendation to the draft Creative Brief Document.
-12. `artist-os-art-critic-review` is mandatory and runs as a bounded sub-agent. It strengthens the Creative Brief Document, resolves Open Questions, improves Symbology Direction, Style Direction, and Visual Dynamics, and increases Poetic Density without overriding Artist Meaning.
-13. After Brief Approval, if intensity remains open, `artist-os-text-to-image-plan` shows three concise Minimal / Faithful-Balanced / Amplified-Maximal detail options before prompt locking.
-14. `artist-os-text-to-image-plan` creates the Creative Brief Record with `transformation_brief_id` and `beat_plan_id`, then one Provider-Neutral Image Prompt Plan with Faithful, Amplified, and Minimal Prompt Variant Plans based on the approved Symbology Direction and Style Direction.
-15. If the artist wants a curator batch, `artist-os-text-to-image-plan` creates a Prompt Branch Set: usually five meaning-equivalent prompt branches that vary style, setting, symbol, composition, and palette/light while preserving the same kernel.
-16. If the artist approves a Series Plan, `artist-os-text-to-image-plan` creates three calibration Prompt Variant Plans for the Series Calibration Image first.
-17. After the artist approves one calibration direction, `artist-os-text-to-image-plan` records the Calibration Choice and can create one Provider-Neutral Image Prompt Plan per remaining Image Role.
-18. Generation, import, drafting, or human editing creates an Output Record for the concrete Output Artifact before review or acceptance. For Cumulative Work, the Long-Work Stewardship Record is updated with the part status and output reference.
-19. `artist-os-critique-asset` runs as a bounded sub-agent and compares the Prompt Plan, Prompt Branch Set, Output Record, or Generated Work against the approved Creative Brief.
-20. The Workspace Library records prompts, settings, outputs, image paths, sidecar metadata, stewardship records, and review notes. Output Records validate against `schemas/output-record.schema.json`, image sidecars validate against `schemas/asset-metadata.schema.json`, and the SQLite index at `workspace-library/artist-os/artist-os.sqlite` is refreshed from those files.
+The runtime phase sequence — the handoffs between skills and where each gate falls — is owned by the `artist-os` conductor (`skills/artist-os/SKILL.md` → "Phase Order"), and the typed record-to-record transitions are in `docs/pipeline-contract.md`. The First Vertical Slice diagram above shows the end-to-end image path; this section does not maintain a third copy of the step sequence.
 
 ## State Model
 
@@ -108,18 +89,7 @@ Artist OS keeps public product behavior separate from local project state.
 
 ## Provenance Invariant
 
-Every Prompt Variant Plan and Output Artifact must trace back to:
-
-- Artist Meaning,
-- evidence from the Reference,
-- the Creative Brief,
-- Style Direction,
-- Emotional Structure,
-- Visual Dynamics or Sonic Dynamics,
-- the Beat or Tension Point,
-- the Transformation Brief,
-- the Prompt Plan,
-- and the Output Record when an output artifact exists.
+Every Prompt Variant Plan, Text Generation Plan, and Output Artifact must trace back through the full lineage chain. That chain is defined once in `AGENTS.md` → "Product Invariant"; this doc does not keep a second copy.
 
 ## Provider Boundary
 

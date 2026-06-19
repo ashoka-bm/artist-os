@@ -155,7 +155,7 @@ Use Monumental / Intimate only when scale, embodiment, installation, performance
 
 ### Series Amplitude Plan
 
-When recommending a triptych or image series, add an internal Series Amplitude Plan to each suggested image. This is not a user-facing gate. It is a 0-1 numeric profile that keeps the series from repeating the same visual distance, density, motion, and scale.
+When recommending an image series, add an internal Series Amplitude Plan to each suggested image. This is not a user-facing gate. It is a 0-1 numeric profile that keeps the series from repeating the same visual distance, density, motion, and scale.
 
 Each suggested image gets:
 
@@ -199,7 +199,7 @@ Every Beat Plan and Medium Plan must define minimum tension criteria before prom
 
 For a single image, the criteria should require enough internal contrast that the image creates pressure without needing explanation. Default when the artist has not specified otherwise: at least two active tensions, with one primary emotional or visual tension at `0.7` or higher.
 
-For a triptych or image series, the criteria should require movement between adjacent images. Default when the artist has not specified otherwise: adjacent images shift at least two amplitude dimensions and at least one active emotional or visual tension, while changing composition, communication intent, and at least one Shot Design axis: shot scale, camera angle, visual emphasis, or composition strategy.
+For an image series, the criteria should require movement between adjacent images. Default when the artist has not specified otherwise: adjacent images shift at least two amplitude dimensions and at least one active emotional or visual tension, while changing composition, communication intent, and at least one Shot Design axis: shot scale, camera angle, visual emphasis, or composition strategy.
 
 Reviewers should block when an artifact falls below its own minimum tension criteria unless the artist explicitly approves low-contrast repetition as the point.
 
@@ -301,18 +301,18 @@ Each Beat records:
 When a Reference contains more than one meaningful Beat or Tension Point, Artist OS should recommend whether the work is best served by:
 
 - a single image that compresses the whole emotional arc,
-- a triptych that stages a before, threshold, and after movement,
+- a three-image series that stages a before, threshold, and after movement,
 - an image series where each image has a distinct Image Role.
 
 A multi-Beat Reference does not automatically become a series. Recommend a single image when compression into one symbol, threshold, or contradiction preserves the work more strongly than sequence.
 
-Use a triptych when the Beat Plan has a clear three-part emotional structure, such as before/threshold/after, invitation/rupture/consequence, or concealment/revelation/aftermath. Use an image series for extended sequence, motif evolution, or world exploration.
+Use an image series for multi-image output, whether the Beat Plan has a clear three-part emotional structure such as before/threshold/after, or an extended sequence, motif evolution, or world exploration.
 
 When the Reference warrants it, a Series Recommendation may propose Style Progression, where the visual language changes across images to express emotional movement. Style Progression must be intentional and trace back to the Beat Plan.
 
 Series Recommendation must also include the internal Series Amplitude Plan for each suggested image. Use it to verify that image roles move across visual spectra such as close/wide, sparse/dense, still/active, enclosed/open, minimal/detailed, and quiet/pressurized. If every suggested image has similar amplitude values, revise the series unless sameness is intentional and traced to the Emotional Arc.
 
-Each image role in a triptych or series must communicate a different emotional claim, not merely show the same subject in a different pose. Vary Shot Design, composition, scale, focal hierarchy, spatial relationship, symbolic action, color/light logic, density, and active tension profile as needed so each frame changes what the audience feels and understands. Adjacent roles must state how they differ from the previous role in visual composition, emotional communication, and at least one Shot Design axis.
+Each image role in a series must communicate a different emotional claim, not merely show the same subject in a different pose. Vary Shot Design, composition, scale, focal hierarchy, spatial relationship, symbolic action, color/light logic, density, and active tension profile as needed so each frame changes what the audience feels and understands. Adjacent roles must state how they differ from the previous role in visual composition, emotional communication, and at least one Shot Design axis.
 
 Do not create multiple image prompt plans by default. A Series Plan requires artist approval, and Style Progression becomes executable only after that approval.
 
@@ -354,7 +354,7 @@ The Amplified Prompt Variant may use Derived Symbols, but each Derived Symbol mu
 
 The three Prompt Variant Plans must create meaningful visual alternatives along the Minimalist-to-Maximalist axis. They should not be three near-identical prompts with adjective changes. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic layering, abstraction level, color/light strategy, texture, finish, negative space, ornament, scale, drama, or focal hierarchy.
 
-When the artist wants one generation for comparison, the three final intensity directions can be packed into a Single-Generation Variant Triptych: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center the Faithful/balanced direction, and the right the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
+When the artist wants one generation for comparison, the three final intensity directions can be packed into a Single-Generation Variant Comparison: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center the Faithful/balanced direction, and the right the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
 
 ## First Slice
 
