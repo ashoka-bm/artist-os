@@ -106,7 +106,7 @@
   "$defs": {
     "text_form": {
       "type": "string",
-      "enum": ["poem", "prose_scene", "short_story", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+      "enum": ["poem", "prose_scene", "short_story", "article", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
     },
     "fidelity_policy": {
       "type": "object",

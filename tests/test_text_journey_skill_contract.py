@@ -64,6 +64,9 @@ TEXT_JOURNEY_SPEC = {
         "Text Draft Packet",
         "Writing Critic Review",
         "Beat Plan",
+        "Medium Output Shape Recommendation",
+        "Adapted Cultural Format Structure",
+        "Audience Hook",
     ],
     # The records this skill is responsible for producing.
     "schema_ids": [

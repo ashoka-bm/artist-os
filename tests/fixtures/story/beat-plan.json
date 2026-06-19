@@ -5,6 +5,22 @@
   "transformation_brief_id": "tb_door_left_lit",
   "story_mode": "single_beat",
   "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "threshold_crossing",
+    "name": "Threshold Crossing",
+    "grounding_status": "provisional",
+    "grounding_tier": "craft_authority",
+    "core_movement": "A figure reaches a boundary where change is possible, but the crossing itself becomes charged, delayed, refused, or transformed.",
+    "adaptation_summary": "This project compresses the threshold into one held doorway moment where agency exists but cannot yet become action.",
+    "turn_logic": "The audience first expects entry, then feels the threshold become an unresolved emotional condition.",
+    "compression_rule": "Compress around the charged boundary and make the unmade choice visible.",
+    "expansion_rule": "Let approach, boundary pressure, and aftermath become separate beats only when the work needs duration.",
+    "failure_modes": [
+      "the threshold becomes only setting",
+      "the crossing resolves too early",
+      "the refusal is explained instead of felt"
+    ]
+  },
   "beats": [
     {
       "beat_id": "beat_threshold_001",

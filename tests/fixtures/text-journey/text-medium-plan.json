@@ -11,6 +11,67 @@
     "method_modifiers": ["beats"],
     "rationale": "The output needs a compact reader-facing fragment that still follows the approved threshold beat."
   },
+  "medium_output_shape_recommendation": {
+    "requested_shape": "artist_statement",
+    "recommended_shape": "three-section reflective artist statement",
+    "accepted_shape": "three-section reflective artist statement",
+    "rationale": "The approved threshold beat needs a concise reader-facing form that can hook through image, turn through pressure, and stop before resolution.",
+    "alternatives_considered": [
+      "prose poem",
+      "monologue"
+    ],
+    "tradeoffs": [
+      "The artist statement improves viewer orientation but risks over-explaining the threshold.",
+      "The monologue influence preserves intimacy but cannot replace the public-facing statement function."
+    ],
+    "conflict": {
+      "has_conflict": false,
+      "conflict_summary": null,
+      "resolution": "not_needed",
+      "gate_decision_id": null
+    }
+  },
+  "cultural_format_structure": {
+    "library_entry_id": "reflective_artist_statement",
+    "name": "Reflective Artist Statement",
+    "grounding_status": "provisional",
+    "grounding_tier": "craft_authority",
+    "audience_promise": "The viewer will understand the threshold image as unresolved emotional pressure rather than a literal doorway scene.",
+    "audience_hook": "Open with the concrete key so the statement begins in image before explanation.",
+    "parts": [
+      {
+        "part_id": "cfs_part_hook",
+        "label": "Hook",
+        "function": "Begin with a concrete image that creates curiosity before interpretation.",
+        "maps_to_section_ids": ["txtsec_key_001"]
+      },
+      {
+        "part_id": "cfs_part_turn",
+        "label": "Turn",
+        "function": "Shift welcome into tender danger.",
+        "maps_to_section_ids": ["txtsec_light_001"]
+      },
+      {
+        "part_id": "cfs_part_residue",
+        "label": "Residue",
+        "function": "Leave the viewer with the withheld crossing instead of a resolved explanation.",
+        "maps_to_section_ids": ["txtsec_stop_001"]
+      }
+    ],
+    "turn_or_payoff": "The statement reframes the doorway as pressure held open, not a passage completed.",
+    "adaptation_policy": {
+      "required": ["hook", "turn", "residue"],
+      "mergeable": ["context", "interpretive statement"],
+      "omittable": ["explicit biographical explanation"],
+      "invertible": ["conclusion"]
+    },
+    "failure_modes": [
+      "generic artist-statement language",
+      "explaining the threshold too neatly",
+      "ending with a lesson instead of residue"
+    ],
+    "recommended_stewardship_views": ["section_outline", "promise_payoff"]
+  },
   "text_form": {
     "primary_text_form": "essay_artist_statement",
     "text_form_modifiers": ["monologue"],

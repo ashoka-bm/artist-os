@@ -5,6 +5,22 @@
   "transformation_brief_id": "tb_sample_text_001",
   "story_mode": "single_beat",
   "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "threshold_crossing",
+    "name": "Threshold Crossing",
+    "grounding_status": "provisional",
+    "grounding_tier": "craft_authority",
+    "core_movement": "A figure reaches a boundary where change is possible, but the crossing itself becomes charged, delayed, refused, or transformed.",
+    "adaptation_summary": "This project compresses the threshold into a single suspended moment where the doorway, key, and light make choice feel possible but unresolved.",
+    "turn_logic": "The audience first expects entry or welcome, then learns the real movement is the refusal to cross.",
+    "compression_rule": "Compress around the charged boundary and make the unmade choice visible.",
+    "expansion_rule": "Let approach, boundary pressure, and aftermath become separate beats only when the work needs duration.",
+    "failure_modes": [
+      "the crossing resolves too early",
+      "the threshold becomes only setting",
+      "the unmade choice is over-explained"
+    ]
+  },
   "beats": [
     {
       "beat_id": "beat_threshold_001",

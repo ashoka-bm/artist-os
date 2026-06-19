@@ -165,7 +165,7 @@ A secondary style, finish, mood, production, or genre influence that modifies th
 _Avoid_: Unbounded hybrid style list
 
 **Primary Text Form**:
-The dominant written container for a Text Journey, such as poem, prose scene, short story, monologue, script, lyrics, letter, essay, manifesto, treatment, rewrite, or adaptation.
+The dominant written container for a Text Journey, such as poem, prose scene, short story, article, monologue, script, lyrics, letter, essay, manifesto, treatment, rewrite, or adaptation.
 _Avoid_: Equal-weight pileup of text forms
 
 **Text Form Modifier**:
@@ -420,6 +420,54 @@ _Avoid_: Emotional Dimensions
 The emotional change over time or implied movement inside a Reference.
 _Avoid_: Beat Plan
 
+**Story Structure**:
+The reusable movement pattern that describes how a work changes, holds, intensifies, breaks, returns, or remains unresolved before medium-specific planning.
+_Avoid_: Format, output shape, asset count
+
+**Story Structure Library**:
+A reusable library of Story Structures that helps Artist OS adapt emotional, symbolic, narrative, rhetorical, or experiential movement before Medium Plans recommend output shape.
+_Avoid_: Format Structure Library, template library, series template
+
+**Story Structure Library Entry**:
+One reusable Story Structure definition containing its movement pattern, typical Beat Roles, key turns, compression guidance, expansion guidance, medium affinities, common failure modes, and adaptation questions.
+_Avoid_: Rigid outline, output-count template
+
+**Adapted Story Structure**:
+The project-specific Story Structure stored inside a Beat Plan, including library entry name, compact grounding metadata, core movement, adaptation summary, turn logic, compression rule, expansion rule, and failure modes.
+_Avoid_: Separate story-authority record, output-shape recommendation
+
+**Structure Grounding**:
+The named source tradition, framework, research source, or artist-approved rationale that defines the parameters of a Story Structure or Cultural Format Structure.
+_Avoid_: Unmarked invention, vague best practice
+
+**Structure Grounding Tier**:
+The authority level for Structure Grounding: canonical or field-recognized framework, craft authority, platform-era pattern evidence, or artist-defined/project-specific structure.
+_Avoid_: Treating all structure sources as equally authoritative
+
+**Cultural Format Structure**:
+The culturally recognized audience-facing grammar of a format, such as an article, op-ed, short story, novel, screenplay, trailer, documentary short, video essay, sermon, artist statement, or hook-driven social post.
+_Avoid_: Story Structure, asset count, provider format
+
+**Cultural Format Structure Library**:
+A reusable library of Cultural Format Structures that helps Artist OS make outputs coherent with established audience expectations for a form.
+_Avoid_: Story Structure Library, generic template collection, style category list
+
+**Cultural Format Structure Library Entry**:
+One reusable Cultural Format Structure definition containing expected parts, audience promise, hook logic, turn/payoff behavior, pacing norms, required decisions, common failure modes, and adaptation questions.
+_Avoid_: Fill-in-the-blank template, rigid formula
+
+**Adapted Cultural Format Structure**:
+The project-specific Cultural Format Structure stored inside a Medium Plan, including compact grounding metadata, audience promise, Audience Hook, adapted parts, turn or payoff, adaptation policy, failure modes, and recommended Stewardship Views.
+_Avoid_: Replacing Medium Plan section structure, rigid template
+
+**Audience Hook**:
+The opening attention mechanism that creates enough curiosity, tension, beauty, identification, surprise, or promise for the audience to keep going.
+_Avoid_: Clickbait, headline only, first sentence only
+
+**Cultural Format Adaptation Policy**:
+The Medium Plan decision for which Cultural Format Structure parts are required, mergeable, omittable, or invertible for a specific project.
+_Avoid_: Treating cultural format parts as unchangeable slots
+
 **Emotional Payload**:
 The felt meaning carried by one Beat.
 _Avoid_: Emotion, vibe
@@ -475,6 +523,10 @@ _Avoid_: Story Critic, Art Critic, Output Critic
 **Long-Work Continuity Rule**:
 A first-class stewardship rule that preserves part-to-part continuity for emotional arc, symbol, visual language, voice, motif, character, setting, sonic language, structure, or pacing.
 _Avoid_: Story bible entry, loose note
+
+**Stewardship View**:
+A readable projection of Medium Plan and Long-Work Stewardship state for a specific long-form need, such as a plot tracker, chapter tracker, act tracker, open-thread list, or character continuity view.
+_Avoid_: Separate story authority, separate tracking record
 
 **Proposed Continuity Update**:
 A candidate change discovered from an Output Artifact, calibration, draft, or review that may become a Long-Work Continuity Rule only after the required approval.
@@ -547,6 +599,18 @@ _Avoid_: Format conversion, style transfer
 **Medium Plan**:
 The medium-specific translation record that explains how an approved Beat Plan becomes a specific medium. Image Medium Plan, Sound Medium Plan, Video Medium Plan, Text Medium Plan, and Mixed-Media Plan are specializations of this concept.
 _Avoid_: Creative Brief, Prompt Plan, provider settings
+
+**Medium Output Shape Recommendation**:
+A Medium Plan recommendation for how an approved Beat Plan and adapted Story Structure should be realized in one medium, such as a text form, sound form, single compressed image, triptych, image series, short video, or longer sequence.
+_Avoid_: Asset count, format decision before story structure, series-first recommendation
+
+**Accepted Output Shape**:
+The artist-approved or explicitly unconfirmed output shape that the Medium Plan will use after considering the requested shape, Medium Output Shape Recommendation, tradeoffs, and any Medium Output Shape Conflict.
+_Avoid_: Requested shape, recommended shape
+
+**Medium Output Shape Conflict**:
+A surfaced conflict between the artist-requested output shape and the Medium Plan's story-preserving Medium Output Shape Recommendation.
+_Avoid_: Silent override, silently obeying a shape that weakens Artist Meaning
 
 **Prompt Plan**:
 The generation-facing prompts and constraints for a specific model or medium.
@@ -705,6 +769,9 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Style Interview** first asks whether the artist has a specific visual vision or wants to explore what art style to use when the artist has not named a specific style.
 - **Symbology Gate** comes before **Style Gate** by default because symbolic representation is closer to **Artist Meaning** than art style.
 - **Symbology Board** compares six concise symbolic options, asks for artist selection, and asks whether the work should become a single image, emotional arc, or multi-image presentation before style is locked.
+- For visual media, **Medium Output Shape Recommendation** should happen after **Symbology Direction** and before **Style Direction** so symbolic representation can inform compression or expansion before visual style hardens.
+- For text, **Text Medium Plan** should produce **Medium Output Shape Recommendation** before locking **Primary Text Form** so story movement drives form choice.
+- For sound, **Medium Output Shape Recommendation** chooses the sound form family and scale, while **Arrangement / Form Direction**, **Song Structure**, **Section Function**, and **Section Tension Map** own the detailed time structure.
 - **Style Interview** is adaptive, with **Style Interview Fallback Order** used when the Reference and **Artist Meaning** do not already narrow the next question.
 - **Style Interview** stops early when **Style Interview Stop Condition** is met.
 - **Style Interview** produces a **Style Recommendation** for artist confirmation.
@@ -723,6 +790,30 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Every **Target Visual Engine** choice must trace back to **Artist Meaning**, **Reference** evidence, **Emotional Structure**, **Beat Plan**, or **Critical Heuristics**.
 - **Monumental / Intimate** is a **Conditional Visual Tension Pair** for scale, embodiment, installation, performance, and immersive work.
 - **Emotional Structure** contains **Core Tension Pairs**, **Emotional Qualities**, an **Emotional Arc**, and **Emotional Payloads**.
+- A **Story Structure** is selected or adapted during **Story Journey** to help shape the **Beat Plan**.
+- A **Story Structure** guides movement, but it does not override **Artist Meaning**, replace **Reference** evidence, or decide output shape directly.
+- The **Story Structure Library** provides reusable Story Structures; a project uses an adapted Story Structure inside its **Beat Plan** rather than applying a generic template unchanged.
+- The first implementation should store the selected **Adapted Story Structure** inside the **Beat Plan**, not as a separate story-authority record.
+- **Story Structure Library Entry** medium affinities are recommendations, not constraints; they guide compression and expansion tradeoffs without forbidding an artist-chosen medium.
+- **Story Structure Library** should be grounded in recognized story and narrative theory over time, not only internally invented movement patterns.
+- Every **Story Structure Library Entry** and **Cultural Format Structure Library Entry** should include **Structure Grounding** before it is treated as canonical; provisional entries must be marked as provisional until researched.
+- **Structure Grounding Tier** should distinguish canonical frameworks, craft authority, platform-era pattern evidence, and artist-defined or project-specific structures.
+- Research should inform **Story Structure Library Entries** and **Cultural Format Structure Library Entries**, but entries should stay concise and contain the operational structure itself rather than citations or source-reference lists.
+- Library entries may include compact grounding metadata such as researched/provisional status and **Structure Grounding Tier**, but should not include citations or source-reference lists.
+- **Cultural Format Structure Library** complements **Story Structure Library**: Story Structure owns deep movement, while Cultural Format Structure owns culturally recognized audience-facing form.
+- A project can combine one adapted **Story Structure** with one or more adapted **Cultural Format Structures** when a medium form has established expectations.
+- **Cultural Format Structure** is selected or adapted during **Medium Plan** creation, not during **Story Journey**.
+- **Medium Plans** produce a **Medium Output Shape Recommendation** from the approved **Beat Plan** and adapted **Story Structure**; the **Story Structure Library** does not choose the number of outputs.
+- Every **Medium Plan** must include a **Medium Output Shape Recommendation**, even when the recommended shape is obvious or compact.
+- When the artist-requested output shape and the **Medium Output Shape Recommendation** materially diverge, record a **Medium Output Shape Conflict** and resolve it with one **Decision Interview** question before locking the **Medium Plan**.
+- Select or adapt **Cultural Format Structure** after the **Medium Output Shape Recommendation** is accepted, revised, or explicitly allowed to proceed unconfirmed.
+- Each adapted **Cultural Format Structure** must include a **Cultural Format Adaptation Policy** so recognizable form can be preserved, merged, omitted, or inverted without becoming a rigid formula.
+- **Adapted Cultural Format Structure** parts map to Medium Plan sections, scenes, movements, or other parts; they do not replace the Medium Plan's execution structure.
+- Every **Cultural Format Structure** must define **Audience Hook** logic for its format, but the hook does not have to be a headline, first sentence, or clickbait device.
+- **Cultural Format Structure Library Entries** may recommend **Stewardship Views** for long or complex works, but those views remain projections over **Medium Plan** and **Long-Work Stewardship** state.
+- The first implementation should add optional schema fields for adapted **Story Structure**, **Medium Output Shape Recommendation**, and adapted **Cultural Format Structure**, then use fixtures and tests to harden them before making them required.
+- The first schema implementation should apply these optional fields to **Beat Plan** and **Text Medium Plan** first; cross-medium adoption for image, sound, video, and mixed media remains an explicit follow-up decision.
+- Image-specific **Series Recommendation** language should narrow toward **Medium Output Shape Recommendation** when the recommendation includes single compressed image, triptych, image series, video, or other visual forms.
 - **Poetic Density** increases when a single element carries multiple meanings without collapsing them into one message.
 - **Poetic Density Notes** capture **Poetic Density** without reducing it to a numeric score.
 - **Core Tension Pairs** exist to support creative translation across media.
@@ -746,6 +837,10 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Long-Work Stewardship** does not own **Artist Meaning**, **Core Tension Pairs**, **Beat Plan** authority, **Medium Plan** authority, or final acceptance.
 - A **Long-Work Stewardship Record** references the governing **Beat Plan** rather than duplicating it.
 - A **Long-Work Stewardship Record** is centered on one planned part per cumulative unit, such as an image role, text section, chapter, song section, video scene, or mixed-media movement.
+- Plot-tracker-style templates are views over **Medium Plan** structure and **Long-Work Stewardship** execution state, not separate story-authority or tracking records.
+- A **Stewardship View** may present plot tracker, act tracker, chapter tracker, open-thread, or character continuity information, but the authoritative state remains in **Medium Plan** and **Long-Work Stewardship** records.
+- Subplots, open threads, and character-brief needs should first map to **Medium Plan** part structure, **Long-Work Continuity Rules**, **Proposed Continuity Updates**, or **Long-Work Checkpoints** before adding new records.
+- Add a specialized continuity companion record only when repeated projects prove that **Long-Work Continuity Rules** cannot carry the needed subplot, thread, character, setting, or world continuity clearly.
 - An **Artist OS Project** may have multiple **Long-Work Stewardship Records**, but each **Long-Work Stewardship Record** governs one **Cumulative Work**.
 - A **Long-Work Stewardship Record** is updated in place for execution progress, but a governing Artist Meaning, Beat Plan, or Medium Plan change that alters cumulative structure creates a superseding stewardship record.
 - A **Long-Work Part** is not a **Prompt Variant Plan** or **Variant**; prompt variants test directions, while Long-Work Parts carry cumulative story or emotional structure.

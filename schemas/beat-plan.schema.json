@@ -27,6 +27,7 @@
     "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
     "story_mode": { "$ref": "#/$defs/story_mode" },
     "story_gate_status": { "$ref": "#/$defs/approval_status" },
+    "story_structure": { "$ref": "#/$defs/story_structure" },
     "beats": {
       "type": "array",
       "minItems": 1,
@@ -92,6 +93,41 @@
     "review_approval_status": {
       "type": "string",
       "enum": ["not_required", "pending", "approve", "revise", "block", "waived"]
+    },
+    "story_structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "library_entry_id",
+        "name",
+        "grounding_status",
+        "grounding_tier",
+        "core_movement",
+        "adaptation_summary",
+        "turn_logic",
+        "compression_rule",
+        "expansion_rule",
+        "failure_modes"
+      ],
+      "properties": {
+        "library_entry_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "grounding_status": { "type": "string", "enum": ["provisional", "researched", "artist_defined", "project_specific"] },
+        "grounding_tier": {
+          "type": "string",
+          "enum": ["canonical_framework", "craft_authority", "platform_pattern_evidence", "artist_defined_project_specific"]
+        },
+        "core_movement": { "type": "string", "minLength": 1 },
+        "adaptation_summary": { "type": "string", "minLength": 1 },
+        "turn_logic": { "type": "string", "minLength": 1 },
+        "compression_rule": { "type": "string", "minLength": 1 },
+        "expansion_rule": { "type": "string", "minLength": 1 },
+        "failure_modes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
     },
     "beat_record": {
       "type": "object",

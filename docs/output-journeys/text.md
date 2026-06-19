@@ -10,6 +10,7 @@ Use the Text Journey when the final work should be:
 - a monologue,
 - a prose scene,
 - a short story,
+- an article,
 - lyrics,
 - a script,
 - a letter,
@@ -23,6 +24,9 @@ Use the Text Journey when the final work should be:
 Approved Beat Plan
   -> Long-Work Stewardship Record, when the text structure is cumulative
   -> Writing Method Gate
+  -> Medium Output Shape Recommendation
+  -> Medium Output Shape Conflict Decision, when needed
+  -> Cultural Format Structure selection, when relevant
   -> Text Form Gate
   -> Voice / Point Of View Gate
   -> Structure Gate
@@ -47,7 +51,10 @@ Approved Beat Plan
 ## Gates
 
 - Writing Method Gate: fragments, beats, shape, or a hybrid sequence?
-- Text Form Gate: poem, monologue, prose scene, script, lyrics, essay, letter, treatment, or other form?
+- Medium Output Shape Recommendation: what text shape best preserves the approved Beat Plan and adapted Story Structure?
+- Medium Output Shape Conflict Decision: if the artist-requested shape and recommended shape materially diverge, should the plan keep the requested shape, accept the recommendation, revise the shape, or proceed unconfirmed?
+- Cultural Format Structure selection: what culturally recognized form grammar, Audience Hook, parts, payoff, and adaptation policy should shape the accepted text form?
+- Text Form Gate: poem, article, monologue, prose scene, script, lyrics, essay, letter, treatment, or other form?
 - Voice / Point Of View Gate: who speaks, from what distance, and with what authority?
 - Structure Gate: fragment, scene, sequence, arc, chapters, sections, verses, or hybrid?
 - Fidelity / Transformation Gate: preserve source wording, adapt it, invert it, expand it, compress it, translate it, or create a new work from the approved Beat Plan?
@@ -78,7 +85,9 @@ After a written Output Artifact exists, run a Clear Writing Pass when the Text G
 
 After editorial passes, the main agent performs a final check against Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, protected features, and structure before Output Critic Review.
 
-For long text where sections, chapters, scenes, or poem movements build cumulatively, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Text Medium Plan maps Beats to text sections or other medium parts. The Text Medium Plan owns text form, voice, structure, fidelity, publication use, and section jobs; the stewardship record references text section or chapter ids and tracks cumulative progress, readiness, checkpoints, continuity rules, and drift.
+For long text where sections, chapters, scenes, or poem movements build cumulatively, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Text Medium Plan maps Beats to text sections or other medium parts. The Text Medium Plan owns Medium Output Shape Recommendation, Cultural Format Structure, text form, voice, structure, fidelity, publication use, and section jobs; the stewardship record references text section or chapter ids and tracks cumulative progress, readiness, checkpoints, continuity rules, and drift.
+
+Plot-tracker-style documents, act trackers, open-thread lists, and character continuity summaries are Stewardship Views over Text Medium Plan and Long-Work Stewardship state. They are not separate story-authority records.
 
 The Text Generation Plan must set `human_voice_pass_policy` to `required`, `recommended`, `optional`, or `skip`, with `degree` set to `light`, `standard`, or `deep` when the pass is not skipped. It must also name protected features such as line breaks, character voice, source wording, rhetoric, meter, repetition, formal tone, or deliberate artificiality.
 
@@ -98,6 +107,14 @@ Use the smallest method that matches the work:
 - If the piece wants sequence, pivots, scenes, or experiential movement, use beats.
 - If the piece wants a finished reader-facing argument, article, statement, or treatment, use shape.
 
-The current Text schemas are conservative. Refine them through rehearsals only when beats, form, section shape, narrative pressure, or writing-specific review criteria reveal a real gap.
+When using `shape`, produce the Medium Output Shape Recommendation before locking Primary Text Form, then select or adapt the Cultural Format Structure for the accepted shape. Map Cultural Format Structure parts to `structure_plan.sections`; do not let the format parts replace section jobs, Intended Feeling, or Expectation Turn translation.
+
+Keep these levels distinct:
+
+- Cultural Format Structure `function`: the audience-facing job of a recognizable format part, such as hook, reveal, why-now, turn, payoff, or close.
+- Section `structure_role`: the local position or role of one Text Medium Plan section inside the accepted form.
+- Section `section_job`: the concrete drafting instruction for that section, including what it must do with Artist Meaning, Intended Feeling, and Expectation Turn translation.
+
+The current Text schemas are conservative. Refine them through rehearsals only when beats, form, cultural format structure, section shape, narrative pressure, or writing-specific review criteria reveal a real gap.
 
 Orientation may capture the artist's early fidelity preference. The Text Medium Plan owns the durable fidelity policy; if Orientation already answered it clearly, carry that answer forward without re-asking.
