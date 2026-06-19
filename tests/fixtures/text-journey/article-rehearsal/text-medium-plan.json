@@ -1,0 +1,238 @@
+{
+  "text_medium_plan_id": "tmp_civic_garden_hook_article",
+  "source_id": "src_civic_garden_hook_article",
+  "artist_meaning_id": "meaning_civic_garden_hook_article",
+  "transformation_brief_id": "tb_civic_garden_hook_article",
+  "beat_plan_id": "bp_civic_garden_hook_article",
+  "target_media_type": "text",
+  "story_mode": "sequence",
+  "writing_method": {
+    "primary_method": "shape",
+    "method_modifiers": [
+      "beats",
+      "hook-driven"
+    ],
+    "rationale": "The output is a reader-facing article whose opening promise, reveal, and payoff need deliberate shape rather than raw fragments."
+  },
+  "medium_output_shape_recommendation": {
+    "requested_shape": "hook-driven article",
+    "recommended_shape": "compact hook-driven reflective article",
+    "accepted_shape": "compact hook-driven reflective article",
+    "rationale": "The Beat Plan already has a concrete curiosity hook, a civic reveal, and a perceptual payoff, so a broad article form with a specific Cultural Format Structure is the clearest fit.",
+    "alternatives_considered": [
+      "essay_artist_statement",
+      "social_post",
+      "reported feature"
+    ],
+    "tradeoffs": [
+      "The article form gives room for a true turn and payoff without forcing an artist-statement speaker.",
+      "A social post would sharpen the hook but compress the middle labor reveal too far.",
+      "A reported feature would imply interviews and factual sourcing that this safe invented rehearsal does not have."
+    ],
+    "conflict": {
+      "has_conflict": false,
+      "conflict_summary": null,
+      "resolution": "not_needed",
+      "gate_decision_id": null
+    }
+  },
+  "cultural_format_structure": {
+    "library_entry_id": "hook_driven_reflective_article",
+    "name": "Hook-Driven Reflective Article",
+    "grounding_status": "project_specific",
+    "grounding_tier": "artist_defined_project_specific",
+    "audience_promise": "The reader will start with a concrete odd detail and leave seeing shared maintenance as civic care.",
+    "audience_hook": "Open on the muddy shoe at the garden gate before naming the article's civic meaning.",
+    "parts": [
+      {
+        "part_id": "cfs_part_hook",
+        "label": "Concrete Hook",
+        "function": "Earn immediate curiosity through one visible object that implies an unseen story.",
+        "maps_to_section_ids": [
+          "txtsec_shoe_001"
+        ]
+      },
+      {
+        "part_id": "cfs_part_promise",
+        "label": "Promise",
+        "function": "Let the reader understand that the piece is about care infrastructure, not a lost-object anecdote.",
+        "maps_to_section_ids": [
+          "txtsec_water_001"
+        ]
+      },
+      {
+        "part_id": "cfs_part_turn",
+        "label": "Turn",
+        "function": "Shift from pleasant garden story to the repeated labor that makes public ease possible.",
+        "maps_to_section_ids": [
+          "txtsec_water_001"
+        ]
+      },
+      {
+        "part_id": "cfs_part_payoff",
+        "label": "Payoff",
+        "function": "Return the reader to visible details with changed attention rather than a tidy moral.",
+        "maps_to_section_ids": [
+          "txtsec_notice_001"
+        ]
+      }
+    ],
+    "turn_or_payoff": "The article pays off the opening shoe by teaching the reader to see every small maintenance sign as evidence of shared care.",
+    "adaptation_policy": {
+      "required": [
+        "concrete hook",
+        "promise",
+        "turn",
+        "payoff"
+      ],
+      "mergeable": [
+        "promise",
+        "turn"
+      ],
+      "omittable": [
+        "reported nut graf",
+        "expert quote",
+        "service sidebar"
+      ],
+      "invertible": [
+        "explicit call to action"
+      ]
+    },
+    "failure_modes": [
+      "the hook functions as clickbait rather than an emotional doorway",
+      "the article subtype is hidden inside primary_text_form instead of CFS",
+      "the section jobs repeat CFS functions without concrete drafting instructions",
+      "the ending instructs instead of changing perception"
+    ],
+    "recommended_stewardship_views": [
+      "promise_payoff",
+      "section_outline"
+    ]
+  },
+  "text_form": {
+    "primary_text_form": "article",
+    "text_form_modifiers": [],
+    "confirmation_status": "confirmed",
+    "rationale": "The broad article form is sufficient because the hook-driven subtype is carried by the accepted shape and Cultural Format Structure.",
+    "avoid": [
+      "using other as an escape hatch for article variants",
+      "forcing a separate subtype enum before rehearsals prove one is needed",
+      "turning the article into a generic essay"
+    ]
+  },
+  "voice_point_of_view": {
+    "speaker": "a close observer of the garden who respects the caretakers without claiming authority over them",
+    "point_of_view": "first person plural avoided; limited first person singular allowed only for noticing",
+    "distance": "near enough to show details, restrained enough to avoid confession",
+    "register": "plain, tactile, civic, image-led",
+    "authority": "earned by attention to maintenance details rather than expertise claims",
+    "voice_constraints": [
+      "avoid sentimental neighborhood uplift",
+      "avoid investigative-reporting posture",
+      "avoid moralizing the reader"
+    ]
+  },
+  "structure_plan": {
+    "structure_type": "argument",
+    "structure_rationale": "The article needs an argument-shaped movement, but each section must stay anchored to a concrete beat and a distinct reader experience.",
+    "sections": [
+      {
+        "section_id": "txtsec_shoe_001",
+        "beat_id": "beat_shoe_001",
+        "key_emotional_movement_id": "kem_hook_001",
+        "section_label": "The shoe at the gate",
+        "structure_role": "opening hook",
+        "section_job": "Open with the muddy shoe as a humane disturbance, making the reader want to understand the garden before any thesis appears.",
+        "intended_feeling": "curious tenderness sharpened by a small disturbance",
+        "expectation_turn_translation": "The garden article begins with evidence of use and absence instead of seasonal beauty.",
+        "source_wording_notes": [
+          "Use only invented details from this rehearsal.",
+          "Do not imply a real person, child, or location."
+        ],
+        "paragraph_distinction": "Image-first and question-making; no abstract civic language yet."
+      },
+      {
+        "section_id": "txtsec_water_001",
+        "beat_id": "beat_water_001",
+        "key_emotional_movement_id": "kem_turn_001",
+        "section_label": "The rota before work",
+        "structure_role": "promise and turn",
+        "section_job": "Reveal the watering rota, latch repair, and quiet coordination so the article's promise becomes visible: care is infrastructure when repeated.",
+        "intended_feeling": "respectful recognition of quiet effort",
+        "expectation_turn_translation": "The expected lost-shoe answer is displaced by the adults who make the garden usable.",
+        "source_wording_notes": [
+          "Keep details generic and invented.",
+          "Avoid reported quotes or named organizations."
+        ],
+        "paragraph_distinction": "Moves from object to system; allows the clearest claim but keeps it grounded in action."
+      },
+      {
+        "section_id": "txtsec_notice_001",
+        "beat_id": "beat_notice_001",
+        "key_emotional_movement_id": "kem_payoff_001",
+        "section_label": "What to notice next",
+        "structure_role": "perceptual payoff",
+        "section_job": "Return to small signs of maintenance so the reader leaves trained to notice care without being handed a moral or volunteer pitch.",
+        "intended_feeling": "modest civic attention that lingers after the article",
+        "expectation_turn_translation": "The article does not solve the shoe or end with gratitude; it changes the reader's noticing practice.",
+        "source_wording_notes": [
+          "May echo the shoe once.",
+          "Do not invent a resolved owner for the shoe."
+        ],
+        "paragraph_distinction": "Shorter, quieter, and more residue-based than the middle section."
+      }
+    ]
+  },
+  "fidelity_policy": {
+    "mode": "new_from_meaning",
+    "source_wording_constraints": [
+      "No real source wording exists; use only safe invented material.",
+      "Preserve the invented shoe, watering rota, latch, barrel, and swept path as traceable details."
+    ],
+    "transformation_allowed": [
+      "compress",
+      "paraphrase",
+      "reorder details within the approved section jobs",
+      "create new connective prose from the approved meaning"
+    ],
+    "rights_notes": "Safe invented rehearsal material only; no provider calls and no user-provided private reference.",
+    "rationale": "The rehearsal is testing schema and planning behavior, so fidelity means preserving approved invented meaning and traceable details rather than copying source language."
+  },
+  "publication_use": {
+    "use_case": "other",
+    "audience": "readers of a short reflective article about shared places and maintenance",
+    "privacy_notes": "No real people, places, quotes, or private artist material are represented.",
+    "rights_notes": "Disposable local rehearsal in .tmp; not a publishable factual article."
+  },
+  "gates": {
+    "writing_method_gate": "complete",
+    "text_form_gate": "complete",
+    "voice_point_of_view_gate": "complete",
+    "structure_gate": "complete",
+    "fidelity_transformation_gate": "complete",
+    "publication_use_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "writing_critic_required": true,
+    "prompt_critic_required": true,
+    "output_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_civic_garden_hook_article",
+      "note": "The Text Medium Plan preserves the invented Artist Meaning: make ordinary maintenance visible as shared care."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_civic_garden_hook_article",
+      "note": "The three article sections map one-to-one to the hook, reveal, and payoff beats without requiring section order fields."
+    },
+    {
+      "source_type": "beat",
+      "source_ref": "beat_water_001",
+      "note": "The middle section keeps the CFS promise/turn merged while retaining one concrete section job."
+    }
+  ]
+}

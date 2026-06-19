@@ -1,0 +1,320 @@
+{
+  "beat_plan_id": "bp_civic_garden_hook_article",
+  "source_id": "src_civic_garden_hook_article",
+  "artist_meaning_id": "meaning_civic_garden_hook_article",
+  "transformation_brief_id": "tb_civic_garden_hook_article",
+  "story_mode": "sequence",
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "public_private_reframe",
+    "name": "Public Private Reframe",
+    "grounding_status": "project_specific",
+    "grounding_tier": "artist_defined_project_specific",
+    "core_movement": "A small private practice is revealed as public infrastructure without becoming sentimental proof.",
+    "adaptation_summary": "The article moves from a concrete overlooked object, through hidden labor, into a civic reframing that asks the reader to notice maintenance as care.",
+    "turn_logic": "The reader expects a lifestyle anecdote, then discovers the hook is really about who keeps shared places alive.",
+    "compression_rule": "Keep each beat tied to one visible garden detail and one pressure shift.",
+    "expansion_rule": "Expand only by adding examples of maintenance, not by adding policy exposition.",
+    "failure_modes": [
+      "the article becomes a generic neighborhood-good story",
+      "the hook overpromises conflict the piece does not carry",
+      "the ending tells the reader what to believe instead of changing what they notice"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_shoe_001",
+      "beat_role": "invitation",
+      "one_move_summary": "A muddy child's shoe beside a garden gate turns the reader toward an ordinary object that feels out of place.",
+      "builds_toward_key_movement_id": "kem_hook_001",
+      "before_state": "The garden reads as a small pleasant local scene.",
+      "after_state": "The misplaced shoe makes the scene feel like evidence of a larger unseen story.",
+      "value_shift": "Decoration becomes clue.",
+      "expectation_turn": {
+        "expected_direction": "A garden article will begin with seasonal beauty or neighborhood charm.",
+        "actual_result": "The first image is a lost, muddy object that implies use, absence, and care.",
+        "surprise_function": "The hook creates curiosity without manufacturing scandal.",
+        "emotional_counterpoint": "Tenderness is crossed with unease about what shared spaces ask of people."
+      },
+      "intended_feeling": "curious tenderness sharpened by a small disturbance",
+      "emotional_payload": "The ordinary object opens a civic question without naming it yet.",
+      "tension_profile": [
+        {
+          "name": "Charm / Evidence",
+          "tension_intensity": 0.74,
+          "emotional_function": "keeps the garden from becoming only a pleasant backdrop"
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.7,
+          "emotional_function": "makes the missing child and unseen caretakers active in the scene"
+        }
+      ],
+      "source_evidence": [
+        "Invented reference detail: one small shoe left beside a green gate."
+      ],
+      "must_preserve": [
+        "start with the shoe rather than the thesis",
+        "keep curiosity humane instead of sensational"
+      ],
+      "pivot_options": [
+        {
+          "label": "caretaker",
+          "next_move": "Reveal the unseen maintenance routine behind the inviting scene.",
+          "rationale": "This lets the hook turn into labor rather than remain a cute anecdote."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "Use the shoe as the hook image and delay the thesis until the second section."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_civic_garden_hook_article",
+          "note": "The artist wants overlooked maintenance to feel emotionally visible."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_water_001",
+      "beat_role": "reveal",
+      "one_move_summary": "The article reveals the dawn watering rota and the quiet negotiations that keep the garden open.",
+      "builds_toward_key_movement_id": "kem_turn_001",
+      "before_state": "The reader is following a mystery around one object.",
+      "after_state": "The reader sees the garden as a web of uncredited coordination.",
+      "value_shift": "Clue becomes labor.",
+      "expectation_turn": {
+        "expected_direction": "The hook will explain who lost the shoe.",
+        "actual_result": "The explanation widens to the adults who water, unlock, repair, and remember.",
+        "surprise_function": "The expected answer is displaced by a more meaningful system.",
+        "emotional_counterpoint": "Warmth meets fatigue; care becomes real because it costs time."
+      },
+      "intended_feeling": "respectful recognition of quiet effort",
+      "emotional_payload": "The article makes hidden labor feel specific without making anyone heroic.",
+      "tension_profile": [
+        {
+          "name": "Private Effort / Public Benefit",
+          "tension_intensity": 0.83,
+          "emotional_function": "turns maintenance into the article's central civic pressure"
+        },
+        {
+          "name": "Warmth / Fatigue",
+          "tension_intensity": 0.68,
+          "emotional_function": "keeps care from reading as effortless niceness"
+        }
+      ],
+      "source_evidence": [
+        "Invented reference detail: three neighbors rotate watering before work."
+      ],
+      "must_preserve": [
+        "show maintenance as coordination",
+        "avoid converting volunteers into symbols"
+      ],
+      "pivot_options": [
+        {
+          "label": "reframe",
+          "next_move": "Name the garden as civic infrastructure in miniature.",
+          "rationale": "The labor reveal earns a broader claim without starting as abstraction."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "Use the second section to convert hook curiosity into the article promise."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_civic_garden_hook_article",
+          "note": "The transformation should make care visible through maintenance details."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_notice_001",
+      "beat_role": "residue",
+      "one_move_summary": "The ending asks the reader to notice the repaired latch, full barrel, and swept path before praising the garden.",
+      "builds_toward_key_movement_id": "kem_payoff_001",
+      "before_state": "The garden has become evidence of maintenance.",
+      "after_state": "The reader carries a changed noticing practice into other shared places.",
+      "value_shift": "Labor becomes perception.",
+      "expectation_turn": {
+        "expected_direction": "The article will close with gratitude or a call to volunteer.",
+        "actual_result": "It closes by changing what the reader is trained to notice.",
+        "surprise_function": "The payoff is perceptual rather than instructional.",
+        "emotional_counterpoint": "Hope remains modest because the work is ongoing."
+      },
+      "intended_feeling": "modest civic attention that lingers after the article",
+      "emotional_payload": "The reader should feel invited to see shared care before demanding a lesson from it.",
+      "tension_profile": [
+        {
+          "name": "Instruction / Perception",
+          "tension_intensity": 0.76,
+          "emotional_function": "keeps the close from becoming a sermon"
+        },
+        {
+          "name": "Completion / Ongoing Work",
+          "tension_intensity": 0.72,
+          "emotional_function": "leaves maintenance active after the final line"
+        }
+      ],
+      "source_evidence": [
+        "Invented reference detail: latch, barrel, and swept path are visible signs of care."
+      ],
+      "must_preserve": [
+        "end with changed attention",
+        "avoid a tidy moral"
+      ],
+      "pivot_options": [
+        {
+          "label": "echo",
+          "next_move": "Return to the shoe as one sign among many.",
+          "rationale": "This preserves hook payoff without forcing a solved anecdote."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "Use the closing section to pay off the hook through changed perception."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_civic_garden_hook_article",
+          "note": "The artist wants the ending to create attention rather than instruction."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_seen_unseen_labor",
+      "summary": "The shared place feels effortless until its hidden maintenance becomes visible.",
+      "intended_feeling": "recognition without sentimentality",
+      "emotional_payload": "Care matters because it is repeated, specific, and easy to miss.",
+      "source_evidence": [
+        "Invented reference pattern: shoe, watering rota, repaired latch, full barrel, swept path."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "private_effort_public_benefit",
+          "note": "The article's pressure lives between uncredited private work and public ease."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_hook_001",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_shoe_001"
+      ],
+      "emotional_shift": "pleasant scene becomes charged evidence",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "invented_shoe_detail",
+          "note": "The hook depends on one concrete object rather than abstract thesis."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_turn_001",
+      "role": "revelation",
+      "beat_ids": [
+        "beat_water_001"
+      ],
+      "emotional_shift": "curiosity becomes recognition of hidden labor",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_civic_garden_hook_article",
+          "note": "The reveal must widen from anecdote to care infrastructure."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_payoff_001",
+      "role": "residue",
+      "beat_ids": [
+        "beat_notice_001"
+      ],
+      "emotional_shift": "recognition becomes a changed habit of noticing",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_civic_garden_hook_article",
+          "note": "The final movement preserves modest civic attention instead of a moral."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Each beat should shift the reader's attention: object, labor, perception.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 2,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "Do not waive adjacent shifts unless the artist explicitly asks for a quiet single-image article."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_shoe_001",
+        "to_beat_id": "beat_water_001",
+        "shift_summary": "The article moves from curiosity around an object to recognition of labor.",
+        "shifted_tensions": [
+          {
+            "name": "Private Effort / Public Benefit",
+            "from_intensity": 0.46,
+            "to_intensity": 0.83,
+            "delta": 0.37,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_water_001",
+        "to_beat_id": "beat_notice_001",
+        "shift_summary": "The article moves from revealed labor to the reader's changed noticing.",
+        "shifted_tensions": [
+          {
+            "name": "Instruction / Perception",
+            "from_intensity": 0.42,
+            "to_intensity": 0.76,
+            "delta": 0.34,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the article hook remains a clever opening only, if the middle lacks specific maintenance labor, or if the ending collapses into a generic call to appreciate volunteers."
+  },
+  "arc_summary": {
+    "beginning": "A muddy shoe creates a small unsolved question.",
+    "turn": "The question widens into the unseen labor that keeps the shared garden usable.",
+    "ending_or_residue": "The reader leaves with a changed practice of noticing maintenance signs.",
+    "scale_rationale": "Three beats are enough for a hook-driven article because the piece needs one hook, one reframing reveal, and one perceptual payoff."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_civic_garden_hook_article",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "rehearsal_agent",
+    "approved_at": "2026-06-19T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_civic_garden_hook_article",
+      "note": "Safe invented material: the governing meaning is that ordinary maintenance should become visible as shared care."
+    }
+  ]
+}
