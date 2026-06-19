@@ -4,6 +4,8 @@
 
 **Scope**: A reader-facing article opens with a concrete curiosity, tension, image, question, or promise, then converts that hook into a clear reason to keep reading.
 
+**Structure grounding**: Article lede, nut graf, turn, and payoff craft convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

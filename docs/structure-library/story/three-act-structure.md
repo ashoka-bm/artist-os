@@ -4,6 +4,8 @@
 
 **Scope**: A narrative or argument moves from setup, through escalating confrontation, into resolution.
 
+**Structure grounding**: Three-act dramatic craft tradition.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

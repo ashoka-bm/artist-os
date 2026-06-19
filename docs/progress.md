@@ -447,6 +447,7 @@ Implemented branches:
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
 - text-to-Suno through Sound Medium Plan, Sound Creative Brief Record, Suno Sound Prompt Plan, and output lifecycle contracts,
 - Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures.
+- Structure Library docs for reusable Story Structures and Cultural Format Structures, split into context-efficient per-entry files with chooser indexes.
 
 Not implemented yet:
 

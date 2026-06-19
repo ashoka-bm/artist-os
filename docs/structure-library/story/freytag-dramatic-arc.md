@@ -4,6 +4,8 @@
 
 **Scope**: A dramatic work rises through pressure to a central turning point, then falls through consequence into resolution, catastrophe, or denouement.
 
+**Structure grounding**: Freytag dramatic arc.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `canonical_framework`

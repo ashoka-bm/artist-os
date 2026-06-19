@@ -4,6 +4,8 @@
 
 **Scope**: A figure leaves an ordinary orientation, crosses into trial or mystery, gains a boon or revelation, and returns changed.
 
+**Structure grounding**: Monomyth / Hero's Journey framework.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `canonical_framework`

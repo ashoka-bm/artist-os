@@ -4,6 +4,8 @@
 
 **Scope**: A four-part movement introduces a world, develops it, introduces an unexpected turn, and reconciles the turn with what came before.
 
+**Structure grounding**: Kishotenketsu four-part narrative tradition.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `canonical_framework`

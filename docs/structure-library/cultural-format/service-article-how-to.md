@@ -4,6 +4,8 @@
 
 **Scope**: A practical article helps the reader understand, choose, fix, do, or improve something.
 
+**Structure grounding**: Service journalism and how-to article convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

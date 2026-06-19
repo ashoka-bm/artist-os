@@ -13,6 +13,7 @@ Load details only when needed:
 
 - `docs/output-journeys/text.md` for the route, drafting boundary, editorial pass order, and Text Draft Packet rules.
 - `docs/writing/README.md` and `docs/writing/references/` for fragments, beats, and shape.
+- `docs/structure-library/README.md`, then only the relevant `docs/structure-library/story/` or `docs/structure-library/cultural-format/` entry, when selecting or adapting Story Structure or Cultural Format Structure.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and reviewer rules.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific planning.
 - `schemas/text-medium-plan.schema.json` for text translation decisions before Text Creative Brief creation.
@@ -62,11 +63,11 @@ For exploratory writing, follow strict `writing-beats`: candidate starting beats
 Use this only after the shared Transformation Brief and Beat Plan exist.
 
 1. Identify formal observations from the Reference: voice, diction, imagery, pacing, lineation, paragraph pressure, structure, repetition, reversal, and source-wording sensitivity.
-2. Consume the shared Beat Plan, including Adapted Story Structure when present. Do not fork a separate text-only beat structure.
+2. Consume the shared Beat Plan, including Adapted Story Structure when present. If Story Structure needs selection or revision, use `docs/structure-library/README.md` and open only the relevant Story Structure entry. Do not fork a separate text-only beat structure.
 3. Select the writing method: `fragments`, `beats`, `shape`, or `hybrid`. Use `shape` when the output is a reader-facing finished piece.
 4. Produce a Medium Output Shape Recommendation before locking Primary Text Form. Include requested shape, recommended shape, accepted shape, rationale, alternatives considered, tradeoffs, and conflict status.
 5. If the artist-requested shape and recommended shape materially diverge, record a Medium Output Shape Conflict and resolve it with one Decision Interview question before locking the Text Medium Plan.
-6. Select or adapt the Cultural Format Structure after the Medium Output Shape Recommendation is accepted, revised, or explicitly allowed to proceed unconfirmed. Include Audience Hook, audience promise, adapted parts, turn or payoff, adaptation policy, failure modes, and any recommended Stewardship Views.
+6. Select or adapt the Cultural Format Structure after the Medium Output Shape Recommendation is accepted, revised, or explicitly allowed to proceed unconfirmed. Use `docs/structure-library/cultural-format/README.md` to choose an entry, then open only that entry file. Include Audience Hook, audience promise, adapted parts, turn or payoff, adaptation policy, failure modes, and any recommended Stewardship Views.
 7. Define one Primary Text Form, such as poem, article, prose scene, short story, monologue, script, lyrics, letter, essay/artist statement, manifesto, treatment, rewrite, adaptation, or other. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
 8. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
 9. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure. Map adapted Cultural Format Structure parts to Text Medium Plan sections rather than replacing section jobs. Keep Cultural Format Structure `function` at the audience-facing format-part level, section `structure_role` at the local position level, and section `section_job` at the concrete drafting-instruction level.

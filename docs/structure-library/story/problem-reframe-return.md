@@ -4,6 +4,8 @@
 
 **Scope**: A compact rhetorical or experiential movement starts with a felt problem, changes the frame of that problem, then returns the audience to action, perception, or meaning.
 
+**Structure grounding**: Platform-era problem/reframe/payoff pattern.
+
 **Grounding status**: `provisional`
 
 **Grounding tier**: `platform_pattern_evidence`

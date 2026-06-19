@@ -4,6 +4,8 @@
 
 **Scope**: A scene written for screen action advances story, reveals character, turns on action or information, and leaves before the energy drains.
 
+**Structure grounding**: Screenwriting scene objective, obstacle, turn, and early-exit convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

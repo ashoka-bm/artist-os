@@ -4,6 +4,8 @@
 
 **Scope**: A concise opinion article makes a timely, accountable argument for a public audience.
 
+**Structure grounding**: Opinion article / op-ed argument convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

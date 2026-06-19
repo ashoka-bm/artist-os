@@ -4,6 +4,8 @@
 
 **Scope**: A compact fictional prose work creates a complete narrative pressure, image, turn, or emotional residue within limited space.
 
+**Structure grounding**: Short fiction craft convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`

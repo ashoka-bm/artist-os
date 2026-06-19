@@ -16,6 +16,7 @@ Each Story Structure entry should include:
 - Entry id
 - Name
 - Scope
+- Structure grounding
 - Grounding status
 - Grounding tier
 - Use when
@@ -37,6 +38,7 @@ Each Cultural Format Structure entry should include:
 - Entry id
 - Name
 - Scope
+- Structure grounding
 - Grounding status
 - Grounding tier
 - Use when

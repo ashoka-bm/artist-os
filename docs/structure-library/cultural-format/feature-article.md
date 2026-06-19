@@ -4,6 +4,8 @@
 
 **Scope**: A reported, researched, or deeply observed article uses scene, character, evidence, and context to reveal the meaning of a subject.
 
+**Structure grounding**: Feature article lede, nut graf, development, and kicker convention.
+
 **Grounding status**: `researched`
 
 **Grounding tier**: `craft_authority`
