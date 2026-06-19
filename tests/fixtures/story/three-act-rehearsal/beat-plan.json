@@ -1,0 +1,417 @@
+{
+  "beat_plan_id": "bp_fading_museum_three_act",
+  "source_id": "src_fading_museum_three_act",
+  "artist_meaning_id": "meaning_fading_museum_three_act",
+  "transformation_brief_id": "tb_fading_museum_three_act",
+  "story_mode": "arc",
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "three_act_structure",
+    "name": "Three-Act Structure",
+    "grounding_status": "researched",
+    "grounding_tier": "craft_authority",
+    "core_movement": "A stable custodial routine is disrupted by a disappearing image, escalates through the guard's choice to witness rather than control, reaches a decisive dawn test, and lands in a changed public relationship to attention.",
+    "adaptation_summary": "The rehearsal compresses three-act movement into four Beat Plan beats: setup and inciting pressure, first major choice, midpoint/darkest pressure, and climax/resolution residue.",
+    "turn_logic": "The audience first expects preservation or repair, then discovers the real turn is from possession of the image to responsibility for attention.",
+    "compression_rule": "Combine setup with inciting incident in the opening beat, combine escalation with midpoint pressure in the third beat, and let climax and resolution share the final beat so the loss remains unresolved.",
+    "expansion_rule": "If expanded, split Act 2 into repeated failed control attempts before the midpoint reframe and consequence beats after the guard accepts witnessing as the only honest action.",
+    "failure_modes": [
+      "the structure becomes a plot checklist instead of an attention-pressure system",
+      "the fading painting is explained as a puzzle and weakens the emotional turn",
+      "the ending restores the image instead of preserving changed perception"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_fading_setup",
+      "beat_role": "invitation",
+      "one_move_summary": "The guard notices the small painting fading during an ordinary night shift.",
+      "builds_toward_key_movement_id": "kem_opening_pressure",
+      "before_state": "The guard treats the museum as a place to protect through routine.",
+      "after_state": "Routine custody is disturbed by a loss that appears only under neglect.",
+      "value_shift": "Custody becomes unease.",
+      "expectation_turn": {
+        "expected_direction": "A damaged painting suggests a repair problem or security incident.",
+        "actual_result": "The painting fades most when no one gives it attention.",
+        "surprise_function": "The problem moves from material preservation to moral attention.",
+        "emotional_counterpoint": "Professional calm is crossed by private dread."
+      },
+      "intended_feeling": "quiet alarm at noticing loss too late",
+      "emotional_payload": "Attention begins as a duty and becomes a burden.",
+      "tension_profile": [
+        {
+          "name": "Control / Surrender",
+          "tension_intensity": 0.62,
+          "emotional_function": "starts with procedural control and exposes its limits"
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.74,
+          "emotional_function": "makes the disappearing image feel active rather than empty"
+        }
+      ],
+      "source_evidence": [
+        "The reference opens with a guard discovering a fading painting during routine work."
+      ],
+      "must_preserve": [
+        "routine custody disrupted by loss",
+        "the painting fades through lack of attention"
+      ],
+      "pivot_options": [
+        {
+          "label": "investigate",
+          "next_move": "Have the guard test whether attention changes the fading.",
+          "rationale": "This turns the setup into the central dramatic question."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The opening beat adapts the reference's first disruption."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_fading_choice",
+      "beat_role": "threshold",
+      "one_move_summary": "The guard chooses to stay with the painting instead of filing it as ordinary damage.",
+      "builds_toward_key_movement_id": "kem_inciting_shift",
+      "before_state": "The guard can still hand the problem back to procedure.",
+      "after_state": "He commits his own attention to the loss.",
+      "value_shift": "Observation becomes responsibility.",
+      "expectation_turn": {
+        "expected_direction": "A guard should report damage and return to patrol.",
+        "actual_result": "He breaks the rhythm of patrol and keeps watch.",
+        "surprise_function": "The first major choice makes care personal instead of institutional.",
+        "emotional_counterpoint": "Fear of failure is met by tenderness."
+      },
+      "intended_feeling": "the vulnerable seriousness of choosing to witness",
+      "emotional_payload": "The guard crosses from keeper of objects to keeper of attention.",
+      "tension_profile": [
+        {
+          "name": "Duty / Care",
+          "tension_intensity": 0.78,
+          "emotional_function": "separates institutional duty from personal witness"
+        },
+        {
+          "name": "Control / Surrender",
+          "tension_intensity": 0.69,
+          "emotional_function": "keeps his choice active even though he cannot command the result"
+        }
+      ],
+      "source_evidence": [
+        "The reference says he breaks protocol by staying with the painting through dawn."
+      ],
+      "must_preserve": [
+        "attention as care",
+        "choice without guaranteed rescue"
+      ],
+      "pivot_options": [
+        {
+          "label": "hold-watch",
+          "next_move": "Let the night intensify around the guard's chosen witness.",
+          "rationale": "This tests whether the choice can survive worsening pressure."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fading_museum_three_act",
+          "note": "The beat protects the meaning that attention matters as care, not control."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_fading_midpoint",
+      "beat_role": "reversal",
+      "one_move_summary": "The guard realizes watching does not restore the image; it only makes the loss undeniable.",
+      "builds_toward_key_movement_id": "kem_midpoint_reframe",
+      "before_state": "The guard hopes attention might save the painting.",
+      "after_state": "He understands attention may only dignify the loss.",
+      "value_shift": "Hope of repair becomes commitment to witness.",
+      "expectation_turn": {
+        "expected_direction": "If attention caused the fading to slow, sustained attention should reverse it.",
+        "actual_result": "The painting continues to vanish while becoming more emotionally present.",
+        "surprise_function": "The midpoint reframes success from rescue to witness.",
+        "emotional_counterpoint": "Helplessness deepens care rather than cancelling it."
+      },
+      "intended_feeling": "grief sharpened by the refusal to look away",
+      "emotional_payload": "The work turns on accepting that care may not prevent loss.",
+      "tension_profile": [
+        {
+          "name": "Hope / Grief",
+          "tension_intensity": 0.84,
+          "emotional_function": "forces the emotional reframe at the midpoint"
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.88,
+          "emotional_function": "makes the vanishing image feel more present as it disappears"
+        }
+      ],
+      "source_evidence": [
+        "The image has not returned by morning in the reference."
+      ],
+      "must_preserve": [
+        "loss is not fixed",
+        "witnessing still matters"
+      ],
+      "pivot_options": [
+        {
+          "label": "answer",
+          "next_move": "Let dawn answer the central question through the room's changed attention.",
+          "rationale": "This moves toward climax without solving the mystery."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_fading_museum_three_act",
+          "note": "The midpoint tests the transformation constraint that the loss must not be explained away."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_fading_closure",
+      "beat_role": "closure",
+      "one_move_summary": "At dawn the painting is gone, but the empty frame causes visitors to look harder at the whole room.",
+      "builds_toward_key_movement_id": "kem_climax_residue",
+      "before_state": "The guard has failed to preserve the image as an object.",
+      "after_state": "The room inherits his attention as a changed public practice.",
+      "value_shift": "Private witness becomes shared perception.",
+      "expectation_turn": {
+        "expected_direction": "The climax should reveal the image restored or the mystery solved.",
+        "actual_result": "The image remains gone, and the answer arrives as changed attention in others.",
+        "surprise_function": "The central question is answered emotionally rather than materially.",
+        "emotional_counterpoint": "Defeat carries a quiet communal opening."
+      },
+      "intended_feeling": "sadness made useful without becoming consolation",
+      "emotional_payload": "The loss remains, but attention has changed hands.",
+      "tension_profile": [
+        {
+          "name": "Private / Public",
+          "tension_intensity": 0.79,
+          "emotional_function": "moves the guard's private act into shared perception"
+        },
+        {
+          "name": "Loss / Meaning",
+          "tension_intensity": 0.86,
+          "emotional_function": "keeps the ending from becoming either repair or despair"
+        }
+      ],
+      "source_evidence": [
+        "Visitors stop and look harder at everything else after seeing the empty frame."
+      ],
+      "must_preserve": [
+        "changed public perception",
+        "unrestored image"
+      ],
+      "pivot_options": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fading_museum_three_act",
+          "note": "The ending preserves attention as care while refusing restoration."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_unrestored_attention",
+      "summary": "Care matters even when it cannot restore what has been lost.",
+      "intended_feeling": "useful grief without consolation",
+      "emotional_payload": "The empty frame becomes a demand for deeper looking.",
+      "source_evidence": [
+        "The painting does not return, but the visitors' attention changes."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fading_museum_three_act",
+          "note": "The tension point preserves the core meaning of attention as care without control."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_opening_pressure",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_fading_setup"
+      ],
+      "emotional_shift": "routine custody becomes alarmed attention",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The opening pressure comes from the first visible fading."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_inciting_shift",
+      "role": "inciting_shift",
+      "beat_ids": [
+        "beat_fading_choice"
+      ],
+      "emotional_shift": "procedure becomes personal witness",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fading_museum_three_act",
+          "note": "The first major choice adapts care as a chosen act."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_midpoint_reframe",
+      "role": "midpoint_turn",
+      "beat_ids": [
+        "beat_fading_midpoint"
+      ],
+      "emotional_shift": "saving the image becomes witnessing the loss",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_fading_museum_three_act",
+          "note": "The midpoint keeps the work from becoming a repair plot."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_climax_residue",
+      "role": "climax",
+      "beat_ids": [
+        "beat_fading_closure"
+      ],
+      "emotional_shift": "private witness becomes shared perception",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fading_museum_three_act",
+          "note": "The climax answers through changed attention rather than restoration."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Move from procedural control to surrendered witness while making each adjacent beat intensify or reframe attention.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 3,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "A lower adjacent shift can be waived only if the artist explicitly wants a more static vigil and the reviewer confirms the midpoint reframe still lands."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_fading_setup",
+        "to_beat_id": "beat_fading_choice",
+        "shift_summary": "The pressure shifts from noticing loss to choosing responsibility for it.",
+        "shifted_tensions": [
+          {
+            "name": "Control / Surrender",
+            "from_intensity": 0.62,
+            "to_intensity": 0.69,
+            "delta": 0.07,
+            "direction": "holds"
+          },
+          {
+            "name": "Duty / Care",
+            "from_intensity": 0.48,
+            "to_intensity": 0.78,
+            "delta": 0.3,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_fading_choice",
+        "to_beat_id": "beat_fading_midpoint",
+        "shift_summary": "The guard's chosen witness stops feeling like rescue and becomes grief-bearing attention.",
+        "shifted_tensions": [
+          {
+            "name": "Hope / Grief",
+            "from_intensity": 0.52,
+            "to_intensity": 0.84,
+            "delta": 0.32,
+            "direction": "increases"
+          },
+          {
+            "name": "Presence / Absence",
+            "from_intensity": 0.64,
+            "to_intensity": 0.88,
+            "delta": 0.24,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_fading_midpoint",
+        "to_beat_id": "beat_fading_closure",
+        "shift_summary": "The unresolved loss moves from one person's vigil into a public change in perception.",
+        "shifted_tensions": [
+          {
+            "name": "Private / Public",
+            "from_intensity": 0.41,
+            "to_intensity": 0.79,
+            "delta": 0.38,
+            "direction": "increases"
+          },
+          {
+            "name": "Loss / Meaning",
+            "from_intensity": 0.63,
+            "to_intensity": 0.86,
+            "delta": 0.23,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the three-act shape reads as external plot mechanics rather than escalating attention pressure, or if the climax restores the image instead of changing perception."
+  },
+  "arc_summary": {
+    "beginning": "A routine guard notices a painting fading when neglected.",
+    "turn": "He learns that attention cannot restore the image but can change the meaning of the loss.",
+    "ending_or_residue": "The painting remains gone, while the empty frame teaches the room to look harder.",
+    "scale_rationale": "An arc is appropriate because the project needs setup, commitment, midpoint reframe, and climax/residue to prove that attention matters without solving the loss."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_fading_museum_three_act",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-19T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "reference-and-meaning.md",
+      "note": "The Beat Plan adapts the invented reference's fading painting, guard choice, and changed visitor attention."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_fading_museum_three_act",
+      "note": "The adapted three-act structure preserves attention as care rather than control."
+    },
+    {
+      "source_type": "story_gate",
+      "source_ref": "three_act_structure",
+      "note": "The Story Structure guides Beat movement and does not select medium, output shape, asset count, or Cultural Format Structure."
+    }
+  ]
+}

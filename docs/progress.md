@@ -458,6 +458,7 @@ Not implemented yet:
 
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
+- rehearse additional Story Structure entries in the Story Journey / Beat Plan path, especially `hero_journey` and `kishotenketsu`,
 - rehearse the image and Suno dry-run flows end to end against the hardened emotional-primacy model,
 - rehearse the Text Journey end to end and harden any schema or skill gaps found in use,
 - build provider/import adapter contracts that emit Output Records,
@@ -466,6 +467,8 @@ This means the next work should be consolidation first, then expansion. Good nex
 Structure Library rehearsal status:
 
 - Service article / how-to, op-ed, and short story Cultural Format Structure entries all rehearsed cleanly against Text Journey without schema changes.
+- `three_act_structure` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/three-act-rehearsal/beat-plan.json`. The rehearsal confirmed that Story Structure can guide movement, turn logic, compression, expansion, and failure modes without choosing medium, output shape, asset count, or Cultural Format Structure.
+- `hero_journey` and `kishotenketsu` should be rehearsed before making Story Structure selection stricter because they stress less baseline movement patterns.
 - `tests/fixtures/text-journey/op-ed-rehearsal/` is the representative promoted fixture because it proves `primary_text_form = "article"` can combine with `cultural_format_structure.library_entry_id = "op_ed"` without article subtype enums.
 
 ## Future Follow-Ups
@@ -474,6 +477,7 @@ Structure Library rehearsal status:
 - Design a Randomizer function for accepted or final-ready work. Given a locked Reference, Artist Meaning, Transformation Brief, Beat Plan, and final outcome target, it should create one or more meaning-equivalent alternate directions that preserve the heart of the work while varying approved axes such as art style, genre, world, setting, symbolic language, composition, palette, or medium treatment. This should build on the Prompt Branch Set idea, but may need its own post-final workflow when the artist wants a radically different world or genre after a final outcome exists.
 - Design Artist OS Personality Profiles for the skill layer. The goal is to make artist-facing communication feel distinctive and less generic while preserving all product rules: clear Decision Interviews, Recommended Answers, provenance, approval gates, and no unapproved generation calls. Profiles should change tone and interaction texture, not alter Artist Meaning or pipeline behavior.
 - Decide whether the new text-first structure fields should move into image, sound, video, and mixed-media Medium Plans after the Text Journey rehearsal hardens adapted Story Structure, Medium Output Shape Recommendation, and adapted Cultural Format Structure.
+- Revisit `publication_use.use_case` only after one or two more editorial/article rehearsals confirm that article/editorial use should not continue falling back to `other`.
 - Add `taste-memory-record.schema.json` only when accepted outputs need durable reusable taste guidance.
 - Add `calibration-choice.schema.json` only when calibration choices need to update future prompt planning in a structured way.
 - Add an Output Batch or Provider Run record only when provider adapters need batch-level cost tracking, retry tracking, or comparative curation.

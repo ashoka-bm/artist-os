@@ -86,9 +86,12 @@ Review:
 
 Turns the Transformation Brief into a Story / Beat Plan.
 
+When a recognized movement pattern would help the work, select or adapt a Story Structure from `docs/structure-library/story/README.md` and store the project-specific adaptation in `story_structure` on the Beat Plan. The Story Structure guides movement, compression, expansion, and Beat Roles; it does not choose medium, output shape, asset count, or publication format.
+
 Outputs:
 
 - Story Mode,
+- Adapted Story Structure, when used,
 - Beat Plan,
 - Beat Roles,
 - tension movement,
