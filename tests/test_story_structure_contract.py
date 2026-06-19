@@ -48,6 +48,10 @@ class StoryStructureContractTests(unittest.TestCase):
                 "entry_id": "kishotenketsu",
                 "roles": {"grounding", "build", "reveal", "closure"},
             },
+            "tests/fixtures/story/freytag-rehearsal/beat-plan.json": {
+                "entry_id": "freytag_dramatic_arc",
+                "roles": {"grounding", "build", "reversal", "consequence", "residue"},
+            },
         }
 
         for fixture_path, expectation in fixture_expectations.items():

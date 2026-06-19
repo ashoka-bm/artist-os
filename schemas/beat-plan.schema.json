@@ -81,6 +81,21 @@
       "items": { "$ref": "#/$defs/traceability_note" }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "required": ["story_mode"],
+        "properties": {
+          "story_mode": {
+            "enum": ["beat_pair", "triptych", "sequence", "scene", "arc", "world"]
+          }
+        }
+      },
+      "then": {
+        "required": ["story_structure"]
+      }
+    }
+  ],
   "$defs": {
     "story_mode": {
       "type": "string",

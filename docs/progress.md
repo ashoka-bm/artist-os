@@ -458,8 +458,7 @@ Not implemented yet:
 
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
-- decide whether three passing Story Structure rehearsals are enough to make `story_structure` required for multi-beat or arc Beat Plans, or whether to rehearse `freytag_dramatic_arc` first,
-- rehearse the image and Suno dry-run flows end to end against the hardened emotional-primacy model,
+- rehearse the image and Suno dry-run flows end to end against the hardened Story Structure and emotional-primacy model,
 - rehearse the Text Journey end to end and harden any schema or skill gaps found in use,
 - build provider/import adapter contracts that emit Output Records,
 - design curation records after real accepted outputs exist.
@@ -470,6 +469,8 @@ Structure Library rehearsal status:
 - `three_act_structure` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/three-act-rehearsal/beat-plan.json`. The rehearsal confirmed that Story Structure can guide movement, turn logic, compression, expansion, and failure modes without choosing medium, output shape, asset count, or Cultural Format Structure.
 - `hero_journey` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/hero-journey-rehearsal/beat-plan.json`. The rehearsal confirmed that `failure_modes` can carry anti-savior and anti-private-victory guardrails for canonical frameworks with stronger cultural baggage.
 - `kishotenketsu` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/kishotenketsu-rehearsal/beat-plan.json`. The rehearsal confirmed that Beat Plans can express contrast, recontextualization, and reconciliation without forcing conflict escalation.
+- `freytag_dramatic_arc` rehearsed cleanly as Story Journey / Beat Plan authority and is promoted at `tests/fixtures/story/freytag-rehearsal/beat-plan.json`. The rehearsal confirmed that Beat Plans can preserve rise, peak turn, falling consequence, and residue; Freytag climax maps to Beat Plan `reversal` while Key Emotional Movement carries `role = "climax"`.
+- After four passing Story Structure rehearsals, `story_structure` is required in `schemas/beat-plan.schema.json` for `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, and `world`, and remains optional for `single_beat`.
 - `tests/fixtures/text-journey/op-ed-rehearsal/` is the representative promoted fixture because it proves `primary_text_form = "article"` can combine with `cultural_format_structure.library_entry_id = "op_ed"` without article subtype enums.
 
 ## Future Follow-Ups

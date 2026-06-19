@@ -88,6 +88,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Output: Beat Plan.
 - Schema: `schemas/beat-plan.schema.json`.
 - Skill: medium planner or future story planner.
+- Structure rule: `story_structure` is required when `story_mode` is `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, series, lyric-bearing, scene, arc, or ambiguous plans.
 - Gate: Story Gate and Story Approval Gate.
 - Next: image, sound, video, text, or mixed-media medium planning.

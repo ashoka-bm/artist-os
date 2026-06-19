@@ -5,6 +5,22 @@
   "transformation_brief_id": "tb_op_ed_rehearsal",
   "story_mode": "sequence",
   "story_gate_status": "unconfirmed",
+  "story_structure": {
+    "library_entry_id": "public_access_argument_sequence",
+    "name": "Public Access Argument Sequence",
+    "grounding_status": "project_specific",
+    "grounding_tier": "artist_defined_project_specific",
+    "core_movement": "A concrete access failure becomes an accountable public claim, gathers focused evidence, turns through counterargument, and closes with a bounded civic ask.",
+    "adaptation_summary": "The op-ed Beat Plan adapts argument movement as a five-beat sequence: hook, thesis/authority, evidence/stakes, counterargument turn, and closing call.",
+    "turn_logic": "The reader first sees a service gap through one closed cooling center, then understands the deeper issue as practical access rather than nominal availability.",
+    "compression_rule": "Keep each beat tied to one civic job so urgency does not become diffuse climate alarm.",
+    "expansion_rule": "Expand by adding evidence or counterargument detail only when it strengthens the practical access claim.",
+    "failure_modes": [
+      "the piece becomes a general heat-risk article instead of an access argument",
+      "the hook creates urgency without connecting to the policy ask",
+      "the counterargument is dismissed instead of answered responsibly"
+    ]
+  },
   "beats": [
     {
       "beat_id": "beat_news_hook",

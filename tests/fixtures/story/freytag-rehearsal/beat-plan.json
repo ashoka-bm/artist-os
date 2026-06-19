@@ -1,0 +1,506 @@
+{
+  "beat_plan_id": "bp_fire_tower_freytag",
+  "source_id": "src_fire_tower_freytag",
+  "artist_meaning_id": "meaning_fire_tower_freytag",
+  "transformation_brief_id": "tb_fire_tower_freytag",
+  "story_mode": "arc",
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "freytag_dramatic_arc",
+    "name": "Freytag Dramatic Arc",
+    "grounding_status": "researched",
+    "grounding_tier": "canonical_framework",
+    "core_movement": "An obsolete fire lookout tower becomes dramatically necessary during a dry lightning storm, reaches a peak when the lookout sends an unverified warning, then falls through consequence into mixed residue rather than triumph.",
+    "adaptation_summary": "The rehearsal compresses Freytag into five Beat Plan beats: exposition/exciting force, rising action, climax, falling action, and denouement. It gives the falling side real emotional weight instead of treating it as explanation.",
+    "turn_logic": "The audience first expects a human-versus-automation validation arc, then the climax turns into a consequence arc where being right still causes harm.",
+    "compression_rule": "Merge exposition with exciting force, give rising action one strong pressure build, then preserve separate climax, falling action, and denouement beats so consequence is not skipped.",
+    "expansion_rule": "If expanded, split the rising side into repeated sensor/human perception conflicts and split the falling side into saved ridge, stranded crew, public accounting, and decommissioning residue.",
+    "failure_modes": [
+      "the climax validates the hero and leaves no governing change",
+      "falling action summarizes consequences instead of making the audience sit with them",
+      "the rise uses emergency volume rather than moral pressure",
+      "the ending ties off plot while avoiding mixed emotional residue"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_tower_exposition_force",
+      "beat_role": "grounding",
+      "one_move_summary": "The lookout begins her final week in a tower everyone treats as obsolete until a dry lightning storm makes the valley feel newly vulnerable.",
+      "builds_toward_key_movement_id": "kem_tower_exposition_force",
+      "before_state": "The tower is scheduled for automation and the lookout's attention is treated as sentimental redundancy.",
+      "after_state": "The storm makes obsolescence feel dangerous rather than settled.",
+      "value_shift": "Obsolescence becomes latent pressure.",
+      "expectation_turn": {
+        "expected_direction": "A decommissioned tower suggests a quiet retirement or nostalgia story.",
+        "actual_result": "The dry lightning storm turns the old tower into the only human vantage point still watching.",
+        "surprise_function": "The exciting force starts the dramatic line without yet proving the lookout right.",
+        "emotional_counterpoint": "Melancholy is sharpened by alertness."
+      },
+      "intended_feeling": "uneasy attention inside something everyone else has dismissed",
+      "emotional_payload": "The old lookout system may still see what the faster system misses.",
+      "tension_profile": [
+        {
+          "name": "Obsolescence / Perception",
+          "tension_intensity": 0.74,
+          "emotional_function": "turns the tower's age into a live source of pressure"
+        },
+        {
+          "name": "Calm / Threat",
+          "tension_intensity": 0.7,
+          "emotional_function": "lets the storm disturb the final-week stillness"
+        }
+      ],
+      "source_evidence": [
+        "The lookout spends the last week in a mountain tower scheduled for automation during dry lightning conditions."
+      ],
+      "must_preserve": [
+        "obsolete tower still perceptive",
+        "storm begins dramatic rise"
+      ],
+      "pivot_options": [
+        {
+          "label": "rising-pressure",
+          "next_move": "Let the lookout see smoke that the sensors mark clear.",
+          "rationale": "The rise needs pressure between human attention and automated certainty."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The opening merges exposition and exciting force as Freytag compression guidance allows."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_tower_rising_action",
+      "beat_role": "build",
+      "one_move_summary": "The lookout sees smoke in a ravine the sensors call clear, and each minute of hesitation increases the cost of trusting either system.",
+      "builds_toward_key_movement_id": "kem_tower_rising_action",
+      "before_state": "Human attention and automated certainty can still coexist uneasily.",
+      "after_state": "The lookout must choose because waiting becomes its own risk.",
+      "value_shift": "Observation becomes urgent responsibility.",
+      "expectation_turn": {
+        "expected_direction": "The sensor system should resolve uncertainty faster than the lookout can.",
+        "actual_result": "The discrepancy widens and makes both obedience and warning dangerous.",
+        "surprise_function": "The rise builds moral pressure rather than just emergency spectacle.",
+        "emotional_counterpoint": "Clarity increases fear instead of reducing it."
+      },
+      "intended_feeling": "the tightening pressure of needing to act before certainty arrives",
+      "emotional_payload": "The rise is the cost of attention when authority disagrees.",
+      "tension_profile": [
+        {
+          "name": "Attention / Certainty",
+          "tension_intensity": 0.86,
+          "emotional_function": "forces the dramatic climb toward a choice"
+        },
+        {
+          "name": "Obedience / Responsibility",
+          "tension_intensity": 0.82,
+          "emotional_function": "makes protocol feel both protective and dangerous"
+        }
+      ],
+      "source_evidence": [
+        "She spots smoke in a ravine the sensors have marked clear."
+      ],
+      "must_preserve": [
+        "increasing pressure",
+        "human attention versus automated certainty"
+      ],
+      "pivot_options": [
+        {
+          "label": "send-warning",
+          "next_move": "The lookout breaks protocol by sending the unverified warning.",
+          "rationale": "Freytag requires the strongest pressure to change the governing condition."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The rising action protects pressure as a moral decision, not volume."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_tower_climax",
+      "beat_role": "reversal",
+      "one_move_summary": "She sends the unverified warning, saving one ridge and immediately changing the story from whether she is right to what her rightness costs.",
+      "builds_toward_key_movement_id": "kem_tower_climax",
+      "before_state": "The central question is whether she should trust what she sees.",
+      "after_state": "The central condition changes: action has happened and consequence is now unavoidable.",
+      "value_shift": "Decision becomes irreversible consequence.",
+      "expectation_turn": {
+        "expected_direction": "The warning should function as the triumphant proof that human attention matters.",
+        "actual_result": "The warning saves one ridge while beginning the chain that strands a crew.",
+        "surprise_function": "The climax changes direction from validation to accounting.",
+        "emotional_counterpoint": "Relief is immediately contaminated by dread."
+      },
+      "intended_feeling": "the shock of a necessary action becoming morally irreversible",
+      "emotional_payload": "The peak does not end the pressure; it changes what kind of pressure the story is about.",
+      "tension_profile": [
+        {
+          "name": "Necessity / Harm",
+          "tension_intensity": 0.94,
+          "emotional_function": "makes the climax change the governing condition"
+        },
+        {
+          "name": "Relief / Dread",
+          "tension_intensity": 0.9,
+          "emotional_function": "prevents the peak from becoming simple triumph"
+        }
+      ],
+      "source_evidence": [
+        "She breaks protocol by sending an unverified warning, causing an evacuation that saves one ridge but strands a crew."
+      ],
+      "must_preserve": [
+        "climax changes governing condition",
+        "necessary action creates harm"
+      ],
+      "pivot_options": [
+        {
+          "label": "falling-consequence",
+          "next_move": "Follow the stranded crew and saved ridge as consequence, not summary.",
+          "rationale": "Freytag needs the falling action to matter as much as the climb."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "freytag_dramatic_arc",
+          "note": "The climax answers the rise by changing the governing condition of the work."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_tower_falling_action",
+      "beat_role": "consequence",
+      "one_move_summary": "After the evacuation, the saved ridge and stranded crew make the valley count the same warning as rescue and harm.",
+      "builds_toward_key_movement_id": "kem_tower_falling_action",
+      "before_state": "The warning has proven the lookout's perception mattered.",
+      "after_state": "The warning becomes ethically mixed because its consequences cannot be separated.",
+      "value_shift": "Proof becomes accounting.",
+      "expectation_turn": {
+        "expected_direction": "After a correct warning, the falling action should confirm her judgment.",
+        "actual_result": "The aftermath forces everyone to weigh saved lives against people endangered by the warning's timing.",
+        "surprise_function": "Consequence replaces escalation and keeps the story morally open.",
+        "emotional_counterpoint": "Gratitude and blame occupy the same event."
+      },
+      "intended_feeling": "the heavy stillness after a right choice that still hurt people",
+      "emotional_payload": "The falling side is where the work refuses clean vindication.",
+      "tension_profile": [
+        {
+          "name": "Rescue / Harm",
+          "tension_intensity": 0.91,
+          "emotional_function": "makes consequence emotionally active"
+        },
+        {
+          "name": "Vindication / Accountability",
+          "tension_intensity": 0.87,
+          "emotional_function": "keeps the aftermath from becoming summary"
+        }
+      ],
+      "source_evidence": [
+        "The evacuation saves one ridge but strands a crew on the old access road."
+      ],
+      "must_preserve": [
+        "falling action as consequence",
+        "mixed accounting"
+      ],
+      "pivot_options": [
+        {
+          "label": "denouement",
+          "next_move": "Let the tower still be decommissioned while the lookout sits with the mixed residue.",
+          "rationale": "The final state should land the emotional wound rather than solve the plot."
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The falling action preserves consequence after necessary choice as the piece's core meaning."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_tower_denouement",
+      "beat_role": "residue",
+      "one_move_summary": "The tower is decommissioned anyway, leaving the lookout with saved lives, stranded people, and no clean verdict.",
+      "builds_toward_key_movement_id": "kem_tower_denouement",
+      "before_state": "The aftermath might still become public vindication or institutional reversal.",
+      "after_state": "The final state preserves mixed residue: the tower ends, the warning mattered, and harm remains.",
+      "value_shift": "Accounting becomes residue.",
+      "expectation_turn": {
+        "expected_direction": "The institution might keep the tower after the lookout proves its value.",
+        "actual_result": "The tower is still decommissioned, and the moral residue stays with the lookout.",
+        "surprise_function": "The denouement refuses structural reward while preserving emotional consequence.",
+        "emotional_counterpoint": "Release is paired with unresolved burden."
+      },
+      "intended_feeling": "the sober residue of being necessary without being absolved",
+      "emotional_payload": "The ending lands the wound rather than the verdict.",
+      "tension_profile": [
+        {
+          "name": "Closure / Wound",
+          "tension_intensity": 0.83,
+          "emotional_function": "keeps the final state emotionally open"
+        },
+        {
+          "name": "Usefulness / Obsolescence",
+          "tension_intensity": 0.79,
+          "emotional_function": "lets the tower's value and ending coexist"
+        }
+      ],
+      "source_evidence": [
+        "After the fire passes, the tower is still decommissioned."
+      ],
+      "must_preserve": [
+        "tower still decommissioned",
+        "mixed emotional residue"
+      ],
+      "pivot_options": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The denouement preserves necessary action without absolution."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_necessary_harm",
+      "summary": "The warning is necessary and harmful at the same time.",
+      "intended_feeling": "moral residue after an urgent correct choice",
+      "emotional_payload": "Being right does not erase what the action caused.",
+      "source_evidence": [
+        "The warning saves one ridge but strands a crew."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The tension point protects consequence after necessary choice."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_tower_exposition_force",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_tower_exposition_force"
+      ],
+      "emotional_shift": "obsolete tower becomes latent pressure",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "reference-and-meaning.md",
+          "note": "The opening combines exposition and exciting force."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_tower_rising_action",
+      "role": "threshold",
+      "beat_ids": [
+        "beat_tower_rising_action"
+      ],
+      "emotional_shift": "observation becomes urgent responsibility",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The rise builds pressure to choose before certainty arrives."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_tower_climax",
+      "role": "climax",
+      "beat_ids": [
+        "beat_tower_climax"
+      ],
+      "emotional_shift": "decision becomes irreversible consequence",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "freytag_dramatic_arc",
+          "note": "The climax changes the governing condition from whether to act to what the action caused."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_tower_falling_action",
+      "role": "aftermath",
+      "beat_ids": [
+        "beat_tower_falling_action"
+      ],
+      "emotional_shift": "proof becomes accounting",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The falling movement keeps consequence emotionally active."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_tower_denouement",
+      "role": "residue",
+      "beat_ids": [
+        "beat_tower_denouement"
+      ],
+      "emotional_shift": "accounting becomes unresolved residue",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_fire_tower_freytag",
+          "note": "The final movement lands mixed residue rather than reward."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Rise from dismissed human attention toward an irreversible warning, then fall through consequence so aftermath matters as much as escalation.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.72,
+      "minimum_adjacent_shift_count": 4,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "A lower adjacent shift can be waived only if the artist explicitly wants a quieter dramatic arc and the climax still changes the governing condition."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_tower_exposition_force",
+        "to_beat_id": "beat_tower_rising_action",
+        "shift_summary": "The tower's latent pressure becomes an urgent choice between human attention and automated certainty.",
+        "shifted_tensions": [
+          {
+            "name": "Attention / Certainty",
+            "from_intensity": 0.5,
+            "to_intensity": 0.86,
+            "delta": 0.36,
+            "direction": "increases"
+          },
+          {
+            "name": "Obedience / Responsibility",
+            "from_intensity": 0.44,
+            "to_intensity": 0.82,
+            "delta": 0.38,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_tower_rising_action",
+        "to_beat_id": "beat_tower_climax",
+        "shift_summary": "The pressure peaks when the lookout acts and the governing condition changes from uncertainty to consequence.",
+        "shifted_tensions": [
+          {
+            "name": "Necessity / Harm",
+            "from_intensity": 0.58,
+            "to_intensity": 0.94,
+            "delta": 0.36,
+            "direction": "increases"
+          },
+          {
+            "name": "Relief / Dread",
+            "from_intensity": 0.42,
+            "to_intensity": 0.9,
+            "delta": 0.48,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_tower_climax",
+        "to_beat_id": "beat_tower_falling_action",
+        "shift_summary": "After the peak, escalation gives way to rescue/harm accounting.",
+        "shifted_tensions": [
+          {
+            "name": "Rescue / Harm",
+            "from_intensity": 0.7,
+            "to_intensity": 0.91,
+            "delta": 0.21,
+            "direction": "increases"
+          },
+          {
+            "name": "Vindication / Accountability",
+            "from_intensity": 0.55,
+            "to_intensity": 0.87,
+            "delta": 0.32,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_tower_falling_action",
+        "to_beat_id": "beat_tower_denouement",
+        "shift_summary": "The consequence settles into unresolved residue when institutional reward does not arrive.",
+        "shifted_tensions": [
+          {
+            "name": "Closure / Wound",
+            "from_intensity": 0.56,
+            "to_intensity": 0.83,
+            "delta": 0.27,
+            "direction": "increases"
+          },
+          {
+            "name": "Usefulness / Obsolescence",
+            "from_intensity": 0.52,
+            "to_intensity": 0.79,
+            "delta": 0.27,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if the climax only validates the lookout, if falling action becomes recap, or if the denouement resolves the mixed residue too cleanly."
+  },
+  "arc_summary": {
+    "beginning": "The obsolete tower becomes dramatically live during a dry lightning storm.",
+    "turn": "The lookout sends the unverified warning, changing the story from whether she is right to what her rightness costs.",
+    "ending_or_residue": "The tower is decommissioned anyway, and the lookout carries saved lives, stranded people, and no clean verdict.",
+    "scale_rationale": "A Freytag arc is appropriate because the piece needs visible rise, peak turn, falling consequence, and final residue."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_fire_tower_freytag",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-19T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "reference-and-meaning.md",
+      "note": "The Beat Plan adapts the invented reference's obsolete tower, storm pressure, warning climax, stranded crew consequence, and decommissioning residue."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_fire_tower_freytag",
+      "note": "The adapted Freytag arc preserves consequence after necessary choice."
+    },
+    {
+      "source_type": "story_gate",
+      "source_ref": "freytag_dramatic_arc",
+      "note": "Freytag guides rise, peak turn, falling action, and denouement without choosing medium, output shape, asset count, or Cultural Format Structure."
+    }
+  ]
+}

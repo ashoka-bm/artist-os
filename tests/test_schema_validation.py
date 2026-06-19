@@ -130,6 +130,27 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_beat_plan_requires_story_structure_for_non_single_beat_modes(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "freytag-rehearsal" / "beat-plan.json"
+        schema = load_json(schema_path)
+        for story_mode in ["beat_pair", "triptych", "sequence", "scene", "arc", "world"]:
+            with self.subTest(story_mode=story_mode):
+                record = load_json(data_path)
+                record["story_mode"] = story_mode
+                del record["story_structure"]
+                with self.assertRaisesRegex(ValidationError, "missing required field 'story_structure'"):
+                    validate(record, schema, schema)
+
+    def test_beat_plan_allows_single_beat_without_story_structure(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json"
+        record = load_json(data_path)
+        self.assertEqual("single_beat", record["story_mode"])
+        del record["story_structure"]
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
 
 if __name__ == "__main__":
     unittest.main()

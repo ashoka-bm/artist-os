@@ -61,6 +61,18 @@ def type_matches(value: Any, expected: str | list[str]) -> bool:
 def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str = "$") -> None:
     schema = resolve_schema(schema, root)
 
+    for subschema in schema.get("allOf", []):
+        validate(value, subschema, root, path)
+
+    if "if" in schema:
+        try:
+            validate(value, schema["if"], root, path)
+        except ValidationError:
+            pass
+        else:
+            if "then" in schema:
+                validate(value, schema["then"], root, path)
+
     if "type" in schema and not type_matches(value, schema["type"]):
         raise ValidationError(path, f"expected {schema['type']}, got {type(value).__name__}")
 

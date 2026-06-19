@@ -460,6 +460,10 @@ _Avoid_: Fill-in-the-blank template, rigid formula
 The project-specific Cultural Format Structure stored inside a Medium Plan, including compact grounding metadata, audience promise, Audience Hook, adapted parts, turn or payoff, adaptation policy, failure modes, and recommended Stewardship Views.
 _Avoid_: Replacing Medium Plan section structure, rigid template
 
+**Platform Container**:
+The publishing surface that packages an output for a specific platform or channel, such as Instagram Reel, TikTok photo post, YouTube Short, LinkedIn document carousel, Reddit AMA post, or Substack Note.
+_Avoid_: Cultural Format Structure, Story Structure, creative template
+
 **Audience Hook**:
 The opening attention mechanism that creates enough curiosity, tension, beauty, identification, surprise, or promise for the audience to keep going.
 _Avoid_: Clickbait, headline only, first sentence only
@@ -801,6 +805,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Research should inform **Story Structure Library Entries** and **Cultural Format Structure Library Entries**, but entries should stay concise and contain the operational structure itself rather than citations or source-reference lists.
 - Library entries may include compact grounding metadata such as researched/provisional status and **Structure Grounding Tier**, but should not include citations or source-reference lists.
 - **Cultural Format Structure Library** complements **Story Structure Library**: Story Structure owns deep movement, while Cultural Format Structure owns culturally recognized audience-facing form.
+- Social-media patterns such as carousel lessons, threads, AMAs, launch posts, and hook-demo-payoff posts are **Cultural Format Structures** by default; only deeper movement patterns such as reveal loops, before/after transformation, or problem/reframe/return belong in the **Story Structure Library**.
 - A project can combine one adapted **Story Structure** with one or more adapted **Cultural Format Structures** when a medium form has established expectations.
 - **Cultural Format Structure** is selected or adapted during **Medium Plan** creation, not during **Story Journey**.
 - **Medium Plans** produce a **Medium Output Shape Recommendation** from the approved **Beat Plan** and adapted **Story Structure**; the **Story Structure Library** does not choose the number of outputs.
@@ -811,8 +816,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Adapted Cultural Format Structure** parts map to Medium Plan sections, scenes, movements, or other parts; they do not replace the Medium Plan's execution structure.
 - Every **Cultural Format Structure** must define **Audience Hook** logic for its format, but the hook does not have to be a headline, first sentence, or clickbait device.
 - **Cultural Format Structure Library Entries** may recommend **Stewardship Views** for long or complex works, but those views remain projections over **Medium Plan** and **Long-Work Stewardship** state.
-- The first implementation should add optional schema fields for adapted **Story Structure**, **Medium Output Shape Recommendation**, and adapted **Cultural Format Structure**, then use fixtures and tests to harden them before making them required.
-- The first schema implementation should apply these optional fields to **Beat Plan** and **Text Medium Plan** first; cross-medium adoption for image, sound, video, and mixed media remains an explicit follow-up decision.
+- Adapted **Story Structure** is required in the **Beat Plan** when `story_mode` is `beat_pair`, `triptych`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
+- **Medium Output Shape Recommendation** and adapted **Cultural Format Structure** remain text-first Text Medium Plan fields while fixtures and tests harden cross-medium adoption; image, sound, video, and mixed-media adoption remains an explicit follow-up decision.
 - Image-specific **Series Recommendation** language should narrow toward **Medium Output Shape Recommendation** when the recommendation includes single compressed image, triptych, image series, video, or other visual forms.
 - **Poetic Density** increases when a single element carries multiple meanings without collapsing them into one message.
 - **Poetic Density Notes** capture **Poetic Density** without reducing it to a numeric score.
