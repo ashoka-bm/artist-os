@@ -1,0 +1,397 @@
+{
+  "beat_plan_id": "bp_op_ed_rehearsal",
+  "source_id": "src_op_ed_rehearsal",
+  "artist_meaning_id": "meaning_op_ed_rehearsal",
+  "transformation_brief_id": "tb_op_ed_rehearsal",
+  "story_mode": "sequence",
+  "story_gate_status": "unconfirmed",
+  "beats": [
+    {
+      "beat_id": "beat_news_hook",
+      "beat_role": "invitation",
+      "one_move_summary": "Open on a neighbor finding a locked cooling center after work and make the timing problem immediate.",
+      "builds_toward_key_movement_id": "kem_public_urgency",
+      "before_state": "Heat relief is treated as a daytime service.",
+      "after_state": "The reader sees that daytime-only hours miss the people most exposed after work.",
+      "value_shift": "From policy abstraction to concrete public urgency.",
+      "expectation_turn": {
+        "expected_direction": "A public service exists, so vulnerable residents can use it.",
+        "actual_result": "The service is closed at the exact hour many working residents can reach it.",
+        "surprise_function": "Turns availability into a credibility problem.",
+        "emotional_counterpoint": "Practical concern sharpened by disbelief."
+      },
+      "intended_feeling": "Urgent civic concern",
+      "emotional_payload": "A useful public promise becomes unreliable when its hours ignore lived schedules.",
+      "tension_profile": [
+        {
+          "name": "public promise versus practical access",
+          "tension_intensity": 0.72,
+          "emotional_function": "Makes the argument feel necessary rather than merely preferable."
+        }
+      ],
+      "source_evidence": [
+        "Invented reference note: city cooling centers close before many shift workers return home.",
+        "Invented reference note: the speaker volunteers at a neighborhood tenant desk."
+      ],
+      "must_preserve": [
+        "The argument must stay accountable to access, not convenience.",
+        "The opening must create urgency without sensationalizing heat risk."
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "text": "Use as the op-ed lede and audience hook."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_op_ed_rehearsal",
+          "note": "Artist Meaning frames the piece as a public argument for practical access."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_thesis_authority",
+      "beat_role": "grounding",
+      "one_move_summary": "State the thesis and establish why this speaker can responsibly make the claim.",
+      "builds_toward_key_movement_id": "kem_accountable_claim",
+      "before_state": "The reader has a problem but not yet a position.",
+      "after_state": "The reader understands the requested change and the speaker's accountable vantage point.",
+      "value_shift": "From concern to arguable civic claim.",
+      "expectation_turn": {
+        "expected_direction": "The piece might only complain about hours.",
+        "actual_result": "It asks for a specific evening-hours pilot tied to access data.",
+        "surprise_function": "Converts grievance into testable policy.",
+        "emotional_counterpoint": "Firmness restrained by practical responsibility."
+      },
+      "intended_feeling": "Trust in a specific, accountable claim",
+      "emotional_payload": "The speaker has seen the access gap closely enough to propose a bounded fix.",
+      "tension_profile": [
+        {
+          "name": "moral urgency versus operational realism",
+          "tension_intensity": 0.65,
+          "emotional_function": "Keeps the claim persuasive rather than merely indignant."
+        }
+      ],
+      "source_evidence": [
+        "Invented reference note: the speaker helps residents navigate public services.",
+        "Invented reference note: a pilot would keep three centers open until 9 p.m. on heat-alert days."
+      ],
+      "must_preserve": [
+        "The thesis must be debatable and concrete.",
+        "Authority must come from accountable proximity, not self-importance."
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "text": "Use as the thesis and authority section."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_op_ed_rehearsal",
+          "note": "The transformation brief asks for a public-facing argument with practical accountability."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_evidence_stakes",
+      "beat_role": "build",
+      "one_move_summary": "Use focused evidence and human stakes to show who the current schedule fails.",
+      "builds_toward_key_movement_id": "kem_public_urgency",
+      "before_state": "The policy proposal is clear but not yet fully earned.",
+      "after_state": "The reader sees the access gap as predictable, uneven, and fixable.",
+      "value_shift": "From assertion to supported public consequence.",
+      "expectation_turn": {
+        "expected_direction": "Evidence may broaden into a general climate argument.",
+        "actual_result": "Evidence stays pointed at hours, transit, shifts, and caretaking schedules.",
+        "surprise_function": "Narrows the evidence so the remedy feels actionable.",
+        "emotional_counterpoint": "Controlled pressure instead of diffuse alarm."
+      },
+      "intended_feeling": "Focused pressure",
+      "emotional_payload": "The people most likely to need evening access are also least helped by daytime-only hours.",
+      "tension_profile": [
+        {
+          "name": "visible service versus invisible exclusion",
+          "tension_intensity": 0.78,
+          "emotional_function": "Shows why formal availability is not the same as actual access."
+        }
+      ],
+      "source_evidence": [
+        "Invented reference note: residents mention bus transfers, caregiving, and late shifts.",
+        "Invented reference note: evening libraries and recreation centers already have staff patterns that could be studied."
+      ],
+      "must_preserve": [
+        "Evidence must remain credible and non-exhaustive.",
+        "Stakes must identify affected residents without exploiting them."
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "text": "Use as the evidence and stakes middle."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "src_op_ed_rehearsal",
+          "note": "Invented civic reference material supplies access barriers and stakes."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_counterargument",
+      "beat_role": "reversal",
+      "one_move_summary": "Face cost, staffing, and safety objections without caricature.",
+      "builds_toward_key_movement_id": "kem_accountable_claim",
+      "before_state": "The proposal risks sounding obvious and under-costed.",
+      "after_state": "The reader sees that the objection changes the design, not the need.",
+      "value_shift": "From advocacy to accountable persuasion.",
+      "expectation_turn": {
+        "expected_direction": "The piece might dismiss objections as indifference.",
+        "actual_result": "It accepts operational limits and proposes a bounded pilot with measurement.",
+        "surprise_function": "Makes restraint part of the argument's credibility.",
+        "emotional_counterpoint": "Respect for constraints held against urgency."
+      },
+      "intended_feeling": "Sober confidence",
+      "emotional_payload": "A fair objection should shape the policy, not cancel the public need.",
+      "tension_profile": [
+        {
+          "name": "budget caution versus public responsibility",
+          "tension_intensity": 0.7,
+          "emotional_function": "Prevents the op-ed from becoming a one-sided demand."
+        }
+      ],
+      "source_evidence": [
+        "Invented reference note: city departments worry about overtime and safety coverage.",
+        "Invented reference note: a pilot could limit scope and track usage."
+      ],
+      "must_preserve": [
+        "The counterargument must be fair.",
+        "The answer must improve the recommendation rather than simply repeat the thesis."
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "text": "Use as a counterargument and design refinement."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "prior_beat",
+          "source_ref": "beat_evidence_stakes",
+          "note": "The counterargument tests whether the earlier evidence supports a realistic remedy."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_close_call",
+      "beat_role": "closure",
+      "one_move_summary": "End with a clear call for an evening-hours pilot and a consequence if the city refuses.",
+      "builds_toward_key_movement_id": "kem_public_consequence",
+      "before_state": "The reader understands the claim, evidence, and objection.",
+      "after_state": "The reader feels that refusing a measured pilot would expose the gap between public promise and public protection.",
+      "value_shift": "From reasoned case to public consequence.",
+      "expectation_turn": {
+        "expected_direction": "The ending might summarize the argument.",
+        "actual_result": "The ending makes inaction harder to defend.",
+        "surprise_function": "Turns the close from recap into civic pressure.",
+        "emotional_counterpoint": "Measured language carrying a firm warning."
+      },
+      "intended_feeling": "Resolved public pressure",
+      "emotional_payload": "A city that opens cooling centers only when workers cannot reach them has not solved access.",
+      "tension_profile": [
+        {
+          "name": "public claim versus public accountability",
+          "tension_intensity": 0.82,
+          "emotional_function": "Leaves the reader with consequence rather than scolding."
+        }
+      ],
+      "source_evidence": [
+        "Invented reference note: the desired change is a measured evening-hours pilot.",
+        "Invented reference note: access is the stated value the piece must preserve."
+      ],
+      "must_preserve": [
+        "Close with consequence, action, or memorable observation.",
+        "Avoid scolding; make refusal harder to justify."
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "text": "Use as the close and call."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "story_gate",
+          "source_ref": "story_gate_unconfirmed_rehearsal",
+          "note": "Rehearsal keeps approval unconfirmed while testing structural fit."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_access_gap",
+      "summary": "A public service can exist on paper while remaining practically unreachable.",
+      "intended_feeling": "Civic unease",
+      "emotional_payload": "Access language feels hollow when hours exclude the people who need the service.",
+      "source_evidence": [
+        "Invented reference note: evening access problem."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_op_ed_rehearsal",
+          "note": "The central meaning is practical access, not symbolic concern."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_public_urgency",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_news_hook",
+        "beat_evidence_stakes"
+      ],
+      "emotional_shift": "The reader moves from abstract awareness to urgent recognition of a concrete access gap.",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_op_ed_rehearsal",
+          "note": "Urgency must come from access failure."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_accountable_claim",
+      "role": "midpoint_turn",
+      "beat_ids": [
+        "beat_thesis_authority",
+        "beat_counterargument"
+      ],
+      "emotional_shift": "The reader moves from agreement with the problem to trust in a bounded remedy.",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "transformation_brief",
+          "source_ref": "tb_op_ed_rehearsal",
+          "note": "The argument should stay accountable and practical."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_public_consequence",
+      "role": "climax",
+      "beat_ids": [
+        "beat_close_call"
+      ],
+      "emotional_shift": "The reader moves from understanding the recommendation to feeling the public cost of refusal.",
+      "compression_priority": "secondary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "src_op_ed_rehearsal",
+          "note": "The invented reference frames a specific policy call."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Move from concrete access failure to accountable policy remedy, then to public consequence.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 1,
+      "minimum_primary_tension_intensity": 0.6,
+      "minimum_adjacent_shift_count": 1,
+      "minimum_adjacent_shift_delta": 0.1,
+      "waiver_rule": "Do not waive unless the artist explicitly asks for a quieter civic reflection instead of persuasion."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_news_hook",
+        "to_beat_id": "beat_thesis_authority",
+        "shift_summary": "Moves from incident urgency to concrete policy claim.",
+        "shifted_tensions": [
+          {
+            "name": "public promise versus practical access",
+            "from_intensity": 0.72,
+            "to_intensity": 0.65,
+            "delta": 0.07,
+            "direction": "decreases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_thesis_authority",
+        "to_beat_id": "beat_evidence_stakes",
+        "shift_summary": "Moves from claim to proof and human stakes.",
+        "shifted_tensions": [
+          {
+            "name": "visible service versus invisible exclusion",
+            "from_intensity": 0.65,
+            "to_intensity": 0.78,
+            "delta": 0.13,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_evidence_stakes",
+        "to_beat_id": "beat_counterargument",
+        "shift_summary": "Moves from pressure to fair objection and design restraint.",
+        "shifted_tensions": [
+          {
+            "name": "budget caution versus public responsibility",
+            "from_intensity": 0.78,
+            "to_intensity": 0.7,
+            "delta": 0.08,
+            "direction": "inverts"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_counterargument",
+        "to_beat_id": "beat_close_call",
+        "shift_summary": "Moves from answered objection to public consequence.",
+        "shifted_tensions": [
+          {
+            "name": "public claim versus public accountability",
+            "from_intensity": 0.7,
+            "to_intensity": 0.82,
+            "delta": 0.12,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Check that every beat contains an expectation turn and that the counterargument is fair enough to improve persuasion."
+  },
+  "arc_summary": {
+    "beginning": "A closed door reveals a public-service access gap.",
+    "turn": "A fair operational objection forces the argument to become a bounded pilot rather than an unlimited demand.",
+    "ending_or_residue": "The city is left accountable for whether its public protection can be reached by the public.",
+    "scale_rationale": "A five-beat sequence is enough for a compact op-ed: hook, thesis, evidence, counterargument, close."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": null,
+    "approval_status": "pending"
+  },
+  "story_approval": {
+    "status": "unconfirmed",
+    "approved_by": null,
+    "approved_at": null,
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_op_ed_rehearsal",
+      "note": "Safe invented Artist Meaning: make a practical public argument for evening cooling-center access."
+    },
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "src_op_ed_rehearsal",
+      "note": "All evidence is invented for dry-run rehearsal."
+    }
+  ]
+}

@@ -1,0 +1,304 @@
+{
+  "text_medium_plan_id": "tmp_op_ed_rehearsal",
+  "source_id": "src_op_ed_rehearsal",
+  "artist_meaning_id": "meaning_op_ed_rehearsal",
+  "transformation_brief_id": "tb_op_ed_rehearsal",
+  "beat_plan_id": "bp_op_ed_rehearsal",
+  "target_media_type": "text",
+  "story_mode": "sequence",
+  "writing_method": {
+    "primary_method": "shape",
+    "method_modifiers": [
+      "argument beats"
+    ],
+    "rationale": "The target is a reader-facing finished opinion article, so the cultural format shape should govern section planning while the Beat Plan governs emotional movement."
+  },
+  "medium_output_shape_recommendation": {
+    "requested_shape": "op-ed",
+    "recommended_shape": "compact op-ed opinion article",
+    "accepted_shape": "compact op-ed opinion article",
+    "rationale": "The invented material has a timely civic claim, public stakes, accountable speaker, evidence, counterargument, and requested change.",
+    "alternatives_considered": [
+      "service article how-to",
+      "hook-driven article"
+    ],
+    "tradeoffs": [
+      "The op-ed shape favors persuasion over neutral explanation.",
+      "The compact length requires pointed evidence instead of exhaustive reporting."
+    ],
+    "conflict": {
+      "has_conflict": false,
+      "conflict_summary": null,
+      "resolution": "not_needed",
+      "gate_decision_id": null
+    }
+  },
+  "cultural_format_structure": {
+    "library_entry_id": "op_ed",
+    "name": "Op-Ed",
+    "grounding_status": "researched",
+    "grounding_tier": "craft_authority",
+    "audience_promise": "The reader will understand the speaker's public claim, why it matters now, why the speaker can responsibly make it, and what should change.",
+    "audience_hook": "Open with a concrete invented moment: a resident reaches a cooling center after a late shift and finds the doors closed.",
+    "parts": [
+      {
+        "part_id": "cfs_part_news_hook",
+        "label": "News hook or lede",
+        "function": "Shows why this argument matters now.",
+        "maps_to_section_ids": [
+          "txtsec_news_hook"
+        ]
+      },
+      {
+        "part_id": "cfs_part_argument_thesis",
+        "label": "Argument / thesis",
+        "function": "States or clearly implies the position.",
+        "maps_to_section_ids": [
+          "txtsec_thesis_authority"
+        ]
+      },
+      {
+        "part_id": "cfs_part_authority",
+        "label": "Authority",
+        "function": "Shows why the speaker is accountable to the claim.",
+        "maps_to_section_ids": [
+          "txtsec_thesis_authority"
+        ]
+      },
+      {
+        "part_id": "cfs_part_evidence_points",
+        "label": "Evidence points",
+        "function": "Supports the argument with credible material.",
+        "maps_to_section_ids": [
+          "txtsec_evidence",
+          "txtsec_stakes"
+        ]
+      },
+      {
+        "part_id": "cfs_part_counterargument",
+        "label": "Counterargument",
+        "function": "Acknowledges a strong objection or limitation.",
+        "maps_to_section_ids": [
+          "txtsec_counterargument"
+        ]
+      },
+      {
+        "part_id": "cfs_part_stakes",
+        "label": "Stakes",
+        "function": "Explains who is affected and why the issue matters.",
+        "maps_to_section_ids": [
+          "txtsec_stakes"
+        ]
+      },
+      {
+        "part_id": "cfs_part_close_call",
+        "label": "Close / call",
+        "function": "Ends with consequence, action, warning, or memorable observation.",
+        "maps_to_section_ids": [
+          "txtsec_close_call"
+        ]
+      }
+    ],
+    "turn_or_payoff": "The close should sharpen the public consequence: refusing a measured evening-hours pilot makes the city accountable for a protection people cannot reach.",
+    "adaptation_policy": {
+      "required": [
+        "News hook or lede",
+        "Argument / thesis",
+        "Authority",
+        "Evidence points",
+        "Counterargument",
+        "Stakes",
+        "Close / call"
+      ],
+      "mergeable": [
+        "Argument / thesis with Authority",
+        "Evidence points with Stakes"
+      ],
+      "omittable": [],
+      "invertible": [
+        "Authority may appear before or after the thesis if the lede needs immediate grounding."
+      ]
+    },
+    "failure_modes": [
+      "The piece has opinions but no argument.",
+      "The hook is timely but the thesis is generic.",
+      "Evidence is asserted rather than shown.",
+      "The counterargument is weak or caricatured.",
+      "The ending scolds instead of persuading."
+    ],
+    "recommended_stewardship_views": [
+      "argument_map",
+      "counterargument_tracker",
+      "evidence_stakes_map"
+    ]
+  },
+  "text_form": {
+    "primary_text_form": "article",
+    "text_form_modifiers": [],
+    "confirmation_status": "unconfirmed",
+    "rationale": "The `op_ed` Cultural Format Structure is a subtype of article, and the existing enum does not need a dedicated op-ed value because the cultural format carries the subtype.",
+    "avoid": [
+      "Do not turn the op-ed into a neutral explainer.",
+      "Do not add a separate article subtype enum unless downstream routing cannot distinguish `article` plus `op_ed`."
+    ]
+  },
+  "voice_point_of_view": {
+    "speaker": "A neighborhood tenant-help volunteer using invented civic experience.",
+    "point_of_view": "First-person plural used sparingly, with direct public argument in third-person policy language.",
+    "distance": "Close enough to show accountable proximity, restrained enough to avoid memoir.",
+    "register": "Clear, civic, concrete, and measured.",
+    "authority": "Accountability comes from helping residents navigate services and observing access barriers.",
+    "voice_constraints": [
+      "No partisan labels.",
+      "No real city, official, or private person names.",
+      "No invented statistics presented as verified fact."
+    ]
+  },
+  "structure_plan": {
+    "structure_type": "argument",
+    "structure_rationale": "The section plan maps op-ed cultural-format parts to concrete drafting sections while preserving local section jobs and Beat Plan movement.",
+    "sections": [
+      {
+        "section_id": "txtsec_news_hook",
+        "beat_id": "beat_news_hook",
+        "key_emotional_movement_id": "kem_public_urgency",
+        "section_label": "Locked-door lede",
+        "structure_role": "Op-ed lede / news hook",
+        "section_job": "Make the timing problem immediate through one safe invented moment, then name the public access gap.",
+        "intended_feeling": "Urgent civic concern",
+        "expectation_turn_translation": "The text sets up an available public service, then reveals that its hours make it unavailable to the resident who needs it.",
+        "source_wording_notes": [
+          "Use only invented reference details.",
+          "Avoid pretending the incident is a verified report."
+        ],
+        "paragraph_distinction": "Concrete moment and public urgency; no policy detail yet."
+      },
+      {
+        "section_id": "txtsec_thesis_authority",
+        "beat_id": "beat_thesis_authority",
+        "key_emotional_movement_id": "kem_accountable_claim",
+        "section_label": "Claim and accountable speaker",
+        "structure_role": "Thesis plus authority",
+        "section_job": "State that the city should pilot evening cooling-center hours on heat-alert days and explain the speaker's accountable vantage point.",
+        "intended_feeling": "Trust in a specific, accountable claim",
+        "expectation_turn_translation": "The text shifts from complaint to a bounded testable remedy.",
+        "source_wording_notes": [
+          "Do not overclaim expertise.",
+          "Keep authority tied to service navigation and observed access barriers."
+        ],
+        "paragraph_distinction": "Position and speaker accountability; not yet the evidence build."
+      },
+      {
+        "section_id": "txtsec_evidence",
+        "beat_id": "beat_evidence_stakes",
+        "key_emotional_movement_id": "kem_public_urgency",
+        "section_label": "Focused evidence",
+        "structure_role": "Evidence points",
+        "section_job": "Show why daytime-only hours predictably miss shift workers, caretakers, and transit-dependent residents.",
+        "intended_feeling": "Focused pressure",
+        "expectation_turn_translation": "Instead of expanding into a broad climate essay, the text narrows evidence to access mechanics.",
+        "source_wording_notes": [
+          "Do not fabricate numerical data.",
+          "Use qualitative invented examples clearly as rehearsal material."
+        ],
+        "paragraph_distinction": "Reasoned support; less anecdotal than the lede and more concrete than the thesis."
+      },
+      {
+        "section_id": "txtsec_stakes",
+        "beat_id": "beat_evidence_stakes",
+        "key_emotional_movement_id": "kem_public_urgency",
+        "section_label": "Who is affected",
+        "structure_role": "Stakes",
+        "section_job": "Explain that the schedule excludes people whose work, caregiving, or transit constraints make evening access essential.",
+        "intended_feeling": "Focused pressure with human consequence",
+        "expectation_turn_translation": "The text turns formal availability into practical exclusion.",
+        "source_wording_notes": [
+          "Keep affected residents generalized and respectful.",
+          "Avoid melodrama."
+        ],
+        "paragraph_distinction": "Human consequence; warmer and more grounded than the evidence paragraph."
+      },
+      {
+        "section_id": "txtsec_counterargument",
+        "beat_id": "beat_counterargument",
+        "key_emotional_movement_id": "kem_accountable_claim",
+        "section_label": "Fair objection and answer",
+        "structure_role": "Counterargument",
+        "section_job": "Acknowledge cost, staffing, and safety constraints, then answer with a limited pilot and measurement.",
+        "intended_feeling": "Sober confidence",
+        "expectation_turn_translation": "The text treats the objection as real and lets it refine the policy instead of weakening the claim.",
+        "source_wording_notes": [
+          "Do not caricature budget or staffing concerns.",
+          "Keep the answer operationally modest."
+        ],
+        "paragraph_distinction": "Deliberately cooler and more analytical than the stakes section."
+      },
+      {
+        "section_id": "txtsec_close_call",
+        "beat_id": "beat_close_call",
+        "key_emotional_movement_id": "kem_public_consequence",
+        "section_label": "Call with consequence",
+        "structure_role": "Close / call",
+        "section_job": "Ask for the evening-hours pilot and end on the consequence of a public protection that closes before people can reach it.",
+        "intended_feeling": "Resolved public pressure",
+        "expectation_turn_translation": "The text refuses a mere summary and makes inaction harder to defend.",
+        "source_wording_notes": [
+          "Close with pressure, not scolding.",
+          "Avoid adding new evidence in the final paragraph."
+        ],
+        "paragraph_distinction": "Memorable consequence and call; firmer than the counterargument, cleaner than the lede."
+      }
+    ]
+  },
+  "fidelity_policy": {
+    "mode": "new_from_meaning",
+    "source_wording_constraints": [
+      "All material is safe invented rehearsal content.",
+      "No source phrases are protected."
+    ],
+    "transformation_allowed": [
+      "Compress invented notes into an argument.",
+      "Create fresh wording from the rehearsal Artist Meaning.",
+      "Reorder op-ed parts when needed for clarity while preserving all required parts."
+    ],
+    "rights_notes": "Disposable dry-run artifact; no user-provided private media or generated work is included.",
+    "rationale": "The rehearsal tests structure mapping, not preservation of a real Reference's wording."
+  },
+  "publication_use": {
+    "use_case": "other",
+    "audience": "General public readers of a local opinion page.",
+    "privacy_notes": "No real people, locations, or private facts are used.",
+    "rights_notes": "Safe invented material only; no provider generation."
+  },
+  "gates": {
+    "writing_method_gate": "complete",
+    "text_form_gate": "unconfirmed",
+    "voice_point_of_view_gate": "unconfirmed",
+    "structure_gate": "complete",
+    "fidelity_transformation_gate": "complete",
+    "publication_use_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "writing_critic_required": true,
+    "prompt_critic_required": true,
+    "output_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_op_ed_rehearsal",
+      "note": "The plan preserves the invented meaning: practical access matters more than symbolic service availability."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_op_ed_rehearsal",
+      "note": "Each section maps to a Beat Plan beat and key emotional movement."
+    },
+    {
+      "source_type": "gate_decision",
+      "source_ref": "shape_recommendation_rehearsal",
+      "note": "The op-ed shape is accepted for rehearsal without artist confirmation."
+    }
+  ]
+}

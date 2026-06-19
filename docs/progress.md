@@ -463,6 +463,11 @@ This means the next work should be consolidation first, then expansion. Good nex
 - build provider/import adapter contracts that emit Output Records,
 - design curation records after real accepted outputs exist.
 
+Structure Library rehearsal status:
+
+- Service article / how-to, op-ed, and short story Cultural Format Structure entries all rehearsed cleanly against Text Journey without schema changes.
+- `tests/fixtures/text-journey/op-ed-rehearsal/` is the representative promoted fixture because it proves `primary_text_form = "article"` can combine with `cultural_format_structure.library_entry_id = "op_ed"` without article subtype enums.
+
 ## Future Follow-Ups
 
 - Design Personal Style Memory: a local, artist-specific style library where Artist OS can save reusable Style Directions, accepted style traits, rejected style traits, calibration notes, sample references, and provenance. The record should be private Workspace Library state, not committed project data, and it should never outrank Artist Meaning, Beat Plan, Visual Dynamics, or the governing Creative Brief.
