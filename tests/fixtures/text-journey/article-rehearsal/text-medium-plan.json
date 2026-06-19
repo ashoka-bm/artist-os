@@ -37,10 +37,10 @@
     }
   },
   "cultural_format_structure": {
-    "library_entry_id": "hook_driven_reflective_article",
+    "library_entry_id": "hook_driven_article",
     "name": "Hook-Driven Reflective Article",
-    "grounding_status": "project_specific",
-    "grounding_tier": "artist_defined_project_specific",
+    "grounding_status": "researched",
+    "grounding_tier": "craft_authority",
     "audience_promise": "The reader will start with a concrete odd detail and leave seeing shared maintenance as civic care.",
     "audience_hook": "Open on the muddy shoe at the garden gate before naming the article's civic meaning.",
     "parts": [
