@@ -75,7 +75,7 @@ Route single image toward the standard image Prompt Plan. Route sequential image
 > - **Rewrite or adaptation of the source**
 > - **Not sure**: recommend the best written form
 
-The artist may name multiple text forms, but identify or recommend one Primary Text Form before planning. Treat other named forms as Text Form Modifiers or constraints. If no primary form is clear, ask one clarifier.
+The artist may name multiple text forms, but identify or recommend one Primary Text Form before planning, such as article, poem, monologue, scene, script, lyrics, essay, letter, or treatment. Treat other named forms as Text Form Modifiers or constraints. If no primary form is clear, ask one clarifier.
 
 After the artist chooses a text kind, ask:
 

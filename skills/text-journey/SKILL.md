@@ -49,7 +49,7 @@ Before creating the text-specific brief, produce:
 2. A Beat Plan matching `schemas/beat-plan.schema.json`.
 3. A Text Medium Plan matching `schemas/text-medium-plan.schema.json`.
 
-The Beat Plan is authoritative for story shape. The Text Medium Plan is authoritative for text translation decisions: writing method, Primary Text Form, Text Form Modifiers, voice / point of view, structure, fidelity policy, publication/use, gate statuses, and review requirements. The later Text Creative Brief Record must include `transformation_brief_id`, `beat_plan_id`, and `text_medium_plan_id`; do not embed duplicate Beat records.
+The Beat Plan is authoritative for story shape, including any Adapted Story Structure stored in the Beat Plan. The Text Medium Plan is authoritative for text translation decisions: Medium Output Shape Recommendation, Adapted Cultural Format Structure, writing method, Primary Text Form, Text Form Modifiers, voice / point of view, structure, fidelity policy, publication/use, gate statuses, and review requirements. The later Text Creative Brief Record must include `transformation_brief_id`, `beat_plan_id`, and `text_medium_plan_id`; do not embed duplicate Beat records.
 
 For cumulative long text, the Long-Work Stewardship Record protects execution across text sections, chapters, scenes, or poem movements. The foundation record starts after Story Approval. Enrich it after Text Medium Plan by referencing text section or other medium part ids. Do not duplicate section execution, voice, fidelity, or editorial policy fields inside the stewardship record; those remain owned by Text Medium Plan and Text Generation Plan.
 
@@ -62,23 +62,26 @@ For exploratory writing, follow strict `writing-beats`: candidate starting beats
 Use this only after the shared Transformation Brief and Beat Plan exist.
 
 1. Identify formal observations from the Reference: voice, diction, imagery, pacing, lineation, paragraph pressure, structure, repetition, reversal, and source-wording sensitivity.
-2. Consume the shared Beat Plan. Do not fork a separate text-only beat structure.
+2. Consume the shared Beat Plan, including Adapted Story Structure when present. Do not fork a separate text-only beat structure.
 3. Select the writing method: `fragments`, `beats`, `shape`, or `hybrid`. Use `shape` when the output is a reader-facing finished piece.
-4. Define one Primary Text Form. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
-5. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
-6. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure.
-7. For every section, paragraph group, act, scene, or verse, name the structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and how it must feel different from neighboring sections.
-8. Define Fidelity Policy: preserve source wording, adapt, invert, expand, compress, translate, or create new text from meaning.
-9. Define publication/use and rights/privacy notes.
-10. Produce the Text Medium Plan only after the writing method, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
-11. When the text structure is cumulative, enrich the Long-Work Stewardship Record from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval.
+4. Produce a Medium Output Shape Recommendation before locking Primary Text Form. Include requested shape, recommended shape, accepted shape, rationale, alternatives considered, tradeoffs, and conflict status.
+5. If the artist-requested shape and recommended shape materially diverge, record a Medium Output Shape Conflict and resolve it with one Decision Interview question before locking the Text Medium Plan.
+6. Select or adapt the Cultural Format Structure after the Medium Output Shape Recommendation is accepted, revised, or explicitly allowed to proceed unconfirmed. Include Audience Hook, audience promise, adapted parts, turn or payoff, adaptation policy, failure modes, and any recommended Stewardship Views.
+7. Define one Primary Text Form, such as poem, article, prose scene, short story, monologue, script, lyrics, letter, essay/artist statement, manifesto, treatment, rewrite, adaptation, or other. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
+8. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
+9. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure. Map adapted Cultural Format Structure parts to Text Medium Plan sections rather than replacing section jobs. Keep Cultural Format Structure `function` at the audience-facing format-part level, section `structure_role` at the local position level, and section `section_job` at the concrete drafting-instruction level.
+10. For every section, paragraph group, act, scene, or verse, name the structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and how it must feel different from neighboring sections.
+11. Define Fidelity Policy: preserve source wording, adapt, invert, expand, compress, translate, or create new text from meaning.
+12. Define publication/use and rights/privacy notes.
+13. Produce the Text Medium Plan only after writing method, Medium Output Shape Recommendation, Cultural Format Structure when relevant, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
+14. When the text structure is cumulative, enrich the Long-Work Stewardship Record from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval. Plot-tracker-style Stewardship Views are projections over Text Medium Plan and Long-Work Stewardship state, not separate authority records.
 
 ## Draft Text Creative Brief Process
 
 Use this only after the Text Medium Plan exists. Before Writing Critic Review, build a substantive draft brief from the Text Medium Plan:
 
 1. Preserve `transformation_brief_id`, `beat_plan_id`, and `text_medium_plan_id`.
-2. Use the Text Medium Plan as the source of truth for writing method, Primary Text Form, voice, structure, fidelity policy, and publication/use.
+2. Use the Text Medium Plan as the source of truth for Medium Output Shape Recommendation, Adapted Cultural Format Structure, writing method, Primary Text Form, voice, structure, fidelity policy, and publication/use.
 3. Add Artist Meaning, formal observations, Emotional Qualities, Poetic Density Notes, source-wording constraints, transformation constraints, and editorial pass recommendations.
 4. Produce the draft Text Creative Brief Document only after required medium gates are complete or explicitly allowed to proceed unconfirmed.
 
@@ -138,13 +141,13 @@ Run editorial passes only after the main agent confirms the draft follows the Te
 
 ## Traceability Rules
 
-Every writing choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, a section job, Intended Feeling, Expectation Turn translation, Poetic Density Note, or editorial pass policy.
+Every writing choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Adapted Story Structure when present, Text Medium Plan, Medium Output Shape Recommendation, Adapted Cultural Format Structure when present, Text Creative Brief, Text Generation Plan, source-wording policy, a section job, Intended Feeling, Expectation Turn translation, Poetic Density Note, or editorial pass policy.
 
 Text form, clarity, and naturalness are subordinate to Artist Meaning, Beat Plan, structure, fidelity policy, and protected features.
 
 ## Outputs
 
-Before Writing Critic Review, return the Text Medium Plan, draft Text Creative Brief Document, Beat Plan reference, structure plan, fidelity policy, editorial pass recommendations, and open questions.
+Before Writing Critic Review, return the Text Medium Plan, draft Text Creative Brief Document, Beat Plan reference, Medium Output Shape Recommendation, Adapted Cultural Format Structure when present, structure plan, fidelity policy, editorial pass recommendations, and open questions.
 
 After Writing Critic Review and Brief Approval, return the Text Creative Brief Record and Text Generation Plan.
 

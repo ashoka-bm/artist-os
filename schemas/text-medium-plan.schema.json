@@ -40,6 +40,8 @@
         "rationale": { "type": "string", "minLength": 1 }
       }
     },
+    "medium_output_shape_recommendation": { "$ref": "#/$defs/medium_output_shape_recommendation" },
+    "cultural_format_structure": { "$ref": "#/$defs/cultural_format_structure" },
     "text_form": {
       "type": "object",
       "additionalProperties": false,
@@ -132,7 +134,130 @@
     },
     "text_form": {
       "type": "string",
-      "enum": ["poem", "prose_scene", "short_story", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+      "enum": ["poem", "prose_scene", "short_story", "article", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]
+    },
+    "medium_output_shape_recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_shape",
+        "recommended_shape",
+        "accepted_shape",
+        "rationale",
+        "alternatives_considered",
+        "tradeoffs",
+        "conflict"
+      ],
+      "properties": {
+        "requested_shape": { "type": ["string", "null"], "minLength": 1 },
+        "recommended_shape": { "type": "string", "minLength": 1 },
+        "accepted_shape": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string", "minLength": 1 },
+        "alternatives_considered": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "tradeoffs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "conflict": { "$ref": "#/$defs/medium_output_shape_conflict" }
+      }
+    },
+    "medium_output_shape_conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["has_conflict", "conflict_summary", "resolution", "gate_decision_id"],
+      "properties": {
+        "has_conflict": { "type": "boolean" },
+        "conflict_summary": { "type": ["string", "null"], "minLength": 1 },
+        "resolution": {
+          "type": "string",
+          "enum": ["not_needed", "accepted_recommendation", "kept_requested_shape", "revised_shape", "proceeded_unconfirmed", "waived"]
+        },
+        "gate_decision_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+      }
+    },
+    "cultural_format_structure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "library_entry_id",
+        "name",
+        "grounding_status",
+        "grounding_tier",
+        "audience_promise",
+        "audience_hook",
+        "parts",
+        "turn_or_payoff",
+        "adaptation_policy",
+        "failure_modes",
+        "recommended_stewardship_views"
+      ],
+      "properties": {
+        "library_entry_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "grounding_status": { "type": "string", "enum": ["provisional", "researched", "artist_defined", "project_specific"] },
+        "grounding_tier": {
+          "type": "string",
+          "enum": ["canonical_framework", "craft_authority", "platform_pattern_evidence", "artist_defined_project_specific"]
+        },
+        "audience_promise": { "type": "string", "minLength": 1 },
+        "audience_hook": { "type": "string", "minLength": 1 },
+        "parts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/cultural_format_part" }
+        },
+        "turn_or_payoff": { "type": "string", "minLength": 1 },
+        "adaptation_policy": { "$ref": "#/$defs/cultural_format_adaptation_policy" },
+        "failure_modes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "recommended_stewardship_views": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "cultural_format_part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["part_id", "label", "function", "maps_to_section_ids"],
+      "properties": {
+        "part_id": { "type": "string", "pattern": "^cfs_part_[a-zA-Z0-9_-]+$" },
+        "label": { "type": "string", "minLength": 1 },
+        "function": { "type": "string", "minLength": 1 },
+        "maps_to_section_ids": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^txtsec_[a-zA-Z0-9_-]+$" }
+        }
+      }
+    },
+    "cultural_format_adaptation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "mergeable", "omittable", "invertible"],
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "mergeable": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "omittable": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "invertible": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
     },
     "fidelity_policy": {
       "type": "object",

@@ -107,6 +107,16 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_text_form_schemas_accept_article(self) -> None:
+        for schema_name in [
+            "text-medium-plan.schema.json",
+            "text-creative-brief.schema.json",
+            "text-generation-plan.schema.json",
+        ]:
+            with self.subTest(schema=schema_name):
+                schema = load_json(REPO_ROOT / "schemas" / schema_name)
+                validate("article", schema["$defs"]["text_form"], schema)
+
     def test_gate_decision_accepts_long_work_checkpoint(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
