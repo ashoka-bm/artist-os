@@ -46,6 +46,7 @@
 **Common failure modes**:
 
 - The manifesto is vague inspiration without a line.
+- The piece only complains and never defines principles, call, or future vision.
 - The enemy is too broad to create focus.
 - Principles repeat each other.
 - The call is absent or timid.
