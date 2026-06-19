@@ -83,9 +83,11 @@ Long narrative entries must preserve the existing Artist OS continuity boundary:
 Choose by the audience-facing promise and grammar, not by deep emotional movement.
 
 - Use article subtypes by reader promise: news for verified current development, explainer for understanding, service for practical action, feature/profile for revealed subject meaning, op-ed for accountable public argument, and hook-driven article when attention/payoff is the main grammar.
+- Use `profile`, `review_criticism`, and `case_study` with `primary_text_form = "article"` by default; the CFS entry carries the specific profile, critical, or case-study grammar.
 - Use `interview_q_and_a` with `primary_text_form = "article"` by default, or `other` when the interview is not editorial; the CFS entry carries the interview grammar unless a future schema pass adds an interview text form.
 - Use `personal_essay` for short memoir-like reflective prose unless a future memoir-specific entry is added.
 - Use internet-native entries when the publishing relationship changes the form: newsletter continuity, platform-era thought leadership, framework teaching, curated selection, teardown, trend read, field note, or serialized installment. Use `newsletter_dispatch` with `primary_text_form = "article"`, `essay_artist_statement`, or `other` according to the issue's main thread; the CFS entry carries newsletter grammar.
+- Use `thought_leadership_essay` and `framework_post` with `primary_text_form = "article"` by default. Use `publication_use.use_case = "social_post"` for platform-native professional posts; use `other` for Medium/Substack-style editorial use unless a future schema pass adds blog/newsletter/editorial use cases. Use `essay_artist_statement` only when the piece is explicitly artist- or practice-facing.
 - Use argument/persuasion entries when the form must move a specific audience toward belief, alignment, accountability, or a decision.
 - Use creative/literary entries when form, voice, scene, image, line, address, or compression is the audience-facing grammar. Use `prose_poem` with `primary_text_form = "poem"`; the CFS entry carries the prose-shaped poem grammar.
 - Use long-narrative entries for delivered planning artifacts or Stewardship Views over cumulative text. Do not let them replace Long-Work Stewardship. Use `plot_tracker` with `primary_text_form = "other"` and `publication_use.use_case = "private_draft"` unless the tracker is being transformed into a true `treatment_outline`.
@@ -96,13 +98,20 @@ Choose by the audience-facing promise and grammar, not by deep emotional movemen
 - `hook_driven_article` vs `service_article_how_to`: choose hook-driven article for attention-to-meaning; choose service when usefulness, steps, caveats, and next action are the reader promise.
 - `op_ed` vs `thought_leadership_essay`: choose op-ed for accountable public argument; choose thought leadership for field POV, implications, and practitioner judgment.
 - `framework_post` vs `service_article_how_to`: choose framework when the model is the deliverable; choose service when practical action is the deliverable.
+- `framework_post` vs `thought_leadership_essay` or `explainer_article`: choose framework only when the model helps classify, decide, diagnose, or change behavior; choose thought leadership for earned field POV and explainer for understanding.
 - `newsletter_dispatch` vs `curated_roundup`: choose newsletter when recurring voice and relationship matter; choose roundup when selection and annotation are the main value.
+- `serialized_installment` vs `newsletter_dispatch`: choose serialized installment when local payoff and forward story/argument movement in an ongoing sequence are the grammar; choose newsletter dispatch when recurring voice and reader relationship are the grammar.
+- `serialized_installment` vs `chapter`: choose serialized installment when publication rhythm, recap pressure, local payoff, open loop, and next promise matter; choose chapter when the unit is primarily a book-scale part inside a cumulative long text.
 - `interview_q_and_a` vs `profile` or `feature_article`: choose interview when edited question-and-answer sequence is the grammar; choose profile or feature when narration, scene, reporting, and context carry the form.
 - `interview_q_and_a` vs `personal_essay`: choose interview when the subject's answers carry the piece; choose personal essay when the author's reflection carries the piece.
 - `letter` vs `open_letter`: choose letter for private or intimate address; choose open letter when public accountability, witness, or pressure on observers is part of the form.
 - `news_article` vs `feature_article`: choose news for timely verified development; choose feature when scene, context, and meaning carry the piece.
 - `explainer_article` vs `service_article_how_to`: choose explainer for understanding a system or issue; choose service when the reader needs to do, decide, fix, or improve something.
 - `profile` vs `feature_article`: choose profile when the subject's character, role, contradiction, or significance is the promise.
+- `review_criticism` vs `op_ed`: choose review/criticism when the piece evaluates a work, object, event, or experience through criteria and evidence; choose op-ed when the main job is an accountable public argument.
+- `review_criticism` vs `teardown_analysis`: choose review/criticism when judgment is the promise; choose teardown when breakdown and transferable lessons are the promise.
+- `case_study` vs `service_article_how_to`: choose case study when one bounded example teaches through situation, challenge, intervention, result, and lesson; choose service/how-to when direct reader action is the promise.
+- `case_study` vs `teardown_analysis`: choose case study for a real or bounded example with outcome and lesson; choose teardown when the value is close analysis of how an artifact, decision, or launch works.
 - `literary_scene` vs `screenplay_scene`: choose literary scene for prose interiority and perception; choose screenplay scene for visible action and performable turn.
 - `short_story` vs `literary_scene`: choose short story for complete fictional pressure and residue; choose literary scene for one charged prose moment inside or outside a larger work.
 - `prose_poem` vs `lyric_poem`: choose prose poem when poetic pressure is carried by prose sentences and paragraph shape; choose lyric poem when lineation, stanza movement, or lyric address is part of the form.

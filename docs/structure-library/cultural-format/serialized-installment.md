@@ -14,6 +14,8 @@
 
 For cumulative long-form projects, Long-Work Stewardship remains the continuity authority; this entry describes installment grammar, not a separate continuity record.
 
+Continuity facts, open-thread status, canon changes, drift, and proposed updates must come from Long-Work Stewardship, Output Records, Review Records, or Gate Decisions. The installment may express or advance that state; it must not track or mutate it independently.
+
 **Audience promise**: The reader will receive a meaningful new movement in the larger sequence and a reason to continue.
 
 **Audience Hook logic**: Open with a recap pressure, unresolved thread, immediate scene, question, or reversal that reconnects the reader to the serial engine.
