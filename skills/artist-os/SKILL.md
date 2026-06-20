@@ -32,6 +32,7 @@ These are the conductor's safety rails — the things only you can enforce becau
 - After generation, import, drafting, or human editing creates a concrete Output Artifact, create an Output Record before Output Critic Review or Output Acceptance Gate. Review and acceptance must point at a fixed, traceable artifact — without a record there is nothing durable to critique or to tie the verdict to.
 - Do not advance a blocked Output Critic Review to Output Acceptance Gate unless the artist explicitly waives the blocking finding and the waiver is recorded in the Review Record. Blocking findings protect meaning; an unrecorded override erases the audit trail of what was knowingly shipped.
 - Do not leave project state only in chat. Persist each phase before advancing (see Persisting State). Chat is ephemeral — if state lives only in the conversation, a returning artist loses the thread and the pipeline's traceability guarantees break.
+- Never complete a gate, grant an approval, record a waiver, or select an option on the artist's behalf — not by inferring it from silence, not by treating your own recommendation as their answer, not because it is "obvious." An obvious fix is still the artist's call, and recording an approval or waiver the artist did not actually give fabricates provenance and breaks the audit trail. The canonical statement is `docs/gates-and-reviews.md` → "Gate Completion Rule"; it is enforced across every gate.
 
 ## Routing
 
