@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from json_schema_validator import (
+from artist_os_schema_validator import (
     REPO_ROOT,
     ValidationError,
     iter_validation_targets,

@@ -246,7 +246,7 @@ Current rule:
 Added:
 
 - `bin/validate-examples`
-- `tests/json_schema_validator.py`
+- `artist_os_schema_validator.py`
 - `tests/test_schema_validation.py`
 - `tests/test_pipeline_transitions.py`
 - `tests/fixtures/`

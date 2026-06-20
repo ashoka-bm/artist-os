@@ -15,9 +15,9 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+sys.path.insert(0, str(REPO_ROOT))
 
-from json_schema_validator import ValidationError, load_json, validate
+from artist_os_schema_validator import ValidationError, load_json, validate
 DEFAULT_LIBRARY_ROOT = REPO_ROOT / "workspace-library" / "artist-os"
 SCHEMA_PATH = REPO_ROOT / "schemas" / "artist-os-library.sql"
 PROJECT_SUBDIRS = [

@@ -14,8 +14,8 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
-from json_schema_validator import ValidationError
-from json_schema_validator import validate
+from artist_os_schema_validator import ValidationError
+from artist_os_schema_validator import validate
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

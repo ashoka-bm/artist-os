@@ -1,4 +1,4 @@
-"""Small JSON Schema validator for Artist OS examples and fixtures.
+"""Small JSON Schema validator for Artist OS records.
 
 This intentionally implements the subset of JSON Schema used by this repo so
 validation works without external dependencies. It is not a general-purpose
@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parent
 
 
 @dataclass
