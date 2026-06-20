@@ -2,6 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+version="$(cat "$repo_root/VERSION" 2>/dev/null || echo unknown)"
 skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
 prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
 library_root="${ARTIST_OS_LIBRARY_ROOT:-$repo_root/workspace-library/artist-os}"
@@ -99,7 +100,7 @@ done
 
 cat <<EOF
 
-Artist OS dev skills installed into:
+Artist OS v$version dev skills installed into:
   $skills_dir
 
 Workspace Library initialized at:
