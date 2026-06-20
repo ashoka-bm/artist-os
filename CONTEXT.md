@@ -680,6 +680,30 @@ _Avoid_: Workspace Library
 Local uncommitted storage for real artist References, Creative Briefs, gate decisions, Prompt Plans, Text Generation Plans, Generated Works, image files, sidecar metadata, and Output Records.
 _Avoid_: Example Corpus
 
+**Artist Library**:
+The user-visible folder tree where artists browse project outputs, readable project summaries, and personal creative library entries.
+_Avoid_: Workspace Library, internal project state
+
+**Personal Library**:
+The artist's reusable private collection of visible creative guidance such as structures, styles, voices, formats, and learnings, backed by internal Workspace Library records.
+_Avoid_: Shipped Structure Library, raw feedback log, committed examples
+
+**Wondermint Root**:
+The user-chosen parent folder that contains the visible `Wondermint/` Artist Library folder and the sibling hidden `.wondermint/` Workspace Library folder.
+_Avoid_: Installing private state inside the visible Artist Library
+
+**Wondermint Root Setting**:
+The user-facing configuration that chooses the Wondermint Root for both the visible Artist Library and hidden Workspace Library.
+_Avoid_: Low-level Workspace Library override
+
+**Cloud-Synced Wondermint Root**:
+A Wondermint Root placed inside a cloud-synced folder, allowed only with a warning that Workspace Library state may encounter sync conflicts.
+_Avoid_: Treating cloud sync as a conflict-free backup system
+
+**Review Draft**:
+A human-readable draft Output Artifact placed in the Artist Library for artist review before acceptance, revision, archival, or export.
+_Avoid_: Internal schema record, gate decision, event log
+
 **Artist OS Project**:
 One isolated Workspace Library unit for a single artist goal, which may be a single image, one song, a long written work, an image series, a store collection, or another bounded output journey.
 _Avoid_: Book, global workspace, chat thread
@@ -692,9 +716,21 @@ _Avoid_: Source of truth for binary media
 A project row in the Artist OS Library Database whose project folder or `project.json` was not found during the latest sync.
 _Avoid_: Archived Project
 
+**Visible Missing Project**:
+An Artist OS Project whose Workspace Library state exists but whose Artist Library project folder or Project Pointer was not found during sync.
+_Avoid_: Deleted Project, Missing Project
+
 **Project Manifest**:
 The `project.json` record that lets an agent reload one Artist OS project across sessions.
 _Avoid_: Chat memory
+
+**Project Pointer**:
+The hidden file in an Artist Library project folder that records the Artist OS Project identity and lets agents reconnect the visible folder to Workspace Library state.
+_Avoid_: Project Manifest, README, source of project truth
+
+**Project README**:
+The lightweight human-readable orientation file in an Artist Library project folder.
+_Avoid_: Project Manifest, event log, full project record
 
 **Project Memory**:
 The durable per-project records, decisions, events, and accepted continuity context that let Artist OS resume one Artist OS Project without mixing it with another.
@@ -735,6 +771,54 @@ _Avoid_: Generated Work when origin matters
 **Output Record**:
 The metadata and provenance record for any concrete output artifact Artist OS may review, accept, archive, export, or use as future calibration context, including provider-generated media, artist imports, agent-drafted text, agent-rewritten text, or human-edited outputs.
 _Avoid_: Generated Work, Source Record, provider-only metadata
+
+**Human-Edited Output Revision**:
+A new Output Artifact revision created when an artist edits a visible Artist Library file, authoritative over the prior artifact for future continuation.
+_Avoid_: Silent mutation of the previous Output Record
+
+**Feedback Log**:
+The durable record of artist feedback, acceptance decisions, revision requests, observed friction, and performance notes from Artist OS projects.
+_Avoid_: Throwaway chat comments, only accepted preferences
+
+**Learning Index**:
+The cross-project index that references Feedback Log evidence and learned patterns so Artist OS can detect repeated preferences, corrections, and performance signals.
+_Avoid_: Replacing per-project provenance
+
+**Learning Candidate**:
+A possible reusable preference, correction, process rule, format rule, or avoid rule extracted from Feedback Log evidence, edits, reviews, analytics, or output comparison.
+_Avoid_: Hard rule from one weak signal
+
+**Soft Learning**:
+A reusable personal guidance signal that can bias Artist OS recommendations without overriding current Artist Meaning or approved project plans.
+_Avoid_: Rule, blocker
+
+**Hard Learning**:
+A durable personal rule that Artist OS should apply by default because it has repeated evidence, strong analytics, explicit artist confirmation, or corrects a concrete schema/tooling mismatch.
+_Avoid_: Taste guess, one-off preference
+
+**Learning Rule**:
+The concise applied instruction inside a Soft Learning or Hard Learning record, limited to roughly 600 characters and backed by separate evidence references.
+_Avoid_: Full feedback transcript, mini skill file
+
+**Learning Review**:
+The classification pass that turns Feedback Log evidence into Learning Candidates and promotes patterns into Soft Learning or Hard Learning.
+_Avoid_: Asking the artist to manually decide which raw feedback matters
+
+**Performance Signal**:
+A measured outcome attached to an Output Artifact, such as views, saves, shares, downloads, listens, completion rate, sales, playlist adds, comments, or a manual performance score.
+_Avoid_: Artist preference, universal quality
+
+**Performance Review**:
+The interpretation pass that compares Performance Signals across outputs and proposes Learning Candidates.
+_Avoid_: Replacing artist judgment with metrics
+
+**Performance-Backed Learning**:
+Soft Learning or Hard Learning promoted partly or fully from Performance Signals.
+_Avoid_: Assuming high-performing means artistically correct
+
+**Pending Learning Review**:
+A project state indicating that Feedback Log evidence has not yet been classified for reusable learning.
+_Avoid_: Finished learning, ignored feedback
 
 **Output Batch**:
 A future grouping record for comparing, costing, and managing multiple Output Records produced from the same Prompt Plan, Text Generation Plan, Prompt Branch Set, provider run, or curation pass.
@@ -908,6 +992,13 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Provider Adapter** translates a **Provider-Neutral Prompt Plan** for a provider.
 - The **Example Corpus** contains safe committed examples.
 - The **Workspace Library** contains real artist work and is not committed by default.
+- The **Wondermint Root** contains sibling visible and hidden folders so deleting the **Artist Library** does not delete the **Workspace Library**.
+- The **Wondermint Root Setting** is the preferred user-facing way to choose storage; low-level Workspace Library overrides remain for development and tests.
+- The **Artist Library** presents user-facing outputs and readable summaries for artists, while the **Workspace Library** preserves internal project state and provenance.
+- The **Artist Library** may contain **Review Drafts**, but not internal schema records, gate decisions, event logs, or sidecar metadata.
+- Artist OS creates **Artist Library** project folders lazily as user-facing files appear, not as empty mirrors of Workspace Library structure.
+- The **Personal Library** presents reusable artist-facing guidance in the **Artist Library**, while evidence, promotion status, and resolver indexes live in the **Workspace Library**.
+- Only artist-useful creative guidance should appear as visible **Personal Library** notes; technical, schema, process, and tooling learnings stay internal.
 - The **Workspace Library** contains many **Artist OS Projects**.
 - Each **Artist OS Project** has its own **Project Memory**.
 - **Project Memory** must not cross project boundaries unless the artist explicitly imports, references, or reuses material from another Artist OS Project.
@@ -915,7 +1006,11 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Use separate **Artist OS Projects** when the governing meaning, source Reference, audience/use, or creative goal changes enough that shared Project Memory would create drift.
 - The **Artist OS Library Database** indexes the **Workspace Library** so agents can find old projects, prompts, image paths, and resume points.
 - A **Missing Project** can be searched as historical context but cannot be resumed until its files are restored.
+- A **Visible Missing Project** remains resumable from the **Workspace Library** and may have its **Artist Library** folder restored.
 - Each project in the **Workspace Library** has a **Project Manifest** and image files use **Asset Metadata** sidecars.
+- Each project folder in the **Artist Library** has a **Project Pointer** that links it to one **Artist OS Project**.
+- A **Project Pointer** uses the **Artist OS Project** id as its authority; relative Workspace Library hints are convenience only.
+- A **Project README** orients humans and agents to visible outputs, status, and resume instructions without replacing the **Project Manifest**.
 - The **First Slice** transforms a text **Reference** into an image **Prompt Plan** through a **Dry Run**.
 - A **Prompt Plan** can produce one or more **Variants**.
 - A **Variant** is a **Generated Work**.
@@ -924,11 +1019,21 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - By default, **Output Critic Review** happens before the **Output Acceptance Gate**. The artist can explicitly accept or waive critic drift findings, and that waiver should be recorded.
 - An **Output Artifact** has one **Output Record**.
 - A **Generated Work** is one kind of **Output Artifact**; its **Output Record** is the durable metadata and provenance record.
+- A user edit to a visible Artist Library file creates a **Human-Edited Output Revision** with a new **Output Record**, linked to the prior **Output Record**.
 - The schema for output provenance should be named `output-record.schema.json`, not `generated-work.schema.json`, because it records any **Output Artifact** origin.
 - When relevant, an **Output Record** includes provider, model, settings, seed, generation approval reference, and estimated or actual cost. The event log preserves chronology; the Output Record preserves artifact provenance.
 - When an **Output Artifact** comes from a **Prompt Branch Set**, its **Output Record** references both the parent **Prompt Plan** and the exact prompt branch that produced it.
 - **Output Record** tracks review and acceptance state, but it does not yet own taste-memory promotion, calibration promotion, or accepted-work promotion fields. Those may become separate records when the curation loop is implemented.
 - Individual **Output Records** are sufficient until provider adapters or batch-generation workflows create a real need for an **Output Batch** record.
+- **Feedback Log** preserves raw evidence; **Learning Review** classifies it into **Learning Candidates**, **Soft Learning**, or **Hard Learning**.
+- Each **Artist OS Project** may keep its own **Feedback Log**, while the **Learning Index** finds repeated patterns across projects.
+- **Soft Learning** may guide future recommendations, but **Hard Learning** carries stronger default authority.
+- A **Learning Rule** stays compact; detailed feedback, analytics, and output comparisons remain separate evidence.
+- **Hard Learning** can come from repeated feedback, strong analytics, explicit artist confirmation, or a concrete schema/tooling mismatch.
+- Artist OS marks completed projects with unclassified feedback as **Pending Learning Review** and may process them at the start of a later project.
+- Relevant **Soft Learning** applies by default with brief disclosure; relevant **Hard Learning** applies by default unless it conflicts with current Artist Meaning or approved plans.
+- **Performance Signals** and artist feedback are equal evidence classes for learning, but neither automatically overrides the other.
+- When **Performance Signals** conflict with artist feedback, Artist OS preserves both and asks whether the current project should prioritize personal expression, performance optimization, or a hybrid.
 
 ## Example dialogue
 

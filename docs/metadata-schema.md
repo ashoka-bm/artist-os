@@ -12,11 +12,15 @@ A Project Manifest tracks one Artist OS project across sessions. It lives in the
 
 The manifest points to the current records and assets. The process history lives in `events.jsonl`.
 
+The accepted storage model also needs the manifest to track visible Artist Library state: project folder path, Project Pointer state, visible-missing state, feedback review status, and any user-facing files that should be restored or checked for human-edited revisions. These fields are implementation pending; follow `docs/storage.md` as the storage contract until `schemas/project-manifest.schema.json` is expanded.
+
 ### Artist OS Library Database
 
 The local SQLite database lives at `workspace-library/artist-os/artist-os.sqlite` and uses `schemas/artist-os-library.sql`.
 
 It is the searchable index for agents resuming earlier sessions. Its indexed contents, the `bin/artist-os-db` commands, and the `missing`-project rule are defined in `docs/storage.md` → SQLite Index; do not restate them here.
+
+The accepted storage model also needs SQLite to index Artist Library paths, Project Pointer state, visible-missing state, Feedback Log review status, Learning Index references, and Performance Signal references. These columns/tables are implementation pending.
 
 ### Asset Metadata
 
@@ -140,6 +144,12 @@ For Text Journey drafts, persist the compact draft trace in `traceability_summar
 For Text Journey rewrite Output Records, set `previous_output_record_id`, preserve the original draft trace, and add compact rewrite trace notes: pass used, policy authorization, prior Output Record, changed pattern or clarity issue, and protected features preserved.
 
 By contract, any Output Record with `origin.origin_type = "agent_rewritten"` must set `previous_output_record_id`. Text Journey transition tests enforce this for rewrite fixtures; add schema-level conditional enforcement only when the local schema validator supports conditionals.
+
+Human-edited visible files in the Artist Library should become new Output Records with `origin.origin_type = "human_edited"` and `previous_output_record_id` pointing to the prior artifact when known. This preserves the artist's edit as an authoritative revision without mutating the earlier Output Record.
+
+### Feedback, Learning, and Performance Records
+
+Project Feedback Logs, Learning Candidates, Soft Learning, Hard Learning, Learning Index entries, and Performance Signals are accepted storage concepts but do not have schemas yet. Until schemas exist, treat `docs/storage.md` as the durable contract: raw feedback stays in project logs, reusable Learning Rules stay compact and evidence-backed, and Performance Signals have equal evidence weight with artist feedback without automatically overriding it.
 
 ### Sound Creative Brief Record
 

@@ -1,0 +1,5 @@
+# Sibling Artist Library and Workspace Library
+
+Artist OS stores user-facing work and internal project state as sibling folders under a user-chosen Wondermint Root. The visible `Wondermint/Artist Library/` contains project outputs, Review Drafts, readable summaries, and Personal Library notes; the hidden sibling `.wondermint/artist-os/` contains Workspace Library records, SQLite indexes, event logs, sidecars, feedback evidence, performance signals, and internal personal-library records. This avoids mixing internal schema state into the artist's browsable files while reducing the risk that deleting the visible Artist Library also deletes the internal data needed for provenance, learning, and project resumption.
+
+Visible project folders include a Project Pointer so agents can reconnect a browsable folder to its Artist OS Project. Human edits to visible Artist Library files become Human-Edited Output Revisions rather than silent mutations of earlier Output Records. Feedback and performance evidence are stored as internal evidence, classified through Learning Review, and may surface as visible Personal Library guidance when useful to the artist.
