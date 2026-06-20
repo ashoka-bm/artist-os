@@ -1,0 +1,40 @@
+name: CI
+
+# Runs the project's fast, offline, deterministic checks on every push and PR.
+# This repo is pure-Python stdlib only (no requirements.txt / pyproject.toml),
+# so there is intentionally no dependency-install step.
+# The token-spending evals/ (which call `claude -p` and require auth) are NOT run here.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Tests and schema validation
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # No dependency install: this project is stdlib only, no third-party deps.
+
+      - name: Run unit tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Validate examples and fixtures against schemas
+        run: python3 bin/validate-examples
