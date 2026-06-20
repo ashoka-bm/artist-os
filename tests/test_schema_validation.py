@@ -54,6 +54,14 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_fallback_review_record_fixture_validates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "fallback-review-record.json"
+        record = load_json(data_path)
+        self.assertEqual(record["reviewer_execution"]["execution_mode"], "fallback_separated_pass")
+        self.assertTrue(record["reviewer_execution"]["sub_agent_required"])
+        validate_file(schema_path, data_path)
+
     def test_sound_prompt_plan_requires_emotional_tension_contract(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
@@ -325,6 +333,38 @@ class SchemaValidationTests(unittest.TestCase):
         record["suno_custom_mode_outputs"]["lyrics"]["text"] = ""
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "expected const True"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_accepts_phonetic_vocals_custom_mode_mapping(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "text-to-suno"
+            / "sound-prompt-plan-phonetic-vocals.json"
+        )
+        record = load_json(data_path)
+        self.assertEqual(record["vocal_lyric_policy"]["lyrics_mode"], "phonetic_vocals")
+        self.assertFalse(record["suno_custom_mode_outputs"]["instrumental"])
+        self.assertEqual(record["suno_custom_mode_outputs"]["lyrics"]["mode"], "generate_in_suno")
+        self.assertIn("intelligible lyrics", " ".join(record["suno_custom_mode_outputs"]["exclude"]).lower())
+        validate_file(schema_path, data_path)
+
+    def test_sound_prompt_plan_rejects_phonetic_vocals_as_instrumental(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = (
+            REPO_ROOT
+            / "tests"
+            / "fixtures"
+            / "text-to-suno"
+            / "sound-prompt-plan-phonetic-vocals.json"
+        )
+        record = load_json(data_path)
+        record["suno_custom_mode_outputs"]["instrumental"] = True
+        record["suno_custom_mode_outputs"]["lyrics"]["mode"] = "none"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const False"):
             validate(record, schema, schema)
 
     def test_beat_plan_requires_story_structure_for_non_single_beat_modes(self) -> None:

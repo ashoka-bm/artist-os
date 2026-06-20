@@ -434,6 +434,7 @@ Near-term plan:
 3. Add reviewer fixture tests for Text Generation Plan critique and text Output Critic packets once a full rehearsal produces natural review examples.
 4. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
 5. Add provider-adapter hard guards: image and Suno adapters must refuse provider calls unless the request includes a matching approved Generation Approval Gate for that exact call or approved batch.
+6. Keep focused regression coverage for rehearsal findings: fallback separated review execution and Suno `phonetic_vocals` Custom Mode mapping.
 
 Final verification for this pass:
 

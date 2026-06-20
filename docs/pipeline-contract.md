@@ -149,6 +149,8 @@ Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records
 - Gate: Generation Approval Gate for provider-backed generation; Output Acceptance Gate for acceptance.
 - Next: Output Critic Review, Output Acceptance Gate, calibration context, export, archive, or revision.
 
+Provider adapters must refuse image or Suno generation unless the request includes an approved Generation Approval Gate for that exact call or approved batch. The adapter must verify that the gate is approved, not pending; that its upstream refs match the Prompt Plan, Suno Sound Prompt Plan, or Prompt Branch Set being executed; and that the requested provider action fits the approved call or batch scope. Missing, mismatched, stale, or merely waived gates are hard failures. After the provider returns a concrete artifact, the adapter emits an Output Record; it must not create an Output Record for a refused or unexecuted call.
+
 ## Text-To-Image Steps
 
 ### `image.medium_plan`

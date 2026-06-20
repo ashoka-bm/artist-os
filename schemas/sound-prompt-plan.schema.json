@@ -390,6 +390,42 @@
           }
         }
       }
+    },
+    {
+      "if": {
+        "properties": {
+          "vocal_lyric_policy": {
+            "type": "object",
+            "properties": {
+              "lyrics_mode": { "type": "string", "const": "phonetic_vocals" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lyrics": {
+            "type": "object",
+            "properties": {
+              "present": { "type": "boolean", "const": true },
+              "text": { "type": "string", "minLength": 1 }
+            }
+          },
+          "suno_custom_mode_outputs": {
+            "type": "object",
+            "properties": {
+              "instrumental": { "type": "boolean", "const": false },
+              "lyrics": {
+                "type": "object",
+                "properties": {
+                  "mode": { "type": "string", "const": "generate_in_suno" },
+                  "text": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   ],
   "$defs": {

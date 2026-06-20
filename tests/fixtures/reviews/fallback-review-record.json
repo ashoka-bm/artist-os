@@ -1,0 +1,95 @@
+{
+  "review_record_id": "review_fallback_bus_depot_story",
+  "project_id": "proj_bus_depot_eval",
+  "review_role": "story_critic",
+  "reviewer_execution": {
+    "execution_mode": "fallback_separated_pass",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-writing-method-review"
+  },
+  "artifact_under_review": {
+    "artifact_type": "beat_plan",
+    "artifact_id": "bp_bus_depot_eval",
+    "path_or_ref": ".tmp/e2e-dry-run-2026-06-20/text/beat-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_bus_depot_eval",
+    "artist_meaning_id": "meaning_bus_depot_eval",
+    "artist_meaning_summary": "Preserve preparation, erasure, and the body waiting for permission that will not arrive.",
+    "governing_refs": [
+      {
+        "ref_type": "transformation_brief",
+        "ref_id": "tb_bus_depot_eval",
+        "path_or_ref": ".tmp/e2e-dry-run-2026-06-20/text/transformation-brief.json"
+      },
+      {
+        "ref_type": "writing_reference",
+        "ref_id": "writing-beats",
+        "path_or_ref": "docs/writing/references/writing-beats.SKILL.md"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "Suspended readiness after the route has disappeared.",
+    "minimum_tension_criteria_reviewed": [
+      "The beat must make waiting feel active rather than merely descriptive.",
+      "The expectation turn must preserve the missing route instead of resolving it."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "beat_bus_depot_waiting",
+        "tension_name": "prepared body / erased route",
+        "claimed_intensity": 0.74,
+        "reviewer_assessed_intensity": 0.76,
+        "minimum_required_intensity": 0.68,
+        "meets_minimum": true,
+        "assessment_note": "The beat earns pressure because the ticket and board keep preparing for a departure the system no longer supports."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_bus_depot_waiting",
+        "review_note": "The movement stays focused on prepared waiting rather than turning into departure."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_bus_depot_waiting",
+        "review_note": "The expected departure becomes erased route evidence, preserving the intended suspension."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "Fallback review found enough emotional and tension context to proceed."
+  },
+  "matched": [
+    {
+      "summary": "The Beat Plan keeps the central action on waiting after the route disappears.",
+      "traces_to": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_bus_depot_eval",
+          "note": "The artist meaning asks for preparation, erasure, and waiting without permission."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Fallback review mode is explicit and bounded.",
+      "evidence": "The review packet is limited to the Beat Plan and governing transformation context.",
+      "recommendation": "Proceed, while preserving that sub-agent review is still required in capable hosts."
+    }
+  ],
+  "recommended_revision": "No revision required before medium planning.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-20T13:00:00Z"
+}

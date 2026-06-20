@@ -1,0 +1,608 @@
+{
+  "prompt_plan_id": "plan_door_left_lit_sound_phonetic",
+  "brief_id": "brief_door_left_lit_sound",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "sound_medium_plan_id": "smp_door_left_lit",
+  "target_media_type": "sound",
+  "plan_mode": "single_track",
+  "sound_work_type": "song",
+  "target_platform": "suno",
+  "description": "A compact wordless vocal Suno prompt plan that uses phonetic vocals to preserve threshold pressure without intelligible lyrics.",
+  "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse piano, close restrained vocal, low sub pressure, rain-like texture, unresolved harmony, intimate dry vocal against distant room tone, compact two-minute structure, quiet-to-restrained lift, unresolved final return., wordless phonetic vocal, no intelligible lyrics",
+  "sonic_concept_summary": {
+    "primary_sonic_concept": "a close nocturnal song where room tone, breath, and piano hold an unresolved threshold",
+    "target_sonic_engine": "sparse piano motif, close vocal, low sub pressure, rain texture, unresolved chord extensions",
+    "avoid": [
+      "triumphant chorus",
+      "literal horror effects",
+      "bright acoustic folk"
+    ]
+  },
+  "genre_direction_summary": {
+    "primary_genre": "alt-R&B",
+    "subgenres": [
+      "downtempo",
+      "ambient pop"
+    ],
+    "production_style": "minimal nocturnal studio production",
+    "style_modifiers": [
+      "intimate",
+      "sparse",
+      "grainy"
+    ],
+    "genre_conflicts": [
+      {
+        "conflict": "Alt-R&B warmth could over-resolve the grief.",
+        "adaptation": "Keep the vocal warm but hold harmony unresolved and leave negative space around the pulse."
+      }
+    ]
+  },
+  "tempo_groove_summary": {
+    "bpm": 82,
+    "bpm_range": {
+      "min": 78,
+      "max": 86
+    },
+    "tempo_feel": "slow-burning and suspended",
+    "tempo_stability": "steady pulse with slight perceived drag",
+    "meter": "4/4",
+    "groove_feel": "laid-back half-time pulse",
+    "rhythmic_density": 0.35
+  },
+  "vocal_lyric_policy": {
+    "lyrics_mode": "phonetic_vocals",
+    "vocal_direction": "close restrained wordless lead using breath, hums, and non-lexical syllables; no intelligible words",
+    "language": "non-lexical vocal sounds",
+    "rights_notes": "No source words or newly written lyrics; use phonetic mouth sounds only."
+  },
+  "lyrics": {
+    "present": true,
+    "title": "Where the Light Ends",
+    "section_tags": [
+      "[Vocalise]",
+      "[Wordless Hook]"
+    ],
+    "text": "ah mm ah / oh eh ah / mm ah oh / no intelligible words"
+  },
+  "arrangement_plan": {
+    "instructions": "Build a compact two-minute song with sparse intro, restrained verse, tightening pre-chorus, unresolved chorus, exposed bridge, and a final hook that fades into room tone.",
+    "dynamic_arc": "quiet invitation, tightening build, restrained release, exposed rupture, unresolved return",
+    "ending_behavior": "end on an unresolved piano fragment and room tone"
+  },
+  "song_structure": {
+    "duration_seconds": 120,
+    "meter": "4/4",
+    "estimated_bpm": 82,
+    "estimated_bars": 41,
+    "sections": [
+      {
+        "section_name": "Intro",
+        "time_range": "0:00-0:08",
+        "bar_range": "1-4",
+        "phrase_count": 1,
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_function": "Invitation",
+        "expectation_turn_translation": "The room tone promises safety, but the unresolved piano fragment keeps the threshold from becoming welcome.",
+        "intended_feeling": "the ache of being close to release but unable to choose it",
+        "tension_profile": [
+          {
+            "tension_name": "Stable / Unstable",
+            "intensity": 0.7,
+            "sonic_expression": "Unresolved piano harmony under a steady but hesitant pulse."
+          }
+        ],
+        "tension_role": "establish the room without resolving it",
+        "section_tags": [
+          "[Intro]"
+        ]
+      },
+      {
+        "section_name": "Verse 1",
+        "time_range": "0:08-0:32",
+        "bar_range": "5-12",
+        "phrase_count": 2,
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_function": "Grounding",
+        "expectation_turn_translation": "The close vocal sounds like confession, but breath gaps and low pressure make the key feel too heavy to turn.",
+        "intended_feeling": "the pain of having a choice that cannot be safely made",
+        "tension_profile": [
+          {
+            "tension_name": "Near / Far",
+            "intensity": 0.75,
+            "sonic_expression": "Dry close vocal sits against distant room texture."
+          }
+        ],
+        "tension_role": "introduce threshold and fragile agency",
+        "section_tags": [
+          "[Verse]"
+        ]
+      },
+      {
+        "section_name": "Chorus",
+        "time_range": "0:48-1:08",
+        "bar_range": "21-28",
+        "phrase_count": 2,
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "section_function": "Release",
+        "expectation_turn_translation": "The hook opens like a return home, then the lyric and harmony withhold entry.",
+        "intended_feeling": "wounded hope in a place that almost remembers you",
+        "tension_profile": [
+          {
+            "tension_name": "Resolved / Unresolved",
+            "intensity": 0.8,
+            "sonic_expression": "The chorus lifts melodically without giving harmonic closure."
+          }
+        ],
+        "tension_role": "state the unresolved hook",
+        "section_tags": [
+          "[Chorus]"
+        ]
+      }
+    ]
+  },
+  "instrumentation_plan": {
+    "primary_instruments": [
+      "felt piano",
+      "close lead vocal"
+    ],
+    "supporting_instruments": [
+      "low sub bass",
+      "soft pad",
+      "rain-like noise texture"
+    ],
+    "rhythm_components": [
+      "minimal half-time kick",
+      "brushed or muted snare texture"
+    ],
+    "texture_layers": [
+      "room tone",
+      "soft tape grain",
+      "distant reversed piano tail"
+    ],
+    "excluded_instruments": [
+      "bright acoustic guitar",
+      "large EDM synth lead",
+      "arena drums"
+    ]
+  },
+  "production_direction": {
+    "mix_perspective": "close vocal in front, distant room texture behind",
+    "space_reverb": "dry intimate vocal with reverberant piano tails",
+    "finish": "polished but grainy and restrained",
+    "texture": "soft noise, low pressure, rain-like motion",
+    "negative_constraints": [
+      "no triumphant key change",
+      "no horror stinger",
+      "no dance drop"
+    ]
+  },
+  "sonic_dynamics_summary": [
+    {
+      "name": "Sparse / Dense",
+      "poles": {
+        "sparse": {
+          "presence": 0.85
+        },
+        "dense": {
+          "presence": 0.35
+        }
+      },
+      "tension_intensity": 0.65,
+      "evidence": [
+        "few details carry most of the emotional weight"
+      ],
+      "translation_notes": [
+        "Let negative space carry grief."
+      ]
+    },
+    {
+      "name": "Soft / Loud",
+      "poles": {
+        "soft": {
+          "presence": 0.9
+        },
+        "loud": {
+          "presence": 0.25
+        }
+      },
+      "tension_intensity": 0.55,
+      "evidence": [
+        "the scene is still and restrained"
+      ],
+      "translation_notes": [
+        "Keep the vocal close and quiet."
+      ]
+    },
+    {
+      "name": "Stable / Unstable",
+      "poles": {
+        "stable": {
+          "presence": 0.4
+        },
+        "unstable": {
+          "presence": 0.8
+        }
+      },
+      "tension_intensity": 0.8,
+      "evidence": [
+        "not entering, not leaving"
+      ],
+      "translation_notes": [
+        "Use unresolved harmony."
+      ]
+    },
+    {
+      "name": "Dry / Reverberant",
+      "poles": {
+        "dry": {
+          "presence": 0.65
+        },
+        "reverberant": {
+          "presence": 0.45
+        }
+      },
+      "tension_intensity": 0.45,
+      "evidence": [
+        "intimate threshold and active room memory"
+      ],
+      "translation_notes": [
+        "Keep vocal dry; let piano tails carry space."
+      ]
+    },
+    {
+      "name": "Near / Far",
+      "poles": {
+        "near": {
+          "presence": 0.8
+        },
+        "far": {
+          "presence": 0.55
+        }
+      },
+      "tension_intensity": 0.75,
+      "evidence": [
+        "physically close but emotionally separated"
+      ],
+      "translation_notes": [
+        "Close vocal against distant texture."
+      ]
+    },
+    {
+      "name": "Consonant / Dissonant",
+      "poles": {
+        "consonant": {
+          "presence": 0.45
+        },
+        "dissonant": {
+          "presence": 0.65
+        }
+      },
+      "tension_intensity": 0.7,
+      "evidence": [
+        "tenderness and threat coexist"
+      ],
+      "translation_notes": [
+        "Use tender chords with unresolved extensions."
+      ]
+    }
+  ],
+  "emotional_tension_contract": {
+    "governing_intended_feeling": "the ache of being close to release but unable to choose it",
+    "key_emotional_movement_ids": [
+      "kem_threshold_001"
+    ],
+    "minimum_tension_criteria": {
+      "criteria": [
+        "The song must keep threshold pressure audible in every section.",
+        "The chorus may lift, but it must not resolve into triumph.",
+        "Sparse texture or silence must carry active absence rather than empty space."
+      ],
+      "minimum_intensity": 0.65,
+      "reviewer_check": "Prompt Critic must block if the plan turns unresolved threshold into generic sadness or resolved homecoming."
+    },
+    "expectation_turn_preservation": [
+      {
+        "beat_id": "beat_threshold_001",
+        "key_emotional_movement_id": "kem_threshold_001",
+        "expected_direction": "The figure seems close enough to return.",
+        "actual_result": "The key and doorway preserve choice as paralysis.",
+        "sonic_translation": "Use close vocal, unresolved harmony, and room tone so intimacy becomes pressure rather than comfort."
+      }
+    ],
+    "section_mapping_required": true,
+    "variant_preservation_required": true
+  },
+  "prompt_variants": [
+    {
+      "variant_type": "faithful",
+      "variant_test_axis_label": "balanced song interpretation",
+      "sonic_differentiators": [
+        "balanced sparse alt-R&B arrangement with piano, vocal, low sub, and minimal percussion",
+        "clear hook while preserving unresolved harmony",
+        "wordless phonetic vocal texture without intelligible lyric content"
+      ],
+      "emotional_tension_preservation": {
+        "intended_feeling": "the ache of being close to release but unable to choose it",
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
+        "expectation_turn_translation": "A familiar song structure invites release, but restrained vocal delivery and unresolved harmony keep return suspended.",
+        "minimum_tension_criteria": {
+          "criteria": [
+            "Keep threshold pressure audible in every section.",
+            "Avoid triumphant closure."
+          ],
+          "minimum_intensity": 0.65,
+          "reviewer_check": "Faithful variant must preserve the approved threshold tension without flattening into plot summary."
+        },
+        "variant_tension_strategy": "Balance intelligible lyric movement with restrained production and non-resolving chords. Phonetic vocals preserve human presence without turning the source into literal lyrics."
+      },
+      "prompt_text": "Create a compact two-minute nocturnal alt-R&B song at about 82 BPM in 4/4. Use sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like noise, and unresolved chord extensions. Keep the verses almost whispered and the chorus clearer but not triumphant. Use the provided lyrics and preserve the feeling of standing at a threshold where return is tender and dangerous. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
+      "suno_outputs": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics",
+        "exclude": [
+          "EDM drop",
+          "triumphant key change",
+          "horror sound effects",
+          "bright acoustic folk",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ]
+      },
+      "negative_constraints": [
+        "no EDM drop",
+        "no triumphant key change",
+        "no horror sound effects",
+        "intelligible lyrics",
+        "spoken words",
+        "clear English words"
+      ],
+      "derived_sonic_elements": [],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "must_preserve",
+          "note": "Preserves threshold, tenderness/threat, active absence, and fragile agency."
+        },
+        {
+          "source_type": "medium_plan",
+          "source_ref": "vocal_lyric_policy",
+          "note": "Phonetic vocals map to generated non-lexical voice rather than pasted lyric text."
+        }
+      ],
+      "critique_checklist": [
+        "Does the song preserve unresolved threshold pressure?",
+        "Do the lyrics keep the key as fragile agency?",
+        "Does the chorus avoid triumphant resolution?"
+      ]
+    },
+    {
+      "variant_type": "amplified",
+      "variant_test_axis_label": "heightened absence and pressure",
+      "sonic_differentiators": [
+        "more exposed bridge with percussion dropout and unstable pad",
+        "stronger near/far contrast between close vocal and distant room texture",
+        "wordless phonetic vocal texture without intelligible lyric content"
+      ],
+      "emotional_tension_preservation": {
+        "intended_feeling": "absence becoming active and almost embodied",
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
+        "expectation_turn_translation": "The arrangement appears to intensify toward release, but dropout and distant room tone expose absence instead.",
+        "minimum_tension_criteria": {
+          "criteria": [
+            "Amplification must deepen active absence.",
+            "The final return must remain unresolved."
+          ],
+          "minimum_intensity": 0.75,
+          "reviewer_check": "Amplified variant must not add melodrama that replaces the core threshold feeling."
+        },
+        "variant_tension_strategy": "Increase near/far contrast and instability while preserving the same unresolved beat. Phonetic vocals preserve human presence without turning the source into literal lyrics."
+      },
+      "prompt_text": "Create a heightened version of the same two-minute nocturnal alt-R&B song. Keep the 82 BPM slow pulse and provided lyrics, but make absence more active: use a more exposed bridge, percussion dropout, distant room tone, unstable low pad, and close vocal breaths. The final chorus should return transformed but unresolved. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
+      "suno_outputs": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "style_of_music": "Heightened nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, close breathy vocal, sparse piano, deep sub pressure, unstable low pad, distant room tone, more exposed bridge with percussion dropout, strong near-far contrast, unresolved final chorus, active absence, tender dread, cinematic but restrained., wordless phonetic vocal texture, no intelligible lyrics",
+        "exclude": [
+          "literal ghost effects",
+          "belted power ballad ending",
+          "bright pop drums",
+          "aggressive drop",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ]
+      },
+      "negative_constraints": [
+        "no literal ghost effects",
+        "no belted power ballad ending",
+        "no bright pop drums",
+        "intelligible lyrics",
+        "spoken words",
+        "clear English words"
+      ],
+      "derived_sonic_elements": [
+        {
+          "element": "distant room tone that swells under the bridge",
+          "purpose": "Makes absence active without inventing a literal absent person.",
+          "traces_to": [
+            {
+              "source_type": "core_tension_pair",
+              "source_ref": "presence_absence",
+              "note": "Absence is one of the strongest emotional tensions."
+            }
+          ]
+        }
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "active_sonic_tension",
+          "source_ref": "Near / Far",
+          "note": "Amplifies close vocal against distant sonic space."
+        },
+        {
+          "source_type": "medium_plan",
+          "source_ref": "vocal_lyric_policy",
+          "note": "Phonetic vocals map to generated non-lexical voice rather than pasted lyric text."
+        }
+      ],
+      "critique_checklist": [
+        "Does amplification deepen absence rather than add melodrama?",
+        "Does the bridge feel like rupture?",
+        "Does the final return remain unresolved?"
+      ]
+    },
+    {
+      "variant_type": "minimal",
+      "variant_test_axis_label": "stripped sonic engine",
+      "sonic_differentiators": [
+        "nearly drumless vocal and piano arrangement",
+        "larger silence gaps and fewer texture layers",
+        "wordless phonetic vocal texture without intelligible lyric content"
+      ],
+      "emotional_tension_preservation": {
+        "intended_feeling": "the pain of having a choice that cannot be safely made",
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
+        "expectation_turn_translation": "The stripped setting suggests clarity, but silence and held piano leave the choice unresolved.",
+        "minimum_tension_criteria": {
+          "criteria": [
+            "Silence must feel active.",
+            "The key must remain a burdened choice, not a resolved answer."
+          ],
+          "minimum_intensity": 0.6,
+          "reviewer_check": "Minimal variant must still create pressure rather than becoming empty quiet."
+        },
+        "variant_tension_strategy": "Use silence, exposed vocal, and a barely audible pulse as the main tension carriers. Phonetic vocals preserve human presence without turning the source into literal lyrics."
+      },
+      "prompt_text": "Create a minimal two-minute version using only close restrained vocal, sparse felt piano, room tone, and a barely audible low pulse. Keep the provided lyrics, but leave long breath-length gaps between phrases. Avoid full drums, dense pads, and large chorus expansion. The song should feel like it is holding the key without turning it. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
+      "suno_outputs": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "style_of_music": "Minimal nocturnal alt-R&B ballad, 82 BPM, 4/4, close restrained vocal, sparse felt piano, room tone, barely audible low pulse, almost drumless, long breath-length gaps between phrases, intimate dry vocal, unresolved piano fragments, quiet active absence, no large chorus expansion., wordless phonetic vocal texture, no intelligible lyrics",
+        "exclude": [
+          "full drum kit",
+          "lush strings",
+          "dense harmonies",
+          "triumphant ending",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ]
+      },
+      "negative_constraints": [
+        "no full drum kit",
+        "no lush strings",
+        "no dense harmonies",
+        "intelligible lyrics",
+        "spoken words",
+        "clear English words"
+      ],
+      "derived_sonic_elements": [],
+      "traceability_notes": [
+        {
+          "source_type": "active_sonic_tension",
+          "source_ref": "Sparse / Dense",
+          "note": "Uses sparsity to preserve active absence."
+        },
+        {
+          "source_type": "medium_plan",
+          "source_ref": "vocal_lyric_policy",
+          "note": "Phonetic vocals map to generated non-lexical voice rather than pasted lyric text."
+        }
+      ],
+      "critique_checklist": [
+        "Does the minimal version still feel emotionally complete?",
+        "Does silence carry pressure?",
+        "Does the song avoid becoming generic sadness?"
+      ]
+    }
+  ],
+  "sequence_calibration": {
+    "is_sequence_calibration": false,
+    "calibration_track_role": "",
+    "uses_three_prompt_variants": false,
+    "requires_artist_approval_before_sequence": false
+  },
+  "suno_custom_mode_outputs": {
+    "mode": "custom",
+    "title": "Where the Light Ends",
+    "instrumental": false,
+    "lyrics": {
+      "mode": "generate_in_suno",
+      "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+    },
+    "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics",
+    "exclude": [
+      "EDM drop",
+      "triumphant key change",
+      "horror sound effects",
+      "bright acoustic folk",
+      "intelligible lyrics",
+      "spoken words",
+      "clear English words"
+    ],
+    "advanced_options": {
+      "duration_target": "about 2 minutes",
+      "model": "",
+      "inspo_or_persona": ""
+    },
+    "suno_notes": [
+      "Use Suno Custom Mode.",
+      "Paste lyrics into Lyrics.",
+      "Paste style_of_music into Style of Music.",
+      "Paste exclude items into Advanced Options > Exclude.",
+      "For phonetic_vocals, leave Instrumental off and let Suno generate non-lexical voice; do not paste intelligible lyrics."
+    ]
+  },
+  "approval_refs": {
+    "prompt_critic_review_id": "review_suno_prompt_critic_door_left_lit",
+    "prompt_lock_gate_id": "gate_suno_prompt_lock_door_left_lit"
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "must_preserve",
+      "note": "All variants preserve threshold, tenderness/threat, active absence, and fragile agency."
+    },
+    {
+      "source_type": "lyrics_draft",
+      "source_ref": "Where the Light Ends",
+      "note": "Lyrics are separated from Style of Music for Suno Custom Mode."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "vocal_lyric_policy",
+      "note": "The phonetic vocal mapping keeps voice present without adding intelligible lyric claims."
+    }
+  ],
+  "critique_checklist": [
+    "Does the prompt plan preserve Artist Meaning?",
+    "Are lyrics, Style of Music, and Exclude separated cleanly for Suno?",
+    "Do Faithful, Amplified, and Minimal differ by concrete sonic choices?"
+  ]
+}
