@@ -1,0 +1,337 @@
+{
+  "beat_plan_id": "bp_cumulative_text_threshold",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "story_mode": "sequence",
+  "story_gate_status": "approved",
+  "workflow_scale_routing": {
+    "scale_level": "cumulative_work",
+    "rationale": "The accepted written work is a dependent sequence of sections that need continuity and checkpoint support across drafting sessions.",
+    "trigger_signals": [
+      "artist_requested_sequence_or_series",
+      "dependent_parts_needed",
+      "voice_or_style_continuity_needed"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "cultural_format_structure",
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "skipped_supports": [
+      "collection_coherence_review",
+      "publishing_or_completion_audit"
+    ],
+    "reroute_triggers": [
+      "Artist reduces the work to one compact artifact, or the project expands into full long-form canon."
+    ]
+  },
+  "story_structure": {
+    "library_entry_id": "problem_reframe_return",
+    "name": "Problem / Reframe / Return",
+    "grounding_status": "provisional",
+    "grounding_tier": "platform_pattern_evidence",
+    "core_movement": "A threshold problem is named, reframed through the cost of return, then left as residue.",
+    "adaptation_summary": "The text sequence moves from key, to lit room, to refusal, with each section depending on the prior emotional claim.",
+    "turn_logic": "The apparent route home becomes a pressure system that cannot be solved by opening the door.",
+    "compression_rule": "Keep each section tied to one threshold object or action.",
+    "expansion_rule": "Expand only by adding sections that change the emotional claim and preserve continuity.",
+    "failure_modes": [
+      "the sequence becomes interchangeable fragments",
+      "the door opens and resolves the pressure",
+      "the ending explains the emotion instead of preserving residue"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_cumulative_key",
+      "beat_role": "invitation",
+      "one_move_summary": "The key appears as agency that cannot yet be used.",
+      "builds_toward_key_movement_id": "kem_cumulative_key",
+      "before_state": "The threshold has not yet become a choice.",
+      "after_state": "The object of entry makes the choice feel close and painful.",
+      "value_shift": "Possibility becomes pressure.",
+      "expectation_turn": {
+        "expected_direction": "A key should make entry possible.",
+        "actual_result": "The key proves that entry is available but emotionally blocked.",
+        "surprise_function": "Turns agency into tension before the sequence expands.",
+        "emotional_counterpoint": "Hope is crossed with dread."
+      },
+      "intended_feeling": "the ache of almost having agency",
+      "emotional_payload": "The opening section establishes a usable object that cannot solve the feeling.",
+      "tension_profile": [
+        {
+          "name": "Agency / Paralysis",
+          "tension_intensity": 0.72,
+          "emotional_function": "makes the key emotionally active instead of merely symbolic"
+        }
+      ],
+      "source_evidence": [
+        "The reference centers a key at a threshold."
+      ],
+      "must_preserve": [
+        "the key should not become an easy solution"
+      ],
+      "pivot_options": [
+        {
+          "label": "lit-room",
+          "next_move": "Move from the key to the lit room that should welcome return.",
+          "rationale": "The sequence needs the second section to test whether entry is actually safe."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "Open with tactile pressure around the key and withhold explanation."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The artist meaning requires agency without resolution."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_cumulative_room",
+      "beat_role": "reversal",
+      "one_move_summary": "The lit room becomes a dangerous welcome rather than safety.",
+      "builds_toward_key_movement_id": "kem_cumulative_room",
+      "before_state": "The key has made return possible.",
+      "after_state": "The possible return feels tender and unsafe.",
+      "value_shift": "Welcome becomes risk.",
+      "expectation_turn": {
+        "expected_direction": "A lit room should make return easier.",
+        "actual_result": "The light increases the cost of crossing.",
+        "surprise_function": "Reframes comfort as pressure.",
+        "emotional_counterpoint": "Tenderness is crossed with danger."
+      },
+      "intended_feeling": "tender danger",
+      "emotional_payload": "The middle section deepens continuity by making the previous key more costly.",
+      "tension_profile": [
+        {
+          "name": "Safety / Risk",
+          "tension_intensity": 0.8,
+          "emotional_function": "keeps the sequence from treating return as simple"
+        }
+      ],
+      "source_evidence": [
+        "The reference holds a lit room beyond the threshold."
+      ],
+      "must_preserve": [
+        "the light must remain tender and dangerous"
+      ],
+      "pivot_options": [
+        {
+          "label": "withheld-crossing",
+          "next_move": "Stop before entry and let the refusal carry residue.",
+          "rationale": "The final section must preserve the unresolved threshold."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "Let the second section depend on the key established in the first section."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "prior_beat",
+          "source_ref": "beat_cumulative_key",
+          "note": "The lit room changes what the key means."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_cumulative_residue",
+      "beat_role": "residue",
+      "one_move_summary": "The sequence stops before entry and preserves unresolved return.",
+      "builds_toward_key_movement_id": "kem_cumulative_residue",
+      "before_state": "The lit room has made crossing emotionally costly.",
+      "after_state": "The threshold remains active because the crossing is withheld.",
+      "value_shift": "Approach becomes residue.",
+      "expectation_turn": {
+        "expected_direction": "The final section should decide whether the speaker enters.",
+        "actual_result": "The text ends with the choice still held in the body.",
+        "surprise_function": "Protects the intended feeling from resolution.",
+        "emotional_counterpoint": "Stillness is crossed with consequence."
+      },
+      "intended_feeling": "unresolved held motion",
+      "emotional_payload": "The final section turns the dependent sequence into residue rather than closure.",
+      "tension_profile": [
+        {
+          "name": "Motion / Stillness",
+          "tension_intensity": 0.76,
+          "emotional_function": "keeps the withheld crossing active"
+        }
+      ],
+      "source_evidence": [
+        "The reference refuses to complete the threshold crossing."
+      ],
+      "must_preserve": [
+        "do not invent an aftermath or resolution"
+      ],
+      "pivot_options": [
+        {
+          "label": "stop",
+          "next_move": "End before the threshold resolves.",
+          "rationale": "The work succeeds by preserving the pressure."
+        }
+      ],
+      "medium_translation_notes": {
+        "text": "End shorter than the prior sections and preserve active absence."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "prior_beat",
+          "source_ref": "beat_cumulative_room",
+          "note": "The residue depends on the lit room's danger."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_cumulative_threshold",
+      "summary": "The key and lit room make return possible while the body refuses resolution.",
+      "intended_feeling": "the pressure of possible return",
+      "emotional_payload": "Agency, welcome, and refusal remain active together.",
+      "source_evidence": [
+        "key",
+        "lit threshold",
+        "withheld crossing"
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The tension point preserves the artist's unresolved threshold."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_cumulative_key",
+      "role": "opening_pressure",
+      "beat_ids": [
+        "beat_cumulative_key"
+      ],
+      "emotional_shift": "object becomes pressure",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "reference_evidence",
+          "source_ref": "src_door_left_lit",
+          "note": "The key is the opening pressure source."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_cumulative_room",
+      "role": "midpoint_turn",
+      "beat_ids": [
+        "beat_cumulative_room"
+      ],
+      "emotional_shift": "welcome becomes risk",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "prior_beat",
+          "source_ref": "beat_cumulative_key",
+          "note": "The room changes the meaning of entry."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_cumulative_residue",
+      "role": "residue",
+      "beat_ids": [
+        "beat_cumulative_residue"
+      ],
+      "emotional_shift": "approach becomes residue",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "prior_beat",
+          "source_ref": "beat_cumulative_room",
+          "note": "The ending depends on the prior risk."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Each section must change the threshold pressure rather than repeat it.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 1,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 2,
+      "minimum_adjacent_shift_delta": 0.1,
+      "waiver_rule": "Artist may waive only if the cumulative sequence is intentionally flattened."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_cumulative_key",
+        "to_beat_id": "beat_cumulative_room",
+        "shift_summary": "Agency becomes risky welcome.",
+        "shifted_tensions": [
+          {
+            "name": "Agency / Paralysis",
+            "from_intensity": 0.72,
+            "to_intensity": 0.4,
+            "delta": 0.32,
+            "direction": "decreases"
+          },
+          {
+            "name": "Safety / Risk",
+            "from_intensity": 0.3,
+            "to_intensity": 0.8,
+            "delta": 0.5,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_cumulative_room",
+        "to_beat_id": "beat_cumulative_residue",
+        "shift_summary": "Risk becomes withheld residue.",
+        "shifted_tensions": [
+          {
+            "name": "Motion / Stillness",
+            "from_intensity": 0.42,
+            "to_intensity": 0.76,
+            "delta": 0.34,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block expansion if adjacent sections repeat the same threshold claim."
+  },
+  "arc_summary": {
+    "beginning": "The key creates possible agency.",
+    "turn": "The lit room makes return tender and unsafe.",
+    "ending_or_residue": "The crossing remains withheld.",
+    "scale_rationale": "The sections are dependent cumulative parts, not one interchangeable compact artifact."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": null,
+    "approval_status": "pending"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-20T00:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The cumulative text plan preserves unresolved return as the governing meaning."
+    }
+  ]
+}

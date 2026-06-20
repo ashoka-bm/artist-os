@@ -458,6 +458,8 @@ class PipelineTransitionTests(unittest.TestCase):
         cumulative_paths = [
             "tests/fixtures/text-to-image/three-image-series-rehearsal/beat-plan.json",
             "tests/fixtures/text-to-image/three-image-series-rehearsal/image-medium-plan.json",
+            "tests/fixtures/text-journey/cumulative-text-rehearsal/beat-plan.json",
+            "tests/fixtures/text-journey/cumulative-text-rehearsal/text-medium-plan.json",
         ]
 
         for path in cumulative_paths:
@@ -563,34 +565,15 @@ class PipelineTransitionTests(unittest.TestCase):
             self.assertNotIn("amplitude_profile", part)
 
     def test_text_medium_plan_to_long_work_stewardship(self) -> None:
-        beat_plan = {
-            "beat_plan_id": "bp_door_left_lit",
-            "workflow_scale_routing": {
-                "scale_level": "cumulative_work",
-                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
-                "skipped_supports": ["collection_coherence_review"],
-            },
-        }
-        text_plan = {
-            "text_medium_plan_id": "tmp_door_left_lit",
-            "workflow_scale_routing": {
-                "scale_level": "cumulative_work",
-                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
-                "skipped_supports": ["collection_coherence_review"],
-            },
-            "structure_plan": {
-                "sections": [
-                    {"section_id": "txtsec_key_001"},
-                    {"section_id": "txtsec_light_001"},
-                    {"section_id": "txtsec_stop_001"},
-                ]
-            },
-        }
-        stewardship = load("tests/fixtures/long-work/text-stewardship-record.json")
+        beat_plan = load("tests/fixtures/text-journey/cumulative-text-rehearsal/beat-plan.json")
+        text_plan = load("tests/fixtures/text-journey/cumulative-text-rehearsal/text-medium-plan.json")
+        stewardship = load("tests/fixtures/long-work/cumulative-text-rehearsal/text-stewardship-record.json")
 
         self.assert_long_work_support(beat_plan, should_activate=True, label="long text beat plan")
         self.assert_long_work_support(text_plan, should_activate=True, label="long text medium plan")
         self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(stewardship["source_id"], beat_plan["source_id"])
+        self.assertEqual(stewardship["artist_meaning_id"], beat_plan["artist_meaning_id"])
         self.assertEqual(stewardship["medium_plan_id"], text_plan["text_medium_plan_id"])
         self.assertEqual(stewardship["target_media_type"], "text")
         self.assertEqual(stewardship["cumulative_work_type"], "long_text")
@@ -602,6 +585,11 @@ class PipelineTransitionTests(unittest.TestCase):
         for part in stewardship["part_plan"]:
             self.assertEqual(part["medium_part_ref"]["ref_type"], "text_section")
             self.assertIn(part["medium_part_ref"]["ref_id"], section_ids)
+            self.assertIn(part["beat_id"], {beat["beat_id"] for beat in beat_plan["beats"]})
+            self.assertIn(
+                part["key_emotional_movement_id"],
+                {movement["movement_id"] for movement in beat_plan["key_emotional_movements"]},
+            )
             self.assertTrue(part["part_job"])
             self.assertNotIn("section_execution", part)
             self.assertNotIn("voice_point_of_view", part)

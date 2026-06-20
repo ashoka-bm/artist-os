@@ -1,0 +1,225 @@
+{
+  "long_work_stewardship_record_id": "lws_cumulative_text_threshold",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_cumulative_text_threshold",
+  "medium_plan_id": "tmp_cumulative_text_threshold",
+  "version": 1,
+  "supersedes_long_work_stewardship_record_id": null,
+  "target_media_type": "text",
+  "cumulative_work_type": "long_text",
+  "stewardship_status": "active",
+  "activation_reason": {
+    "story_mode": "sequence",
+    "artist_requested_cumulative_work": true,
+    "requires_part_to_part_dependency": true,
+    "reason": "The three text sections depend on each other: the key creates agency, the lit room makes it dangerous, and the withheld crossing preserves residue."
+  },
+  "governing_arc": {
+    "arc_summary": "The key introduces agency, the lit room turns welcome into danger, and the withheld crossing preserves unresolved motion.",
+    "key_emotional_movement_ids": [
+      "kem_cumulative_key",
+      "kem_cumulative_room",
+      "kem_cumulative_residue"
+    ],
+    "minimum_tension_criteria_ref": "bp_cumulative_text_threshold#tension_movement_plan.minimum_tension_criteria",
+    "story_authority_ref": "bp_cumulative_text_threshold",
+    "may_revise_story_authority": false
+  },
+  "part_plan": [
+    {
+      "part_id": "lwpart_cumulative_text_key",
+      "part_index": 1,
+      "part_label": "The key",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_cumulative_key",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[0]"
+      },
+      "beat_id": "beat_cumulative_key",
+      "key_emotional_movement_id": "kem_cumulative_key",
+      "assigned_beat_role": "invitation",
+      "part_job": "Make the key feel usable and emotionally blocked.",
+      "intended_feeling": "the ache of almost having agency",
+      "expected_state": "The key is tactile, usable, and emotionally blocked.",
+      "must_preserve": [
+        "key as agency",
+        "entry remains emotionally blocked"
+      ],
+      "must_not_resolve_yet": [
+        "entry",
+        "decision",
+        "aftermath"
+      ],
+      "depends_on_part_ids": [],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_cumulative_text_room",
+      "part_index": 2,
+      "part_label": "The lit room",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_cumulative_room",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[1]"
+      },
+      "beat_id": "beat_cumulative_room",
+      "key_emotional_movement_id": "kem_cumulative_room",
+      "assigned_beat_role": "reversal",
+      "part_job": "Make welcome feel dangerous because the key has made return possible.",
+      "intended_feeling": "tender danger",
+      "expected_state": "The room promises safety while increasing the cost of crossing.",
+      "must_preserve": [
+        "welcome turning dangerous",
+        "continuity from the key"
+      ],
+      "must_not_resolve_yet": [
+        "crossing",
+        "explanation",
+        "peaceful acceptance"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_cumulative_text_key"
+      ],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_cumulative_text_residue",
+      "part_index": 3,
+      "part_label": "The withheld crossing",
+      "part_kind": "text_section",
+      "medium_part_ref": {
+        "ref_type": "text_section",
+        "ref_id": "txtsec_cumulative_residue",
+        "path_or_ref": "medium-plans/text-medium-plan.json#structure_plan.sections[2]"
+      },
+      "beat_id": "beat_cumulative_residue",
+      "key_emotional_movement_id": "kem_cumulative_residue",
+      "assigned_beat_role": "residue",
+      "part_job": "Stop before resolution and preserve the dependent sequence's pressure.",
+      "intended_feeling": "unresolved held motion",
+      "expected_state": "The ending holds the choice open without aftermath.",
+      "must_preserve": [
+        "withheld crossing",
+        "unresolved pressure"
+      ],
+      "must_not_resolve_yet": [
+        "decision",
+        "moral lesson",
+        "afterward"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_cumulative_text_key",
+        "lwpart_cumulative_text_room"
+      ],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    }
+  ],
+  "continuity_rules": [
+    {
+      "rule_id": "lwcr_cumulative_text_order",
+      "rule_type": "structure",
+      "rule": "Sections must remain ordered as key, lit room, withheld crossing because each section changes the previous section's meaning.",
+      "applies_to_part_ids": [
+        "lwpart_cumulative_text_key",
+        "lwpart_cumulative_text_room",
+        "lwpart_cumulative_text_residue"
+      ],
+      "source_ref": "tmp_cumulative_text_threshold#structure_plan",
+      "change_requires": "medium_approval",
+      "status": "active"
+    },
+    {
+      "rule_id": "lwcr_cumulative_text_voice",
+      "rule_type": "voice",
+      "rule": "Voice stays restrained, tactile, and image-led across all sections; later sections must not become explanatory summary.",
+      "applies_to_part_ids": [
+        "lwpart_cumulative_text_key",
+        "lwpart_cumulative_text_room",
+        "lwpart_cumulative_text_residue"
+      ],
+      "source_ref": "tmp_cumulative_text_threshold#voice_point_of_view",
+      "change_requires": "medium_approval",
+      "status": "active"
+    }
+  ],
+  "proposed_continuity_updates": [],
+  "checkpoints": [
+    {
+      "checkpoint_id": "lwcp_cumulative_text_foundation",
+      "checkpoint_type": "foundation",
+      "after_part_id": null,
+      "required_before_continuing": true,
+      "status": "approved",
+      "gate_decision_id": "gate_story_approval_cumulative_text",
+      "review_record_id": null,
+      "affected_part_ids": [
+        "lwpart_cumulative_text_key",
+        "lwpart_cumulative_text_room",
+        "lwpart_cumulative_text_residue"
+      ],
+      "next_action": "Proceed to readiness and first-section drafting before drafting dependent later sections.",
+      "summary": "The foundation confirms that the cumulative text sequence depends on preserving order, voice, and unresolved threshold pressure."
+    },
+    {
+      "checkpoint_id": "lwcp_cumulative_text_first_part",
+      "checkpoint_type": "first_part",
+      "after_part_id": "lwpart_cumulative_text_key",
+      "required_before_continuing": true,
+      "status": "pending",
+      "gate_decision_id": null,
+      "review_record_id": null,
+      "affected_part_ids": [
+        "lwpart_cumulative_text_key"
+      ],
+      "next_action": "Draft the key section and review whether the object-led voice can carry the sequence.",
+      "summary": "The first section must establish agency without solving the threshold."
+    }
+  ],
+  "readiness_review": {
+    "required": true,
+    "status": "ready",
+    "review_record_id": null,
+    "checks": {
+      "story_authority_present": true,
+      "part_mapping_complete": true,
+      "part_job_clarity": true,
+      "expectation_turn_preserved": true,
+      "emotional_arc_movement": true,
+      "premature_resolution_checked": true,
+      "continuity_rules_clear": true,
+      "checkpoint_plan_exists": true,
+      "open_risks_surfaced": true,
+      "waiver_path_clear": true
+    },
+    "blocking_risks": [],
+    "repair_questions": []
+  },
+  "drift_management": {
+    "open_drift_items": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_cumulative_text_threshold",
+      "note": "The stewardship record uses the cumulative text Beat Plan as story authority."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_cumulative_text_threshold",
+      "note": "Each long-work part references a concrete Text Medium Plan section without duplicating section execution or voice fields."
+    }
+  ],
+  "created_at": "2026-06-20T00:00:00Z",
+  "updated_at": "2026-06-20T00:00:00Z"
+}

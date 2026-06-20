@@ -103,6 +103,21 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: Long-Work Checkpoint Gate when a checkpoint requires artist confirmation or waiver.
 - Next: Medium Plan enrichment, Long-Work Readiness, prompt or draft expansion, checkpoint review, Output Review, or Story Approval if a proposed update changes story authority.
 
+## Workflow Scale Routing Contract
+
+Workflow Scale Routing is the internal scale decision recorded on Beat Plans and Medium Plans. It decides which support bundle is active before downstream agents expand a work.
+
+Valid routing combinations:
+
+- `compact_artifact`: one compact artifact can carry the approved movement. `long_work_stewardship`, `long_work_parts`, `long_work_readiness`, and `long_work_checkpoints` stay in `skipped_supports`.
+- `structured_single_artifact`: one artifact has internal sections, movements, scenes, or arguments, but later parts do not depend on prior outputs. Long-Work supports stay in `skipped_supports`.
+- `cumulative_work`: multiple dependent parts, sequence units, chapters, tracks, image roles, or other cumulative units must preserve continuity across outputs. Long-Work supports belong in `activated_supports`.
+- `full_long_form_project`: long-form creation needs durable canon, part planning, readiness checks, checkpoints, and completion support. Long-Work supports belong in `activated_supports`.
+
+`activated_supports` and `skipped_supports` must be disjoint. A support cannot be both active and skipped in the same routing decision.
+
+Project-level routing belongs on the Beat Plan. Medium-level routing belongs on the Medium Plan and may stay compact/structured or escalate the medium into cumulative/full long-form support. If medium-level routing newly activates Long-Work Stewardship after Story Approval and no foundation record exists, create the foundation Long-Work Stewardship Record immediately before enrichment.
+
 Create the Long-Work Stewardship Record only for Cumulative Work: image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative.
 
 The foundation Long-Work Stewardship Record is valid immediately after Story Approval. At that point `medium_plan_id` may be `null`, `part_plan[]` may be empty, and Long-Work Readiness may be `pending`. After the Medium Plan exists, enrich the same record with `medium_plan_id`, one `part_plan[]` entry per cumulative unit, continuity rules, checkpoints, and readiness before expansion.

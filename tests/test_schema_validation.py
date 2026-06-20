@@ -359,6 +359,8 @@ class SchemaValidationTests(unittest.TestCase):
         cumulative_paths = [
             REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "beat-plan.json",
             REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "image-medium-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "cumulative-text-rehearsal" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "cumulative-text-rehearsal" / "text-medium-plan.json",
         ]
 
         for data_path in compact_or_structured_paths:

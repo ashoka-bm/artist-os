@@ -1,0 +1,234 @@
+{
+  "text_medium_plan_id": "tmp_cumulative_text_threshold",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_cumulative_text_threshold",
+  "target_media_type": "text",
+  "story_mode": "sequence",
+  "workflow_scale_routing": {
+    "scale_level": "cumulative_work",
+    "rationale": "The accepted text shape creates dependent sections that need Long-Work Stewardship before multi-section drafting expands.",
+    "trigger_signals": [
+      "dependent_parts_needed",
+      "voice_or_style_continuity_needed",
+      "artist_requested_sequence_or_series"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "cultural_format_structure",
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "skipped_supports": [
+      "collection_coherence_review",
+      "publishing_or_completion_audit"
+    ],
+    "reroute_triggers": [
+      "Artist collapses the sequence into one compact fragment, or the work expands into full long-form chapters."
+    ]
+  },
+  "writing_method": {
+    "primary_method": "shape",
+    "method_modifiers": [
+      "beats"
+    ],
+    "rationale": "The output is a reader-facing sequence whose sections depend on each other."
+  },
+  "medium_output_shape_recommendation": {
+    "requested_shape": "sequence of prose fragments",
+    "recommended_shape": "three-section cumulative prose sequence",
+    "accepted_shape": "three-section cumulative prose sequence",
+    "rationale": "Separate dependent sections preserve key, room, and residue without resolving the threshold.",
+    "alternatives_considered": [
+      "single prose poem",
+      "short artist statement"
+    ],
+    "tradeoffs": [
+      "A single prose poem would be compact but would hide part-to-part dependency.",
+      "An artist statement would explain the threshold more than the approved movement allows."
+    ],
+    "conflict": {
+      "has_conflict": false,
+      "conflict_summary": null,
+      "resolution": "not_needed",
+      "gate_decision_id": null
+    }
+  },
+  "cultural_format_structure": {
+    "library_entry_id": "serialized_installment",
+    "name": "Serialized Installment",
+    "grounding_status": "provisional",
+    "grounding_tier": "platform_pattern_evidence",
+    "audience_promise": "Each section changes the threshold pressure while preserving continuity.",
+    "audience_hook": "Begin with the key as an object that should solve the door but cannot solve the feeling.",
+    "parts": [
+      {
+        "part_id": "cfs_part_cumulative_key",
+        "label": "Opening pressure",
+        "function": "Make agency visible before it becomes costly.",
+        "maps_to_section_ids": [
+          "txtsec_cumulative_key"
+        ]
+      },
+      {
+        "part_id": "cfs_part_cumulative_room",
+        "label": "Turn",
+        "function": "Reframe welcome as danger.",
+        "maps_to_section_ids": [
+          "txtsec_cumulative_room"
+        ]
+      },
+      {
+        "part_id": "cfs_part_cumulative_residue",
+        "label": "Residue",
+        "function": "Preserve withheld crossing as the final pressure.",
+        "maps_to_section_ids": [
+          "txtsec_cumulative_residue"
+        ]
+      }
+    ],
+    "turn_or_payoff": "The sequence pays off by refusing to turn possible entry into resolution.",
+    "adaptation_policy": {
+      "required": [
+        "opening pressure",
+        "turn",
+        "residue"
+      ],
+      "mergeable": [
+        "context"
+      ],
+      "omittable": [
+        "explanation of aftermath"
+      ],
+      "invertible": [
+        "chronology"
+      ]
+    },
+    "failure_modes": [
+      "sections can be read in any order without loss",
+      "voice drifts between sections",
+      "the final section resolves the threshold"
+    ],
+    "recommended_stewardship_views": [
+      "section_outline",
+      "continuity_checkpoints",
+      "voice_drift"
+    ]
+  },
+  "text_form": {
+    "primary_text_form": "prose_scene",
+    "text_form_modifiers": [
+      "poem"
+    ],
+    "confirmation_status": "confirmed",
+    "rationale": "A prose sequence can preserve cumulative emotional movement while staying image-led.",
+    "avoid": [
+      "turning sections into interchangeable fragments",
+      "explaining the final choice"
+    ]
+  },
+  "voice_point_of_view": {
+    "speaker": "threshold witness",
+    "point_of_view": "close third person with restrained interiority",
+    "distance": "intimate but withheld",
+    "register": "plain, tactile, image-led",
+    "authority": "observant without explaining",
+    "voice_constraints": [
+      "hold the same sentence pressure across sections",
+      "avoid summary language"
+    ]
+  },
+  "structure_plan": {
+    "structure_type": "sequence",
+    "structure_rationale": "Three dependent sections let the text move from agency, to danger, to residue.",
+    "sections": [
+      {
+        "section_id": "txtsec_cumulative_key",
+        "beat_id": "beat_cumulative_key",
+        "key_emotional_movement_id": "kem_cumulative_key",
+        "section_label": "The key",
+        "structure_role": "opening pressure",
+        "section_job": "Make the key feel usable and emotionally blocked.",
+        "intended_feeling": "the ache of almost having agency",
+        "expectation_turn_translation": "The object that should solve entry becomes proof that entry is emotionally blocked.",
+        "source_wording_notes": [
+          "Preserve key and threshold imagery without quoting private source language."
+        ],
+        "paragraph_distinction": "This section stays tactile and object-led."
+      },
+      {
+        "section_id": "txtsec_cumulative_room",
+        "beat_id": "beat_cumulative_room",
+        "key_emotional_movement_id": "kem_cumulative_room",
+        "section_label": "The lit room",
+        "structure_role": "turn",
+        "section_job": "Make welcome feel dangerous because the key has made return possible.",
+        "intended_feeling": "tender danger",
+        "expectation_turn_translation": "The room that should welcome return increases the cost of crossing.",
+        "source_wording_notes": [
+          "Keep the lit room concrete and avoid abstract safety language."
+        ],
+        "paragraph_distinction": "This section shifts from object to atmosphere."
+      },
+      {
+        "section_id": "txtsec_cumulative_residue",
+        "beat_id": "beat_cumulative_residue",
+        "key_emotional_movement_id": "kem_cumulative_residue",
+        "section_label": "The withheld crossing",
+        "structure_role": "residue",
+        "section_job": "Stop before resolution and preserve the dependent sequence's pressure.",
+        "intended_feeling": "unresolved held motion",
+        "expectation_turn_translation": "The expected crossing never arrives; the ending holds the choice open.",
+        "source_wording_notes": [
+          "Do not invent an aftermath."
+        ],
+        "paragraph_distinction": "This section is shorter and more withheld than the prior sections."
+      }
+    ]
+  },
+  "fidelity_policy": {
+    "mode": "adapt_source_wording",
+    "source_wording_constraints": [
+      "preserve threshold, key, light, and withheld crossing"
+    ],
+    "transformation_allowed": [
+      "compress",
+      "paraphrase",
+      "sequence into dependent prose sections"
+    ],
+    "rights_notes": "Use only artist-provided source material inside this project.",
+    "rationale": "The sequence should preserve source images and cumulative pressure without copying private phrasing verbatim."
+  },
+  "publication_use": {
+    "use_case": "private_draft",
+    "audience": "artist and reviewer evaluating cumulative text continuity",
+    "privacy_notes": "Keep biography implied rather than explicit.",
+    "rights_notes": "Artist-owned draft for private review."
+  },
+  "gates": {
+    "writing_method_gate": "complete",
+    "text_form_gate": "complete",
+    "voice_point_of_view_gate": "complete",
+    "structure_gate": "complete",
+    "fidelity_transformation_gate": "complete",
+    "publication_use_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "writing_critic_required": true,
+    "prompt_critic_required": true,
+    "output_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_cumulative_text_threshold",
+      "note": "Each text section maps to one dependent Beat and requires continuity before expansion."
+    }
+  ]
+}
