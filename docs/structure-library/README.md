@@ -102,6 +102,12 @@ Current Story Structure entries:
 - [`freytag_dramatic_arc`](story/freytag-dramatic-arc.md)
 - [`kishotenketsu`](story/kishotenketsu.md)
 - [`problem_reframe_return`](story/problem-reframe-return.md)
+- [`save_the_cat_beat_sheet`](story/save-the-cat-beat-sheet.md)
+- [`dan_harmon_story_circle`](story/dan-harmon-story-circle.md)
+- [`seven_point_structure`](story/seven-point-structure.md)
+- [`fichtean_curve`](story/fichtean-curve.md)
+- [`in_medias_res_revelation`](story/in-medias-res-revelation.md)
+- [`frame_story_nested_return`](story/frame-story-nested-return.md)
 
 Current Cultural Format Structure entries:
 

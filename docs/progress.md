@@ -54,6 +54,8 @@ Added:
 
 Story is now the shared layer: every output is one or more approved beats translated into a medium.
 
+The Story Structure Library now includes the original core entries plus six additional researched craft frameworks: `save_the_cat_beat_sheet`, `dan_harmon_story_circle`, `seven_point_structure`, `fichtean_curve`, `in_medias_res_revelation`, and `frame_story_nested_return`.
+
 ### Gates And Reviews
 
 Added:
