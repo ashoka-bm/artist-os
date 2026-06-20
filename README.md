@@ -6,8 +6,9 @@ The current dry-run workflows are:
 
 - Text reference to Provider-Neutral Image Prompt Plan.
 - Text reference to Suno Sound Prompt Plan.
+- Text reference to Text Generation Plan and drafted written output (Text Journey).
 
-Dry-run means the skills produce briefs, prompt plans, lyrics when requested, critique records, and metadata. They do not call paid generation providers without explicit approval.
+Dry-run means the skills produce briefs, prompt plans, lyrics when requested, written drafts, critique records, and metadata. They do not call paid generation providers without explicit approval.
 
 ## Install In Codex
 
@@ -25,14 +26,17 @@ artist-os-ingest-reference
 artist-os-meaning-interview
 artist-os-text-to-image-plan
 artist-os-text-to-suno-plan
+artist-os-text-journey
 artist-os-art-critic-review
 artist-os-writing-method-review
 artist-os-critique-asset
+artist-os-clear-writing-pass
+artist-os-human-voice-pass
 ```
 
 Restart Codex or open a new thread after installing so skill discovery refreshes.
 
-Start normal end-to-end work with `artist-os`. It asks whether unclear text should become visual art or a Suno music prompt, then routes through the required gates.
+Start normal end-to-end work with `artist-os`. It asks whether unclear text should become visual art, a Suno music prompt, or written text, then routes through the required gates.
 
 ## Workflows
 
@@ -44,7 +48,7 @@ Text Reference
   -> Meaning Interview
   -> Transformation Brief
   -> Beat Plan
-  -> Story / Beat Review, for multi-beat or series plans
+  -> Story Critic Review, for multi-beat or series plans
   -> Image Medium Plan
   -> Creative Brief Document
   -> Symbology Direction
@@ -71,7 +75,7 @@ Text Reference
   -> Meaning Interview
   -> Transformation Brief
   -> Beat Plan
-  -> Story / Beat Review, for multi-section or lyric-bearing plans
+  -> Story Critic Review, for multi-section or lyric-bearing plans
   -> Sound Medium Plan
   -> Sound Creative Brief Document
   -> Sonic Concept
@@ -92,6 +96,32 @@ Text Reference
 
 The Vocal / Lyric gate is required. If the artist wants lyrics or intelligible words, Artist OS drafts lyrics and includes them in review before final prompt locking. The first sound output targets Suno Custom Mode fields: title, lyrics or instrumental choice, Style of Music, Exclude, and optional advanced notes.
 
+### Text To Text (Text Journey)
+
+```text
+Text Reference
+  -> Source Record
+  -> Meaning Interview
+  -> Transformation Brief
+  -> Beat Plan
+  -> Story Critic Review, for multi-beat or sequence plans
+  -> Text Medium Plan
+  -> Text Creative Brief Document
+  -> Writing Method / Text Form / Voice / Structure / Fidelity / Use gates
+  -> Writing Critic Review
+  -> Brief Approval
+  -> Text Creative Brief Record
+  -> Text Generation Plan
+  -> Prompt Plan Critique
+  -> Draft Generation Approval Gate
+  -> drafted Output Record
+  -> optional Clear Writing Pass, then optional Human Voice Pass
+  -> Output Critic Review
+  -> Output Acceptance Gate
+```
+
+The Text Journey drafts the written Output Artifact in a fresh-context sub-agent, runs a conformance review before any editorial pass, and runs Clear Writing Pass before Human Voice Pass when the Text Generation Plan requires or recommends them. Each concrete rewrite gets a new Output Record. Drafting requires Draft Generation Approval even though no paid provider is called.
+
 All critic and reviewer stages run as bounded sub-agent reviews. The creating agent does not self-review its own Story, Medium, Prompt, or Output review stage. Provider-backed generation still requires explicit approval; the output lifecycle applies after a generated, imported, drafted, or edited artifact exists.
 
 ## Repository Contents
@@ -107,22 +137,26 @@ docs/progress.md             Current roadmap, transition state, and completed mi
 docs/pipeline-contract.md    Typed step input/output contract
 docs/gates-and-reviews.md    Canonical gates, critic roles, and reviewer contract
 docs/story/                  Shared story and beat architecture
+docs/structure-library/      Story Structures and Cultural Format Structures
 docs/output-journeys/        Medium routes for image, video, sound, text, and mixed media
 docs/writing/                Writing methods and reviewer integration
 docs/text-to-sound/          Suno-specific theory and architecture
+docs/adr/                    Architecture Decision Records
 schemas/                     JSON schemas and SQLite schema
 examples/                    Valid example records
 skills/                      Codex skill source files
+evals/                       Routing and conductor-behavior evals
+tests/                       Schema, transition, and contract tests
 bin/                         Local install and workspace helpers
 ```
 
 ## Architecture Direction
 
-Artist OS now has a shared story layer for the implemented image and Suno dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; an image series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
+Artist OS now has a shared story layer for the implemented image, Suno, and text dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; an image series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
 
 The governing rule is emotional primacy. Artist OS should grab attention, trigger a strong emotion, and forge a simple mental link. Plans must express a feeling rather than only communicate a fact, so Beat Plans, Medium Plans, and briefs now track Intended Feeling, Key Emotional Movements, Expectation Turns, and Minimum Tension Criteria.
 
-The current dry-run slices remain text-to-image and text-to-Suno. The planned cross-medium architecture lives in:
+The current dry-run slices are text-to-image, text-to-Suno, and the text-to-text Text Journey. The planned cross-medium architecture (video and mixed-media) lives in:
 
 ```text
 docs/story/
@@ -130,7 +164,7 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The first shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image and Sound Medium Plans, Review Records, Gate Decisions, Prompt Branch Sets, and Output Records. The existing image and Suno dry-run slices translate the shared Beat Plan through image-specific and sound-specific Medium Plans before producing final brief records, prompt plans, and review records that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run an end-to-end dry-run rehearsal before adding a new medium branch or provider adapter.
+The shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image, Sound, and Text Medium Plans, Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch Sets, Text Generation Plans, and Output Records. The image, Suno, and text dry-run slices translate the shared Beat Plan through medium-specific Medium Plans before producing final brief records, prompt plans or generation plans, and review records that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run end-to-end dry-run rehearsals before adding a new medium branch or provider adapter.
 
 ## Local State And Privacy
 

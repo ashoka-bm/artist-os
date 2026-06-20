@@ -1,5 +1,7 @@
 # Mixed-Media Journey
 
+> **Status: not built yet.** This is forward-looking design, not a shipped slice. The implemented dry-run slices are image, Suno sound, and text, and the conductor runs one medium flow to completion before the next. Keep this doc as planning input for the eventual mixed-media branch.
+
 The Mixed-Media Journey coordinates multiple output journeys from one approved Beat Plan. It is for projects where image, video, sound, text, or other media should share meaning and structure while expressing different parts of the work.
 
 ## Best Fit

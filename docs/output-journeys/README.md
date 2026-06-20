@@ -21,11 +21,11 @@ Reference
 
 Journeys in this directory:
 
-- `image.md`: still images and image series.
-- `video.md`: short clips, scenes, sequences, trailers, and longer arcs.
-- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, and Suno prompt plans.
-- `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms.
-- `mixed-media.md`: coordinated outputs across multiple media.
+- `image.md`: still images and image series. **Implemented.**
+- `video.md`: short clips, scenes, sequences, trailers, and longer arcs. **Not built yet — forward-looking design.**
+- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, and Suno prompt plans. **Implemented.**
+- `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms. **Implemented.**
+- `mixed-media.md`: coordinated outputs across multiple media. **Not built yet — forward-looking design.**
 
 Writing-method integration lives in `docs/writing/README.md`. Its referenced `writing-fragments`, `writing-beats`, and `writing-shape` skill files are high-authority for raw material capture, beat-by-beat journey creation, and finished written shape.
 

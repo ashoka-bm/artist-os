@@ -25,9 +25,12 @@ skills=(
   "meaning-interview"
   "text-to-image-plan"
   "text-to-suno-plan"
+  "text-journey"
   "art-critic-review"
   "writing-method-review"
   "critique-asset"
+  "clear-writing-pass"
+  "human-voice-pass"
 )
 
 mkdir -p "$skills_dir"
@@ -85,12 +88,6 @@ install_skill() {
 }
 
 install_skill "$repo_root/skills/artist-os" "$skills_dir/artist-os"
-
-legacy_orchestrator="$skills_dir/${prefix}first-slice-flow"
-if [[ -L "$legacy_orchestrator" && "$(readlink "$legacy_orchestrator")" == "$repo_root/skills/first-slice-flow" ]]; then
-  rm "$legacy_orchestrator"
-  echo "removed legacy alias: $legacy_orchestrator"
-fi
 
 for skill in "${skills[@]}"; do
   source_dir="$repo_root/skills/$skill"

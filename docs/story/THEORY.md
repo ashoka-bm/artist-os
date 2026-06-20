@@ -30,7 +30,7 @@ Reference
   -> Output Acceptance Gate
 ```
 
-The current image and Suno workflows now use a first-class Beat Plan before medium planning. Medium-specific briefs carry `beat_plan_id`; they do not embed duplicate Beat summaries.
+The current image, Suno, and text workflows now use a first-class Beat Plan before medium planning. Medium-specific briefs carry `beat_plan_id`; they do not embed duplicate Beat summaries.
 
 Long-Work Stewardship exists only for Cumulative Work: long text, image series, songs or sound movements, video sequences, or mixed-media sequences where later parts depend on earlier parts. It protects continuity, readiness, checkpoints, emotional-arc expression, and drift across parts. It is not needed for a non-sequential portfolio, store collection, or curator batch whose pieces are related but do not build one after another.
 

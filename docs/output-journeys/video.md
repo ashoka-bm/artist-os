@@ -1,5 +1,7 @@
 # Video Journey
 
+> **Status: not built yet.** This is forward-looking design, not a shipped slice. The implemented dry-run slices are image, Suno sound, and text. The `artist-os` conductor explicitly tells the artist the video path has not been created yet and offers the available paths instead. Keep this doc as planning input for the eventual video branch.
+
 The Video Journey translates an approved Beat Plan into time-based visual work: a single motion moment, a short clip, a scene, a sequence, a trailer, or a longer arc.
 
 ## Best Fit

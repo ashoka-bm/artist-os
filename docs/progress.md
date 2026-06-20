@@ -4,7 +4,7 @@ This document records what has been created, what is transitional, and what come
 
 ## Current Goal
 
-Artist OS has established the core typed transformation pipeline for the current image and Suno dry-run slices. The current refinement pass adds an emotional-primacy contract on top of that pipeline: records must now name the intended feeling, preserve the artist's authority through a Decision Interview, and carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact.
+Artist OS has established the core typed transformation pipeline for the current image, Suno, and text dry-run slices. The current refinement pass adds an emotional-primacy contract on top of that pipeline: records must now name the intended feeling, preserve the artist's authority through a Decision Interview, and carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact.
 
 Current implementation priority is dry-run output quality: generate the right briefs, plans, prompts, drafts, reviews, and records at the highest possible quality before adding external generation. API setup, provider credentials, provider adapters, and actual external image or Suno generation are intentionally deferred until the dry-run contracts and output quality are strong enough to support them.
 
@@ -43,6 +43,7 @@ Implemented dry-run workflows:
 
 - Text Reference to Provider-Neutral Image Prompt Plan.
 - Text Reference to Suno Sound Prompt Plan.
+- Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
 
 Provider-backed generation remains out of scope without explicit approval.
 
@@ -266,6 +267,7 @@ Added:
 
 - `schemas/image-medium-plan.schema.json`
 - `schemas/sound-medium-plan.schema.json`
+- `schemas/text-medium-plan.schema.json`
 
 Added examples:
 
@@ -275,7 +277,6 @@ Added examples:
 Still future:
 
 - `schemas/video-medium-plan.schema.json`
-- `schemas/text-medium-plan.schema.json`
 - possibly a shared `schemas/medium-plan.schema.json`
 
 ## Completed Implementation Milestones

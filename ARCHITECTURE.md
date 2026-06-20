@@ -83,7 +83,7 @@ Artist OS keeps public product behavior separate from local project state.
 
 - `README.md` explains installation and usage.
 - `THEORY.md`, `ARCHITECTURE.md`, `CONTEXT.md`, `docs/text-to-sound/`, schemas, examples, and `skills/` define product behavior.
-- Provider setup, API keys, host adapters, and media ingestion come after the manual image and Suno workflows are proven.
+- Provider setup, API keys, host adapters, and media ingestion come after the manual image, Suno, and text workflows are proven.
 - `workspace-library/artist-os/` stores private project records and media locally and is ignored by git.
 - `workspace-library/artist-os/artist-os.sqlite` is the local query index for resuming projects across sessions; the project folders remain the durable source artifacts.
 

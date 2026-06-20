@@ -8,7 +8,7 @@ Text Reference
   -> Meaning Interview
   -> Transformation Brief
   -> Beat Plan
-  -> Story / Beat Review, when required
+  -> Story Critic Review, when required
   -> Sound Medium Plan
   -> Draft Sound Creative Brief Document
   -> Sound Work Type
