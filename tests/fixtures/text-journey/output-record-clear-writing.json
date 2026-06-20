@@ -1,6 +1,6 @@
 {
-  "output_record_id": "out_text_door_left_lit_human_voice_001",
-  "previous_output_record_id": "out_text_door_left_lit_clear_writing_001",
+  "output_record_id": "out_text_door_left_lit_clear_writing_001",
+  "previous_output_record_id": "out_text_door_left_lit_draft_001",
   "project_id": "proj_door_left_lit",
   "source_id": "src_door_left_lit",
   "artist_meaning_id": "meaning_door_left_lit",
@@ -15,16 +15,16 @@
   "prompt_variant_type": null,
   "target_media_type": "text",
   "output_artifact": {
-    "artifact_id": "artifact_text_door_left_lit_human_voice_001",
+    "artifact_id": "artifact_text_door_left_lit_clear_writing_001",
     "artifact_kind": "text",
-    "uri_or_path": "workspace-library/artist-os/proj_door_left_lit/outputs/text/human-voice-001.md",
+    "uri_or_path": "workspace-library/artist-os/proj_door_left_lit/outputs/text/clear-writing-001.md",
     "mime_type": "text/markdown",
-    "description": "Human Voice Pass rewrite after the Clear Writing Pass.",
+    "description": "Clear Writing Pass rewrite of the fresh-context draft.",
     "rights_notes": "Artist-owned rewrite for private review."
   },
   "origin": {
     "origin_type": "agent_rewritten",
-    "created_by": "human_voice_pass_sub_agent",
+    "created_by": "clear_writing_pass_sub_agent",
     "generation_approval_ref": "gate_text_draft_generation_001"
   },
   "generation": {
@@ -32,8 +32,8 @@
     "model": null,
     "settings": {
       "text_generation_plan_id": "plan_text_door_left_lit",
-      "human_voice_pass_policy": "recommended",
-      "degree": "standard"
+      "clear_writing_pass_policy": "recommended",
+      "degree": "light"
     },
     "seed": null,
     "estimated_cost": null,
@@ -58,9 +58,9 @@
     },
     {
       "source_type": "output_record",
-      "source_ref": "out_text_door_left_lit_clear_writing_001",
-      "note": "Human Voice Pass rewrite: removed AI-sounding polish after the Clear Writing Pass, preserved source images, protected unresolved ending, and kept the three-section structure."
+      "source_ref": "out_text_door_left_lit_draft_001",
+      "note": "Clear Writing Pass rewrite: tightened paragraph movement, removed clutter, preserved the image-led structure, and kept the unresolved ending."
     }
   ],
-  "created_at": "2026-06-17T12:58:00Z"
+  "created_at": "2026-06-17T12:53:00Z"
 }

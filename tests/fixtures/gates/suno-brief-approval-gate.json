@@ -1,0 +1,35 @@
+{
+  "gate_decision_id": "gate_suno_brief_approval_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "gate_type": "brief_approval",
+  "gate_status": "approved",
+  "decision": "Approve the Sound Creative Brief after Sound Critic Review.",
+  "options_presented": [
+    {
+      "option_id": "approve",
+      "label": "Approve",
+      "summary": "Use the reviewed sound brief as the Suno prompt-planning contract."
+    }
+  ],
+  "selected_option": {
+    "option_id": "approve",
+    "label": "Approve"
+  },
+  "artist_response": "Approved.",
+  "proceed_unconfirmed": false,
+  "upstream_refs": [
+    {
+      "ref_type": "creative_brief",
+      "ref_id": "brief_door_left_lit_sound",
+      "path_or_ref": "tests/fixtures/text-to-suno/sound-creative-brief.json"
+    },
+    {
+      "ref_type": "review_record",
+      "ref_id": "review_suno_sound_critic_door_left_lit",
+      "path_or_ref": "tests/fixtures/reviews/suno-sound-critic-review-record.json"
+    }
+  ],
+  "created_at": "2026-06-17T12:32:00Z"
+}

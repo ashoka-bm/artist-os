@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 
@@ -13,6 +14,14 @@ def load(path: str) -> dict:
 
 
 LONG_WORK_SUPPORT = "long_work_stewardship"
+
+
+def ref_pairs(refs: list[dict]) -> set[tuple[str, str]]:
+    return {(ref["ref_type"], ref["ref_id"]) for ref in refs}
+
+
+def timestamp(record: dict) -> datetime:
+    return datetime.fromisoformat(record["created_at"].replace("Z", "+00:00"))
 
 
 class PipelineTransitionTests(unittest.TestCase):
@@ -80,6 +89,14 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(image_plan["artist_meaning_id"], beat_plan["artist_meaning_id"])
         self.assertEqual(image_plan["transformation_brief_id"], beat_plan["transformation_brief_id"])
         self.assertEqual(image_plan["target_media_type"], "image")
+        self.assertIn(
+            image_plan["symbology_direction"]["confirmation_status"],
+            {"artist_specified", "confirmed"},
+        )
+        self.assertIn(
+            image_plan["style_direction"]["confirmation_status"],
+            {"artist_specified", "confirmed"},
+        )
         key_movement_ids = {
             movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
         }
@@ -92,6 +109,9 @@ class PipelineTransitionTests(unittest.TestCase):
         beat_plan = load("tests/fixtures/story/beat-plan.json")
         image_plan = load("tests/fixtures/text-to-image/image-medium-plan.json")
         creative_brief = load("tests/fixtures/text-to-image/creative-brief.json")
+        art_review = load("tests/fixtures/reviews/image-art-critic-review-record.json")
+        brief_gate = load("tests/fixtures/gates/image-brief-approval-gate.json")
+        detail_gate = load("tests/fixtures/gates/image-detail-intensity-gate.json")
 
         self.assertEqual(creative_brief["beat_plan_id"], image_plan["beat_plan_id"])
         self.assertEqual(creative_brief["source_id"], image_plan["source_id"])
@@ -100,6 +120,21 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertIn("beat_plan_id", creative_brief)
         self.assertIn("transformation_brief_id", creative_brief)
         self.assertNotIn("beats", creative_brief)
+        self.assertIn(
+            creative_brief["symbology_direction"]["confirmation_status"],
+            {"artist_specified", "confirmed"},
+        )
+        self.assertIn(
+            creative_brief["style_direction"]["confirmation_status"],
+            {"artist_specified", "confirmed"},
+        )
+        self.assertEqual(creative_brief["approval_refs"]["art_critic_review_id"], art_review["review_record_id"])
+        self.assertEqual(art_review["review_role"], "art_critic")
+        self.assertEqual(art_review["artifact_under_review"]["artifact_id"], creative_brief["brief_id"])
+        self.assertEqual(creative_brief["approval_refs"]["brief_approval_gate_id"], brief_gate["gate_decision_id"])
+        self.assertEqual(brief_gate["gate_type"], "brief_approval")
+        self.assertIn(("review_record", art_review["review_record_id"]), ref_pairs(brief_gate["upstream_refs"]))
+        self.assertGreater(timestamp(detail_gate), timestamp(brief_gate))
         key_movement_ids = {
             movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
         }
@@ -150,6 +185,8 @@ class PipelineTransitionTests(unittest.TestCase):
     def test_sound_medium_plan_to_sound_creative_brief(self) -> None:
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")
         sound_brief = load("tests/fixtures/text-to-suno/sound-creative-brief.json")
+        sound_review = load("tests/fixtures/reviews/suno-sound-critic-review-record.json")
+        brief_gate = load("tests/fixtures/gates/suno-brief-approval-gate.json")
 
         self.assertEqual(sound_brief["beat_plan_id"], sound_plan["beat_plan_id"])
         self.assertEqual(sound_brief["source_id"], sound_plan["source_id"])
@@ -157,11 +194,19 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(sound_brief["transformation_brief_id"], sound_plan["transformation_brief_id"])
         self.assertIn("transformation_brief_id", sound_brief)
         self.assertNotIn("beats", sound_brief)
+        self.assertEqual(sound_brief["approval_refs"]["sound_critic_review_id"], sound_review["review_record_id"])
+        self.assertEqual(sound_review["review_role"], "sound_critic")
+        self.assertEqual(sound_review["artifact_under_review"]["artifact_id"], sound_brief["brief_id"])
+        self.assertEqual(sound_brief["approval_refs"]["brief_approval_gate_id"], brief_gate["gate_decision_id"])
+        self.assertEqual(brief_gate["gate_type"], "brief_approval")
+        self.assertIn(("review_record", sound_review["review_record_id"]), ref_pairs(brief_gate["upstream_refs"]))
 
     def test_image_creative_brief_to_prompt_plan(self) -> None:
         creative_brief = load("tests/fixtures/text-to-image/creative-brief.json")
         image_plan = load("tests/fixtures/text-to-image/image-medium-plan.json")
         prompt_plan = load("tests/fixtures/text-to-image/prompt-plan.json")
+        prompt_review = load("tests/fixtures/reviews/image-prompt-critic-review-record.json")
+        prompt_lock_gate = load("tests/fixtures/gates/image-prompt-lock-gate.json")
 
         self.assertEqual(prompt_plan["brief_id"], creative_brief["brief_id"])
         self.assertEqual(prompt_plan["source_id"], creative_brief["source_id"])
@@ -169,6 +214,12 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(prompt_plan["transformation_brief_id"], creative_brief["transformation_brief_id"])
         self.assertEqual(prompt_plan["beat_plan_id"], creative_brief["beat_plan_id"])
         self.assertEqual(prompt_plan["image_medium_plan_id"], image_plan["image_medium_plan_id"])
+        self.assertEqual(prompt_plan["approval_refs"]["prompt_critic_review_id"], prompt_review["review_record_id"])
+        self.assertEqual(prompt_review["review_role"], "prompt_critic")
+        self.assertEqual(prompt_review["artifact_under_review"]["artifact_id"], prompt_plan["prompt_plan_id"])
+        self.assertEqual(prompt_plan["approval_refs"]["prompt_lock_gate_id"], prompt_lock_gate["gate_decision_id"])
+        self.assertEqual(prompt_lock_gate["gate_type"], "prompt_lock")
+        self.assertIn(("review_record", prompt_review["review_record_id"]), ref_pairs(prompt_lock_gate["upstream_refs"]))
 
     def test_image_prompt_plan_to_prompt_branch_set(self) -> None:
         prompt_plan = load("tests/fixtures/text-to-image/prompt-plan.json")
@@ -276,6 +327,8 @@ class PipelineTransitionTests(unittest.TestCase):
         sound_brief = load("tests/fixtures/text-to-suno/sound-creative-brief.json")
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")
         sound_prompt = load("tests/fixtures/text-to-suno/sound-prompt-plan.json")
+        prompt_review = load("tests/fixtures/reviews/suno-prompt-critic-review-record.json")
+        prompt_lock_gate = load("tests/fixtures/gates/suno-prompt-lock-gate.json")
 
         self.assertEqual(sound_prompt["brief_id"], sound_brief["brief_id"])
         self.assertEqual(sound_prompt["source_id"], sound_brief["source_id"])
@@ -283,6 +336,12 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(sound_prompt["transformation_brief_id"], sound_brief["transformation_brief_id"])
         self.assertEqual(sound_prompt["beat_plan_id"], sound_brief["beat_plan_id"])
         self.assertEqual(sound_prompt["sound_medium_plan_id"], sound_plan["sound_medium_plan_id"])
+        self.assertEqual(sound_prompt["approval_refs"]["prompt_critic_review_id"], prompt_review["review_record_id"])
+        self.assertEqual(prompt_review["review_role"], "prompt_critic")
+        self.assertEqual(prompt_review["artifact_under_review"]["artifact_id"], sound_prompt["prompt_plan_id"])
+        self.assertEqual(sound_prompt["approval_refs"]["prompt_lock_gate_id"], prompt_lock_gate["gate_decision_id"])
+        self.assertEqual(prompt_lock_gate["gate_type"], "prompt_lock")
+        self.assertIn(("review_record", prompt_review["review_record_id"]), ref_pairs(prompt_lock_gate["upstream_refs"]))
         beat_plan = load("tests/fixtures/story/beat-plan.json")
         beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
         key_movement_ids = {
@@ -323,6 +382,8 @@ class PipelineTransitionTests(unittest.TestCase):
     def test_text_medium_plan_to_text_creative_brief(self) -> None:
         text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
         text_brief = load("tests/fixtures/text-journey/text-creative-brief.json")
+        writing_review = load("tests/fixtures/reviews/text-writing-critic-review-record.json")
+        brief_gate = load("tests/fixtures/gates/text-brief-approval-gate.json")
 
         self.assertEqual(text_brief["text_medium_plan_id"], text_plan["text_medium_plan_id"])
         self.assertEqual(text_brief["beat_plan_id"], text_plan["beat_plan_id"])
@@ -333,11 +394,20 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(text_brief["primary_text_form"], text_plan["text_form"]["primary_text_form"])
         self.assertEqual(text_brief["fidelity_policy"]["mode"], text_plan["fidelity_policy"]["mode"])
         self.assertNotIn("beats", text_brief)
+        self.assertEqual(text_brief["approval_refs"]["writing_critic_review_id"], writing_review["review_record_id"])
+        self.assertEqual(writing_review["review_role"], "writing_critic")
+        self.assertEqual(writing_review["artifact_under_review"]["artifact_id"], text_brief["brief_id"])
+        self.assertEqual(text_brief["approval_refs"]["brief_approval_gate_id"], brief_gate["gate_decision_id"])
+        self.assertEqual(brief_gate["gate_type"], "brief_approval")
+        self.assertIn(("review_record", writing_review["review_record_id"]), ref_pairs(brief_gate["upstream_refs"]))
 
     def test_text_creative_brief_to_text_generation_plan(self) -> None:
         text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
         text_brief = load("tests/fixtures/text-journey/text-creative-brief.json")
         generation_plan = load("tests/fixtures/text-journey/text-generation-plan.json")
+        prompt_review = load("tests/fixtures/reviews/text-prompt-critic-review-record.json")
+        prompt_lock_gate = load("tests/fixtures/gates/text-prompt-lock-gate.json")
+        draft_gate = load("tests/fixtures/gates/text-draft-generation-approval-gate.json")
 
         self.assertEqual(generation_plan["brief_id"], text_brief["brief_id"])
         self.assertEqual(generation_plan["source_id"], text_brief["source_id"])
@@ -354,17 +424,30 @@ class PipelineTransitionTests(unittest.TestCase):
         )
         trace_source_types = {note["source_type"] for note in generation_plan["traceability_summary"]}
         self.assertIn("text_creative_brief", trace_source_types)
+        post_plan_refs = generation_plan["approval_refs"]["post_plan_gates_required"]
+        self.assertEqual(post_plan_refs["prompt_critic_review_id"], prompt_review["review_record_id"])
+        self.assertEqual(prompt_review["review_role"], "prompt_critic")
+        self.assertEqual(prompt_review["artifact_under_review"]["artifact_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(post_plan_refs["prompt_lock_gate_id"], prompt_lock_gate["gate_decision_id"])
+        self.assertEqual(prompt_lock_gate["gate_type"], "prompt_lock")
+        self.assertIn(("review_record", prompt_review["review_record_id"]), ref_pairs(prompt_lock_gate["upstream_refs"]))
+        self.assertEqual(post_plan_refs["draft_generation_approval_gate_id"], draft_gate["gate_decision_id"])
+        self.assertEqual(draft_gate["gate_type"], "draft_generation_approval")
 
     def test_text_generation_plan_to_draft_and_rewrite_output_records(self) -> None:
         generation_plan = load("tests/fixtures/text-journey/text-generation-plan.json")
         draft_output = load("tests/fixtures/text-journey/output-record-draft.json")
+        clear_output = load("tests/fixtures/text-journey/output-record-clear-writing.json")
         rewrite_output = load("tests/fixtures/text-journey/output-record-human-voice.json")
+        draft_gate = load("tests/fixtures/gates/text-draft-generation-approval-gate.json")
 
         self.assertEqual(draft_output["prompt_plan_id"], generation_plan["text_generation_plan_id"])
         self.assertEqual(draft_output["text_generation_plan_id"], generation_plan["text_generation_plan_id"])
         self.assertIsNone(draft_output["previous_output_record_id"])
         self.assertEqual(draft_output["target_media_type"], "text")
         self.assertEqual(draft_output["origin"]["origin_type"], "agent_drafted")
+        self.assertEqual(draft_output["origin"]["generation_approval_ref"], draft_gate["gate_decision_id"])
+        self.assertGreater(timestamp(draft_output), timestamp(draft_gate))
         draft_trace = [note for note in draft_output["traceability_summary"] if note["source_type"] == "medium_plan"]
         self.assertGreaterEqual(len(draft_trace), 1)
         self.assertIn("section", draft_trace[0]["note"].lower())
@@ -374,9 +457,21 @@ class PipelineTransitionTests(unittest.TestCase):
         ]
         self.assertGreaterEqual(len(generation_plan_trace), 1)
 
+        self.assertEqual(clear_output["prompt_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(clear_output["text_generation_plan_id"], generation_plan["text_generation_plan_id"])
+        self.assertEqual(clear_output["previous_output_record_id"], draft_output["output_record_id"])
+        self.assertEqual(clear_output["origin"]["origin_type"], "agent_rewritten")
+        clear_notes = [
+            note for note in clear_output["traceability_summary"]
+            if note["source_type"] == "output_record"
+        ]
+        self.assertGreaterEqual(len(clear_notes), 1)
+        self.assertIn("clear writing", clear_notes[0]["note"].lower())
+        self.assertGreater(timestamp(clear_output), timestamp(draft_output))
+
         self.assertEqual(rewrite_output["prompt_plan_id"], generation_plan["text_generation_plan_id"])
         self.assertEqual(rewrite_output["text_generation_plan_id"], generation_plan["text_generation_plan_id"])
-        self.assertEqual(rewrite_output["previous_output_record_id"], draft_output["output_record_id"])
+        self.assertEqual(rewrite_output["previous_output_record_id"], clear_output["output_record_id"])
         self.assertEqual(rewrite_output["origin"]["origin_type"], "agent_rewritten")
         rewrite_notes = [
             note for note in rewrite_output["traceability_summary"]
@@ -384,10 +479,12 @@ class PipelineTransitionTests(unittest.TestCase):
         ]
         self.assertGreaterEqual(len(rewrite_notes), 1)
         self.assertIn("human voice", rewrite_notes[0]["note"].lower())
+        self.assertGreater(timestamp(rewrite_output), timestamp(clear_output))
 
     def test_agent_rewritten_outputs_reference_previous_output(self) -> None:
         output_paths = [
             "tests/fixtures/text-journey/output-record-draft.json",
+            "tests/fixtures/text-journey/output-record-clear-writing.json",
             "tests/fixtures/text-journey/output-record-human-voice.json",
             "tests/fixtures/outputs/output-record.json",
         ]

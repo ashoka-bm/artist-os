@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_suno_sound_critic_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "sound_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-art-critic-review"
+  },
+  "artifact_under_review": {
+    "artifact_type": "sound_creative_brief",
+    "artifact_id": "brief_door_left_lit_sound",
+    "path_or_ref": "tests/fixtures/text-to-suno/sound-creative-brief.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve unresolved threshold pressure in sound.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "smp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-suno/sound-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["The song must keep threshold pressure audible in every section."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "brief_door_left_lit_sound",
+        "tension_name": "unresolved harmonic pressure",
+        "claimed_intensity": 0.75,
+        "reviewer_assessed_intensity": 0.76,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "Vocal, harmony, and room tone preserve the threshold."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The sound brief compresses the movement into one lyric-bearing track."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The hook lifts but refuses resolution."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The sound brief is ready for Brief Approval."
+  },
+  "matched": [
+    {
+      "summary": "Sonic choices preserve unresolved threshold pressure.",
+      "traces_to": [
+        {
+          "source_type": "medium_plan",
+          "source_ref": "smp_door_left_lit",
+          "note": "The sound plan calls for close voice, unresolved harmony, and active room tone."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Sound brief is coherent.",
+      "evidence": "The lyric and arrangement avoid triumphant closure.",
+      "recommendation": "Proceed to Brief Approval."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:30:00Z"
+}

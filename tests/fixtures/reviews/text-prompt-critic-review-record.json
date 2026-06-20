@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_text_prompt_critic_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "prompt_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "text_generation_plan",
+    "artifact_id": "plan_text_door_left_lit",
+    "path_or_ref": "tests/fixtures/text-journey/text-generation-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve threshold, key, active absence, and an unresolved ending.",
+    "governing_refs": [
+      {
+        "ref_type": "text_creative_brief",
+        "ref_id": "brief_text_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-journey/text-creative-brief.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "tmp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-journey/text-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["Drafting instructions must preserve section jobs and unresolved ending."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "plan_text_door_left_lit",
+        "tension_name": "drafting readiness",
+        "claimed_intensity": 0.68,
+        "reviewer_assessed_intensity": 0.7,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "The generation plan protects structure before prose polish."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The plan maps all drafting sections to the movement."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "Drafting instructions preserve the withheld crossing."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The Text Generation Plan is ready for prompt lock and draft approval."
+  },
+  "matched": [
+    {
+      "summary": "The plan separates drafting, conformance review, and editorial passes.",
+      "traces_to": [
+        {
+          "source_type": "text_creative_brief",
+          "source_ref": "brief_text_door_left_lit",
+          "note": "The generation plan follows the approved text brief."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Text Generation Plan is ready.",
+      "evidence": "It requires fresh-context drafting and separates Clear Writing from Human Voice.",
+      "recommendation": "Proceed to Prompt Lock and Draft Generation Approval."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:45:00Z"
+}

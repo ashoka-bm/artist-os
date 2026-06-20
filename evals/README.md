@@ -53,7 +53,7 @@ graded against a checklist. `eval-spec.md` has the test prompts, the per-prompt
 subagent instructions, and the checklist. Procedure:
 
 1. Snapshot the current conductor: `cp skills/artist-os/SKILL.md evals/conductor-behavior/baseline-SKILL.md`.
-2. Spawn one subagent per test prompt (see `eval-spec.md`); save traces to `baseline/T1.md`, `T2.md`, `T3.md`.
+2. Spawn one subagent per test prompt (see `eval-spec.md`); save traces to `baseline/T1.md`, `T2.md`, etc.
 3. Grade each trace against the checklist — this is the behavior to preserve.
 4. Make the conductor change, then re-run the same prompts into `trimmed/`.
 5. Diff: every checklist assertion that passed at baseline must still pass. A

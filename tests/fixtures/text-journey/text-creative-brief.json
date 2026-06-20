@@ -97,5 +97,9 @@
     "target_media_type": "text",
     "preserve": ["threshold", "key as fragile agency", "active absence", "unresolved ending"],
     "avoid": ["resolution", "new backstory", "promotional artist-statement language"]
+  },
+  "approval_refs": {
+    "writing_critic_review_id": "review_text_door_left_lit_writing_critic_001",
+    "brief_approval_gate_id": "gate_text_door_left_lit_brief_approval_001"
   }
 }

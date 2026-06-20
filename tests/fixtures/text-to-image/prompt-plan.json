@@ -244,6 +244,10 @@
     "uses_three_prompt_variants": false,
     "requires_artist_approval_before_series": false
   },
+  "approval_refs": {
+    "prompt_critic_review_id": "review_image_prompt_critic_door_left_lit",
+    "prompt_lock_gate_id": "gate_image_prompt_lock_door_left_lit"
+  },
   "traceability_summary": [
     {
       "source_type": "artist_meaning",

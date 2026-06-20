@@ -28,7 +28,7 @@
   "symbology_direction": {
     "selection_method": "agent_recommended",
     "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
-    "confirmation_status": "unconfirmed",
+    "confirmation_status": "confirmed",
     "alternatives_considered": [
       "the key alone as a ritual object",
       "an empty room with no figure",
@@ -46,7 +46,7 @@
     "style_family": "camera-based cinematic image",
     "style_mode": "grainy cinematic photoreal with restrained surreal symbolism",
     "primary_style": "cinematic photoreal",
-    "confirmation_status": "unconfirmed",
+    "confirmation_status": "confirmed",
     "style_modifiers": [
       "grainy / film-grain",
       "surreal / dreamlike",
@@ -506,5 +506,9 @@
       "showing a clear antagonist",
       "flattening the scene into simple loneliness"
     ]
+  },
+  "approval_refs": {
+    "art_critic_review_id": "review_image_art_critic_door_left_lit",
+    "brief_approval_gate_id": "gate_image_brief_approval_door_left_lit"
   }
 }

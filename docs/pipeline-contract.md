@@ -90,6 +90,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Skill: medium planner or future story planner.
 - Structure rule: `story_structure` is required when `story_mode` is `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`; it remains optional for `single_beat`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, series, lyric-bearing, scene, arc, or ambiguous plans.
+- Story Critic required when Story Mode scale, meaning preservation, symbolic progression, minimum tension criteria, or Story Approval authority is uncertain. If both Beat Reviewer and Story Critic are required, run Beat Reviewer first and pass its Review Record into Story Critic.
 - Gate: Story Gate and Story Approval Gate.
 - Next: image, sound, video, text, or mixed-media medium planning.
 
@@ -136,6 +137,8 @@ The Beat Plan remains the story authority. The Long-Work Stewardship Record refe
 
 The Review Record must include numeric tension intensity assessments. Reviewers compare claimed intensity against their own assessed intensity and the minimum required intensity, then set `meets_minimum`; downstream gates use that verdict when deciding whether a block can be waived or whether revision is required.
 
+Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records, Suno Sound Prompt Plans, Text Creative Brief Records, and Text Generation Plans are locked contract records. Draft brief documents, draft prompt documents, and pre-approval planning packets are not validated against these final-record schemas until their required review and approval gates have completed.
+
 ### `output.record`
 
 - Input: Prompt Plan, Text Generation Plan, or Prompt Branch Set; generated, imported, drafted, rewritten, or edited output artifact; generation or Draft Generation Approval when required.
@@ -155,7 +158,7 @@ The Review Record must include numeric tension intensity assessments. Reviewers 
 - Schema: `schemas/image-medium-plan.schema.json`.
 - Skill: `skills/text-to-image-plan`.
 - Reviewer required: Beat Reviewer sub-agent when the image plan is multi-beat, series, or ambiguous.
-- Gate: Symbology Gate, Presentation Gate, Style Gate, Detail Gate.
+- Gate: Symbology Gate, Presentation Mode inside Symbology Gate, Style Gate.
 - Next: `long_work.stewardship` enrichment when the image work is cumulative, otherwise `image.creative_brief`.
 
 ### `image.creative_brief`
@@ -169,6 +172,8 @@ The Review Record must include numeric tension intensity assessments. Reviewers 
 - Next: `image.prompt_plan`.
 
 The Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. It does not embed Beat summaries; the referenced Beat Plan is authoritative for story shape and emotional movement.
+
+The Detail / Minimalist-to-Maximalist Gate runs after Brief Approval when intensity remains unresolved; it is not part of Image Medium Plan creation.
 
 ### `image.prompt_plan`
 

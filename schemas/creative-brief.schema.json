@@ -19,7 +19,8 @@
     "emotional_qualities",
     "poetic_density_notes",
     "series_recommendation",
-    "transformation_constraints"
+    "transformation_constraints",
+    "approval_refs"
   ],
   "properties": {
     "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
@@ -261,6 +262,15 @@
         "target_media_type": { "type": "string", "enum": ["image", "audio", "video", "text"] },
         "preserve": { "type": "array", "items": { "type": "string" } },
         "avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["art_critic_review_id", "brief_approval_gate_id"],
+      "properties": {
+        "art_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "brief_approval_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" }
       }
     }
   },

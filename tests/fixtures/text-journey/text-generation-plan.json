@@ -84,6 +84,15 @@
     "rewrite_origin_type": "agent_rewritten",
     "previous_output_record_required_for_rewrite": true
   },
+  "approval_refs": {
+    "writing_critic_review_id": "review_text_door_left_lit_writing_critic_001",
+    "brief_approval_gate_id": "gate_text_door_left_lit_brief_approval_001",
+    "post_plan_gates_required": {
+      "prompt_critic_review_id": "review_text_prompt_critic_door_left_lit",
+      "prompt_lock_gate_id": "gate_text_prompt_lock_door_left_lit",
+      "draft_generation_approval_gate_id": "gate_text_draft_generation_001"
+    }
+  },
   "traceability_summary": [
     {
       "source_type": "text_creative_brief",

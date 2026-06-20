@@ -384,5 +384,9 @@
     "target_media_type": "sound",
     "preserve": ["threshold", "tenderness and threat", "active absence", "fragile agency"],
     "avoid": ["triumphant resolution", "literal horror effects", "explaining the absent person"]
+  },
+  "approval_refs": {
+    "sound_critic_review_id": "review_suno_sound_critic_door_left_lit",
+    "brief_approval_gate_id": "gate_suno_brief_approval_door_left_lit"
   }
 }

@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_image_prompt_critic_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "prompt_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "prompt_plan",
+    "artifact_id": "plan_door_left_lit",
+    "path_or_ref": "tests/fixtures/text-to-image/prompt-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve unresolved threshold pressure, fragile agency, and active absence.",
+    "governing_refs": [
+      {
+        "ref_type": "creative_brief",
+        "ref_id": "brief_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/creative-brief.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "imp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/image-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["Prompt variants must preserve threshold pressure and avoid resolved homecoming."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "plan_door_left_lit",
+        "tension_name": "visual threshold tension",
+        "claimed_intensity": 0.78,
+        "reviewer_assessed_intensity": 0.8,
+        "minimum_required_intensity": 0.7,
+        "meets_minimum": true,
+        "assessment_note": "All variants retain the doorway, key, and unresolved stance."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "Prompt variants preserve the compressed movement."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "Each variant withholds entry rather than resolving it."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The prompt plan is ready for prompt lock."
+  },
+  "matched": [
+    {
+      "summary": "The prompt variants remain meaning-equivalent.",
+      "traces_to": [
+        {
+          "source_type": "creative_brief",
+          "source_ref": "brief_door_left_lit",
+          "note": "Variants preserve the approved threshold subject."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Prompt plan is coherent.",
+      "evidence": "Faithful, Amplified, and Minimal differ by composition and density.",
+      "recommendation": "Proceed to Prompt Lock."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:25:00Z"
+}

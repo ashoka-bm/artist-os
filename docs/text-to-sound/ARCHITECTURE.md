@@ -11,10 +11,12 @@ Text Reference
   -> Story / Beat Review, when required
   -> Sound Medium Plan
   -> Draft Sound Creative Brief Document
+  -> Sound Work Type
   -> Sonic Concept Direction
   -> Genre / Production Direction
   -> Tempo / Groove Direction
   -> Vocal / Lyric Policy
+  -> preliminary Arrangement / Form skeleton, when lyrics are required
   -> Lyrics Draft, when required
   -> Arrangement / Form Direction
   -> Sonic Dynamics
@@ -54,6 +56,10 @@ Reuse the existing Artist OS stages where they are medium-neutral:
 ## Sound-Specific Gates
 
 The Text-to-Sound Slice has sound-specific gates. Do not move past a gate until it is complete or the artist explicitly says to proceed unconfirmed.
+
+### Sound Work Type Gate
+
+Choose the concrete sound work type before sonic concept details harden: song, instrumental track, ambient soundscape, cinematic score, spoken-word bed, ritual audio, sound design piece, or sonic logo. Default to `song` only when the artist asked for music, a song, or lyrics; otherwise ask or recommend one clear direction.
 
 ### Sonic Concept Gate
 
@@ -95,7 +101,7 @@ Valid directions:
 - spoken word,
 - phonetic or wordless vocals.
 
-If the artist chooses adapted or new lyrics, create a Lyrics Draft before final prompt locking. The Lyrics Draft must be reviewed as part of the Creative Brief Document or as a required revision to it. Do not silently generate lyrics inside the final prompt.
+If the artist chooses adapted or new lyrics, define a preliminary Arrangement / Form skeleton before drafting lyrics, then create a Lyrics Draft before final prompt locking. The Lyrics Draft must be reviewed as part of the Creative Brief Document or as a required revision to it. Do not silently generate lyrics inside the final prompt.
 
 The Lyrics Draft should include:
 

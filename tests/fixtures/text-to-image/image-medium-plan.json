@@ -29,7 +29,7 @@
   "symbology_direction": {
     "selection_method": "agent_recommended",
     "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
-    "confirmation_status": "unconfirmed",
+    "confirmation_status": "confirmed",
     "rationale": "The threshold scene preserves the central pressure between return and refusal.",
     "avoid": [
       "literalizing the absent person",
@@ -45,7 +45,7 @@
       "surreal / dreamlike",
       "dark / moody"
     ],
-    "confirmation_status": "unconfirmed",
+    "confirmation_status": "confirmed",
     "rationale": "Cinematic photoreal grounding keeps the domestic threshold physically real while restrained surreal lighting preserves opacity.",
     "avoid": [
       "glossy fantasy rendering",

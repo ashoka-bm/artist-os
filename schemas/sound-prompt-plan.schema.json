@@ -32,6 +32,7 @@
     "prompt_variants",
     "sequence_calibration",
     "suno_custom_mode_outputs",
+    "approval_refs",
     "traceability_summary",
     "critique_checklist"
   ],
@@ -197,8 +198,43 @@
     "emotional_tension_contract": { "$ref": "#/$defs/emotional_tension_contract" },
     "prompt_variants": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 3,
       "maxItems": 3,
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["variant_type"],
+            "properties": {
+              "variant_type": { "type": "string", "const": "faithful" }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["variant_type"],
+            "properties": {
+              "variant_type": { "type": "string", "const": "amplified" }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["variant_type"],
+            "properties": {
+              "variant_type": { "type": "string", "const": "minimal" }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ],
       "items": { "$ref": "#/$defs/prompt_variant_plan" }
     },
     "sequence_calibration": {
@@ -261,6 +297,15 @@
         "suno_notes": { "type": "array", "items": { "type": "string" } }
       }
     },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_critic_review_id", "prompt_lock_gate_id"],
+      "properties": {
+        "prompt_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "prompt_lock_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+      }
+    },
     "traceability_summary": {
       "type": "array",
       "minItems": 1,
@@ -272,6 +317,81 @@
       "items": { "type": "string" }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "vocal_lyric_policy": {
+            "type": "object",
+            "properties": {
+              "lyrics_mode": {
+                "type": "string",
+                "enum": ["source_text_verbatim", "source_text_adapted", "new_lyrics", "spoken_word"]
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lyrics": {
+            "type": "object",
+            "properties": {
+              "present": { "type": "boolean", "const": true },
+              "text": { "type": "string", "minLength": 1 }
+            }
+          },
+          "suno_custom_mode_outputs": {
+            "type": "object",
+            "properties": {
+              "instrumental": { "type": "boolean", "const": false },
+              "lyrics": {
+                "type": "object",
+                "properties": {
+                  "mode": { "type": "string", "enum": ["custom", "generate_in_suno"] },
+                  "text": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "vocal_lyric_policy": {
+            "type": "object",
+            "properties": {
+              "lyrics_mode": { "type": "string", "const": "instrumental" }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "lyrics": {
+            "type": "object",
+            "properties": {
+              "present": { "type": "boolean", "const": false }
+            }
+          },
+          "suno_custom_mode_outputs": {
+            "type": "object",
+            "properties": {
+              "instrumental": { "type": "boolean", "const": true },
+              "lyrics": {
+                "type": "object",
+                "properties": {
+                  "mode": { "type": "string", "const": "none" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "arrangement_plan": {
       "type": "object",

@@ -1,0 +1,30 @@
+{
+  "gate_decision_id": "gate_text_writing_method_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "gate_type": "writing_method",
+  "gate_status": "selected",
+  "decision": "Use writing-shape for a reader-facing artist statement.",
+  "options_presented": [
+    {
+      "option_id": "shape",
+      "label": "Shape",
+      "summary": "Use finished-piece structure and paragraph force."
+    }
+  ],
+  "selected_option": {
+    "option_id": "shape",
+    "label": "Shape"
+  },
+  "artist_response": "Use shape.",
+  "proceed_unconfirmed": false,
+  "upstream_refs": [
+    {
+      "ref_type": "beat_plan",
+      "ref_id": "bp_door_left_lit",
+      "path_or_ref": "tests/fixtures/story/beat-plan.json"
+    }
+  ],
+  "created_at": "2026-06-17T12:37:00Z"
+}

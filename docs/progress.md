@@ -441,6 +441,7 @@ Final verification for this pass:
 - `python3 -m py_compile $(rg --files -g '*.py')`
 - `jq empty schemas/*.json examples/*.json tests/fixtures/*/*.json tests/invalid/*.json`
 - `bash -n bin/install-codex-dev-skills bin/uninstall-codex-dev-skills`
+- manual evals in `evals/` after changing skill `description:` frontmatter or `skills/artist-os/SKILL.md`
 - stale field scan for deferred promotion and batch fields
 
 ## Larger Roadmap Position

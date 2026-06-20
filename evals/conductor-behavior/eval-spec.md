@@ -8,16 +8,35 @@ grade the trace against a checklist. Baseline (current conductor) defines the
 
 ## Test prompts
 
-- **T1 (image, full flow):** "Here's a poem about my mother's hands. I want to turn
-  it into visual art. Go on autopilot — assume I approve the recommended option at
-  every gate and approve generation — and take it all the way."
-- **T2 (suno, full flow):** "Turn my journal entry about insomnia into a Suno track.
-  Autopilot, I approve recommended choices and generation; take it to the end."
+The full-flow prompts include tiny synthetic References so the conductor can
+trace beyond Source Record without inventing user material. Keep the
+missing-Reference prompt as a separate start-condition guard.
+
+- **T1 (image, full flow):** "Here's a poem:
+  'My mother's hands fold light into bread.
+  Flour gathers in every line.
+  When she rests them, the room keeps working.'
+  I want to turn it into visual art. Go on autopilot — assume I approve the
+  recommended option at every gate and approve generation — and take it all the
+  way."
+- **T2 (suno, full flow):** "Here is my journal entry:
+  'At 3:17 the apartment hums like a wire. I count the ceiling cracks and wait
+  for morning to forgive me. Sleep stays in the next room, breathing without me.'
+  Turn it into a Suno track. Autopilot, I approve recommended choices and
+  generation; take it to the end."
 - **T3 (review start-condition):** "I already generated an image for my 'saltmarsh'
   project and have the brief and prompt plan. Can you review the image against it?"
-- **T4 (text, full flow):** "Turn my journal entry about leaving home into a short
-  personal essay. Autopilot — I approve the recommended choice at every gate, and
-  approve drafting and the editorial passes; take it all the way."
+- **T4 (text, full flow):** "Here is my journal entry:
+  'I packed the blue mug last because it made the apartment look inhabited. The
+  hallway smelled like rain and old paint. I did not cry until I turned in the
+  keys and heard the lock answer for me.'
+  Turn it into a short personal essay. Autopilot — I approve the recommended
+  choice at every gate, and approve drafting and the editorial passes; take it
+  all the way."
+- **T5 (missing Reference start-condition):** "Here's a poem about my mother's
+  hands. I want to turn it into visual art. Go on autopilot — assume I approve
+  the recommended option at every gate and approve generation — and take it all
+  the way."
 
 ## Checklist (assertions per trace)
 
@@ -54,6 +73,13 @@ grade the trace against a checklist. Baseline (current conductor) defines the
 9. TEXT QUIRK E: editorial passes run Clear Writing Pass before Human Voice Pass by default, each as a separate bounded fresh-context sub-agent, and each concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.
 10. Hard gates: brief-approval before Text Creative Brief Record and Text Generation Plan, Draft Generation Approval before drafting, Output Record before acceptance, persist each phase.
 
+### T5 — missing Reference
+1. Routes to the requested medium from the user's intent without re-asking the top-level medium question.
+2. Does NOT invent the absent poem, journal entry, letter, or other Reference content.
+3. Stops before Source Record ingestion and asks for the missing text Reference.
+4. Does not run Artist Meaning, Transformation Brief, Beat Plan, Medium Plan, or downstream review before the Reference exists.
+5. Explains that autopilot approval cannot bypass missing required source material.
+
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.
 Baseline establishes the target; trimmed must match the baseline's pass set.
@@ -69,7 +95,7 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > `<repo>/skills/artist-os/SKILL.md` (plus any files IT explicitly tells you to
 > read). Do not improvise behavior that isn't in the skill.
 >
-> Scenario (the user's message): "<T1 / T2 / T3 prompt>"
+> Scenario (the user's message): "<T1 / T2 / T3 / T4 / T5 prompt>"
 >
 > Produce a precise ORDERED TRACE of what the conductor does. Do NOT call any
 > generator and do NOT write project files. The trace is a numbered list; each
@@ -85,7 +111,9 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > SPECIFICS" (which skill runs the Critic Review; Draft Generation Approval with
 > no provider call; fresh-context drafting vs. editorial passes; conformance
 > review before polishing; Clear→Human pass order and per-rewrite Output Records)
-> + "HARD GATES ENFORCED".
+> + "HARD GATES ENFORCED". T5: "MISSING REFERENCE HANDLING" (medium route,
+> missing Reference stop, no invented source material, and phases that must not
+> run yet) + "HARD GATES ENFORCED".
 >
 > Quote the skill line/section each major step comes from. Write the trace to
 > `<repo>/evals/conductor-behavior/<baseline|trimmed>/T<N>.md` and return it.

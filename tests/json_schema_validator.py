@@ -104,6 +104,19 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
         if "items" in schema:
             for index, item in enumerate(value):
                 validate(item, schema["items"], root, f"{path}[{index}]")
+        if "contains" in schema:
+            match_count = 0
+            for item in value:
+                try:
+                    validate(item, schema["contains"], root, path)
+                except ValidationError:
+                    continue
+                match_count += 1
+            min_contains = schema.get("minContains", 1)
+            if match_count < min_contains:
+                raise ValidationError(path, f"matches fewer than minContains {min_contains}")
+            if "maxContains" in schema and match_count > schema["maxContains"]:
+                raise ValidationError(path, f"matches more than maxContains {schema['maxContains']}")
 
     if isinstance(value, dict):
         properties = schema.get("properties", {})
@@ -156,14 +169,34 @@ FIXTURE_SCHEMA_MAP = {
     "artist-meaning.json": "artist-meaning.schema.json",
     "output-acceptance-gate.json": "gate-decision.schema.json",
     "output-acceptance-waiver-gate.json": "gate-decision.schema.json",
+    "image-style-gate.json": "gate-decision.schema.json",
+    "image-detail-intensity-gate.json": "gate-decision.schema.json",
+    "image-brief-approval-gate.json": "gate-decision.schema.json",
+    "image-prompt-lock-gate.json": "gate-decision.schema.json",
+    "suno-sound-work-type-gate.json": "gate-decision.schema.json",
+    "suno-vocal-lyric-gate.json": "gate-decision.schema.json",
+    "suno-brief-approval-gate.json": "gate-decision.schema.json",
+    "suno-prompt-lock-gate.json": "gate-decision.schema.json",
+    "text-writing-method-gate.json": "gate-decision.schema.json",
+    "text-form-gate.json": "gate-decision.schema.json",
+    "text-brief-approval-gate.json": "gate-decision.schema.json",
+    "text-prompt-lock-gate.json": "gate-decision.schema.json",
+    "text-draft-generation-approval-gate.json": "gate-decision.schema.json",
     "output-review-blocked-waived-record.json": "review-record.schema.json",
     "output-review-record.json": "review-record.schema.json",
+    "image-art-critic-review-record.json": "review-record.schema.json",
+    "image-prompt-critic-review-record.json": "review-record.schema.json",
+    "suno-sound-critic-review-record.json": "review-record.schema.json",
+    "suno-prompt-critic-review-record.json": "review-record.schema.json",
+    "text-writing-critic-review-record.json": "review-record.schema.json",
+    "text-prompt-critic-review-record.json": "review-record.schema.json",
     "symbology-gate.json": "gate-decision.schema.json",
     "transformation-brief.json": "transformation-brief.schema.json",
     "beat-plan.json": "beat-plan.schema.json",
     "image-medium-plan.json": "image-medium-plan.schema.json",
     "output-record.json": "output-record.schema.json",
     "output-record-draft.json": "output-record.schema.json",
+    "output-record-clear-writing.json": "output-record.schema.json",
     "output-record-human-voice.json": "output-record.schema.json",
     "creative-brief.json": "creative-brief.schema.json",
     "text-creative-brief.json": "text-creative-brief.schema.json",

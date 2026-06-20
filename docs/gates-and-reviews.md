@@ -169,7 +169,9 @@ Use when later interpretation, story, medium translation, or output appears to o
 
 Checks meaning preservation, Story Mode scale, Beat Plan coherence, tension movement, symbolic continuity, and whether the Beat Plan should exist at this length.
 
-Boundary: Story Critic owns meaning preservation, scale, arc, and symbolic progression. Beat Reviewer owns beat mechanics.
+Boundary: Story Critic owns the Story Approval contract. It decides whether the Beat Plan preserves Artist Meaning, uses the right Story Mode scale, carries enough arc or sequence logic, keeps symbolic progression coherent, and defines minimum tension criteria strong enough for downstream medium work. It does not replace the Beat Reviewer when individual beat mechanics need method review.
+
+Use Story Critic when Story Mode, length, meaning preservation, symbolic progression, or Beat Plan authority is uncertain, or when a proposed later change would alter Story Approval. Use Beat Reviewer when the question is whether each beat performs one meaningful move, pivots cleanly, earns its turn, differs from adjacent beats, and avoids false endings or locked-ahead journeys. When both are needed, run Beat Reviewer first, then have Story Critic consume that Review Record before Story Approval.
 
 Drift check: compare the Beat Plan against the Reference, Artist Meaning, Transformation Brief, Emotional Structure, and must-preserve constraints.
 

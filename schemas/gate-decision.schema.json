@@ -42,10 +42,18 @@
         "tempo_groove",
         "vocal_lyric",
         "arrangement_form",
+        "writing_method",
+        "text_form",
+        "voice_pov",
+        "structure",
+        "fidelity_transformation",
+        "publication_use",
+        "brief_approval",
         "prompt_branch",
         "prompt_lock",
         "long_work_checkpoint",
         "generation_approval",
+        "draft_generation_approval",
         "output_acceptance"
       ]
     },

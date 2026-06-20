@@ -506,5 +506,9 @@
       "showing a clear antagonist",
       "flattening the scene into simple loneliness"
     ]
+  },
+  "approval_refs": {
+    "art_critic_review_id": "review_image_art_critic_door_left_lit",
+    "brief_approval_gate_id": "gate_image_brief_approval_door_left_lit"
   }
 }

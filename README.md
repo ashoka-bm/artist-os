@@ -178,6 +178,8 @@ Run tests with:
 python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
+When changing skill `description:` frontmatter or the `artist-os` conductor, also run the manual evals in `evals/`. They call `claude -p`, require auth, and cost tokens, so they are intentionally not part of the normal test suite.
+
 Uninstall the local Artist OS skill entries with:
 
 ```bash

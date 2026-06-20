@@ -242,6 +242,91 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_gate_decision_accepts_text_journey_gates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
+        schema = load_json(schema_path)
+        text_gate_types = [
+            "writing_method",
+            "text_form",
+            "voice_pov",
+            "structure",
+            "fidelity_transformation",
+            "publication_use",
+            "brief_approval",
+            "draft_generation_approval",
+        ]
+        for gate_type in text_gate_types:
+            with self.subTest(gate_type=gate_type):
+                record = load_json(data_path)
+                record["gate_type"] = gate_type
+                validate(record, schema, schema)
+
+    def test_text_creative_brief_requires_review_and_brief_approval_refs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "text-creative-brief.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-creative-brief.json"
+        record = load_json(data_path)
+        record.pop("approval_refs", None)
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'approval_refs'"):
+            validate(record, schema, schema)
+
+    def test_text_generation_plan_requires_approval_and_post_plan_gate_contract(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "text-generation-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-generation-plan.json"
+        record = load_json(data_path)
+        record.pop("approval_refs", None)
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'approval_refs'"):
+            validate(record, schema, schema)
+
+    def test_image_and_sound_final_records_require_approval_refs(self) -> None:
+        cases = [
+            ("creative-brief.schema.json", "tests/fixtures/text-to-image/creative-brief.json"),
+            ("prompt-plan.schema.json", "tests/fixtures/text-to-image/prompt-plan.json"),
+            ("sound-creative-brief.schema.json", "tests/fixtures/text-to-suno/sound-creative-brief.json"),
+            ("sound-prompt-plan.schema.json", "tests/fixtures/text-to-suno/sound-prompt-plan.json"),
+        ]
+        for schema_name, fixture_path in cases:
+            with self.subTest(schema=schema_name, fixture=fixture_path):
+                schema = load_json(REPO_ROOT / "schemas" / schema_name)
+                record = load_json(REPO_ROOT / fixture_path)
+                record.pop("approval_refs", None)
+                with self.assertRaisesRegex(ValidationError, "missing required field 'approval_refs'"):
+                    validate(record, schema, schema)
+
+    def test_sound_prompt_plan_requires_exactly_three_variants(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["prompt_variants"] = record["prompt_variants"][:2]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "fewer than 3|minContains"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_requires_one_of_each_variant_type(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["prompt_variants"][1]["variant_type"] = "faithful"
+        record["prompt_variants"][2]["variant_type"] = "faithful"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "matches more than maxContains 1"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_lyrics_required_without_lyrics(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["lyrics"]["present"] = False
+        record["lyrics"]["text"] = ""
+        record["suno_custom_mode_outputs"]["instrumental"] = True
+        record["suno_custom_mode_outputs"]["lyrics"]["mode"] = "none"
+        record["suno_custom_mode_outputs"]["lyrics"]["text"] = ""
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const True"):
+            validate(record, schema, schema)
+
     def test_beat_plan_requires_story_structure_for_non_single_beat_modes(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "freytag-rehearsal" / "beat-plan.json"

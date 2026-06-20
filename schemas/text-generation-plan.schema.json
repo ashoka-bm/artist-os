@@ -22,6 +22,7 @@
     "clear_writing_pass_policy",
     "human_voice_pass_policy",
     "output_recording",
+    "approval_refs",
     "traceability_summary",
     "critique_checklist"
   ],
@@ -85,6 +86,33 @@
         "rewrite_output_record_required": { "type": "boolean", "const": true },
         "rewrite_origin_type": { "type": "string", "const": "agent_rewritten" },
         "previous_output_record_required_for_rewrite": { "type": "boolean", "const": true }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "writing_critic_review_id",
+        "brief_approval_gate_id",
+        "post_plan_gates_required"
+      ],
+      "properties": {
+        "writing_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "brief_approval_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "post_plan_gates_required": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prompt_critic_review_id",
+            "prompt_lock_gate_id",
+            "draft_generation_approval_gate_id"
+          ],
+          "properties": {
+            "prompt_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+            "prompt_lock_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+            "draft_generation_approval_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+          }
+        }
       }
     },
     "traceability_summary": {

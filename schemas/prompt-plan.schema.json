@@ -22,6 +22,7 @@
     "layout_plan",
     "prompt_variants",
     "series_calibration",
+    "approval_refs",
     "traceability_summary",
     "critique_checklist"
   ],
@@ -64,6 +65,15 @@
         "calibration_image_role": { "type": "string" },
         "uses_three_prompt_variants": { "type": "boolean" },
         "requires_artist_approval_before_series": { "type": "boolean" }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_critic_review_id", "prompt_lock_gate_id"],
+      "properties": {
+        "prompt_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "prompt_lock_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" }
       }
     },
     "traceability_summary": {

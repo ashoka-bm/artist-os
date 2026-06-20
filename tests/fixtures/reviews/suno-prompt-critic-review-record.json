@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_suno_prompt_critic_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "prompt_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "prompt_plan",
+    "artifact_id": "plan_door_left_lit_sound",
+    "path_or_ref": "tests/fixtures/text-to-suno/sound-prompt-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve unresolved threshold pressure in Suno prompt fields.",
+    "governing_refs": [
+      {
+        "ref_type": "sound_creative_brief",
+        "ref_id": "brief_door_left_lit_sound",
+        "path_or_ref": "tests/fixtures/text-to-suno/sound-creative-brief.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "smp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-suno/sound-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["Suno prompt variants must preserve lyrics, threshold pressure, and unresolved harmony."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "plan_door_left_lit_sound",
+        "tension_name": "variant threshold preservation",
+        "claimed_intensity": 0.72,
+        "reviewer_assessed_intensity": 0.74,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "All variants preserve the lyric-bearing threshold and unresolved ending."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The prompt plan maps the key movement into sections and variants."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The song structure invites return but withholds resolution."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The Suno prompt plan is ready for prompt lock."
+  },
+  "matched": [
+    {
+      "summary": "Suno fields separate lyrics, style, and exclusions cleanly.",
+      "traces_to": [
+        {
+          "source_type": "sound_creative_brief",
+          "source_ref": "brief_door_left_lit_sound",
+          "note": "The final prompt preserves the approved lyric policy."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Prompt plan is Suno-ready.",
+      "evidence": "Custom Mode fields are complete and variants are distinct.",
+      "recommendation": "Proceed to Prompt Lock."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:35:00Z"
+}

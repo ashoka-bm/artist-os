@@ -397,6 +397,10 @@
       "Paste exclude items into Advanced Options > Exclude."
     ]
   },
+  "approval_refs": {
+    "prompt_critic_review_id": "review_suno_prompt_critic_door_left_lit",
+    "prompt_lock_gate_id": "gate_suno_prompt_lock_door_left_lit"
+  },
   "traceability_summary": [
     {
       "source_type": "artist_meaning",

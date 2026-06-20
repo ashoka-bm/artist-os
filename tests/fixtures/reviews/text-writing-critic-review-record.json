@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_text_door_left_lit_writing_critic_001",
+  "project_id": "proj_door_left_lit",
+  "review_role": "writing_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-writing-method-review"
+  },
+  "artifact_under_review": {
+    "artifact_type": "text_creative_brief",
+    "artifact_id": "brief_text_door_left_lit",
+    "path_or_ref": "tests/fixtures/text-journey/text-creative-brief.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve threshold, key, active absence, and an unresolved ending.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "tmp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-journey/text-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["Each section must do a different reader-facing job while preserving unresolved motion."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "brief_text_door_left_lit",
+        "tension_name": "section pressure",
+        "claimed_intensity": 0.7,
+        "reviewer_assessed_intensity": 0.72,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "The three sections move from key, to light, to withheld stop."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The text brief preserves the compressed movement in a three-section shape."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The ending refuses resolution rather than explaining it."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The text brief is ready for Brief Approval."
+  },
+  "matched": [
+    {
+      "summary": "The brief protects form, voice, and source-wording policy.",
+      "traces_to": [
+        {
+          "source_type": "medium_plan",
+          "source_ref": "tmp_door_left_lit",
+          "note": "The brief follows the Text Medium Plan section jobs."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Text brief is coherent.",
+      "evidence": "The planned artist statement keeps an unresolved ending.",
+      "recommendation": "Proceed to Brief Approval."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:40:00Z"
+}

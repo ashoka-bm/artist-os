@@ -38,7 +38,7 @@ Use `artist-os` as the normal orchestration skill for this workflow. It moves th
 
 ## Cross-Medium Direction
 
-Artist OS now has the core of a shared story architecture where every output is one or more approved beats translated into a medium. The existing First Slice and Text-to-Sound Slice remain the implemented dry-run paths, and they now reference a shared Beat Plan while keeping embedded Beat summaries as transitional compatibility fields.
+Artist OS now has the core of a shared story architecture where every output is one or more approved beats translated into a medium. The implemented dry-run paths are the First Slice, Text-to-Sound Slice, and Text Journey. They all reference the shared Beat Plan; medium-specific brief records carry `beat_plan_id` rather than duplicating embedded Beat summaries.
 
 Planning docs for that direction live in:
 
@@ -48,7 +48,7 @@ Planning docs for that direction live in:
 - `docs/gates-and-reviews.md`
 - `docs/output-journeys/`
 
-Shared schemas for the Transformation Brief, Beat Plan, Long-Work Stewardship Record, Image Medium Plan, Sound Medium Plan, Review Record, Gate Decision, Prompt Branch Set, and Output Record now exist. The image and Suno flows consume the shared Beat Plan through medium-specific planning records; a later cleanup can remove embedded Beat summaries from the medium-specific brief schemas after downstream examples and consumers are stable.
+Shared schemas for the Transformation Brief, Beat Plan, Long-Work Stewardship Record, Image Medium Plan, Sound Medium Plan, Text Medium Plan, Review Record, Gate Decision, Prompt Branch Set, Text Generation Plan, and Output Record now exist. The image, Suno, and text flows consume the shared Beat Plan through medium-specific planning records, then preserve emotional movement and tension criteria through final records and review.
 
 ## Data Flow
 

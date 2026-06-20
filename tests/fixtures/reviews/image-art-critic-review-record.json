@@ -1,0 +1,92 @@
+{
+  "review_record_id": "review_image_art_critic_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "review_role": "art_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-art-critic-review"
+  },
+  "artifact_under_review": {
+    "artifact_type": "creative_brief",
+    "artifact_id": "brief_door_left_lit",
+    "path_or_ref": "tests/fixtures/text-to-image/creative-brief.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve unresolved threshold pressure, fragile agency, and active absence.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "imp_door_left_lit",
+        "path_or_ref": "tests/fixtures/text-to-image/image-medium-plan.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": ["The image must hold threshold pressure before explanation."],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "brief_door_left_lit",
+        "tension_name": "threshold pressure",
+        "claimed_intensity": 0.8,
+        "reviewer_assessed_intensity": 0.82,
+        "minimum_required_intensity": 0.7,
+        "meets_minimum": true,
+        "assessment_note": "The lit doorway, still figure, and key preserve active pressure."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_threshold_001",
+        "review_note": "The visual plan compresses the key emotional movement into one threshold image."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_threshold_001",
+        "review_note": "The expected return is withheld by the still pose and unresolved doorway."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The creative brief preserves the approved visual tension."
+  },
+  "matched": [
+    {
+      "summary": "Symbology and style preserve Artist Meaning without replacing it.",
+      "traces_to": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The threshold and key remain central."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Visual direction is ready for approval.",
+      "evidence": "The brief keeps the threshold unresolved and avoids literal horror.",
+      "recommendation": "Proceed to Brief Approval."
+    }
+  ],
+  "recommended_revision": "No blocking revision required.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-17T12:20:00Z"
+}
