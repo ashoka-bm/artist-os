@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,6 +19,23 @@ PROJECT_SUBDIRS = [
     "projects",
     "imports",
     "exports",
+]
+ARTIST_LIBRARY_RELATIVE = Path("Wondermint") / "Artist Library"
+WORKSPACE_LIBRARY_RELATIVE = Path(".wondermint") / "artist-os"
+PROJECT_POINTER_FILENAME = ".artist-os-project.json"
+PROJECT_SLUG_PATTERN = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._-]*$")
+PROJECT_ID_PATTERN = re.compile(r"^proj_[a-zA-Z0-9_-]+$")
+FEEDBACK_ID_PATTERN = re.compile(r"^fb_[a-zA-Z0-9_-]+$")
+LEARNING_ID_PATTERN = re.compile(r"^learn_[a-zA-Z0-9_-]+$")
+PERFORMANCE_SIGNAL_ID_PATTERN = re.compile(r"^perf_[a-zA-Z0-9_-]+$")
+OUTPUT_RECORD_ID_PATTERN = re.compile(r"^out_[a-zA-Z0-9_-]+$")
+LEARNING_EVIDENCE_TYPES = [
+    "feedback_entry",
+    "performance_signal",
+    "output_record",
+    "review_record",
+    "schema_mismatch",
+    "tool_field_mismatch",
 ]
 
 
@@ -40,6 +59,40 @@ def setup_library(library_root: Path, db_path: Path) -> None:
         apply_schema(conn)
 
 
+def workspace_library_for_wondermint_root(wondermint_root: Path) -> Path:
+    return wondermint_root / WORKSPACE_LIBRARY_RELATIVE
+
+
+def artist_library_for_wondermint_root(wondermint_root: Path) -> Path:
+    return wondermint_root / ARTIST_LIBRARY_RELATIVE
+
+
+def default_library_root() -> Path:
+    if os.environ.get("ARTIST_OS_LIBRARY_ROOT"):
+        return Path(os.environ["ARTIST_OS_LIBRARY_ROOT"])
+    if os.environ.get("WONDERMINT_ROOT"):
+        return workspace_library_for_wondermint_root(Path(os.environ["WONDERMINT_ROOT"]))
+    return DEFAULT_LIBRARY_ROOT
+
+
+def library_root_for(args: argparse.Namespace) -> Path:
+    if getattr(args, "library_root", None):
+        return Path(args.library_root)
+    if getattr(args, "wondermint_root", None):
+        return workspace_library_for_wondermint_root(Path(args.wondermint_root))
+    return default_library_root()
+
+
+def artist_library_root_for(args: argparse.Namespace) -> Path | None:
+    if getattr(args, "artist_library_root", None):
+        return Path(args.artist_library_root)
+    if getattr(args, "wondermint_root", None):
+        return artist_library_for_wondermint_root(Path(args.wondermint_root))
+    if os.environ.get("WONDERMINT_ROOT") and not getattr(args, "library_root", None):
+        return artist_library_for_wondermint_root(Path(os.environ["WONDERMINT_ROOT"]))
+    return None
+
+
 def init_db(args: argparse.Namespace) -> None:
     db_path = db_path_for(args)
     with connect(db_path) as conn:
@@ -48,10 +101,16 @@ def init_db(args: argparse.Namespace) -> None:
 
 
 def setup_db(args: argparse.Namespace) -> None:
-    library_root = Path(args.library_root)
+    library_root = library_root_for(args)
     db_path = db_path_for(args)
     setup_library(library_root, db_path)
+    artist_library_root = artist_library_root_for(args)
+    if artist_library_root:
+        (artist_library_root / "Projects").mkdir(parents=True, exist_ok=True)
+        (artist_library_root / "Personal Library").mkdir(parents=True, exist_ok=True)
     print(f"created Workspace Library folders under {library_root}")
+    if artist_library_root:
+        print(f"created Artist Library folders under {artist_library_root}")
     print(f"initialized {db_path}")
 
 
@@ -90,8 +149,214 @@ def event_key(payload: dict, fallback_index: int) -> tuple:
     return ("row", fallback_index)
 
 
-def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root: Path) -> None:
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def compact_timestamp(value: str) -> str:
+    return re.sub(r"[^0-9]", "", value)[:20]
+
+
+def relative_library_path(path: Path, library_root: Path) -> str:
+    try:
+        return str(path.relative_to(library_root))
+    except ValueError:
+        return str(path)
+
+
+def project_manifest_path(library_root: Path, project_id: str) -> Path:
+    return library_root / "projects" / project_id / "project.json"
+
+
+def load_project_manifest(library_root: Path, project_id: str) -> tuple[Path, dict]:
+    validate_id(project_id, PROJECT_ID_PATTERN, "project_id")
+    manifest_path = project_manifest_path(library_root, project_id)
+    if not manifest_path.exists():
+        raise SystemExit(f"project manifest not found: {manifest_path}")
+    return manifest_path, read_json(manifest_path)
+
+
+def write_project_manifest(manifest_path: Path, manifest: dict) -> None:
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+
+def feedback_state_for(manifest: dict, project_id: str) -> dict:
+    feedback_state = dict(manifest.get("feedback_state") or {})
+    feedback_state.setdefault("feedback_log_path", f"projects/{project_id}/feedback-log.jsonl")
+    feedback_state.setdefault("learning_review_status", "pending")
+    feedback_state.setdefault("learning_reviewed_at", None)
+    feedback_state.setdefault("learning_refs", [])
+    feedback_state.setdefault("performance_signal_refs", [])
+    return feedback_state
+
+
+def dedupe_refs(refs: list[dict], id_key: str, new_ref: dict) -> list[dict]:
+    filtered = [ref for ref in refs if ref.get(id_key) != new_ref[id_key]]
+    filtered.append(new_ref)
+    return filtered
+
+
+def validate_id(value: str, pattern: re.Pattern[str], label: str) -> str:
+    if not pattern.fullmatch(value):
+        raise SystemExit(f"{label} must match {pattern.pattern}")
+    return value
+
+
+def validate_optional_id(value: str | None, pattern: re.Pattern[str], label: str) -> str | None:
+    if value is None:
+        return None
+    return validate_id(value, pattern, label)
+
+
+def require_new_record_path(path: Path, overwrite: bool) -> None:
+    if path.exists() and not overwrite:
+        raise SystemExit(f"record already exists: {path}; use --overwrite to replace it")
+
+
+def read_feedback_entries(feedback_log_path: Path) -> list[dict]:
+    if not feedback_log_path.exists():
+        return []
+    entries = []
+    for line in feedback_log_path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            entries.append(json.loads(line))
+    return entries
+
+
+def write_feedback_entries(feedback_log_path: Path, entries: list[dict]) -> None:
+    feedback_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with feedback_log_path.open("w", encoding="utf-8") as handle:
+        for entry in entries:
+            handle.write(json.dumps(entry, sort_keys=True) + "\n")
+
+
+def feedback_log_path_for(library_root: Path, manifest: dict, project_id: str) -> Path:
+    feedback_state = manifest.get("feedback_state") or {}
+    feedback_log_path = feedback_state.get("feedback_log_path") or f"projects/{project_id}/feedback-log.jsonl"
+    path = Path(feedback_log_path)
+    if path.is_absolute():
+        return path
+    return library_root / path
+
+
+def mark_feedback_entries_reviewed(
+    feedback_log_path: Path,
+    feedback_ids: list[str] | None,
+    classification_status: str,
+) -> bool:
+    entries = read_feedback_entries(feedback_log_path)
+    if not entries:
+        return True
+    ids = set(feedback_ids or [])
+    for entry in entries:
+        if not ids or entry.get("feedback_id") in ids:
+            entry["classification_status"] = classification_status
+            entry["learning_review_status"] = "complete"
+    write_feedback_entries(feedback_log_path, entries)
+    return not any(entry.get("learning_review_status") == "pending" for entry in entries)
+
+
+def resolve_artist_library_path(
+    path_value: str | None,
+    artist_library_root: Path | None,
+    visible_project_dir: Path | None = None,
+) -> Path | None:
+    if not path_value:
+        return None
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    if artist_library_root:
+        if path.parts[:3] == ("Wondermint", "Artist Library", "Projects"):
+            return artist_library_root.parents[1].joinpath(*path.parts)
+        if path.parts[:1] == ("Projects",):
+            return artist_library_root.joinpath(*path.parts)
+    if visible_project_dir:
+        return visible_project_dir / path
+    repo_candidate = REPO_ROOT / path
+    if repo_candidate.exists():
+        return repo_candidate
+    direct_candidate = Path.cwd() / path
+    if direct_candidate.exists():
+        return direct_candidate
+    return None
+
+
+def pointer_state(pointer_path: Path | None, project_id: str) -> tuple[str, str | None]:
+    if not pointer_path or not pointer_path.exists():
+        return ("missing", None)
+    try:
+        pointer = read_json(pointer_path)
+    except (OSError, json.JSONDecodeError):
+        return ("invalid", None)
+    if not isinstance(pointer, dict):
+        return ("invalid", None)
+    pointer_project_id = pointer.get("project_id")
+    if not isinstance(pointer_project_id, str):
+        return ("invalid", None)
+    if pointer_project_id != project_id:
+        return ("retargeted", pointer_project_id)
+    return ("present", pointer_project_id)
+
+
+def refreshed_artist_library_state(
+    manifest: dict,
+    artist_library_root: Path | None,
+    checked_at: str,
+) -> dict | None:
+    artist_library = manifest.get("artist_library")
+    if not artist_library:
+        return None
+
+    refreshed = dict(artist_library)
+    project_id = manifest["project_id"]
+    project_dir = resolve_artist_library_path(refreshed.get("project_dir"), artist_library_root)
+    pointer_path = resolve_artist_library_path(
+        refreshed.get("project_pointer_path"),
+        artist_library_root,
+        project_dir if refreshed.get("project_pointer_path") == PROJECT_POINTER_FILENAME else None,
+    )
+
+    if not project_dir and not pointer_path:
+        return refreshed
+
+    refreshed["last_checked_at"] = checked_at
+    if project_dir and not project_dir.exists():
+        refreshed["visible_state"] = "visible_missing"
+        refreshed["project_pointer_state"] = "missing"
+        refreshed["project_pointer_project_id"] = None
+    elif pointer_path:
+        current_pointer_state, pointer_project_id = pointer_state(pointer_path, project_id)
+        refreshed["project_pointer_state"] = current_pointer_state
+        refreshed["project_pointer_project_id"] = pointer_project_id
+        refreshed["visible_state"] = "present" if current_pointer_state == "present" else "visible_missing"
+
+    user_facing_files = []
+    for file_ref in refreshed.get("user_facing_files", []):
+        checked_file_ref = dict(file_ref)
+        file_path = resolve_artist_library_path(
+            checked_file_ref.get("path"),
+            artist_library_root,
+            project_dir,
+        )
+        if file_path and not file_path.exists():
+            checked_file_ref["status"] = "missing"
+            checked_file_ref["updated_at"] = checked_at
+        user_facing_files.append(checked_file_ref)
+    if user_facing_files:
+        refreshed["user_facing_files"] = user_facing_files
+    return refreshed
+
+
+def upsert_manifest(
+    conn: sqlite3.Connection,
+    manifest_path: Path,
+    library_root: Path,
+    artist_library_root: Path | None = None,
+    checked_at: str | None = None,
+) -> None:
     manifest = read_json(manifest_path)
+    checked_at = checked_at or datetime.now(timezone.utc).isoformat()
     project_id = manifest["project_id"]
     paths = manifest.get("paths", {})
     decisions = manifest.get("decisions", {})
@@ -132,6 +397,92 @@ def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root:
         "INSERT INTO project_paths (project_id, path_key, path_value) VALUES (?, ?, ?)",
         [(project_id, key, value) for key, value in paths.items()],
     )
+
+    artist_library = refreshed_artist_library_state(manifest, artist_library_root, checked_at)
+    conn.execute("DELETE FROM project_visible_state WHERE project_id = ?", (project_id,))
+    conn.execute("DELETE FROM artist_library_files WHERE project_id = ?", (project_id,))
+    if artist_library:
+        conn.execute(
+            """
+            INSERT INTO project_visible_state (
+              project_id, artist_library_project_dir, project_pointer_path,
+              project_pointer_state, project_pointer_project_id, visible_state,
+              last_checked_at, payload_json
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                project_id,
+                artist_library.get("project_dir"),
+                artist_library.get("project_pointer_path"),
+                artist_library.get("project_pointer_state"),
+                artist_library.get("project_pointer_project_id"),
+                artist_library["visible_state"],
+                artist_library.get("last_checked_at"),
+                json.dumps(artist_library, sort_keys=True),
+            ),
+        )
+        conn.executemany(
+            """
+            INSERT INTO artist_library_files (
+              project_id, path, file_role, status, output_record_id, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    project_id,
+                    file_ref["path"],
+                    file_ref["file_role"],
+                    file_ref["status"],
+                    file_ref.get("output_record_id"),
+                    file_ref.get("updated_at"),
+                )
+                for file_ref in artist_library.get("user_facing_files", [])
+            ],
+        )
+
+    feedback_state = manifest.get("feedback_state")
+    conn.execute("DELETE FROM project_feedback_state WHERE project_id = ?", (project_id,))
+    conn.execute("DELETE FROM learning_refs WHERE project_id = ?", (project_id,))
+    conn.execute("DELETE FROM performance_signal_refs WHERE project_id = ?", (project_id,))
+    if feedback_state:
+        conn.execute(
+            """
+            INSERT INTO project_feedback_state (
+              project_id, feedback_log_path, learning_review_status,
+              learning_reviewed_at, payload_json
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                project_id,
+                feedback_state.get("feedback_log_path"),
+                feedback_state["learning_review_status"],
+                feedback_state.get("learning_reviewed_at"),
+                json.dumps(feedback_state, sort_keys=True),
+            ),
+        )
+        conn.executemany(
+            """
+            INSERT INTO learning_refs (project_id, ref_id, learning_type, path, status)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            [
+                (project_id, ref["ref_id"], ref["learning_type"], ref["path"], ref["status"])
+                for ref in feedback_state.get("learning_refs", [])
+            ],
+        )
+        conn.executemany(
+            """
+            INSERT INTO performance_signal_refs (project_id, signal_id, path, status)
+            VALUES (?, ?, ?, ?)
+            """,
+            [
+                (project_id, ref["signal_id"], ref["path"], ref["status"])
+                for ref in feedback_state.get("performance_signal_refs", [])
+            ],
+        )
 
     conn.execute(
         """
@@ -264,14 +615,16 @@ def upsert_manifest(conn: sqlite3.Connection, manifest_path: Path, library_root:
 
 
 def sync_db(args: argparse.Namespace) -> None:
-    library_root = Path(args.library_root)
+    library_root = library_root_for(args)
     db_path = db_path_for(args)
+    artist_library_root = artist_library_root_for(args)
+    checked_at = datetime.now(timezone.utc).isoformat()
     manifests = sorted((library_root / "projects").glob("*/project.json"))
     with connect(db_path) as conn:
         apply_schema(conn)
         found_project_ids = set()
         for manifest_path in manifests:
-            upsert_manifest(conn, manifest_path, library_root)
+            upsert_manifest(conn, manifest_path, library_root, artist_library_root, checked_at)
             found_project_ids.add(read_json(manifest_path)["project_id"])
         if found_project_ids:
             placeholders = ",".join("?" for _ in found_project_ids)
@@ -283,7 +636,7 @@ def sync_db(args: argparse.Namespace) -> None:
                 WHERE project_id NOT IN ({placeholders})
                   AND status != 'archived'
                 """,
-                (datetime.now(timezone.utc).isoformat(), *sorted(found_project_ids)),
+                (checked_at, *sorted(found_project_ids)),
             )
         else:
             conn.execute(
@@ -293,9 +646,275 @@ def sync_db(args: argparse.Namespace) -> None:
                     updated_at = ?
                 WHERE status != 'archived'
                 """,
-                (datetime.now(timezone.utc).isoformat(),),
+                (checked_at,),
             )
     print(f"synced {len(manifests)} project(s) into {db_path}")
+
+
+def add_feedback(args: argparse.Namespace) -> None:
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    received_at = utc_now()
+    feedback_id = args.feedback_id or f"fb_{args.project_id.removeprefix('proj_')}_{compact_timestamp(received_at)}"
+    validate_id(feedback_id, FEEDBACK_ID_PATTERN, "feedback_id")
+    output_record_id = validate_optional_id(args.output_record_id, OUTPUT_RECORD_ID_PATTERN, "output_record_id")
+    feedback_log_path = feedback_log_path_for(library_root, manifest, args.project_id)
+    feedback_log_path.parent.mkdir(parents=True, exist_ok=True)
+    existing_ids = {entry.get("feedback_id") for entry in read_feedback_entries(feedback_log_path)}
+    if feedback_id in existing_ids:
+        raise SystemExit(f"feedback_id already exists in {feedback_log_path}: {feedback_id}")
+    entry = {
+        "feedback_id": feedback_id,
+        "project_id": args.project_id,
+        "received_at": received_at,
+        "source": args.source,
+        "stage": args.stage,
+        "output_record_id": output_record_id,
+        "feedback_text": args.feedback,
+        "classification_status": "unclassified",
+        "learning_review_status": "pending",
+        "notes": args.notes,
+    }
+    with feedback_log_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(entry, sort_keys=True) + "\n")
+
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    feedback_state["feedback_log_path"] = relative_library_path(feedback_log_path, library_root)
+    feedback_state["learning_review_status"] = "pending"
+    feedback_state["learning_reviewed_at"] = None
+    manifest["feedback_state"] = feedback_state
+    manifest["updated_at"] = received_at
+    write_project_manifest(manifest_path, manifest)
+    sync_db(args)
+    print(f"appended feedback {feedback_id}")
+
+
+def add_learning(args: argparse.Namespace) -> None:
+    validate_id(args.learning_id, LEARNING_ID_PATTERN, "learning_id")
+    if len(args.learning_rule) > 600:
+        raise SystemExit("learning_rule must be 600 characters or fewer")
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    now = utc_now()
+    learning_path = library_root / "personal-library" / "learnings" / f"{args.learning_id}.json"
+    learning_path.parent.mkdir(parents=True, exist_ok=True)
+    require_new_record_path(learning_path, args.overwrite)
+    evidence_refs = [
+        {
+            "evidence_type": args.evidence_type,
+            "ref": evidence_ref,
+            "summary": args.evidence_summary or "Recorded as learning evidence.",
+        }
+        for evidence_ref in (args.evidence_ref or [])
+    ]
+    record = {
+        "learning_id": args.learning_id,
+        "learning_type": args.learning_type,
+        "status": "active",
+        "learning_rule": args.learning_rule,
+        "scope": args.scope,
+        "source_project_ids": [args.project_id],
+        "evidence_refs": evidence_refs,
+        "promotion_state": {
+            "occurrence_count": args.occurrence_count,
+            "promotion_reason": args.promotion_reason,
+        },
+        "created_at": now,
+        "updated_at": now,
+    }
+    learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    if args.mark_review_complete:
+        all_feedback_reviewed = mark_feedback_entries_reviewed(
+            feedback_log_path_for(library_root, manifest, args.project_id),
+            args.evidence_ref,
+            "applied",
+        )
+        feedback_state["learning_review_status"] = "complete" if all_feedback_reviewed else "pending"
+        feedback_state["learning_reviewed_at"] = now if all_feedback_reviewed else None
+    feedback_state["learning_refs"] = dedupe_refs(
+        feedback_state.get("learning_refs", []),
+        "ref_id",
+        {
+            "ref_id": args.learning_id,
+            "learning_type": args.learning_type,
+            "path": relative_library_path(learning_path, library_root),
+            "status": "active",
+        },
+    )
+    manifest["feedback_state"] = feedback_state
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    sync_db(args)
+    print(f"wrote learning record {learning_path}")
+
+
+def parse_metric_value(raw_value: str) -> float | str:
+    try:
+        return float(raw_value)
+    except ValueError:
+        return raw_value
+
+
+def add_performance_signal(args: argparse.Namespace) -> None:
+    validate_id(args.signal_id, PERFORMANCE_SIGNAL_ID_PATTERN, "signal_id")
+    output_record_id = validate_optional_id(args.output_record_id, OUTPUT_RECORD_ID_PATTERN, "output_record_id")
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    now = utc_now()
+    signal_path = library_root / "personal-library" / "performance-signals" / f"{args.signal_id}.json"
+    signal_path.parent.mkdir(parents=True, exist_ok=True)
+    require_new_record_path(signal_path, args.overwrite)
+    record = {
+        "signal_id": args.signal_id,
+        "project_id": args.project_id,
+        "output_record_id": output_record_id,
+        "captured_at": now,
+        "source": args.source,
+        "metric_name": args.metric_name,
+        "metric_value": parse_metric_value(args.metric_value),
+        "signal_direction": args.signal_direction,
+        "evidence_weight": "equal_to_artist_feedback",
+        "notes": args.notes,
+    }
+    signal_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    feedback_state["performance_signal_refs"] = dedupe_refs(
+        feedback_state.get("performance_signal_refs", []),
+        "signal_id",
+        {
+            "signal_id": args.signal_id,
+            "path": relative_library_path(signal_path, library_root),
+            "status": "active",
+        },
+    )
+    manifest["feedback_state"] = feedback_state
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    sync_db(args)
+    print(f"wrote performance signal {signal_path}")
+
+
+def mark_learning_review_complete(args: argparse.Namespace) -> None:
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    now = utc_now()
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    all_feedback_reviewed = mark_feedback_entries_reviewed(
+        feedback_log_path_for(library_root, manifest, args.project_id),
+        args.feedback_id,
+        args.classification_status,
+    )
+    feedback_state["learning_review_status"] = "complete" if all_feedback_reviewed else "pending"
+    feedback_state["learning_reviewed_at"] = now if all_feedback_reviewed else None
+    manifest["feedback_state"] = feedback_state
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    sync_db(args)
+    print(f"marked learning review complete for {args.project_id}")
+
+
+def pending_learning_reviews(args: argparse.Namespace) -> None:
+    with connect(db_path_for(args)) as conn:
+        apply_schema(conn)
+        rows = conn.execute(
+            """
+            SELECT p.project_id, p.title, p.updated_at, f.feedback_log_path
+            FROM project_feedback_state f
+            JOIN projects p ON p.project_id = f.project_id
+            WHERE f.learning_review_status = 'pending'
+            ORDER BY p.updated_at DESC
+            """
+        ).fetchall()
+    for row in rows:
+        print("\t".join(str(value or "") for value in row))
+
+
+def project_pointer_payload(project_id: str, workspace_root_hint: str | None) -> dict:
+    validate_id(project_id, PROJECT_ID_PATTERN, "project_id")
+    payload = {
+        "schema_version": 1,
+        "project_id": project_id,
+        "created_by": "artist-os",
+    }
+    if workspace_root_hint:
+        payload["workspace_root_hint"] = workspace_root_hint
+    return payload
+
+
+def project_readme(title: str, project_id: str, summary: str | None, status: str | None) -> str:
+    lines = [
+        f"# {title}",
+        "",
+        "This folder contains Artist OS files intended for artist review.",
+        "",
+        f"- Project id: `{project_id}`",
+    ]
+    if status:
+        lines.append(f"- Status: {status}")
+    if summary:
+        lines.extend(["", "## Summary", "", summary])
+    lines.extend([
+        "",
+        "## Resume",
+        "",
+        "Ask Artist OS to resume this project from this folder. Internal project state lives in the sibling `.wondermint` Workspace Library.",
+        "",
+    ])
+    return "\n".join(lines)
+
+
+def validate_project_slug(project_slug: str) -> str:
+    if not PROJECT_SLUG_PATTERN.fullmatch(project_slug):
+        raise SystemExit(
+            "project_slug must be one folder name using letters, numbers, dots, underscores, or hyphens"
+        )
+    return project_slug
+
+
+def write_project_pointer(pointer_path: Path, pointer: dict, overwrite: bool) -> None:
+    if pointer_path.exists() and not overwrite:
+        try:
+            existing = read_json(pointer_path)
+        except json.JSONDecodeError as exc:
+            raise SystemExit(
+                f"Project Pointer already exists but is not valid JSON: {pointer_path}; use --overwrite-pointer to replace it"
+            ) from exc
+        if not isinstance(existing, dict):
+            raise SystemExit(
+                f"Project Pointer already exists but is not a JSON object: {pointer_path}; use --overwrite-pointer to replace it"
+            )
+        if existing.get("project_id") != pointer["project_id"]:
+            raise SystemExit(
+                f"Project Pointer already links to {existing.get('project_id')}; use --overwrite-pointer to replace it"
+            )
+        return
+    pointer_path.write_text(json.dumps(pointer, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def link_visible_project(args: argparse.Namespace) -> None:
+    artist_library_root = artist_library_root_for(args)
+    if not artist_library_root:
+        raise SystemExit("link-visible-project requires --wondermint-root, WONDERMINT_ROOT, or --artist-library-root")
+    project_slug = validate_project_slug(args.project_slug)
+    project_dir = artist_library_root / "Projects" / project_slug
+    project_dir.mkdir(parents=True, exist_ok=True)
+
+    pointer_path = project_dir / PROJECT_POINTER_FILENAME
+    pointer = project_pointer_payload(args.project_id, args.workspace_root_hint)
+    write_project_pointer(pointer_path, pointer, args.overwrite_pointer)
+
+    readme_path = project_dir / "README.md"
+    if not readme_path.exists() or args.overwrite_readme:
+        readme_path.write_text(
+            project_readme(args.title or args.project_slug, args.project_id, args.summary, args.status),
+            encoding="utf-8",
+        )
+
+    print(f"linked Artist Library project folder at {project_dir}")
+    print(f"wrote Project Pointer at {pointer_path}")
 
 
 def list_projects(args: argparse.Namespace) -> None:
@@ -324,6 +943,21 @@ def show_project(args: argparse.Namespace) -> None:
         decisions = conn.execute(
             "SELECT * FROM project_decisions WHERE project_id = ?", (args.project_id,)
         ).fetchone()
+        visible_state = conn.execute(
+            "SELECT * FROM project_visible_state WHERE project_id = ?", (args.project_id,)
+        ).fetchone()
+        feedback_state = conn.execute(
+            "SELECT * FROM project_feedback_state WHERE project_id = ?", (args.project_id,)
+        ).fetchone()
+        artist_library_files = conn.execute(
+            """
+            SELECT path, file_role, status, output_record_id, updated_at
+            FROM artist_library_files
+            WHERE project_id = ?
+            ORDER BY updated_at, path
+            """,
+            (args.project_id,),
+        ).fetchall()
         assets = conn.execute(
             """
             SELECT asset_id, asset_type, stage, status, path
@@ -336,6 +970,9 @@ def show_project(args: argparse.Namespace) -> None:
     print(json.dumps({
         "project": dict(project),
         "decisions": dict(decisions) if decisions else None,
+        "visible_state": dict(visible_state) if visible_state else None,
+        "artist_library_files": [dict(file_ref) for file_ref in artist_library_files],
+        "feedback_state": dict(feedback_state) if feedback_state else None,
         "assets": [dict(asset) for asset in assets],
     }, indent=2))
 
@@ -345,22 +982,97 @@ def parser() -> argparse.ArgumentParser:
     root.add_argument("--db", default=None)
     sub = root.add_subparsers(required=True)
 
+    def add_library_args(command: argparse.ArgumentParser) -> None:
+        command.add_argument("--library-root", default=None)
+        command.add_argument("--wondermint-root", default=None)
+
     init = sub.add_parser("init", help="create or migrate the SQLite library database")
+    add_library_args(init)
     init.set_defaults(func=init_db)
 
     setup = sub.add_parser("setup", help="create Workspace Library folders and initialize SQLite")
-    setup.add_argument("--library-root", default=str(DEFAULT_LIBRARY_ROOT))
+    add_library_args(setup)
     setup.set_defaults(func=setup_db)
 
     sync = sub.add_parser("sync", help="sync project manifests into the SQLite index")
-    sync.add_argument("--library-root", default=str(DEFAULT_LIBRARY_ROOT))
+    add_library_args(sync)
     sync.set_defaults(func=sync_db)
 
+    feedback = sub.add_parser("add-feedback", help="append project feedback and mark learning review pending")
+    feedback.add_argument("project_id")
+    feedback.add_argument("--feedback", required=True)
+    feedback.add_argument("--feedback-id", default=None)
+    feedback.add_argument("--source", default="artist", choices=["artist", "agent_observation", "system"])
+    feedback.add_argument("--stage", default=None)
+    feedback.add_argument("--output-record-id", default=None)
+    feedback.add_argument("--notes", default=None)
+    add_library_args(feedback)
+    feedback.set_defaults(func=add_feedback)
+
+    learning = sub.add_parser("add-learning", help="write a compact learning record and link it to a project")
+    learning.add_argument("project_id")
+    learning.add_argument("learning_id")
+    learning.add_argument("--learning-type", required=True, choices=["candidate", "soft", "hard"])
+    learning.add_argument("--learning-rule", required=True)
+    learning.add_argument("--scope", default=None)
+    learning.add_argument("--evidence-type", default="feedback_entry", choices=LEARNING_EVIDENCE_TYPES)
+    learning.add_argument("--evidence-ref", action="append")
+    learning.add_argument("--evidence-summary", default=None)
+    learning.add_argument("--occurrence-count", type=int, default=1)
+    learning.add_argument("--promotion-reason", default=None)
+    learning.add_argument("--mark-review-complete", action="store_true")
+    learning.add_argument("--overwrite", action="store_true")
+    add_library_args(learning)
+    learning.set_defaults(func=add_learning)
+
+    signal = sub.add_parser("add-performance-signal", help="write a performance signal and link it to a project")
+    signal.add_argument("project_id")
+    signal.add_argument("signal_id")
+    signal.add_argument("--metric-name", required=True)
+    signal.add_argument("--metric-value", required=True)
+    signal.add_argument("--signal-direction", required=True, choices=["positive", "negative", "neutral", "mixed"])
+    signal.add_argument("--source", default="manual_import")
+    signal.add_argument("--output-record-id", default=None)
+    signal.add_argument("--notes", default=None)
+    signal.add_argument("--overwrite", action="store_true")
+    add_library_args(signal)
+    signal.set_defaults(func=add_performance_signal)
+
+    review = sub.add_parser("mark-learning-review-complete", help="mark a project's learning review complete")
+    review.add_argument("project_id")
+    review.add_argument("--feedback-id", action="append")
+    review.add_argument(
+        "--classification-status",
+        default="applied",
+        choices=["candidate", "applied", "dismissed"],
+    )
+    add_library_args(review)
+    review.set_defaults(func=mark_learning_review_complete)
+
+    pending = sub.add_parser("pending-learning-reviews", help="list projects with pending learning review")
+    add_library_args(pending)
+    pending.set_defaults(func=pending_learning_reviews)
+
+    link = sub.add_parser("link-visible-project", help="create a visible Artist Library project folder and Project Pointer")
+    link.add_argument("project_id")
+    link.add_argument("project_slug")
+    link.add_argument("--title", default=None)
+    link.add_argument("--summary", default=None)
+    link.add_argument("--status", default=None)
+    link.add_argument("--workspace-root-hint", default="../../../.wondermint/artist-os")
+    link.add_argument("--wondermint-root", default=None)
+    link.add_argument("--artist-library-root", default=None)
+    link.add_argument("--overwrite-pointer", action="store_true")
+    link.add_argument("--overwrite-readme", action="store_true")
+    link.set_defaults(func=link_visible_project)
+
     list_cmd = sub.add_parser("list", help="list indexed projects")
+    add_library_args(list_cmd)
     list_cmd.set_defaults(func=list_projects)
 
     show = sub.add_parser("show", help="show one indexed project")
     show.add_argument("project_id")
+    add_library_args(show)
     show.set_defaults(func=show_project)
 
     return root
@@ -369,8 +1081,7 @@ def parser() -> argparse.ArgumentParser:
 def db_path_for(args: argparse.Namespace) -> Path:
     if args.db:
         return Path(args.db)
-    library_root = Path(getattr(args, "library_root", DEFAULT_LIBRARY_ROOT))
-    return library_root / "artist-os.sqlite"
+    return library_root_for(args) / "artist-os.sqlite"
 
 
 def main() -> None:

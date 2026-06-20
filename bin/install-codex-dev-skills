@@ -5,6 +5,20 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
 prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
 library_root="${ARTIST_OS_LIBRARY_ROOT:-$repo_root/workspace-library/artist-os}"
+artist_library_root=""
+setup_args=(setup)
+if [[ -n "${ARTIST_OS_LIBRARY_ROOT:-}" ]]; then
+  setup_args+=(--library-root "$library_root")
+elif [[ -z "${WONDERMINT_ROOT:-}" ]]; then
+  setup_args+=(--library-root "$library_root")
+fi
+if [[ -n "${WONDERMINT_ROOT:-}" ]]; then
+  if [[ -z "${ARTIST_OS_LIBRARY_ROOT:-}" ]]; then
+    library_root="$WONDERMINT_ROOT/.wondermint/artist-os"
+  fi
+  artist_library_root="$WONDERMINT_ROOT/Wondermint/Artist Library"
+  setup_args+=(--wondermint-root "$WONDERMINT_ROOT")
+fi
 
 skills=(
   "ingest-reference"
@@ -84,7 +98,7 @@ for skill in "${skills[@]}"; do
   install_skill "$source_dir" "$target"
 done
 
-"$repo_root/bin/artist-os-db" setup --library-root "$library_root"
+"$repo_root/bin/artist-os-db" "${setup_args[@]}"
 
 cat <<EOF
 
@@ -93,6 +107,8 @@ Artist OS dev skills installed into:
 
 Workspace Library initialized at:
   $library_root
+
+$(if [[ -n "$artist_library_root" ]]; then printf 'Artist Library initialized at:\n  %s\n\n' "$artist_library_root"; fi)
 
 Installed skill names:
   - artist-os

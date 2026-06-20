@@ -134,13 +134,25 @@ The first shared cross-medium schemas now exist for Transformation Briefs, Beat 
 
 ## Local State And Privacy
 
-Real Artist OS project work is stored outside git in:
+The accepted storage model for installed user runs stores user-facing files and internal project state under a user-chosen Wondermint Root:
+
+```text
+<wondermint_root>/
+├── Wondermint/
+│   └── Artist Library/
+└── .wondermint/
+    └── artist-os/
+```
+
+`Wondermint/Artist Library/` contains visible project outputs, Review Drafts, readable summaries, and artist-useful Personal Library notes. The hidden sibling `.wondermint/artist-os/` contains internal Workspace Library state such as project manifests, event logs, prompt plans, critiques, sidecars, feedback evidence, learning records, and performance signals. Basic installed-root setup, Project Pointer creation, manifest fields, SQLite indexing, visible-missing sync, and feedback/learning/performance record scaffolding are available. See `docs/storage.md` and `docs/progress.md`.
+
+For repo development and tests, the internal Workspace Library can still live at:
 
 ```text
 workspace-library/artist-os/
 ```
 
-That local library can contain artist references, generated media, project manifests, event logs, prompt plans, critiques, and the SQLite query index. It is ignored by git.
+The repo-local development library is ignored by this repository's git rules. User-chosen Wondermint Roots should live outside git repositories, or the containing repository should explicitly ignore both `Wondermint/` and `.wondermint/`.
 
 Do not commit generated media, private artist references, secrets, API keys, or paid-service credentials.
 

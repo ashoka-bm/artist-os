@@ -39,6 +39,8 @@ Use `WONDERMINT_ROOT=/path/to/root` as the preferred user-facing storage overrid
 
 Use `ARTIST_OS_LIBRARY_ROOT=/path/to/library` only as a low-level Workspace Library override for development, tests, or compatibility with existing tooling.
 
+All `bin/artist-os-db` commands that read or write the Workspace Library accept `--wondermint-root` or `--library-root`. Prefer `--wondermint-root` for installed user runs so the command can derive both the hidden Workspace Library and visible Artist Library. Use `--library-root` only when intentionally addressing a Workspace Library directly.
+
 If a Wondermint Root is inside a cloud-synced folder, warn the user that visible outputs may sync well but internal Workspace Library state, especially SQLite, may encounter sync conflicts.
 
 ## Artist Library Layout
@@ -169,15 +171,15 @@ Agents should query this database first when a user asks about old projects, pre
 Initialize or refresh it with:
 
 ```bash
-bin/artist-os-db setup
-bin/artist-os-db sync
+bin/artist-os-db setup --wondermint-root /path/to/root
+bin/artist-os-db sync --wondermint-root /path/to/root
 ```
 
 Useful reads:
 
 ```bash
-bin/artist-os-db list
-bin/artist-os-db show <project_id>
+bin/artist-os-db list --wondermint-root /path/to/root
+bin/artist-os-db show <project_id> --wondermint-root /path/to/root
 ```
 
 `index.json` is optional as a human-readable export. It is not the primary index once SQLite exists.
@@ -290,6 +292,18 @@ At the start of a later project, Artist OS may run Learning Review over pending 
 Concrete schema, process, or tool-field mismatches can become Hard Learning immediately. Taste and creative preferences usually start as Learning Candidates or Soft Learning unless repeated feedback, strong analytics, or explicit artist confirmation promotes them.
 
 Performance Signals and artist feedback are equal evidence classes for learning. Neither automatically overrides the other. When they conflict, Artist OS should preserve both and ask whether the current project should prioritize personal expression, performance optimization, or a hybrid.
+
+Useful write commands:
+
+```bash
+bin/artist-os-db add-feedback <project_id> --feedback "..." --wondermint-root /path/to/root
+bin/artist-os-db add-learning <project_id> <learning_id> --learning-type soft --learning-rule "..." --wondermint-root /path/to/root
+bin/artist-os-db add-performance-signal <project_id> <signal_id> --metric-name save_rate --metric-value 0.32 --signal-direction positive --wondermint-root /path/to/root
+bin/artist-os-db mark-learning-review-complete <project_id> --wondermint-root /path/to/root
+bin/artist-os-db pending-learning-reviews --wondermint-root /path/to/root
+```
+
+Learning and Performance Signal ids must match their schemas and cannot overwrite an existing record unless the command is run with `--overwrite`.
 
 ## Package Setup
 

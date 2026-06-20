@@ -40,6 +40,8 @@
     "created_at": { "type": "string" },
     "updated_at": { "type": "string" },
     "summary": { "type": "string" },
+    "artist_library": { "$ref": "#/$defs/artist_library_state" },
+    "feedback_state": { "$ref": "#/$defs/feedback_state" },
     "paths": {
       "type": "object",
       "additionalProperties": false,
@@ -109,6 +111,96 @@
     }
   },
   "$defs": {
+    "artist_library_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visible_state"],
+      "properties": {
+        "project_dir": { "type": "string" },
+        "project_pointer_path": { "type": "string" },
+        "project_pointer_state": {
+          "type": "string",
+          "enum": ["not_created", "present", "missing", "invalid", "retargeted"]
+        },
+        "project_pointer_project_id": { "type": ["string", "null"], "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+        "visible_state": { "type": "string", "enum": ["not_created", "present", "visible_missing"] },
+        "last_checked_at": { "type": "string" },
+        "user_facing_files": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/user_facing_file" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "visible_state": { "const": "present" } },
+            "required": ["visible_state"]
+          },
+          "then": {
+            "required": [
+              "project_dir",
+              "project_pointer_path",
+              "project_pointer_state",
+              "project_pointer_project_id"
+            ],
+            "properties": {
+              "project_pointer_state": { "const": "present" }
+            }
+          }
+        }
+      ]
+    },
+    "user_facing_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "file_role", "status"],
+      "properties": {
+        "path": { "type": "string" },
+        "file_role": { "type": "string", "enum": ["review_draft", "accepted_work", "readable_summary", "personal_library_note"] },
+        "status": { "type": "string", "enum": ["current", "missing", "stale", "archived"] },
+        "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+        "updated_at": { "type": "string" }
+      }
+    },
+    "feedback_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["learning_review_status"],
+      "properties": {
+        "feedback_log_path": { "type": "string" },
+        "learning_review_status": { "type": "string", "enum": ["not_applicable", "pending", "complete"] },
+        "learning_reviewed_at": { "type": ["string", "null"] },
+        "learning_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/learning_ref" }
+        },
+        "performance_signal_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/performance_signal_ref" }
+        }
+      }
+    },
+    "learning_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "learning_type", "path", "status"],
+      "properties": {
+        "ref_id": { "type": "string" },
+        "learning_type": { "type": "string", "enum": ["candidate", "soft", "hard"] },
+        "path": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "superseded", "archived"] }
+      }
+    },
+    "performance_signal_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signal_id", "path", "status"],
+      "properties": {
+        "signal_id": { "type": "string" },
+        "path": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "superseded", "archived"] }
+      }
+    },
     "stage_status": {
       "type": "string",
       "enum": ["not_started", "in_progress", "complete", "skipped", "unconfirmed"]

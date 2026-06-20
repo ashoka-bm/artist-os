@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/learning-record.schema.json",
+  "title": "LearningRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "learning_id",
+    "learning_type",
+    "status",
+    "learning_rule",
+    "evidence_refs",
+    "promotion_state",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "learning_id": { "type": "string", "pattern": "^learn_[a-zA-Z0-9_-]+$" },
+    "learning_type": { "type": "string", "enum": ["candidate", "soft", "hard"] },
+    "status": { "type": "string", "enum": ["active", "superseded", "archived"] },
+    "learning_rule": { "type": "string", "minLength": 1, "maxLength": 600 },
+    "scope": { "type": ["string", "null"] },
+    "source_project_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_ref" }
+    },
+    "promotion_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["occurrence_count", "promotion_reason"],
+      "properties": {
+        "occurrence_count": { "type": "integer", "minimum": 1 },
+        "promotion_reason": { "type": ["string", "null"] }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_type", "ref", "summary"],
+      "properties": {
+        "evidence_type": {
+          "type": "string",
+          "enum": ["feedback_entry", "performance_signal", "output_record", "review_record", "schema_mismatch", "tool_field_mismatch"]
+        },
+        "ref": { "type": "string" },
+        "summary": { "type": "string" }
+      }
+    }
+  }
+}

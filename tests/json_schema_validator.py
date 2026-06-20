@@ -85,6 +85,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
     if isinstance(value, str):
         if "minLength" in schema and len(value) < schema["minLength"]:
             raise ValidationError(path, f"shorter than minLength {schema['minLength']}")
+        if "maxLength" in schema and len(value) > schema["maxLength"]:
+            raise ValidationError(path, f"longer than maxLength {schema['maxLength']}")
         if "pattern" in schema and not re.match(schema["pattern"], value):
             raise ValidationError(path, f"{value!r} does not match {schema['pattern']!r}")
 
@@ -132,6 +134,9 @@ EXAMPLE_SCHEMA_MAP = {
     "output-record.example.json": "output-record.schema.json",
     "prompt-branch-set.example.json": "prompt-branch-set.schema.json",
     "project-manifest.example.json": "project-manifest.schema.json",
+    "project-feedback-log-entry.example.json": "project-feedback-log-entry.schema.json",
+    "learning-record.example.json": "learning-record.schema.json",
+    "performance-signal.example.json": "performance-signal.schema.json",
     "review-record.example.json": "review-record.schema.json",
     "sound-medium-plan.example.json": "sound-medium-plan.schema.json",
     "source-record.example.json": "source-record.schema.json",
@@ -172,6 +177,9 @@ FIXTURE_SCHEMA_MAP = {
     "review-record.json": "review-record.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
+    "project-feedback-log-entry.json": "project-feedback-log-entry.schema.json",
+    "learning-record.json": "learning-record.schema.json",
+    "performance-signal.json": "performance-signal.schema.json",
     "foundation-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "image-series-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "text-stewardship-record.json": "long-work-stewardship-record.schema.json",

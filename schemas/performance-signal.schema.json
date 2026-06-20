@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/performance-signal.schema.json",
+  "title": "PerformanceSignal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "signal_id",
+    "project_id",
+    "captured_at",
+    "source",
+    "metric_name",
+    "metric_value",
+    "signal_direction",
+    "evidence_weight"
+  ],
+  "properties": {
+    "signal_id": { "type": "string", "pattern": "^perf_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "source": { "type": "string" },
+    "metric_name": { "type": "string" },
+    "metric_value": { "type": ["number", "string"] },
+    "signal_direction": { "type": "string", "enum": ["positive", "negative", "neutral", "mixed"] },
+    "evidence_weight": { "type": "string", "enum": ["equal_to_artist_feedback"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}

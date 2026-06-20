@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/project-feedback-log-entry.schema.json",
+  "title": "ProjectFeedbackLogEntry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "feedback_id",
+    "project_id",
+    "received_at",
+    "source",
+    "feedback_text",
+    "classification_status",
+    "learning_review_status"
+  ],
+  "properties": {
+    "feedback_id": { "type": "string", "pattern": "^fb_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "received_at": { "type": "string", "format": "date-time" },
+    "source": { "type": "string", "enum": ["artist", "agent_observation", "system"] },
+    "stage": { "type": ["string", "null"] },
+    "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+    "feedback_text": { "type": "string", "minLength": 1 },
+    "classification_status": { "type": "string", "enum": ["unclassified", "candidate", "applied", "dismissed"] },
+    "learning_review_status": { "type": "string", "enum": ["pending", "complete"] },
+    "notes": { "type": ["string", "null"] }
+  }
+}

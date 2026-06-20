@@ -1,0 +1,12 @@
+{
+  "feedback_id": "fb_door_left_lit_20260620_001",
+  "project_id": "proj_door_left_lit",
+  "received_at": "2026-06-20T12:00:00Z",
+  "source": "artist",
+  "stage": "project_completion",
+  "output_record_id": "out_door_left_lit_branch_station_001",
+  "feedback_text": "The first draft got the threshold right, but future versions should feel less polished at the start.",
+  "classification_status": "unclassified",
+  "learning_review_status": "pending",
+  "notes": null
+}

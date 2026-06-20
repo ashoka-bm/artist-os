@@ -1,0 +1,21 @@
+{
+  "learning_id": "learn_rawer_first_drafts",
+  "learning_type": "soft",
+  "status": "active",
+  "learning_rule": "For this artist, first drafts should preserve more rawness before polish unless the current brief asks for a finished public voice.",
+  "scope": "text and image prompt drafting",
+  "source_project_ids": ["proj_door_left_lit"],
+  "evidence_refs": [
+    {
+      "evidence_type": "feedback_entry",
+      "ref": "fb_door_left_lit_20260620_001",
+      "summary": "Artist asked for less polished first drafts."
+    }
+  ],
+  "promotion_state": {
+    "occurrence_count": 2,
+    "promotion_reason": "Repeated artist feedback across project completion reviews."
+  },
+  "created_at": "2026-06-20T12:05:00Z",
+  "updated_at": "2026-06-20T12:05:00Z"
+}

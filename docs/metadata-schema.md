@@ -12,7 +12,7 @@ A Project Manifest tracks one Artist OS project across sessions. It lives in the
 
 The manifest points to the current records and assets. The process history lives in `events.jsonl`.
 
-The accepted storage model also needs the manifest to track visible Artist Library state: project folder path, Project Pointer state, visible-missing state, feedback review status, and any user-facing files that should be restored or checked for human-edited revisions. These fields are implementation pending; follow `docs/storage.md` as the storage contract until `schemas/project-manifest.schema.json` is expanded.
+The accepted storage model uses the manifest to track visible Artist Library state: project folder path, Project Pointer state, visible-missing state, feedback review status, and any user-facing files that should be restored or checked for human-edited revisions. Follow `schemas/project-manifest.schema.json` for the current record shape and `docs/storage.md` for the storage contract.
 
 ### Artist OS Library Database
 
@@ -20,7 +20,7 @@ The local SQLite database lives at `workspace-library/artist-os/artist-os.sqlite
 
 It is the searchable index for agents resuming earlier sessions. Its indexed contents, the `bin/artist-os-db` commands, and the `missing`-project rule are defined in `docs/storage.md` → SQLite Index; do not restate them here.
 
-The accepted storage model also needs SQLite to index Artist Library paths, Project Pointer state, visible-missing state, Feedback Log review status, Learning Index references, and Performance Signal references. These columns/tables are implementation pending.
+SQLite indexes Artist Library paths, Project Pointer state, visible-missing state, Feedback Log review status, Learning Index references, and Performance Signal references. The database remains an index; the manifest, event logs, and sidecar records remain the durable source artifacts.
 
 ### Asset Metadata
 
@@ -149,7 +149,9 @@ Human-edited visible files in the Artist Library should become new Output Record
 
 ### Feedback, Learning, and Performance Records
 
-Project Feedback Logs, Learning Candidates, Soft Learning, Hard Learning, Learning Index entries, and Performance Signals are accepted storage concepts but do not have schemas yet. Until schemas exist, treat `docs/storage.md` as the durable contract: raw feedback stays in project logs, reusable Learning Rules stay compact and evidence-backed, and Performance Signals have equal evidence weight with artist feedback without automatically overriding it.
+Project Feedback Log entries validate against `schemas/project-feedback-log-entry.schema.json`. Learning Candidate, Soft Learning, and Hard Learning records validate against `schemas/learning-record.schema.json`. Performance Signals validate against `schemas/performance-signal.schema.json`.
+
+Raw feedback stays in project logs until Learning Review classifies it. Reusable Learning Rules stay compact and evidence-backed; `learning_rule` is capped at 600 characters. Performance Signals have equal evidence weight with artist feedback without automatically overriding it.
 
 ### Sound Creative Brief Record
 
