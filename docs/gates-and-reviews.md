@@ -29,6 +29,14 @@ Routing Gate
 
 Provider-backed generation always requires explicit approval. Drafting briefs, boards, prompt plans, lyrics, scripts, shot lists, comparison boards, or other dry-run artifacts is allowed.
 
+## Gate Completion Rule
+
+A gate is complete, an approval given, a waiver granted, or an option selected only when it comes from an explicit artist turn: an actual artist response in the conversation. The agent must not infer approval from silence, treat its own recommendation as the artist's answer, self-approve, or assume the artist would obviously want a choice. "Obvious," "low-risk," "trivial," or "an obvious fix" does not waive this requirement. An obvious choice is still the artist's choice.
+
+Recording a Gate Decision, approval, selection, or waiver the artist did not actually make is forbidden. It fabricates provenance and breaks the audit trail that every downstream record inherits.
+
+This rule applies to every gate in this document, including Brief Approval, Series/Sequence approval, Generation Approval, Draft Generation Approval, and blocking-finding waivers.
+
 ## Canonical Gates
 
 ### Routing Gate
