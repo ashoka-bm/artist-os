@@ -71,7 +71,7 @@ Workflow Scale Routing is schema-backed and required on:
 - `schemas/image-medium-plan.schema.json`
 - `schemas/sound-medium-plan.schema.json`
 
-The initial Workflow Scale Levels are `compact_artifact`, `structured_single_artifact`, `cumulative_work`, and `full_long_form_project`. The governing placement decision is recorded in `docs/adr/0006-workflow-scale-routing-placement.md`.
+The initial Workflow Scale Levels are `compact_artifact`, `structured_single_artifact`, `cumulative_work`, and `full_long_form_project`. The governing placement decision is recorded in `docs/adr/0007-workflow-scale-routing-placement.md`.
 
 ### Gates And Reviews
 

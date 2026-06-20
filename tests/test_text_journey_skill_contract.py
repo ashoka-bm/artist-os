@@ -31,6 +31,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 TEXT_JOURNEY_SKILL = "skills/text-journey/SKILL.md"
+FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
+    "If medium-level `workflow_scale_routing.activated_supports` newly includes "
+    "`long_work_stewardship` and no foundation record exists, create the "
+    "foundation record immediately before enrichment."
+)
 
 # The director skill. Mirrors MEDIUM_PLAN_SKILLS in the medium-plan guard.
 TEXT_JOURNEY_SPEC = {
@@ -128,6 +133,20 @@ class TextJourneyDirectorContractTests(unittest.TestCase):
         for schema_id in TEXT_JOURNEY_SPEC["schema_ids"]:
             with self.subTest(schema_id=schema_id):
                 self.assertIn(schema_id, text)
+
+    def test_records_final_workflow_scale_routing_after_shape_conflict_resolution(self) -> None:
+        text = self._read()
+        conflict_index = text.index("record a Medium Output Shape Conflict")
+        routing_index = text.index("Record medium-level Workflow Scale Routing after")
+
+        self.assertLess(conflict_index, routing_index)
+        self.assertIn(
+            "after any Medium Output Shape Conflict is resolved",
+            text,
+        )
+
+    def test_medium_level_long_work_activation_creates_foundation_before_enrichment(self) -> None:
+        self.assertIn(FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT, self._read())
 
 
 class EditorialPassContractTests(unittest.TestCase):

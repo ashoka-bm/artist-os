@@ -13,6 +13,20 @@ from json_schema_validator import (
 )
 
 
+LONG_WORK_SUPPORT = "long_work_stewardship"
+WORKFLOW_SCALE_SCHEMA_NAMES = {
+    "beat-plan.schema.json",
+    "image-medium-plan.schema.json",
+    "sound-medium-plan.schema.json",
+    "text-medium-plan.schema.json",
+}
+
+
+def routing_support_overlap(record: dict) -> set[str]:
+    routing = record["workflow_scale_routing"]
+    return set(routing["activated_supports"]) & set(routing["skipped_supports"])
+
+
 class SchemaValidationTests(unittest.TestCase):
     def test_examples_and_fixtures_validate(self) -> None:
         targets = iter_validation_targets(include_fixtures=True)
@@ -311,6 +325,57 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "not one of"):
             validate(record, schema, schema)
+
+    def test_workflow_scale_routing_supports_are_not_both_activated_and_skipped(self) -> None:
+        targets = [
+            (schema_path, data_path)
+            for schema_path, data_path in iter_validation_targets(include_fixtures=True)
+            if schema_path.name in WORKFLOW_SCALE_SCHEMA_NAMES
+        ]
+        self.assertGreaterEqual(len(targets), 4)
+
+        for _schema_path, data_path in targets:
+            record = load_json(data_path)
+            with self.subTest(data=data_path.relative_to(REPO_ROOT)):
+                self.assertEqual(set(), routing_support_overlap(record))
+
+    def test_workflow_scale_routing_detects_long_work_activation_skip_contradiction(self) -> None:
+        record = load_json(REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json")
+        record["workflow_scale_routing"]["activated_supports"].append(LONG_WORK_SUPPORT)
+
+        self.assertIn(LONG_WORK_SUPPORT, routing_support_overlap(record))
+
+    def test_workflow_scale_routing_long_work_activation_matches_scale_fixture_intent(self) -> None:
+        compact_or_structured_paths = [
+            REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "image-medium-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "article-rehearsal" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "article-rehearsal" / "text-medium-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "op-ed-rehearsal" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-journey" / "op-ed-rehearsal" / "text-medium-plan.json",
+        ]
+        cumulative_paths = [
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "beat-plan.json",
+            REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "three-image-series-rehearsal" / "image-medium-plan.json",
+        ]
+
+        for data_path in compact_or_structured_paths:
+            record = load_json(data_path)
+            routing = record["workflow_scale_routing"]
+            with self.subTest(data=data_path.relative_to(REPO_ROOT)):
+                self.assertIn(routing["scale_level"], {"compact_artifact", "structured_single_artifact"})
+                self.assertNotIn(LONG_WORK_SUPPORT, routing["activated_supports"])
+                self.assertIn(LONG_WORK_SUPPORT, routing["skipped_supports"])
+
+        for data_path in cumulative_paths:
+            record = load_json(data_path)
+            routing = record["workflow_scale_routing"]
+            with self.subTest(data=data_path.relative_to(REPO_ROOT)):
+                self.assertEqual("cumulative_work", routing["scale_level"])
+                self.assertIn(LONG_WORK_SUPPORT, routing["activated_supports"])
+                self.assertNotIn(LONG_WORK_SUPPORT, routing["skipped_supports"])
 
     def test_image_output_shapes_do_not_use_three_part_sequence(self) -> None:
         image_schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")

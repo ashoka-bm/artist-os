@@ -100,6 +100,13 @@ MEDIUM_PLAN_SKILLS = {
     },
 }
 
+CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
+FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
+    "If medium-level `workflow_scale_routing.activated_supports` newly includes "
+    "`long_work_stewardship` and no foundation record exists, create the "
+    "foundation record immediately before enrichment."
+)
+
 
 class MediumPlanSkillContractTests(unittest.TestCase):
     def _read(self, skill_path: str) -> str:
@@ -156,6 +163,13 @@ class MediumPlanSkillContractTests(unittest.TestCase):
             with self.subTest(skill=skill_path):
                 for schema_id in spec["schema_ids"]:
                     self.assertIn(schema_id, text)
+
+    def test_medium_level_long_work_activation_creates_foundation_before_enrichment(self) -> None:
+        skill_paths = [CONDUCTOR_SKILL, *MEDIUM_PLAN_SKILLS]
+        for skill_path in skill_paths:
+            text = self._read(skill_path)
+            with self.subTest(skill=skill_path):
+                self.assertIn(FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT, text)
 
 
 if __name__ == "__main__":

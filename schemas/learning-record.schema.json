@@ -26,6 +26,7 @@
     },
     "evidence_refs": {
       "type": "array",
+      "minItems": 1,
       "items": { "$ref": "#/$defs/evidence_ref" }
     },
     "promotion_state": {

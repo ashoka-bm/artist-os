@@ -14,6 +14,7 @@ from io import StringIO
 from pathlib import Path
 from unittest.mock import patch
 
+from json_schema_validator import ValidationError
 from json_schema_validator import validate
 
 
@@ -147,6 +148,111 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertIn("# Door Left Lit", readme)
             self.assertIn("proj_door_left_lit", readme)
             self.assertIn("A threshold image project.", readme)
+
+    def test_link_visible_project_updates_manifest_and_indexes_visible_state_when_manifest_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / ".wondermint" / "artist-os"
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                project_id="proj_door_left_lit",
+                project_slug="door-left-lit",
+                title="Door Left Lit",
+                summary="A threshold image project.",
+                status="active",
+                workspace_root_hint="../../../.wondermint/artist-os",
+                wondermint_root=str(root),
+                artist_library_root=None,
+                overwrite_pointer=False,
+                overwrite_readme=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.link_visible_project(args)
+
+            manifest = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            readme_path = "Wondermint/Artist Library/Projects/door-left-lit/README.md"
+            self.assertEqual(
+                manifest["artist_library"]["project_dir"],
+                "Wondermint/Artist Library/Projects/door-left-lit",
+            )
+            self.assertEqual(
+                manifest["artist_library"]["project_pointer_path"],
+                "Wondermint/Artist Library/Projects/door-left-lit/.artist-os-project.json",
+            )
+            self.assertEqual(manifest["artist_library"]["visible_state"], "present")
+            self.assertEqual(manifest["artist_library"]["project_pointer_state"], "present")
+            self.assertEqual(manifest["artist_library"]["user_facing_files"][0]["path"], readme_path)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                visible_state = conn.execute(
+                    """
+                    SELECT visible_state, artist_library_project_dir,
+                           project_pointer_state, project_pointer_project_id
+                    FROM project_visible_state
+                    """
+                ).fetchone()
+                file_ref = conn.execute(
+                    "SELECT path, file_role, status FROM artist_library_files"
+                ).fetchone()
+
+            self.assertEqual(
+                visible_state,
+                (
+                    "present",
+                    "Wondermint/Artist Library/Projects/door-left-lit",
+                    "present",
+                    "proj_door_left_lit",
+                ),
+            )
+            self.assertEqual(file_ref, (readme_path, "readable_summary", "current"))
+
+    def test_link_visible_project_with_visible_root_only_does_not_update_default_workspace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            default_workspace = root / "default-workspace"
+            workspace_project_dir = default_workspace / "projects" / "proj_door_left_lit"
+            artist_library_root = root / "custom-visible" / "Artist Library"
+            workspace_project_dir.mkdir(parents=True)
+            original_manifest = minimal_manifest()
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(original_manifest),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                project_id="proj_door_left_lit",
+                project_slug="door-left-lit",
+                title="Door Left Lit",
+                summary="A threshold image project.",
+                status="active",
+                workspace_root_hint="../../../.wondermint/artist-os",
+                wondermint_root=None,
+                artist_library_root=str(artist_library_root),
+                overwrite_pointer=False,
+                overwrite_readme=False,
+            )
+
+            with patch.object(artist_os_db, "DEFAULT_LIBRARY_ROOT", default_workspace):
+                with patch.dict(os.environ, {}, clear=True):
+                    with redirect_stdout(StringIO()):
+                        artist_os_db.link_visible_project(args)
+
+            manifest = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            self.assertNotIn("artist_library", manifest)
+            self.assertFalse((default_workspace / "artist-os.sqlite").exists())
+            self.assertTrue(
+                (
+                    artist_library_root
+                    / "Projects"
+                    / "door-left-lit"
+                    / ".artist-os-project.json"
+                ).is_file()
+            )
 
     def test_link_visible_project_preserves_existing_same_project_pointer_without_override(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -694,6 +800,66 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "output_record_id must match"):
                 artist_os_db.add_feedback(args)
 
+    def test_add_feedback_rejects_absolute_feedback_log_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            manifest = minimal_manifest()
+            manifest["feedback_state"] = {
+                "feedback_log_path": str(library_root.parent / "outside-feedback.jsonl"),
+                "learning_review_status": "pending",
+            }
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(manifest),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+
+            with self.assertRaisesRegex(SystemExit, "feedback_log_path"):
+                artist_os_db.add_feedback(args)
+
+    def test_add_feedback_rejects_parent_traversal_feedback_log_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            manifest = minimal_manifest()
+            manifest["feedback_state"] = {
+                "feedback_log_path": "../outside-feedback.jsonl",
+                "learning_review_status": "pending",
+            }
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(manifest),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+
+            with self.assertRaisesRegex(SystemExit, "feedback_log_path"):
+                artist_os_db.add_feedback(args)
+
     def test_add_learning_rejects_learning_rule_over_600_characters(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             library_root = Path(tmpdir)
@@ -721,6 +887,76 @@ class ArtistOSDbStorageTests(unittest.TestCase):
 
             with self.assertRaisesRegex(SystemExit, "600 characters or fewer"):
                 artist_os_db.add_learning(args)
+
+    def test_learning_record_schema_requires_evidence_ref(self) -> None:
+        schema = json.loads((REPO_ROOT / "schemas" / "learning-record.schema.json").read_text(encoding="utf-8"))
+        record = {
+            "learning_id": "learn_rawer_first_drafts",
+            "learning_type": "soft",
+            "status": "active",
+            "learning_rule": "Keep first drafts rawer before polishing.",
+            "scope": None,
+            "source_project_ids": ["proj_door_left_lit"],
+            "evidence_refs": [],
+            "promotion_state": {
+                "occurrence_count": 1,
+                "promotion_reason": None,
+            },
+            "created_at": "2026-05-31T00:00:00Z",
+            "updated_at": "2026-05-31T00:00:00Z",
+        }
+
+        with self.assertRaisesRegex(ValidationError, "evidence_refs"):
+            validate(record, schema, schema)
+
+    def test_add_learning_requires_evidence_ref_and_does_not_mark_feedback(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            feedback_args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_feedback(feedback_args)
+            learning_args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                learning_id="learn_rawer_first_drafts",
+                learning_type="soft",
+                learning_rule="Keep first drafts rawer before polishing.",
+                scope=None,
+                evidence_type="feedback_entry",
+                evidence_ref=None,
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=True,
+                overwrite=False,
+            )
+
+            with self.assertRaisesRegex(SystemExit, "at least one --evidence-ref"):
+                artist_os_db.add_learning(learning_args)
+
+            manifest = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            feedback_entry = json.loads((workspace_project_dir / "feedback-log.jsonl").read_text(encoding="utf-8").strip())
+            self.assertEqual(manifest["feedback_state"]["learning_review_status"], "pending")
+            self.assertEqual(feedback_entry["learning_review_status"], "pending")
 
     def test_add_learning_writes_record_links_manifest_and_indexes_ref(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -787,7 +1023,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 learning_rule="Stay compact.",
                 scope=None,
                 evidence_type="feedback_entry",
-                evidence_ref=None,
+                evidence_ref=["fb_door_left_lit_test"],
                 evidence_summary=None,
                 occurrence_count=1,
                 promotion_reason=None,
@@ -820,7 +1056,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 learning_rule="Stay compact.",
                 scope=None,
                 evidence_type="feedback_entry",
-                evidence_ref=None,
+                evidence_ref=["fb_door_left_lit_test"],
                 evidence_summary=None,
                 occurrence_count=1,
                 promotion_reason=None,
@@ -886,6 +1122,62 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertEqual(feedback_entry["classification_status"], "applied")
             self.assertEqual(feedback_entry["learning_review_status"], "complete")
             self.assertEqual(pending_count, 0)
+
+    def test_add_learning_mark_review_complete_ignores_non_feedback_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            feedback_args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_feedback(feedback_args)
+            learning_args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                learning_id="learn_schema_field_mismatch",
+                learning_type="soft",
+                learning_rule="Fill tool fields exactly when the tool reports schema names.",
+                scope=None,
+                evidence_type="tool_field_mismatch",
+                evidence_ref=["tool_run_001"],
+                evidence_summary="Tool field mismatch.",
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=True,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_learning(learning_args)
+
+            manifest = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            feedback_entry = json.loads((workspace_project_dir / "feedback-log.jsonl").read_text(encoding="utf-8").strip())
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                pending_count = conn.execute(
+                    "SELECT COUNT(*) FROM project_feedback_state WHERE learning_review_status = 'pending'"
+                ).fetchone()[0]
+
+            self.assertEqual(manifest["feedback_state"]["learning_review_status"], "pending")
+            self.assertEqual(feedback_entry["classification_status"], "unclassified")
+            self.assertEqual(feedback_entry["learning_review_status"], "pending")
+            self.assertEqual(pending_count, 1)
 
     def test_mark_learning_review_complete_keeps_project_pending_when_log_has_pending_entries(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

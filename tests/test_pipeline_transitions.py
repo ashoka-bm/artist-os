@@ -12,7 +12,29 @@ def load(path: str) -> dict:
     return json.loads((REPO_ROOT / path).read_text(encoding="utf-8"))
 
 
+LONG_WORK_SUPPORT = "long_work_stewardship"
+
+
 class PipelineTransitionTests(unittest.TestCase):
+    def assert_support_sets_are_disjoint(self, record: dict, label: str) -> None:
+        routing = record["workflow_scale_routing"]
+        activated = set(routing["activated_supports"])
+        skipped = set(routing["skipped_supports"])
+        self.assertFalse(
+            activated & skipped,
+            f"{label} has supports in both activated_supports and skipped_supports",
+        )
+
+    def assert_long_work_support(self, record: dict, should_activate: bool, label: str) -> None:
+        routing = record["workflow_scale_routing"]
+        self.assert_support_sets_are_disjoint(record, label)
+        if should_activate:
+            self.assertIn(LONG_WORK_SUPPORT, routing["activated_supports"], label)
+            self.assertNotIn(LONG_WORK_SUPPORT, routing["skipped_supports"], label)
+        else:
+            self.assertNotIn(LONG_WORK_SUPPORT, routing["activated_supports"], label)
+            self.assertIn(LONG_WORK_SUPPORT, routing["skipped_supports"], label)
+
     def test_source_record_to_transformation_brief(self) -> None:
         source = load("tests/fixtures/story/source-record.json")
         artist_meaning = load("tests/fixtures/story/artist-meaning.json")
@@ -403,10 +425,88 @@ class PipelineTransitionTests(unittest.TestCase):
         for turn in review["emotional_tension_review"]["expectation_turns_reviewed"]:
             self.assertIn(turn["beat_id"], beat_ids)
 
-    def test_beat_plan_to_foundation_long_work_stewardship(self) -> None:
-        beat_plan = load("tests/fixtures/story/beat-plan.json")
-        stewardship = load("tests/fixtures/long-work/foundation-stewardship-record.json")
+    def test_compact_and_structured_workflow_scale_routing_skips_long_work(self) -> None:
+        compact_or_structured_paths = [
+            "tests/fixtures/story/beat-plan.json",
+            "tests/fixtures/text-to-image/single-image-rehearsal/beat-plan.json",
+            "tests/fixtures/text-to-image/single-image-rehearsal/image-medium-plan.json",
+            "tests/fixtures/text-to-image/image-medium-plan.json",
+            "tests/fixtures/text-to-suno/sound-medium-plan.json",
+            "tests/fixtures/text-journey/text-medium-plan.json",
+            "tests/fixtures/text-journey/article-rehearsal/beat-plan.json",
+            "tests/fixtures/text-journey/article-rehearsal/text-medium-plan.json",
+            "tests/fixtures/text-journey/op-ed-rehearsal/beat-plan.json",
+            "tests/fixtures/text-journey/op-ed-rehearsal/text-medium-plan.json",
+            "tests/fixtures/story/freytag-rehearsal/beat-plan.json",
+            "tests/fixtures/story/hero-journey-rehearsal/beat-plan.json",
+            "tests/fixtures/story/kishotenketsu-rehearsal/beat-plan.json",
+            "tests/fixtures/story/save-the-cat-rehearsal/beat-plan.json",
+            "tests/fixtures/story/three-act-rehearsal/beat-plan.json",
+            "tests/fixtures/story/fichtean-quiet-crisis-rehearsal/beat-plan.json",
+        ]
 
+        for path in compact_or_structured_paths:
+            record = load(path)
+            with self.subTest(path=path):
+                self.assertIn(
+                    record["workflow_scale_routing"]["scale_level"],
+                    {"compact_artifact", "structured_single_artifact"},
+                )
+                self.assert_long_work_support(record, should_activate=False, label=path)
+
+    def test_cumulative_workflow_scale_routing_activates_long_work(self) -> None:
+        cumulative_paths = [
+            "tests/fixtures/text-to-image/three-image-series-rehearsal/beat-plan.json",
+            "tests/fixtures/text-to-image/three-image-series-rehearsal/image-medium-plan.json",
+        ]
+
+        for path in cumulative_paths:
+            record = load(path)
+            with self.subTest(path=path):
+                self.assertEqual(record["workflow_scale_routing"]["scale_level"], "cumulative_work")
+                self.assert_long_work_support(record, should_activate=True, label=path)
+
+    def test_full_long_form_routing_requires_long_work_support(self) -> None:
+        routing_record = {
+            "workflow_scale_routing": {
+                "scale_level": "full_long_form_project",
+                "activated_supports": [
+                    "core_pipeline",
+                    LONG_WORK_SUPPORT,
+                    "long_work_parts",
+                    "long_work_readiness",
+                    "long_work_checkpoints",
+                ],
+                "skipped_supports": [
+                    "collection_coherence_review",
+                ],
+            }
+        }
+
+        self.assert_long_work_support(
+            routing_record,
+            should_activate=True,
+            label="purpose-built full_long_form_project routing",
+        )
+
+    def test_beat_plan_to_foundation_long_work_stewardship(self) -> None:
+        stewardship = load("tests/fixtures/long-work/foundation-stewardship-record.json")
+        beat_plan = {
+            "beat_plan_id": stewardship["beat_plan_id"],
+            "source_id": stewardship["source_id"],
+            "artist_meaning_id": stewardship["artist_meaning_id"],
+            "workflow_scale_routing": {
+                "scale_level": "cumulative_work",
+                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
+                "skipped_supports": ["collection_coherence_review"],
+            },
+        }
+
+        self.assert_long_work_support(
+            beat_plan,
+            should_activate=True,
+            label="purpose-built foundation source routing",
+        )
         self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
         self.assertEqual(stewardship["source_id"], beat_plan["source_id"])
         self.assertEqual(stewardship["artist_meaning_id"], beat_plan["artist_meaning_id"])
@@ -417,10 +517,31 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(stewardship["checkpoints"][0]["checkpoint_type"], "foundation")
 
     def test_beat_plan_to_image_series_long_work_stewardship(self) -> None:
-        beat_plan = load("tests/fixtures/story/beat-plan.json")
-        image_plan = load("tests/fixtures/text-to-image/image-medium-plan.json")
+        beat_plan = {
+            "beat_plan_id": "bp_door_left_lit",
+            "source_id": "src_door_left_lit",
+            "artist_meaning_id": "meaning_door_left_lit",
+            "workflow_scale_routing": {
+                "scale_level": "cumulative_work",
+                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
+                "skipped_supports": ["collection_coherence_review"],
+            },
+            "beats": [{"beat_id": "beat_threshold_001"}],
+            "key_emotional_movements": [{"movement_id": "kem_threshold_001"}],
+        }
+        image_plan = {
+            "image_medium_plan_id": "imp_door_left_lit",
+            "workflow_scale_routing": {
+                "scale_level": "cumulative_work",
+                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
+                "skipped_supports": ["collection_coherence_review"],
+            },
+            "image_roles": [{"image_role_id": "imgrole_threshold_001"}],
+        }
         stewardship = load("tests/fixtures/long-work/image-series-stewardship-record.json")
 
+        self.assert_long_work_support(beat_plan, should_activate=True, label="image series beat plan")
+        self.assert_long_work_support(image_plan, should_activate=True, label="image series medium plan")
         self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
         self.assertEqual(stewardship["source_id"], beat_plan["source_id"])
         self.assertEqual(stewardship["artist_meaning_id"], beat_plan["artist_meaning_id"])
@@ -442,10 +563,33 @@ class PipelineTransitionTests(unittest.TestCase):
             self.assertNotIn("amplitude_profile", part)
 
     def test_text_medium_plan_to_long_work_stewardship(self) -> None:
-        beat_plan = load("tests/fixtures/story/beat-plan.json")
-        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+        beat_plan = {
+            "beat_plan_id": "bp_door_left_lit",
+            "workflow_scale_routing": {
+                "scale_level": "cumulative_work",
+                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
+                "skipped_supports": ["collection_coherence_review"],
+            },
+        }
+        text_plan = {
+            "text_medium_plan_id": "tmp_door_left_lit",
+            "workflow_scale_routing": {
+                "scale_level": "cumulative_work",
+                "activated_supports": ["core_pipeline", LONG_WORK_SUPPORT],
+                "skipped_supports": ["collection_coherence_review"],
+            },
+            "structure_plan": {
+                "sections": [
+                    {"section_id": "txtsec_key_001"},
+                    {"section_id": "txtsec_light_001"},
+                    {"section_id": "txtsec_stop_001"},
+                ]
+            },
+        }
         stewardship = load("tests/fixtures/long-work/text-stewardship-record.json")
 
+        self.assert_long_work_support(beat_plan, should_activate=True, label="long text beat plan")
+        self.assert_long_work_support(text_plan, should_activate=True, label="long text medium plan")
         self.assertEqual(stewardship["beat_plan_id"], beat_plan["beat_plan_id"])
         self.assertEqual(stewardship["medium_plan_id"], text_plan["text_medium_plan_id"])
         self.assertEqual(stewardship["target_media_type"], "text")

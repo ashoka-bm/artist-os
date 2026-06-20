@@ -162,6 +162,10 @@ def relative_library_path(path: Path, library_root: Path) -> str:
     try:
         return str(path.relative_to(library_root))
     except ValueError:
+        pass
+    try:
+        return str(path.resolve().relative_to(library_root.resolve()))
+    except ValueError:
         return str(path)
 
 
@@ -236,8 +240,14 @@ def feedback_log_path_for(library_root: Path, manifest: dict, project_id: str) -
     feedback_log_path = feedback_state.get("feedback_log_path") or f"projects/{project_id}/feedback-log.jsonl"
     path = Path(feedback_log_path)
     if path.is_absolute():
-        return path
-    return library_root / path
+        raise SystemExit("feedback_log_path must be relative to the Workspace Library")
+    library_root_resolved = library_root.resolve()
+    resolved_path = (library_root / path).resolve()
+    try:
+        resolved_path.relative_to(library_root_resolved)
+    except ValueError as exc:
+        raise SystemExit("feedback_log_path must stay within the Workspace Library") from exc
+    return resolved_path
 
 
 def mark_feedback_entries_reviewed(
@@ -694,6 +704,12 @@ def add_learning(args: argparse.Namespace) -> None:
     validate_id(args.learning_id, LEARNING_ID_PATTERN, "learning_id")
     if len(args.learning_rule) > 600:
         raise SystemExit("learning_rule must be 600 characters or fewer")
+    evidence_ref_values = args.evidence_ref or []
+    if not evidence_ref_values:
+        raise SystemExit("add-learning requires at least one --evidence-ref")
+    if args.evidence_type == "feedback_entry":
+        for evidence_ref in evidence_ref_values:
+            validate_id(evidence_ref, FEEDBACK_ID_PATTERN, "evidence_ref")
     library_root = library_root_for(args)
     manifest_path, manifest = load_project_manifest(library_root, args.project_id)
     now = utc_now()
@@ -706,7 +722,7 @@ def add_learning(args: argparse.Namespace) -> None:
             "ref": evidence_ref,
             "summary": args.evidence_summary or "Recorded as learning evidence.",
         }
-        for evidence_ref in (args.evidence_ref or [])
+        for evidence_ref in evidence_ref_values
     ]
     record = {
         "learning_id": args.learning_id,
@@ -726,10 +742,10 @@ def add_learning(args: argparse.Namespace) -> None:
     learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
     feedback_state = feedback_state_for(manifest, args.project_id)
-    if args.mark_review_complete:
+    if args.mark_review_complete and args.evidence_type == "feedback_entry":
         all_feedback_reviewed = mark_feedback_entries_reviewed(
             feedback_log_path_for(library_root, manifest, args.project_id),
-            args.evidence_ref,
+            evidence_ref_values,
             "applied",
         )
         feedback_state["learning_review_status"] = "complete" if all_feedback_reviewed else "pending"
@@ -895,6 +911,69 @@ def write_project_pointer(pointer_path: Path, pointer: dict, overwrite: bool) ->
     pointer_path.write_text(json.dumps(pointer, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def visible_project_ref(path: Path, wondermint_root: Path | None, artist_library_root: Path) -> str:
+    if wondermint_root:
+        try:
+            return str(path.relative_to(wondermint_root))
+        except ValueError:
+            pass
+    try:
+        return str(path.relative_to(artist_library_root.parent.parent))
+    except ValueError:
+        return str(path)
+
+
+def update_visible_project_manifest(
+    args: argparse.Namespace,
+    artist_library_root: Path,
+    project_dir: Path,
+    pointer_path: Path,
+    readme_path: Path,
+) -> bool:
+    has_workspace_root = (
+        getattr(args, "library_root", None)
+        or getattr(args, "wondermint_root", None)
+        or os.environ.get("ARTIST_OS_LIBRARY_ROOT")
+        or os.environ.get("WONDERMINT_ROOT")
+    )
+    if not has_workspace_root:
+        return False
+
+    library_root = library_root_for(args)
+    manifest_path = project_manifest_path(library_root, args.project_id)
+    if not manifest_path.exists():
+        return False
+
+    now = utc_now()
+    manifest = read_json(manifest_path)
+    project_id = manifest.get("project_id")
+    if project_id != args.project_id:
+        raise SystemExit(f"project manifest id mismatch: expected {args.project_id}, found {project_id}")
+
+    wondermint_root = Path(args.wondermint_root) if getattr(args, "wondermint_root", None) else None
+    current_pointer_state, pointer_project_id = pointer_state(pointer_path, args.project_id)
+    manifest["artist_library"] = {
+        "project_dir": visible_project_ref(project_dir, wondermint_root, artist_library_root),
+        "project_pointer_path": visible_project_ref(pointer_path, wondermint_root, artist_library_root),
+        "project_pointer_state": current_pointer_state,
+        "project_pointer_project_id": pointer_project_id,
+        "visible_state": "present" if current_pointer_state == "present" else "visible_missing",
+        "last_checked_at": now,
+        "user_facing_files": [
+            {
+                "path": visible_project_ref(readme_path, wondermint_root, artist_library_root),
+                "file_role": "readable_summary",
+                "status": "current" if readme_path.exists() else "missing",
+                "updated_at": now,
+            }
+        ],
+    }
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    sync_db(args)
+    return True
+
+
 def link_visible_project(args: argparse.Namespace) -> None:
     artist_library_root = artist_library_root_for(args)
     if not artist_library_root:
@@ -914,6 +993,7 @@ def link_visible_project(args: argparse.Namespace) -> None:
             encoding="utf-8",
         )
 
+    update_visible_project_manifest(args, artist_library_root, project_dir, pointer_path, readme_path)
     print(f"linked Artist Library project folder at {project_dir}")
     print(f"wrote Project Pointer at {pointer_path}")
 
@@ -1017,7 +1097,7 @@ def parser() -> argparse.ArgumentParser:
     learning.add_argument("--learning-rule", required=True)
     learning.add_argument("--scope", default=None)
     learning.add_argument("--evidence-type", default="feedback_entry", choices=LEARNING_EVIDENCE_TYPES)
-    learning.add_argument("--evidence-ref", action="append")
+    learning.add_argument("--evidence-ref", action="append", required=True)
     learning.add_argument("--evidence-summary", default=None)
     learning.add_argument("--occurrence-count", type=int, default=1)
     learning.add_argument("--promotion-reason", default=None)
@@ -1080,7 +1160,7 @@ def parser() -> argparse.ArgumentParser:
 
 
 def db_path_for(args: argparse.Namespace) -> Path:
-    if args.db:
+    if getattr(args, "db", None):
         return Path(args.db)
     return library_root_for(args) / "artist-os.sqlite"
 
