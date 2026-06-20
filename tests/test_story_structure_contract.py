@@ -96,6 +96,14 @@ class StoryStructureContractTests(unittest.TestCase):
                 "entry_id": "freytag_dramatic_arc",
                 "roles": {"grounding", "build", "reversal", "consequence", "residue"},
             },
+            "tests/fixtures/story/save-the-cat-rehearsal/beat-plan.json": {
+                "entry_id": "save_the_cat_beat_sheet",
+                "roles": {"invitation", "threshold", "reversal", "surrender", "closure"},
+            },
+            "tests/fixtures/story/fichtean-quiet-crisis-rehearsal/beat-plan.json": {
+                "entry_id": "fichtean_curve",
+                "roles": {"rupture", "reveal", "reversal", "consequence", "residue"},
+            },
         }
 
         for fixture_path, expectation in fixture_expectations.items():

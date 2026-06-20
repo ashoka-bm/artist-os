@@ -58,6 +58,8 @@ The Story Structure Library now includes the original core entries plus six addi
 
 Focused Story Structure rehearsals for those six new entries passed without schema changes. The main shared finding was that Story Structure craft labels must be mapped into schema-valid Beat Plan `beat_role` values rather than copied literally; `fichtean_curve` also needs quiet crisis pressure to remain valid, and `frame_story_nested_return` needs object/archive testimony to change the return frame before it counts as nested material.
 
+Promoted representative fixtures for `save_the_cat_beat_sheet` and `fichtean_curve` to cover granular commercial beat mapping and quiet crisis pressure without adding six redundant Beat Plan fixtures.
+
 ### Gates And Reviews
 
 Added:
