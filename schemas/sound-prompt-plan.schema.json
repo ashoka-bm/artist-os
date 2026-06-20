@@ -320,9 +320,11 @@
   "allOf": [
     {
       "if": {
+        "required": ["vocal_lyric_policy"],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
+            "required": ["lyrics_mode"],
             "properties": {
               "lyrics_mode": {
                 "type": "string",
@@ -359,9 +361,11 @@
     },
     {
       "if": {
+        "required": ["vocal_lyric_policy"],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
+            "required": ["lyrics_mode"],
             "properties": {
               "lyrics_mode": { "type": "string", "const": "instrumental" }
             }
@@ -393,9 +397,11 @@
     },
     {
       "if": {
+        "required": ["vocal_lyric_policy"],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
+            "required": ["lyrics_mode"],
             "properties": {
               "lyrics_mode": { "type": "string", "const": "phonetic_vocals" }
             }

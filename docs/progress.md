@@ -6,6 +6,8 @@ This document records what has been created, what is transitional, and what come
 
 Artist OS has established the core typed transformation pipeline for the current image and Suno dry-run slices. The current refinement pass adds an emotional-primacy contract on top of that pipeline: records must now name the intended feeling, preserve the artist's authority through a Decision Interview, and carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact.
 
+Current implementation priority is dry-run output quality: generate the right briefs, plans, prompts, drafts, reviews, and records at the highest possible quality before adding external generation. API setup, provider credentials, provider adapters, and actual external image or Suno generation are intentionally deferred until the dry-run contracts and output quality are strong enough to support them.
+
 ```text
 Step Input Record
   -> Agent / Skill Transformation

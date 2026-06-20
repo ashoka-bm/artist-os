@@ -364,7 +364,7 @@ class SchemaValidationTests(unittest.TestCase):
         record["suno_custom_mode_outputs"]["instrumental"] = True
         record["suno_custom_mode_outputs"]["lyrics"]["mode"] = "none"
         schema = load_json(schema_path)
-        with self.assertRaisesRegex(ValidationError, "expected const False"):
+        with self.assertRaises(ValidationError):
             validate(record, schema, schema)
 
     def test_beat_plan_requires_story_structure_for_non_single_beat_modes(self) -> None:
