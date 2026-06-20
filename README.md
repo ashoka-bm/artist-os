@@ -1,5 +1,7 @@
 # Artist OS
 
+[![CI](https://github.com/ashoka-bm/artist-os/actions/workflows/ci.yml/badge.svg)](https://github.com/ashoka-bm/artist-os/actions/workflows/ci.yml)
+
 Artist OS is a Codex skill bundle for transforming artist-provided text into structured creative prompt plans while preserving the artist's meaning, intended feeling, emotional arc, and provenance.
 
 The current dry-run workflows are:
