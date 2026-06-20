@@ -90,11 +90,6 @@ Read the smallest file that answers the planning question:
 2. Read [story/README.md](story/README.md) or [cultural-format/README.md](cultural-format/README.md) to choose an entry.
 3. Open only the selected entry file.
 
-The older aggregate entry points remain as compatibility indexes:
-
-- [Story Structures](story-structures.md)
-- [Cultural Format Structures](cultural-format-structures.md)
-
 Current Story Structure entries:
 
 - [`three_act_structure`](story/three-act-structure.md)

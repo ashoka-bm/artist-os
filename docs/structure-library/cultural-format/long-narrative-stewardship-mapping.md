@@ -23,12 +23,13 @@ Long-Work Stewardship remains the continuity authority. These Novel Craft mappin
 - Novel Craft chapter briefs map to Text Medium Plan chapter/section jobs plus Long-Work Parts.
 - Novel Craft character sheets, relationship maps, world rules, subplots, and open threads are Stewardship Views unless the user explicitly asks for a delivered document in that format.
 - No view may silently change continuity. Changes discovered during drafting remain proposed until the required approval path accepts them.
-- View-first entries may display status, risks, dependencies, and proposed changes, but they may not mutate Long-Work Stewardship, Beat Plan, Medium Plan, Output Records, Review Records, or Gate Decisions.
-- View-first entries may display projected status, risks, and open questions, but they may not mutate Long-Work Stewardship directly.
+- View-first entries may display projected status, risks, dependencies, open questions, and proposed changes, but they may not mutate Long-Work Stewardship, Beat Plan, Medium Plan, Output Records, Review Records, or Gate Decisions.
 
-## Rename / View-Only Flags
+## Internal View Names
 
-- `character_brief` may be better as `character_continuity_view` when used internally. Keep `character_brief` only for a deliverable document.
-- `relationship_arc` may be better as `relationship_continuity_view` when used internally.
-- `subplot_tracker`, `open_thread_tracker`, and `plot_tracker` should be treated as Stewardship Views by default, not ordinary CFS entries.
-- `scene_card` may be better named `scene_brief` if the library wants consistent "brief" language with `chapter`.
+When these entries are used internally as Stewardship Views rather than delivered as documents, use the view name; reserve the CFS entry name for a deliverable document. This matches the per-entry "Authority mode" notes in the cultural-format library.
+
+- `character_brief` → `character_continuity_view` internally; keep `character_brief` for a delivered document.
+- `relationship_arc` → `relationship_continuity_view` internally; keep `relationship_arc` for a delivered document.
+- `scene_card` → `scene_brief` or `scene_stewardship_view` internally; keep `scene_card` for a delivered document.
+- `subplot_tracker`, `open_thread_tracker`, and `plot_tracker` are Stewardship Views by default, not ordinary CFS entries.

@@ -39,12 +39,8 @@ class StoryStructureContractTests(unittest.TestCase):
             "docs/structure-library/story/README.md"
         )
         top_level_links = self._story_entry_links("docs/structure-library/README.md")
-        compatibility_links = self._story_entry_links(
-            "docs/structure-library/story-structures.md"
-        )
 
         self.assertSetEqual(story_readme_links, top_level_links)
-        self.assertSetEqual(story_readme_links, compatibility_links)
 
     def test_story_structure_craft_roles_map_to_schema_beat_roles(self) -> None:
         text = self._read("docs/structure-library/story/README.md")
