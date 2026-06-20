@@ -8,12 +8,16 @@ import json
 import os
 import re
 import sqlite3
+import sys
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "tests"))
+
+from json_schema_validator import ValidationError, load_json, validate
 DEFAULT_LIBRARY_ROOT = REPO_ROOT / "workspace-library" / "artist-os"
 SCHEMA_PATH = REPO_ROOT / "schemas" / "artist-os-library.sql"
 PROJECT_SUBDIRS = [
@@ -662,6 +666,19 @@ def sync_db(args: argparse.Namespace) -> None:
     print(f"synced {len(manifests)} project(s) into {db_path}")
 
 
+def validate_record(record: dict, schema_name: str) -> None:
+    """Validate a record against its schema before persisting it.
+
+    Refuses to write malformed records so the durable store never
+    accumulates data that violates the repo's schemas.
+    """
+    schema = load_json(REPO_ROOT / "schemas" / schema_name)
+    try:
+        validate(record, schema, schema)
+    except ValidationError as exc:
+        raise SystemExit(f"refusing to write malformed {schema_name}: {exc}")
+
+
 def add_feedback(args: argparse.Namespace) -> None:
     library_root = library_root_for(args)
     manifest_path, manifest = load_project_manifest(library_root, args.project_id)
@@ -686,6 +703,7 @@ def add_feedback(args: argparse.Namespace) -> None:
         "learning_review_status": "pending",
         "notes": args.notes,
     }
+    validate_record(entry, "project-feedback-log-entry.schema.json")
     with feedback_log_path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry, sort_keys=True) + "\n")
 
@@ -739,6 +757,7 @@ def add_learning(args: argparse.Namespace) -> None:
         "created_at": now,
         "updated_at": now,
     }
+    validate_record(record, "learning-record.schema.json")
     learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
     feedback_state = feedback_state_for(manifest, args.project_id)
@@ -795,6 +814,7 @@ def add_performance_signal(args: argparse.Namespace) -> None:
         "evidence_weight": "equal_to_artist_feedback",
         "notes": args.notes,
     }
+    validate_record(record, "performance-signal.schema.json")
     signal_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
 
     feedback_state = feedback_state_for(manifest, args.project_id)
