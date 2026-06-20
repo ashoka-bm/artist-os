@@ -212,7 +212,7 @@ Style Direction defines the artistic language used to express the Creative Brief
 Artist OS moves through four artist-facing stages: Interpretation, Visualization/Symbolic, Style, and Detail. Do not advance while the current stage still has an unanswered choice unless the artist explicitly says to proceed unconfirmed.
 
 - **Interpretation complete**: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
-- **Visualization/Symbolic complete**: the artist has selected or combined a symbolic representation, selected single image / emotional arc / multi-image presentation, and accepted, declined, or requested visualization.
+- **Visualization/Symbolic complete**: the artist has selected or combined a symbolic representation, selected single image / compressed arc / image series, and accepted, declined, or requested visualization.
 - **Style complete**: the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
 - **Detail complete**: the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 
@@ -220,7 +220,7 @@ Before choosing Style Direction by default, choose Symbology Direction: what the
 
 Explore it with a Symbology Board, built as a Comparison Board (see "Visual Gate Boards" below): one single image, a 2x3 grid of six cells, where every cell is plain black-and-white line art of the subject only — no color, shading, style, or background — so style does not obscure the symbolic choice. The six cells compare distinct symbolic representations such as figure, object, landscape, ritual scene, room, threshold, vessel, or abstraction. Wait for the artist to select, combine, reject, or revise options before locking Symbology Direction unless they explicitly choose to proceed unconfirmed.
 
-At the gate, show only six concise symbolic representations and ask: "Which one would you like? Should this become a single image, an emotional arc, or a multi-image presentation? Would you like it visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
+At the gate, show only six concise symbolic representations and ask: "Which one would you like? Should this become a single image, a compressed arc, or an image series? Would you like it visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
 
 ### Visual Gate Boards
 

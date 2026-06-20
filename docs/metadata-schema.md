@@ -204,7 +204,7 @@ Required fields:
 - `rationale`
 - `avoid`
 
-When unresolved, show six concise symbolic options and ask which one the artist wants. Also ask whether the work should become a single image, an emotional arc, or a multi-image presentation, plus whether they want it visualized. Keep the full board prompt internal unless the artist explicitly asks for an image-generator prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
+When unresolved, show six concise symbolic options and ask which one the artist wants. Also ask whether the work should become a single image, a compressed arc, or an image series, plus whether they want it visualized. Keep the full board prompt internal unless the artist explicitly asks for an image-generator prompt. Wait for artist selection, combination, rejection, or revision before confirming Symbology Direction.
 
 ## Style Direction
 
@@ -271,7 +271,7 @@ The default First Slice has three visual gates. Each gate is a **Comparison Boar
 Stage completion criteria:
 
 - Interpretation is complete when Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
-- Visualization/Symbolic is complete when the artist has selected or combined a symbolic representation, chosen single image / emotional arc / multi-image presentation, and accepted, declined, or requested visualization.
+- Visualization/Symbolic is complete when the artist has selected or combined a symbolic representation, chosen single image / compressed arc / image series, and accepted, declined, or requested visualization.
 - Style is complete when the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
 - Detail is complete when the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 

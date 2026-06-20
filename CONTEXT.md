@@ -285,7 +285,7 @@ A Symbology Direction where absence itself is the symbolic representation: an om
 _Avoid_: Filling in missing subjects just because the medium can show them
 
 **Symbology Gate**:
-The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented and whether the work should become a single image, emotional arc, or multi-image presentation.
+The first visual choice gate after Artist Meaning, where the artist decides how the work should be symbolically represented and whether the work should become a single image, compressed arc, or image series.
 _Avoid_: Hiding symbolic representation inside final prompt variants
 
 **Symbology Board**:
@@ -916,7 +916,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Art Critic Review** may propose a default **Style Adaptation** and only ask for explicit approval when it materially changes the named style.
 - **Style Interview** first asks whether the artist has a specific visual vision or wants to explore what art style to use when the artist has not named a specific style.
 - **Symbology Gate** comes before **Style Gate** by default because symbolic representation is closer to **Artist Meaning** than art style.
-- **Symbology Board** compares six concise symbolic options, asks for artist selection, and asks whether the work should become a single image, emotional arc, or multi-image presentation before style is locked.
+- **Symbology Board** compares six concise symbolic options, asks for artist selection, and asks whether the work should become a single image, compressed arc, or image series before style is locked.
 - For visual media, **Medium Output Shape Recommendation** should happen after **Symbology Direction** and before **Style Direction** so symbolic representation can inform compression or expansion before visual style hardens.
 - For text, **Text Medium Plan** should produce **Medium Output Shape Recommendation** before locking **Primary Text Form** so story movement drives form choice.
 - For sound, **Medium Output Shape Recommendation** chooses the sound form family and scale, while **Arrangement / Form Direction**, **Song Structure**, **Section Function**, and **Section Tension Map** own the detailed time structure.

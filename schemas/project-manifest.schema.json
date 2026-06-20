@@ -96,7 +96,7 @@
         "selected_symbology": { "type": "string" },
         "presentation_mode": {
           "type": "string",
-          "enum": ["single_image", "emotional_arc", "multi_image", "unselected"]
+          "enum": ["single_image", "compressed_arc", "image_series", "unselected"]
         },
         "selected_style": { "type": "string" },
         "selected_detail_mode": {
