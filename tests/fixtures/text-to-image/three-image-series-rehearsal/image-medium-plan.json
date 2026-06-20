@@ -6,6 +6,31 @@
   "beat_plan_id": "bp_three_image_series",
   "target_media_type": "image",
   "story_mode": "sequence",
+  "workflow_scale_routing": {
+    "scale_level": "cumulative_work",
+    "rationale": "The accepted image series creates dependent image roles that need stewardship, readiness, and checkpoint support.",
+    "trigger_signals": [
+      "artist_requested_sequence_or_series",
+      "dependent_parts_needed"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "skipped_supports": [
+      "extraction_verification",
+      "synthesis_checkpoints",
+      "publishing_or_completion_audit"
+    ],
+    "reroute_triggers": [
+      "Artist reduces scope to one compact artifact, or durable canon needs upgrade the project to full long-form."
+    ]
+  },
   "symbology_direction": {
     "selection_method": "agent_recommended",
     "primary_symbolic_representation": "a threshold scene where a still figure, lit doorway, and fragile key carry the grief of return without resolution",
@@ -101,7 +126,7 @@
         "composition_strategy": "Hold the room wide and sparse so absence becomes the subject.",
         "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
         "avoid": [
-            "treating this as a special three-image output class",
+          "treating this as a special three-image output class",
           "repeating the same pose with surface variation only"
         ]
       },
@@ -154,7 +179,7 @@
         "composition_strategy": "Place the figure at the doorway with the key visible but unused.",
         "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
         "avoid": [
-            "treating this as a special three-image output class",
+          "treating this as a special three-image output class",
           "repeating the same pose with surface variation only"
         ]
       },
@@ -207,7 +232,7 @@
         "composition_strategy": "Return to the threshold after the figure has left the frame or nearly disappeared.",
         "emotional_rationale": "The shot design changes the audience relationship to the threshold across the image series.",
         "avoid": [
-            "treating this as a special three-image output class",
+          "treating this as a special three-image output class",
           "repeating the same pose with surface variation only"
         ]
       },

@@ -4,6 +4,27 @@
   "artist_meaning_id": "meaning_erased_route_hero_journey",
   "transformation_brief_id": "tb_erased_route_hero_journey",
   "story_mode": "arc",
+  "workflow_scale_routing": {
+    "scale_level": "structured_single_artifact",
+    "rationale": "The approved Beat Plan has multiple beats, but the movement can be realized as one structured artifact unless a medium plan accepts cumulative expansion.",
+    "trigger_signals": [
+      "internal_sections_or_movements_needed",
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints"
+    ],
+    "reroute_triggers": [
+      "Artist requests dependent parts, a sequence or series, durable canon, or long-form drafting across sessions."
+    ]
+  },
   "story_gate_status": "approved",
   "story_structure": {
     "library_entry_id": "hero_journey",

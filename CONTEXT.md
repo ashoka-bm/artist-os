@@ -616,6 +616,66 @@ _Avoid_: Requested shape, recommended shape
 A surfaced conflict between the artist-requested output shape and the Medium Plan's story-preserving Medium Output Shape Recommendation.
 _Avoid_: Silent override, silently obeying a shape that weakens Artist Meaning
 
+**Workflow Scale Routing**:
+The internal Artist OS routing decision that determines which planning, stewardship, review, and continuity supports are needed for the scale of a work. It keeps compact outputs from carrying long-work overhead while activating Long-Work Stewardship, Stewardship Views, checkpoints, and continuity helpers when a work becomes cumulative or long-form.
+_Avoid_: Length Gate, user-facing gate, word-count trigger, asset-count trigger
+
+**Workflow Scale Level**:
+One of the internal routing levels used by Workflow Scale Routing: Compact Artifact, Structured Single Artifact, Cumulative Work, or Full Long-Form Project. Schema values are `compact_artifact`, `structured_single_artifact`, `cumulative_work`, and `full_long_form_project`.
+_Avoid_: Size score, quality tier, fixed word-count band
+
+**Project-Level Workflow Scale Routing**:
+The first Workflow Scale Routing pass, run after Story Approval, that decides the scale of the Artist OS Project and whether durable canon management or Cumulative Work support is needed before medium-specific planning.
+_Avoid_: Medium Output Shape Recommendation, text form choice
+
+**Medium-Level Workflow Scale Routing**:
+The medium-specific Workflow Scale Routing pass inside a Medium Plan. It decides which scale supports that output journey needs, because one project may contain both compact outputs and cumulative outputs.
+_Avoid_: Replacing project-level routing, assuming every medium inherits the largest project scale
+
+**Workflow Scale Routing Timing**:
+Workflow Scale Routing may be estimated during Orientation, but the first authoritative Project-Level Workflow Scale Routing pass happens after Story Approval. Medium-Level Workflow Scale Routing happens inside each Medium Plan. If the artist changes scope, Workflow Scale Routing is rerun and later helpers are activated or skipped according to the revised scale.
+_Avoid_: One-time guess before the Beat Plan, user-facing approval gate
+
+**Workflow Scale Reroute**:
+A revised Workflow Scale Routing decision caused by artist scope change or evidence that the current scale support is too light or too heavy. Upward reroutes may happen when the artist expands scope or dependent parts/durable canon needs appear. Downward reroutes after long-work state exists require explicit acknowledgement; existing stewardship or planning records should be preserved or superseded, not silently deleted.
+_Avoid_: Silent downgrade, deleting stewardship state
+
+**Workflow Scale Routing Field**:
+The compact schema field used to persist Workflow Scale Routing on existing pipeline records. It contains `scale_level`, `rationale`, `trigger_signals`, `activated_supports`, `skipped_supports`, and `reroute_triggers`. Project-Level Workflow Scale Routing belongs on the Beat Plan. Medium-Level Workflow Scale Routing belongs on each Medium Plan. Artist OS does not use a standalone Workflow Scale Routing Record unless future projects prove routing needs its own lifecycle.
+_Avoid_: Standalone routing record by default, chat-only routing decision
+
+**Workflow Scale Routing Schema Adoption**:
+Workflow Scale Routing should be schema-backed on Beat Plan and Medium Plans. Beat Plan records carry project-level routing. Text Medium Plan, Image Medium Plan, and Sound Medium Plan records all carry required medium-level routing. Adoption should reuse the same compact field shape rather than creating a standalone record.
+_Avoid_: Docs-only routing after field shape is settled
+
+**Compact Artifact**:
+A work small enough for one output artifact to hold the whole approved movement without long-work continuity machinery, such as a single image, short poem, flash story, one compact song, or compressed visual arc.
+_Avoid_: Single beat only, simple work
+
+**Structured Single Artifact**:
+One output artifact with internal sections, movements, scenes, arguments, or arrangement parts, but without dependent outputs across drafting or generation sessions.
+_Avoid_: Cumulative Work, Long-Work Stewardship by default
+
+**Full Long-Form Project**:
+A large Cumulative Work with durable canon needs, such as a novel, novella, feature film, serialized fiction project, or comparable long narrative project. The upgrade trigger is durable canon management, not sheer length: recurring character states, world rules, timelines, subplots, open threads, voice/style continuity, extraction and verification, or whole-work synthesis. It may require specialized long-form supports such as plot trackers, character sheets, world-building records, chapter or scene briefs, style guides, extraction and verification, synthesis checkpoints, and publishing or completion audits.
+_Avoid_: Any multi-beat arc, any long text, any image series
+
+**Workflow Scale Support Bundle**:
+The default set of planning, stewardship, review, continuity, and long-form helper tools activated for a Workflow Scale Level. Compact Artifacts use the core Artist OS pipeline without Long-Work Stewardship. Structured Single Artifacts add medium-owned section, movement, scene, argument, or arrangement planning. Cumulative Work adds Long-Work Stewardship, Long-Work Parts, readiness, checkpoints when needed, and Stewardship Views when useful. Full Long-Form Projects add durable canon tools such as plot trackers, character sheets, world-building records, chapter or scene briefs, style guides, extraction and verification, synthesis checkpoints, and publishing or completion audits.
+_Avoid_: Enabling every helper for every project, skipping scale-specific support
+
+**Workflow Scale Support**:
+A named support module that Workflow Scale Routing may activate or skip. Initial schema values are `core_pipeline`, `medium_section_plan`, `cultural_format_structure`, `long_work_stewardship`, `long_work_parts`, `long_work_readiness`, `long_work_checkpoints`, `stewardship_views`, `plot_tracker`, `character_sheets`, `world_building`, `chapter_or_scene_briefs`, `style_guide`, `extraction_verification`, `synthesis_checkpoints`, `publishing_or_completion_audit`, and `collection_coherence_review`.
+_Avoid_: Freeform helper names, duplicate support labels
+
+**Workflow Scale Trigger Signal**:
+A named reason that caused Workflow Scale Routing to choose a scale level. Initial schema values are `artist_requested_compact_output`, `artist_requested_long_form`, `artist_requested_sequence_or_series`, `single_artifact_can_hold_movement`, `internal_sections_or_movements_needed`, `dependent_parts_needed`, `durable_canon_needed`, `recurring_characters_needed`, `world_rules_or_timeline_needed`, `subplots_or_open_threads_needed`, `voice_or_style_continuity_needed`, `extraction_verification_needed`, `synthesis_or_batch_generation_needed`, `publication_or_completion_audit_needed`, and `collection_without_sequence`.
+_Avoid_: Word-count-only trigger, asset-count-only trigger
+
+**Planning View**:
+A lightweight, non-authoritative helper view used to plan or explain one artifact, such as temporary character notes, world notes, act outline, chapter sketch, plot tracker, or treatment support. A Planning View does not create Long-Work Stewardship unless the project also creates dependent parts that need cumulative execution tracking.
+_Avoid_: Long-Work Stewardship, authoritative canon record
+
 **Prompt Plan**:
 The generation-facing prompts and constraints for a specific model or medium.
 _Avoid_: Creative Brief, Transformation Plan

@@ -65,6 +65,7 @@
     "beat_plan_id",
     "target_media_type",
     "story_mode",
+    "workflow_scale_routing",
     "symbology_direction",
     "presentation_mode",
     "style_direction",
@@ -83,6 +84,7 @@
     "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
     "target_media_type": { "type": "string", "const": "image" },
     "story_mode": { "$ref": "#/$defs/story_mode" },
+    "workflow_scale_routing": { "$ref": "#/$defs/workflow_scale_routing" },
     "symbology_direction": { "$ref": "#/$defs/symbology_direction" },
     "medium_output_shape_recommendation": { "$ref": "#/$defs/medium_output_shape_recommendation" },
     "presentation_mode": {
@@ -173,6 +175,79 @@
     "image_output_shape": {
       "type": "string",
       "enum": ["single_image", "compressed_arc", "image_series"]
+    },
+    "workflow_scale_level": {
+      "type": "string",
+      "enum": ["compact_artifact", "structured_single_artifact", "cumulative_work", "full_long_form_project"]
+    },
+    "workflow_scale_support": {
+      "type": "string",
+      "enum": [
+        "core_pipeline",
+        "medium_section_plan",
+        "cultural_format_structure",
+        "long_work_stewardship",
+        "long_work_parts",
+        "long_work_readiness",
+        "long_work_checkpoints",
+        "stewardship_views",
+        "plot_tracker",
+        "character_sheets",
+        "world_building",
+        "chapter_or_scene_briefs",
+        "style_guide",
+        "extraction_verification",
+        "synthesis_checkpoints",
+        "publishing_or_completion_audit",
+        "collection_coherence_review"
+      ]
+    },
+    "workflow_scale_trigger_signal": {
+      "type": "string",
+      "enum": [
+        "artist_requested_compact_output",
+        "artist_requested_long_form",
+        "artist_requested_sequence_or_series",
+        "single_artifact_can_hold_movement",
+        "internal_sections_or_movements_needed",
+        "dependent_parts_needed",
+        "durable_canon_needed",
+        "recurring_characters_needed",
+        "world_rules_or_timeline_needed",
+        "subplots_or_open_threads_needed",
+        "voice_or_style_continuity_needed",
+        "extraction_verification_needed",
+        "synthesis_or_batch_generation_needed",
+        "publication_or_completion_audit_needed",
+        "collection_without_sequence"
+      ]
+    },
+    "workflow_scale_routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scale_level", "rationale", "trigger_signals", "activated_supports", "skipped_supports", "reroute_triggers"],
+      "properties": {
+        "scale_level": { "$ref": "#/$defs/workflow_scale_level" },
+        "rationale": { "type": "string", "minLength": 1 },
+        "trigger_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/workflow_scale_trigger_signal" }
+        },
+        "activated_supports": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/workflow_scale_support" }
+        },
+        "skipped_supports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/workflow_scale_support" }
+        },
+        "reroute_triggers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
     },
     "medium_output_shape_recommendation": {
       "type": "object",

@@ -4,6 +4,26 @@
   "artist_meaning_id": "meaning_sample_text_001",
   "transformation_brief_id": "tb_sample_text_001",
   "story_mode": "single_beat",
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "The approved Beat Plan is a compact single-beat movement that does not need long-work support.",
+    "trigger_signals": [
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "reroute_triggers": [
+      "Artist requests sequence, series, long-form expansion, or dependent follow-up parts."
+    ]
+  },
   "story_gate_status": "approved",
   "story_structure": {
     "library_entry_id": "threshold_crossing",
@@ -50,8 +70,13 @@
           "emotional_function": "makes the key feel like agency that cannot be used"
         }
       ],
-      "source_evidence": ["The reference centers on an uncrossed doorway."],
-      "must_preserve": ["held motion", "unresolved ending"],
+      "source_evidence": [
+        "The reference centers on an uncrossed doorway."
+      ],
+      "must_preserve": [
+        "held motion",
+        "unresolved ending"
+      ],
       "pivot_options": [
         {
           "label": "residue",
@@ -81,7 +106,9 @@
       "summary": "Stillness that feels ready to move.",
       "intended_feeling": "suspense held in the body without release",
       "emotional_payload": "Suspense without release.",
-      "source_evidence": ["The figure is close to action but does not act."],
+      "source_evidence": [
+        "The figure is close to action but does not act."
+      ],
       "traceability_notes": [
         {
           "source_type": "core_tension_pair",
@@ -95,7 +122,9 @@
     {
       "movement_id": "kem_threshold_001",
       "role": "threshold",
-      "beat_ids": ["beat_threshold_001"],
+      "beat_ids": [
+        "beat_threshold_001"
+      ],
       "emotional_shift": "welcome becomes danger without losing tenderness",
       "compression_priority": "primary",
       "traceability_notes": [

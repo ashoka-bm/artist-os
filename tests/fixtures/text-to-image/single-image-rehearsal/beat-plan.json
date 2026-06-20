@@ -4,6 +4,26 @@
   "artist_meaning_id": "meaning_door_left_lit",
   "transformation_brief_id": "tb_door_left_lit",
   "story_mode": "single_beat",
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "The approved Beat Plan is a compact single-beat movement that does not need long-work support.",
+    "trigger_signals": [
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "reroute_triggers": [
+      "Artist requests sequence, series, long-form expansion, or dependent follow-up parts."
+    ]
+  },
   "story_gate_status": "approved",
   "beats": [
     {

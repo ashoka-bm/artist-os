@@ -11,6 +11,7 @@
     "transformation_brief_id",
     "story_mode",
     "story_gate_status",
+    "workflow_scale_routing",
     "beats",
     "tension_points",
     "key_emotional_movements",
@@ -28,6 +29,7 @@
     "story_mode": { "$ref": "#/$defs/story_mode" },
     "story_gate_status": { "$ref": "#/$defs/approval_status" },
     "story_structure": { "$ref": "#/$defs/story_structure" },
+    "workflow_scale_routing": { "$ref": "#/$defs/workflow_scale_routing" },
     "beats": {
       "type": "array",
       "minItems": 1,
@@ -108,6 +110,79 @@
     "review_approval_status": {
       "type": "string",
       "enum": ["not_required", "pending", "approve", "revise", "block", "waived"]
+    },
+    "workflow_scale_level": {
+      "type": "string",
+      "enum": ["compact_artifact", "structured_single_artifact", "cumulative_work", "full_long_form_project"]
+    },
+    "workflow_scale_support": {
+      "type": "string",
+      "enum": [
+        "core_pipeline",
+        "medium_section_plan",
+        "cultural_format_structure",
+        "long_work_stewardship",
+        "long_work_parts",
+        "long_work_readiness",
+        "long_work_checkpoints",
+        "stewardship_views",
+        "plot_tracker",
+        "character_sheets",
+        "world_building",
+        "chapter_or_scene_briefs",
+        "style_guide",
+        "extraction_verification",
+        "synthesis_checkpoints",
+        "publishing_or_completion_audit",
+        "collection_coherence_review"
+      ]
+    },
+    "workflow_scale_trigger_signal": {
+      "type": "string",
+      "enum": [
+        "artist_requested_compact_output",
+        "artist_requested_long_form",
+        "artist_requested_sequence_or_series",
+        "single_artifact_can_hold_movement",
+        "internal_sections_or_movements_needed",
+        "dependent_parts_needed",
+        "durable_canon_needed",
+        "recurring_characters_needed",
+        "world_rules_or_timeline_needed",
+        "subplots_or_open_threads_needed",
+        "voice_or_style_continuity_needed",
+        "extraction_verification_needed",
+        "synthesis_or_batch_generation_needed",
+        "publication_or_completion_audit_needed",
+        "collection_without_sequence"
+      ]
+    },
+    "workflow_scale_routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scale_level", "rationale", "trigger_signals", "activated_supports", "skipped_supports", "reroute_triggers"],
+      "properties": {
+        "scale_level": { "$ref": "#/$defs/workflow_scale_level" },
+        "rationale": { "type": "string", "minLength": 1 },
+        "trigger_signals": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/workflow_scale_trigger_signal" }
+        },
+        "activated_supports": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/workflow_scale_support" }
+        },
+        "skipped_supports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/workflow_scale_support" }
+        },
+        "reroute_triggers": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
     },
     "story_structure": {
       "type": "object",

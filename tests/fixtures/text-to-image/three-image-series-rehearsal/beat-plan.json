@@ -4,6 +4,31 @@
   "artist_meaning_id": "meaning_door_left_lit",
   "transformation_brief_id": "tb_door_left_lit",
   "story_mode": "sequence",
+  "workflow_scale_routing": {
+    "scale_level": "cumulative_work",
+    "rationale": "The accepted image series creates dependent image roles that need stewardship, readiness, and checkpoint support.",
+    "trigger_signals": [
+      "artist_requested_sequence_or_series",
+      "dependent_parts_needed"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "skipped_supports": [
+      "extraction_verification",
+      "synthesis_checkpoints",
+      "publishing_or_completion_audit"
+    ],
+    "reroute_triggers": [
+      "Artist reduces scope to one compact artifact, or durable canon needs upgrade the project to full long-form."
+    ]
+  },
   "story_structure": {
     "library_entry_id": "problem_reframe_return",
     "name": "Problem / Reframe / Return",

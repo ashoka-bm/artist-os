@@ -73,7 +73,9 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 11. Define Arrangement / Form Direction using `Song -> Sections -> Phrases -> Bars / beats` when the output is a song. Include section functions and section tension roles.
 12. Select 6 to 8 Active Sonic Tension Pairs. Use evidence, independent pole presences, tension intensity, and translation notes.
 13. Add Sequence Recommendation from the shared Beat Plan.
-14. Produce the Sound Medium Plan only after Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, and Arrangement / Form are complete or explicitly allowed to proceed unconfirmed.
+14. Record medium-level Workflow Scale Routing. A single multi-section sound work may stay a structured single artifact. Activate sequence and Long-Work supports when `workflow_scale_routing` calls for them because the accepted sound shape creates dependent tracks, movements, or sequence parts, durable canon is needed, recurring motifs or world rules must persist, or full long-form sound support is required.
+15. Produce the Sound Medium Plan only after Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form, and Workflow Scale Routing are complete or explicitly allowed to proceed unconfirmed.
+16. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, enrich the Long-Work Stewardship Record from the completed Sound Medium Plan with one Long-Work Part per track, movement, section, or sequence part; include continuity rules, checkpoint plan, and Long-Work Readiness before any multi-track or long-form prompt expansion. Validate the active stewardship record against `schemas/long-work-stewardship-record.schema.json`.
 
 ## Draft Sound Creative Brief Process
 

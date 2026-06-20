@@ -17,12 +17,12 @@ Use the Mixed-Media Journey when the final work should include:
 ## Route
 
 ```text
-Approved Beat Plan
+Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Mixed-Media Scope Gate
   -> Medium Selection Gate
   -> Role Assignment Gate
   -> Cross-Media Continuity Gate
-  -> Medium-Specific Journeys
+  -> Medium-Specific Journeys with Medium-Level Workflow Scale Routing
   -> Mixed-Media Critic Review
   -> Prompt Critic Review
   -> Prompt Lock Gate

@@ -62,6 +62,17 @@ Promoted representative fixtures for `save_the_cat_beat_sheet` and `fichtean_cur
 
 A cross-medium rehearsal using the shared `fichtean_curve` Beat Plan found that Text, Image, and Sound can all preserve the same Story Structure while recommending compact medium shapes: short written work, compressed visual arc, and single multi-section sound work. Length and expansion gates should therefore consider dependency, accepted expansion, continuity, and medium-specific part planning rather than triggering from beat count or `story_mode = "arc"` alone.
 
+Added Workflow Scale Routing as the internal scale decision layer. Beat Plans now carry Project-Level Workflow Scale Routing, and Text, Image, and Sound Medium Plans carry Medium-Level Workflow Scale Routing. The field records `scale_level`, rationale, trigger signals, activated supports, skipped supports, and reroute triggers so agents can choose the right support bundle without overusing Long-Work Stewardship for compact artifacts.
+
+Workflow Scale Routing is schema-backed and required on:
+
+- `schemas/beat-plan.schema.json`
+- `schemas/text-medium-plan.schema.json`
+- `schemas/image-medium-plan.schema.json`
+- `schemas/sound-medium-plan.schema.json`
+
+The initial Workflow Scale Levels are `compact_artifact`, `structured_single_artifact`, `cumulative_work`, and `full_long_form_project`. The governing placement decision is recorded in `docs/adr/0006-workflow-scale-routing-placement.md`.
+
 ### Gates And Reviews
 
 Added:

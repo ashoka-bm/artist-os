@@ -6,6 +6,27 @@
   "beat_plan_id": "bp_door_left_lit",
   "target_media_type": "sound",
   "story_mode": "single_beat",
+  "workflow_scale_routing": {
+    "scale_level": "structured_single_artifact",
+    "rationale": "One sound artifact can hold the movement through internal arrangement sections without becoming a sound sequence.",
+    "trigger_signals": [
+      "internal_sections_or_movements_needed",
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints"
+    ],
+    "reroute_triggers": [
+      "Artist requests dependent parts, a sequence or series, durable canon, or long-form drafting across sessions."
+    ]
+  },
   "sound_work_type": "song",
   "sonic_concept_direction": {
     "selection_method": "agent_recommended",
@@ -13,21 +34,37 @@
     "target_sonic_engine": "sparse piano, close vocal, low sub pressure, soft rain-like texture, and unresolved harmonic color",
     "confirmation_status": "unconfirmed",
     "rationale": "A close song form can preserve the human threshold while sparse sound makes absence active.",
-    "avoid": ["large triumphant chorus", "literal haunted-house sound effects", "upbeat dance resolution"]
+    "avoid": [
+      "large triumphant chorus",
+      "literal haunted-house sound effects",
+      "upbeat dance resolution"
+    ]
   },
   "genre_direction": {
     "selection_method": "agent_recommended",
     "primary_genre": "alt-R&B",
-    "modifiers": ["downtempo", "ambient pop", "intimate", "sparse"],
+    "modifiers": [
+      "downtempo",
+      "ambient pop",
+      "intimate",
+      "sparse"
+    ],
     "production_style": "minimal nocturnal studio production",
     "confirmation_status": "unconfirmed",
     "rationale": "Alt-R&B supports close vocal tenderness while downtempo ambient production preserves threat and absence.",
-    "avoid": ["EDM drop", "arena pop", "bright acoustic folk"]
+    "avoid": [
+      "EDM drop",
+      "arena pop",
+      "bright acoustic folk"
+    ]
   },
   "tempo_groove_direction": {
     "selection_method": "agent_recommended",
     "bpm": 82,
-    "bpm_range": { "min": 78, "max": 86 },
+    "bpm_range": {
+      "min": 78,
+      "max": 86
+    },
     "tempo_feel": "slow-burning and suspended",
     "meter": "4/4",
     "groove_feel": "laid-back half-time pulse",
@@ -65,12 +102,16 @@
       {
         "name": "Sparse / Dense",
         "tension_intensity": 0.65,
-        "translation_notes": ["Keep the mix sparse while allowing pressure to accumulate."]
+        "translation_notes": [
+          "Keep the mix sparse while allowing pressure to accumulate."
+        ]
       },
       {
         "name": "Resolved / Unresolved",
         "tension_intensity": 0.9,
-        "translation_notes": ["Avoid clean cadences; let the ending remain suspended."]
+        "translation_notes": [
+          "Avoid clean cadences; let the ending remain suspended."
+        ]
       }
     ],
     "genre_sonic_conflicts": [

@@ -6,6 +6,28 @@
   "beat_plan_id": "bp_civic_garden_hook_article",
   "target_media_type": "text",
   "story_mode": "sequence",
+  "workflow_scale_routing": {
+    "scale_level": "structured_single_artifact",
+    "rationale": "One written artifact can hold the movement through text sections without long-work stewardship.",
+    "trigger_signals": [
+      "internal_sections_or_movements_needed",
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "cultural_format_structure"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints"
+    ],
+    "reroute_triggers": [
+      "Artist requests dependent parts, a sequence or series, durable canon, or long-form drafting across sessions."
+    ]
+  },
   "writing_method": {
     "primary_method": "shape",
     "method_modifiers": [

@@ -16,11 +16,12 @@ Use the Image Journey when the final work should be:
 ## Route
 
 ```text
-Approved Beat Plan
-  -> Long-Work Stewardship Record, for image series
+Approved Beat Plan with Project-Level Workflow Scale Routing
+  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
   -> Symbology Gate
   -> Style Gate
   -> Detail / Intensity Gate
+  -> Image Medium Plan with Medium-Level Workflow Scale Routing
   -> Art Critic Review
   -> Provider-Neutral Image Prompt Plan
   -> Prompt Critic Review
@@ -43,7 +44,7 @@ Approved Beat Plan
 
 - Story Critic Review happens before this journey as a bounded sub-agent review.
 - Beat Reviewer sub-agent is mandatory for image series or any ambiguous multi-beat image plan.
-- Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, and proposed continuity updates for image series.
+- Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, and proposed continuity updates when image-series support is active.
 - Art Critic Review checks Symbology Direction, Style Direction, Visual Dynamics, image-role distinction, and series coherence as a bounded sub-agent review.
 - Prompt Critic Review checks provider-neutral prompt quality, variant distinction, traceability, and missing visual constraints as a bounded sub-agent review.
 - Prompt Branch Gate is used when the artist wants a curator batch: multiple meaning-equivalent prompts that vary style, setting, symbol, composition, and other approved axes.
@@ -53,4 +54,4 @@ Approved Beat Plan
 
 The current First Slice implements this route through the Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The image brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
 
-For image series, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Image Medium Plan maps Beats to Image Roles. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.
+For image series or other cumulative image work, create a foundation Long-Work Stewardship Record after Story Approval when Project-Level Workflow Scale Routing activates it, then enrich it after the Image Medium Plan maps Beats to Image Roles and records Medium-Level Workflow Scale Routing. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

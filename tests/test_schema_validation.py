@@ -249,6 +249,69 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_beat_plan_requires_workflow_scale_routing(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json"
+        record = load_json(data_path)
+        del record["workflow_scale_routing"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_text_medium_plan_requires_workflow_scale_routing(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "text-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-medium-plan.json"
+        record = load_json(data_path)
+        del record["workflow_scale_routing"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_image_medium_plan_requires_workflow_scale_routing(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "image-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "image-medium-plan.json"
+        record = load_json(data_path)
+        del record["workflow_scale_routing"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_sound_medium_plan_requires_workflow_scale_routing(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        del record["workflow_scale_routing"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_workflow_scale_supports_are_enum_backed(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json"
+        record = load_json(data_path)
+        record["workflow_scale_routing"]["activated_supports"].append("unsupported_helper")
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
+    def test_workflow_scale_skipped_supports_are_enum_backed(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "image-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "image-medium-plan.json"
+        record = load_json(data_path)
+        record["workflow_scale_routing"]["skipped_supports"].append("unsupported_helper")
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
+    def test_workflow_scale_trigger_signals_are_enum_backed(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        record["workflow_scale_routing"]["trigger_signals"].append("unsupported_signal")
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
     def test_image_output_shapes_do_not_use_three_part_sequence(self) -> None:
         image_schema = load_json(REPO_ROOT / "schemas" / "image-medium-plan.schema.json")
         creative_schema = load_json(REPO_ROOT / "schemas" / "creative-brief.schema.json")

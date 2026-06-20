@@ -19,13 +19,14 @@ Use the Video Journey when the final work should include:
 ## Route
 
 ```text
-Approved Beat Plan
+Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Video Format Gate
   -> Scene / Sequence Gate
   -> Shot Logic Gate
   -> Motion Gate
   -> Visual Style Gate
   -> Pacing / Transition Gate
+  -> Video Plan with Medium-Level Workflow Scale Routing, when schema-backed
   -> Video Critic Review
   -> Video Prompt Plan
   -> Prompt Critic Review
@@ -43,6 +44,7 @@ Approved Beat Plan
 - Motion Gate: what moves, how much, and why?
 - Visual Style Gate: what visual language carries the Beat Plan?
 - Pacing / Transition Gate: how fast do beats unfold and how do they connect?
+- Workflow Scale Routing: should this stay one clip or scene, or does it need sequence, calibration, Long-Work, or full long-form support?
 - Calibration Gate: for longer video, approve a style/motion test before full production.
 
 ## Reviews
