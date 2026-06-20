@@ -53,9 +53,26 @@ Check:
 - the current beat leaves a meaningful place for the next beat to pivot,
 - the journey ends because it is complete, not because the source pile is exhausted.
 
+### Story Critic
+
+Use when reviewing a Beat Plan for Story Approval. This is the mode the `artist-os` conductor means by "Story Critic Review" at Phase Order step 5: run it after Beat Reviewer and before Story Approval, for any multi-beat, sequence, image-series, or lyric-bearing plan.
+
+Story Critic owns the Story Approval contract — meaning preservation, Story Mode scale, Beat Plan coherence, tension movement, symbolic continuity, and whether the Beat Plan should exist at this length. It does not replace the Beat Reviewer when individual beat mechanics need method review. When both are needed, run Beat Reviewer first, then consume that Review Record here before Story Approval. The canonical role boundary is in `docs/gates-and-reviews.md` → "Story Critic".
+
+Check:
+
+- the Beat Plan preserves Artist Meaning and must-preserve constraints,
+- the Story Mode scale fits the work (single compressed beat, beat pair, three-part sequence, sequence, scene, arc, or world),
+- the Beat Plan carries enough arc or sequence logic and should exist at this length,
+- symbolic progression stays coherent across beats,
+- minimum tension criteria are defined and strong enough for downstream medium work,
+- adjacent beats in a sequence do not repeat the same tension profile without an artist-approved reason.
+
+Block when Beats name only facts, events, or symbols without an intended feeling, when a Beat lacks a real Expectation Turn, when the Beat Plan does not define minimum tension criteria, when a Beat falls below the required primary tension intensity, or when adjacent Beats in a sequence repeat the same tension profile without an artist-approved reason.
+
 ### Shape Reviewer
 
-Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing. This is the mode the `artist-os` conductor and `skills/text-journey` mean by "Writing Critic Review" (step 8 "Writing Critic mode" for text): run Shape Reviewer against the Text Creative Brief before Brief Approval, and against the written draft when reviewing a finished piece.
+Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing. This is the mode the `artist-os` conductor and `skills/text-journey` mean by "Writing Critic Review" (Phase Order step 9, "Writing Critic mode" for text): run Shape Reviewer against the Text Creative Brief before Brief Approval, and against the written draft when reviewing a finished piece.
 
 Check:
 
@@ -73,7 +90,7 @@ Every review must emit a Review Record JSON object that validates against `schem
 
 Set Review Record fields as follows:
 
-- `review_role`: `fragment_reviewer`, `beat_reviewer`, `shape_reviewer`, or `writing_critic` for hybrid writing reviews.
+- `review_role`: `fragment_reviewer`, `beat_reviewer`, `story_critic`, `shape_reviewer`, or `writing_critic` for hybrid writing reviews.
 - `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-writing-method-review`.
@@ -93,7 +110,7 @@ Use `block` when the artifact violates Artist Meaning, overwrites raw source mat
 
 Return Review Record JSON first, then a compact method summary with:
 
-- `review_mode`: `fragment`, `beat`, `shape`, or `hybrid`,
+- `review_mode`: `fragment`, `beat`, `story`, `shape`, or `hybrid`,
 - `matched`: what follows the reference method well,
 - `drifted`: where the artifact moved away from source material, Artist Meaning, Beat Plan, opening promise, or prior approved material,
 - `findings`: actionable issues, ordered by severity,

@@ -44,6 +44,8 @@ Every Prompt Variant Plan, Text Generation Plan, and concrete Output Artifact mu
 
 Provider-Neutral Image Prompt Plan records should validate against `schemas/prompt-plan.schema.json`.
 
+Image Creative Brief records should validate against `schemas/creative-brief.schema.json`.
+
 Sound Creative Brief records should validate against `schemas/sound-creative-brief.schema.json`.
 
 Suno Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.

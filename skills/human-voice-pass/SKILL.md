@@ -1,6 +1,6 @@
 ---
 name: artist-os-human-voice-pass
-description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Human Voice Pass. Rewrites the current text to remove AI-writing patterns while preserving Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, structure, and protected formal features.
+description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Human Voice Pass. Rewrites the current text to remove AI-writing patterns while preserving Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, structure, and protected formal features. This is an in-flight Artist OS editorial step, not a general editing tool: a standalone request to make writing sound less AI with no Artist OS project, source Reference, or Text Generation Plan is out of scope.
 ---
 
 # Human Voice Pass

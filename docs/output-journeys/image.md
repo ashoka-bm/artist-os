@@ -20,9 +20,9 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
   -> Symbology Gate
   -> Style Gate
-  -> Detail / Intensity Gate
   -> Image Medium Plan with Medium-Level Workflow Scale Routing
   -> Art Critic Review
+  -> Brief Approval Gate, with the Detail / Intensity gate resolved here, after Symbology and Style are locked
   -> Provider-Neutral Image Prompt Plan
   -> Prompt Critic Review
   -> Prompt Lock Gate
@@ -35,7 +35,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 - Symbology Gate: what should the image show as the core symbolic representation, and should it remain a single image or become an approved image series?
 - Style Gate: what visual language should carry the meaning?
-- Detail / Intensity Gate: Minimal, Faithful-Balanced, or Amplified-Maximal?
+- Detail / Intensity Gate: Minimal, Faithful-Balanced, or Amplified-Maximal? Resolved at Brief Approval, after Symbology and Style are locked — never during the Image Medium Plan.
 - Series Approval Gate: required before multiple image prompt plans are created.
 - Calibration Approval Gate: required before producing the rest of an approved series.
 - Long-Work Checkpoint Gate: required when Long-Work Readiness, calibration, or another series checkpoint blocks expansion.

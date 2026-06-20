@@ -1,6 +1,6 @@
 ---
 name: artist-os-clear-writing-pass
-description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Clear Writing Pass. Improves clarity, concision, paragraph force, and reader guidance when those qualities serve the approved text form.
+description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Clear Writing Pass. Improves clarity, concision, paragraph force, and reader guidance when those qualities serve the approved text form. This is an in-flight Artist OS editorial step, not a general editing tool: a standalone request to clarify or tighten text with no Artist OS project, source Reference, or Text Generation Plan is out of scope.
 ---
 
 # Clear Writing Pass

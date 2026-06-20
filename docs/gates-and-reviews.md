@@ -18,10 +18,11 @@ Routing Gate
   -> Long-Work Readiness / Checkpoints, when the work is cumulative
   -> Medium Gates
   -> Medium Critic Review
+  -> Brief Approval Gate
   -> Prompt Critic Review
   -> Prompt Branch Gate, when curator batches are requested
   -> Prompt Lock Gate
-  -> Generation Approval Gate
+  -> Generation Approval Gate, or Draft Generation Approval Gate for text drafting
   -> Output Critic Review
   -> Output Acceptance Gate
 ```
@@ -54,7 +55,7 @@ Chooses the Story Mode: one compressed beat, beat pair, three-part sequence, seq
 
 Complete when the artist selects, combines, revises, rejects, or explicitly allows an unconfirmed Story Mode to proceed.
 
-When multiple Story Modes are plausible, ask one direct Decision Interview question with a recommended Story Mode before drafting the Beat Plan. Do not silently choose between single image, emotional arc, and series when more than one would preserve Artist Meaning.
+When multiple Story Modes are plausible, ask one direct Decision Interview question with a recommended Story Mode before drafting the Beat Plan. Do not silently choose between single image, compressed arc, and image series when more than one would preserve Artist Meaning.
 
 ### Story Approval Gate
 
@@ -70,7 +71,7 @@ Chooses how the approved Beat Plan becomes a medium-specific work.
 
 Examples:
 
-- image: Symbology, Presentation Mode, Style, Detail / Intensity,
+- image: Symbology, Presentation Mode, Style,
 - video: Format, Scene / Sequence, Shot Logic, Motion, Visual Style, Pacing / Transition,
 - sound: Sound Work Type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form,
 - text: Writing Method, Text Form, Voice / Point Of View, Structure, Fidelity / Transformation,
@@ -79,6 +80,12 @@ Examples:
 Complete when the medium-specific gates required for that output are selected, revised, rejected, or explicitly allowed to proceed unconfirmed.
 
 At medium gates, present the strongest recommendation first, then ask for artist confirmation or correction. Avoid broad menus unless the artist asks to explore.
+
+### Brief Approval Gate
+
+Approves the medium-specific Creative Brief Document after the Medium Critic Review has revised it, before any Creative Brief Record, Prompt Plan, or Text Generation Plan is created. The brief is the meaning contract everything downstream inherits, so it must be ratified before a plan is locked on top of it.
+
+Complete when the artist accepts the revised brief, or revises it and re-approves. On changes, re-run the critic only for the affected areas. For image, the Detail / Intensity (Minimalist-to-Maximalist) gate runs here, after Symbology and Style are locked — never during the Medium Plan. Store the decision as a Gate Decision with `gate_type = "brief_approval"`.
 
 ### Prompt Lock Gate
 
@@ -105,6 +112,12 @@ When Long-Work Readiness is `pending`, run the readiness pass before expansion. 
 Approves any provider-backed generation call, cost-bearing action, upload, or irreversible external action.
 
 Complete only with explicit per-call artist approval. Approval for one call never implies approval for later calls.
+
+### Draft Generation Approval Gate
+
+Approves locally drafting a written Output Artifact from an approved Text Generation Plan, even when no paid provider call is made. This is distinct from the Generation Approval Gate: it governs the Text Journey's drafting step, not a cost-bearing provider call or other irreversible external action.
+
+Complete with explicit artist approval to draft. Store the decision as a Gate Decision with `gate_type = "draft_generation_approval"`.
 
 ### Output Acceptance Gate
 
@@ -145,6 +158,7 @@ The Review Record is the machine-readable output of the review stage. It must in
 - `reviewer_execution.source_skill`,
 - `artifact_under_review`,
 - `upstream_context`,
+- `emotional_tension_review`,
 - `matched`,
 - `drifted`,
 - `findings`,
