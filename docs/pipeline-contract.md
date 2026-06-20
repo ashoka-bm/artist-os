@@ -251,6 +251,8 @@ The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-le
 - Gate: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
 - Next: `long_work.stewardship` enrichment when the text work is cumulative, otherwise `text.creative_brief`.
 
+Durable project runs should persist each Text Medium gate as its own Gate Decision when it reflects a real artist choice, correction, waiver, or approval. Compact dry-run and eval harnesses may summarize bundled recommended gate assumptions as rehearsal evidence, but that summary is not a substitute for durable project gate records.
+
 Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Movement, name a section job, state the Intended Feeling, translate the Expectation Turn, and explain how the section differs from adjacent sections.
 
 ### `text.creative_brief`

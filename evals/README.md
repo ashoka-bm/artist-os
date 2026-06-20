@@ -62,3 +62,12 @@ subagent instructions, and the checklist. Procedure:
 The baseline traces double as the spec: if a subagent can reconstruct the exact
 behavior from the SKILL.md, the prose communicates it; the edit's job is to keep
 those traces identical.
+
+## disposable rehearsal artifacts
+
+End-to-end rehearsal artifacts may live under `.tmp/` when the goal is evidence
+for evals rather than resumable Artist OS project state. This is an eval-only
+exception to the normal Workspace Library persistence contract: `.tmp/` records
+can prove behavior and reveal contract gaps, but they are not durable project
+state and should not be promoted wholesale. Promote only reduced fixtures,
+tests, or docs that protect a specific finding.
