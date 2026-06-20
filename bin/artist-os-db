@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -55,7 +56,7 @@ def setup_library(library_root: Path, db_path: Path) -> None:
     library_root.mkdir(parents=True, exist_ok=True)
     for subdir in PROJECT_SUBDIRS:
         (library_root / subdir).mkdir(parents=True, exist_ok=True)
-    with connect(db_path) as conn:
+    with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
 
 
@@ -95,7 +96,7 @@ def artist_library_root_for(args: argparse.Namespace) -> Path | None:
 
 def init_db(args: argparse.Namespace) -> None:
     db_path = db_path_for(args)
-    with connect(db_path) as conn:
+    with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
     print(f"initialized {db_path}")
 
@@ -620,7 +621,7 @@ def sync_db(args: argparse.Namespace) -> None:
     artist_library_root = artist_library_root_for(args)
     checked_at = datetime.now(timezone.utc).isoformat()
     manifests = sorted((library_root / "projects").glob("*/project.json"))
-    with connect(db_path) as conn:
+    with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
         found_project_ids = set()
         for manifest_path in manifests:
@@ -817,7 +818,7 @@ def mark_learning_review_complete(args: argparse.Namespace) -> None:
 
 
 def pending_learning_reviews(args: argparse.Namespace) -> None:
-    with connect(db_path_for(args)) as conn:
+    with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         rows = conn.execute(
             """
@@ -918,7 +919,7 @@ def link_visible_project(args: argparse.Namespace) -> None:
 
 
 def list_projects(args: argparse.Namespace) -> None:
-    with connect(db_path_for(args)) as conn:
+    with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         rows = conn.execute(
             """
@@ -932,7 +933,7 @@ def list_projects(args: argparse.Namespace) -> None:
 
 
 def show_project(args: argparse.Namespace) -> None:
-    with connect(db_path_for(args)) as conn:
+    with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         conn.row_factory = sqlite3.Row
         project = conn.execute(

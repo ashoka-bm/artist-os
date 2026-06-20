@@ -7,6 +7,7 @@ import os
 import sqlite3
 import tempfile
 import unittest
+from contextlib import closing
 from contextlib import redirect_stdout
 from importlib.machinery import SourceFileLoader
 from io import StringIO
@@ -371,7 +372,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 artist_os_db.sync_db(args)
 
             db_path = library_root / "artist-os.sqlite"
-            with sqlite3.connect(db_path) as conn:
+            with closing(sqlite3.connect(db_path)) as conn:
                 visible_state = conn.execute(
                     """
                     SELECT visible_state, artist_library_project_dir,
@@ -437,7 +438,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with redirect_stdout(StringIO()):
                 artist_os_db.sync_db(args)
 
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 project_status = conn.execute("SELECT status FROM projects").fetchone()[0]
                 visible_state = conn.execute(
                     """
@@ -492,7 +493,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with redirect_stdout(StringIO()):
                 artist_os_db.sync_db(args)
 
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 visible_state = conn.execute(
                     """
                     SELECT visible_state, project_pointer_state, project_pointer_project_id
@@ -532,7 +533,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with redirect_stdout(StringIO()):
                 artist_os_db.sync_db(args)
 
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 visible_state = conn.execute(
                     """
                     SELECT visible_state, project_pointer_state, project_pointer_project_id
@@ -579,7 +580,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with redirect_stdout(StringIO()):
                 artist_os_db.sync_db(args)
 
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 visible_state = conn.execute(
                     "SELECT visible_state, project_pointer_state FROM project_visible_state"
                 ).fetchone()
@@ -625,7 +626,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with redirect_stdout(StringIO()):
                 artist_os_db.sync_db(args)
 
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 file_status = conn.execute("SELECT status FROM artist_library_files").fetchone()[0]
 
             self.assertEqual(file_status, "missing")
@@ -662,7 +663,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertEqual(entry["feedback_id"], "fb_door_left_lit_test")
             self.assertEqual(entry["learning_review_status"], "pending")
             self.assertEqual(manifest["feedback_state"]["learning_review_status"], "pending")
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 pending = conn.execute(
                     "SELECT learning_review_status FROM project_feedback_state"
                 ).fetchone()[0]
@@ -761,7 +762,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 manifest["feedback_state"]["learning_refs"][0]["path"],
                 "personal-library/learnings/learn_rawer_first_drafts.json",
             )
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 learning_ref = conn.execute(
                     "SELECT ref_id, learning_type, status FROM learning_refs"
                 ).fetchone()
@@ -876,7 +877,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
 
             manifest = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
             feedback_entry = json.loads((workspace_project_dir / "feedback-log.jsonl").read_text(encoding="utf-8").strip())
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 pending_count = conn.execute(
                     "SELECT COUNT(*) FROM project_feedback_state WHERE learning_review_status = 'pending'"
                 ).fetchone()[0]
@@ -930,7 +931,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 json.loads(line)
                 for line in (workspace_project_dir / "feedback-log.jsonl").read_text(encoding="utf-8").splitlines()
             ]
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 pending_count = conn.execute(
                     "SELECT COUNT(*) FROM project_feedback_state WHERE learning_review_status = 'pending'"
                 ).fetchone()[0]
@@ -977,7 +978,7 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 manifest["feedback_state"]["performance_signal_refs"][0]["path"],
                 "personal-library/performance-signals/perf_symbology_board_001.json",
             )
-            with sqlite3.connect(library_root / "artist-os.sqlite") as conn:
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
                 signal_ref = conn.execute(
                     "SELECT signal_id, status FROM performance_signal_refs"
                 ).fetchone()
