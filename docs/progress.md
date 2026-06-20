@@ -56,6 +56,8 @@ Story is now the shared layer: every output is one or more approved beats transl
 
 The Story Structure Library now includes the original core entries plus six additional researched craft frameworks: `save_the_cat_beat_sheet`, `dan_harmon_story_circle`, `seven_point_structure`, `fichtean_curve`, `in_medias_res_revelation`, and `frame_story_nested_return`.
 
+Focused Story Structure rehearsals for those six new entries passed without schema changes. The main shared finding was that Story Structure craft labels must be mapped into schema-valid Beat Plan `beat_role` values rather than copied literally; `fichtean_curve` also needs quiet crisis pressure to remain valid, and `frame_story_nested_return` needs object/archive testimony to change the return frame before it counts as nested material.
+
 ### Gates And Reviews
 
 Added:

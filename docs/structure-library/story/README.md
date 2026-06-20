@@ -22,6 +22,8 @@ Read this index first, then open only the entry that matches the project.
 
 Choose by the work's governing movement, not by medium or asset count.
 
+Story Structure entry **Typical Beat Roles** are craft functions, not literal `beat_role` enum values. When adapting a Story Structure into a Beat Plan, map those functions into schema-valid Beat Roles such as `invitation`, `grounding`, `threshold`, `build`, `rupture`, `reveal`, `reversal`, `surrender`, `consequence`, `return`, `closure`, or `residue`.
+
 - Use `three_act_structure` when the work has a central question that should build through commitment, escalation, midpoint change, climax, and final state.
 - Use `freytag_dramatic_arc` when the rise to a peak turn and the falling consequence after that peak are both structurally important.
 - Use `hero_journey` when threshold crossing, ordeal, transformation, boon, and return are the real engine.

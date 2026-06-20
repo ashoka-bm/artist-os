@@ -10,7 +10,7 @@
 
 **Grounding tier**: `craft_authority`
 
-**Use when**: The work depends on a narrator, listener, archive, interview, memory, found document, testimony, or story-within-story relationship.
+**Use when**: The work depends on a narrator, listener, archive, interview, memory, found document, testimony, or story-within-story relationship. Object, image, or archive testimony can count as nested material only when the return frame changes meaning.
 
 **Core movement**: A framing situation creates the reason a story is being told or found. The nested material carries the main pressure. The return to the frame changes the frame's meaning, reveals the act of telling as consequential, or makes the audience question authority, memory, distance, or inheritance.
 

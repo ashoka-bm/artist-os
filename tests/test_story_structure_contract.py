@@ -46,6 +46,16 @@ class StoryStructureContractTests(unittest.TestCase):
         self.assertSetEqual(story_readme_links, top_level_links)
         self.assertSetEqual(story_readme_links, compatibility_links)
 
+    def test_story_structure_craft_roles_map_to_schema_beat_roles(self) -> None:
+        text = self._read("docs/structure-library/story/README.md")
+
+        for required in (
+            "craft functions, not literal `beat_role` enum values",
+            "map those functions into schema-valid Beat Roles",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, text)
+
     def test_conductor_routes_story_structure_into_beat_plan(self) -> None:
         text = self._read("skills/artist-os/SKILL.md")
 

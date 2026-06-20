@@ -10,7 +10,7 @@
 
 **Grounding tier**: `craft_authority`
 
-**Use when**: The work should start in trouble, reveal context through action, and sustain momentum through escalating crises rather than extended setup.
+**Use when**: The work should start in trouble, reveal context through action, and sustain momentum through escalating crises rather than extended setup. Crisis may be emotional, perceptual, relational, custodial, or external; it does not have to mean action-thriller danger.
 
 **Core movement**: The work begins inside active pressure. Each crisis forces action, reveals missing context, and raises cost. The accumulating crises crest in a climax, then resolve into consequence, changed state, or survival residue.
 
