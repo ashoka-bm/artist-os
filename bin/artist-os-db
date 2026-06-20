@@ -9,6 +9,7 @@ import os
 import re
 import sqlite3
 import sys
+from collections import namedtuple
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -51,17 +52,111 @@ def connect(db_path: Path) -> sqlite3.Connection:
     return conn
 
 
-def apply_schema(conn: sqlite3.Connection) -> None:
+# A migration is a forward, run-once delta that the idempotent baseline DDL
+# cannot express (ALTER, data backfill, DROP). Migrations apply in ascending
+# version order and are recorded in schema_migrations so they never run twice.
+Migration = namedtuple("Migration", ["version", "name", "statements"])
+
+# Frozen-baseline convention:
+#   - The baseline is the schemas/artist-os-library.sql DDL, which seeds
+#     schema_migrations versions 1 and 2. Every fresh or existing DB therefore
+#     starts at {1, 2} after apply_schema().
+#   - Entries here are version 3+ deltas the baseline DDL cannot express
+#     (ALTER / data backfill / DROP). New additive tables/indexes go straight
+#     into the baseline DDL ("CREATE ... IF NOT EXISTS" is safe on both fresh
+#     and existing DBs) and must NOT get a migration entry.
+#   - A migration's effect must NOT also be baked into the baseline DDL. If it
+#     were, a fresh DB would already have the final shape and re-applying the
+#     migration would fail.
+MIGRATIONS: list[Migration] = []
+
+# Migrations begin above the baseline seeded by schemas/artist-os-library.sql
+# (versions 1 and 2). A registered migration must use a version >= this. If
+# the baseline seed set ever grows, bump this in lockstep.
+MIN_MIGRATION_VERSION = 3
+
+
+def apply_migrations(conn: sqlite3.Connection, migrations=None) -> list[int]:
+    """Apply pending forward migrations in ascending version order.
+
+    Each migration runs inside its own SAVEPOINT so a failure mid-migration
+    rolls back that migration's partial DDL/DML and leaves schema_migrations
+    unchanged for it (Python's sqlite3 does not reliably wrap DDL in the
+    implicit DML transaction, so the SAVEPOINT is what guarantees atomicity).
+    Returns the list of versions newly applied during this call.
+    """
+    if migrations is None:
+        migrations = MIGRATIONS
+
+    # Validate the registry's well-formedness BEFORE touching the DB, so a
+    # malformed registry fails loud (no partial writes) rather than silently
+    # no-op'ing. This checks the registry only; it deliberately does NOT look at
+    # what is already recorded in schema_migrations -- skipping an
+    # already-applied version is the intended idempotent behaviour below.
+    versions = [migration.version for migration in migrations]
+    seen: set[int] = set()
+    duplicates = sorted({v for v in versions if v in seen or seen.add(v)})
+    if duplicates:
+        raise ValueError(f"duplicate migration versions in registry: {duplicates}")
+    below_baseline = sorted(v for v in versions if v < MIN_MIGRATION_VERSION)
+    if below_baseline:
+        raise ValueError(
+            f"migration versions below the seeded baseline: {below_baseline}; "
+            f"versions 1 and 2 are reserved for the schemas/artist-os-library.sql "
+            f"baseline seed, so a registered migration must use a version "
+            f">= MIN_MIGRATION_VERSION ({MIN_MIGRATION_VERSION})"
+        )
+
+    # Defensively ensure the ledger exists, mirroring the baseline DDL, so this
+    # works even on a connection that never ran apply_schema(). This inline DDL
+    # MUST stay in sync with the canonical schema_migrations definition in
+    # schemas/artist-os-library.sql (currently byte-identical) -- a column change
+    # to one must be mirrored in the other.
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS schema_migrations (
+          version INTEGER PRIMARY KEY,
+          name TEXT NOT NULL,
+          applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    applied = {row[0] for row in conn.execute("SELECT version FROM schema_migrations")}
+
+    newly_applied: list[int] = []
+    for migration in sorted(migrations, key=lambda m: m.version):
+        if migration.version in applied:
+            continue
+        conn.execute("SAVEPOINT artist_os_migration")
+        try:
+            for statement in migration.statements:
+                conn.execute(statement)
+            conn.execute(
+                "INSERT INTO schema_migrations (version, name) VALUES (?, ?)",
+                (migration.version, migration.name),
+            )
+            conn.execute("RELEASE SAVEPOINT artist_os_migration")
+        except Exception:
+            conn.execute("ROLLBACK TO SAVEPOINT artist_os_migration")
+            conn.execute("RELEASE SAVEPOINT artist_os_migration")
+            raise
+        applied.add(migration.version)
+        newly_applied.append(migration.version)
+    return newly_applied
+
+
+def apply_schema(conn: sqlite3.Connection) -> list[int]:
     schema = SCHEMA_PATH.read_text(encoding="utf-8")
     conn.executescript(schema)
+    return apply_migrations(conn)
 
 
-def setup_library(library_root: Path, db_path: Path) -> None:
+def setup_library(library_root: Path, db_path: Path) -> list[int]:
     library_root.mkdir(parents=True, exist_ok=True)
     for subdir in PROJECT_SUBDIRS:
         (library_root / subdir).mkdir(parents=True, exist_ok=True)
     with closing(connect(db_path)) as conn, conn:
-        apply_schema(conn)
+        return apply_schema(conn)
 
 
 def workspace_library_for_wondermint_root(wondermint_root: Path) -> Path:
@@ -101,14 +196,16 @@ def artist_library_root_for(args: argparse.Namespace) -> Path | None:
 def init_db(args: argparse.Namespace) -> None:
     db_path = db_path_for(args)
     with closing(connect(db_path)) as conn, conn:
-        apply_schema(conn)
+        newly_applied = apply_schema(conn)
     print(f"initialized {db_path}")
+    if newly_applied:
+        print(f"applied migrations: {newly_applied}")
 
 
 def setup_db(args: argparse.Namespace) -> None:
     library_root = library_root_for(args)
     db_path = db_path_for(args)
-    setup_library(library_root, db_path)
+    newly_applied = setup_library(library_root, db_path)
     artist_library_root = artist_library_root_for(args)
     if artist_library_root:
         (artist_library_root / "Projects").mkdir(parents=True, exist_ok=True)
@@ -117,6 +214,8 @@ def setup_db(args: argparse.Namespace) -> None:
     if artist_library_root:
         print(f"created Artist Library folders under {artist_library_root}")
     print(f"initialized {db_path}")
+    if newly_applied:
+        print(f"applied migrations: {newly_applied}")
 
 
 def read_json(path: Path) -> dict:
