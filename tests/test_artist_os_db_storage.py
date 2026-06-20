@@ -1386,6 +1386,292 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 "proj_door_left_lit",
             )
 
+    def _load_schema(self, schema_name: str) -> dict:
+        return json.loads(
+            (REPO_ROOT / "schemas" / schema_name).read_text(encoding="utf-8")
+        )
+
+    def test_add_feedback_persists_record_that_revalidates_against_schema(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_feedback(args)
+
+            feedback_log = workspace_project_dir / "feedback-log.jsonl"
+            self.assertTrue(feedback_log.is_file())
+            entry = json.loads(feedback_log.read_text(encoding="utf-8").strip())
+            schema = self._load_schema("project-feedback-log-entry.schema.json")
+            validate(entry, schema, schema)
+
+    def test_add_learning_persists_record_that_revalidates_against_schema(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                learning_id="learn_rawer_first_drafts",
+                learning_type="soft",
+                learning_rule="Keep first drafts rawer before polishing.",
+                scope=None,
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_door_left_lit_test"],
+                evidence_summary="Artist requested rawer first drafts.",
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_learning(args)
+
+            learning_path = (
+                library_root
+                / "personal-library"
+                / "learnings"
+                / "learn_rawer_first_drafts.json"
+            )
+            self.assertTrue(learning_path.is_file())
+            record = json.loads(learning_path.read_text(encoding="utf-8"))
+            schema = self._load_schema("learning-record.schema.json")
+            validate(record, schema, schema)
+
+    def test_add_performance_signal_persists_record_that_revalidates_against_schema(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                signal_id="perf_symbology_board_001",
+                metric_name="save_rate",
+                metric_value="0.32",
+                signal_direction="positive",
+                source="manual_import",
+                output_record_id=None,
+                notes=None,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_performance_signal(args)
+
+            signal_path = (
+                library_root
+                / "personal-library"
+                / "performance-signals"
+                / "perf_symbology_board_001.json"
+            )
+            self.assertTrue(signal_path.is_file())
+            record = json.loads(signal_path.read_text(encoding="utf-8"))
+            schema = self._load_schema("performance-signal.schema.json")
+            validate(record, schema, schema)
+
+    def test_add_feedback_rejects_invalid_record_without_writing(self) -> None:
+        # An empty --feedback passes argparse (required, but no content check) yet
+        # violates the schema's minLength:1. Write-time validation must block the
+        # write end to end: no feedback-log file is created and the manifest is
+        # left byte-for-byte untouched (validation precedes the append, the
+        # manifest update, and sync).
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            manifest_path = workspace_project_dir / "project.json"
+            manifest_path.write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            manifest_before = manifest_path.read_text(encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                feedback="",
+                feedback_id="fb_door_left_lit_test",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                with self.assertRaisesRegex(
+                    SystemExit,
+                    "refusing to write malformed project-feedback-log-entry.schema.json",
+                ):
+                    artist_os_db.add_feedback(args)
+
+            self.assertFalse((workspace_project_dir / "feedback-log.jsonl").exists())
+            self.assertEqual(
+                manifest_path.read_text(encoding="utf-8"), manifest_before
+            )
+
+    def test_add_learning_rejects_invalid_record_without_writing(self) -> None:
+        # --occurrence-count 0 passes argparse (type=int, no range) but violates
+        # the schema's promotion_state.occurrence_count minimum:1. Validation must
+        # block the write_text path: no learning record file is created.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            workspace_project_dir.mkdir(parents=True)
+            (workspace_project_dir / "project.json").write_text(
+                json.dumps(minimal_manifest()),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                project_id="proj_door_left_lit",
+                learning_id="learn_rawer_first_drafts",
+                learning_type="soft",
+                learning_rule="Keep first drafts rawer before polishing.",
+                scope=None,
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_door_left_lit_test"],
+                evidence_summary="Artist requested rawer first drafts.",
+                occurrence_count=0,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                with self.assertRaisesRegex(
+                    SystemExit,
+                    "refusing to write malformed learning-record.schema.json",
+                ):
+                    artist_os_db.add_learning(args)
+
+            learning_path = (
+                library_root
+                / "personal-library"
+                / "learnings"
+                / "learn_rawer_first_drafts.json"
+            )
+            self.assertFalse(learning_path.exists())
+
+    def test_validate_record_accepts_valid_record(self) -> None:
+        record = {
+            "feedback_id": "fb_door_left_lit_test",
+            "project_id": "proj_door_left_lit",
+            "received_at": "2026-05-31T00:00:00Z",
+            "source": "artist",
+            "stage": None,
+            "output_record_id": None,
+            "feedback_text": "The first draft should be rawer.",
+            "classification_status": "unclassified",
+            "learning_review_status": "pending",
+            "notes": None,
+        }
+
+        self.assertIsNone(
+            artist_os_db.validate_record(record, "project-feedback-log-entry.schema.json")
+        )
+
+    def test_validate_record_rejects_missing_required_field(self) -> None:
+        record = {
+            "feedback_id": "fb_door_left_lit_test",
+            "project_id": "proj_door_left_lit",
+            "received_at": "2026-05-31T00:00:00Z",
+            "source": "artist",
+            "feedback_text": "The first draft should be rawer.",
+            "classification_status": "unclassified",
+            # learning_review_status is required and intentionally omitted
+        }
+
+        with self.assertRaisesRegex(
+            SystemExit,
+            "refusing to write malformed project-feedback-log-entry.schema.json",
+        ):
+            artist_os_db.validate_record(record, "project-feedback-log-entry.schema.json")
+
+    def test_validate_record_rejects_wrong_typed_field(self) -> None:
+        record = {
+            "learning_id": "learn_rawer_first_drafts",
+            "learning_type": "not_a_valid_enum_value",
+            "status": "active",
+            "learning_rule": "Keep first drafts rawer before polishing.",
+            "scope": None,
+            "source_project_ids": ["proj_door_left_lit"],
+            "evidence_refs": [
+                {
+                    "evidence_type": "feedback_entry",
+                    "ref": "fb_door_left_lit_test",
+                    "summary": "Recorded as learning evidence.",
+                }
+            ],
+            "promotion_state": {
+                "occurrence_count": 1,
+                "promotion_reason": None,
+            },
+            "created_at": "2026-05-31T00:00:00Z",
+            "updated_at": "2026-05-31T00:00:00Z",
+        }
+
+        with self.assertRaisesRegex(
+            SystemExit,
+            "refusing to write malformed learning-record.schema.json",
+        ):
+            artist_os_db.validate_record(record, "learning-record.schema.json")
+
+    def test_validate_record_rejects_extra_field_under_additional_properties_false(self) -> None:
+        record = {
+            "signal_id": "perf_symbology_board_001",
+            "project_id": "proj_door_left_lit",
+            "output_record_id": None,
+            "captured_at": "2026-05-31T00:00:00Z",
+            "source": "manual_import",
+            "metric_name": "save_rate",
+            "metric_value": 0.32,
+            "signal_direction": "positive",
+            "evidence_weight": "equal_to_artist_feedback",
+            "notes": None,
+            "unexpected_field": "should be rejected",
+        }
+
+        with self.assertRaisesRegex(
+            SystemExit,
+            "refusing to write malformed performance-signal.schema.json",
+        ):
+            artist_os_db.validate_record(record, "performance-signal.schema.json")
+
     def test_init_command_accepts_library_root_routing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             library_root = Path(tmpdir)
