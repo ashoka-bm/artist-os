@@ -275,7 +275,7 @@
       "traceability_notes": [
         {
           "source_type": "artist_meaning",
-          "source_ref": "meaning_fading_museum_three_act",
+          "source_ref": "meaning_fading_museum_fichtean_curve",
           "note": "The tension point preserves the core meaning of attention as care without control."
         }
       ]
@@ -286,7 +286,7 @@
       "movement_id": "kem_opening_pressure",
       "role": "opening_pressure",
       "beat_ids": [
-        "beat_fading_setup"
+        "beat_fichtean_curve_rupture"
       ],
       "emotional_shift": "routine custody becomes alarmed attention",
       "compression_priority": "primary",
@@ -302,14 +302,14 @@
       "movement_id": "kem_inciting_shift",
       "role": "inciting_shift",
       "beat_ids": [
-        "beat_fading_choice"
+        "beat_fichtean_curve_reveal"
       ],
       "emotional_shift": "procedure becomes personal witness",
       "compression_priority": "primary",
       "traceability_notes": [
         {
           "source_type": "artist_meaning",
-          "source_ref": "meaning_fading_museum_three_act",
+          "source_ref": "meaning_fading_museum_fichtean_curve",
           "note": "The first major choice adapts care as a chosen act."
         }
       ]
@@ -318,14 +318,14 @@
       "movement_id": "kem_midpoint_reframe",
       "role": "midpoint_turn",
       "beat_ids": [
-        "beat_fading_midpoint"
+        "beat_fichtean_curve_reversal"
       ],
       "emotional_shift": "saving the image becomes witnessing the loss",
       "compression_priority": "primary",
       "traceability_notes": [
         {
           "source_type": "transformation_brief",
-          "source_ref": "tb_fading_museum_three_act",
+          "source_ref": "tb_fading_museum_fichtean_curve",
           "note": "The midpoint keeps the work from becoming a repair plot."
         }
       ]
@@ -334,14 +334,15 @@
       "movement_id": "kem_climax_residue",
       "role": "climax",
       "beat_ids": [
-        "beat_fading_closure"
+        "beat_fichtean_curve_consequence",
+        "beat_fichtean_curve_residue"
       ],
       "emotional_shift": "private witness becomes shared perception",
       "compression_priority": "primary",
       "traceability_notes": [
         {
           "source_type": "artist_meaning",
-          "source_ref": "meaning_fading_museum_three_act",
+          "source_ref": "meaning_fading_museum_fichtean_curve",
           "note": "The climax answers through changed attention rather than restoration."
         }
       ]
@@ -358,8 +359,8 @@
     },
     "adjacent_beat_shifts": [
       {
-        "from_beat_id": "beat_fading_setup",
-        "to_beat_id": "beat_fading_choice",
+        "from_beat_id": "beat_fichtean_curve_rupture",
+        "to_beat_id": "beat_fichtean_curve_reveal",
         "shift_summary": "The pressure shifts from noticing loss to choosing responsibility for it.",
         "shifted_tensions": [
           {
@@ -380,8 +381,8 @@
         "meets_minimum": true
       },
       {
-        "from_beat_id": "beat_fading_choice",
-        "to_beat_id": "beat_fading_midpoint",
+        "from_beat_id": "beat_fichtean_curve_reveal",
+        "to_beat_id": "beat_fichtean_curve_reversal",
         "shift_summary": "The guard's chosen witness stops feeling like rescue and becomes grief-bearing attention.",
         "shifted_tensions": [
           {
@@ -402,8 +403,30 @@
         "meets_minimum": true
       },
       {
-        "from_beat_id": "beat_fading_midpoint",
-        "to_beat_id": "beat_fading_closure",
+        "from_beat_id": "beat_fichtean_curve_reversal",
+        "to_beat_id": "beat_fichtean_curve_consequence",
+        "shift_summary": "Witness without rescue reaches visible cost at dawn when the painting is gone.",
+        "shifted_tensions": [
+          {
+            "name": "Hope / Grief",
+            "from_intensity": 0.84,
+            "to_intensity": 0.9,
+            "delta": 0.06,
+            "direction": "holds"
+          },
+          {
+            "name": "Loss / Meaning",
+            "from_intensity": 0.63,
+            "to_intensity": 0.82,
+            "delta": 0.19,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_fichtean_curve_consequence",
+        "to_beat_id": "beat_fichtean_curve_residue",
         "shift_summary": "The unresolved loss moves from one person's vigil into a public change in perception.",
         "shifted_tensions": [
           {
@@ -424,7 +447,7 @@
         "meets_minimum": true
       }
     ],
-    "reviewer_instruction": "Block if the three-act shape reads as external plot mechanics rather than escalating attention pressure, or if the climax restores the image instead of changing perception."
+    "reviewer_instruction": "Block if the Fichtean crisis pattern reads as external plot mechanics rather than escalating attention pressure, or if the climax restores the image instead of changing perception."
   },
   "arc_summary": {
     "beginning": "A routine guard notices a painting fading when neglected.",
@@ -434,7 +457,7 @@
   },
   "story_critic_review": {
     "required": true,
-    "review_record_id": "review_story_fading_museum_three_act",
+    "review_record_id": "review_story_fading_museum_fichtean_curve",
     "approval_status": "approve"
   },
   "story_approval": {
@@ -451,12 +474,12 @@
     },
     {
       "source_type": "artist_meaning",
-      "source_ref": "meaning_fading_museum_three_act",
-      "note": "The adapted three-act structure preserves attention as care rather than control."
+      "source_ref": "meaning_fading_museum_fichtean_curve",
+      "note": "The adapted Fichtean Curve preserves attention as care rather than control."
     },
     {
       "source_type": "story_gate",
-      "source_ref": "three_act_structure",
+      "source_ref": "fichtean_curve",
       "note": "The Story Structure guides Beat movement and does not select medium, output shape, asset count, or Cultural Format Structure."
     }
   ]

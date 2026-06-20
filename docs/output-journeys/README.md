@@ -31,6 +31,8 @@ Writing-method integration lives in `docs/writing/README.md`. Its referenced `wr
 
 Long-Work Stewardship applies only when outputs build on each other through sequence, dependency, emotional arc, or cumulative continuity. Related but non-sequential portfolios, collections, store sets, or broad prompt branches should stay on the lighter collection review path.
 
+A compact multi-beat `arc` does not automatically trigger Long-Work Stewardship, image-series expansion, sound-sequence planning, or long-text handling. Trigger those paths when the artist accepts expansion or when the medium plan creates dependent parts whose later outputs rely on earlier outputs. When adjacent beats overlap or can be held together, the medium may recommend a compact shape such as a short written work, compressed visual arc, or single multi-section sound work.
+
 ## Gates And Reviews
 
 The canonical shared gate order, critic roles, reviewer roles, mandatory bounded sub-agent review rule, and blocking behavior live in `docs/gates-and-reviews.md`.

@@ -60,6 +60,8 @@ Focused Story Structure rehearsals for those six new entries passed without sche
 
 Promoted representative fixtures for `save_the_cat_beat_sheet` and `fichtean_curve` to cover granular commercial beat mapping and quiet crisis pressure without adding six redundant Beat Plan fixtures.
 
+A cross-medium rehearsal using the shared `fichtean_curve` Beat Plan found that Text, Image, and Sound can all preserve the same Story Structure while recommending compact medium shapes: short written work, compressed visual arc, and single multi-section sound work. Length and expansion gates should therefore consider dependency, accepted expansion, continuity, and medium-specific part planning rather than triggering from beat count or `story_mode = "arc"` alone.
+
 ### Gates And Reviews
 
 Added:

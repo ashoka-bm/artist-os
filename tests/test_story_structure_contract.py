@@ -56,6 +56,26 @@ class StoryStructureContractTests(unittest.TestCase):
             with self.subTest(required=required):
                 self.assertIn(required, text)
 
+    def test_compact_multi_beat_arc_does_not_force_long_work(self) -> None:
+        text = self._read("docs/output-journeys/README.md")
+        beat_plan = json.loads(
+            (
+                REPO_ROOT
+                / "tests/fixtures/story/fichtean-quiet-crisis-rehearsal/beat-plan.json"
+            ).read_text(encoding="utf-8")
+        )
+
+        self.assertEqual("arc", beat_plan["story_mode"])
+        self.assertEqual(5, len(beat_plan["beats"]))
+        self.assertIn(
+            "A compact multi-beat `arc` does not automatically trigger Long-Work Stewardship",
+            text,
+        )
+        self.assertIn(
+            "short written work, compressed visual arc, or single multi-section sound work",
+            text,
+        )
+
     def test_conductor_routes_story_structure_into_beat_plan(self) -> None:
         text = self._read("skills/artist-os/SKILL.md")
 
