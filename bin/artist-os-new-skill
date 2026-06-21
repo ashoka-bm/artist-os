@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""Scaffold a new Artist OS skill and register it everywhere the suite requires.
+
+Adding a skill means touching four places that must stay in sync (enforced by
+tests/test_skill_set_sync.py): the skill's own SKILL.md, the installer's
+`skills=( … )` array, the conductor's `skills/<name>` delegation list, and the
+routing eval's `skills[]` membership. Doing that by hand is easy to half-finish;
+this command does all four atomically (rolling every write back on failure) and
+prints the authoring TODOs that remain (the real description, the conductor phase
+placement, the eval cases).
+"""
+from __future__ import annotations
+
+import importlib.machinery
+import importlib.util
+import json
+import re
+import shutil
+import sys
+from pathlib import Path
+
+_RESOLVER_PATH = Path(__file__).resolve().parent / "artist-os-paths"
+_LOADER = importlib.machinery.SourceFileLoader("artist_os_paths", str(_RESOLVER_PATH))
+_SPEC = importlib.util.spec_from_loader("artist_os_paths", _LOADER)
+resolver = importlib.util.module_from_spec(_SPEC)
+_LOADER.exec_module(resolver)
+
+# Skill directory names are lowercase kebab; the frontmatter name is artist-os-<dir>.
+_NAME_RE = re.compile(r"^[a-z][a-z0-9-]*$")
+
+# Names that collide with reserved tokens: "none" is the routing sentinel (a
+# skill named it would duplicate it and slip past the set-based sync check),
+# "artist-os" is the conductor itself.
+RESERVED = {"none", "artist-os"}
+
+
+class ScaffoldError(Exception):
+    """A registration site could not be found — fail loud rather than half-register."""
+
+
+ANCHOR_SENTENCE = (
+    "Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from "
+    "`$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex "
+    "install. If a referenced file is missing, run `bin/artist-os-paths doctor`."
+)
+
+
+def _title(name: str) -> str:
+    return name.replace("-", " ").title()
+
+
+def create_skill_file(root: Path, name: str) -> Path:
+    """Write skills/<name>/SKILL.md from a lint-clean template."""
+    skill_dir = root / "skills" / name
+    skill_dir.mkdir(parents=True)
+    md = skill_dir / "SKILL.md"
+    md.write_text(
+        "---\n"
+        f"name: artist-os-{name}\n"
+        f"description: TODO — one-line triggering description for {name}; replace before shipping.\n"
+        "---\n\n"
+        f"# {_title(name)}\n\n"
+        "TODO: author this skill.\n\n"
+        f"{ANCHOR_SENTENCE}\n",
+        encoding="utf-8",
+    )
+    return md
+
+
+# The stable phrase that anchors the conductor's delegation enumeration. If this
+# disappears the scaffold fails loud rather than guessing where delegation lives.
+_DELEGATION_ANCHOR = "Delegate each phase's detailed checklist"
+_DELEGATION_RE = re.compile(r"^(.*), and (`skills/[a-z0-9-]+`)\.\s*$")
+
+
+def plan_installer(root: Path, name: str) -> tuple[Path, str]:
+    """Return (path, new_text) inserting "<name>" into the `skills=( … )` array."""
+    path = root / "bin" / "install-codex-dev-skills"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    try:
+        start = next(i for i, line in enumerate(lines) if line.strip() == "skills=(")
+    except StopIteration:
+        raise ScaffoldError("could not find the `skills=(` array in bin/install-codex-dev-skills")
+    close = next((i for i in range(start + 1, len(lines)) if lines[i].strip() == ")"), None)
+    if close is None:
+        raise ScaffoldError("unterminated `skills=(` array in bin/install-codex-dev-skills")
+    # Match members per line (a quoted token alone on a line), so a commented-out
+    # token elsewhere in the array region is not mistaken for a real entry.
+    members = [
+        m.group(1) for i in range(start + 1, close) if (m := re.fullmatch(r'"([a-z0-9-]+)",?', lines[i].strip()))
+    ]
+    if name in members:
+        raise ScaffoldError(
+            f"{name!r} is already in the installer skills=() array; the repo may have drifted "
+            "— run the test suite to check sync"
+        )
+    indent = "  "
+    for i in range(start + 1, close):
+        if lines[i].strip():
+            indent = lines[i][: len(lines[i]) - len(lines[i].lstrip())]
+            break
+    lines.insert(close, f'{indent}"{name}"')
+    return path, "\n".join(lines) + "\n"
+
+
+def plan_conductor(root: Path, name: str) -> tuple[Path, str]:
+    """Return (path, new_text) appending `skills/<name>` to the conductor's
+    Oxford-comma delegation list ("A, B, and C." -> "A, B, C, and <name>.")."""
+    path = root / "skills" / "artist-os" / "SKILL.md"
+    raw = path.read_text(encoding="utf-8")
+    if re.search(rf"`skills/{re.escape(name)}`", raw):
+        raise ScaffoldError(
+            f"`skills/{name}` is already referenced in the conductor; the repo may have drifted "
+            "— run the test suite to check sync"
+        )
+    lines = raw.splitlines()
+    for i, line in enumerate(lines):
+        if _DELEGATION_ANCHOR not in line:
+            continue
+        match = _DELEGATION_RE.match(line)
+        if not match:
+            raise ScaffoldError(
+                "conductor delegation sentence found but its phrasing changed; "
+                f"add `skills/{name}` to it by hand in skills/artist-os/SKILL.md"
+            )
+        lines[i] = f"{match.group(1)}, {match.group(2)}, and `skills/{name}`."
+        return path, "\n".join(lines) + "\n"
+    raise ScaffoldError(
+        f"could not find the conductor delegation sentence ({_DELEGATION_ANCHOR!r}) "
+        "in skills/artist-os/SKILL.md"
+    )
+
+
+def plan_routing(root: Path, name: str) -> tuple[Path, str]:
+    """Return (path, new_text) inserting "<name>" into routing-evals.json skills[]
+    just before the "none" sentinel, by line edit so the hand-formatted eval
+    cases are left byte-for-byte untouched."""
+    path = root / "evals" / "routing" / "routing-evals.json"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    start = next(
+        (i for i, l in enumerate(lines) if l.strip().startswith('"skills"') and l.rstrip().endswith("[")),
+        None,
+    )
+    if start is None:
+        raise ScaffoldError('could not find the `"skills": [` array in evals/routing/routing-evals.json')
+    close = next((i for i in range(start + 1, len(lines)) if lines[i].strip().startswith("]")), None)
+    if close is None:
+        raise ScaffoldError('unterminated `"skills"` array in evals/routing/routing-evals.json')
+    members = [lines[i].strip().rstrip(",").strip('"') for i in range(start + 1, close)]
+    if name in members:
+        raise ScaffoldError(
+            f"{name!r} is already in routing-evals.json skills[]; the repo may have drifted "
+            "— run the test suite to check sync"
+        )
+    none_idx = next(
+        (i for i in range(start + 1, close) if lines[i].strip().rstrip(",") == '"none"'), None
+    )
+    if none_idx is None:
+        raise ScaffoldError("routing skills[] is missing the 'none' sentinel to insert before")
+    indent = lines[none_idx][: len(lines[none_idx]) - len(lines[none_idx].lstrip())]
+    lines.insert(none_idx, f'{indent}"{name}",')
+    new_text = "\n".join(lines) + "\n"
+    json.loads(new_text)  # never write a routing file we just corrupted
+    return path, new_text
+
+
+def main(argv: list[str]) -> int:
+    if not argv or argv[0] in ("-h", "--help"):
+        print("usage: artist-os-new-skill <name>   (name: ^[a-z][a-z0-9-]*$)")
+        return 0 if argv else 2
+
+    name = argv[0]
+    if not _NAME_RE.match(name):
+        print(f"FAIL  invalid skill name {name!r}; must match ^[a-z][a-z0-9-]*$", file=sys.stderr)
+        return 2
+    if name in RESERVED:
+        print(f"FAIL  {name!r} is a reserved name (routing sentinel / conductor); choose another", file=sys.stderr)
+        return 1
+
+    try:
+        root = resolver.resolve_root()
+    except resolver.ResolveError as exc:
+        print(f"FAIL  {exc}", file=sys.stderr)
+        return 1
+
+    if (root / "skills" / name).exists():
+        print(f"FAIL  skills/{name} already exists", file=sys.stderr)
+        return 1
+
+    # Pre-flight: compute every edit before writing anything, so a missing anchor
+    # (or an unreadable registration file) aborts cleanly instead of leaving the
+    # repo half-registered or dumping a raw traceback.
+    try:
+        edits = [plan_installer(root, name), plan_conductor(root, name), plan_routing(root, name)]
+    except (ScaffoldError, OSError, UnicodeDecodeError) as exc:
+        print(f"FAIL  {exc}", file=sys.stderr)
+        return 1
+
+    # Commit: create the skill file first (the only write needing a fresh dir),
+    # then apply the registration edits. On any write failure, roll everything
+    # back so the tool never leaves a half-registered repo, and fail cleanly.
+    created_dir = root / "skills" / name
+    dir_preexisted = created_dir.exists()  # the guard above makes this False; defensive
+    written: list[tuple[Path, str]] = []
+    try:
+        md = create_skill_file(root, name)
+        for path, new_text in edits:
+            written.append((path, path.read_text(encoding="utf-8")))
+            path.write_text(new_text, encoding="utf-8")
+    except OSError as exc:
+        for path, original in reversed(written):
+            try:
+                path.write_text(original, encoding="utf-8")
+            except OSError:
+                pass
+        if not dir_preexisted:  # never delete a skill dir we did not create
+            shutil.rmtree(created_dir, ignore_errors=True)
+        print(f"FAIL  {exc}", file=sys.stderr)
+        return 1
+
+    print(f"created    {md.relative_to(root)}")
+    print("registered installer skills=() array")
+    print("registered conductor delegation list")
+    print("registered routing-evals.json skills[]")
+    _print_todos(name)
+    return 0
+
+
+def _print_todos(name: str) -> None:
+    print(
+        f"\nNEXT (author by hand — the scaffold only satisfies the sync gate):\n"
+        f"  1. skills/{name}/SKILL.md: replace the TODO `description:` and body.\n"
+        f"  2. skills/artist-os/SKILL.md: place {name} in the phase order with its packet\n"
+        f"     (the scaffold only added it to the delegation list).\n"
+        f"  3. evals/routing/routing-evals.json: add eval case(s) and a policy line for {name}\n"
+        f"     (scaffold registered membership only; cases are not auto-generated).\n"
+        f"  Then run: bin/artist-os-lint {name}  &&  python3 -m unittest discover -s tests -p 'test_*.py'"
+    )
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
