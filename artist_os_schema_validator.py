@@ -131,6 +131,86 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
             if key in properties:
                 validate(item, properties[key], root, f"{path}.{key}")
 
+        if path == "$" and root.get("title") == "ReleasePackagePlan":
+            validate_release_package_plan_contract(value)
+
+
+def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
+    """Validate Album v1 cross-item invariants not expressible in our schema subset."""
+    if record.get("package_subtype") != "album":
+        return
+
+    deliverables = record.get("deliverables", [])
+    tracks = record.get("tracks", [])
+
+    if record.get("album_cohesion_mode") == "arc_album":
+        if not record.get("long_work_stewardship_record_ids", []):
+            raise ValidationError(
+                "$.long_work_stewardship_record_ids",
+                "Album v1 arc_album requires at least one Long-Work Stewardship record id",
+            )
+
+        for track in tracks:
+            track_id = track.get("track_id")
+            album_beat_ref = track.get("album_beat_ref", {})
+            if album_beat_ref.get("long_work_part_id") is None:
+                raise ValidationError(
+                    "$.tracks",
+                    f"Album v1 arc_album track {track_id!r} requires a non-null long_work_part_id",
+                )
+
+    for deliverable_type in ["album_title", "album_description", "album_cover"]:
+        matches = [
+            deliverable for deliverable in deliverables
+            if (
+                deliverable.get("deliverable_type") == deliverable_type
+                and deliverable.get("required") is True
+                and deliverable.get("track_id") is None
+            )
+        ]
+        if len(matches) != 1:
+            raise ValidationError(
+                "$.deliverables",
+                f"Album v1 requires exactly one required package-level {deliverable_type} deliverable",
+            )
+
+    for track in tracks:
+        track_id = track.get("track_id")
+        sound_deliverables = [
+            deliverable for deliverable in deliverables
+            if (
+                deliverable.get("deliverable_type") == "track_sound_prompt_plan"
+                and deliverable.get("required") is True
+                and deliverable.get("track_id") == track_id
+            )
+        ]
+        if len(sound_deliverables) != 1:
+            raise ValidationError(
+                "$.deliverables",
+                f"Album v1 track {track_id!r} requires exactly one required track_sound_prompt_plan deliverable",
+            )
+
+        cover_deliverables = [
+            deliverable for deliverable in deliverables
+            if (
+                deliverable.get("deliverable_type") == "track_cover_image_prompt_plan"
+                and deliverable.get("required") is True
+                and deliverable.get("track_id") == track_id
+            )
+        ]
+        if len(cover_deliverables) != 1:
+            raise ValidationError(
+                "$.deliverables",
+                f"Album v1 track {track_id!r} requires exactly one required track_cover_image_prompt_plan deliverable",
+            )
+
+        cover_ids = {deliverable.get("deliverable_id") for deliverable in cover_deliverables}
+        if track.get("track_cover_deliverable_id") not in cover_ids:
+            raise ValidationError(
+                "$.tracks",
+                f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
+            )
+
 
 def validate_file(schema_path: Path, data_path: Path) -> None:
     schema = load_json(schema_path)
@@ -179,6 +259,8 @@ FIXTURE_SCHEMA_MAP = {
     "text-brief-approval-gate.json": "gate-decision.schema.json",
     "text-prompt-lock-gate.json": "gate-decision.schema.json",
     "text-draft-generation-approval-gate.json": "gate-decision.schema.json",
+    "album-release-package-plan-approval-gate.json": "gate-decision.schema.json",
+    "album-calibration-gate.json": "gate-decision.schema.json",
     "output-review-blocked-waived-record.json": "review-record.schema.json",
     "output-review-record.json": "review-record.schema.json",
     "fallback-review-record.json": "review-record.schema.json",
@@ -188,6 +270,7 @@ FIXTURE_SCHEMA_MAP = {
     "suno-prompt-critic-review-record.json": "review-record.schema.json",
     "text-writing-critic-review-record.json": "review-record.schema.json",
     "text-prompt-critic-review-record.json": "review-record.schema.json",
+    "album-pre-calibration-mixed-media-critic-review-record.json": "review-record.schema.json",
     "symbology-gate.json": "gate-decision.schema.json",
     "transformation-brief.json": "transformation-brief.schema.json",
     "beat-plan.json": "beat-plan.schema.json",
@@ -207,12 +290,14 @@ FIXTURE_SCHEMA_MAP = {
     "text-generation-plan.json": "text-generation-plan.schema.json",
     "text-medium-plan.json": "text-medium-plan.schema.json",
     "review-record.json": "review-record.schema.json",
+    "album-release-package-plan.json": "release-package-plan.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
     "project-feedback-log-entry.json": "project-feedback-log-entry.schema.json",
     "learning-record.json": "learning-record.schema.json",
     "performance-signal.json": "performance-signal.schema.json",
     "foundation-stewardship-record.json": "long-work-stewardship-record.schema.json",
+    "album-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "image-series-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "text-stewardship-record.json": "long-work-stewardship-record.schema.json",
 }

@@ -1,0 +1,151 @@
+{
+  "review_record_id": "review_door_left_lit_pre_calibration",
+  "project_id": "proj_door_left_lit",
+  "review_role": "mixed_media_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "release_package_plan",
+    "artifact_id": "rpp_door_left_lit_album",
+    "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json"
+  },
+  "upstream_context": {
+    "source_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "artist_meaning_summary": "Preserve the unresolved threshold: nearness to release should intensify pressure without becoming triumph.",
+    "governing_refs": [
+      {
+        "ref_type": "release_package_plan",
+        "ref_id": "rpp_door_left_lit_album",
+        "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json"
+      },
+      {
+        "ref_type": "transformation_brief",
+        "ref_id": "tb_door_left_lit",
+        "path_or_ref": "tests/fixtures/story/transformation-brief.json"
+      },
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit_album",
+        "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json#album_beat_plan_id"
+      },
+      {
+        "ref_type": "long_work_stewardship",
+        "ref_id": "lws_door_left_lit_album",
+        "path_or_ref": "tests/fixtures/long-work/album-stewardship-record.json"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "the ache of being close to release but unable to choose it",
+    "minimum_tension_criteria_reviewed": [
+      "The album should sustain withheld crossing across tracks and covers.",
+      "The calibration track and Track Cover should be coherent enough to test before full expansion."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "rpp_door_left_lit_album#cross_media_continuity",
+        "tension_name": "withheld crossing across media",
+        "claimed_intensity": 0.8,
+        "reviewer_assessed_intensity": 0.82,
+        "minimum_required_intensity": 0.7,
+        "meets_minimum": true,
+        "assessment_note": "The shared sonic and visual rules keep the threshold unresolved and prevent a triumphant crossing."
+      },
+      {
+        "source_ref": "rpp_door_left_lit_album#album_calibration",
+        "tension_name": "calibration readiness",
+        "claimed_intensity": 0.75,
+        "reviewer_assessed_intensity": 0.76,
+        "minimum_required_intensity": 0.65,
+        "meets_minimum": true,
+        "assessment_note": "Track 1 and its Track Cover are justified as representative tests for sound, visual direction, and sound-visual fit."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_album_threshold",
+        "review_note": "The package keeps the threshold movement active through the Calibration Track and the first Track Cover."
+      },
+      {
+        "movement_id": "kem_album_residue",
+        "review_note": "The later track mapping preserves residue as a planned expansion target without rushing it before calibration."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_album_approach",
+        "review_note": "The first track sets up approach as near release that remains withheld."
+      },
+      {
+        "beat_id": "beat_album_threshold",
+        "review_note": "The second track is mapped to deepen the doorway pressure instead of resolving it."
+      },
+      {
+        "beat_id": "beat_album_residue",
+        "review_note": "The final track is held for later expansion as unresolved aftermath."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The Release Package Plan is coherent enough to approve for representative Album Calibration planning."
+  },
+  "matched": [
+    {
+      "summary": "Required Album v1 deliverables are present before calibration.",
+      "traces_to": [
+        {
+          "source_type": "release_package_plan",
+          "source_ref": "rpp_door_left_lit_album#deliverables",
+          "note": "The plan includes package title, description, album cover, one sound prompt deliverable per track, and one Track Cover deliverable per track."
+        }
+      ]
+    },
+    {
+      "summary": "Album Sonic System and Album Visual System have clear boundaries.",
+      "traces_to": [
+        {
+          "source_type": "release_package_plan",
+          "source_ref": "rpp_door_left_lit_album#album_sonic_system",
+          "note": "The sonic system governs shared pressure, motifs, and production constraints without replacing Sound Medium Plans."
+        },
+        {
+          "source_type": "release_package_plan",
+          "source_ref": "rpp_door_left_lit_album#album_visual_system",
+          "note": "The visual system governs shared cover language without replacing Image Medium Plans."
+        }
+      ]
+    },
+    {
+      "summary": "Long-Work Stewardship supports the album arc before expansion.",
+      "traces_to": [
+        {
+          "source_type": "long_work_stewardship",
+          "source_ref": "lws_door_left_lit_album",
+          "note": "The stewardship record maps tracks to parts and keeps cumulative drift visible."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Provider-boundary safety is intact.",
+      "evidence": "The plan approves coordination and calibration planning only; it does not approve provider-backed generation.",
+      "recommendation": "Proceed to Release Package Plan Approval Gate, then representative Medium Plans and Album Calibration."
+    }
+  ],
+  "recommended_revision": "No blocking revision required before package approval.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-06-21T12:20:00Z"
+}

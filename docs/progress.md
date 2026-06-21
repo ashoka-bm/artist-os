@@ -44,8 +44,24 @@ Implemented dry-run workflows:
 - Text Reference to Provider-Neutral Image Prompt Plan.
 - Text Reference to Suno Sound Prompt Plan.
 - Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
+- Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
 
 Provider-backed generation remains out of scope without explicit approval.
+
+### Release Package / Album v1
+
+Added the first schema-backed Release Package coordination record:
+
+- `schemas/release-package-plan.schema.json`,
+- `tests/fixtures/release-packages/album-release-package-plan.json`,
+- schema validation coverage for Album v1 and Single Bundle rejection,
+- transition coverage for Album Beat Plan to Release Package Plan, calibration-before-expansion order, Album Calibration subchecks, and individual Output Records,
+- `release_package_plan_approval` and `album_calibration` support in Gate Decisions,
+- `release_package_plan` support in Review Records.
+
+Album is the only implemented Release Package subtype in v1. EP, Single Bundle, Visual Album, campaign, and broader package routes remain future sibling subtypes. The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship Records, Prompt Plans, Text Generation Plans, or Output Records.
+
+Album Calibration is directional only. Representative Sound and Image Medium Plans come before calibration; remaining track Sound Prompt Plans, album cover, Track Covers, and optional text deliverables expand only after the relevant subchecks approve. Final artifacts still use normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates.
 
 ### Shared Story Architecture
 
@@ -415,7 +431,7 @@ These make the output lifecycle concrete without expanding Output Record into ta
 
 ## Current Best Next Step
 
-This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run end-to-end dry-run rehearsals from Reference to Prompt Plan or Text Generation Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding a new medium branch or provider adapter.
+This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run end-to-end dry-run rehearsals from Reference to Prompt Plan, Text Generation Plan, or Album v1 Release Package Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding another package subtype or provider adapter.
 
 Reason:
 
@@ -428,16 +444,18 @@ Reason:
 - `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
-- output batch/group records need provider adapters or batch generation workflows before they become schemas.
+- output batch/group records need provider adapters or batch generation workflows before they become schemas,
+- Album v1 now has a package plan schema and representative fixture, but still needs end-to-end rehearsal before EP, Single Bundle, Visual Album, or export/publishing package artifacts become schemas.
 
 Near-term plan:
 
 1. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan or Text Generation Plan for image, Suno, and Text Journey, and update any docs or skill instructions that still feel under-specified.
-2. Add reviewer fixture tests for symbolic gate status and medium-gate completeness when review packets omit required gate context.
-3. Add reviewer fixture tests for Text Generation Plan critique and text Output Critic packets once a full rehearsal produces natural review examples.
-4. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
-5. Add provider-adapter hard guards: image and Suno adapters must refuse provider calls unless the request includes a matching approved Generation Approval Gate for that exact call or approved batch.
-6. Keep focused regression coverage for rehearsal findings: fallback separated review execution and Suno `phonetic_vocals` Custom Mode mapping.
+2. Run one Album v1 dry-run rehearsal through Release Package Plan, pre-calibration Mixed-Media Critic Review, representative calibration Medium Plans, and Album Calibration.
+3. Add reviewer fixture tests for symbolic gate status and medium-gate completeness when review packets omit required gate context.
+4. Add reviewer fixture tests for Text Generation Plan critique and text Output Critic packets once a full rehearsal produces natural review examples.
+5. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
+6. Add provider-adapter hard guards: image and Suno adapters must refuse provider calls unless the request includes a matching approved Generation Approval Gate for that exact call or approved batch.
+7. Keep focused regression coverage for rehearsal findings: fallback separated review execution and Suno `phonetic_vocals` Custom Mode mapping.
 
 Final verification for this pass:
 
@@ -458,6 +476,7 @@ Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Beat Plan
+  -> optional Release Package Plan
   -> Medium Plan
   -> Creative Brief Record
   -> Prompt Plan / Text Generation Plan
@@ -477,6 +496,7 @@ Implemented branches:
 Not implemented yet:
 
 - Video Medium Plan and Mixed-Media Plan schemas,
+- EP, Single Bundle, Visual Album, campaign, export, or publishing Release Package subtypes,
 - provider adapters and real provider-backed generation calls,
 - import adapters for artist-provided output artifacts,
 - durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records.

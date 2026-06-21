@@ -1,0 +1,215 @@
+{
+  "long_work_stewardship_record_id": "lws_door_left_lit_album",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit_album",
+  "medium_plan_id": null,
+  "version": 1,
+  "supersedes_long_work_stewardship_record_id": null,
+  "target_media_type": "sound",
+  "cumulative_work_type": "song_sequence",
+  "stewardship_status": "active",
+  "activation_reason": {
+    "story_mode": "arc",
+    "artist_requested_cumulative_work": true,
+    "requires_part_to_part_dependency": true,
+    "reason": "Album Cohesion Mode selected an arc album, so track order and emotional continuity require stewardship before full expansion."
+  },
+  "governing_arc": {
+    "arc_summary": "The album moves from approach to threshold pressure to residue without granting a completed crossing.",
+    "key_emotional_movement_ids": [
+      "kem_album_threshold",
+      "kem_album_residue"
+    ],
+    "minimum_tension_criteria_ref": "bp_door_left_lit_album#tension_movement_plan.minimum_tension_criteria",
+    "story_authority_ref": "bp_door_left_lit_album",
+    "may_revise_story_authority": false
+  },
+  "part_plan": [
+    {
+      "part_id": "lwpart_album_01",
+      "part_index": 1,
+      "part_label": "Key In Hand",
+      "part_kind": "sound_movement",
+      "medium_part_ref": {
+        "ref_type": "sound_movement",
+        "ref_id": "track_door_01",
+        "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json#tracks/0"
+      },
+      "beat_id": "beat_album_approach",
+      "key_emotional_movement_id": "kem_album_threshold",
+      "assigned_beat_role": "approach",
+      "part_job": "Open the album with the nearness of release before any crossing is possible.",
+      "intended_feeling": "the ache of holding a key that cannot yet be used",
+      "expected_state": "The listener feels close to action but still restrained.",
+      "must_preserve": [
+        "near release",
+        "withheld crossing"
+      ],
+      "must_not_resolve_yet": [
+        "the threshold must not become triumph"
+      ],
+      "depends_on_part_ids": [],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_album_02",
+      "part_index": 2,
+      "part_label": "Light That Refuses",
+      "part_kind": "sound_movement",
+      "medium_part_ref": {
+        "ref_type": "sound_movement",
+        "ref_id": "track_door_02",
+        "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json#tracks/1"
+      },
+      "beat_id": "beat_album_threshold",
+      "key_emotional_movement_id": "kem_album_threshold",
+      "assigned_beat_role": "threshold",
+      "part_job": "Make the lit doorway feel more dangerous because it remains open.",
+      "intended_feeling": "tender pressure turning into paralysis",
+      "expected_state": "The listener feels the doorway as invitation and threat at once.",
+      "must_preserve": [
+        "lit threshold",
+        "unresolved choice"
+      ],
+      "must_not_resolve_yet": [
+        "the album must not cross or close the doorway"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_album_01"
+      ],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    },
+    {
+      "part_id": "lwpart_album_03",
+      "part_index": 3,
+      "part_label": "No Crossing",
+      "part_kind": "sound_movement",
+      "medium_part_ref": {
+        "ref_type": "sound_movement",
+        "ref_id": "track_door_03",
+        "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json#tracks/2"
+      },
+      "beat_id": "beat_album_residue",
+      "key_emotional_movement_id": "kem_album_residue",
+      "assigned_beat_role": "residue",
+      "part_job": "Leave the listener with the consequence of not crossing rather than a release.",
+      "intended_feeling": "quiet residue after a choice remains unmade",
+      "expected_state": "The listener understands refusal as the album's final emotional condition.",
+      "must_preserve": [
+        "aftermath without action",
+        "unresolved ending"
+      ],
+      "must_not_resolve_yet": [
+        "do not convert the residue into acceptance or victory"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_album_02"
+      ],
+      "status": "planned",
+      "output_record_id": null,
+      "review_record_id": null
+    }
+  ],
+  "continuity_rules": [
+    {
+      "rule_id": "lwcr_album_uncrossed_threshold",
+      "rule_type": "emotional_arc",
+      "rule": "The album may intensify nearness to release, but no track should complete the crossing unless Story Approval changes.",
+      "applies_to_part_ids": [
+        "lwpart_album_01",
+        "lwpart_album_02",
+        "lwpart_album_03"
+      ],
+      "source_ref": "bp_door_left_lit_album",
+      "change_requires": "story_approval",
+      "status": "active"
+    },
+    {
+      "rule_id": "lwcr_album_key_motif",
+      "rule_type": "motif",
+      "rule": "The key-like sonic or visual motif may recur, but it should feel unusable rather than victorious.",
+      "applies_to_part_ids": [
+        "lwpart_album_01",
+        "lwpart_album_02",
+        "lwpart_album_03"
+      ],
+      "source_ref": "rpp_door_left_lit_album#album_sonic_system",
+      "change_requires": "artist_confirmation",
+      "status": "active"
+    }
+  ],
+  "proposed_continuity_updates": [],
+  "checkpoints": [
+    {
+      "checkpoint_id": "lwcp_album_foundation",
+      "checkpoint_type": "foundation",
+      "after_part_id": null,
+      "required_before_continuing": true,
+      "status": "approved",
+      "gate_decision_id": "gate_story_approval_door_left_lit_album",
+      "review_record_id": "review_story_door_left_lit_album",
+      "affected_part_ids": [],
+      "next_action": "Create the Release Package Plan, then calibrate representative sound and visual directions before expanding remaining deliverables.",
+      "summary": "Story Approval and Album Cohesion Mode established an arc album that needs stewardship."
+    },
+    {
+      "checkpoint_id": "lwcp_album_track_mapping",
+      "checkpoint_type": "medium_mapping",
+      "after_part_id": null,
+      "required_before_continuing": true,
+      "status": "approved",
+      "gate_decision_id": "gate_door_left_lit_package_approval",
+      "review_record_id": "review_door_left_lit_pre_calibration",
+      "affected_part_ids": [
+        "lwpart_album_01",
+        "lwpart_album_02",
+        "lwpart_album_03"
+      ],
+      "next_action": "Use Track 1 as the Calibration Track and keep remaining track expansion blocked until Album Calibration subchecks approve.",
+      "summary": "The Release Package Plan mapped each album track to one Long-Work Part before calibration."
+    }
+  ],
+  "readiness_review": {
+    "required": true,
+    "status": "ready",
+    "review_record_id": "review_door_left_lit_pre_calibration",
+    "checks": {
+      "story_authority_present": true,
+      "part_mapping_complete": true,
+      "part_job_clarity": true,
+      "expectation_turn_preserved": true,
+      "emotional_arc_movement": true,
+      "premature_resolution_checked": true,
+      "continuity_rules_clear": true,
+      "checkpoint_plan_exists": true,
+      "open_risks_surfaced": true,
+      "waiver_path_clear": true
+    },
+    "blocking_risks": [],
+    "repair_questions": []
+  },
+  "drift_management": {
+    "open_drift_items": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit_album",
+      "note": "The Album Beat Plan owns track order and emotional movement for this stewardship record."
+    },
+    {
+      "source_type": "gate_decision",
+      "source_ref": "gate_door_left_lit_package_approval",
+      "note": "Release Package Plan Approval confirms the track-to-part mapping before calibration Medium Plans."
+    }
+  ],
+  "created_at": "2026-06-21T11:30:00Z",
+  "updated_at": "2026-06-21T12:30:00Z"
+}

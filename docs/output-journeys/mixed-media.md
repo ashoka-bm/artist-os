@@ -1,8 +1,10 @@
 # Mixed-Media Journey
 
-> **Status: not built yet.** This is forward-looking design, not a shipped slice. The implemented dry-run slices are image, Suno sound, and text, and the conductor runs one medium flow to completion before the next. Keep this doc as planning input for the eventual mixed-media branch.
+> **Status: Album v1 planning contract exists; broader mixed-media is not built yet.** The implemented dry-run slices are image, Suno sound, text, and the schema-backed Album v1 Release Package Plan. General mixed-media package behavior remains planning input for later branches.
 
 The Mixed-Media Journey coordinates multiple output journeys from one approved Beat Plan. It is for projects where image, video, sound, text, or other media should share meaning and structure while expressing different parts of the work.
+
+Album v1 is the first concrete Release Package route inside this branch. Broader mixed-media behavior remains forward-looking until additional package subtypes are implemented. The governing language for Release Package, Album, Album Sonic System, Album Visual System, Album Calibration, and Track Cover lives in `CONTEXT.md`; ADR 0008 records why the schema is generic while Album is the only v1 subtype.
 
 ## Best Fit
 
@@ -17,6 +19,32 @@ Use the Mixed-Media Journey when the final work should include:
 - several coordinated assets from the same Reference.
 
 ## Route
+
+### Album v1
+
+```text
+Approved Album Beat Plan
+  -> Foundation Long-Work Stewardship when Album Cohesion Mode activates it
+  -> Release Package Plan
+  -> Pre-Calibration Mixed-Media Critic Review
+  -> Release Package Plan Approval Gate
+  -> Representative Sound Medium Plan for the Calibration Track
+  -> Representative Image Medium Plan for the Calibration Track Cover
+  -> Album Calibration Gate
+  -> Remaining track Sound Medium Plans and Sound Prompt Plans
+  -> Album cover and Track Cover Image Medium Plans and Prompt Plans
+  -> Optional title, description, lyrics, liner notes, captions, or track story Text Journeys
+  -> Post-Calibration Mixed-Media Critic Review
+  -> Per-output Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance Gates
+```
+
+The Release Package Plan is package-level coordination only. It owns deliverables, track mapping, Album Cohesion Mode, Album Sonic System, Album Visual System, calibration status, production order, and cross-media continuity. It does not replace Sound Medium Plans, Image Medium Plans, Text Medium Plans, Long-Work Stewardship Records, Prompt Plans, Text Generation Plans, or Output Records.
+
+When Album Cohesion Mode activates Long-Work Stewardship, create the foundation Long-Work Stewardship Record before Release Package Plan approval. The Release Package Plan may reference that stewardship record, but it does not own part status, checkpoint state, readiness, or cumulative drift management.
+
+Album Calibration is directional. It checks sonic direction, visual direction, and sound-visual fit after representative Sound and Image Medium Plans exist, before the remaining album deliverables expand. Final artifacts still go through the normal per-output gates.
+
+### Future Mixed Media
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
@@ -35,6 +63,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Gates
 
+- Release Package Plan Approval Gate: does the artist approve Album Cohesion Mode, deliverables, Album Sonic System, Album Visual System, Calibration Track, and calibration visual target as ready for representative Medium Plan creation?
+- Album Calibration Gate: do the sonic direction, visual direction, and sound-visual fit subchecks approve expansion for the relevant deliverables?
 - Mixed-Media Scope Gate: what is the package or experience?
 - Medium Selection Gate: which media are included?
 - Role Assignment Gate: which beats belong to which medium?
@@ -46,10 +76,32 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 - Story Critic Review happens before this journey as a bounded sub-agent review.
 - Beat Reviewer sub-agent is mandatory when beats are assigned across multiple media.
+- Album v1 uses Mixed-Media Critic Review with album-specific criteria, not a separate Album Critic role.
+- Pre-calibration Mixed-Media Critic Review checks whether the Release Package Plan is coherent enough to test.
+- Post-calibration Mixed-Media Critic Review checks whether the calibrated direction is strong enough to expand.
 - Medium-specific critic reviews happen inside each selected output journey as bounded sub-agent reviews.
 - Mixed-Media Critic Review checks whether the media work together instead of duplicating or contradicting each other accidentally as a bounded sub-agent review.
 - Prompt Critic Review checks the complete output package for traceability, consistency, sequencing, and generation risk as a bounded sub-agent review.
 - Output Critic Review checks the generated package against Artist Meaning, Beat Plan, medium plans, and cross-media continuity decisions as a bounded sub-agent review.
+
+### Album v1 Review Criteria
+
+Pre-calibration Mixed-Media Critic Review must check:
+
+- traceability to Artist Meaning, Transformation Brief, Album Beat Plan, and any active Long-Work Stewardship Record,
+- required deliverable completeness: title, description, album cover, one track Sound Prompt Plan deliverable per track, and one Track Cover deliverable per track,
+- Album Sonic System and Album Visual System boundaries, including what each system must not own,
+- Calibration Track and calibration visual target justification,
+- cross-media continuity and drift risks,
+- provider-boundary safety, including no open-ended generation approval.
+
+Post-calibration Mixed-Media Critic Review must check:
+
+- sonic direction, visual direction, and sound-visual fit subcheck outcomes,
+- whether expansion is limited to deliverables whose relevant calibration subchecks are approved,
+- whether remaining Sound Medium Plans and Image Medium Plans still respect the Album Sonic System and Album Visual System,
+- whether optional text deliverables are justified by artist request or approved track direction,
+- whether per-output gates remain intact before any concrete artifact is generated, drafted, imported, reviewed, or accepted.
 
 ## Coordination Rules
 
@@ -63,3 +115,5 @@ Examples:
 - text names the hidden logic while visuals preserve ambiguity.
 
 Mixed-media work should not multiply outputs just because it can. Add a medium only when it carries something the others cannot.
+
+Album v1 uses individual Output Records for concrete audio, cover, and text artifacts. A package-level Output Record is deferred until an export or publishing workflow creates a concrete package artifact.
