@@ -972,6 +972,79 @@ def pending_learning_reviews(args: argparse.Namespace) -> None:
         print("\t".join(str(value or "") for value in row))
 
 
+def learnings_report(args: argparse.Namespace) -> None:
+    """Close-out summary: per-project learning-review state, linked learnings, and
+    performance signals, ending with the next action. Read-only."""
+    with closing(connect(db_path_for(args))) as conn, conn:
+        apply_schema(conn)
+        if args.project_id:
+            rows = conn.execute(
+                "SELECT project_id, title, updated_at FROM projects WHERE project_id = ?",
+                (args.project_id,),
+            ).fetchall()
+            if not rows:
+                raise SystemExit(f"no indexed project {args.project_id!r}; run `artist-os-db sync` first")
+        else:
+            rows = conn.execute(
+                "SELECT project_id, title, updated_at FROM projects ORDER BY updated_at DESC"
+            ).fetchall()
+        if not rows:
+            print("no indexed projects; run `artist-os-db sync` first")
+            return
+
+        pending = complete = not_applicable = no_feedback = 0
+        for project_id, title, _updated_at in rows:
+            state = conn.execute(
+                "SELECT learning_review_status, learning_reviewed_at FROM project_feedback_state WHERE project_id = ?",
+                (project_id,),
+            ).fetchone()
+            status = state[0] if state else "none"
+            reviewed_at = state[1] if state else None
+            if status == "pending":
+                pending += 1
+            elif status == "complete":
+                complete += 1
+            elif status == "not_applicable":
+                not_applicable += 1
+            else:  # no project_feedback_state row -> review=none
+                no_feedback += 1
+            learnings = conn.execute(
+                "SELECT ref_id, learning_type, status FROM learning_refs WHERE project_id = ? ORDER BY ref_id",
+                (project_id,),
+            ).fetchall()
+            signals = conn.execute(
+                "SELECT signal_id, status FROM performance_signal_refs WHERE project_id = ? ORDER BY signal_id",
+                (project_id,),
+            ).fetchall()
+
+            header = f"{project_id}  [{title or 'untitled'}]  review={status}"
+            if reviewed_at:
+                header += f"  reviewed_at={reviewed_at}"
+            print(header)
+            for ref_id, learning_type, ref_status in learnings:
+                print(f"    learning  {ref_id}  ({learning_type}, {ref_status})")
+            for signal_id, ref_status in signals:
+                print(f"    signal    {signal_id}  ({ref_status})")
+            if not learnings and not signals and status in ("none", None):
+                print("    (no feedback, learnings, or signals recorded)")
+
+        if pending:
+            print(
+                f"\n{pending} project(s) await learning review — capture a learning with "
+                "`add-learning` or close it with `mark-learning-review-complete`."
+            )
+        else:
+            parts = []
+            if complete:
+                parts.append(f"{complete} complete")
+            if not_applicable:
+                parts.append(f"{not_applicable} not applicable")
+            if no_feedback:
+                parts.append(f"{no_feedback} with no feedback yet")
+            detail = f" ({', '.join(parts)})" if parts else ""
+            print(f"\nno projects await a learning review{detail}.")
+
+
 def project_pointer_payload(project_id: str, workspace_root_hint: str | None) -> dict:
     validate_id(project_id, PROJECT_ID_PATTERN, "project_id")
     payload = {
@@ -1256,6 +1329,14 @@ def parser() -> argparse.ArgumentParser:
     pending = sub.add_parser("pending-learning-reviews", help="list projects with pending learning review")
     add_library_args(pending)
     pending.set_defaults(func=pending_learning_reviews)
+
+    report = sub.add_parser(
+        "learnings-report",
+        help="summarize per-project learning-review state, learnings, and signals (read-only)",
+    )
+    report.add_argument("project_id", nargs="?", default=None)
+    add_library_args(report)
+    report.set_defaults(func=learnings_report)
 
     link = sub.add_parser("link-visible-project", help="create a visible Artist Library project folder and Project Pointer")
     link.add_argument("project_id")

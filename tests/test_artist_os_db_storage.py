@@ -1716,5 +1716,132 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertTrue((library_root / "artist-os.sqlite").is_file())
 
 
+class LearningsLoopTests(unittest.TestCase):
+    """The feedback -> review -> complete state machine, the pending listing
+    (previously untested), and the learnings-report close-out command."""
+
+    def _seed_project(self, library_root: Path) -> dict:
+        proj_dir = library_root / "projects" / "proj_door_left_lit"
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(json.dumps(minimal_manifest()), encoding="utf-8")
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _capture(self, func, args) -> str:
+        buf = StringIO()
+        with redirect_stdout(buf):
+            func(args)
+        return buf.getvalue()
+
+    def test_loop_pending_then_complete_through_report_and_listing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+
+            fb_args = argparse.Namespace(
+                **base,
+                project_id="proj_door_left_lit",
+                feedback="The first draft should be rawer.",
+                feedback_id="fb_rawer_draft",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            )
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_feedback(fb_args)
+
+            report_args = argparse.Namespace(**base, project_id="proj_door_left_lit")
+            pending_report = self._capture(artist_os_db.learnings_report, report_args)
+            self.assertIn("proj_door_left_lit", pending_report)
+            # Assert the per-project state line, not a bare word a footer could satisfy.
+            self.assertIn("review=pending", pending_report)
+
+            pending_list = self._capture(
+                artist_os_db.pending_learning_reviews, argparse.Namespace(**base)
+            )
+            self.assertIn("proj_door_left_lit", pending_list)
+
+            learn_args = argparse.Namespace(
+                **base,
+                project_id="proj_door_left_lit",
+                learning_id="learn_rawer",
+                learning_type="soft",
+                learning_rule="Prefer rawer, less-polished first drafts for this artist.",
+                scope=None,
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_rawer_draft"],
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=True,
+                overwrite=False,
+            )
+            with redirect_stdout(StringIO()):
+                artist_os_db.add_learning(learn_args)
+
+            done_report = self._capture(artist_os_db.learnings_report, report_args)
+            self.assertIn("review=complete", done_report)  # per-project header, not the footer
+            self.assertNotIn("review=pending", done_report)
+            self.assertIn("learn_rawer", done_report)
+
+            done_list = self._capture(
+                artist_os_db.pending_learning_reviews, argparse.Namespace(**base)
+            )
+            self.assertNotIn("proj_door_left_lit", done_list)
+
+    def test_learnings_report_honors_requested_project_id(self) -> None:
+        # Index a real project, then confirm the WHERE clause distinguishes a known
+        # id (succeeds) from an unknown one (SystemExit) — not just "empty DB raises".
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(argparse.Namespace(**base))
+
+            known = self._capture(
+                artist_os_db.learnings_report, argparse.Namespace(**base, project_id="proj_door_left_lit")
+            )
+            self.assertIn("proj_door_left_lit", known)
+
+            with self.assertRaises(SystemExit):
+                with redirect_stdout(StringIO()):
+                    artist_os_db.learnings_report(argparse.Namespace(**base, project_id="proj_does_not_exist"))
+
+    def test_report_does_not_label_never_reviewed_project_complete(self) -> None:
+        # A synced project with no feedback is review=none; the footer must count it
+        # as "with no feedback yet", never "complete" (assert the real footer text so
+        # the bucket can't silently regress to the complete count).
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(argparse.Namespace(**base))
+            report = self._capture(artist_os_db.learnings_report, argparse.Namespace(**base, project_id=None))
+            self.assertIn("review=none", report)
+            self.assertIn("with no feedback yet", report)
+            self.assertNotIn("complete", report)
+
+    def test_report_labels_not_applicable_distinctly(self) -> None:
+        # A 'not_applicable' review (a valid schema enum) must show as such, not be
+        # miscounted as "with no feedback yet".
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            proj_json = library_root / "projects" / "proj_door_left_lit" / "project.json"
+            manifest = json.loads(proj_json.read_text(encoding="utf-8"))
+            manifest["feedback_state"] = {
+                "feedback_log_path": "projects/proj_door_left_lit/feedback-log.jsonl",
+                "learning_review_status": "not_applicable",
+                "learning_reviewed_at": None,
+            }
+            proj_json.write_text(json.dumps(manifest), encoding="utf-8")
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(argparse.Namespace(**base))
+            report = self._capture(artist_os_db.learnings_report, argparse.Namespace(**base, project_id=None))
+            self.assertIn("review=not_applicable", report)
+            self.assertIn("not applicable", report)
+            self.assertNotIn("with no feedback yet", report)
+
+
 if __name__ == "__main__":
     unittest.main()

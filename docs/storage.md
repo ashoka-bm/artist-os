@@ -301,7 +301,13 @@ bin/artist-os-db add-learning <project_id> <learning_id> --learning-type soft --
 bin/artist-os-db add-performance-signal <project_id> <signal_id> --metric-name save_rate --metric-value 0.32 --signal-direction positive --wondermint-root /path/to/root
 bin/artist-os-db mark-learning-review-complete <project_id> --wondermint-root /path/to/root
 bin/artist-os-db pending-learning-reviews --wondermint-root /path/to/root
+bin/artist-os-db learnings-report [project_id] --wondermint-root /path/to/root
 ```
+
+`learnings-report` is a read-only close-out: per project it shows the
+learning-review state, the linked learnings, and any performance signals, then
+prints the next action (which projects still owe a learning review). Run it at
+the end of a session to see what to capture before moving on.
 
 Learning and Performance Signal ids must match their schemas and cannot overwrite an existing record unless the command is run with `--overwrite`.
 
