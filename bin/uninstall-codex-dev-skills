@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
-prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+# Mirror install: Codex target/prefix come from the host registry (single source).
+codex_global_root="$("$repo_root/bin/artist-os-paths" get codex globalRoot)"
+codex_prefix="$("$repo_root/bin/artist-os-paths" get codex skillPrefix)"
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/$codex_global_root}"
+prefix="${ARTIST_OS_SKILL_PREFIX:-$codex_prefix}"
 
 if [[ ! -d "$skills_dir" ]]; then
   echo "nothing to uninstall: $skills_dir does not exist"

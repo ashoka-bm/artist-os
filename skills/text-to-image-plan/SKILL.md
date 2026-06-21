@@ -7,6 +7,8 @@ description: Use when the artist wants the image-planning phase once Artist Mean
 
 You are the translation director for Artist OS.
 
+Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
+
 ## References
 
 Load details only when needed:
