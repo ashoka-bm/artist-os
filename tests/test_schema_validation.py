@@ -200,12 +200,152 @@ class SchemaValidationTests(unittest.TestCase):
         schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
         fixture_paths = [
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json",
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "album-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "image-series-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "text-stewardship-record.json",
         ]
         for data_path in fixture_paths:
             with self.subTest(data=data_path.relative_to(REPO_ROOT)):
                 validate_file(schema_path, data_path)
+
+    def test_album_release_package_plan_fixture_validates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        validate_file(schema_path, data_path)
+
+    def test_release_package_plan_v1_rejects_single_bundle(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["package_subtype"] = "single_bundle"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'album'"):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_requires_album_systems_and_calibration(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        schema = load_json(schema_path)
+        for required_field in ["album_sonic_system", "album_visual_system", "album_calibration"]:
+            with self.subTest(required_field=required_field):
+                record = load_json(data_path)
+                del record[required_field]
+                with self.assertRaisesRegex(ValidationError, f"missing required field '{required_field}'"):
+                    validate(record, schema, schema)
+
+    def test_release_package_plan_requires_package_level_album_cover(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["deliverables"] = [
+            deliverable
+            for deliverable in record["deliverables"]
+            if deliverable["deliverable_type"] != "album_cover"
+        ]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "requires exactly one required package-level album_cover deliverable",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_requires_one_sound_deliverable_per_track(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["deliverables"] = [
+            deliverable
+            for deliverable in record["deliverables"]
+            if not (
+                deliverable["deliverable_type"] == "track_sound_prompt_plan"
+                and deliverable["track_id"] == "track_door_02"
+            )
+        ]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "track 'track_door_02' requires exactly one required track_sound_prompt_plan deliverable",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_requires_one_track_cover_deliverable_per_track(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["deliverables"] = [
+            deliverable
+            for deliverable in record["deliverables"]
+            if not (
+                deliverable["deliverable_type"] == "track_cover_image_prompt_plan"
+                and deliverable["track_id"] == "track_door_03"
+            )
+        ]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "track 'track_door_03' requires exactly one required track_cover_image_prompt_plan deliverable",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_track_cover_ref_must_match_deliverable(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["tracks"][0]["track_cover_deliverable_id"] = "deliv_track_02_cover"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "track 'track_door_01' track_cover_deliverable_id must reference its required Track Cover deliverable",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_arc_album_requires_stewardship_refs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["long_work_stewardship_record_ids"] = []
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "arc_album requires at least one Long-Work Stewardship record id",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_arc_album_requires_track_part_refs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["tracks"][0]["album_beat_ref"]["long_work_part_id"] = None
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "track 'track_door_01' requires a non-null long_work_part_id",
+        ):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_requires_all_album_calibration_subchecks(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        for subcheck in record["album_calibration"]["subchecks"]:
+            if subcheck["subcheck_type"] == "visual_direction":
+                subcheck["subcheck_type"] = "sonic_direction"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "matches more than maxContains 1"):
+            validate(record, schema, schema)
+
+    def test_release_package_plan_rejects_missing_sound_visual_fit_subcheck(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        record = load_json(data_path)
+        record["album_calibration"]["subchecks"] = [
+            subcheck
+            for subcheck in record["album_calibration"]["subchecks"]
+            if subcheck["subcheck_type"] != "sound_visual_fit"
+        ]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "has fewer than 3 items|matches fewer than minContains 1"):
+            validate(record, schema, schema)
 
     def test_review_record_accepts_long_work_reviewer(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
@@ -222,6 +362,26 @@ class SchemaValidationTests(unittest.TestCase):
                 "ref_type": "long_work_stewardship",
                 "ref_id": "lws_door_left_lit_foundation",
                 "path_or_ref": "tests/fixtures/long-work/foundation-stewardship-record.json",
+            }
+        )
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_review_record_accepts_release_package_plan_review(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
+        record = load_json(data_path)
+        record["review_role"] = "mixed_media_critic"
+        record["artifact_under_review"] = {
+            "artifact_type": "release_package_plan",
+            "artifact_id": "rpp_door_left_lit_album",
+            "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json",
+        }
+        record["upstream_context"]["governing_refs"].append(
+            {
+                "ref_type": "release_package_plan",
+                "ref_id": "rpp_door_left_lit_album",
+                "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json",
             }
         )
         schema = load_json(schema_path)
@@ -249,6 +409,21 @@ class SchemaValidationTests(unittest.TestCase):
         }
         schema = load_json(schema_path)
         validate(record, schema, schema)
+
+    def test_gate_decision_accepts_release_package_gates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
+        schema = load_json(schema_path)
+        for gate_type in ["release_package_plan_approval", "album_calibration"]:
+            with self.subTest(gate_type=gate_type):
+                record = load_json(data_path)
+                record["gate_type"] = gate_type
+                record["upstream_refs"][0] = {
+                    "ref_type": "release_package_plan",
+                    "ref_id": "rpp_door_left_lit_album",
+                    "path_or_ref": "tests/fixtures/release-packages/album-release-package-plan.json",
+                }
+                validate(record, schema, schema)
 
     def test_gate_decision_accepts_text_journey_gates(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"

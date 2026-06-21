@@ -464,6 +464,82 @@ _Avoid_: Replacing Medium Plan section structure, rigid template
 The publishing surface that packages an output for a specific platform or channel, such as Instagram Reel, TikTok photo post, YouTube Short, LinkedIn document carousel, Reddit AMA post, or Substack Note.
 _Avoid_: Cultural Format Structure, Story Structure, creative template, platform constraints
 
+**Release Package**:
+A coordinated set of outputs prepared as one artist-facing release, such as an album, EP, single bundle, campaign, or visual album.
+_Avoid_: Treating each asset as an unrelated project, Platform Container
+
+**Release Package Plan**:
+The schema-backed package-level coordination record for a Release Package, owning deliverables, medium roles, calibration status, production order, and cross-media continuity decisions.
+_Avoid_: Medium Plan, Long-Work Stewardship Record, prose-only package notes
+
+**Album**:
+A Release Package whose primary medium is sound and whose parts usually include ordered tracks plus supporting text and visual assets.
+_Avoid_: Generic Cumulative Work, Sound Medium Plan
+
+**EP**:
+A Release Package subtype for a shorter sound-primary release with multiple tracks.
+_Avoid_: Album subtype
+
+**Single Bundle**:
+A Release Package subtype for one primary track plus supporting versions, covers, text, visuals, or related assets.
+_Avoid_: Album subtype
+
+**Visual Album**:
+A Release Package subtype where visual outputs are primary companions to the sound release rather than supporting cover assets.
+_Avoid_: Album Cohesion Mode, Album with stronger style
+
+**Album Deliverable**:
+A required or optional output inside an Album, such as the album title, album description, album cover, track Sound Prompt Plan, or track cover Image Prompt Plan.
+_Avoid_: Treating album deliverables as unrelated outputs
+
+**Working Release Copy**:
+The early title or description text stored on a Release Package Plan so the package can be understood before polished release copy is drafted.
+_Avoid_: Treating every title or description as a full Text Journey
+
+**Working Track Title**:
+The early title stored for an Album track before optional polished naming work.
+_Avoid_: Forcing every track title through a full Text Journey
+
+**Album Beat Plan**:
+The album-level Beat Plan that owns track order, cross-track Emotional Movement, Key Emotional Movements, and each track's job in the album.
+_Avoid_: Track-Level Beat Plan, Sound Medium Plan
+
+**Track-Level Beat Plan**:
+A Beat Plan for one track that deepens that track's internal movement while tracing back to the governing Album Beat Plan.
+_Avoid_: Replacing the Album Beat Plan
+
+**Album Cohesion Mode**:
+The Album routing decision for whether tracks form a cumulative arc, a standalone collection, or a hybrid of dependent clusters and standalone tracks.
+_Avoid_: Assuming every album needs Long-Work Stewardship
+
+**Track Cover**:
+The image deliverable for one Album track, translating the track's emotional movement while obeying album-level visual continuity rules.
+_Avoid_: Unrelated cover art, generic song thumbnail
+
+**Album Visual System**:
+The lightweight package-level visual language that coordinates the album cover and Track Covers.
+_Avoid_: Image Medium Plan, visual bible
+
+**Album Sonic System**:
+The lightweight package-level sonic language that coordinates the Album's tracks without replacing track-level Sound Medium Plans.
+_Avoid_: Sound Medium Plan, separate sonic bible
+
+**Album Calibration**:
+The early Album checkpoint that tests whether representative sound and visual directions are moving correctly before final outputs are produced.
+_Avoid_: Treating calibration as final acceptance, producing all album deliverables before checking sonic and visual language
+
+**Album Calibration Subcheck**:
+One directional verdict inside Album Calibration, such as sonic direction, visual direction, or sound-visual fit.
+_Avoid_: Final Output Acceptance
+
+**Calibration Track**:
+The Album track selected to test whether the Album Sonic System and related visual direction are moving correctly.
+_Avoid_: Automatically using track one or the lead single
+
+**Calibration Track Cover**:
+The Track Cover used during Album Calibration to test whether a track's emotional movement translates into the Album Visual System.
+_Avoid_: Automatically using the album cover for visual calibration
+
 **Audience Hook**:
 The opening attention mechanism that creates enough curiosity, tension, beauty, identification, surprise, or promise for the audience to keep going.
 _Avoid_: Clickbait, headline only, first sentence only
@@ -896,6 +972,50 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Downstream records should reference the governing `artist_meaning_id` directly. `source_id` alone is not enough once a Reference can have multiple Artist Meaning versions.
 - Downstream records may embed Artist Meaning summaries for readability and review packets, but `artist_meaning_id` is the authority. If an embedded summary conflicts with the referenced **Artist Meaning Record**, the referenced record wins.
 - A **Reference** can produce one or more **Creative Briefs** after Artist Meaning, story, and medium planning are established.
+- A **Release Package** coordinates multiple outputs under one artist-facing release.
+- A **Release Package Plan** coordinates selected Medium Plans and deliverables without replacing medium-specific planning authority.
+- A **Release Package Plan** owns package subtype, deliverable list, required or optional status, Album Cohesion Mode when the package is an Album, track-to-deliverable mapping, package-level production order, Album Calibration state, cross-media continuity decisions, and references to governing plans and outputs.
+- A **Release Package Plan** does not own song arrangement details, lyrics, genre, Sonic Dynamics, image Shot Design, Style Direction, prompt variants, title or description drafting rules, cumulative execution state, or part status.
+- The first **Release Package Plan** schema should use the generic release-package name while implementing Album as the first supported package subtype.
+- A **Release Package Plan** stores **Working Release Copy** early; polished title and description become Text deliverables only when the artist wants crafted release copy, options, or review.
+- An **Album** is a **Release Package** whose primary medium is sound.
+- **Album**, **EP**, **Single Bundle**, and **Visual Album** are sibling **Release Package** subtypes.
+- A **Visual Album** is not an **Album Cohesion Mode**; it changes medium roles and expected deliverables.
+- An **Album** has an artist-chosen track count; 10 tracks is an example, not a domain invariant.
+- The first **Album** implementation requires album-level title, description, album cover, ordered tracks with **Working Track Titles**, one track Sound Prompt Plan per track, one track cover Image Prompt Plan per track, and package-level cross-media continuity rules.
+- Track descriptions, lyrics, social captions, liner notes, and track story notes are optional Album deliverables unless the artist requests them or a track's approved direction requires them.
+- Lyrics are conditional per Album track; each track's Sound Medium Plan owns Vocal / Lyric Policy and lyrics when required.
+- An **Album Beat Plan** is the album story authority; **Track-Level Beat Plans** may deepen individual tracks but must trace back to the governing Album Beat Plan.
+- Every Album track is represented by an Album Beat Plan Beat or Long-Work Part, but a **Track-Level Beat Plan** is created only when the track needs internal emotional movement beyond its album-level job.
+- **Album Cohesion Mode** may be arc album, collection album, or hybrid album.
+- An arc album activates **Cumulative Work** and **Long-Work Stewardship** by default; a collection album uses **Collection Coherence Review** by default; a hybrid album activates stewardship only for dependent clusters or a governing album arc.
+- When **Album Cohesion Mode** activates **Long-Work Stewardship**, create the foundation Long-Work Stewardship Record after Story Approval and before approving the Release Package Plan so the Release Package Plan can reference an existing stewardship record.
+- A collection album still requires explicit Album Sonic System, Album Visual System, Working Release Copy, and Collection Coherence Review, but it should not invent track-to-track escalation or dependency.
+- A hybrid album uses one album-level **Release Package Plan** and one **Long-Work Stewardship Record** per dependent cluster or governing album arc.
+- A **Track Cover** is governed by the track's assigned emotional movement and by album-level visual continuity rules.
+- When a **Track-Level Beat Plan** exists, the **Track Cover** uses it as the primary track-specific authority while still tracing to the governing **Album Beat Plan** and **Release Package Plan**; otherwise it traces to the track's **Album Beat Plan** Beat or **Long-Work Part**.
+- An **Album Visual System** owns shared visual language, allowed variation, recurring symbols or motifs, style constraints, and consistency rules across the album cover and Track Covers.
+- An **Album Visual System** does not own individual cover Shot Design or prompt variants.
+- Each Album cover deliverable gets its own Image Medium Plan generated from the shared **Album Visual System**.
+- An **Album Sonic System** owns shared sonic language, allowed variation, recurring motifs, voice, instrumentation, production constraints, and consistency rules across Album tracks.
+- An **Album Sonic System** does not own track arrangement, lyrics, section maps, or provider prompt fields.
+- Each Album track gets its own Sound Medium Plan generated from the shared **Album Sonic System**.
+- Every Album v1 **Release Package Plan** requires an **Album Sonic System** and an **Album Visual System**, even when either system is intentionally minimal.
+- **Album Calibration** happens after representative calibration Sound and Image Medium Plans exist and before full expansion of remaining track Sound Prompt Plans, album cover, Track Covers, title, and description.
+- **Album Calibration** approves or rejects direction only; final Output Artifacts still require their normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates.
+- **Album Calibration** is one checkpoint by default, with **Album Calibration Subchecks** for sonic direction, visual direction, and sound-visual fit.
+- **Album Calibration Subchecks** may be approved or revised independently; expansion may continue only for deliverables whose relevant subchecks are approved.
+- Track Cover expansion requires approved visual direction and approved sound-visual fit.
+- Album v1 uses a pre-calibration package review to confirm the Release Package Plan is coherent enough to test, and a post-calibration package review to confirm the calibrated direction is strong enough to expand.
+- The artist must approve the Release Package Plan's Album Cohesion Mode, deliverables, Album Sonic System, Album Visual System, Calibration Track, and calibration visual target before calibration Medium Plans are created.
+- Album v1 provider-backed generation approval may be per output or per enumerated batch, but must name the exact outputs, provider, model or tool, and cost-bearing scope.
+- Album v1 uses individual Output Records for concrete audio, cover, and text artifacts; a package-level Output Record is deferred until an export or publishing workflow creates a concrete package artifact.
+- The **Calibration Track** should be the track that best tests album identity, prioritizing strongest Key Emotional Movement, representative Album Sonic System traits, or collection-level release identity unless the artist overrides.
+- **Album Calibration** uses the **Calibration Track Cover** by default; when the album cover is the main visual anchor and Track Covers are secondary variants, calibration may include the album cover plus a lightweight Track Cover direction.
+- Album v1 production order is album-level Artist Meaning, Album Cohesion Mode, Album Beat Plan, foundation Long-Work Stewardship when activated, album package plan, pre-calibration Mixed-Media Critic Review, Release Package Plan Approval, representative calibration Sound and Image Medium Plans, Album Calibration, remaining track Sound Prompt Plans, album cover and Track Covers, title and description, then post-calibration package-level review.
+- Album v1 uses **Mixed-Media Critic Review** with album-specific criteria rather than a separate Album Critic role.
+- A **Release Package Plan** is created after the Album Beat Plan and before medium-specific Medium Plans; it starts with placeholder deliverables and is enriched with Medium Plan references as they are created.
+- A **Release Package** becomes a **Cumulative Work** when its parts depend on sequence, emotional arc, continuity, or approved part-to-part relationships.
 - A **Creative Brief** can be represented as a **Creative Brief Document** and a **Creative Brief Record**.
 - A **Creative Brief Document** requires **Brief Approval** before producing the **Creative Brief Record**.
 - **Rough Brief Approval** permits producing a **Creative Brief Record** while preserving uncertainty notes.

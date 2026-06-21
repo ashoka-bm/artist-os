@@ -615,6 +615,241 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(stewardship["readiness_review"]["status"], "pending")
         self.assertEqual(stewardship["checkpoints"][0]["checkpoint_type"], "foundation")
 
+    def test_album_beat_plan_to_release_package_plan(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+
+        self.assertEqual(package_plan["package_subtype"], "album")
+        self.assertEqual(package_plan["primary_medium"], "sound")
+        self.assertEqual(package_plan["source_id"], "src_door_left_lit")
+        self.assertEqual(package_plan["artist_meaning_id"], "meaning_door_left_lit")
+        self.assertEqual(package_plan["transformation_brief_id"], "tb_door_left_lit")
+        self.assertTrue(package_plan["album_beat_plan_id"].startswith("bp_"))
+        self.assertGreaterEqual(len(package_plan["tracks"]), 1)
+        self.assertGreaterEqual(len(package_plan["deliverables"]), len(package_plan["tracks"]))
+        self.assertIsNotNone(package_plan["approval_refs"]["pre_calibration_review_id"])
+        self.assertIsNotNone(package_plan["approval_refs"]["release_package_plan_approval_gate_id"])
+        self.assertIsNone(package_plan["approval_refs"]["album_calibration_gate_id"])
+        self.assertIsNone(package_plan["approval_refs"]["post_calibration_review_id"])
+
+    def test_album_release_package_approval_refs_resolve(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        review = load("tests/fixtures/reviews/album-pre-calibration-mixed-media-critic-review-record.json")
+        approval_gate = load("tests/fixtures/gates/album-release-package-plan-approval-gate.json")
+
+        self.assertEqual(review["review_record_id"], "review_door_left_lit_pre_calibration")
+        self.assertEqual(approval_gate["gate_decision_id"], "gate_door_left_lit_package_approval")
+        self.assertEqual(
+            package_plan["approval_refs"]["pre_calibration_review_id"],
+            review["review_record_id"],
+        )
+        self.assertEqual(review["review_role"], "mixed_media_critic")
+        self.assertEqual(review["artifact_under_review"]["artifact_type"], "release_package_plan")
+        self.assertEqual(
+            review["artifact_under_review"]["artifact_id"],
+            package_plan["release_package_plan_id"],
+        )
+        review_refs = ref_pairs(review["upstream_context"]["governing_refs"])
+        self.assertIn(("release_package_plan", package_plan["release_package_plan_id"]), review_refs)
+        self.assertIn(("transformation_brief", package_plan["transformation_brief_id"]), review_refs)
+        self.assertIn(("beat_plan", package_plan["album_beat_plan_id"]), review_refs)
+        self.assertIn(("long_work_stewardship", "lws_door_left_lit_album"), review_refs)
+        self.assertNotIn(("medium_plan", "smp_door_left_lit_calibration"), review_refs)
+        self.assertNotIn(("medium_plan", "imp_door_left_lit_calibration_cover"), review_refs)
+        self.assertEqual(review["approval_status"], "approve")
+
+        self.assertEqual(
+            package_plan["approval_refs"]["release_package_plan_approval_gate_id"],
+            approval_gate["gate_decision_id"],
+        )
+        self.assertEqual(approval_gate["gate_type"], "release_package_plan_approval")
+        self.assertEqual(approval_gate["gate_status"], "approved")
+        approval_refs = ref_pairs(approval_gate["upstream_refs"])
+        self.assertIn(("release_package_plan", package_plan["release_package_plan_id"]), approval_refs)
+        self.assertIn(("review_record", review["review_record_id"]), approval_refs)
+
+    def test_album_release_package_plan_references_existing_stewardship_parts(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        stewardship = load("tests/fixtures/long-work/album-stewardship-record.json")
+
+        self.assertIn(
+            stewardship["long_work_stewardship_record_id"],
+            package_plan["long_work_stewardship_record_ids"],
+        )
+        self.assertEqual(stewardship["project_id"], package_plan["project_id"])
+        self.assertEqual(stewardship["source_id"], package_plan["source_id"])
+        self.assertEqual(stewardship["artist_meaning_id"], package_plan["artist_meaning_id"])
+        self.assertEqual(stewardship["transformation_brief_id"], package_plan["transformation_brief_id"])
+        self.assertEqual(stewardship["beat_plan_id"], package_plan["album_beat_plan_id"])
+        self.assertEqual(stewardship["target_media_type"], "sound")
+        self.assertEqual(stewardship["cumulative_work_type"], "song_sequence")
+
+        package_track_ids = {track["track_id"] for track in package_plan["tracks"]}
+        part_by_id = {part["part_id"]: part for part in stewardship["part_plan"]}
+        self.assertGreaterEqual(len(part_by_id), len(package_track_ids))
+
+        for track in package_plan["tracks"]:
+            part_id = track["album_beat_ref"]["long_work_part_id"]
+            self.assertIsNotNone(part_id)
+            self.assertIn(part_id, part_by_id)
+            part = part_by_id[part_id]
+            self.assertEqual(part["medium_part_ref"]["ref_type"], "sound_movement")
+            self.assertEqual(part["medium_part_ref"]["ref_id"], track["track_id"])
+            self.assertEqual(part["beat_id"], track["album_beat_ref"]["beat_id"])
+            self.assertEqual(
+                part["key_emotional_movement_id"],
+                track["album_beat_ref"]["key_emotional_movement_id"],
+            )
+
+        for part in stewardship["part_plan"]:
+            self.assertIn(part["medium_part_ref"]["ref_id"], package_track_ids)
+
+    def test_album_release_package_plan_orders_calibration_before_full_expansion(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        order = {step["step_type"]: step["order_index"] for step in package_plan["production_order"]}
+
+        self.assertLess(order["album_beat_plan"], order["release_package_plan"])
+        self.assertLess(order["album_beat_plan"], order["long_work_stewardship_creation"])
+        self.assertLess(order["long_work_stewardship_creation"], order["release_package_plan"])
+        self.assertLess(order["release_package_plan"], order["pre_calibration_review"])
+        self.assertLess(order["pre_calibration_review"], order["release_package_plan_approval"])
+        self.assertLess(order["release_package_plan_approval"], order["calibration_sound_medium_plan"])
+        self.assertLess(order["release_package_plan_approval"], order["calibration_image_medium_plan"])
+        self.assertLess(order["calibration_sound_medium_plan"], order["album_calibration"])
+        self.assertLess(order["calibration_image_medium_plan"], order["album_calibration"])
+        self.assertLess(order["release_package_plan_approval"], order["album_calibration"])
+        self.assertLess(order["album_calibration"], order["remaining_sound_prompt_plans"])
+        self.assertLess(order["album_calibration"], order["album_cover_and_track_covers"])
+        self.assertLess(order["remaining_sound_prompt_plans"], order["post_calibration_review"])
+        self.assertLess(order["album_cover_and_track_covers"], order["post_calibration_review"])
+        self.assertLess(order["post_calibration_review"], order["per_output_records"])
+
+    def test_album_calibration_subchecks_gate_expansion_by_medium(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        subchecks = {
+            subcheck["subcheck_type"]: subcheck
+            for subcheck in package_plan["album_calibration"]["subchecks"]
+        }
+
+        self.assertEqual(subchecks["sonic_direction"]["status"], "pending")
+        self.assertEqual(subchecks["visual_direction"]["status"], "pending")
+        self.assertEqual(subchecks["sound_visual_fit"]["status"], "pending")
+        self.assertIn(
+            "track_sound_prompt_plan",
+            subchecks["sonic_direction"]["required_for_deliverable_types"],
+        )
+        self.assertIn(
+            "album_cover",
+            subchecks["visual_direction"]["required_for_deliverable_types"],
+        )
+        self.assertIn(
+            "track_cover_image_prompt_plan",
+            subchecks["visual_direction"]["required_for_deliverable_types"],
+        )
+        self.assertIn(
+            "track_cover_image_prompt_plan",
+            subchecks["sound_visual_fit"]["required_for_deliverable_types"],
+        )
+
+        expansion_steps = {
+            step["step_type"]: step
+            for step in package_plan["production_order"]
+            if step["step_type"] in {"remaining_sound_prompt_plans", "album_cover_and_track_covers"}
+        }
+        self.assertEqual(expansion_steps["remaining_sound_prompt_plans"]["status"], "planned")
+        self.assertEqual(expansion_steps["album_cover_and_track_covers"]["status"], "planned")
+
+    def test_album_calibration_gate_is_proposed_without_package_expansion(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        calibration_gate = load("tests/fixtures/gates/album-calibration-gate.json")
+
+        self.assertEqual(calibration_gate["gate_type"], "album_calibration")
+        self.assertEqual(calibration_gate["gate_status"], "proposed")
+        self.assertFalse(calibration_gate["proceed_unconfirmed"])
+        refs = ref_pairs(calibration_gate["upstream_refs"])
+        self.assertIn(("release_package_plan", package_plan["release_package_plan_id"]), refs)
+        self.assertIn(("medium_plan", "smp_door_left_lit_calibration"), refs)
+        self.assertIn(("medium_plan", "imp_door_left_lit_calibration_cover"), refs)
+
+        self.assertIsNone(package_plan["approval_refs"]["album_calibration_gate_id"])
+        for subcheck in package_plan["album_calibration"]["subchecks"]:
+            self.assertEqual(subcheck["status"], "pending")
+            self.assertIsNone(subcheck["gate_decision_id"])
+
+    def test_album_calibration_medium_plan_refs_resolve(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+        refs = package_plan["album_calibration"]["representative_medium_plan_refs"]
+        refs_by_type = {ref["ref_type"]: ref for ref in refs}
+
+        sound_ref = refs_by_type["sound_medium_plan"]
+        sound_path = REPO_ROOT / sound_ref["path_or_ref"]
+        self.assertTrue(sound_path.exists(), sound_ref["path_or_ref"])
+        sound_plan = load(sound_ref["path_or_ref"])
+        self.assertEqual(sound_plan["sound_medium_plan_id"], sound_ref["ref_id"])
+        self.assertEqual(sound_plan["source_id"], package_plan["source_id"])
+        self.assertEqual(sound_plan["artist_meaning_id"], package_plan["artist_meaning_id"])
+        self.assertEqual(sound_plan["transformation_brief_id"], package_plan["transformation_brief_id"])
+        self.assertEqual(sound_plan["beat_plan_id"], package_plan["album_beat_plan_id"])
+        self.assertEqual(sound_plan["target_media_type"], "sound")
+        self.assertTrue(
+            all(status == "complete" for status in sound_plan["gates"].values()),
+            sound_plan["gates"],
+        )
+
+        calibration_track_id = package_plan["album_calibration"]["calibration_track_id"]
+        calibration_track = next(
+            track for track in package_plan["tracks"]
+            if track["track_id"] == calibration_track_id
+        )
+        self.assertEqual(calibration_track["sound_medium_plan_id"], sound_ref["ref_id"])
+        calibration_beat = calibration_track["album_beat_ref"]["beat_id"]
+        calibration_movement = calibration_track["album_beat_ref"]["key_emotional_movement_id"]
+        for section in sound_plan["arrangement_direction"]["section_strategy"]:
+            self.assertEqual(section["beat_id"], calibration_beat)
+
+        sound_deliverable = next(
+            deliverable for deliverable in package_plan["deliverables"]
+            if (
+                deliverable["track_id"] == calibration_track_id
+                and deliverable["deliverable_type"] == "track_sound_prompt_plan"
+            )
+        )
+        self.assertEqual(sound_deliverable["medium_plan_id"], sound_ref["ref_id"])
+
+        image_ref = refs_by_type["image_medium_plan"]
+        image_path = REPO_ROOT / image_ref["path_or_ref"]
+        self.assertTrue(image_path.exists(), image_ref["path_or_ref"])
+        image_plan = load(image_ref["path_or_ref"])
+        self.assertEqual(image_plan["image_medium_plan_id"], image_ref["ref_id"])
+        self.assertEqual(image_plan["source_id"], package_plan["source_id"])
+        self.assertEqual(image_plan["artist_meaning_id"], package_plan["artist_meaning_id"])
+        self.assertEqual(image_plan["transformation_brief_id"], package_plan["transformation_brief_id"])
+        self.assertEqual(image_plan["beat_plan_id"], package_plan["album_beat_plan_id"])
+        self.assertEqual(image_plan["target_media_type"], "image")
+        self.assertTrue(
+            all(status == "complete" for status in image_plan["gates"].values()),
+            image_plan["gates"],
+        )
+        for role in image_plan["image_roles"]:
+            self.assertEqual(role["beat_id"], calibration_beat)
+            self.assertEqual(role["key_emotional_movement_id"], calibration_movement)
+
+        calibration_visual_id = package_plan["album_calibration"]["calibration_visual_target_deliverable_id"]
+        visual_deliverable = next(
+            deliverable for deliverable in package_plan["deliverables"]
+            if deliverable["deliverable_id"] == calibration_visual_id
+        )
+        self.assertEqual(visual_deliverable["medium_plan_id"], image_ref["ref_id"])
+        self.assertEqual(visual_deliverable["track_id"], calibration_track_id)
+
+    def test_album_release_package_uses_individual_output_records_only(self) -> None:
+        package_plan = load("tests/fixtures/release-packages/album-release-package-plan.json")
+
+        self.assertNotIn("output_record_id", package_plan)
+        self.assertNotIn("package_output_record_id", package_plan)
+        for deliverable in package_plan["deliverables"]:
+            self.assertIn("output_record_id", deliverable)
+            self.assertIsNone(deliverable["output_record_id"])
+
     def test_beat_plan_to_image_series_long_work_stewardship(self) -> None:
         beat_plan = {
             "beat_plan_id": "bp_door_left_lit",

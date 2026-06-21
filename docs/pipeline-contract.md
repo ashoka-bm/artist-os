@@ -25,6 +25,7 @@ No step advances unless its output validates against the declared schema. Review
 | Transformation Brief | `schemas/transformation-brief.schema.json` | `examples/transformation-brief.example.json` |
 | Beat Plan | `schemas/beat-plan.schema.json` | `examples/beat-plan.example.json` |
 | Long-Work Stewardship Record | `schemas/long-work-stewardship-record.schema.json` | `tests/fixtures/long-work/foundation-stewardship-record.json` |
+| Release Package Plan | `schemas/release-package-plan.schema.json` | `tests/fixtures/release-packages/album-release-package-plan.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
 | Text Medium Plan | `schemas/text-medium-plan.schema.json` | `tests/fixtures/text-journey/text-medium-plan.json` |
@@ -92,7 +93,7 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, series, lyric-bearing, scene, arc, or ambiguous plans.
 - Story Critic required when Story Mode scale, meaning preservation, symbolic progression, minimum tension criteria, or Story Approval authority is uncertain. If both Beat Reviewer and Story Critic are required, run Beat Reviewer first and pass its Review Record into Story Critic.
 - Gate: Story Gate and Story Approval Gate.
-- Next: image, sound, video, text, or mixed-media medium planning.
+- Next: `release_package.plan` for Album v1 and future Release Package routes; otherwise image, sound, video, text, or mixed-media medium planning.
 
 ### `long_work.stewardship`
 
@@ -103,6 +104,28 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Reviewer required: Long-Work Reviewer for readiness, checkpoint, cumulative drift, and proposed continuity update reviews.
 - Gate: Long-Work Checkpoint Gate when a checkpoint requires artist confirmation or waiver.
 - Next: Medium Plan enrichment, Long-Work Readiness, prompt or draft expansion, checkpoint review, Output Review, or Story Approval if a proposed update changes story authority.
+
+### `release_package.plan`
+
+- Input: approved Album Beat Plan, Transformation Brief, Artist Meaning, Source Record, package scope decisions.
+- Output: Release Package Plan.
+- Schema: `schemas/release-package-plan.schema.json`.
+- Skill: conductor or future release package planning skill.
+- Reviewer required: Mixed-Media Critic Review before Album Calibration and after Album Calibration.
+- Gate: Release Package Plan Approval Gate after representative calibration Medium Plans and before Album Calibration; Album Calibration Gate before remaining expansion.
+- Next: after approved calibration subchecks, remaining Sound Medium Plans, Image Medium Plans, optional Text Medium Plans, Prompt Plans, Text Generation Plans, and per-output records.
+
+Album v1 is the only implemented Release Package subtype. EP, Single Bundle, Visual Album, campaign, and other package shapes are future sibling subtypes, not Album subtypes.
+
+The Release Package Plan starts after the Album Beat Plan and before full medium-specific expansion. It may begin with placeholder deliverables and is enriched with Medium Plan, Prompt Plan, Text Generation Plan, Review Record, Gate Decision, and Output Record refs as those records are created.
+
+When Album Cohesion Mode activates Long-Work Stewardship, create the foundation Long-Work Stewardship Record after Story Approval and before Release Package Plan approval. The Release Package Plan may reference the stewardship record, but stewardship keeps ownership of part status, readiness, checkpoints, continuity updates, and cumulative drift management.
+
+The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, calibration status, production order, track mapping, and cross-media continuity. It does not own song arrangement details, lyrics, genre, Sonic Dynamics, image Shot Design, Style Direction, prompt variants, title or description drafting rules, cumulative execution state, or part status.
+
+Album Calibration happens after representative Sound and Image Medium Plans exist for the Calibration Track and calibration visual target. The default subchecks are sonic direction, visual direction, and sound-visual fit. Expansion may continue only for deliverables whose relevant subchecks are approved; Track Cover expansion requires approved visual direction and approved sound-visual fit.
+
+Album Calibration is not final acceptance. Final Output Artifacts still require their normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates. Provider-backed generation approval may be per output or per enumerated batch only; the approval must name the exact outputs, provider, model or tool, and cost-bearing scope.
 
 ## Workflow Scale Routing Contract
 

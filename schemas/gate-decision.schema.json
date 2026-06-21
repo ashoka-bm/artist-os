@@ -52,6 +52,8 @@
         "prompt_branch",
         "prompt_lock",
         "long_work_checkpoint",
+        "release_package_plan_approval",
+        "album_calibration",
         "generation_approval",
         "draft_generation_approval",
         "output_acceptance"
@@ -96,7 +98,7 @@
         "properties": {
           "ref_type": {
             "type": "string",
-            "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "medium_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
+                "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
           },
           "ref_id": { "type": "string" },
           "path_or_ref": { "type": "string" }

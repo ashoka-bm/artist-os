@@ -1,0 +1,459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/release-package-plan.schema.json",
+  "title": "ReleasePackagePlan",
+  "type": "object",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "properties": {
+        "deliverables": {
+          "contains": {
+            "required": ["deliverable_type", "required", "track_id"],
+            "properties": {
+              "deliverable_type": { "const": "album_title" },
+              "required": { "const": true },
+              "track_id": { "const": null }
+            }
+          },
+          "minContains": 1
+        }
+      }
+    },
+    {
+      "properties": {
+        "deliverables": {
+          "contains": {
+            "required": ["deliverable_type", "required", "track_id"],
+            "properties": {
+              "deliverable_type": { "const": "album_description" },
+              "required": { "const": true },
+              "track_id": { "const": null }
+            }
+          },
+          "minContains": 1
+        }
+      }
+    },
+    {
+      "properties": {
+        "deliverables": {
+          "contains": {
+            "required": ["deliverable_type", "required", "track_id"],
+            "properties": {
+              "deliverable_type": { "const": "album_cover" },
+              "required": { "const": true },
+              "track_id": { "const": null }
+            }
+          },
+          "minContains": 1
+        }
+      }
+    },
+    {
+      "properties": {
+        "album_calibration": {
+          "properties": {
+            "subchecks": {
+              "contains": {
+                "required": ["subcheck_type"],
+                "properties": {
+                  "subcheck_type": { "const": "sonic_direction" }
+                }
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "album_calibration": {
+          "properties": {
+            "subchecks": {
+              "contains": {
+                "required": ["subcheck_type"],
+                "properties": {
+                  "subcheck_type": { "const": "visual_direction" }
+                }
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "album_calibration": {
+          "properties": {
+            "subchecks": {
+              "contains": {
+                "required": ["subcheck_type"],
+                "properties": {
+                  "subcheck_type": { "const": "sound_visual_fit" }
+                }
+              },
+              "minContains": 1,
+              "maxContains": 1
+            }
+          }
+        }
+      }
+    }
+  ],
+  "required": [
+    "release_package_plan_id",
+    "project_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "album_beat_plan_id",
+    "package_subtype",
+    "primary_medium",
+    "album_cohesion_mode",
+    "working_release_copy",
+    "tracks",
+    "deliverables",
+    "album_sonic_system",
+    "album_visual_system",
+    "album_calibration",
+    "production_order",
+    "cross_media_continuity",
+    "approval_refs",
+    "traceability_summary",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "release_package_plan_id": { "type": "string", "pattern": "^rpp_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "album_beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "package_subtype": { "type": "string", "const": "album" },
+    "primary_medium": { "type": "string", "const": "sound" },
+    "album_cohesion_mode": {
+      "type": "string",
+      "enum": ["arc_album", "collection_album", "hybrid_album"]
+    },
+    "long_work_stewardship_record_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^lws_[a-zA-Z0-9_-]+$" }
+    },
+    "working_release_copy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["working_title", "working_description", "polished_text_deliverables_required", "status"],
+      "properties": {
+        "working_title": { "type": "string", "minLength": 1 },
+        "working_description": { "type": "string", "minLength": 1 },
+        "polished_text_deliverables_required": { "type": "boolean" },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "artist_approved_for_planning", "superseded"]
+        }
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/track" }
+    },
+    "deliverables": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/deliverable" }
+    },
+    "album_sonic_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "shared_sonic_language", "allowed_variation", "recurring_motifs", "voice_and_instrumentation", "production_constraints", "consistency_rules"],
+      "properties": {
+        "status": { "$ref": "#/$defs/system_status" },
+        "shared_sonic_language": { "type": "string", "minLength": 1 },
+        "allowed_variation": { "type": "array", "items": { "type": "string" } },
+        "recurring_motifs": { "type": "array", "items": { "type": "string" } },
+        "voice_and_instrumentation": { "type": "array", "items": { "type": "string" } },
+        "production_constraints": { "type": "array", "items": { "type": "string" } },
+        "consistency_rules": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "album_visual_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "shared_visual_language", "allowed_variation", "recurring_symbols", "style_constraints", "consistency_rules"],
+      "properties": {
+        "status": { "$ref": "#/$defs/system_status" },
+        "shared_visual_language": { "type": "string", "minLength": 1 },
+        "allowed_variation": { "type": "array", "items": { "type": "string" } },
+        "recurring_symbols": { "type": "array", "items": { "type": "string" } },
+        "style_constraints": { "type": "array", "items": { "type": "string" } },
+        "consistency_rules": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "album_calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "calibration_track_id",
+        "calibration_visual_target_deliverable_id",
+        "representative_medium_plan_refs",
+        "subchecks"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_started", "medium_plans_ready", "in_review", "approved", "needs_revision", "blocked"]
+        },
+        "calibration_track_id": { "type": "string", "pattern": "^track_[a-zA-Z0-9_-]+$" },
+        "calibration_visual_target_deliverable_id": { "type": "string", "pattern": "^deliv_[a-zA-Z0-9_-]+$" },
+        "representative_medium_plan_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ref" }
+        },
+        "subchecks": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/$defs/calibration_subcheck" }
+        }
+      }
+    },
+    "production_order": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/production_step" }
+    },
+    "cross_media_continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared_meaning_rules", "shared_symbols", "allowed_variation", "must_not_drift"],
+      "properties": {
+        "shared_meaning_rules": { "type": "array", "items": { "type": "string" } },
+        "shared_symbols": { "type": "array", "items": { "type": "string" } },
+        "allowed_variation": { "type": "array", "items": { "type": "string" } },
+        "must_not_drift": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pre_calibration_review_id",
+        "release_package_plan_approval_gate_id",
+        "album_calibration_gate_id",
+        "post_calibration_review_id"
+      ],
+      "properties": {
+        "pre_calibration_review_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "release_package_plan_approval_gate_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "album_calibration_gate_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "post_calibration_review_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "system_status": {
+      "type": "string",
+      "enum": ["draft", "artist_approved_for_calibration", "calibrated", "needs_revision"]
+    },
+    "track": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "track_id",
+        "track_number",
+        "working_track_title",
+        "album_beat_ref",
+        "track_level_beat_plan_id",
+        "sound_medium_plan_id",
+        "sound_prompt_plan_id",
+        "track_cover_deliverable_id",
+        "lyrics_policy",
+        "status"
+      ],
+      "properties": {
+        "track_id": { "type": "string", "pattern": "^track_[a-zA-Z0-9_-]+$" },
+        "track_number": { "type": "integer", "minimum": 1 },
+        "working_track_title": { "type": "string", "minLength": 1 },
+        "album_beat_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["beat_id", "key_emotional_movement_id", "long_work_part_id"],
+          "properties": {
+            "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
+            "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+            "long_work_part_id": { "type": ["string", "null"], "pattern": "^lwpart_[a-zA-Z0-9_-]+$" }
+          }
+        },
+        "track_level_beat_plan_id": { "type": ["string", "null"], "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+        "sound_medium_plan_id": { "type": ["string", "null"], "pattern": "^smp_[a-zA-Z0-9_-]+$" },
+        "sound_prompt_plan_id": { "type": ["string", "null"] },
+        "track_cover_deliverable_id": { "type": "string", "pattern": "^deliv_[a-zA-Z0-9_-]+$" },
+        "lyrics_policy": {
+          "type": "string",
+          "enum": ["instrumental", "lyrics_required", "lyrics_optional", "spoken_or_phonetic"]
+        },
+        "status": { "$ref": "#/$defs/planning_status" }
+      }
+    },
+    "deliverable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deliverable_id",
+        "deliverable_type",
+        "required",
+        "track_id",
+        "medium_role",
+        "medium_plan_id",
+        "prompt_plan_id",
+        "text_generation_plan_id",
+        "output_record_id",
+        "review_record_id",
+        "status"
+      ],
+      "properties": {
+        "deliverable_id": { "type": "string", "pattern": "^deliv_[a-zA-Z0-9_-]+$" },
+        "deliverable_type": {
+          "type": "string",
+          "enum": [
+            "album_title",
+            "album_description",
+            "album_cover",
+            "track_sound_prompt_plan",
+            "track_cover_image_prompt_plan",
+            "track_description",
+            "lyrics",
+            "social_caption",
+            "liner_notes",
+            "track_story_notes"
+          ]
+        },
+        "required": { "type": "boolean" },
+        "track_id": { "type": ["string", "null"], "pattern": "^track_[a-zA-Z0-9_-]+$" },
+        "medium_role": { "type": "string", "enum": ["primary", "supporting", "optional"] },
+        "medium_plan_id": { "type": ["string", "null"], "pattern": "^(imp|smp|tmp)_[a-zA-Z0-9_-]+$" },
+        "prompt_plan_id": { "type": ["string", "null"] },
+        "text_generation_plan_id": { "type": ["string", "null"] },
+        "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+        "review_record_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "status": { "$ref": "#/$defs/planning_status" }
+      }
+    },
+    "calibration_subcheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subcheck_type", "status", "required_for_deliverable_types", "gate_decision_id", "review_note"],
+      "properties": {
+        "subcheck_type": {
+          "type": "string",
+          "enum": ["sonic_direction", "visual_direction", "sound_visual_fit"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "needs_revision", "blocked"]
+        },
+        "required_for_deliverable_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["track_sound_prompt_plan", "album_cover", "track_cover_image_prompt_plan"]
+          }
+        },
+        "gate_decision_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "review_note": { "type": "string" }
+      }
+    },
+    "production_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order_index", "step_type", "status", "required_before_step_types"],
+      "properties": {
+        "order_index": { "type": "integer", "minimum": 1 },
+        "step_type": {
+          "type": "string",
+          "enum": [
+            "album_artist_meaning",
+            "album_cohesion_mode",
+            "album_beat_plan",
+            "long_work_stewardship_creation",
+            "release_package_plan",
+            "pre_calibration_review",
+            "release_package_plan_approval",
+            "calibration_sound_medium_plan",
+            "calibration_image_medium_plan",
+            "album_calibration",
+            "remaining_sound_prompt_plans",
+            "album_cover_and_track_covers",
+            "release_copy_text_deliverables",
+            "post_calibration_review",
+            "per_output_records"
+          ]
+        },
+        "status": { "$ref": "#/$defs/planning_status" },
+        "required_before_step_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "planning_status": {
+      "type": "string",
+      "enum": ["planned", "ready_for_calibration", "approved_for_expansion", "in_progress", "complete", "blocked", "deferred"]
+    },
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_type", "ref_id", "path_or_ref"],
+      "properties": {
+        "ref_type": {
+          "type": "string",
+          "enum": [
+            "sound_medium_plan",
+            "image_medium_plan",
+            "text_medium_plan",
+            "release_package_plan",
+            "review_record",
+            "gate_decision"
+          ]
+        },
+        "ref_id": { "type": "string" },
+        "path_or_ref": { "type": "string" }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "artist_meaning",
+            "transformation_brief",
+            "album_beat_plan",
+            "long_work_stewardship",
+            "medium_plan",
+            "review_record",
+            "gate_decision"
+          ]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
