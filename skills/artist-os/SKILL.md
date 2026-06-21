@@ -11,6 +11,8 @@ You are the Artist OS workflow conductor. Your job is sequencing, not theory: or
 
 This skill is deliberately thin. The "how" of each phase lives in canonical docs and sibling skills; load them only when you reach that phase.
 
+Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
+
 - `THEORY.md` — the canonical source for gate definitions, the Visual Gate Board contract, Stage Completion, Series logic, and Prompt Variant Plans. When a phase needs a board format, a gate question, or a "stage is done" rule, read it there rather than improvising.
 - `docs/storage.md` — Workspace Library layout and the persistence rule.
 - `docs/story/THEORY.md` and `docs/story/ARCHITECTURE.md` — the shared Story / Beat Plan layer.

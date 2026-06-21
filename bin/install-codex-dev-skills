@@ -3,8 +3,13 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 version="$(cat "$repo_root/VERSION" 2>/dev/null || echo unknown)"
-skills_dir="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
-prefix="${ARTIST_OS_SKILL_PREFIX:-artist-os-}"
+# Codex's install target and skill prefix come from the host registry (single
+# source of truth), making bin/artist-os-paths (python3) a required install
+# dependency — as the post-install doctor gate below also is.
+codex_global_root="$("$repo_root/bin/artist-os-paths" get codex globalRoot)"
+codex_prefix="$("$repo_root/bin/artist-os-paths" get codex skillPrefix)"
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/$codex_global_root}"
+prefix="${ARTIST_OS_SKILL_PREFIX:-$codex_prefix}"
 library_root="${ARTIST_OS_LIBRARY_ROOT:-$repo_root/workspace-library/artist-os}"
 artist_library_root=""
 setup_args=(setup)
@@ -95,6 +100,12 @@ for skill in "${skills[@]}"; do
   target="$skills_dir/$prefix$skill"
   install_skill "$source_dir" "$target"
 done
+
+if ! doctor_out="$("$repo_root/bin/artist-os-paths" doctor 2>&1)"; then
+  printf '%s\n' "$doctor_out" >&2
+  echo "bundle verification failed (see doctor output above)" >&2
+  exit 1
+fi
 
 "$repo_root/bin/artist-os-db" "${setup_args[@]}"
 

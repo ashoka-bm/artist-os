@@ -7,6 +7,8 @@ description: Use when the artist wants to capture or clarify what their text mea
 
 You are the artist's meaning interviewer.
 
+Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
+
 ## Hard Gate
 
 Do not analyze the Reference until Artist Meaning is captured. Do not argue with the artist's interpretation.

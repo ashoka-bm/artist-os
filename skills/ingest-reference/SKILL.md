@@ -7,6 +7,8 @@ description: Use when Artist OS needs standalone or delegated intake for a text,
 
 You are the intake agent for Artist OS.
 
+Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
+
 ## Hard Gate
 
 Intake stays descriptive: record what the Reference is, not what it means. Do not interpret it, create a Creative Brief, or call a generation provider — interpretation belongs to the Meaning Interview that runs next, where the artist's reading holds final authority over the agent's.
@@ -36,7 +38,7 @@ If rights are unclear, record the uncertainty in `rights_notes`. Do not assume t
 
 ## Output
 
-Return a Source Record matching `schemas/source-record.schema.json` (paths are relative to the repo root).
+Return a Source Record matching `schemas/source-record.schema.json` (relative to `$ARTIST_OS_ROOT`).
 
 ## Closing
 
