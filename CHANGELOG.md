@@ -8,6 +8,21 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-21
+
+### Added
+
+- `bin/artist-os-eval`: gates re-blessing on the (manual, token-spending)
+  conductor-behavior eval. `status` reports whether the live conductor still
+  matches the eval-validated digest in `evals/conductor-behavior/blessed.lock`,
+  `bless` records the current conductor as validated, and `start` snapshots the
+  conductor and scaffolds a grade sheet for a run. `tests/test_conductor_eval_lock.py`
+  turns the digest check into a CI gate, so editing the conductor without
+  re-blessing fails loudly.
+- `bin/artist-os-db learnings-report [project_id]`: a read-only close-out that
+  summarizes each project's learning-review state, linked learnings, and
+  performance signals, ending with the next action.
+
 ## [0.3.0] - 2026-06-21
 
 ### Added
