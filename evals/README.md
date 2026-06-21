@@ -63,6 +63,24 @@ The baseline traces double as the spec: if a subagent can reconstruct the exact
 behavior from the SKILL.md, the prose communicates it; the edit's job is to keep
 those traces identical.
 
+### The re-bless gate (`bin/artist-os-eval`)
+
+The eval run itself can't be in CI (it calls `claude -p`), but "did the conductor
+change since the last validated run?" can be. `evals/conductor-behavior/blessed.lock`
+records the SHA-256 of the eval-validated conductor, and `tests/test_conductor_eval_lock.py`
+fails when `skills/artist-os/SKILL.md` no longer matches it — forcing a re-run.
+
+```bash
+bin/artist-os-eval status              # is the live conductor still blessed?
+bin/artist-os-eval start baseline      # snapshot conductor + scaffold baseline/grade.md
+# ...edit the conductor, then:
+bin/artist-os-eval start trimmed       # snapshot + scaffold trimmed/grade.md, run the prompts
+bin/artist-os-eval bless               # after the trimmed grade matches the baseline pass-set
+```
+
+So a conductor edit turns CI red until you re-run the eval and `bless` the new
+version — the same drift-guard discipline the schema/sync tests apply elsewhere.
+
 ## disposable rehearsal artifacts
 
 End-to-end rehearsal artifacts may live under `.tmp/` when the goal is evidence

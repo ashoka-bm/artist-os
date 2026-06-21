@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""Drive the conductor-behavior eval and gate re-blessing on it.
+
+The conductor-behavior eval is manual and token-spending (it traces the conductor
+via `claude -p` subagents and grades against a checklist — see evals/README.md),
+so it cannot run in CI. What CI *can* enforce is that the conductor has not drifted
+from the version that was last eval-validated: this tool records that version's
+digest in evals/conductor-behavior/blessed.lock and reports / updates it.
+
+  status                 is the live conductor still the blessed one? (exit 1 if not)
+  bless                  record the current conductor as eval-validated (after a run)
+  start <baseline|trimmed>  snapshot the conductor + scaffold a grade sheet for a run
+
+tests/test_conductor_eval_lock.py turns `status` into a CI gate by asserting the
+live conductor matches blessed.lock.
+"""
+from __future__ import annotations
+
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import shutil
+import sys
+from datetime import date
+from pathlib import Path
+
+_RESOLVER_PATH = Path(__file__).resolve().parent / "artist-os-paths"
+_LOADER = importlib.machinery.SourceFileLoader("artist_os_paths", str(_RESOLVER_PATH))
+_SPEC = importlib.util.spec_from_loader("artist_os_paths", _LOADER)
+resolver = importlib.util.module_from_spec(_SPEC)
+_LOADER.exec_module(resolver)
+
+CONDUCTOR_REL = "skills/artist-os/SKILL.md"
+LOCK_REL = "evals/conductor-behavior/blessed.lock"
+SPEC_REL = "evals/conductor-behavior/eval-spec.md"
+GRADE_TEMPLATE_REL = "evals/conductor-behavior/grade-template.md"
+
+
+def conductor_digest(root: Path) -> str:
+    path = root / CONDUCTOR_REL
+    if not path.exists():
+        # resolve_root only requires the skills/ dir, so the conductor file itself
+        # can be absent; surface that as a clean ResolveError, not a traceback.
+        raise resolver.ResolveError(f"missing {CONDUCTOR_REL} under {root}")
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read_lock(root: Path) -> dict | None:
+    """Parsed blessed.lock as a dict, or None when missing/malformed/not an object."""
+    lock_path = root / LOCK_REL
+    if not lock_path.exists():
+        return None
+    try:
+        data = json.loads(lock_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError, UnicodeDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def is_blessed(root: Path) -> bool:
+    """True iff blessed.lock exists, parses, and records the live conductor's digest."""
+    lock = read_lock(root)
+    if not lock:
+        return False
+    try:
+        return lock.get("sha256") == conductor_digest(root)
+    except resolver.ResolveError:
+        return False  # a missing conductor is, definitionally, not blessed
+
+
+def write_lock(root: Path, blessed_at: str | None = None) -> dict:
+    lock = {
+        "conductor": CONDUCTOR_REL,
+        "sha256": conductor_digest(root),
+        "blessed_at": blessed_at or date.today().isoformat(),
+        "note": (
+            "Digest of the conductor body last validated by the conductor-behavior "
+            "eval. Re-bless with `bin/artist-os-eval bless` after re-running the eval "
+            "(evals/README.md)."
+        ),
+    }
+    lock_path = root / LOCK_REL
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
+    return lock
+
+
+def cmd_status(argv: list[str]) -> int:
+    root = resolver.resolve_root()
+    lock = read_lock(root)
+    if lock is None:
+        print("STALE  blessed.lock is missing or malformed — bless the conductor with `bin/artist-os-eval bless`")
+        return 1
+    if lock.get("sha256") == conductor_digest(root):
+        print(f"OK     conductor blessed (sha256 {str(lock.get('sha256'))[:12]}…, blessed_at {lock.get('blessed_at')})")
+        return 0
+    print(f"STALE  conductor changed since the last eval bless ({lock.get('blessed_at')})")
+    print(f"       live {conductor_digest(root)[:12]}…  !=  blessed {str(lock.get('sha256'))[:12]}…")
+    print(f"       Re-run the conductor-behavior eval ({SPEC_REL}), then `bin/artist-os-eval bless`.")
+    return 1
+
+
+def cmd_bless(argv: list[str]) -> int:
+    root = resolver.resolve_root()
+    lock = write_lock(root)
+    print(f"blessed conductor at sha256 {lock['sha256'][:12]}… ({lock['blessed_at']})")
+    return 0
+
+
+def cmd_start(argv: list[str]) -> int:
+    positional = [a for a in argv if a != "--force"]
+    force = "--force" in argv
+    role = positional[0] if positional else None
+    if role not in ("baseline", "trimmed"):
+        print("usage: artist-os-eval start <baseline|trimmed> [--force]", file=sys.stderr)
+        return 2
+    root = resolver.resolve_root()
+    if not (root / CONDUCTOR_REL).exists():
+        print(f"FAIL  missing {CONDUCTOR_REL}; nothing to snapshot", file=sys.stderr)
+        return 1
+    template = root / GRADE_TEMPLATE_REL
+    if not template.exists():
+        print(f"FAIL  missing {GRADE_TEMPLATE_REL}; cannot scaffold the grade sheet", file=sys.stderr)
+        return 1
+    snapshot = root / "evals" / "conductor-behavior" / f"{role}-SKILL.md"
+    if snapshot.exists() and not force:
+        print(
+            f"FAIL  {snapshot.relative_to(root)} already exists from a prior run; pass --force to "
+            "re-snapshot and reset the run (discards the old snapshot, grade sheet, and traces)",
+            file=sys.stderr,
+        )
+        return 1
+    resnapshot = snapshot.exists()  # only reachable here under --force
+    shutil.copyfile(root / CONDUCTOR_REL, snapshot)
+    trace_dir = root / "evals" / "conductor-behavior" / role
+    trace_dir.mkdir(parents=True, exist_ok=True)
+    grade = trace_dir / "grade.md"
+    if resnapshot:
+        # A fresh snapshot must never coexist with the prior run's grade/traces —
+        # that would let an operator bless against a grade of a different conductor.
+        for stale in sorted(trace_dir.glob("T*.md")):
+            stale.unlink()
+        grade.unlink(missing_ok=True)
+    if not grade.exists():
+        shutil.copyfile(template, grade)
+    print(f"snapshot   {snapshot.relative_to(root)}")
+    print(f"trace dir  {trace_dir.relative_to(root)}/  (write T1.md … T5.md here)")
+    print(f"grade      {grade.relative_to(root)}")
+    print(f"\nRun the 5 test prompts as tracing subagents — see {SPEC_REL}")
+    print('("## Test prompts" + "## Subagent prompt template"). When the grade matches')
+    print("the baseline pass-set, `bin/artist-os-eval bless` to update the gate.")
+    return 0
+
+
+COMMANDS = {"status": cmd_status, "bless": cmd_bless, "start": cmd_start}
+
+
+def main(argv: list[str]) -> int:
+    if not argv or argv[0] in ("-h", "--help"):
+        print("usage: artist-os-eval {status|bless|start <baseline|trimmed>}")
+        return 0 if argv else 2
+    cmd = argv[0]
+    if cmd not in COMMANDS:
+        print(f"unknown command {cmd!r}; use one of {', '.join(COMMANDS)}", file=sys.stderr)
+        return 2
+    try:
+        return COMMANDS[cmd](argv[1:])
+    except resolver.ResolveError as exc:
+        print(f"FAIL  {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))
