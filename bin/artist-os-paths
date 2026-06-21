@@ -109,14 +109,26 @@ def load_manifest(root: Path) -> dict:
     return _load_json(root / PACKAGING_DIR / "MANIFEST.json")
 
 
+def referenced_paths_in_text(text: str) -> list[str]:
+    """Bundle-content paths (root docs, docs/, schemas/) named in a chunk of text."""
+    refs: set[str] = set()
+    for token in _BACKTICK_RE.findall(text):
+        token = token.strip()
+        if _DOC_REF_RE.match(token):
+            refs.add(token)
+    return sorted(refs)
+
+
+def referenced_paths_in(skill_md: Path) -> list[str]:
+    """Bundle-content paths named anywhere in ONE skill file."""
+    return referenced_paths_in_text(skill_md.read_text(encoding="utf-8"))
+
+
 def referenced_paths(root: Path) -> list[str]:
-    """Bundle-content paths (root docs, docs/, schemas/) named in skill bodies."""
+    """Bundle-content paths named across all skill bodies (the union)."""
     refs: set[str] = set()
     for skill_md in sorted((root / "skills").glob("*/SKILL.md")):
-        for token in _BACKTICK_RE.findall(skill_md.read_text(encoding="utf-8")):
-            token = token.strip()
-            if _DOC_REF_RE.match(token):
-                refs.add(token)
+        refs.update(referenced_paths_in(skill_md))
     return sorted(refs)
 
 

@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""Lint Artist OS skills for the quality invariants a reviewer would otherwise
+check by hand, so contributors get fast, offline, CI-runnable feedback.
+
+Per skill under skills/<name>/SKILL.md:
+  1. frontmatter carries a non-empty `name:` and `description:` (the triggering
+     surface a host reads to route to the skill);
+  2. if the BODY references repo-root paths (THEORY.md, docs/…, schemas/…), it
+     carries the `$ARTIST_OS_ROOT` anchor sentence so a host can resolve them;
+  3. every such referenced doc/schema resolves to a file under the bundle root.
+
+Output is human-first like `bin/artist-os-paths doctor`: an OK/FAIL line per
+skill and a non-zero exit if any skill fails, so it drops straight into CI.
+"""
+from __future__ import annotations
+
+import importlib.machinery
+import importlib.util
+import re
+from pathlib import Path
+
+# Reuse the SHIPPED resolver's reference-scanning logic (referenced_paths_in,
+# resolve_root) rather than re-declaring the doc/schema regex, so the linter
+# cannot drift from what `bin/artist-os-paths doctor` and the manifest test check.
+_RESOLVER_PATH = Path(__file__).resolve().parent / "artist-os-paths"
+_LOADER = importlib.machinery.SourceFileLoader("artist_os_paths", str(_RESOLVER_PATH))
+_SPEC = importlib.util.spec_from_loader("artist_os_paths", _LOADER)
+resolver = importlib.util.module_from_spec(_SPEC)
+_LOADER.exec_module(resolver)
+
+# A skill that names repo-root paths must carry the $ARTIST_OS_ROOT anchor
+# sentence so a host can resolve them; this literal token is its defining marker.
+ANCHOR_TOKEN = "$ARTIST_OS_ROOT"
+
+# Leading-block frontmatter is simple single-line `key: value` (not full YAML),
+# so a stdlib regex parse is sufficient and keeps the linter dependency-free.
+_FM_KEY_RE = re.compile(r"^([a-zA-Z][\w-]*):\s*(.*)$")
+
+
+# A bare YAML block/folded scalar opener (`>`/`|` with an optional indentation
+# digit and/or chomp indicator, e.g. `>`, `|-`, `>2`, `|1+`) carries no value on
+# the key line, so the line-based parser would otherwise read it as non-empty.
+_BLOCK_SCALAR_RE = re.compile(r"^[>|][0-9]*[-+]?$")
+
+
+def _frontmatter(text: str) -> tuple[dict | None, str]:
+    """Parse the leading `---`-delimited block into (flat key->value dict, body).
+
+    The dict is None when there is no opening or no closing delimiter, so the
+    caller can distinguish 'no frontmatter' from 'present but empty fields'. The
+    body is everything after the closing `---` (the whole text when there is no
+    frontmatter), so reference/anchor checks see only what a host reads.
+    """
+    if not text.startswith("---"):
+        return None, text
+    lines = text.splitlines()
+    fm: dict[str, str] = {}
+    for i, line in enumerate(lines[1:], start=1):
+        if line.strip() == "---":
+            return fm, "\n".join(lines[i + 1 :])
+        match = _FM_KEY_RE.match(line)
+        if match:
+            key = match.group(1)
+            val = match.group(2).strip().strip('"').strip("'").strip()
+            fm[key] = "" if _BLOCK_SCALAR_RE.match(val) else val
+    return None, text  # opening delimiter but no closing one
+
+
+def lint_skill(skill_md, root) -> list[str]:
+    """Return a list of failure messages for one skill (empty == clean)."""
+    failures: list[str] = []
+    try:
+        # A leading BOM (some editors add one) must not be read as 'no frontmatter'.
+        text = skill_md.read_text(encoding="utf-8").lstrip("﻿")
+    except (OSError, UnicodeDecodeError) as exc:
+        return [f"could not read SKILL.md: {exc}"]
+
+    fm, body = _frontmatter(text)
+    if fm is None:
+        failures.append("missing or unterminated `---` frontmatter block")
+        return failures
+    if not fm.get("name"):
+        failures.append("missing or empty `name:` in frontmatter")
+    if not fm.get("description"):
+        failures.append("missing or empty `description:` in frontmatter")
+
+    # Reference and anchor checks are scoped to the BODY (what a host actually
+    # reads), so a path or token sitting only in the frontmatter never counts.
+    refs = resolver.referenced_paths_in_text(body)
+    if refs and ANCHOR_TOKEN not in body:
+        failures.append(
+            f"references repo-root paths ({', '.join(refs)}) but is missing the "
+            f"`{ANCHOR_TOKEN}` anchor sentence"
+        )
+    for ref in refs:
+        if not (root / ref).exists():
+            failures.append(f"references `{ref}`, which does not resolve under {ANCHOR_TOKEN}")
+
+    return failures
+
+
+def lint_root(root, names: list[str] | None = None) -> dict[str, list[str]]:
+    """Lint every skill under root/skills (or only the named ones)."""
+    results: dict[str, list[str]] = {}
+    for skill_md in sorted((root / "skills").glob("*/SKILL.md")):
+        name = skill_md.parent.name
+        if names and name not in names:
+            continue
+        results[name] = lint_skill(skill_md, root)
+    return results
+
+
+def main(argv: list[str]) -> int:
+    if argv and argv[0] in ("-h", "--help"):
+        print("usage: artist-os-lint [skill-name ...]   (default: lint all skills)")
+        return 0
+
+    try:
+        root = resolver.resolve_root()
+    except resolver.ResolveError as exc:
+        print(f"FAIL  anchor: {exc}")
+        return 1
+
+    on_disk = {p.parent.name for p in (root / "skills").glob("*/SKILL.md")}
+    unknown = [n for n in argv if n not in on_disk]
+    for name in unknown:
+        print(f"FAIL  unknown skill: {name!r} (no skills/{name}/SKILL.md under root)")
+
+    results = lint_root(root, argv or None)
+    print(f"linting {len(results)} skill(s) under {root}/skills")
+    failed_skills = 0
+    for name, failures in results.items():
+        if failures:
+            failed_skills += 1
+            for failure in failures:
+                print(f"FAIL  {name}: {failure}")
+        else:
+            print(f"OK    {name}")
+
+    ok = len(results) - failed_skills
+    if unknown or failed_skills:
+        print(f"\n{ok} skill(s) OK, {failed_skills} with failures, {len(unknown)} unknown")
+        return 1
+    print(f"\nall {ok} skill(s) lint clean")
+    return 0
+
+
+if __name__ == "__main__":
+    import sys
+
+    raise SystemExit(main(sys.argv[1:]))
