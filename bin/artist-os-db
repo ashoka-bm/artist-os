@@ -598,36 +598,40 @@ def upsert_manifest(
             ],
         )
 
-    conn.execute(
-        """
-        INSERT INTO project_decisions (
-          project_id, interpretation_status, symbology_status, style_status,
-          detail_status, selected_symbology, presentation_mode, selected_style,
-          selected_detail_mode
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(project_id) DO UPDATE SET
-          interpretation_status = excluded.interpretation_status,
-          symbology_status = excluded.symbology_status,
-          style_status = excluded.style_status,
-          detail_status = excluded.detail_status,
-          selected_symbology = excluded.selected_symbology,
-          presentation_mode = excluded.presentation_mode,
-          selected_style = excluded.selected_style,
-          selected_detail_mode = excluded.selected_detail_mode
-        """,
-        (
-            project_id,
-            decisions["interpretation_status"],
-            decisions["symbology_status"],
-            decisions["style_status"],
-            decisions["detail_status"],
-            decisions.get("selected_symbology"),
-            decisions.get("presentation_mode"),
-            decisions.get("selected_style"),
-            decisions.get("selected_detail_mode"),
-        ),
+    # Mirror the artist_library / feedback_state handling above: clear the row,
+    # then insert only when the manifest actually carries the decision data. The
+    # four *_status columns are NOT NULL, so an empty or partial `decisions`
+    # object must skip the row rather than bracket-access missing keys (KeyError)
+    # or insert NULLs (IntegrityError).
+    conn.execute("DELETE FROM project_decisions WHERE project_id = ?", (project_id,))
+    required_decision_status = (
+        "interpretation_status",
+        "symbology_status",
+        "style_status",
+        "detail_status",
     )
+    if decisions and all(key in decisions for key in required_decision_status):
+        conn.execute(
+            """
+            INSERT INTO project_decisions (
+              project_id, interpretation_status, symbology_status, style_status,
+              detail_status, selected_symbology, presentation_mode, selected_style,
+              selected_detail_mode
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                project_id,
+                decisions["interpretation_status"],
+                decisions["symbology_status"],
+                decisions["style_status"],
+                decisions["detail_status"],
+                decisions.get("selected_symbology"),
+                decisions.get("presentation_mode"),
+                decisions.get("selected_style"),
+                decisions.get("selected_detail_mode"),
+            ),
+        )
 
     conn.execute("DELETE FROM assets WHERE project_id = ?", (project_id,))
     project_dir_path = Path(project_dir)
