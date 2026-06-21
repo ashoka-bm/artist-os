@@ -556,6 +556,35 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertEqual(project_status, "active")
             self.assertEqual(visible_state, ("visible_missing", "missing", None))
 
+    def test_sync_tolerates_manifest_with_empty_decisions(self) -> None:
+        # Regression: a manifest with an empty `decisions` object once raised
+        # KeyError in upsert_manifest, which bracket-accessed the NOT NULL status
+        # fields after defaulting `decisions` to {}. Sync must skip the decisions
+        # row (like it does for artist_library/feedback_state) instead of crashing.
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / ".wondermint" / "artist-os"
+            project_dir = library_root / "projects" / "proj_door_left_lit"
+            project_dir.mkdir(parents=True)
+            manifest = minimal_manifest()
+            manifest["decisions"] = {}
+            (project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            args = argparse.Namespace(db=None, library_root=None, wondermint_root=str(root))
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)  # must not raise
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                project_row = conn.execute(
+                    "SELECT status FROM projects WHERE project_id = ?", ("proj_door_left_lit",)
+                ).fetchone()
+                decision_rows = conn.execute(
+                    "SELECT COUNT(*) FROM project_decisions WHERE project_id = ?", ("proj_door_left_lit",)
+                ).fetchone()[0]
+
+            self.assertEqual(project_row, ("active",), "project should still be indexed")
+            self.assertEqual(decision_rows, 0, "empty decisions must index no project_decisions row")
+
     def test_project_manifest_schema_allows_visible_missing_null_pointer_project_id(self) -> None:
         schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
         manifest = minimal_manifest()
