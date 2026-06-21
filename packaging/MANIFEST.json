@@ -1,0 +1,26 @@
+{
+  "description": "The reference surface that must travel with an installed Artist OS skill bundle so skill-body paths (THEORY.md, docs/..., schemas/...) resolve from $ARTIST_OS_ROOT. Paths are bundle-root-relative; a trailing slash denotes a directory tree. See docs/adr/0008-multi-host-skill-distribution.md.",
+  "include": [
+    "THEORY.md",
+    "ARCHITECTURE.md",
+    "AGENTS.md",
+    "CONTEXT.md",
+    "VERSION",
+    "artist_os_schema_validator.py",
+    "bin/",
+    "docs/",
+    "schemas/",
+    "skills/",
+    "packaging/"
+  ],
+  "exclude": [
+    "workspace-library/",
+    "artist-os-library/",
+    ".tmp/",
+    "*.sqlite",
+    ".env",
+    ".git/",
+    "__pycache__/",
+    "packaging/build/"
+  ]
+}

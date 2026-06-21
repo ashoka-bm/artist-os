@@ -9,6 +9,9 @@ artist-os-library/
 # Disposable local intermediates.
 .tmp/
 
+# Generated per-host install trees (future generator; ADR 0008).
+packaging/build/
+
 # Local build-process notes; not part of the public skill bundle.
 PROGRESS.md
 !docs/progress.md

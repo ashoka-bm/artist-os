@@ -1,0 +1,47 @@
+{
+  "primaryHost": "codex",
+  "note": "globalRoot is relative to $HOME (e.g. \".codex/skills\" means \"$HOME/.codex/skills\"). A host installer may override the base (Codex via CODEX_SKILLS_DIR). See packaging/README.md and ADR 0008.",
+  "hosts": {
+    "codex": {
+      "displayName": "Codex / OpenAI",
+      "status": "active",
+      "cliCommand": "codex",
+      "skillPrefix": "artist-os-",
+      "conductorUnprefixed": true,
+      "globalRoot": ".codex/skills",
+      "usesEnvVars": true,
+      "linkingStrategy": "symlink-or-copy",
+      "frontmatter": { "mode": "passthrough" },
+      "pathRewrites": []
+    },
+    "claude-code": {
+      "displayName": "Claude Code",
+      "status": "stub",
+      "cliCommand": "claude",
+      "skillPrefix": null,
+      "conductorUnprefixed": null,
+      "globalRoot": null,
+      "usesEnvVars": null,
+      "linkingStrategy": null,
+      "frontmatter": null,
+      "pathRewrites": null,
+      "marketplace": {
+        "planned": true,
+        "sandboxed": true,
+        "note": "Claude plugins cannot read files outside the plugin dir, and ${CLAUDE_PLUGIN_ROOT} does not expand in SKILL.md markdown (claude-code issue #9354). The generator must rewrite bare repo-root references to skill-relative paths and bundle referenced content inside the plugin (shared/ dir + per-skill references/ symlinks, dereferenced at install). $ARTIST_OS_ROOT is not usable inside a Claude plugin. See ADR 0008."
+      }
+    },
+    "cursor": {
+      "displayName": "Cursor",
+      "status": "stub",
+      "cliCommand": "cursor",
+      "skillPrefix": null,
+      "conductorUnprefixed": null,
+      "globalRoot": null,
+      "usesEnvVars": null,
+      "linkingStrategy": null,
+      "frontmatter": null,
+      "pathRewrites": null
+    }
+  }
+}
