@@ -8,6 +8,21 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-21
+
+### Added
+
+- `bin/artist-os-lint`: a skill linter that flags any skill whose frontmatter is
+  missing a non-empty `name:` or `description:`, that references repo-root paths
+  without the `$ARTIST_OS_ROOT` anchor sentence, or that references a doc/schema
+  that does not resolve under the bundle root. Human-readable FAIL output and a
+  non-zero exit, so it runs both as a CLI and in CI.
+- `bin/artist-os-new-skill <name>`: scaffolds a lint-clean `skills/<name>/SKILL.md`
+  and registers the skill in the three sync sites the suite enforces — the
+  installer `skills=( … )` array, the conductor delegation list, and the routing
+  eval `skills[]` — then prints the authoring steps that remain. Aborts without
+  writing anything if a registration anchor cannot be found.
+
 ## [0.2.0] - 2026-06-21
 
 ### Added
