@@ -103,6 +103,8 @@ A Text Medium Plan is the typed writing translation layer between the shared Bea
 
 Each `structure_plan.sections[]` entry must name the governing Beat, Key Emotional Movement, structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and paragraph distinction. Text planning must make every section or paragraph group do a different job instead of producing a smooth summary of the source.
 
+`length_policy` records the accepted Format Length Standard: standard source, target word count, minimum, maximum, flexibility, rationale, and any artist override. Text Medium Plan owns the length decision because length changes the medium structure before drafting.
+
 ### Review Record
 
 A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
@@ -189,7 +191,7 @@ Suno Sound Prompt Plans must preserve the lineage IDs from the approved Sound Cr
 
 A Text Generation Plan is the structured post-brief plan for drafting or generating a written Output Artifact. It validates against `schemas/text-generation-plan.schema.json`.
 
-The Text Generation Plan owns the final draft instructions and editorial pass policies. It must require fresh-context drafting, forbid Human Voice Pass during first drafting, require a returned draft trace, and specify Output Record requirements for draft and rewrite artifacts. Its traceability notes may cite the approved Text Creative Brief as `text_creative_brief`.
+The Text Generation Plan owns the final draft instructions and editorial pass policies. It must require fresh-context drafting, forbid Human Voice Pass during first drafting, require a returned draft trace, carry the accepted length policy into drafting instructions, record the review presentation decision, and specify Output Record requirements for draft and rewrite artifacts. Its traceability notes may cite the approved Text Creative Brief as `text_creative_brief`.
 
 ## Symbology Direction
 

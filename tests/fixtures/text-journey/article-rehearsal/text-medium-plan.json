@@ -205,6 +205,15 @@
       }
     ]
   },
+  "length_policy": {
+    "standard_source": "Format Length Standards: hook-driven article",
+    "target_word_count": 900,
+    "minimum_word_count": 700,
+    "maximum_word_count": 1200,
+    "flexibility": "standard",
+    "rationale": "A compact hook-driven article needs enough room for hook, turn, and payoff without becoming a feature.",
+    "artist_override": null
+  },
   "fidelity_policy": {
     "mode": "new_from_meaning",
     "source_wording_constraints": [

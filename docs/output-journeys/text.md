@@ -29,6 +29,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Medium-Level Workflow Scale Routing
   -> Medium Output Shape Conflict Decision, when needed
   -> Cultural Format Structure selection, when relevant
+  -> Format Length Standard application, with override gate only when needed
   -> Text Form Gate
   -> Voice / Point Of View Gate
   -> Structure Gate
@@ -40,6 +41,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Text Generation Plan
   -> Prompt Critic Review
   -> Prompt Lock Gate
+  -> Review Presentation Gate
   -> Draft Generation Approval Gate
   -> Fresh-Context Drafting Pass
   -> Main-Agent Conformance Review
@@ -57,13 +59,19 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 - Medium Output Shape Recommendation: what text shape best preserves the approved Beat Plan and adapted Story Structure?
 - Medium Output Shape Conflict Decision: if the artist-requested shape and recommended shape materially diverge, should the plan keep the requested shape, accept the recommendation, revise the shape, or proceed unconfirmed?
 - Cultural Format Structure selection: what culturally recognized form grammar, Audience Hook, parts, payoff, and adaptation policy should shape the accepted text form?
+- Format Length Standard: what target word-count range should this format use, and does the artist need to override it?
 - Text Form Gate: poem, article, monologue, prose scene, script, lyrics, essay, letter, treatment, or other form?
 - Voice / Point Of View Gate: who speaks, from what distance, and with what authority?
 - Structure Gate: fragment, scene, sequence, arc, chapters, sections, verses, or hybrid?
 - Fidelity / Transformation Gate: preserve source wording, adapt it, invert it, expand it, compress it, translate it, or create a new work from the approved Beat Plan?
 - Publication / Use Gate: private draft, performance text, lyrics, social post, book fragment, prompt source, or other use?
+- Review Presentation Gate: should Artist OS produce Markdown only, a local HTML mockup, or both for human review?
 
 Ask the Research Grounding question for public-facing, timely, factual, trend-aware, or platform-native work such as articles, explainers, op-eds, trend analysis, LinkedIn posts, service writing, thought leadership, and launch copy. Recommend research when current facts, market context, platform discourse, examples, statistics, or recent developments would materially improve the piece. Recommend skipping it when the work should stay personal, timeless, private, poetic, or source-bound. If accepted, browse only within the agreed scope and summarize source dates before using the research.
+
+Apply Format Length Standards automatically from `docs/structure-library/cultural-format/README.md` after Cultural Format Structure and publication use are known. Record the target range in `TextMediumPlan.length_policy` and carry it into `TextGenerationPlan.length_policy`. Ask the artist only when the default conflicts with their request, the assignment specifies a length, or the agent recommends an override. Drafting and editorial passes should treat the range as a reviewable target, not as a reason to damage Artist Meaning, structure, or voice.
+
+Ask the Review Presentation question for written format outputs. Recommend a local HTML mockup when the piece benefits from layout, reading flow, hierarchy, or scanning review; recommend Markdown-only when the artist wants raw text. If accepted, create the HTML only after a concrete draft exists, store it as a review presentation artifact, and keep the drafted written Output Artifact canonical.
 
 ## Reviews
 
@@ -95,6 +103,8 @@ For long text where Workflow Scale Routing identifies cumulative or full long-fo
 Plot-tracker-style documents, act trackers, open-thread lists, and character continuity summaries are Stewardship Views over Text Medium Plan and Long-Work Stewardship state. They are not separate story-authority records.
 
 The Text Generation Plan must set `human_voice_pass_policy` to `required`, `recommended`, `optional`, or `skip`, with `degree` set to `light`, `standard`, or `deep` when the pass is not skipped. It must also name protected features such as line breaks, character voice, source wording, rhetoric, meter, repetition, formal tone, or deliberate artificiality.
+
+The Text Generation Plan must include the accepted `length_policy` and `review_presentation` decision. The drafting packet should tell the fresh-context drafter the target word count and acceptable range; the conformance review should flag drafts that miss the range materially unless the miss is justified by Artist Meaning or an artist-approved override.
 
 A Clear Writing Pass is separate from the Human Voice Pass. The Text Generation Plan must decide whether the Clear Writing Pass is required, recommended, optional, or skipped for the specific text form. Apply `skills/clear-writing-pass/SKILL.md` for direct explanatory, professional, public-facing, or reader-guidance prose; avoid applying it blindly to poems, lyrics, dialogue, manifestos, experimental prose, or source-preserving adaptations where compression or plainness would damage the intended form.
 

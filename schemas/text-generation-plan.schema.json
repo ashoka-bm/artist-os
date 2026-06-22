@@ -15,6 +15,7 @@
     "target_media_type",
     "generation_mode",
     "primary_text_form",
+    "length_policy",
     "drafting_instructions",
     "structure_execution",
     "source_wording_policy",
@@ -22,6 +23,7 @@
     "clear_writing_pass_policy",
     "human_voice_pass_policy",
     "output_recording",
+    "review_presentation",
     "approval_refs",
     "traceability_summary",
     "critique_checklist"
@@ -37,6 +39,7 @@
     "target_media_type": { "type": "string", "const": "text" },
     "generation_mode": { "type": "string", "enum": ["single_draft", "revision_pass", "alternate_direction"] },
     "primary_text_form": { "$ref": "#/$defs/text_form" },
+    "length_policy": { "$ref": "#/$defs/length_policy" },
     "drafting_instructions": {
       "type": "object",
       "additionalProperties": false,
@@ -86,6 +89,21 @@
         "rewrite_output_record_required": { "type": "boolean", "const": true },
         "rewrite_origin_type": { "type": "string", "const": "agent_rewritten" },
         "previous_output_record_required_for_rewrite": { "type": "boolean", "const": true }
+      }
+    },
+    "review_presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["offer_html_mockup", "accepted_formats", "html_mockup_timing", "notes"],
+      "properties": {
+        "offer_html_mockup": { "type": "boolean" },
+        "accepted_formats": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["markdown", "html_mockup"] }
+        },
+        "html_mockup_timing": { "type": "string", "enum": ["after_draft", "after_editorial_passes", "not_requested"] },
+        "notes": { "type": "string" }
       }
     },
     "approval_refs": {
@@ -139,6 +157,26 @@
         "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
         "intended_feeling": { "type": "string" },
         "must_feel_different_because": { "type": "string" }
+      }
+    },
+    "length_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "standard_source",
+        "target_word_count",
+        "minimum_word_count",
+        "maximum_word_count",
+        "flexibility",
+        "drafting_instruction"
+      ],
+      "properties": {
+        "standard_source": { "type": "string", "minLength": 1 },
+        "target_word_count": { "type": "integer", "minimum": 1 },
+        "minimum_word_count": { "type": "integer", "minimum": 1 },
+        "maximum_word_count": { "type": "integer", "minimum": 1 },
+        "flexibility": { "type": "string", "enum": ["tight", "standard", "loose", "artist_defined"] },
+        "drafting_instruction": { "type": "string", "minLength": 1 }
       }
     },
     "editorial_pass_policy": {

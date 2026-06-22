@@ -272,6 +272,15 @@
       }
     ]
   },
+  "length_policy": {
+    "standard_source": "Format Length Standards: op-ed",
+    "target_word_count": 800,
+    "minimum_word_count": 650,
+    "maximum_word_count": 1000,
+    "flexibility": "standard",
+    "rationale": "A compact op-ed should be long enough for evidence and counterargument but short enough to keep the public claim sharp.",
+    "artist_override": null
+  },
   "fidelity_policy": {
     "mode": "new_from_meaning",
     "source_wording_constraints": [

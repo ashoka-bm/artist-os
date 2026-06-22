@@ -18,11 +18,13 @@ Routing Gate
   -> Story Approval Gate
   -> Long-Work Readiness / Checkpoints, when the work is cumulative
   -> Medium Gates
+  -> Format Length Gate, when the artist overrides the default length standard
   -> Medium Critic Review
   -> Brief Approval Gate
   -> Prompt Critic Review
   -> Prompt Branch Gate, when curator batches are requested
   -> Prompt Lock Gate
+  -> Review Presentation Gate, for written Output Artifacts
   -> Generation Approval Gate, or Draft Generation Approval Gate for text drafting
   -> Output Critic Review
   -> Output Acceptance Gate
@@ -100,12 +102,20 @@ Examples:
 - image: Symbology, Presentation Mode, Style,
 - video: Format, Scene / Sequence, Shot Logic, Motion, Visual Style, Pacing / Transition,
 - sound: Sound Work Type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form,
-- text: Writing Method, Text Form, Voice / Point Of View, Structure, Fidelity / Transformation,
+- text: Writing Method, Format Length when overridden, Text Form, Voice / Point Of View, Structure, Fidelity / Transformation, Review Presentation,
 - mixed media: Scope, Medium Selection, Role Assignment, Cross-Media Continuity, Production Order.
 
 Complete when the medium-specific gates required for that output are selected, revised, rejected, or explicitly allowed to proceed unconfirmed.
 
 At medium gates, present the strongest recommendation first, then ask for artist confirmation or correction. Avoid broad menus unless the artist asks to explore.
+
+### Format Length Gate
+
+Confirms or overrides the Format Length Standard when the artist wants a different word count than the default for the selected Cultural Format Structure and publication use.
+
+Complete when the Text Medium Plan applies the default Format Length Standard, or when the artist explicitly sets a different target, range, or flexibility. The agent should not ask this gate by default when the standard clearly fits; it should state the applied target briefly and continue. Ask only when the artist names a length, the assignment or platform implies a different length, the format standard conflicts with Artist Meaning, or the recommended shape would be harmed by the default.
+
+When overridden, store the override in `length_policy.artist_override` and record a Gate Decision with `gate_type = "format_length"`.
 
 ### Brief Approval Gate
 
@@ -144,6 +154,14 @@ Complete only with explicit per-call artist approval. Approval for one call neve
 Approves locally drafting a written Output Artifact from an approved Text Generation Plan, even when no paid provider call is made. This is distinct from the Generation Approval Gate: it governs the Text Journey's drafting step, not a cost-bearing provider call or other irreversible external action.
 
 Complete with explicit artist approval to draft. Store the decision as a Gate Decision with `gate_type = "draft_generation_approval"`.
+
+### Review Presentation Gate
+
+Chooses how the artist wants to review a drafted written Output Artifact: Markdown, a local HTML mockup, or both.
+
+Complete when the artist accepts or declines an HTML mockup. Ask this for written format outputs before Draft Generation Approval or before the first concrete draft is created. Recommend HTML mockup for articles, op-eds, LinkedIn-style posts, newsletters, essays, speeches, pitch pages, artist statements, and other written pieces where layout, scanning, or reading flow affects review. Recommend Markdown-only for tiny notes, source-bound private drafts, or cases where the artist only wants raw text.
+
+Creating a local HTML mockup is allowed after the draft exists and does not require provider-backed generation approval. It must not publish, upload, or replace the canonical written Output Artifact. Store the decision as a Gate Decision with `gate_type = "review_presentation"` and carry it into the Text Generation Plan's `review_presentation`.
 
 ### Output Acceptance Gate
 

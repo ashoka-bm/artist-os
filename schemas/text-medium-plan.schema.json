@@ -17,6 +17,7 @@
     "text_form",
     "voice_point_of_view",
     "structure_plan",
+    "length_policy",
     "fidelity_policy",
     "publication_use",
     "gates",
@@ -83,6 +84,7 @@
         }
       }
     },
+    "length_policy": { "$ref": "#/$defs/length_policy" },
     "fidelity_policy": { "$ref": "#/$defs/fidelity_policy" },
     "publication_use": {
       "type": "object",
@@ -331,6 +333,37 @@
         "invertible": {
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "length_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "standard_source",
+        "target_word_count",
+        "minimum_word_count",
+        "maximum_word_count",
+        "flexibility",
+        "rationale",
+        "artist_override"
+      ],
+      "properties": {
+        "standard_source": { "type": "string", "minLength": 1 },
+        "target_word_count": { "type": "integer", "minimum": 1 },
+        "minimum_word_count": { "type": "integer", "minimum": 1 },
+        "maximum_word_count": { "type": "integer", "minimum": 1 },
+        "flexibility": { "type": "string", "enum": ["tight", "standard", "loose", "artist_defined"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "artist_override": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["override_word_count", "override_reason", "gate_decision_id"],
+          "properties": {
+            "override_word_count": { "type": ["integer", "null"], "minimum": 1 },
+            "override_reason": { "type": "string", "minLength": 1 },
+            "gate_decision_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+          }
         }
       }
     },

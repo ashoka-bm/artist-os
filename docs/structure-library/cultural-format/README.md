@@ -92,6 +92,33 @@ Choose by the audience-facing promise and grammar, not by deep emotional movemen
 - Use creative/literary entries when form, voice, scene, image, line, address, or compression is the audience-facing grammar. Use `lyric_poem`, `narrative_poem`, and `prose_poem` with `primary_text_form = "poem"`; use `literary_scene` with `prose_scene`, `monologue` with `monologue`, `letter` with `letter`, and `screenplay_scene` with `script`.
 - Use long-narrative entries for delivered planning artifacts or Stewardship Views over cumulative text. Do not let them replace Long-Work Stewardship. Use `plot_tracker`, `novel_outline`, `chapter`, `scene_card`, `sequence_arc`, `character_brief`, `relationship_arc`, `subplot_tracker`, and `open_thread_tracker` with `primary_text_form = "other"` and `publication_use.use_case = "private_draft"` when delivered as planning/view documents. Use `treatment_outline` with `primary_text_form = "treatment_outline"`.
 
+## Format Length Standards
+
+Use these as automatic Text Medium Plan defaults for `length_policy` when the artist has not named a length. They are drafting and review targets, not platform hard limits. If a piece's Artist Meaning, publication surface, assignment, or artist preference needs a different size, record the override and rationale instead of forcing the default.
+
+| Format or CFS entry | Default range | Target | Notes |
+| --- | ---: | ---: | --- |
+| `news_article` | 500-900 words | 700 | Short enough for timely clarity; expand only for complex context. |
+| `explainer_article` | 900-1,500 words | 1,200 | Allows definitions, distinctions, causes, and implications. |
+| `hook_driven_article` | 700-1,200 words | 900 | Enough room for hook, turn, and payoff without becoming a feature. |
+| `feature_article` / `profile` | 1,200-2,500 words | 1,800 | Scene, context, and development need more room. |
+| `op_ed` | 650-1,000 words | 800 | Keeps a public argument sharp while allowing evidence and counterargument. |
+| `thought_leadership_essay` | 800-1,400 words | 1,100 | Gives room for field context and point of view. |
+| `framework_post` | 600-1,100 words | 850 | Keeps the model usable and scannable. |
+| LinkedIn-style professional post / `social_post` | 150-450 words | 300 | Optimizes for fast platform reading; not a platform character-limit guarantee. |
+| `trend_analysis` | 1,000-1,800 words | 1,400 | Needs signal, drivers, uncertainty, stakes, and watch points. |
+| `service_article_how_to` | 900-1,600 words | 1,200 | Practical guidance needs steps, caveats, and next action. |
+| `case_study` | 900-1,500 words | 1,200 | Situation, intervention, result, and lesson need balanced space. |
+| `newsletter_dispatch` | 600-1,200 words | 900 | Preserves voice, continuity, and one meaningful payoff. |
+| `artist_statement` / `essay_artist_statement` | 250-500 words | 350 | Orient without over-explaining the work. |
+| `manifesto` | 500-1,000 words | 750 | Declaration needs rhythm and force, not exhaustive proof. |
+| `speech` | 900-1,500 words | 1,200 | Roughly supports a concise spoken address; adjust for actual delivery time. |
+| `pitch` | 400-900 words | 650 | Enough for problem, proof, ask, and consequence. |
+| `short_story` | 1,500-5,000 words | 3,000 | Treat shorter or longer targets as artist-defined. |
+| `letter` / `open_letter` | 500-1,200 words | 800 | Allows address, pressure, turn, and closing gesture. |
+| `lyric_poem` / `prose_poem` / `narrative_poem` | 80-500 words | 250 | Poetry length is highly form-sensitive; use loose flexibility. |
+| `treatment_outline` | 800-1,500 words | 1,100 | Enough to present shape, stakes, world, and ending direction. |
+
 ## Common Confusion Pairs
 
 - `hook_driven_article` vs `feature_article`: choose hook-driven article when hook/promise/payoff is the main grammar; choose feature article when reported or observed texture, context, and kicker carry the form.

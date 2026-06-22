@@ -9,6 +9,14 @@
   "target_media_type": "text",
   "generation_mode": "single_draft",
   "primary_text_form": "essay_artist_statement",
+  "length_policy": {
+    "standard_source": "Format Length Standards: artist statement",
+    "target_word_count": 350,
+    "minimum_word_count": 250,
+    "maximum_word_count": 500,
+    "flexibility": "standard",
+    "drafting_instruction": "Aim for roughly 350 words; stay within 250-500 words unless preserving the approved structure requires a small variance."
+  },
   "drafting_instructions": {
     "task": "Draft a three-section artist statement that preserves the threshold, key, and withheld crossing.",
     "voice_constraints": ["plain", "restrained", "image-led", "not promotional"],
@@ -83,6 +91,15 @@
     "rewrite_output_record_required": true,
     "rewrite_origin_type": "agent_rewritten",
     "previous_output_record_required_for_rewrite": true
+  },
+  "review_presentation": {
+    "offer_html_mockup": true,
+    "accepted_formats": [
+      "markdown",
+      "html_mockup"
+    ],
+    "html_mockup_timing": "after_draft",
+    "notes": "Create a local HTML mockup after the draft so the artist can review the statement in a readable layout."
   },
   "approval_refs": {
     "writing_critic_review_id": "review_text_door_left_lit_writing_critic_001",

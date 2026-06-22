@@ -33,6 +33,8 @@ These hold whether you run standalone or under the `artist-os` conductor:
 - Do not silently browse or add external current facts. For public-facing, timely, factual, trend-aware, or platform-native writing, offer Research Grounding early and use online research only when the artist approves it or explicitly asks for it.
 - Do not create a Text Creative Brief Record or Text Generation Plan until Writing Critic Review and Brief Approval are complete.
 - Do not draft the final written Output Artifact until Draft Generation Approval is explicit, even when the agent drafts locally without a paid provider call.
+- Do not silently ignore Format Length Standards for recognizable written formats. Apply the default from `docs/structure-library/cultural-format/README.md` unless the artist, assignment, platform container, or Artist Meaning requires an override.
+- Ask whether the artist wants a local HTML mockup for review before drafting written format outputs. Creating the HTML mockup is allowed only after a concrete draft exists; it is a review presentation artifact, not publication or a replacement for the canonical written Output Artifact.
 - Draft the written Output Artifact in a fresh-context sub-agent using a bounded Text Draft Packet.
 - For cumulative long text, create and maintain a Long-Work Stewardship Record; do not draft later sections while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - The fresh-context drafting sub-agent must not run the Human Voice Pass or Clear Writing Pass during first drafting.
@@ -72,15 +74,16 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 5. Produce a Medium Output Shape Recommendation before locking Primary Text Form. Include requested shape, recommended shape, accepted shape, rationale, alternatives considered, tradeoffs, and conflict status.
 6. If the artist-requested shape and recommended shape materially diverge, record a Medium Output Shape Conflict and resolve it with one Decision Interview question before locking the Text Medium Plan.
 7. Select or adapt the Cultural Format Structure after the Medium Output Shape Recommendation is accepted, revised, or explicitly allowed to proceed unconfirmed. Use `docs/structure-library/cultural-format/README.md` to choose an entry, then open only that entry file. Include Audience Hook, audience promise, adapted parts, turn or payoff, adaptation policy, failure modes, and any recommended Stewardship Views.
-8. Record medium-level Workflow Scale Routing after the Medium Output Shape Recommendation is accepted or explicitly allowed to proceed unconfirmed and after any Medium Output Shape Conflict is resolved. A compact or structured single text artifact does not activate Long-Work Stewardship just because it has several sections; activate cumulative or full long-form supports only when dependent text parts, durable canon, extraction/verification, or long-form drafting across sessions are needed.
-9. Define one Primary Text Form, such as poem, article, prose scene, short story, monologue, script, lyrics, letter, essay/artist statement, manifesto, treatment, rewrite, adaptation, or other. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
-10. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
-11. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure. Map adapted Cultural Format Structure parts to Text Medium Plan sections rather than replacing section jobs. Keep Cultural Format Structure `function` at the audience-facing format-part level, section `structure_role` at the local position level, and section `section_job` at the concrete drafting-instruction level.
-12. For every section, paragraph group, act, scene, or verse, name the structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and how it must feel different from neighboring sections.
-13. Define Fidelity Policy: preserve source wording, adapt, invert, expand, compress, translate, or create new text from meaning.
-14. Define publication/use and rights/privacy notes.
-15. Produce the Text Medium Plan only after writing method, Research Grounding when applicable, Medium Output Shape Recommendation, Workflow Scale Routing, Cultural Format Structure when relevant, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
-16. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval. Plot-tracker-style Stewardship Views are projections over Text Medium Plan and Long-Work Stewardship state, not separate authority records.
+8. Apply the Format Length Standard from `docs/structure-library/cultural-format/README.md` once Cultural Format Structure and publication use are clear enough. Record `length_policy` with default range, target, flexibility, rationale, and any artist override. Do not ask the artist by default when the standard fits; ask one Format Length Gate question only when the default conflicts with the request, an assignment/platform container specifies a length, or Artist Meaning would be harmed by the default.
+9. Record medium-level Workflow Scale Routing after the Medium Output Shape Recommendation is accepted or explicitly allowed to proceed unconfirmed and after any Medium Output Shape Conflict is resolved. A compact or structured single text artifact does not activate Long-Work Stewardship just because it has several sections; activate cumulative or full long-form supports only when dependent text parts, durable canon, extraction/verification, or long-form drafting across sessions are needed.
+10. Define one Primary Text Form, such as poem, article, prose scene, short story, monologue, script, lyrics, letter, essay/artist statement, manifesto, treatment, rewrite, adaptation, or other. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
+11. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
+12. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure. Map adapted Cultural Format Structure parts to Text Medium Plan sections rather than replacing section jobs. Keep Cultural Format Structure `function` at the audience-facing format-part level, section `structure_role` at the local position level, and section `section_job` at the concrete drafting-instruction level.
+13. For every section, paragraph group, act, scene, or verse, name the structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and how it must feel different from neighboring sections.
+14. Define Fidelity Policy: preserve source wording, adapt, invert, expand, compress, translate, or create new text from meaning.
+15. Define publication/use and rights/privacy notes.
+16. Produce the Text Medium Plan only after writing method, Research Grounding when applicable, Medium Output Shape Recommendation, Workflow Scale Routing, Cultural Format Structure when relevant, length policy, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
+17. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval. Plot-tracker-style Stewardship Views are projections over Text Medium Plan and Long-Work Stewardship state, not separate authority records.
 
 ## Draft Text Creative Brief Process
 
@@ -100,12 +103,14 @@ Use this only after Writing Critic Review and Brief Approval.
 1. Produce the Text Creative Brief Record matching `schemas/text-creative-brief.schema.json`.
 2. Produce one Text Generation Plan matching `schemas/text-generation-plan.schema.json`.
 3. Include `text_medium_plan_id`, `transformation_brief_id`, and `beat_plan_id`.
-4. Include fresh-context drafting instructions and require a draft trace.
-5. Include section-level drafting jobs that map to `beat_id`, `key_emotional_movement_id`, Intended Feeling, and section distinction.
-6. Include source-wording policy and rights notes.
-7. Set Clear Writing Pass Policy and Human Voice Pass Policy to `required`, `recommended`, `optional`, or `skip`, with degree and protected features.
-8. Default editorial order is Clear Writing Pass first, Human Voice Pass second, unless the form requires a different order or skip.
-9. Include Output Record requirements: draft Output Record required, rewrite Output Record required, rewrite origin `agent_rewritten`, and `previous_output_record_id` required for rewrites.
+4. Carry the Text Medium Plan `length_policy` into the Text Generation Plan and turn it into a concrete drafting instruction.
+5. Include fresh-context drafting instructions and require a draft trace.
+6. Include section-level drafting jobs that map to `beat_id`, `key_emotional_movement_id`, Intended Feeling, and section distinction.
+7. Include source-wording policy and rights notes.
+8. Ask the Review Presentation Gate before Draft Generation Approval: "Do you want a local HTML mockup for review, Markdown only, or both?" Recommend HTML mockup for articles, op-eds, LinkedIn-style posts, newsletters, essays, speeches, pitch pages, artist statements, and other written pieces where hierarchy or reading flow helps review. Store the decision in `review_presentation`.
+9. Set Clear Writing Pass Policy and Human Voice Pass Policy to `required`, `recommended`, `optional`, or `skip`, with degree and protected features.
+10. Default editorial order is Clear Writing Pass first, Human Voice Pass second, unless the form requires a different order or skip.
+11. Include Output Record requirements: draft Output Record required, rewrite Output Record required, rewrite origin `agent_rewritten`, and `previous_output_record_id` required for rewrites.
 
 ## Fresh-Context Drafting
 
@@ -118,6 +123,7 @@ After Draft Generation Approval, assemble a Text Draft Packet. The packet is int
 - Text Generation Plan,
 - source text or allowed excerpts,
 - source-wording policy and rights notes,
+- length policy with target word count, minimum, maximum, and flexibility,
 - structure execution plan,
 - voice constraints,
 - protected features,
@@ -130,6 +136,8 @@ The drafting sub-agent returns:
 - conformance risks for the main agent.
 
 Persist the concrete draft as an Output Record with `origin.origin_type = "agent_drafted"` and the compact draft trace in `traceability_summary`.
+
+If `review_presentation.accepted_formats` includes `html_mockup`, create a local HTML review mockup after the draft Output Record exists. The mockup should preserve the draft text, use simple readable structure, and make hierarchy, section rhythm, and scanning flow visible. Do not add new claims, rewrite prose, publish, upload, or treat the HTML file as the canonical Output Artifact.
 
 For cumulative long text, update the Long-Work Stewardship Record when a section, chapter, scene, or poem movement is drafted, rewritten, reviewed, accepted, blocked, or skipped. First-part and interval checkpoints must be resolved before drafting later dependent parts when marked `required_before_continuing`.
 

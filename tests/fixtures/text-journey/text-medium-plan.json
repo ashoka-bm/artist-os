@@ -187,6 +187,15 @@
       }
     ]
   },
+  "length_policy": {
+    "standard_source": "Format Length Standards: artist statement",
+    "target_word_count": 350,
+    "minimum_word_count": 250,
+    "maximum_word_count": 500,
+    "flexibility": "standard",
+    "rationale": "A short artist statement should orient the viewer without over-explaining the work.",
+    "artist_override": null
+  },
   "fidelity_policy": {
     "mode": "adapt_source_wording",
     "source_wording_constraints": [

@@ -468,6 +468,14 @@ _Avoid_: Cultural Format Structure, Story Structure, creative template, platform
 An optional early text-planning decision to use online research or artist-provided sources to ground a public-facing, timely, factual, trend-aware, or platform-native written work in current evidence before the piece's argument, examples, or audience promise harden.
 _Avoid_: Silent browsing, treating web research as required for private or purely expressive work, letting current trends override Artist Meaning
 
+**Format Length Standard**:
+The default word-count range and target used by a Text Medium Plan for a recognizable written format, derived from Cultural Format Structure and publication use before drafting. It gives the draft a reviewable size target without overriding Artist Meaning or an artist-approved length.
+_Avoid_: Treating word count as a universal quality metric, confusing heuristic format length with external platform limits, silently expanding or compressing a piece against the artist's purpose
+
+**Review Presentation**:
+The artist-facing format used to review a drafted written Output Artifact, such as Markdown, HTML mockup, or both. HTML mockups are local review artifacts that make reading and layout review easier; they do not publish, upload, or replace the source draft.
+_Avoid_: Provider-backed generation, publishing workflow, treating HTML as the canonical written artifact
+
 **Release Package**:
 A coordinated set of outputs prepared as one artist-facing release, such as an album, EP, single bundle, campaign, or visual album.
 _Avoid_: Treating each asset as an unrelated project, Platform Container

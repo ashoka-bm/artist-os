@@ -94,6 +94,16 @@ For public-facing, timely, factual, trend-aware, or platform-native text such as
 
 If the artist says yes, browse only for the agreed scope, summarize the sources and dates used, and keep research subordinate to Artist Meaning. If the artist says no, record that choice and continue. Do not ask this for private drafts, poems, personal letters, lyrics, or purely meaning-preserving adaptations unless the artist's goal depends on current facts.
 
+For recognizable written formats, apply the Format Length Standard automatically once the text shape is clear. Mention the target briefly instead of asking by default, for example: "I’ll target about 800 words for the op-ed unless you want a different length." Ask only when the artist requested a different length, the assignment/platform implies one, or the standard conflicts with Artist Meaning.
+
+For written format outputs, ask whether the artist wants a local HTML mockup for review before Draft Generation Approval:
+
+> Do you want a local HTML mockup for review, Markdown only, or both?
+>
+> My recommended answer: HTML mockup plus Markdown for articles, op-eds, LinkedIn-style posts, newsletters, essays, speeches, pitch pages, and artist statements; Markdown only for tiny notes or raw private drafts.
+
+If the artist accepts HTML, create it only after a concrete draft exists. The HTML mockup is a local review artifact, not publication, upload, or the canonical written Output Artifact.
+
 **Audio**:
 
 > What kind of audio do you want?

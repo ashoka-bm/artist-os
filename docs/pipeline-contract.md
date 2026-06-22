@@ -275,12 +275,14 @@ The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-le
 - Schema: `schemas/text-medium-plan.schema.json`.
 - Skill: `skills/text-journey`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, scene, arc, or structurally ambiguous plans.
-- Gate: Research Grounding when applicable, Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
+- Gate: Research Grounding when applicable, Writing Method, Format Length override when needed, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
 - Next: `long_work.stewardship` enrichment when the text work is cumulative, otherwise `text.creative_brief`.
 
 Durable project runs should persist each Text Medium gate as its own Gate Decision when it reflects a real artist choice, correction, waiver, or approval. Compact dry-run and eval harnesses may summarize bundled recommended gate assumptions as rehearsal evidence, but that summary is not a substitute for durable project gate records.
 
 For public-facing, timely, factual, trend-aware, or platform-native text, resolve Research Grounding before locking the audience promise, argument, examples, or factual claims. If online research is approved, record the scope, source dates, and how sourced facts are separated from the agent's interpretation.
+
+The Text Medium Plan must include `length_policy`. Apply the Format Length Standard from the selected Cultural Format Structure and publication use by default; record an artist override only when a different length is requested or recommended.
 
 Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Movement, name a section job, state the Intended Feeling, translate the Expectation Turn, and explain how the section differs from adjacent sections.
 
@@ -306,7 +308,7 @@ The Text Creative Brief Record must include `transformation_brief_id`, `beat_pla
 - Gate: Prompt Lock Gate and Draft Generation Approval Gate.
 - Next: fresh-context draft Output Record, editorial rewrite Output Records, Output Critic Review, or Output Acceptance Gate.
 
-The Text Generation Plan must require fresh-context drafting, a returned draft trace, main-agent conformance review, editorial pass policies, and Output Records for every concrete draft or rewrite artifact.
+The Text Generation Plan must require fresh-context drafting, a returned draft trace, main-agent conformance review, editorial pass policies, length policy, review presentation decision, and Output Records for every concrete draft or rewrite artifact.
 
 ## Transition Rules
 

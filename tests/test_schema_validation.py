@@ -430,12 +430,15 @@ class SchemaValidationTests(unittest.TestCase):
         data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
         schema = load_json(schema_path)
         text_gate_types = [
+            "research_grounding",
             "writing_method",
+            "format_length",
             "text_form",
             "voice_pov",
             "structure",
             "fidelity_transformation",
             "publication_use",
+            "review_presentation",
             "brief_approval",
             "draft_generation_approval",
         ]
@@ -462,6 +465,17 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "missing required field 'approval_refs'"):
             validate(record, schema, schema)
+
+    def test_text_generation_plan_requires_length_policy_and_review_presentation(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "text-generation-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-generation-plan.json"
+        schema = load_json(schema_path)
+        for field in ["length_policy", "review_presentation"]:
+            with self.subTest(field=field):
+                record = load_json(data_path)
+                record.pop(field, None)
+                with self.assertRaisesRegex(ValidationError, f"missing required field '{field}'"):
+                    validate(record, schema, schema)
 
     def test_image_and_sound_final_records_require_approval_refs(self) -> None:
         cases = [
@@ -579,6 +593,15 @@ class SchemaValidationTests(unittest.TestCase):
         del record["workflow_scale_routing"]
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_text_medium_plan_requires_length_policy(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "text-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-medium-plan.json"
+        record = load_json(data_path)
+        del record["length_policy"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'length_policy'"):
             validate(record, schema, schema)
 
     def test_image_medium_plan_requires_workflow_scale_routing(self) -> None:

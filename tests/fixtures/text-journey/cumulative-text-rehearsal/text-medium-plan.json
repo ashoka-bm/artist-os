@@ -191,6 +191,15 @@
       }
     ]
   },
+  "length_policy": {
+    "standard_source": "Format Length Standards: serialized installment",
+    "target_word_count": 1000,
+    "minimum_word_count": 700,
+    "maximum_word_count": 1400,
+    "flexibility": "loose",
+    "rationale": "A serialized prose sequence needs enough room for local movement and forward pressure across dependent sections.",
+    "artist_override": null
+  },
   "fidelity_policy": {
     "mode": "adapt_source_wording",
     "source_wording_constraints": [
