@@ -7,6 +7,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sqlite3
 import sys
 from collections import namedtuple
@@ -43,6 +44,21 @@ LEARNING_EVIDENCE_TYPES = [
     "schema_mismatch",
     "tool_field_mismatch",
 ]
+VISIBLE_OUTPUT_STATE_TO_ROLE = {
+    "draft": "review_draft",
+    "accepted": "accepted_work",
+}
+VISIBLE_OUTPUT_STATE_TO_SUBDIR = {
+    "draft": "Drafts",
+    "accepted": "Accepted",
+}
+ARTIFACT_KIND_TO_MEDIUM_FOLDER = {
+    "image": "Images",
+    "audio": "Audio",
+    "text": "Writing",
+    "video": "Video",
+    "mixed_media_package": "Mixed Media",
+}
 
 
 def connect(db_path: Path) -> sqlite3.Connection:
@@ -246,6 +262,51 @@ def optional_json(path_value: str | None, project_dir: Path, library_root: Path)
     return {}
 
 
+def iter_output_record_files(paths: dict, project_dir: Path, library_root: Path) -> list[Path]:
+    output_records_dir = resolve_path(paths.get("output_records_dir"), project_dir, library_root)
+    if not output_records_dir or not output_records_dir.is_dir():
+        return []
+    return sorted(
+        path
+        for path in output_records_dir.rglob("*.json")
+        if path.is_file()
+    )
+
+
+def output_artifact_row(
+    project_id: str,
+    output_record_path: Path,
+    output_record: dict,
+    library_root: Path,
+) -> tuple | None:
+    if output_record.get("project_id") != project_id:
+        return None
+    output_record_id = output_record.get("output_record_id")
+    artifact = output_record.get("output_artifact") or {}
+    required_artifact_fields = ("artifact_id", "artifact_kind", "uri_or_path", "mime_type")
+    if not output_record_id or any(not artifact.get(field) for field in required_artifact_fields):
+        return None
+    origin = output_record.get("origin") or {}
+    generation = output_record.get("generation") or {}
+    review_state = output_record.get("review_state") or {}
+    acceptance_state = output_record.get("acceptance_state") or {}
+    return (
+        output_record_id,
+        project_id,
+        relative_library_path(output_record_path, library_root),
+        artifact["artifact_id"],
+        artifact.get("artifact_kind"),
+        artifact["uri_or_path"],
+        artifact.get("mime_type"),
+        origin.get("origin_type"),
+        generation.get("provider"),
+        generation.get("model"),
+        review_state.get("review_status"),
+        acceptance_state.get("output_acceptance_status"),
+        output_record.get("created_at"),
+    )
+
+
 def event_key(payload: dict, fallback_index: int) -> tuple:
     event_id = payload.get("event_id")
     if event_id:
@@ -385,14 +446,14 @@ def resolve_artist_library_path(
             return artist_library_root.parents[1].joinpath(*path.parts)
         if path.parts[:1] == ("Projects",):
             return artist_library_root.joinpath(*path.parts)
-    if visible_project_dir:
-        return visible_project_dir / path
     repo_candidate = REPO_ROOT / path
     if repo_candidate.exists():
         return repo_candidate
     direct_candidate = Path.cwd() / path
     if direct_candidate.exists():
         return direct_candidate
+    if visible_project_dir:
+        return visible_project_dir / path
     return None
 
 
@@ -671,6 +732,7 @@ def upsert_manifest(
         )
 
     conn.execute("DELETE FROM records WHERE project_id = ?", (project_id,))
+    conn.execute("DELETE FROM output_artifacts WHERE project_id = ?", (project_id,))
     record_keys = {
         "source_record": "source_record",
         "reference_text": "reference_text",
@@ -699,6 +761,54 @@ def upsert_manifest(
                 VALUES (?, ?, ?, ?, ?)
                 """,
                 (project_id, record_type, value, None, manifest["updated_at"]),
+            )
+
+    for output_record_path in iter_output_record_files(paths, project_dir_path, library_root):
+        try:
+            output_record = read_json(output_record_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if output_record.get("project_id") != project_id or not output_record.get("output_record_id"):
+            continue
+        record_path = relative_library_path(output_record_path, library_root)
+        conn.execute(
+            """
+            INSERT INTO records (project_id, record_type, path, status, updated_at)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                project_id,
+                "output_record",
+                record_path,
+                (output_record.get("acceptance_state") or {}).get("output_acceptance_status"),
+                output_record.get("created_at") or manifest["updated_at"],
+            ),
+        )
+        artifact_row = output_artifact_row(project_id, output_record_path, output_record, library_root)
+        if artifact_row:
+            conn.execute(
+                """
+                INSERT INTO output_artifacts (
+                  output_record_id, project_id, output_record_path, artifact_id,
+                  artifact_kind, uri_or_path, mime_type, origin_type, provider,
+                  model, review_status, acceptance_status, created_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(output_record_id) DO UPDATE SET
+                  project_id = excluded.project_id,
+                  output_record_path = excluded.output_record_path,
+                  artifact_id = excluded.artifact_id,
+                  artifact_kind = excluded.artifact_kind,
+                  uri_or_path = excluded.uri_or_path,
+                  mime_type = excluded.mime_type,
+                  origin_type = excluded.origin_type,
+                  provider = excluded.provider,
+                  model = excluded.model,
+                  review_status = excluded.review_status,
+                  acceptance_status = excluded.acceptance_status,
+                  created_at = excluded.created_at
+                """,
+                artifact_row,
             )
 
     events_path_value = paths.get("events")
@@ -1119,6 +1229,140 @@ def visible_project_ref(path: Path, wondermint_root: Path | None, artist_library
         return str(path)
 
 
+def visible_filename(value: str) -> str:
+    cleaned = re.sub(r"[^a-zA-Z0-9._ -]+", "-", value).strip(" .-")
+    if not cleaned:
+        raise SystemExit("visible filename must contain at least one safe character")
+    return cleaned
+
+
+def visible_output_ref(
+    path: Path,
+    wondermint_root: Path | None,
+    artist_library_root: Path,
+) -> str:
+    return visible_project_ref(path, wondermint_root, artist_library_root)
+
+
+def read_output_record_by_id(
+    manifest: dict,
+    output_record_id: str,
+    project_dir: Path,
+    library_root: Path,
+) -> tuple[Path, dict]:
+    for output_record_path in iter_output_record_files(manifest.get("paths", {}), project_dir, library_root):
+        try:
+            output_record = read_json(output_record_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if output_record.get("output_record_id") == output_record_id:
+            return output_record_path, output_record
+    raise SystemExit(f"output record not found under output_records_dir: {output_record_id}")
+
+
+def require_visible_artist_library_state(manifest: dict) -> dict:
+    artist_library = manifest.get("artist_library") or {}
+    if artist_library.get("visible_state") != "present" or not artist_library.get("project_dir"):
+        raise SystemExit(
+            "project has no present Artist Library folder; run link-visible-project first"
+        )
+    return artist_library
+
+
+def artifact_source_path(output_record: dict, project_dir: Path, library_root: Path) -> Path:
+    artifact = output_record.get("output_artifact") or {}
+    source = resolve_path(artifact.get("uri_or_path"), project_dir, library_root)
+    if not source or not source.is_file():
+        raise SystemExit(f"output artifact file not found: {artifact.get('uri_or_path')}")
+    return source
+
+
+def dedupe_user_facing_file_refs(files: list[dict], new_ref: dict) -> list[dict]:
+    filtered = [file_ref for file_ref in files if file_ref.get("path") != new_ref["path"]]
+    filtered.append(new_ref)
+    return filtered
+
+
+def publish_visible_output(args: argparse.Namespace) -> None:
+    validate_id(args.project_id, PROJECT_ID_PATTERN, "project_id")
+    output_record_id = validate_id(args.output_record_id, OUTPUT_RECORD_ID_PATTERN, "output_record_id")
+    library_root = library_root_for(args)
+    artist_library_root = artist_library_root_for(args)
+    if not artist_library_root:
+        raise SystemExit("publish-visible-output requires --wondermint-root, WONDERMINT_ROOT, or --artist-library-root")
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    artist_library = require_visible_artist_library_state(manifest)
+    project_dir = Path(manifest.get("paths", {}).get("project_dir", manifest_path.parent))
+    output_record_path, output_record = read_output_record_by_id(
+        manifest,
+        output_record_id,
+        project_dir,
+        library_root,
+    )
+    artifact = output_record.get("output_artifact") or {}
+    artifact_kind = artifact.get("artifact_kind")
+    medium_folder = args.medium_folder or ARTIFACT_KIND_TO_MEDIUM_FOLDER.get(artifact_kind)
+    if not medium_folder:
+        raise SystemExit(f"no default visible medium folder for artifact kind: {artifact_kind}")
+    medium_folder = visible_filename(medium_folder)
+    state_dir = VISIBLE_OUTPUT_STATE_TO_SUBDIR[args.state]
+    source_path = artifact_source_path(output_record, project_dir, library_root)
+    extension = source_path.suffix or Path(artifact.get("uri_or_path", "")).suffix
+    requested_filename = args.filename or f"{output_record_id}{extension}"
+    filename = visible_filename(requested_filename)
+    if extension and not filename.endswith(extension):
+        filename = f"{filename}{extension}"
+
+    wondermint_root = Path(args.wondermint_root) if getattr(args, "wondermint_root", None) else None
+    visible_project_dir = resolve_artist_library_path(
+        artist_library["project_dir"],
+        artist_library_root,
+    )
+    if not visible_project_dir:
+        raise SystemExit(f"visible project folder cannot be resolved: {artist_library['project_dir']}")
+    destination_dir = visible_project_dir / medium_folder / state_dir
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    destination_path = destination_dir / filename
+    if destination_path.exists() and not args.overwrite:
+        raise SystemExit(f"visible output already exists: {destination_path}; use --overwrite to replace it")
+    shutil.copy2(source_path, destination_path)
+
+    now = utc_now()
+    new_ref = {
+        "path": visible_output_ref(destination_path, wondermint_root, artist_library_root),
+        "file_role": VISIBLE_OUTPUT_STATE_TO_ROLE[args.state],
+        "status": "current",
+        "output_record_id": output_record_id,
+        "updated_at": now,
+    }
+    artist_library["user_facing_files"] = dedupe_user_facing_file_refs(
+        artist_library.get("user_facing_files", []),
+        new_ref,
+    )
+    artist_library["visible_state"] = "present"
+    artist_library["last_checked_at"] = now
+    manifest["artist_library"] = artist_library
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+
+    events_path = resolve_path(manifest.get("paths", {}).get("events"), project_dir, library_root)
+    if events_path:
+        event = {
+            "event_id": f"evt_{args.project_id.removeprefix('proj_')}_{compact_timestamp(now)}",
+            "project_id": args.project_id,
+            "event_type": "visible_output_published",
+            "stage": "output_record",
+            "created_at": now,
+            "record_path": relative_library_path(output_record_path, library_root),
+            "details": f"Published {output_record_id} to visible Artist Library path {new_ref['path']}.",
+        }
+        with events_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, sort_keys=True) + "\n")
+
+    sync_db(args)
+    print(f"published visible output {destination_path}")
+
+
 def update_visible_project_manifest(
     args: argparse.Namespace,
     artist_library_root: Path,
@@ -1244,12 +1488,34 @@ def show_project(args: argparse.Namespace) -> None:
             """,
             (args.project_id,),
         ).fetchall()
+        records = conn.execute(
+            """
+            SELECT record_type, path, status, updated_at
+            FROM records
+            WHERE project_id = ?
+            ORDER BY record_type, path
+            """,
+            (args.project_id,),
+        ).fetchall()
+        output_artifacts = conn.execute(
+            """
+            SELECT output_record_id, artifact_id, artifact_kind, uri_or_path,
+                   origin_type, provider, review_status, acceptance_status,
+                   output_record_path
+            FROM output_artifacts
+            WHERE project_id = ?
+            ORDER BY created_at, output_record_id
+            """,
+            (args.project_id,),
+        ).fetchall()
     print(json.dumps({
         "project": dict(project),
         "decisions": dict(decisions) if decisions else None,
         "visible_state": dict(visible_state) if visible_state else None,
         "artist_library_files": [dict(file_ref) for file_ref in artist_library_files],
         "feedback_state": dict(feedback_state) if feedback_state else None,
+        "records": [dict(record) for record in records],
+        "output_artifacts": [dict(artifact) for artifact in output_artifacts],
         "assets": [dict(asset) for asset in assets],
     }, indent=2))
 
@@ -1345,11 +1611,24 @@ def parser() -> argparse.ArgumentParser:
     link.add_argument("--summary", default=None)
     link.add_argument("--status", default=None)
     link.add_argument("--workspace-root-hint", default="../../../.wondermint/artist-os")
+    link.add_argument("--library-root", default=None)
     link.add_argument("--wondermint-root", default=None)
     link.add_argument("--artist-library-root", default=None)
     link.add_argument("--overwrite-pointer", action="store_true")
     link.add_argument("--overwrite-readme", action="store_true")
     link.set_defaults(func=link_visible_project)
+
+    publish = sub.add_parser("publish-visible-output", help="copy an Output Artifact into a visible Artist Library project folder")
+    publish.add_argument("project_id")
+    publish.add_argument("output_record_id")
+    publish.add_argument("--state", default="draft", choices=sorted(VISIBLE_OUTPUT_STATE_TO_ROLE))
+    publish.add_argument("--filename", default=None)
+    publish.add_argument("--medium-folder", default=None)
+    publish.add_argument("--library-root", default=None)
+    publish.add_argument("--wondermint-root", default=None)
+    publish.add_argument("--artist-library-root", default=None)
+    publish.add_argument("--overwrite", action="store_true")
+    publish.set_defaults(func=publish_visible_output)
 
     list_cmd = sub.add_parser("list", help="list indexed projects")
     add_library_args(list_cmd)

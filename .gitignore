@@ -5,6 +5,8 @@ __pycache__/
 # Private Artist OS project state and generated media.
 workspace-library/
 artist-os-library/
+Wondermint/
+.wondermint/
 
 # Disposable local intermediates.
 .tmp/
