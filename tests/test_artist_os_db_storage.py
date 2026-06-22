@@ -61,6 +61,80 @@ def minimal_manifest(project_id: str = "proj_door_left_lit") -> dict:
     }
 
 
+def minimal_output_record(project_id: str = "proj_door_left_lit") -> dict:
+    return {
+        "output_record_id": "out_door_left_lit_audio_001",
+        "previous_output_record_id": None,
+        "project_id": project_id,
+        "source_id": "src_door_left_lit",
+        "artist_meaning_id": "meaning_door_left_lit",
+        "transformation_brief_id": "tb_door_left_lit",
+        "beat_plan_id": "bp_door_left_lit",
+        "medium_plan_id": "smp_door_left_lit",
+        "brief_id": "brief_door_left_lit",
+        "prompt_plan_id": "plan_door_left_lit",
+        "target_media_type": "sound",
+        "output_artifact": {
+            "artifact_id": "artifact_door_left_lit_audio_001",
+            "artifact_kind": "audio",
+            "uri_or_path": "projects/proj_door_left_lit/outputs/audio/generated/door-left-lit.mp3",
+            "mime_type": "audio/mpeg",
+            "description": "Generated audio artifact.",
+            "rights_notes": "Private review artifact.",
+        },
+        "origin": {
+            "origin_type": "artist_imported",
+            "created_by": "artist",
+            "generation_approval_ref": None,
+        },
+        "generation": {
+            "provider": "suno",
+            "model": None,
+            "settings": {},
+            "seed": None,
+            "estimated_cost": None,
+            "actual_cost": None,
+        },
+        "review_state": {
+            "output_critic_review_required": True,
+            "review_record_id": None,
+            "review_status": "not_reviewed",
+        },
+        "acceptance_state": {
+            "output_acceptance_status": "pending",
+            "accepted_work": False,
+            "artist_decision_ref": None,
+            "waiver_reason": None,
+        },
+        "traceability_summary": [
+            {
+                "source_type": "prompt_plan",
+                "source_ref": "plan_door_left_lit",
+                "note": "Produced from the prompt plan.",
+            }
+        ],
+        "created_at": "2026-05-31T00:00:00Z",
+    }
+
+
+def minimal_image_output_record(project_id: str = "proj_door_left_lit") -> dict:
+    record = minimal_output_record(project_id)
+    record["output_record_id"] = "out_door_left_lit_image_001"
+    record["medium_plan_id"] = "imp_door_left_lit"
+    record["target_media_type"] = "image"
+    record["output_artifact"] = {
+        "artifact_id": "artifact_door_left_lit_image_001",
+        "artifact_kind": "image",
+        "uri_or_path": "projects/proj_door_left_lit/assets/generated/door-left-lit.png",
+        "mime_type": "image/png",
+        "description": "Generated image artifact.",
+        "rights_notes": "Private review artifact.",
+    }
+    record["generation"]["provider"] = "OpenAI image generation tool"
+    record["generation"]["model"] = "image_gen"
+    return record
+
+
 class ArtistOSDbStorageTests(unittest.TestCase):
     def test_wondermint_root_derives_workspace_and_artist_library_roots(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -369,6 +443,87 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, "already links to proj_door_left_lit"):
                 artist_os_db.link_visible_project(args)
 
+    def test_publish_visible_output_copies_image_artifact_and_indexes_visible_review_draft(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / "workspace-library" / "artist-os"
+            artist_library_root = root / "Wondermint" / "Artist Library"
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            output_records_dir = workspace_project_dir / "outputs"
+            generated_dir = workspace_project_dir / "assets" / "generated"
+            visible_project_dir = artist_library_root / "Projects" / "door-left-lit"
+            output_records_dir.mkdir(parents=True)
+            generated_dir.mkdir(parents=True)
+            visible_project_dir.mkdir(parents=True)
+            (visible_project_dir / ".artist-os-project.json").write_text(
+                json.dumps({"schema_version": 1, "project_id": "proj_door_left_lit"}),
+                encoding="utf-8",
+            )
+            image_path = generated_dir / "door-left-lit.png"
+            image_path.write_bytes(b"fake png")
+            output_record = minimal_image_output_record()
+            (output_records_dir / "output-record-image-001.json").write_text(
+                json.dumps(output_record),
+                encoding="utf-8",
+            )
+            manifest = minimal_manifest()
+            manifest["paths"]["project_dir"] = "projects/proj_door_left_lit"
+            manifest["paths"]["output_records_dir"] = "projects/proj_door_left_lit/outputs"
+            manifest["artist_library"] = {
+                "project_dir": "Projects/door-left-lit",
+                "project_pointer_path": "Projects/door-left-lit/.artist-os-project.json",
+                "project_pointer_state": "present",
+                "project_pointer_project_id": "proj_door_left_lit",
+                "visible_state": "present",
+                "user_facing_files": [],
+            }
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                artist_library_root=str(artist_library_root),
+                project_id="proj_door_left_lit",
+                output_record_id="out_door_left_lit_image_001",
+                state="draft",
+                filename="door-left-lit.png",
+                medium_folder=None,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.publish_visible_output(args)
+
+            destination = visible_project_dir / "Images" / "Drafts" / "door-left-lit.png"
+            self.assertEqual(destination.read_bytes(), b"fake png")
+            manifest_after = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                manifest_after["artist_library"]["user_facing_files"][0]["path"],
+                "Wondermint/Artist Library/Projects/door-left-lit/Images/Drafts/door-left-lit.png",
+            )
+            self.assertEqual(
+                manifest_after["artist_library"]["user_facing_files"][0]["output_record_id"],
+                "out_door_left_lit_image_001",
+            )
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                file_ref = conn.execute(
+                    "SELECT path, file_role, status, output_record_id FROM artist_library_files"
+                ).fetchone()
+                output_artifact = conn.execute(
+                    "SELECT output_record_id, artifact_kind FROM output_artifacts"
+                ).fetchone()
+
+            self.assertEqual(
+                file_ref,
+                (
+                    "Wondermint/Artist Library/Projects/door-left-lit/Images/Drafts/door-left-lit.png",
+                    "review_draft",
+                    "current",
+                    "out_door_left_lit_image_001",
+                ),
+            )
+            self.assertEqual(output_artifact, ("out_door_left_lit_image_001", "image"))
+
     def test_installer_passes_wondermint_root_even_with_low_level_workspace_override(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
@@ -585,6 +740,111 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             self.assertEqual(project_row, ("active",), "project should still be indexed")
             self.assertEqual(decision_rows, 0, "empty decisions must index no project_decisions row")
 
+    def test_sync_indexes_concrete_output_records_and_artifacts_from_output_records_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            project_id = "proj_door_left_lit"
+            workspace_project_dir = library_root / "projects" / project_id
+            output_records_dir = workspace_project_dir / "outputs" / "audio" / "output-records"
+            output_records_dir.mkdir(parents=True)
+            manifest = minimal_manifest(project_id)
+            manifest["paths"]["output_records_dir"] = f"projects/{project_id}/outputs"
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            output_record = minimal_output_record(project_id)
+            (output_records_dir / "output-record-audio-001.json").write_text(
+                json.dumps(output_record),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                record_rows = conn.execute(
+                    """
+                    SELECT record_type, path, status
+                    FROM records
+                    WHERE project_id = ? AND record_type = 'output_record'
+                    """,
+                    (project_id,),
+                ).fetchall()
+                artifact_row = conn.execute(
+                    """
+                    SELECT output_record_id, artifact_id, artifact_kind, uri_or_path,
+                           origin_type, provider, review_status, acceptance_status
+                    FROM output_artifacts
+                    WHERE project_id = ?
+                    """,
+                    (project_id,),
+                ).fetchone()
+
+            self.assertEqual(
+                record_rows,
+                [
+                    (
+                        "output_record",
+                        "projects/proj_door_left_lit/outputs/audio/output-records/output-record-audio-001.json",
+                        "pending",
+                    )
+                ],
+            )
+            self.assertEqual(
+                artifact_row,
+                (
+                    "out_door_left_lit_audio_001",
+                    "artifact_door_left_lit_audio_001",
+                    "audio",
+                    "projects/proj_door_left_lit/outputs/audio/generated/door-left-lit.mp3",
+                    "artist_imported",
+                    "suno",
+                    "not_reviewed",
+                    "pending",
+                ),
+            )
+
+    def test_sync_skips_output_artifact_index_when_required_artifact_fields_are_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            project_id = "proj_door_left_lit"
+            workspace_project_dir = library_root / "projects" / project_id
+            output_records_dir = workspace_project_dir / "outputs"
+            output_records_dir.mkdir(parents=True)
+            manifest = minimal_manifest(project_id)
+            manifest["paths"]["output_records_dir"] = f"projects/{project_id}/outputs"
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            output_record = minimal_output_record(project_id)
+            del output_record["output_artifact"]["mime_type"]
+            (output_records_dir / "output-record-audio-001.json").write_text(
+                json.dumps(output_record),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                record_count = conn.execute(
+                    "SELECT COUNT(*) FROM records WHERE project_id = ? AND record_type = 'output_record'",
+                    (project_id,),
+                ).fetchone()[0]
+                artifact_count = conn.execute(
+                    "SELECT COUNT(*) FROM output_artifacts WHERE project_id = ?",
+                    (project_id,),
+                ).fetchone()[0]
+
+            self.assertEqual(record_count, 1)
+            self.assertEqual(artifact_count, 0)
+
     def test_project_manifest_schema_allows_visible_missing_null_pointer_project_id(self) -> None:
         schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
         manifest = minimal_manifest()
@@ -765,6 +1025,52 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                 file_status = conn.execute("SELECT status FROM artist_library_files").fetchone()[0]
 
             self.assertEqual(file_status, "missing")
+
+    def test_sync_resolves_repo_relative_wondermint_visible_file_paths_before_project_relative_join(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / "workspace-library" / "artist-os"
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            visible_project_dir = root / "Wondermint" / "Artist Library" / "Projects" / "door-left-lit"
+            workspace_project_dir.mkdir(parents=True)
+            visible_project_dir.mkdir(parents=True)
+            (visible_project_dir / ".artist-os-project.json").write_text(
+                json.dumps({"schema_version": 1, "project_id": "proj_door_left_lit"}),
+                encoding="utf-8",
+            )
+            visible_file = visible_project_dir / "Audio" / "Drafts" / "draft.mp3"
+            visible_file.parent.mkdir(parents=True)
+            visible_file.write_bytes(b"fake mp3")
+            manifest = minimal_manifest()
+            manifest["artist_library"] = {
+                "project_dir": "Wondermint/Artist Library/Projects/door-left-lit",
+                "project_pointer_path": "Wondermint/Artist Library/Projects/door-left-lit/.artist-os-project.json",
+                "project_pointer_state": "present",
+                "project_pointer_project_id": "proj_door_left_lit",
+                "visible_state": "present",
+                "user_facing_files": [
+                    {
+                        "path": "Wondermint/Artist Library/Projects/door-left-lit/Audio/Drafts/draft.mp3",
+                        "file_role": "review_draft",
+                        "status": "current",
+                    }
+                ],
+            }
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+            )
+
+            with patch.object(artist_os_db, "REPO_ROOT", root):
+                with redirect_stdout(StringIO()):
+                    artist_os_db.sync_db(args)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                file_status = conn.execute("SELECT status FROM artist_library_files").fetchone()[0]
+
+            self.assertEqual(file_status, "current")
 
     def test_add_feedback_appends_log_marks_pending_and_indexes_review(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -99,6 +99,29 @@ CREATE TABLE IF NOT EXISTS records (
 CREATE INDEX IF NOT EXISTS idx_records_type
 ON records(record_type);
 
+CREATE TABLE IF NOT EXISTS output_artifacts (
+  output_record_id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  output_record_path TEXT NOT NULL,
+  artifact_id TEXT NOT NULL,
+  artifact_kind TEXT NOT NULL,
+  uri_or_path TEXT NOT NULL,
+  mime_type TEXT NOT NULL,
+  origin_type TEXT,
+  provider TEXT,
+  model TEXT,
+  review_status TEXT,
+  acceptance_status TEXT,
+  created_at TEXT,
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_output_artifacts_project
+ON output_artifacts(project_id);
+
+CREATE INDEX IF NOT EXISTS idx_output_artifacts_kind
+ON output_artifacts(artifact_kind);
+
 CREATE TABLE IF NOT EXISTS project_feedback_state (
   project_id TEXT PRIMARY KEY,
   feedback_log_path TEXT,

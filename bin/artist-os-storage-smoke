@@ -1,0 +1,276 @@
+#!/usr/bin/env python3
+"""Smoke-test Artist OS storage landing in an isolated .tmp library."""
+
+from __future__ import annotations
+
+import argparse
+import base64
+import json
+import shutil
+import sqlite3
+import subprocess
+import sys
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+ARTIST_OS_DB = REPO_ROOT / "bin" / "artist-os-db"
+DEFAULT_SMOKE_ROOT = REPO_ROOT / ".tmp" / "artist-os-storage-smoke"
+PROJECT_ID = "proj_storage_smoke_image_001"
+OUTPUT_RECORD_ID = "out_storage_smoke_image_001"
+PROJECT_SLUG = "storage-smoke-image"
+VISIBLE_FILENAME = "storage-smoke-image.png"
+CREATED_AT = "2026-06-22T00:00:00Z"
+
+
+ONE_BY_ONE_PNG = base64.b64decode(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII="
+)
+
+
+def run(args: list[str]) -> str:
+    completed = subprocess.run(
+        [sys.executable, str(ARTIST_OS_DB), *args],
+        cwd=REPO_ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return completed.stdout
+
+
+def write_json(path: Path, payload: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def manifest() -> dict:
+    return {
+        "project_id": PROJECT_ID,
+        "title": "Storage Smoke Image",
+        "status": "active",
+        "current_stage": "critique",
+        "created_at": CREATED_AT,
+        "updated_at": CREATED_AT,
+        "summary": "Smoke-test project for Artist OS visible output publishing.",
+        "paths": {
+            "project_dir": f"projects/{PROJECT_ID}",
+            "events": f"projects/{PROJECT_ID}/events.jsonl",
+            "source_record": f"projects/{PROJECT_ID}/source/source-record.json",
+            "meaning_interview": f"projects/{PROJECT_ID}/meaning/meaning-interview.json",
+            "creative_brief_record": f"projects/{PROJECT_ID}/briefs/creative-brief.record.json",
+            "prompt_plan": f"projects/{PROJECT_ID}/prompt-plans/prompt-plan.json",
+            "output_records_dir": f"projects/{PROJECT_ID}/outputs",
+            "assets_dir": f"projects/{PROJECT_ID}/assets",
+        },
+        "decisions": {
+            "interpretation_status": "complete",
+            "symbology_status": "complete",
+            "style_status": "complete",
+            "detail_status": "complete",
+        },
+        "assets": [],
+    }
+
+
+def output_record() -> dict:
+    return {
+        "output_record_id": OUTPUT_RECORD_ID,
+        "previous_output_record_id": None,
+        "project_id": PROJECT_ID,
+        "source_id": "src_storage_smoke_image_001",
+        "artist_meaning_id": "meaning_storage_smoke_image_001",
+        "transformation_brief_id": "tb_storage_smoke_image_001",
+        "beat_plan_id": "bp_storage_smoke_image_001",
+        "medium_plan_id": "imp_storage_smoke_image_001",
+        "brief_id": "brief_storage_smoke_image_001",
+        "prompt_plan_id": "plan_storage_smoke_image_001",
+        "text_generation_plan_id": None,
+        "prompt_branch_set_id": None,
+        "prompt_branch_id": None,
+        "prompt_variant_type": None,
+        "target_media_type": "image",
+        "output_artifact": {
+            "artifact_id": "artifact_storage_smoke_image_001",
+            "artifact_kind": "image",
+            "uri_or_path": f"projects/{PROJECT_ID}/assets/generated/{VISIBLE_FILENAME}",
+            "mime_type": "image/png",
+            "description": "Smoke-test image artifact.",
+            "rights_notes": "Local disposable smoke-test fixture.",
+        },
+        "origin": {
+            "origin_type": "provider_generated",
+            "created_by": "artist-os-storage-smoke",
+            "generation_approval_ref": "gate_storage_smoke_generation_001",
+        },
+        "generation": {
+            "provider": "smoke-fixture",
+            "model": "one-by-one-png",
+            "settings": {},
+            "seed": None,
+            "estimated_cost": 0,
+            "actual_cost": 0,
+        },
+        "review_state": {
+            "output_critic_review_required": True,
+            "review_record_id": None,
+            "review_status": "not_reviewed",
+        },
+        "acceptance_state": {
+            "output_acceptance_status": "pending",
+            "accepted_work": False,
+            "artist_decision_ref": None,
+            "waiver_reason": None,
+        },
+        "traceability_summary": [
+            {
+                "source_type": "prompt_plan",
+                "source_ref": "plan_storage_smoke_image_001",
+                "note": "Smoke artifact traces to the prompt plan fixture.",
+            }
+        ],
+        "created_at": CREATED_AT,
+    }
+
+
+def seed_workspace(library_root: Path) -> None:
+    project_dir = library_root / "projects" / PROJECT_ID
+    write_json(project_dir / "project.json", manifest())
+    write_json(project_dir / "source" / "source-record.json", {"source_id": "src_storage_smoke_image_001"})
+    write_json(
+        project_dir / "meaning" / "meaning-interview.json",
+        {"artist_meaning_id": "meaning_storage_smoke_image_001"},
+    )
+    write_json(project_dir / "briefs" / "creative-brief.record.json", {"brief_id": "brief_storage_smoke_image_001"})
+    write_json(project_dir / "prompt-plans" / "prompt-plan.json", {"prompt_plan_id": "plan_storage_smoke_image_001"})
+    write_json(project_dir / "outputs" / "output-record-image-001.json", output_record())
+    (project_dir / "events.jsonl").write_text("", encoding="utf-8")
+
+    artifact_path = project_dir / "assets" / "generated" / VISIBLE_FILENAME
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    artifact_path.write_bytes(ONE_BY_ONE_PNG)
+
+
+def assert_row_count(conn: sqlite3.Connection, sql: str, params: tuple, expected: int, label: str) -> None:
+    actual = conn.execute(sql, params).fetchone()[0]
+    if actual != expected:
+        raise AssertionError(f"{label}: expected {expected}, found {actual}")
+
+
+def verify(wondermint_root: Path) -> dict:
+    library_root = wondermint_root / ".wondermint" / "artist-os"
+    db_path = library_root / "artist-os.sqlite"
+    visible_project_dir = wondermint_root / "Wondermint" / "Artist Library" / "Projects" / PROJECT_SLUG
+    visible_output = visible_project_dir / "Images" / "Drafts" / VISIBLE_FILENAME
+    pointer_path = visible_project_dir / ".artist-os-project.json"
+    readme_path = visible_project_dir / "README.md"
+
+    for path, label in [
+        (db_path, "SQLite index"),
+        (pointer_path, "Project Pointer"),
+        (readme_path, "visible README"),
+        (visible_output, "visible output artifact"),
+    ]:
+        if not path.is_file():
+            raise AssertionError(f"missing {label}: {path}")
+
+    with sqlite3.connect(db_path) as conn:
+        assert_row_count(conn, "SELECT COUNT(*) FROM projects WHERE project_id = ?", (PROJECT_ID,), 1, "project row")
+        assert_row_count(
+            conn,
+            "SELECT COUNT(*) FROM records WHERE project_id = ? AND record_type = 'output_record'",
+            (PROJECT_ID,),
+            1,
+            "output record row",
+        )
+        assert_row_count(
+            conn,
+            "SELECT COUNT(*) FROM output_artifacts WHERE project_id = ? AND output_record_id = ? AND artifact_kind = 'image'",
+            (PROJECT_ID, OUTPUT_RECORD_ID),
+            1,
+            "output artifact row",
+        )
+        assert_row_count(
+            conn,
+            """
+            SELECT COUNT(*)
+            FROM artist_library_files
+            WHERE project_id = ?
+              AND output_record_id = ?
+              AND file_role = 'review_draft'
+              AND status = 'current'
+            """,
+            (PROJECT_ID, OUTPUT_RECORD_ID),
+            1,
+            "visible output file row",
+        )
+
+    show_payload = json.loads(run(["show", PROJECT_ID, "--wondermint-root", str(wondermint_root)]))
+    if len(show_payload["output_artifacts"]) != 1:
+        raise AssertionError("show output should include one output artifact")
+    if not any(file_ref["path"].endswith(f"Images/Drafts/{VISIBLE_FILENAME}") for file_ref in show_payload["artist_library_files"]):
+        raise AssertionError("show output should include the visible draft image")
+
+    return {
+        "wondermint_root": str(wondermint_root),
+        "workspace_library": str(library_root),
+        "artist_library_project": str(visible_project_dir),
+        "visible_output": str(visible_output),
+        "sqlite_index": str(db_path),
+    }
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--smoke-root", default=str(DEFAULT_SMOKE_ROOT))
+    parser.add_argument("--keep", action="store_true", help="keep any existing smoke root contents before running")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    smoke_root = Path(args.smoke_root).resolve()
+    wondermint_root = smoke_root / "wondermint-root"
+    library_root = wondermint_root / ".wondermint" / "artist-os"
+
+    if smoke_root.exists() and not args.keep:
+        shutil.rmtree(smoke_root)
+    smoke_root.mkdir(parents=True, exist_ok=True)
+
+    run(["setup", "--wondermint-root", str(wondermint_root)])
+    seed_workspace(library_root)
+    run(
+        [
+            "link-visible-project",
+            PROJECT_ID,
+            PROJECT_SLUG,
+            "--title",
+            "Storage Smoke Image",
+            "--summary",
+            "Smoke-test project for Artist OS visible output publishing.",
+            "--status",
+            "active",
+            "--wondermint-root",
+            str(wondermint_root),
+        ]
+    )
+    run(
+        [
+            "publish-visible-output",
+            PROJECT_ID,
+            OUTPUT_RECORD_ID,
+            "--filename",
+            VISIBLE_FILENAME,
+            "--wondermint-root",
+            str(wondermint_root),
+        ]
+    )
+    result = verify(wondermint_root)
+    print("PASS Artist OS storage smoke")
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

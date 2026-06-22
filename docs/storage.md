@@ -160,6 +160,7 @@ The SQLite database validates against the schema in `schemas/artist-os-library.s
 - project paths,
 - gate and creative decisions,
 - record paths,
+- concrete Output Artifacts from Output Records,
 - assets and image sidecars,
 - event history,
 - visible Artist Library paths and Project Pointer state,
