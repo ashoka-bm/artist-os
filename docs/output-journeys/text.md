@@ -23,6 +23,7 @@ Use the Text Journey when the final work should be:
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Research Grounding Gate, when timely or public-facing work may need current evidence
   -> Writing Method Gate
   -> Medium Output Shape Recommendation
   -> Medium-Level Workflow Scale Routing
@@ -51,6 +52,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Gates
 
+- Research Grounding Gate: should the agent do online research or use artist-provided sources before the piece's argument, examples, or audience promise harden?
 - Writing Method Gate: fragments, beats, shape, or a hybrid sequence?
 - Medium Output Shape Recommendation: what text shape best preserves the approved Beat Plan and adapted Story Structure?
 - Medium Output Shape Conflict Decision: if the artist-requested shape and recommended shape materially diverge, should the plan keep the requested shape, accept the recommendation, revise the shape, or proceed unconfirmed?
@@ -60,6 +62,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 - Structure Gate: fragment, scene, sequence, arc, chapters, sections, verses, or hybrid?
 - Fidelity / Transformation Gate: preserve source wording, adapt it, invert it, expand it, compress it, translate it, or create a new work from the approved Beat Plan?
 - Publication / Use Gate: private draft, performance text, lyrics, social post, book fragment, prompt source, or other use?
+
+Ask the Research Grounding question for public-facing, timely, factual, trend-aware, or platform-native work such as articles, explainers, op-eds, trend analysis, LinkedIn posts, service writing, thought leadership, and launch copy. Recommend research when current facts, market context, platform discourse, examples, statistics, or recent developments would materially improve the piece. Recommend skipping it when the work should stay personal, timeless, private, poetic, or source-bound. If accepted, browse only within the agreed scope and summarize source dates before using the research.
 
 ## Reviews
 

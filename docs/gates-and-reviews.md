@@ -11,6 +11,7 @@ The default cross-medium journey uses this gate order:
 ```text
 Routing Gate
   -> Meaning Confirmation Gate
+  -> Research Grounding Gate, when timely or public-facing work may need current evidence
   -> Interpretation Gate
   -> Story Gate
   -> Story Critic Review
@@ -37,6 +38,15 @@ Recording a Gate Decision, approval, selection, or waiver the artist did not act
 
 This rule applies to every gate in this document, including Brief Approval, Series/Sequence approval, Generation Approval, Draft Generation Approval, and blocking-finding waivers.
 
+## Continuation Rule
+
+After an explicit artist turn completes a gate, answers a Decision Interview question, or corrects a project detail, the agent must not stop with only acknowledgement or persistence status. It must either:
+
+- continue immediately into the next unlocked pipeline step, or
+- ask the next concrete required gate or Decision Interview question when artist input is still the blocker.
+
+This is especially important for small confirmations and corrections such as spelling, terminology, rights policy, genre, vocal mode, calibration details, or approval of a recommended answer. Recording the answer is required, but recording alone is not a complete artist-facing turn. The artist should never have to ask "what is next?" to recover the workflow.
+
 ## Canonical Gates
 
 ### Routing Gate
@@ -50,6 +60,14 @@ Complete when the artist chooses a target road or explicitly asks Artist OS to r
 Confirms what the Reference means to the artist and what must survive transformation.
 
 Complete when Artist Meaning, must-preserve details, may-transform details, avoid list, intended feeling, target medium/story-shape direction, and success criteria are captured through the Decision Interview or explicitly marked safe to proceed unconfirmed.
+
+### Research Grounding Gate
+
+Offers online research or artist-provided source grounding before public-facing, timely, factual, trend-aware, or platform-native text hardens into an argument, audience promise, examples, or claims.
+
+Complete when the artist accepts research, declines research, provides source material instead, or explicitly allows the piece to proceed unresearched. When asking, recommend research if current facts, market context, platform discourse, examples, statistics, or recent developments would materially strengthen the work; recommend skipping it if the work should stay personal, timeless, private, poetic, or source-bound.
+
+If accepted, the research scope must be concrete enough to browse: topic, audience, geography or market when relevant, recency expectations when relevant, and source preferences or exclusions when relevant. The agent must summarize the sources and dates used, separate sourced facts from interpretation, and keep research subordinate to Artist Meaning. Do not silently browse or insert current factual claims when this gate is unresolved.
 
 ### Interpretation Gate
 

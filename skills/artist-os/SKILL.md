@@ -86,6 +86,14 @@ After the artist chooses a text kind, ask:
 
 > Should the new text preserve the source wording closely, adapt it, or create something new from its meaning?
 
+For public-facing, timely, factual, trend-aware, or platform-native text such as articles, essays, explainers, op-eds, LinkedIn posts, Substack posts, trend analysis, service writing, thought leadership, or launch copy, offer Research Grounding after the artist gives their initial idea and before the argument, examples, or audience promise harden:
+
+> Do you want me to do online research first so this is grounded in the latest data, trends, and developments?
+>
+> My recommended answer: yes if the piece depends on current facts, market context, examples, or platform discourse; no if this should stay personal, timeless, or based only on your own source material.
+
+If the artist says yes, browse only for the agreed scope, summarize the sources and dates used, and keep research subordinate to Artist Meaning. If the artist says no, record that choice and continue. Do not ask this for private drafts, poems, personal letters, lyrics, or purely meaning-preserving adaptations unless the artist's goal depends on current facts.
+
 **Audio**:
 
 > What kind of audio do you want?
@@ -115,6 +123,15 @@ If the artist wants more than one medium outside Album v1, ask which medium to s
 ## Autopilot
 
 Move forward automatically. Stop only when the next step genuinely needs the artist: missing reference, target medium, Artist Meaning, a medium gate choice, Brief Approval, Series/Sequence approval, layout choice, or calibration approval. A stage is complete only when the artist has selected, revised, rejected, or explicitly skipped its open choice. For the exact per-stage definitions, see `THEORY.md` → "Stage Completion" (the visual stages) and the medium sub-skill's draft process (the Suno gates); do not restate or improvise them here. For Suno, Vocal / Lyric is never complete until lyrics, spoken/phonetic vocals, or instrumental mode is selected.
+
+After any artist response, classify it before replying:
+
+- **Blocking gate answer**: record the answer, persist the gate or decision, then continue immediately into the unlocked next phase if no new artist choice is required.
+- **Small correction or confirmation**: record the correction, persist it, then continue immediately into the current phase's next task. Do not end the turn with only an acknowledgement, status summary, or corrected spelling/term.
+- **New blocking choice**: ask exactly the next required Decision Interview or gate question, with your recommended answer.
+- **Provider-backed generation or irreversible action**: stop and ask for explicit approval for that exact call or batch.
+
+Every artist-facing turn must end in one of two states: work has already advanced as far as allowed in that turn, or the artist sees the one concrete question/action needed to proceed. Never leave the artist with a passive update that requires them to ask "what is next?" If the next phase can be started without a gate, start it in the same turn; if time or context prevents completing it, name the in-progress phase and the next artifact being drafted.
 
 Autopilot does not mean silent defaults. Before analysis hardens, run the Meaning Interview as a bounded Decision Interview: ask one concrete question at a time, include your recommended answer, and wait for the artist's response unless they already answered that decision clearly. Persist the question, recommendation, artist response, and status in `ArtistMeaning.decision_interview`.
 
@@ -217,3 +234,5 @@ The cadence that matters for you: persist each phase before advancing — write 
 ## Output Style
 
 Use concise phase labels. Emit full JSON only when the artist asks for records or when final records are produced after approval. Never end with "next, invoke…" or "now call…" — continue automatically, or ask the specific question needed to proceed.
+
+Do not finish an artist-facing response with only "recorded," "confirmed," "validated," or a list of files changed. Pair any status summary with immediate continuation or with the next required gate question. If a response records a correction such as a name, term, rights policy, spelling, genre, lyric mode, or calibration detail, the same response must either advance the unlocked phase or ask the next concrete blocker.

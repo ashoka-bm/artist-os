@@ -464,6 +464,10 @@ _Avoid_: Replacing Medium Plan section structure, rigid template
 The publishing surface that packages an output for a specific platform or channel, such as Instagram Reel, TikTok photo post, YouTube Short, LinkedIn document carousel, Reddit AMA post, or Substack Note.
 _Avoid_: Cultural Format Structure, Story Structure, creative template, platform constraints
 
+**Research Grounding**:
+An optional early text-planning decision to use online research or artist-provided sources to ground a public-facing, timely, factual, trend-aware, or platform-native written work in current evidence before the piece's argument, examples, or audience promise harden.
+_Avoid_: Silent browsing, treating web research as required for private or purely expressive work, letting current trends override Artist Meaning
+
 **Release Package**:
 A coordinated set of outputs prepared as one artist-facing release, such as an album, EP, single bundle, campaign, or visual album.
 _Avoid_: Treating each asset as an unrelated project, Platform Container

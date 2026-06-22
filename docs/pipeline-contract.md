@@ -73,6 +73,8 @@ The Meaning Interview uses a bounded Decision Interview: one question at a time,
 - Gate: any canonical gate.
 - Next: the stage unlocked by the gate decision.
 
+After persisting the Gate Decision, continue into the unlocked stage in the same artist-facing turn whenever no further artist choice is required. If another artist choice is required, ask the next concrete gate or Decision Interview question with a recommended answer. Do not stop at acknowledgement, validation status, or a file-change summary.
+
 ### `story.transformation_brief`
 
 - Input: Source Record and Artist Meaning.
@@ -273,10 +275,12 @@ The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-le
 - Schema: `schemas/text-medium-plan.schema.json`.
 - Skill: `skills/text-journey`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, scene, arc, or structurally ambiguous plans.
-- Gate: Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
+- Gate: Research Grounding when applicable, Writing Method, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
 - Next: `long_work.stewardship` enrichment when the text work is cumulative, otherwise `text.creative_brief`.
 
 Durable project runs should persist each Text Medium gate as its own Gate Decision when it reflects a real artist choice, correction, waiver, or approval. Compact dry-run and eval harnesses may summarize bundled recommended gate assumptions as rehearsal evidence, but that summary is not a substitute for durable project gate records.
+
+For public-facing, timely, factual, trend-aware, or platform-native text, resolve Research Grounding before locking the audience promise, argument, examples, or factual claims. If online research is approved, record the scope, source dates, and how sourced facts are separated from the agent's interpretation.
 
 Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Movement, name a section job, state the Intended Feeling, translate the Expectation Turn, and explain how the section differs from adjacent sections.
 
