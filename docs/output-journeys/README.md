@@ -12,7 +12,8 @@ Reference
   -> Story / Beat Plan with Project-Level Workflow Scale Routing
   -> Long-Work Stewardship, when Workflow Scale Routing activates it
   -> Medium Plan with Medium-Level Workflow Scale Routing
-  -> Prompt Plan or Text Generation Plan
+  -> Creative Brief or storyboard-ready handoff
+  -> Prompt Plan or Text Generation Plan, when the medium has one
   -> Generation Approval Gate or Draft Generation Approval Gate, when required
   -> Output Record, when an artifact exists
   -> Output Critic Review
@@ -22,7 +23,7 @@ Reference
 Journeys in this directory:
 
 - `image.md`: still images and image series. **Implemented.**
-- `video.md`: short clips, scenes, sequences, trailers, and longer arcs. **Not built yet — forward-looking design.**
+- `video.md`: storyboard-ready Video Medium Plans for clips, scenes, sequences, trailers, and longer arcs. **Implemented as v0 planning.**
 - `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, and Suno prompt plans. **Implemented.**
 - `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms. **Implemented.**
 - `mixed-media.md`: coordinated outputs across multiple media. **Not built yet — forward-looking design.**

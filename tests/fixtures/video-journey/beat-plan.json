@@ -1,0 +1,360 @@
+{
+  "beat_plan_id": "bp_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "story_mode": "three_part_sequence",
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "The emotional movement needs three adjacent beats, but they can fit in one compact storyboard without long-work support.",
+    "trigger_signals": [
+      "artist_requested_compact_output",
+      "single_artifact_can_hold_movement",
+      "internal_sections_or_movements_needed"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views",
+      "plot_tracker",
+      "character_sheets",
+      "world_building",
+      "chapter_or_scene_briefs"
+    ],
+    "reroute_triggers": [
+      "Artist expands this into a short film, feature film, or dependent scene sequence.",
+      "Recurring characters, timeline rules, or continuity dependencies become active."
+    ]
+  },
+  "story_gate_status": "approved",
+  "story_structure": {
+    "library_entry_id": "threshold_crossing",
+    "name": "Threshold Crossing",
+    "grounding_status": "provisional",
+    "grounding_tier": "craft_authority",
+    "core_movement": "A figure reaches a charged boundary where change is possible, but the crossing itself becomes delayed or transformed.",
+    "adaptation_summary": "The storyboard separates the approach, the threshold pressure, and the unresolved residue into three compact beats.",
+    "turn_logic": "The audience expects the lit doorway to explain itself, but every beat withholds the cause more sharply.",
+    "compression_rule": "Keep the event in one location and make each beat change distance, information, or pressure.",
+    "expansion_rule": "Expand into scenes or sequences only if the hallway threshold needs durable continuity or character history.",
+    "failure_modes": [
+      "the doorway becomes only setting",
+      "the missing figure appears too soon",
+      "the ending explains the source of the light"
+    ]
+  },
+  "beats": [
+    {
+      "beat_id": "beat_invitation",
+      "beat_role": "invitation",
+      "one_move_summary": "A warm doorway appears at the end of a dark hallway before its cause is known.",
+      "builds_toward_key_movement_id": "kem_invitation_to_unease",
+      "before_state": "The hallway feels ordinary and empty.",
+      "after_state": "The lit doorway turns the emptiness into an invitation.",
+      "value_shift": "Ordinary absence becomes charged invitation.",
+      "expectation_turn": {
+        "expected_direction": "Warm light suggests welcome or safety.",
+        "actual_result": "No host appears, so the welcome becomes uncertain.",
+        "surprise_function": "A comforting signal becomes the first pressure point.",
+        "emotional_counterpoint": "Curiosity begins carrying unease."
+      },
+      "intended_feeling": "drawn in and cautious",
+      "emotional_payload": "The invitation is real, but nobody claims it.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.78,
+          "emotional_function": "makes the absent person feel active"
+        },
+        {
+          "name": "Safety / Threat",
+          "tension_intensity": 0.62,
+          "emotional_function": "keeps warmth and danger unresolved"
+        }
+      ],
+      "source_evidence": [
+        "The reference centers on an open door and the pressure of not knowing who left it that way."
+      ],
+      "must_preserve": [
+        "active absence",
+        "warmth that is not automatically safe"
+      ],
+      "pivot_options": [
+        {
+          "label": "threshold",
+          "next_move": "Move closer to the doorway without revealing the room.",
+          "rationale": "The emotional pressure increases when the expected answer remains withheld."
+        }
+      ],
+      "medium_translation_notes": {
+        "image": "A distant warm doorway in a dark hallway.",
+        "video": "A slow establishing shot that makes the invitation unavoidable.",
+        "sound": "Low room tone with no human source.",
+        "text": "A sentence that notices the light before naming fear.",
+        "mixed_media": "Stillness in image, pressure in sound."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The artist wanted invitation and unease to arrive together."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_threshold",
+      "beat_role": "threshold",
+      "one_move_summary": "The viewer reaches the door, but proximity makes the absence more forceful instead of resolving it.",
+      "builds_toward_key_movement_id": "kem_invitation_to_unease",
+      "before_state": "The door is distant enough to feel like a clue.",
+      "after_state": "The door is close enough to feel like a demand.",
+      "value_shift": "Curiosity becomes intimate dread.",
+      "expectation_turn": {
+        "expected_direction": "Getting closer should reveal what is inside.",
+        "actual_result": "The closer frame reveals only more withholding.",
+        "surprise_function": "Proximity intensifies absence instead of solving it.",
+        "emotional_counterpoint": "The invitation becomes almost confrontational."
+      },
+      "intended_feeling": "intimate dread",
+      "emotional_payload": "The threshold feels like a choice the viewer cannot make.",
+      "tension_profile": [
+        {
+          "name": "Proximity / Withholding",
+          "tension_intensity": 0.86,
+          "emotional_function": "turns closeness into pressure"
+        },
+        {
+          "name": "Control / Surrender",
+          "tension_intensity": 0.73,
+          "emotional_function": "makes the viewer feel pulled toward a withheld answer"
+        }
+      ],
+      "source_evidence": [
+        "The door remains half open, holding a threshold rather than a reveal."
+      ],
+      "must_preserve": [
+        "the threshold is not crossed",
+        "the interior stays withheld"
+      ],
+      "pivot_options": [
+        {
+          "label": "residue",
+          "next_move": "Leave the viewer with the mark the threshold makes.",
+          "rationale": "The piece should end in consequence rather than explanation."
+        }
+      ],
+      "medium_translation_notes": {
+        "image": "A low close frame on the door edge and spilled light.",
+        "video": "A closer shot that holds after the expected reveal should arrive.",
+        "sound": "One small floor creak under the voiceover.",
+        "text": "A single question that does not receive an answer.",
+        "mixed_media": "Text asks the question while image refuses the answer."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The artist wanted the threshold to stay emotionally unresolved."
+        }
+      ]
+    },
+    {
+      "beat_id": "beat_residue",
+      "beat_role": "residue",
+      "one_move_summary": "The video stays with the light left on the floor after the invitation should have resolved.",
+      "builds_toward_key_movement_id": "kem_after_residue",
+      "before_state": "The threshold seems about to demand entry.",
+      "after_state": "Only the mark of the threshold remains.",
+      "value_shift": "Dread becomes unresolved residue.",
+      "expectation_turn": {
+        "expected_direction": "A final beat should reveal the room, the person, or the decision.",
+        "actual_result": "The frame removes the door and holds only the light's residue.",
+        "surprise_function": "The ending shifts from cause to consequence.",
+        "emotional_counterpoint": "The absence becomes quieter and more permanent."
+      },
+      "intended_feeling": "unresolved residue",
+      "emotional_payload": "What remains matters more than what caused it.",
+      "tension_profile": [
+        {
+          "name": "Cause / Consequence",
+          "tension_intensity": 0.8,
+          "emotional_function": "withholds cause while preserving emotional consequence"
+        },
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.84,
+          "emotional_function": "lets absence remain active after the image empties out"
+        }
+      ],
+      "source_evidence": [
+        "The reference values the after-feeling more than literal explanation."
+      ],
+      "must_preserve": [
+        "no explanatory reveal",
+        "the final image feels like aftermath"
+      ],
+      "pivot_options": [],
+      "medium_translation_notes": {
+        "image": "A cropped rectangle of light without the doorway.",
+        "video": "A locked final shot that fades before explaining anything.",
+        "sound": "Room tone thinning into near silence.",
+        "text": "No final caption; let the residue stand.",
+        "mixed_media": "Sound disappears while image holds the mark."
+      },
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The artist wanted the ending to stay unresolved instead of explanatory."
+        }
+      ]
+    }
+  ],
+  "tension_points": [
+    {
+      "tension_point_id": "tp_active_absence",
+      "summary": "The absent person feels more present because the doorway is lit and open.",
+      "intended_feeling": "drawn toward someone who may not be there",
+      "emotional_payload": "Absence has agency.",
+      "source_evidence": [
+        "The open door implies someone without showing them."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "presence_absence",
+          "note": "Presence and absence both stay active through the storyboard."
+        }
+      ]
+    },
+    {
+      "tension_point_id": "tp_threshold_residue",
+      "summary": "The threshold leaves a visible consequence without revealing a cause.",
+      "intended_feeling": "left with the mark of a choice not made",
+      "emotional_payload": "The residue carries the unresolved decision.",
+      "source_evidence": [
+        "The final feeling depends on what remains after the viewer does not enter."
+      ],
+      "traceability_notes": [
+        {
+          "source_type": "core_tension_pair",
+          "source_ref": "cause_consequence",
+          "note": "The plan preserves consequence while withholding cause."
+        }
+      ]
+    }
+  ],
+  "key_emotional_movements": [
+    {
+      "movement_id": "kem_invitation_to_unease",
+      "role": "threshold",
+      "beat_ids": [
+        "beat_invitation",
+        "beat_threshold"
+      ],
+      "emotional_shift": "welcome becomes danger without losing tenderness",
+      "compression_priority": "primary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The first two beats carry the main emotional turn."
+        }
+      ]
+    },
+    {
+      "movement_id": "kem_after_residue",
+      "role": "residue",
+      "beat_ids": [
+        "beat_residue"
+      ],
+      "emotional_shift": "withheld cause becomes lingering consequence",
+      "compression_priority": "secondary",
+      "traceability_notes": [
+        {
+          "source_type": "artist_meaning",
+          "source_ref": "meaning_door_left_lit",
+          "note": "The ending keeps the absence active after the threshold is no longer shown."
+        }
+      ]
+    }
+  ],
+  "tension_movement_plan": {
+    "contrast_goal": "Each beat should change the viewer's distance, information, or pressure around the lit threshold.",
+    "minimum_tension_criteria": {
+      "minimum_active_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_shift_count": 2,
+      "minimum_adjacent_shift_delta": 0.2,
+      "waiver_rule": "A repeated frame may be accepted only if repetition deliberately increases dread or residue."
+    },
+    "adjacent_beat_shifts": [
+      {
+        "from_beat_id": "beat_invitation",
+        "to_beat_id": "beat_threshold",
+        "shift_summary": "Distance becomes proximity while withholding increases.",
+        "shifted_tensions": [
+          {
+            "name": "Proximity / Withholding",
+            "from_intensity": 0.52,
+            "to_intensity": 0.86,
+            "delta": 0.34,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      },
+      {
+        "from_beat_id": "beat_threshold",
+        "to_beat_id": "beat_residue",
+        "shift_summary": "The expected cause disappears, leaving only consequence.",
+        "shifted_tensions": [
+          {
+            "name": "Cause / Consequence",
+            "from_intensity": 0.5,
+            "to_intensity": 0.8,
+            "delta": 0.3,
+            "direction": "increases"
+          }
+        ],
+        "meets_minimum": true
+      }
+    ],
+    "reviewer_instruction": "Block if adjacent storyboard beats only repeat the same doorway information without changing pressure, proximity, or residue."
+  },
+  "arc_summary": {
+    "beginning": "The lit doorway invites approach.",
+    "turn": "Approach makes the absence louder instead of revealing an answer.",
+    "ending_or_residue": "Only the light's mark remains.",
+    "scale_rationale": "Three beats are enough for invitation, threshold pressure, and residue without creating a larger film continuity problem."
+  },
+  "story_critic_review": {
+    "required": true,
+    "review_record_id": "review_story_door_left_lit_video",
+    "approval_status": "approve"
+  },
+  "story_approval": {
+    "status": "approved",
+    "approved_by": "artist",
+    "approved_at": "2026-06-04T12:00:00Z",
+    "waived_blocks": []
+  },
+  "traceability_summary": [
+    {
+      "source_type": "transformation_brief",
+      "source_ref": "tb_door_left_lit",
+      "note": "The video Beat Plan adapts the threshold into invitation, threshold, and residue."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The sequence preserves active absence and unresolved ending."
+    }
+  ]
+}

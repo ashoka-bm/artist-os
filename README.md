@@ -68,7 +68,7 @@ Text Reference
   -> Output Acceptance Gate
 ```
 
-The visual gates are Symbology, Style, then Minimalist-to-Maximalist intensity when needed. The final prompt plan includes Faithful, Amplified, and Minimal variants. When the artist wants broad exploration, Artist OS can also create a Prompt Branch Set: a batch of meaning-equivalent prompts that vary style, setting, symbol, composition, and other approved axes for human curation.
+The shared visual gates are Symbology, then Style. The final prompt plan includes Faithful, Amplified, and Minimal variants guided by Prompt Variant Strategy, so variants differ meaningfully without adding another visual gate. When the artist wants broad exploration, Artist OS can also create a Prompt Branch Set: a batch of meaning-equivalent prompts that vary style, setting, symbol, composition, and other approved axes for human curation.
 
 ### Text To Suno Music
 
@@ -155,11 +155,11 @@ bin/                         Local install and workspace helpers
 
 ## Architecture Direction
 
-Artist OS now has a shared story layer for the implemented image, Suno, and text dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; an image series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
+Artist OS now has a shared story layer for the implemented image, video v0, Suno, and text dry-run slices: every output is one or more approved beats translated into a medium. A single image can be one compressed key emotional movement; an image series stages several movements; a video, song, text piece, or mixed-media package can unfold more beats over time.
 
 The governing rule is emotional primacy. Artist OS should grab attention, trigger a strong emotion, and forge a simple mental link. Plans must express a feeling rather than only communicate a fact, so Beat Plans, Medium Plans, and briefs now track Intended Feeling, Key Emotional Movements, Expectation Turns, and Minimum Tension Criteria.
 
-The current dry-run slices are text-to-image, text-to-Suno, and the text-to-text Text Journey. The planned cross-medium architecture (video and mixed-media) lives in:
+The current dry-run slices are text-to-image, video storyboard planning, text-to-Suno, and the text-to-text Text Journey. The remaining planned cross-medium architecture lives in:
 
 ```text
 docs/story/
@@ -167,7 +167,7 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image, Sound, and Text Medium Plans, Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch Sets, Text Generation Plans, and Output Records. The image, Suno, and text dry-run slices translate the shared Beat Plan through medium-specific Medium Plans before producing final brief records, prompt plans or generation plans, and review records that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run end-to-end dry-run rehearsals before adding a new medium branch or provider adapter.
+The shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image, Video, Sound, and Text Medium Plans, Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch Sets, Text Generation Plans, and Output Records. The image, video v0, Suno, and text dry-run slices translate the shared Beat Plan through medium-specific Medium Plans before producing final brief records, prompt plans, generation plans, or storyboard-ready handoffs that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run end-to-end dry-run rehearsals before finished-video support or provider adapters.
 
 ## Local State And Privacy
 

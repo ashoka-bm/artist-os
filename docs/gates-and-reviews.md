@@ -121,7 +121,7 @@ When overridden, store the override in `length_policy.artist_override` and recor
 
 Approves the medium-specific Creative Brief Document after the Medium Critic Review has revised it, before any Creative Brief Record, Prompt Plan, or Text Generation Plan is created. The brief is the meaning contract everything downstream inherits, so it must be ratified before a plan is locked on top of it.
 
-Complete when the artist accepts the revised brief, or revises it and re-approves. On changes, re-run the critic only for the affected areas. For image, the Detail / Intensity (Minimalist-to-Maximalist) gate runs here, after Symbology and Style are locked — never during the Medium Plan. Store the decision as a Gate Decision with `gate_type = "brief_approval"`.
+Complete when the artist accepts the revised brief, or revises it and re-approves. On changes, re-run the critic only for the affected areas. Store the decision as a Gate Decision with `gate_type = "brief_approval"`.
 
 ### Prompt Lock Gate
 

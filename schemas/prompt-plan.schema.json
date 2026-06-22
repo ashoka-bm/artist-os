@@ -110,12 +110,12 @@
         "aspect_ratio": { "type": "string" },
         "composite_image_prompt": {
           "type": "string",
-          "description": "Required when layout_type is three_panel_variant_comparison: the single provider-neutral prompt that renders all three intensity panels (Minimal, Faithful/Balanced, Amplified/Maximal) as ONE image, same subject and style throughout. Omit for single_image and series layouts."
+          "description": "Required when layout_type is three_panel_variant_comparison: the single provider-neutral prompt that renders multiple Prompt Variant Plans as ONE comparison image, same approved meaning and style throughout. Omit for single_image and series layouts."
         },
         "instructions": {
           "type": "string",
           "minLength": 1,
-          "description": "Final output layout only. Exploration boards are stored in visual_boards. For three_panel_variant_comparison, compare Minimal, Faithful/Balanced, and Amplified/Maximal intensity as one image via composite_image_prompt."
+          "description": "Final output layout only. Exploration boards are stored in visual_boards. For three_panel_variant_comparison, compare multiple Prompt Variant Plans as one image via composite_image_prompt."
         }
       }
     },

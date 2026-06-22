@@ -44,6 +44,7 @@ Implemented dry-run workflows:
 - Text Reference to Provider-Neutral Image Prompt Plan.
 - Text Reference to Suno Sound Prompt Plan.
 - Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
+- Text Reference to storyboard-ready Video Medium Plan (Video Journey v0 planning).
 - Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
 
 Provider-backed generation remains out of scope without explicit approval.
@@ -89,6 +90,7 @@ Workflow Scale Routing is schema-backed and required on:
 - `schemas/text-medium-plan.schema.json`
 - `schemas/image-medium-plan.schema.json`
 - `schemas/sound-medium-plan.schema.json`
+- `schemas/video-medium-plan.schema.json`
 
 The initial Workflow Scale Levels are `compact_artifact`, `structured_single_artifact`, `cumulative_work`, and `full_long_form_project`. The governing placement decision is recorded in `docs/adr/0007-workflow-scale-routing-placement.md`.
 
@@ -489,13 +491,14 @@ Reference
 Implemented branches:
 
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
+- Video Journey v0 through storyboard-ready Video Medium Plan, scene and shot mapping, audio posture, storyboard frame prompts, and provider-boundary policy,
 - text-to-Suno through Sound Medium Plan, Sound Creative Brief Record, Suno Sound Prompt Plan, and output lifecycle contracts,
 - Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures.
 - Structure Library docs for reusable Story Structures and Cultural Format Structures, split into context-efficient per-entry files with chooser indexes.
 
 Not implemented yet:
 
-- Video Medium Plan and Mixed-Media Plan schemas,
+- Mixed-Media Plan schema,
 - EP, Single Bundle, Visual Album, campaign, export, or publishing Release Package subtypes,
 - provider adapters and real provider-backed generation calls,
 - import adapters for artist-provided output artifacts,
