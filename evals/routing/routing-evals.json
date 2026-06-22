@@ -5,6 +5,7 @@
     "ingest-reference",
     "meaning-interview",
     "text-to-image-plan",
+    "video-journey",
     "text-to-suno-plan",
     "text-journey",
     "art-critic-review",
@@ -14,7 +15,7 @@
     "human-voice-pass",
     "none"
   ],
-  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project. text-journey owns the isolated text/writing phase once meaning exists (the written-output peer of text-to-image-plan and text-to-suno-plan). The editorial passes clear-writing-pass and human-voice-pass win only when the user explicitly asks to run that named pass on an in-flight text draft; a generic 'make this clearer / sound less AI' request with no Artist OS project is off-domain (none). A bare 'lyrics' request is ambiguous between text-journey (lyrics as written text) and text-to-suno-plan (a song prompt that uses lyrics), and the conductor disambiguates.",
+  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project. video-journey owns the isolated video planning phase once meaning exists; v0 produces storyboard-ready Video Medium Plans, not finished video. text-journey owns the isolated text/writing phase once meaning exists (the written-output peer of text-to-image-plan, video-journey, and text-to-suno-plan). The editorial passes clear-writing-pass and human-voice-pass win only when the user explicitly asks to run that named pass on an in-flight text draft; a generic 'make this clearer / sound less AI' request with no Artist OS project is off-domain (none). A bare 'lyrics' request is ambiguous between text-journey (lyrics as written text) and text-to-suno-plan (a song prompt that uses lyrics), and the conductor disambiguates.",
   "evals": [
     { "id": 1, "query": "i wrote this breakup poem last night and i want to turn it into a set of images for my instagram, no idea where to start", "target": "artist-os", "rationale": "Cold full transformation, no records yet.", "probe": false },
     { "id": 2, "query": "can we pick back up on the 'tidewrack' project? i think we left off right after the style board", "target": "artist-os", "rationale": "Resume/continue an existing project.", "probe": false },
@@ -32,6 +33,8 @@
     { "id": 11, "query": "meaning's locked for the 'ash & salt' piece, now build the image creative brief and the visual prompt plan", "target": "text-to-image-plan", "rationale": "Isolated image planning after meaning exists.", "probe": false },
     { "id": 12, "query": "i want a three-image series for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "text-to-image-plan", "rationale": "Image planning, meaning already captured.", "probe": false },
     { "id": 13, "query": "give me the faithful / amplified / minimal prompt variants for the approved image brief", "target": "text-to-image-plan", "rationale": "Post-approval prompt plan is owned by the image planner, NOT the critic.", "probe": true },
+    { "id": 34, "query": "meaning is locked for the apartment hallway piece. build the video medium plan with scenes, shot list, camera angles, and storyboard prompts", "target": "video-journey", "rationale": "Isolated video planning after meaning exists.", "probe": false },
+    { "id": 35, "query": "i want to turn this journal entry into a short film storyboard from scratch", "target": "artist-os", "rationale": "Cold full text->video transformation; conductor sets up records then delegates to video-journey.", "probe": true },
 
     { "id": 14, "query": "redo just the sound brief for the existing project, i want to push the genre more toward ambient drone", "target": "text-to-suno-plan", "rationale": "Isolated sound planning on existing project.", "probe": false },
     { "id": 15, "query": "write the suno custom-mode prompt and the lyrics now that the sound brief is approved", "target": "text-to-suno-plan", "rationale": "Isolated Suno prompt/lyrics phase.", "probe": false },

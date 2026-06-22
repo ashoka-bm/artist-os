@@ -200,7 +200,7 @@ Provider adapters must refuse image or Suno generation unless the request includ
 
 The Creative Brief Record must include `transformation_brief_id` and `beat_plan_id`. It does not embed Beat summaries; the referenced Beat Plan is authoritative for story shape and emotional movement.
 
-The Detail / Minimalist-to-Maximalist Gate runs after Brief Approval when intensity remains unresolved; it is not part of Image Medium Plan creation.
+Prompt Variant Strategy runs after Brief Approval when final prompt variants need a clear variation plan; it is not part of Image Medium Plan creation.
 
 ### `image.prompt_plan`
 
@@ -227,6 +227,32 @@ The Provider-Neutral Image Prompt Plan must include `transformation_brief_id`, `
 The Prompt Branch Set preserves the same meaning kernel while deliberately varying style, setting, symbol, composition, and other approved axes. It is for curator batches, not for replacing the approved Prompt Plan.
 
 The Prompt Branch Set must carry the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and branch-level emotional/tension preservation. Each branch names the Key Emotional Movement and Expectation Turn Translation it preserves, so branch variation cannot drift into style-only exploration.
+
+## Video Journey Steps
+
+### `video.medium_plan`
+
+- Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, video gate decisions.
+- Output: Video Medium Plan.
+- Schema: `schemas/video-medium-plan.schema.json`.
+- Skill: `skills/video-journey`.
+- Reviewer required: Beat Reviewer sub-agent for scene, sequence, trailer, arc, or long-form plans.
+- Gate: Symbology Gate, Style Gate, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture.
+- Next: `long_work.stewardship` enrichment when the video work is cumulative, otherwise `video.creative_brief`.
+
+The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Sequences when needed, Video Scenes, Storyboard Shots, Video Style Expression, Video Audio Posture, text/audio refs, storyboard frame prompts, and storyboard still generation policy. It does not create a Video Prompt Plan or finished video.
+
+### `video.creative_brief`
+
+- Input: Video Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, video gate decisions.
+- Output: Video Creative Brief Document and, after future schema hardening, Video Creative Brief Record.
+- Schema: none required in v0 beyond `schemas/video-medium-plan.schema.json`.
+- Skill: `skills/video-journey`.
+- Reviewer required: Video Critic sub-agent.
+- Gate: Brief Approval Gate.
+- Next: storyboard-ready package, optional storyboard still Generation Approval Gate, Output Record when storyboard stills are generated or imported.
+
+The Video Creative Brief compiles the approved Video Medium Plan into an artist-readable handoff. Generated storyboard stills are normal Output Records linked back to the relevant Storyboard Shot.
 
 ## Text-To-Suno Steps
 
@@ -322,11 +348,14 @@ Transformation Brief -> Beat Plan
 Beat Plan -> Long-Work Stewardship Record, when cumulative
 Long-Work Stewardship Record -> Long-Work Checkpoint Gate Decision, when a checkpoint requires artist decision
 Beat Plan -> Image Medium Plan
+Beat Plan -> Video Medium Plan
 Beat Plan -> Sound Medium Plan
 Beat Plan -> Text Medium Plan
 Image Medium Plan -> Long-Work Stewardship Record, when cumulative
+Video Medium Plan -> Long-Work Stewardship Record, when cumulative
 Text Medium Plan -> Long-Work Stewardship Record, when cumulative
 Image Medium Plan -> Creative Brief Record
+Video Medium Plan -> Video Creative Brief Document, v0 planning handoff
 Sound Medium Plan -> Sound Creative Brief Record
 Text Medium Plan -> Text Creative Brief Record
 Creative Brief Record -> Provider-Neutral Image Prompt Plan

@@ -289,6 +289,7 @@ FIXTURE_SCHEMA_MAP = {
     "sound-prompt-plan-phonetic-vocals.json": "sound-prompt-plan.schema.json",
     "text-generation-plan.json": "text-generation-plan.schema.json",
     "text-medium-plan.json": "text-medium-plan.schema.json",
+    "video-medium-plan.json": "video-medium-plan.schema.json",
     "review-record.json": "review-record.schema.json",
     "album-release-package-plan.json": "release-package-plan.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",

@@ -22,7 +22,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Style Gate
   -> Image Medium Plan with Medium-Level Workflow Scale Routing
   -> Art Critic Review
-  -> Brief Approval Gate, with the Detail / Intensity gate resolved here, after Symbology and Style are locked
+  -> Brief Approval Gate
+  -> Prompt Variant Strategy
   -> Provider-Neutral Image Prompt Plan
   -> Prompt Critic Review
   -> Prompt Lock Gate
@@ -35,7 +36,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 - Symbology Gate: what should the image show as the core symbolic representation, and should it remain a single image or become an approved image series?
 - Style Gate: what visual language should carry the meaning?
-- Detail / Intensity Gate: Minimal, Faithful-Balanced, or Amplified-Maximal? Resolved at Brief Approval, after Symbology and Style are locked — never during the Image Medium Plan.
+- Prompt Variant Strategy: how should Faithful, Amplified, Minimal, or other approved Prompt Variant Plans differ while preserving the locked symbology, style, Shot Design, and Visual Dynamics?
 - Series Approval Gate: required before multiple image prompt plans are created.
 - Calibration Approval Gate: required before producing the rest of an approved series.
 - Long-Work Checkpoint Gate: required when Long-Work Readiness, calibration, or another series checkpoint blocks expansion.

@@ -1,8 +1,8 @@
 # Video Journey
 
-> **Status: not built yet.** This is forward-looking design, not a shipped slice. The implemented dry-run slices are image, Suno sound, and text. The `artist-os` conductor explicitly tells the artist the video path has not been created yet and offers the available paths instead. Keep this doc as planning input for the eventual video branch.
+The Video Journey translates an approved Beat Plan into time-based visual work. The v0 implementation is storyboard-ready planning only: it creates a Video Medium Plan with sequences, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video.
 
-The Video Journey translates an approved Beat Plan into time-based visual work: a single motion moment, a short clip, a scene, a sequence, a trailer, or a longer arc.
+Video uses the shared visual planning language from the Image Journey. **Image Role** and **Storyboard Shot** are sibling realizations of a shared **Visual Unit**: an image realizes the unit as a still frame, while video adds time, motion, blocking, transitions, and script or audio relationships.
 
 ## Best Fit
 
@@ -18,45 +18,56 @@ Use the Video Journey when the final work should include:
 - visual rhythm,
 - a longer emotional arc.
 
+The Video Medium Plan is scale-general. It can support short social videos, single scenes, trailers, music videos, short films, feature films, episodic sequences, and other storyboardable video work. Long-form video uses Workflow Scale Routing and Long-Work Stewardship; it is not a separate artifact class.
+
 ## Route
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
+  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Symbology Gate
+  -> Style Gate
   -> Video Format Gate
   -> Scene / Sequence Gate
   -> Shot Logic Gate
-  -> Motion Gate
-  -> Visual Style Gate
-  -> Pacing / Transition Gate
-  -> Video Plan with Medium-Level Workflow Scale Routing, when schema-backed
+  -> Motion / Pacing / Transition Gate
+  -> Audio Posture Gate
+  -> Video Medium Plan with Medium-Level Workflow Scale Routing
+  -> Draft Video Creative Brief Document
   -> Video Critic Review
-  -> Video Prompt Plan
-  -> Prompt Critic Review
-  -> Prompt Lock Gate
-  -> Generation Approval Gate
+  -> Brief Approval Gate
+  -> storyboard-ready package
+  -> optional storyboard still Generation Approval Gate
+  -> Output Record, when storyboard stills are generated or imported
   -> Output Critic Review
   -> Output Acceptance Gate
 ```
 
 ## Gates
 
-- Video Format Gate: single clip, scene, sequence, trailer, loop, or longer arc?
-- Scene / Sequence Gate: how many beats become timed units?
-- Shot Logic Gate: what is the camera relationship to each beat?
-- Motion Gate: what moves, how much, and why?
-- Visual Style Gate: what visual language carries the Beat Plan?
-- Pacing / Transition Gate: how fast do beats unfold and how do they connect?
-- Workflow Scale Routing: should this stay one clip or scene, or does it need sequence, calibration, Long-Work, or full long-form support?
-- Calibration Gate: for longer video, approve a style/motion test before full production.
+- Symbology Gate: what should the work show as the core symbolic representation?
+- Style Gate: what visual language should carry the meaning?
+- Video Format Gate: short social video, single scene, trailer, montage, music video, short film, feature film, episodic sequence, or another format?
+- Scene / Sequence Gate: does this need Video Sequences, Video Scenes only, or long-form stewardship?
+- Shot Logic Gate: how does each Beat, Beat group, or Tension Point become timed Storyboard Shots?
+- Motion / Pacing / Transition Gate: what moves, how fast do shots unfold, and how do they connect?
+- Audio Posture Gate: silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred?
+- Workflow Scale Routing: should this stay compact, expand as a structured single artifact, or activate cumulative/full long-form supports?
 
 ## Reviews
 
 - Story Critic Review happens before this journey as a bounded sub-agent review.
-- Beat Reviewer sub-agent is mandatory for scene, sequence, trailer, or arc plans.
-- Video Critic Review checks whether shot progression, motion, pacing, and transition logic preserve the Beat Plan as a bounded sub-agent review.
-- Art Critic Review sub-agent may be used inside Video Critic Review when visual style or image composition is unresolved.
-- Prompt Critic Review checks video prompt readiness, continuity constraints, shot clarity, provider-neutral language, and generation risks as a bounded sub-agent review.
-- Output Critic Review checks generated video against Artist Meaning, Beat Plan, Video Plan, and Prompt Plan as a bounded sub-agent review.
+- Beat Reviewer sub-agent is mandatory for scene, sequence, trailer, arc, or long-form video plans.
+- Video Critic Review checks shot progression, scene pacing, motion logic, transition logic, visual continuity over time, and script or audio alignment against Artist Meaning, Beat Plan, and Video Medium Plan.
+- Art Critic Review criteria may support Video Critic Review when visual style, symbology, composition, or Visual Dynamics are unresolved.
+- Writing Critic Review criteria may support Video Critic Review when script, dialogue, voiceover, captions, or on-screen text carry meaning.
+- Output Critic Review checks generated storyboard stills or later generated video artifacts against Artist Meaning, Beat Plan, Video Medium Plan, and the approved plan that produced them.
+
+## Current Implementation
+
+The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. A separate Video Prompt Plan waits until provider-neutral video generation instructions prove their fields.
+
+Generated storyboard stills are normal Output Records linked back to the relevant Storyboard Shot. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data but do not define the domain model.
 
 ## Video-Specific Concerns
 
@@ -64,13 +75,16 @@ Video cannot rely on mood words alone. It needs decisions about:
 
 - duration,
 - aspect ratio,
+- sequence and scene structure,
 - shot count,
 - camera movement,
-- subject movement,
+- subject movement and blocking,
 - scene continuity,
 - temporal order,
 - transition behavior,
-- visual consistency,
+- visual consistency over time,
+- audio posture,
+- script, voiceover, dialogue, caption, or on-screen text timing,
 - whether the output loops or resolves.
 
-Longer video should use calibration before full generation. Do not create many generated clips without explicit approval.
+Longer video should use Long-Work Stewardship, checkpoints, and calibration before broad expansion. Do not create generated clips or storyboard stills without explicit approval.

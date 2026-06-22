@@ -93,6 +93,16 @@ Do not let `shot_design` default to full-body character framing. Close shots sho
 
 `visual_dynamics.minimum_tension_criteria` defines the minimum visible contrast for the image plan. For single images, it should name the internal contrast requirement. For series, it should name the required adjacent amplitude and tension shifts.
 
+### Video Medium Plan
+
+A Video Medium Plan is the typed video translation layer between the shared Beat Plan and the Video Creative Brief. It validates against `schemas/video-medium-plan.schema.json`.
+
+The v0 implementation is storyboard-ready planning only. It owns Video Format, Video Style Expression, Visual Dynamics over time, Video Sequences when needed, Video Scenes, Storyboard Shots, audio posture, text/audio refs, storyboard frame prompts, and storyboard still generation policy. It does not create a Video Prompt Plan or finished video.
+
+Video Medium Plans use the same Symbology Direction and Style Direction concepts as Image Medium Plans. Video adds medium-specific choices for rendering mode, camera style, motion style, edit style, scene/sequence structure, shot logic, motion/pacing/transition logic, and audio posture.
+
+Generated storyboard stills require explicit provider-backed generation approval and normal Output Records linked back to the relevant Storyboard Shot. Finished video generation, render adapters, and provider-specific video jobs are downstream adapters.
+
 ### Sound Medium Plan
 
 A Sound Medium Plan is the typed sound translation layer between the shared Beat Plan and the Sound Creative Brief. It validates against `schemas/sound-medium-plan.schema.json`.
@@ -270,20 +280,18 @@ Use amplitude values, each role's `tension_profile`, and each role's `shot_desig
 
 ## Visual Gates
 
-The default First Slice has three visual gates. Each gate is a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images. The `composite_image_prompt` is internal by default; show concise options to the artist unless they explicitly ask for an image-generator prompt.
+The default First Slice has two shared visual gates. Each gate can use a **Comparison Board**: a single provider-neutral prompt that renders every option together inside ONE image as a labeled grid (see `THEORY.md` → "Visual Gate Boards"). Never one prompt per option, never multiple images. The `composite_image_prompt` is internal by default; show concise options to the artist unless they explicitly ask for an image-generator prompt.
 
 Stage completion criteria:
 
 - Interpretation is complete when Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
 - Visualization/Symbolic is complete when the artist has selected or combined a symbolic representation, chosen single image / compressed arc / image series, and accepted, declined, or requested visualization.
 - Style is complete when the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
-- Detail is complete when the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 
 1. Symbology Board: one image, 2x3 grid of six cells, each cell plain black-and-white line art of the subject only (no style) comparing symbolic representations, before style is locked.
 2. Style Exploration Board: one image, 2x3 grid of six tiles, each tile the same locked symbology subject in a different style, shown only after asking whether the artist wants to see style options.
-3. Minimalist-to-Maximalist Gate: one image, three side-by-side panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity, after symbology and style are selected.
 
-Exploration boards are stored in `visual_boards`, not `layout_plan`. The Minimalist-to-Maximalist Gate is a final-output layout, stored as `layout_plan` with `layout_type: three_panel_variant_comparison` and its own `composite_image_prompt`. Each board may be drafted as provider-neutral text or generated only after explicit, per-board artist approval for provider-backed generation.
+Exploration boards are stored in `visual_boards`, not `layout_plan`. Optional single-generation variant comparisons are final-output layouts, stored as `layout_plan` with `layout_type: three_panel_variant_comparison` and their own `composite_image_prompt`. Each board or comparison may be drafted as provider-neutral text or generated only after explicit, per-board artist approval for provider-backed generation.
 
 `visual_boards[]` records pre-locking exploration artifacts:
 
@@ -325,7 +333,7 @@ Each Prompt Variant Plan should include:
 - traceability notes back to the approved Creative Brief,
 - critique checklist.
 
-The three Prompt Variant Plans must be visually distinct along the Minimalist-to-Maximalist axis. Do not create variants that only change adjectives. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, symbolic layering, representation/abstraction, light/color strategy, texture/finish, negative space, ornament, scale, drama, or focal hierarchy. Each Prompt Variant Plan should preserve the selected Symbology Direction and Style Direction unless the artist explicitly asks to revisit an earlier gate.
+The three Prompt Variant Plans must be visually distinct according to the Prompt Variant Strategy. Do not create variants that only change adjectives. Each variant should name at least two differentiators, such as composition, subject scale, camera/viewpoint, density, symbolic layering, representation/abstraction, light/color strategy, texture/finish, negative space, ornament, scale, drama, or focal hierarchy. Each Prompt Variant Plan should preserve the selected Symbology Direction and Style Direction unless the artist explicitly asks to revisit an earlier gate.
 
 Each Prompt Variant Plan must preserve the governing Expectation Turn Translation either in `prompt_text` or in `critique_checklist`, with traceability back to the Beat Plan or Image Medium Plan. This is enforced by Prompt Critic Review rather than a dedicated Prompt Plan field.
 
@@ -336,7 +344,7 @@ Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan 
 `layout_plan` records final output arrangement before provider translation. It does not store pre-locking exploration boards:
 
 - `single_image`: one generated image from one selected variant.
-- `three_panel_variant_comparison`: one generated horizontal image with three equal square panels comparing Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
+- `three_panel_variant_comparison`: one generated horizontal image with equal panels comparing multiple Prompt Variant Plans after symbology and style are selected.
 - `series_calibration_image`: one calibration image for an approved Series Plan.
 - `series_image`: one image role inside an approved Series Plan.
 

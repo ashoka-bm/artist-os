@@ -19,6 +19,7 @@ WORKFLOW_SCALE_SCHEMA_NAMES = {
     "image-medium-plan.schema.json",
     "sound-medium-plan.schema.json",
     "text-medium-plan.schema.json",
+    "video-medium-plan.schema.json",
 }
 
 
@@ -448,6 +449,23 @@ class SchemaValidationTests(unittest.TestCase):
                 record["gate_type"] = gate_type
                 validate(record, schema, schema)
 
+    def test_gate_decision_accepts_video_journey_gates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
+        schema = load_json(schema_path)
+        video_gate_types = [
+            "video_format",
+            "scene_sequence",
+            "shot_logic",
+            "motion_pacing_transition",
+            "audio_posture",
+        ]
+        for gate_type in video_gate_types:
+            with self.subTest(gate_type=gate_type):
+                record = load_json(data_path)
+                record["gate_type"] = gate_type
+                validate(record, schema, schema)
+
     def test_text_creative_brief_requires_review_and_brief_approval_refs(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "text-creative-brief.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-creative-brief.json"
@@ -639,6 +657,20 @@ class SchemaValidationTests(unittest.TestCase):
     def test_sound_medium_plan_requires_workflow_scale_routing(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-medium-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-medium-plan.json"
+        record = load_json(data_path)
+        del record["workflow_scale_routing"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_fixture_validates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        validate_file(schema_path, data_path)
+
+    def test_video_medium_plan_requires_workflow_scale_routing(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
         record = load_json(data_path)
         del record["workflow_scale_routing"]
         schema = load_json(schema_path)

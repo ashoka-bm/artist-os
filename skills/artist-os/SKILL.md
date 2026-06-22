@@ -28,7 +28,7 @@ Delegate each phase's detailed checklist to the sibling skill that owns it: `ski
 
 These are the conductor's safety rails — the things only you can enforce because you see the whole flow:
 
-- Never call a generation provider (image or Suno) without explicit, per-call artist approval. Drafting a prompt or a board is always allowed; sending it to a provider is not. The provider boundary is where cost, irreversibility, and external action live — the artist must never be surprised by spend or by work they did not sanction.
+- Never call a media generation, storyboard-still, render, image, video, Suno, audio, or other external provider without explicit, per-call artist approval. Drafting prompts, boards, storyboard frame prompts, plans, and briefs is always allowed; sending anything to a provider is not. The provider boundary is where cost, irreversibility, and external action live — the artist must never be surprised by spend or by work they did not sanction.
 - Do not create a Creative Brief Record or Prompt Plan until the critic review has revised the Creative Brief Document and the artist has approved it. The same holds for the Sound Creative Brief Record and Suno Sound Prompt Plan. The brief is the meaning contract everything downstream inherits; locking a plan on top of an unratified brief bakes in unreviewed interpretation that is expensive to unwind.
 - Do not produce multiple series image prompts, or multiple Suno sequence plans, until the artist approves the Series/Sequence Plan. A series multiplies generation cost and commits the artist to a direction, so each expansion stays a deliberate artist choice rather than a default.
 - When Workflow Scale Routing activates Long-Work Stewardship, create a foundation Long-Work Stewardship Record after Story Approval, enrich it after Medium Plan, and do not expand while Long-Work Readiness is `pending` or `repair_before_expansion` unless the artist completes readiness, repairs, or explicitly waives the block. If medium-level `workflow_scale_routing.activated_supports` newly includes `long_work_stewardship` and no foundation record exists, create the foundation record immediately before enrichment.
@@ -49,11 +49,11 @@ First ask:
 > What do you want to create from this Reference?
 >
 > - **Image**: a single image, sequential image story, portfolio, or collection
-> - **Video**: the video path has not been created yet
+> - **Video**: a storyboard-ready video plan with scenes, shot list, motion, transitions, and script/audio references
 > - **Audio**: a song, instrumental, soundscape, score, spoken word, or other sound work
 > - **Text**: a poem, prose, story, script, lyrics, essay, letter, or other writing
 
-Then ask the medium-specific output-kind question for Image, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes. Do not ask a second video question.
+Then ask the medium-specific output-kind question for Image, Video, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes.
 
 **Image**:
 
@@ -65,6 +65,21 @@ Then ask the medium-specific output-kind question for Image, Audio, or Text. For
 > - **Not sure**: recommend the best visual format from the Reference
 
 Route single image toward the standard image Prompt Plan. Route sequential image story toward Series Recommendation / Series Plan. Route portfolio / collection toward Prompt Branch Set by default unless the artist asks for ordered emotional movement.
+
+**Video**:
+
+> What kind of video plan do you want?
+>
+> - **Short social video**
+> - **Single scene**
+> - **Trailer / teaser**
+> - **Montage**
+> - **Music video**
+> - **Short film**
+> - **Feature film / episodic sequence**
+> - **Not sure**: recommend the best video format
+
+Route Video to `skills/video-journey`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. Optional generated storyboard stills require explicit provider-backed generation approval and normal Output Records.
 
 **Text**:
 
@@ -122,11 +137,7 @@ If the artist accepts HTML, create it only after a concrete draft exists. The HT
 
 Keep this audio question shallow. The Sound Journey owns later decisions about sonic concept, genre/production, tempo/groove, vocal/lyric, and arrangement/form.
 
-If the artist chooses **Video**, say:
-
-> The video path has not been created yet. I can still help turn this into an image path, audio path, or text path, or capture the video idea as future planning notes.
-
-Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, soundscape, spoken word bed, ritual audio, sound design, or sonic logo → Sound Journey / text-to-Suno flow. Image, visual, illustration, art prompt, picture, portfolio, collection, gallery, storyboard, or sequential stills → text-to-image flow. Text, writing, poem, prose, story, lyrics as written text, script, letter, monologue, essay, manifesto, treatment, rewrite, adaptation, novel, book, chapter, manuscript, blog post, Substack post, LinkedIn post, article, newsletter, thought leadership, launch copy, or publishing-prep writing → `skills/text-journey`. If the artist says only "lyrics" without enough context, ask whether they want lyrics as a written text or a song prompt that uses lyrics. Video → unsupported for now; state that the video path has not been created yet and offer the available paths.
+Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, soundscape, spoken word bed, ritual audio, sound design, or sonic logo → Sound Journey / text-to-Suno flow. Image, visual, illustration, art prompt, picture, portfolio, collection, gallery, or sequential stills → text-to-image flow. Storyboard, video, film, reel, trailer, montage, shot list, scene list, or video script with shots → `skills/video-journey`. Text, writing, poem, prose, story, lyrics as written text, script, letter, monologue, essay, manifesto, treatment, rewrite, adaptation, novel, book, chapter, manuscript, blog post, Substack post, LinkedIn post, article, newsletter, thought leadership, launch copy, or publishing-prep writing → `skills/text-journey`. If the artist says only "lyrics" without enough context, ask whether they want lyrics as a written text or a song prompt that uses lyrics.
 
 Album or sound-primary release package requests route to Album v1 when the artist wants ordered tracks plus supporting visual or text deliverables. EP, Single Bundle, Visual Album, campaign, and broader Release Package subtypes are future sibling routes; capture them as planning notes or ask whether the artist wants to proceed as Album v1.
 
@@ -169,7 +180,7 @@ Infer safe placeholders for title, rights notes, and source context unless right
 
 ## Visual Gates
 
-The three board-backed visual gates are Symbology, Style, and Minimalist-to-Maximalist. Each resolves the same way: with one Comparison Board — a single provider-neutral prompt that renders every option together as a labeled grid inside **one image**. Presentation Mode is decided during the Symbology Gate question, not as a separate board gate. The full contract (one image / one prompt / one generation, the 2x3 grid, draft-vs-generate, the fillable skeleton) lives in `THEORY.md` → "Visual Gate Boards". Use it; do not improvise the format.
+The two shared board-backed visual gates are Symbology and Style. Each resolves with one Comparison Board when visualization is needed — a single provider-neutral prompt that renders every option together as a labeled grid inside **one image**. Presentation Mode is decided during the Symbology Gate question for image work, not as a separate board gate. The full contract (one image / one prompt / one generation, the 2x3 grid, draft-vs-generate, the fillable skeleton) lives in `THEORY.md` → "Visual Gate Boards". Use it; do not improvise the format.
 
 As conductor, hold two rules at every gate:
 
@@ -178,7 +189,7 @@ As conductor, hold two rules at every gate:
 
 ## Phase Order
 
-Image, audio, and text share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image, `skills/text-to-suno-plan` for Sound Journey / Suno, and `skills/text-journey` for text. Reviewer steps (5, 10, 13, 16) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
+Image, video, audio, and text share one spine. Run the phases in order, hand off to the owning skill for the detailed work, and advance automatically once each stage is complete. The owning medium skill is `skills/text-to-image-plan` for image, `skills/video-journey` for video, `skills/text-to-suno-plan` for Sound Journey / Suno, and `skills/text-journey` for text. Reviewer steps (5, 10, 13, 16) use the bounded-sub-agent mechanics already stated above — emit and persist a Review Record; do not self-review — so that is not repeated per step. Persist each phase before advancing.
 
 1. **Source Record** — `skills/ingest-reference`.
 2. **Artist Meaning** — `skills/meaning-interview` (bounded Decision Interview).
@@ -189,10 +200,10 @@ Image, audio, and text share one spine. Run the phases in order, hand off to the
 7. **Release Package Plan** — for Album v1 only, create `schemas/release-package-plan.schema.json` after the Album Beat Plan, and after foundation Long-Work Stewardship when Album Cohesion Mode activates it, before full medium-specific expansion. The plan owns package subtype, deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration state, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship, Prompt Plans, Text Generation Plans, or Output Records. Run pre-calibration Mixed-Media Critic Review, then ask for Release Package Plan Approval before calibration Medium Plans.
 8. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), records medium-level `workflow_scale_routing`, and produces the Medium Plan. Persist each gate decision under `gates/`. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, create the foundation Long-Work Stewardship Record immediately if no foundation record exists, then enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion.
 9. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
-10. **Critic Review** — `skills/art-critic-review` for image or sound; `skills/writing-method-review` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
-11. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas. (Image only: then run the Minimalist-to-Maximalist intensity gate if unresolved — see Medium Specifics.)
-12. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. Series/sequence expansion needs approval first (see Medium Specifics).
-13. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set.
+10. **Critic Review** — `skills/art-critic-review` for image or sound; `skills/video-journey` in Video Critic Review mode for video; `skills/writing-method-review` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
+11. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas.
+12. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. For Video Journey v0, this step produces the approved Video Creative Brief handoff and storyboard-ready package only; do not create a Video Prompt Plan or schema-backed Video Creative Brief Record until that contract exists. Series/sequence expansion needs approval first (see Medium Specifics).
+13. **Prompt Plan Critique** — `skills/critique-asset` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set. For Video Journey v0, skip Prompt Plan Critique unless a future Video Prompt Plan exists; Video Critic Review and Brief Approval are the required planning reviews.
 14. **Generation Approval Gate** — only for provider-backed generation, text Draft Generation Approval, or another external action; approval is explicit per call, approved batch, or draft.
 15. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance. When Long-Work Stewardship is active, update the Long-Work Stewardship Record with the relevant part status and output reference.
 16. **Output Critic Review** — `skills/critique-asset` in Output Critic mode against the Output Record and governing upstream records.
@@ -216,9 +227,16 @@ Image, audio, and text share one spine. Run the phases in order, hand off to the
 
 - Step 8 runs two visual gates in order, Symbology → Style; Presentation Mode is decided inside the Symbology Gate, not as a separate gate. Medium Plan validates against `schemas/image-medium-plan.schema.json`.
 - When image-series or full long-form image support activates Long-Work Stewardship, the stewardship record references Image Role ids and tracks readiness, checkpoints, continuity rules, and drift; it does not duplicate Shot Design, amplitude, or visual tension fields.
-- The Minimalist-to-Maximalist (intensity) gate runs at **Brief Approval (step 11), after symbology and style are locked** — never during the Medium Plan.
-- Step 12 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. If the Series Recommendation is `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
+- Step 12 records validate against `schemas/creative-brief.schema.json` and `schemas/prompt-plan.schema.json`. Use Prompt Variant Strategy to make Faithful, Amplified, and Minimal variants meaningfully distinct while preserving the approved symbology, Style Direction, Visual Dynamics, and Shot Design. If the Series Recommendation is `image_series`, get Series Plan approval, then create only the Series Calibration Image variants and stop for calibration approval before the remaining image-role prompts.
 - Optional after step 12: a Prompt Branch Set (`schemas/prompt-branch-set.schema.json`), usually five branches that hold the meaning kernel while varying style, setting, symbol, composition, and palette/light, when the artist wants a curator batch or broad exploration.
+
+**Video** — owning skill `skills/video-journey`:
+
+- Step 8 works the video gates: Symbology, Style, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, and Audio Posture. Medium Plan validates against `schemas/video-medium-plan.schema.json`.
+- The v0 video path produces storyboard-ready planning only: Video Sequences when scale needs them, Video Scenes, Storyboard Shots, shot list, Video Style Expression, Video Audio Posture, text/audio refs, and storyboard frame prompts. It does not create a Video Prompt Plan or finished video.
+- When cumulative or full long-form video support activates Long-Work Stewardship, the stewardship record references video sequence, scene, or Storyboard Shot ids and tracks readiness, checkpoints, continuity rules, and drift; it does not duplicate Shot Design, motion, transition, or audio-posture details.
+- Step 10 uses Video Critic Review to check shot progression, pacing, motion logic, transition logic, visual continuity over time, and script or audio alignment. Use Art, Writing, or Sound review criteria as supporting checks when those layers carry risk.
+- Storyboard frame prompts remain in the Video Medium Plan for v0. Generated storyboard stills require explicit provider-backed generation approval and normal Output Records linked back to the relevant Storyboard Shot.
 
 **Suno** — owning skill `skills/text-to-suno-plan`:
 

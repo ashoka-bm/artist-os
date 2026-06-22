@@ -37,6 +37,14 @@ missing-Reference prompt as a separate start-condition guard.
   hands. I want to turn it into visual art. Go on autopilot — assume I approve
   the recommended option at every gate and approve generation — and take it all
   the way."
+- **T6 (video storyboard, full flow):** "Here is my journal entry:
+  'The hallway light stayed on after everyone left. The door was open just
+  enough to make the dark room look like it was waiting for me. I stood there
+  until the floor stopped creaking.'
+  Turn it into a short film storyboard with scenes, shot list, camera angles,
+  motion, audio posture, and storyboard frame prompts. Autopilot — assume I
+  approve the recommended choice at every gate, but do not generate any actual
+  images or finished video."
 
 ## Checklist (assertions per trace)
 
@@ -45,7 +53,7 @@ missing-Reference prompt as a separate start-condition guard.
 2. Delegates to: ingest-reference, meaning-interview, text-to-image-plan, writing-method-review (beat review), art-critic-review, critique-asset.
 3. Hard gates enforced: provider-approval (per call), brief-approval before Creative Brief Record, series approval before multiple series prompts, Output Record before acceptance, persist each phase.
 4. Visual gates run in order Symbology → Style during Image Medium Plan; Presentation Mode decided in the Symbology gate.
-5. IMAGE QUIRK: Minimalist-to-Maximalist (intensity) gate runs at Brief Approval (after symbology+style locked), NOT during the medium plan.
+5. IMAGE QUIRK: visual gates run in order Symbology → Style during Image Medium Plan; later visual variation is handled by Prompt Variant Strategy, not another visual gate.
 
 ### T2 — suno
 1. Phases in order: Source Record → Artist Meaning → Transformation Brief → Beat Plan → Beat Review (if multi-section/lyric) → Sound Medium Plan → Draft Sound Creative Brief → Music/Sound Critic Review → Brief Approval → Final Records → Prompt Plan Critique → Generation Approval → Output Record → Output Critic Review → Output Acceptance.
@@ -80,6 +88,15 @@ missing-Reference prompt as a separate start-condition guard.
 4. Does not run Artist Meaning, Transformation Brief, Beat Plan, Medium Plan, or downstream review before the Reference exists.
 5. Explains that autopilot approval cannot bypass missing required source material.
 
+### T6 — video storyboard
+1. Routes storyboard/video/film language to `skills/video-journey`.
+2. Produces storyboard-ready Video Medium Plan / handoff only; does NOT claim finished video generation.
+3. Uses the shared visual gate order Symbology → Style before video-specific gates.
+4. Works video gates: Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, and Audio Posture.
+5. Requires explicit provider-backed Generation Approval before generated storyboard stills or any rendered video provider call.
+6. Requires normal Output Records for generated or imported storyboard stills before review or acceptance.
+7. Does NOT create a Video Prompt Plan in v0.
+
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.
 Baseline establishes the target; trimmed must match the baseline's pass set.
@@ -95,7 +112,7 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > `<repo>/skills/artist-os/SKILL.md` (plus any files IT explicitly tells you to
 > read). Do not improvise behavior that isn't in the skill.
 >
-> Scenario (the user's message): "<T1 / T2 / T3 / T4 / T5 prompt>"
+> Scenario (the user's message): "<T1 / T2 / T3 / T4 / T5 / T6 prompt>"
 >
 > Produce a precise ORDERED TRACE of what the conductor does. Do NOT call any
 > generator and do NOT write project files. The trace is a numbered list; each
@@ -104,7 +121,7 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > (e) where it would pause for artist input.
 >
 > Then add the trace-specific sections — T1: "VISUAL GATES" (gate order;
-> Presentation Mode and Minimalist-to-Maximalist timing) + "HARD GATES
+> Presentation Mode and Prompt Variant Strategy timing) + "HARD GATES
 > ENFORCED". T2: "SUNO SPECIFICS" (Vocal/Lyric vs. brief lock; any image-style
 > Branch Set?) + "HARD GATES ENFORCED". T3: "START-CONDITION HANDLING" (restart
 > vs. review path; records requested; Output Record creation). T4: "TEXT
@@ -113,7 +130,10 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > review before polishing; Clear→Human pass order and per-rewrite Output Records)
 > + "HARD GATES ENFORCED". T5: "MISSING REFERENCE HANDLING" (medium route,
 > missing Reference stop, no invented source material, and phases that must not
-> run yet) + "HARD GATES ENFORCED".
+> run yet) + "HARD GATES ENFORCED". T6: "VIDEO STORYBOARD SPECIFICS" (video
+> route; v0 storyboard-only boundary; Symbology → Style; video gates; storyboard
+> still approval; Output Records for stills; no Video Prompt Plan) + "HARD GATES
+> ENFORCED".
 >
 > Quote the skill line/section each major step comes from. Write the trace to
 > `<repo>/evals/conductor-behavior/<baseline|trimmed>/T<N>.md` and return it.

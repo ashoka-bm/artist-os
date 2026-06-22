@@ -92,6 +92,34 @@ _Avoid_: Text Medium Plan, Text Generation Plan
 The structured JSON version of an approved Text Creative Brief for agent handoff, validation, and Text Generation Plan creation.
 _Avoid_: Text Creative Brief Document, Text Medium Plan, Text Generation Plan
 
+**Video Medium Plan**:
+The video-specific Medium Plan that translates an approved Beat Plan into sequences, Video Scenes, timed Storyboard Shots, visual style, shot list, motion, transitions, script or audio relationships, and storyboard planning; v0 stops at storyboard-ready planning rather than finished video generation.
+_Avoid_: Storyboard pre-plan, finished video, provider-specific video job
+
+**Video Creative Brief**:
+The video-specific Creative Brief that compiles Artist Meaning, Transformation Brief, Beat Plan, and Video Medium Plan into an approved handoff for video storyboard or future video prompt planning.
+_Avoid_: Video Medium Plan, screenplay, finished storyboard
+
+**Video Creative Brief Record**:
+The structured JSON version of an approved Video Creative Brief for agent handoff, validation, and future video prompt planning.
+_Avoid_: Video Creative Brief Document, Video Medium Plan, Video Prompt Plan
+
+**Video Sequence**:
+A Video Medium Plan container that groups Video Scenes into a larger movement, act, trailer section, montage passage, episode part, or feature-scale story unit.
+_Avoid_: Beat Plan, Long-Work Stewardship, flat shot list
+
+**Video Scene**:
+A Video Medium Plan container that groups one or more Storyboard Shots around a setting, situation, Beat group, or local dramatic purpose.
+_Avoid_: Storyboard Shot, Beat, finished clip
+
+**Video Style Expression**:
+The video-specific expression of Style Direction across rendering mode, camera style, motion style, edit style, caption typography, color, and light.
+_Avoid_: Replacing Style Direction, visual style pileup
+
+**Video Audio Posture**:
+The Video Medium Plan decision that states whether the video is silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred.
+_Avoid_: Assuming every video needs music or dialogue
+
 **Brief Approval**:
 The artist's approval of a Creative Brief Document before Artist OS generates the Creative Brief Record.
 _Avoid_: Acceptance Review
@@ -112,6 +140,10 @@ _Avoid_: Final prompt ambiguity
 A reviewer stage that strengthens the Creative Brief by resolving weak interpretations, increasing Poetic Density, and turning low-confidence notes into decisive artistic direction.
 _Avoid_: Critique Asset, Acceptance Review
 
+**Video Critic Review**:
+A reviewer stage that checks shot progression, pacing, motion logic, transition logic, visual continuity over time, and script or audio alignment against Artist Meaning, Beat Plan, and Video Medium Plan.
+_Avoid_: Art Critic Review alone, Writing Critic Review alone, Output Critic Review
+
 **Review Record**:
 The universal machine-readable output of any bounded reviewer sub-agent. It records reviewer role, reviewed artifact, upstream context, matched material, drift, findings, recommended revision, and approval status.
 _Avoid_: Reviewer-specific machine-readable schemas unless a real downstream need appears
@@ -128,8 +160,20 @@ _Avoid_: Emotional analysis
 The formal forces that make a visual work active, coherent, tense, immersive, unstable, or memorable.
 _Avoid_: Technicality, visual style only
 
+**Visual Unit**:
+The shared visual-planning unit that translates one Beat, Key Emotional Movement, or Tension Point into composition, style, visual tension, and Shot Design before it becomes a still image or video shot.
+_Avoid_: Treating still images and video shots as unrelated planning objects
+
+**Image Role**:
+The still-image realization of a Visual Unit inside a single image, compressed arc, image series, portfolio, or collection, naming the function of that image such as opening image, threshold image, rupture image, return image, or resolution image.
+_Avoid_: Storyboard Shot, frame, generic image
+
+**Storyboard Shot**:
+The atomic time-based video realization of a Visual Unit that adds duration, motion, blocking, transition, and script or audio relationships.
+_Avoid_: Image Role, finished video clip, generated video
+
 **Shot Design**:
-The image-role decision that names shot scale, camera angle, visual emphasis, and composition strategy for one still image. Shot Design serves Intended Feeling and the governing Expectation Turn; it is not a default full-body depiction of the subject.
+The Visual Unit decision that names shot scale, camera angle, visual emphasis, and composition strategy. Shot Design serves Intended Feeling and the governing Expectation Turn; it is not a default full-body depiction of the subject.
 _Avoid_: Generic full-body framing, camera variety for its own sake
 
 **Shot Scale**:
@@ -145,7 +189,7 @@ The thing a Shot Design makes dominant: face or reaction, hands or object, body 
 _Avoid_: Centering the whole subject when the Beat needs one pressure point
 
 **Shot Progression**:
-The intentional change of Shot Design across adjacent Image Roles in an image series. Adjacent roles should vary shot scale, camera angle, visual emphasis, or composition strategy unless repetition is artist-approved and tied to Artist Meaning.
+The intentional change of Shot Design across adjacent Visual Units in an image series or video storyboard. Adjacent units should vary shot scale, camera angle, visual emphasis, or composition strategy unless repetition is artist-approved and tied to Artist Meaning.
 _Avoid_: A series where every frame has the same full-body composition
 
 **Sonic Dynamics**:
@@ -300,9 +344,9 @@ _Avoid_: Separate specialized decision schemas before a gate proves it needs one
 The second visual choice gate, where the artist chooses the artistic language for the selected Symbology Direction.
 _Avoid_: Style overriding symbolic meaning
 
-**Minimalist-to-Maximalist Gate**:
-The third visual choice gate, where the artist compares Minimal, Faithful/Balanced, and Amplified/Maximal intensity after symbology and style are selected.
-_Avoid_: Reopening symbology or style unless the artist asks
+**Prompt Variant Strategy**:
+The plan for how Prompt Variant Plans differ while preserving the approved meaning, symbology, Style Direction, Visual Dynamics, and Shot Design.
+_Avoid_: Mandatory extra visual gate, arbitrary variation
 
 **Prompt Branch Gate**:
 The gate that approves a Prompt Branch Set strategy before generation: branch count, meaning kernel, variation axes, hold-constant rules, and minimum distinction rule.
@@ -657,8 +701,8 @@ A concrete visual lever that makes one Prompt Variant Plan visually distinct fro
 _Avoid_: Only changing adjectives or intensity words
 
 **Single-Generation Variant Comparison**:
-One horizontal image made of three equal square panels that compares Minimal/minimalist, Faithful/Balanced, and Amplified/Maximal intensity directions in a single generation after Symbology Direction and Style Direction are selected.
-_Avoid_: Treating the comparison image as a Series Plan
+One optional comparison image that lays multiple Prompt Variant Plans into a single generated image for artist review after Symbology Direction and Style Direction are selected.
+_Avoid_: Mandatory variant comparison, treating the comparison image as a Series Plan
 
 **Layout Plan**:
 The Provider-Neutral Prompt Plan field that records final output arrangement: single image, three-panel variant comparison, series calibration image, or series image. Pre-locking exploration boards are recorded in visual boards, not Layout Plan.
@@ -667,10 +711,6 @@ _Avoid_: Hiding generation layout inside prompt prose only
 **Visual Boards**:
 The Provider-Neutral Prompt Plan field that records pre-locking Symbology Boards and Style Exploration Boards, including options, traceability, risks, selection status, and whether provider-backed generation was approved.
 _Avoid_: Stuffing exploration-board options into Layout Plan prose
-
-**Image Role**:
-The function of one image inside a Series Plan, such as opening image, threshold image, rupture image, return image, or resolution image. Each Image Role carries its own Shot Design so the frame's distance, angle, emphasis, and composition serve that role's Intended Feeling.
-_Avoid_: Variant
 
 **Tension Point**:
 A meaningful contrast or unresolved pressure that carries emotion but does not imply before/after change.
@@ -992,6 +1032,23 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Downstream records should reference the governing `artist_meaning_id` directly. `source_id` alone is not enough once a Reference can have multiple Artist Meaning versions.
 - Downstream records may embed Artist Meaning summaries for readability and review packets, but `artist_meaning_id` is the authority. If an embedded summary conflicts with the referenced **Artist Meaning Record**, the referenced record wins.
 - A **Reference** can produce one or more **Creative Briefs** after Artist Meaning, story, and medium planning are established.
+- A **Visual Unit** is embedded inside the owning Medium Plan or storyboard plan; it is not a standalone record unless future rehearsals prove it needs its own lifecycle.
+- An **Image Role** is the still-image realization of a **Visual Unit**.
+- A **Storyboard Shot** is the time-based video realization of a **Visual Unit**.
+- Adopt **Visual Unit** language in shared docs before migrating existing image schema fields; image schema churn waits until video rehearsals prove shared JSON schema definitions are useful.
+- A **Beat Plan** remains story authority for video; **Video Sequence**, **Video Scene**, and **Storyboard Shot** are video execution structure.
+- A **Video Sequence** groups **Video Scenes** for pacing, execution, continuity, or long-form navigation.
+- **Video Sequences** are required only when scale, pacing, or stewardship needs scene groups; compact videos can plan directly with **Video Scenes** and **Storyboard Shots**.
+- A **Video Scene** groups one or more **Storyboard Shots** and may map to one Beat, a Beat group, or a local dramatic purpose.
+- The first schema-backed video planning artifact is a **Video Medium Plan** even when its implementation scope is storyboard-only.
+- The first video validation target is **Video Medium Plan**; **Video Creative Brief Record** schema can follow after Video Medium Plan rehearsals prove the brief-specific fields.
+- A **Video Medium Plan** is scale-general; feature films, episodic sequences, and other long-form video work use **Workflow Scale Routing** and **Long-Work Stewardship** rather than a separate video artifact.
+- The v0 **Video Medium Plan** contains provider-neutral storyboard planning fields only; video generators, renderers, and Remotion-style animatic tools are downstream adapters, not domain authority.
+- A **Text Generation Plan** owns drafted script, dialogue, voiceover, captions, social copy, and on-screen text wording; a **Video Medium Plan** owns their timing, placement, role, and relationship to Video Scenes and Storyboard Shots.
+- A **Video Medium Plan** always states its **Video Audio Posture**, but Text Journey or Sound Journey records are created only when the selected posture needs drafted words or sound planning.
+- Storyboard frame prompts belong to the v0 **Video Medium Plan**; a separate **Video Prompt Plan** waits until provider-neutral video generation instructions prove their fields.
+- Generated storyboard stills are normal **Output Records** linked back to the relevant **Storyboard Shot**.
+- **Video Style Expression** expresses the approved **Style Direction** over time; it does not replace or outrank Style Direction.
 - A **Release Package** coordinates multiple outputs under one artist-facing release.
 - A **Release Package Plan** coordinates selected Medium Plans and deliverables without replacing medium-specific planning authority.
 - A **Release Package Plan** owns package subtype, deliverable list, required or optional status, Album Cohesion Mode when the package is an Album, track-to-deliverable mapping, package-level production order, Album Calibration state, cross-media continuity decisions, and references to governing plans and outputs.
@@ -1460,6 +1517,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Style Direction** is the last priority. It must not override **Artist Meaning**, **Emotional Structure**, **Beat Plan**, or **Visual Dynamics**.
 - **Style/Visual Conflicts** should be shown to the artist and can become **Style Adaptations**.
 - **Art Critic Review** may propose default **Style Adaptations** and only ask for explicit approval when the named style materially changes.
+- The shared artist-facing visual gate order is **Symbology Gate** then **Style Gate**; later visual variation belongs to **Prompt Variant Strategy**.
+- **Video Critic Review** is the integrated time-based review for video; it can use Art, Writing, or Sound review criteria as supporting checks without replacing their source records.
 - Use a **Style Interview** and **Style Decision Tree** when the artist has not specified style directly.
 - **Style Interview** is adaptive, using **Style Interview Fallback Order** only as the default.
 - **Style Interview** can stop early when the stop condition is met.
@@ -1486,11 +1545,14 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Add minimal **Series Calibration Fields** to the Creative Brief Record now; defer full **Calibration Choice** schema until image review exists.
 - Add compact **Style Conflict Fields** to the Creative Brief Record now.
 - Three single-image **Prompt Variant Plans** may test unresolved **Variant Test Axes** instead of only varying intensity.
-- Before locking those three Prompt Variant Plans, use the **Minimalist-to-Maximalist Gate** when intensity, density, or complexity could materially change the image.
+- Do not add another visual gate before locking Prompt Variant Plans; use **Prompt Variant Strategy** to choose meaningful variation axes.
 - Keep **Prompt Variant Plan** labels stable. Use **Variant Test Axis Labels** to explain what each variant tests.
 - Each **Prompt Variant Plan** must name concrete **Variant Differentiators** so the three prompts produce meaningfully different visual options.
-- Use a **Single-Generation Variant Comparison** when the artist wants Minimal, Faithful/Balanced, and Amplified/Maximal intensity directions compared in one generated image.
+- Use a **Single-Generation Variant Comparison** only when the artist wants multiple Prompt Variant Plans compared in one generated image.
 - Store image arrangement decisions in the Prompt Plan's **Layout Plan**.
 - "examples" and real user work needed separate storage. Resolved: **Example Corpus** is committed and safe to share; **Workspace Library** is local and uncommitted, with an **Artist OS Library Database**, a **Project Manifest** per project, and **Asset Metadata** sidecars for images and exports.
 - Provider setup risked locking the domain model to one API. Resolved: Artist OS keeps a provider-neutral core and uses **Provider Adapters** for specific media providers.
 - "accepted" needed a boundary. Resolved: an **Output Artifact** becomes an **Accepted Work** only through the **Output Acceptance Gate**.
+- First Video Medium Plan validation uses a compact fixture while preserving scale-general fields and reroute triggers for long-form video.
+- The conductor exposes Video routing through a minimal video skill that owns the Video Medium Plan process, gates, review boundary, outputs, and provider boundary.
+- The first video skill is named `video-journey`; v0 may only produce storyboard-ready Video Medium Plans, but the skill owns the expandable video path.

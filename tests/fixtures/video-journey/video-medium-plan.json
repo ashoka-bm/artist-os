@@ -1,0 +1,301 @@
+{
+  "video_medium_plan_id": "vmp_threshold_reel_storyboard",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "target_media_type": "video",
+  "implementation_scope": "storyboard_plan",
+  "rendering_status": "not_supported",
+  "provider_boundary": {
+    "video_generation": "not_supported",
+    "storyboard_still_generation": "requires_explicit_artist_approval",
+    "render_adapter_status": "future_adapter"
+  },
+  "story_mode": "three_part_sequence",
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "A compact 30 second storyboard can stage invitation, threshold, and residue without long-form continuity support.",
+    "trigger_signals": ["artist_requested_compact_output", "single_artifact_can_hold_movement"],
+    "activated_supports": ["core_pipeline", "medium_section_plan"],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views",
+      "plot_tracker",
+      "character_sheets",
+      "world_building",
+      "chapter_or_scene_briefs",
+      "style_guide",
+      "extraction_verification",
+      "synthesis_checkpoints",
+      "publishing_or_completion_audit",
+      "collection_coherence_review"
+    ],
+    "reroute_triggers": [
+      "artist expands this into a short film or feature film",
+      "recurring characters or world rules become durable continuity",
+      "dependent scene batches require checkpointed expansion"
+    ]
+  },
+  "video_format": {
+    "primary_video_format": "short_social_video",
+    "format_modifiers": ["micro_trailer"],
+    "duration_target_seconds": 30,
+    "duration_flexibility": "standard",
+    "aspect_ratio": "9:16",
+    "publication_use": "private_draft",
+    "audience": "Artist review before any storyboard still generation.",
+    "rationale": "The requested compact video can hold the emotional movement as a vertical storyboard without claiming a finished generated video."
+  },
+  "symbology_direction": {
+    "selection_method": "agent_recommended",
+    "primary_symbolic_representation": "A half-open apartment door spilling warm light into a dark hallway.",
+    "active_absence": true,
+    "confirmation_status": "confirmed",
+    "rationale": "The missing person and lit threshold carry the invitation and unease without literal explanation.",
+    "avoid": ["showing the absent figure", "turning the hallway into a horror reveal"]
+  },
+  "style_direction": {
+    "selection_method": "style_gate",
+    "primary_style": "cinematic live-action realism",
+    "style_modifiers": ["quiet suspense", "natural practical light"],
+    "confirmation_status": "confirmed",
+    "rationale": "The style keeps the ordinary hallway believable so the threshold carries the pressure.",
+    "avoid": ["glossy trailer spectacle", "cartoon exaggeration", "overly dark horror grading"]
+  },
+  "video_style_expression": {
+    "medium_rendering_mode": "live_action",
+    "camera_style": "slow_observational",
+    "motion_style": "restrained_drift",
+    "edit_style": "measured_cuts",
+    "caption_typography_style": "minimal_lower_third",
+    "color_light_style": "warm practical light against cool hallway shadow",
+    "style_direction_notes": "Every shot should feel possible as a real camera observation, even when storyboarded as still prompts."
+  },
+  "visual_dynamics": {
+    "target_visual_engine": "A narrow hallway compresses the viewer toward a warm doorway that withholds its cause.",
+    "active_visual_tensions": [
+      {
+        "pair": "Presence/Absence",
+        "active_pole_summary": "The open door implies a presence that never appears.",
+        "intensity": "high",
+        "translation_notes": "Hold empty space long enough for absence to feel active."
+      },
+      {
+        "pair": "Safety/Threat",
+        "active_pole_summary": "Warm light promises safety while the dark hallway keeps threat unresolved.",
+        "intensity": "medium",
+        "translation_notes": "Avoid jump-scare motion; keep the tension in the uncertain invitation."
+      }
+    ],
+    "minimum_tension_criteria": {
+      "criteria": "Each adjacent Storyboard Shot must change the viewer's distance, information, or pressure around the lit threshold.",
+      "required_adjacent_difference": "Adjacent shots must differ on at least one Shot Design axis and one emotional or visual tension axis unless the repetition is explicitly serving dread."
+    },
+    "style_visual_conflicts": []
+  },
+  "video_sequences": [],
+  "video_scenes": [
+    {
+      "scene_id": "vscene_hallway_threshold",
+      "sequence_id": null,
+      "beat_ids": ["beat_invitation", "beat_threshold", "beat_residue"],
+      "scene_label": "Hallway Threshold",
+      "scene_purpose": "Move from ordinary approach to unresolved invitation.",
+      "setting": "A narrow apartment hallway at night.",
+      "duration_target_seconds": 30,
+      "local_tension": "The viewer is pulled toward light while the cause stays absent."
+    }
+  ],
+  "storyboard_shots": [
+    {
+      "shot_id": "vshot_001",
+      "scene_id": "vscene_hallway_threshold",
+      "beat_id": "beat_invitation",
+      "key_emotional_movement_id": "kem_invitation_to_unease",
+      "time_range": {
+        "start_seconds": 0,
+        "duration_seconds": 5
+      },
+      "visual_unit": {
+        "composition_intent": "Establish distance and make the lit doorway small but unavoidable.",
+        "communication_intent": "The invitation exists before the viewer understands it.",
+        "expectation_turn_translation": "The warm light promises welcome, but the empty hall denies a host.",
+        "intended_feeling": "drawn in and cautious",
+        "active_tension_profile": "Low motion, high absence, medium threat.",
+        "traceable_symbolic_representation": "The half-open door as active absence.",
+        "shot_design": {
+          "shot_scale": "wide",
+          "camera_angle": "eye_level",
+          "visual_emphasis": "environment",
+          "composition_strategy": "Long hallway lines converge on the small warm doorway.",
+          "emotional_rationale": "Distance lets the invitation feel real before it becomes personal.",
+          "avoid": ["centered full-body subject", "visible person in the doorway"]
+        }
+      },
+      "camera_movement": "slow_push_in",
+      "subject_movement": "none",
+      "blocking": "No figure enters; the doorway remains the only active presence.",
+      "transition_in": "fade_from_black",
+      "transition_out": "hard_cut",
+      "script_ref": null,
+      "audio_ref": "audio_cue_hall_tone",
+      "on_screen_text_refs": [],
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, narrow apartment hallway at night, cool dark walls, a small half-open door at the far end spilling warm practical light, no people visible, long converging hallway lines, quiet suspense, wide eye-level shot, restrained composition, active absence."
+    },
+    {
+      "shot_id": "vshot_002",
+      "scene_id": "vscene_hallway_threshold",
+      "beat_id": "beat_threshold",
+      "key_emotional_movement_id": "kem_invitation_to_unease",
+      "time_range": {
+        "start_seconds": 5,
+        "duration_seconds": 7
+      },
+      "visual_unit": {
+        "composition_intent": "Bring the viewer close enough that the door fills the emotional field.",
+        "communication_intent": "The threshold now feels like a choice.",
+        "expectation_turn_translation": "Approach should reveal an answer, but the closer frame makes the absence louder.",
+        "intended_feeling": "intimate dread",
+        "active_tension_profile": "Medium motion, high absence, high proximity.",
+        "traceable_symbolic_representation": "Warm light crossing the threshold without revealing its source.",
+        "shot_design": {
+          "shot_scale": "medium_close_up",
+          "camera_angle": "low_angle",
+          "visual_emphasis": "absence_negative_space",
+          "composition_strategy": "Door edge dominates one side while warm light cuts across the floor.",
+          "emotional_rationale": "The low angle gives the ordinary doorway too much authority.",
+          "avoid": ["revealing the room interior", "decorative clutter"]
+        }
+      },
+      "camera_movement": "held_breath_push",
+      "subject_movement": "light flicker only",
+      "blocking": "The door does not move; the threshold holds.",
+      "transition_in": "hard_cut",
+      "transition_out": "match_cut",
+      "script_ref": "txtblock_vo_threshold_question",
+      "audio_ref": "audio_cue_floor_creak",
+      "on_screen_text_refs": ["txtblock_title_still_open"],
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, medium close-up low angle of a half-open apartment door, warm practical light spilling over floorboards into cool darkness, no person visible, the door edge imposing, negative space beyond the crack withheld, quiet suspense, minimal lower-third title area."
+    },
+    {
+      "shot_id": "vshot_003",
+      "scene_id": "vscene_hallway_threshold",
+      "beat_id": "beat_residue",
+      "key_emotional_movement_id": "kem_after_residue",
+      "time_range": {
+        "start_seconds": 12,
+        "duration_seconds": 8
+      },
+      "visual_unit": {
+        "composition_intent": "Hold on the consequence of not entering.",
+        "communication_intent": "The unanswered invitation remains after the moment should have resolved.",
+        "expectation_turn_translation": "Instead of entering or revealing, the video stays with the mark the light leaves behind.",
+        "intended_feeling": "unresolved residue",
+        "active_tension_profile": "Very low motion, high opacity, high absence.",
+        "traceable_symbolic_representation": "A rectangle of light left on empty floor.",
+        "shot_design": {
+          "shot_scale": "close_up",
+          "camera_angle": "overhead",
+          "visual_emphasis": "symbolic_detail",
+          "composition_strategy": "Crop out the door and show only the warm rectangle of light on the floor.",
+          "emotional_rationale": "Removing the door makes the residue more unsettling than the source.",
+          "avoid": ["explaining the source", "showing feet or a hand"]
+        }
+      },
+      "camera_movement": "locked_off",
+      "subject_movement": "light tremble only",
+      "blocking": "The empty floor holds the aftermath.",
+      "transition_in": "match_cut",
+      "transition_out": "fade_to_black",
+      "script_ref": null,
+      "audio_ref": "audio_cue_room_tone_drop",
+      "on_screen_text_refs": [],
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, overhead close-up of an empty hallway floor with a warm rectangle of light falling across worn boards, door itself cropped out, no people, no objects, quiet unresolved residue, sparse composition, cool shadows around the light."
+    }
+  ],
+  "audio_plan": {
+    "audio_mode": "voiceover",
+    "sound_journey_required": false,
+    "text_generation_plan_refs": ["plan_threshold_reel_script"],
+    "sound_prompt_plan_refs": [],
+    "audio_cues": [
+      {
+        "audio_ref": "audio_cue_hall_tone",
+        "role": "ambient_tone",
+        "description": "Low room tone, barely audible.",
+        "used_by_shot_ids": ["vshot_001"]
+      },
+      {
+        "audio_ref": "audio_cue_floor_creak",
+        "role": "sound_design",
+        "description": "One quiet floorboard creak under the voiceover question.",
+        "used_by_shot_ids": ["vshot_002"]
+      },
+      {
+        "audio_ref": "audio_cue_room_tone_drop",
+        "role": "silence_shift",
+        "description": "The room tone thins into near silence.",
+        "used_by_shot_ids": ["vshot_003"]
+      }
+    ],
+    "notes": "Voiceover carries one question; sound design stays sparse enough for absence to lead."
+  },
+  "text_track_refs": [
+    {
+      "text_block_id": "txtblock_vo_threshold_question",
+      "text_generation_plan_id": "plan_threshold_reel_script",
+      "role": "voiceover",
+      "used_by_shot_ids": ["vshot_002"],
+      "timing_notes": "Starts after the low-angle shot has held for one second."
+    },
+    {
+      "text_block_id": "txtblock_title_still_open",
+      "text_generation_plan_id": "plan_threshold_reel_script",
+      "role": "on_screen_text",
+      "used_by_shot_ids": ["vshot_002"],
+      "timing_notes": "Minimal lower-third title appears for the final two seconds of the shot."
+    }
+  ],
+  "storyboard_generation_policy": {
+    "storyboard_frame_prompts_in_plan": true,
+    "generated_storyboard_stills_allowed": false,
+    "requires_explicit_artist_approval": true,
+    "output_record_required_for_generated_stills": true,
+    "notes": "The fixture validates planning only; no storyboard stills have been generated."
+  },
+  "gates": {
+    "symbology_gate": "complete",
+    "style_gate": "complete",
+    "video_format_gate": "complete",
+    "scene_shot_logic_gate": "complete",
+    "motion_pacing_transition_gate": "complete",
+    "audio_posture_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "video_critic_required": true,
+    "prompt_critic_required": false,
+    "output_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The missing figure remains absent in every shot."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The three storyboard shots preserve invitation, threshold, and residue."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "vmp_threshold_reel_storyboard",
+      "note": "The plan stops at storyboard-ready planning and does not imply finished video generation."
+    }
+  ]
+}

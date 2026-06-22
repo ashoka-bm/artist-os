@@ -209,12 +209,11 @@ Style Direction defines the artistic language used to express the Creative Brief
 
 ### Stage Completion
 
-Artist OS moves through four artist-facing stages: Interpretation, Visualization/Symbolic, Style, and Detail. Do not advance while the current stage still has an unanswered choice unless the artist explicitly says to proceed unconfirmed.
+Artist OS moves through three artist-facing visual planning stages: Interpretation, Visualization/Symbolic, and Style. Do not advance while the current stage still has an unanswered choice unless the artist explicitly says to proceed unconfirmed.
 
 - **Interpretation complete**: Artist Meaning, must-preserve meaning, and emotional language or emotional arc are captured, or unresolved interpretation questions are marked safe to proceed unconfirmed.
 - **Visualization/Symbolic complete**: the artist has selected or combined a symbolic representation, selected single image / compressed arc / image series, and accepted, declined, or requested visualization.
 - **Style complete**: the artist has selected, combined, or named a style, or explicitly allowed an unconfirmed style recommendation to proceed; any offered visualization has been accepted, declined, or requested as a prompt.
-- **Detail complete**: the artist has selected Minimal, Faithful-Balanced, Amplified-Maximal, a combination, or explicitly skipped the detail choice; any offered visualization has been accepted, declined, or requested as a prompt.
 
 Before choosing Style Direction by default, choose Symbology Direction: what the image shows as the core symbolic representation of Artist Meaning. Symbology is closer to meaning than style, so unresolved symbology should be explored visually before style is locked.
 
@@ -224,18 +223,17 @@ At the gate, show only six concise symbolic representations and ask: "Which one 
 
 ### Visual Gate Boards
 
-The Symbology Gate, the Style Gate, and the Minimalist-to-Maximalist Gate all resolve an open decision the same way: by showing the artist the options laid out together in **one image** so they can compare and choose. This shared mechanic is the Comparison Board.
+The Symbology Gate and the Style Gate resolve open visual decisions by showing the artist the options laid out together in **one image** so they can compare and choose. This shared mechanic is the Comparison Board.
 
 A Comparison Board is a single provider-neutral image-generation prompt that renders every option together inside one image as a labeled grid. It is never a list of separate prompts and never several images — the whole point is that one generation produces the full comparison. Store that one prompt as `composite_image_prompt` and store the per-cell content as the `visual_prompt` of each option.
 
 The contract for every board:
 
 - **One image, one prompt, one generation.** The `composite_image_prompt` describes the entire grid as a single image. Do not emit one prompt per option.
-- **Grid layout.** Default to six cells in a 2x3 grid; use three side-by-side panels for the intensity gate. Match the cell count to the number of options, never more than three cells per row. Cells are equal size with a small number label (1..N) and the same framing.
+- **Grid layout.** Default to six cells in a 2x3 grid. Match the cell count to the number of options, never more than three cells per row. Cells are equal size with a small number label (1..N) and the same framing.
 - **Hold everything constant except the dimension under test.** A board isolates one decision so the comparison is honest:
   - **Symbology Board** — vary the symbolic representation; every cell is line art of the subject only, no style.
   - **Style Exploration Board** — vary the style; every tile shows the same locked Symbology subject, pose, and framing so only style language changes.
-  - **Minimalist-to-Maximalist Gate** — vary visual intensity; three panels hold the same locked subject and style while density, layering, complexity, scale, drama, ornament, and negative space change.
 - **Draft versus generate.** Drafting a board means writing its `composite_image_prompt` as text; this needs no provider call and is always allowed. Generating a board means sending that one prompt to a provider to render the image, which requires explicit, per-board generation approval. Both paths produce the same single prompt.
 - **Prompt is internal by default.** Do not show `composite_image_prompt` to the artist at a gate unless they explicitly ask for an image-generator prompt. Show concise option labels or one-line descriptions, then ask the gate question.
 
@@ -334,11 +332,7 @@ Do not preserve surface form by default. Preserve emotional function. Change the
 
 ## Prompt Variant Plans
 
-Before final Prompt Variant Plans are locked, Artist OS should give the artist a visual intensity choice when Minimal, Faithful, and Amplified would materially change the work. By this point Symbology Direction and Style Direction should be selected or narrowed. Use a Minimalist-to-Maximalist Gate, built as a Comparison Board (see "Visual Gate Boards"): one single image of three side-by-side panels that keep the same approved meaning, symbology, Style Direction, and Target Visual Engine, while density, symbolic layering, visual complexity, scale, drama, ornament, and negative space change from Minimal to Faithful/Balanced to Amplified/Maximal. Store the single three-panel prompt as the layout plan's `composite_image_prompt`.
-
-At the gate, show only three concise detail/intensity options and ask: "Would you like them represented or visualized?" Keep the full board prompt internal unless the artist asks for an image-generator prompt.
-
-The Minimalist-to-Maximalist Gate is not a Series Plan and should not reopen symbology or style unless the artist explicitly asks to go back. Ask the artist to select, combine, reject, or revise intensity directions before final prompt locking whenever intensity would materially affect the image.
+After Symbology Direction and Style Direction are locked, Artist OS uses a Prompt Variant Strategy to decide how final Prompt Variant Plans differ while preserving the approved meaning, symbology, Style Direction, Target Visual Engine, Visual Dynamics, and Shot Design. Variation can test density, composition, shot scale, camera angle, symbolic directness, abstraction, color/light strategy, material texture, or emotional pressure. This is not an artist-facing gate by default; ask only when the selected variant strategy would materially change meaning, style, or another approved upstream choice.
 
 The First Slice produces one Provider-Neutral Image Prompt Plan with three Prompt Variant Plans:
 
@@ -352,9 +346,9 @@ Keep the stable labels Faithful, Amplified, and Minimal even when variants test 
 
 The Amplified Prompt Variant may use Derived Symbols, but each Derived Symbol must be marked and traced to the approved Creative Brief.
 
-The three Prompt Variant Plans must create meaningful visual alternatives along the Minimalist-to-Maximalist axis. They should not be three near-identical prompts with adjective changes. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic layering, abstraction level, color/light strategy, texture, finish, negative space, ornament, scale, drama, or focal hierarchy.
+The three Prompt Variant Plans must create meaningful visual alternatives along the selected Prompt Variant Strategy. They should not be three near-identical prompts with adjective changes. Each variant must use concrete differentiators such as composition, camera distance, spatial depth, density, symbolic layering, abstraction level, color/light strategy, texture, finish, negative space, ornament, scale, drama, or focal hierarchy.
 
-When the artist wants one generation for comparison, the three final intensity directions can be packed into a Single-Generation Variant Comparison: three equal square panels in one horizontal image. The left panel carries the Minimal/minimalist direction, the center the Faithful/balanced direction, and the right the Amplified/maximalist direction. This is not a Series Plan; it is a comparison layout for one approved image direction.
+When the artist wants one generated comparison, multiple Prompt Variant Plans can be packed into a Single-Generation Variant Comparison: one image containing labeled panels for the variants under review. This is not a Series Plan; it is a comparison layout for one approved image direction.
 
 ## First Slice
 

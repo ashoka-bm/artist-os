@@ -20,7 +20,6 @@ Text Reference
   -> Art Critic Review
   -> revised Creative Brief Document
   -> Brief Approval
-  -> Minimalist-to-Maximalist Direction
   -> Creative Brief Record
   -> Provider-Neutral Image Prompt Plan
   -> optional Prompt Branch Set

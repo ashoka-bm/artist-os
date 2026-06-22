@@ -182,6 +182,49 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(sound_plan["transformation_brief_id"], beat_plan["transformation_brief_id"])
         self.assertEqual(sound_plan["target_media_type"], "sound")
 
+    def test_beat_plan_to_video_medium_plan(self) -> None:
+        beat_plan = load("tests/fixtures/video-journey/beat-plan.json")
+        video_plan = load("tests/fixtures/video-journey/video-medium-plan.json")
+
+        self.assertEqual(video_plan["beat_plan_id"], beat_plan["beat_plan_id"])
+        self.assertEqual(video_plan["source_id"], beat_plan["source_id"])
+        self.assertEqual(video_plan["artist_meaning_id"], beat_plan["artist_meaning_id"])
+        self.assertEqual(video_plan["transformation_brief_id"], beat_plan["transformation_brief_id"])
+        self.assertEqual(video_plan["target_media_type"], "video")
+        self.assertEqual(video_plan["implementation_scope"], "storyboard_plan")
+        self.assertEqual(video_plan["rendering_status"], "not_supported")
+        self.assertTrue(video_plan["storyboard_generation_policy"]["storyboard_frame_prompts_in_plan"])
+        self.assertFalse(video_plan["storyboard_generation_policy"]["generated_storyboard_stills_allowed"])
+        self.assertTrue(video_plan["storyboard_generation_policy"]["output_record_required_for_generated_stills"])
+        self.assert_long_work_support(video_plan, should_activate=False, label="video medium plan")
+
+        beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+        key_movement_ids = {
+            movement["movement_id"] for movement in beat_plan["key_emotional_movements"]
+        }
+        scene_ids = {scene["scene_id"] for scene in video_plan["video_scenes"]}
+        shot_ids = {shot["shot_id"] for shot in video_plan["storyboard_shots"]}
+        audio_refs = {cue["audio_ref"] for cue in video_plan["audio_plan"]["audio_cues"]}
+        text_refs = {ref["text_block_id"] for ref in video_plan["text_track_refs"]}
+
+        for scene in video_plan["video_scenes"]:
+            self.assertTrue(set(scene["beat_ids"]).issubset(beat_ids))
+
+        for shot in video_plan["storyboard_shots"]:
+            self.assertIn(shot["scene_id"], scene_ids)
+            self.assertIn(shot["beat_id"], beat_ids)
+            self.assertIn(shot["key_emotional_movement_id"], key_movement_ids)
+            self.assertTrue(shot["visual_unit"]["expectation_turn_translation"])
+            self.assertTrue(shot["visual_unit"]["shot_design"]["emotional_rationale"])
+            if shot["audio_ref"] is not None:
+                self.assertIn(shot["audio_ref"], audio_refs)
+            for text_ref in shot["on_screen_text_refs"]:
+                self.assertIn(text_ref, text_refs)
+            if shot["script_ref"] is not None:
+                self.assertIn(shot["script_ref"], text_refs)
+
+        self.assertEqual(len(shot_ids), len(video_plan["storyboard_shots"]))
+
     def test_sound_medium_plan_to_sound_creative_brief(self) -> None:
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")
         sound_brief = load("tests/fixtures/text-to-suno/sound-creative-brief.json")
