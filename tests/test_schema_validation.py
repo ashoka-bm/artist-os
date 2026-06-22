@@ -492,6 +492,29 @@ class SchemaValidationTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValidationError, "missing required field 'approval_refs'"):
                     validate(record, schema, schema)
 
+    def test_image_prompt_plan_accepts_midjourney_provider_target(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "prompt-plan.json"
+        record = load_json(data_path)
+        midjourney_target = record["provider_targets"][0]
+        self.assertEqual(midjourney_target["provider"], "midjourney")
+        self.assertEqual(midjourney_target["provider_prompt_style"], "suffix_parameters")
+        self.assertIn("--ar 4:5", midjourney_target["rendered_suffix"])
+        self.assertEqual(
+            {rendered["variant_type"] for rendered in midjourney_target["rendered_prompts"]},
+            {"faithful", "amplified", "minimal"},
+        )
+        validate_file(schema_path, data_path)
+
+    def test_image_prompt_plan_rejects_unknown_provider_target_parameter(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "prompt-plan.json"
+        record = load_json(data_path)
+        record["provider_targets"][0]["parameters"]["unsupported_midjourney_flag"] = "--foo"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "unsupported_midjourney_flag"):
+            validate(record, schema, schema)
+
     def test_sound_prompt_plan_requires_exactly_three_variants(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"

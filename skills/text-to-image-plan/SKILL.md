@@ -108,10 +108,11 @@ Use this only after Art Critic Review and Brief Approval.
 7. If all three prompts could generate the same image with minor adjective changes, rewrite them.
 8. Mark any Derived Symbols and trace them to Artist Meaning, Transformation Brief, Beat Plan, Image Medium Plan, Core Tension Pairs, Active Visual Tensions, Beats, Tension Points, or Poetic Density notes.
 9. Preserve the governing Expectation Turn Translation and approved Shot Design in each Prompt Variant Plan, either directly in `prompt_text` or explicitly in `critique_checklist`, with traceability back to the Beat Plan or Image Medium Plan.
-10. Include critique criteria for each Prompt Variant Plan.
-11. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_comparison` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
-12. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
-13. For an approved Series Plan, use Long-Work Checkpoints for calibration and any required interval or completion review before producing remaining image-role prompts.
+10. When the artist asks for Midjourney prompts, include a `provider_targets[]` entry with `provider: "midjourney"` and `provider_prompt_style: "suffix_parameters"`. Keep the approved `prompt_variants[]` provider-neutral; put Midjourney controls such as aspect ratio, stylize, chaos, quality, raw, seed policy, style/character refs, and negative prompts in `provider_targets[].parameters`, then emit `rendered_suffix` and `rendered_prompts[].full_prompt` for each variant. For Niji, use the same suffix-parameter shape only when the artist explicitly names Niji or the Midjourney/Niji family. For OpenAI image generation, Leonardo, Stable Diffusion WebUI, ComfyUI, or other tools that use API fields, settings panels, or workflows instead of prompt-end `--` syntax, use a provider target with `api_fields`, `structured_settings`, or `workflow_settings`; do not invent Midjourney suffixes.
+11. Include critique criteria for each Prompt Variant Plan.
+12. Record Symbology and Style exploration boards in `visual_boards`, each with its single `composite_image_prompt`. Set `layout_plan` only to a final output layout: `single_image`, `three_panel_variant_comparison` (carry its `composite_image_prompt`), `series_calibration_image`, or `series_image`. Exploration boards live in `visual_boards`, never in `layout_plan`.
+13. For an approved Series Plan, create only the Series Calibration Image variants first; wait for calibration approval before remaining image-role prompts.
+14. For an approved Series Plan, use Long-Work Checkpoints for calibration and any required interval or completion review before producing remaining image-role prompts.
 
 ## Prompt Branch Set Process
 
@@ -131,6 +132,6 @@ The Symbology Gate is mandatory before style, detail, or final prompt locking un
 
 Before Art Critic Review, return the Image Medium Plan, Creative Brief Document, Beat Plan reference, Symbology Direction, Style Direction, Series Recommendation, and open questions.
 
-After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, and critique checklist for Prompt Critic Review. For image series, also return the Long-Work Stewardship Record and any Long-Work Checkpoint status. When requested, also return a Prompt Branch Set for curator batches.
+After Art Critic Review and Brief Approval, return the Creative Brief Record, Provider-Neutral Image Prompt Plan, layout plan, Faithful/Amplified/Minimal Prompt Variant Plans, differentiators, Derived Symbols if any, provider target outputs when the artist requested a specific generator such as Midjourney, and critique checklist for Prompt Critic Review. For image series, also return the Long-Work Stewardship Record and any Long-Work Checkpoint status. When requested, also return a Prompt Branch Set for curator batches.
 
 When emitted as records, JSON must validate against `schemas/creative-brief.schema.json`, `schemas/prompt-plan.schema.json`, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/prompt-branch-set.schema.json` when branch sets are produced.

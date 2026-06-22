@@ -44,6 +44,8 @@ If the target output is unclear, run a short Orientation before analysis hardens
 
 First ask:
 
+> Turn any reference into a complete creative release system. Transform one idea, source, or inspiration into albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, audio works, and coordinated release packages. Artist OS keeps the core meaning intact while giving the work structure, momentum, and a clear path from raw spark to finished artifact.
+>
 > What do you want to create from this Reference?
 >
 > - **Image**: a single image, sequential image story, portfolio, or collection
@@ -51,7 +53,7 @@ First ask:
 > - **Audio**: a song, instrumental, soundscape, score, spoken word, or other sound work
 > - **Text**: a poem, prose, story, script, lyrics, essay, letter, or other writing
 
-Then ask the medium-specific output-kind question for Image, Audio, or Text. Do not ask a second video question.
+Then ask the medium-specific output-kind question for Image, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes. Do not ask a second video question.
 
 **Image**:
 
@@ -124,7 +126,7 @@ If the artist chooses **Video**, say:
 
 > The video path has not been created yet. I can still help turn this into an image path, audio path, or text path, or capture the video idea as future planning notes.
 
-Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, soundscape, spoken word bed, ritual audio, sound design, or sonic logo → Sound Journey / text-to-Suno flow. Image, visual, illustration, art prompt, picture, portfolio, collection, gallery, storyboard, or sequential stills → text-to-image flow. Text, writing, poem, prose, story, lyrics as written text, script, letter, monologue, essay, manifesto, treatment, rewrite, or adaptation → `skills/text-journey`. If the artist says only "lyrics" without enough context, ask whether they want lyrics as a written text or a song prompt that uses lyrics. Video → unsupported for now; state that the video path has not been created yet and offer the available paths.
+Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, soundscape, spoken word bed, ritual audio, sound design, or sonic logo → Sound Journey / text-to-Suno flow. Image, visual, illustration, art prompt, picture, portfolio, collection, gallery, storyboard, or sequential stills → text-to-image flow. Text, writing, poem, prose, story, lyrics as written text, script, letter, monologue, essay, manifesto, treatment, rewrite, adaptation, novel, book, chapter, manuscript, blog post, Substack post, LinkedIn post, article, newsletter, thought leadership, launch copy, or publishing-prep writing → `skills/text-journey`. If the artist says only "lyrics" without enough context, ask whether they want lyrics as a written text or a song prompt that uses lyrics. Video → unsupported for now; state that the video path has not been created yet and offer the available paths.
 
 Album or sound-primary release package requests route to Album v1 when the artist wants ordered tracks plus supporting visual or text deliverables. EP, Single Bundle, Visual Album, campaign, and broader Release Package subtypes are future sibling routes; capture them as planning notes or ask whether the artist wants to proceed as Album v1.
 

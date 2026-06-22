@@ -772,6 +772,14 @@ _Avoid_: Creative Brief, Transformation Plan
 A Prompt Plan expressed in Artist OS concepts before provider-specific translation.
 _Avoid_: Provider prompt
 
+**Provider Target**:
+An optional Prompt Plan translation block created when the artist requests a specific image generator, such as Midjourney. It stores provider-specific settings, rendered suffixes, and paste-ready prompts while keeping the approved Prompt Variant Plans provider-neutral.
+_Avoid_: Making provider syntax the canonical prompt
+
+**Midjourney Parameter Suffix**:
+The provider-specific prompt-ending controls for Midjourney-family prompts, such as `--ar`, `--s`, `--c`, `--q`, `--seed`, `--raw`, and `--no`.
+_Avoid_: Hiding Midjourney controls in prose, applying Midjourney syntax to providers that use API fields or workflow settings
+
 **Prompt Variant Plan**:
 One provider-neutral prompt direction inside a Provider-Neutral Prompt Plan.
 _Avoid_: Generated Work, Variant before provider-backed generation

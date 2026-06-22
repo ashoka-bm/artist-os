@@ -54,4 +54,6 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 The current First Slice implements this route through the Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The image brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
 
+When the artist asks for Midjourney prompts, keep the Prompt Variant Plans provider-neutral and add a `provider_targets[]` entry for Midjourney. That entry stores structured controls and renders the Midjourney paste-ready suffix / full prompts. Do not add Midjourney `--` parameters to providers that use API fields, settings panels, or workflows.
+
 For image series or other cumulative image work, create a foundation Long-Work Stewardship Record after Story Approval when Project-Level Workflow Scale Routing activates it, then enrich it after the Image Medium Plan maps Beats to Image Roles and records Medium-Level Workflow Scale Routing. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

@@ -9,6 +9,63 @@
   "target_media_type": "image",
   "plan_mode": "single_image",
   "provider_neutral": true,
+  "provider_targets": [
+    {
+      "provider": "midjourney",
+      "request_status": "artist_requested",
+      "provider_prompt_style": "suffix_parameters",
+      "parameters": {
+        "aspect_ratio": "4:5",
+        "negative_prompt": [
+          "explicit horror antagonist",
+          "sentimental melodrama",
+          "glossy fantasy rendering",
+          "show whether the figure enters"
+        ],
+        "seed_policy": "random",
+        "seed": null,
+        "stylize": 150,
+        "chaos": 10,
+        "quality": 1,
+        "raw": false,
+        "tile": false,
+        "stop": null,
+        "weird": null,
+        "style_reference": null,
+        "style_weight": null,
+        "character_reference": null,
+        "character_weight": null,
+        "image_weight": null,
+        "model_version": null,
+        "custom_suffix_tokens": []
+      },
+      "rendered_suffix": "--ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway",
+      "rendered_prompts": [
+        {
+          "variant_type": "faithful",
+          "prompt_text": "Create a cinematic photoreal medium-wide image of a still figure standing at the edge of a lit doorway in a dark concrete domestic space. Keep the whole threshold readable: the figure in partial silhouette, two untouched chairs inside, a cooling cup on a small table, rain softening the outside steps, and a small key held with tenderness and dread. Preserve sparse composition, strong light/dark threshold tension, realistic domestic detail, and unresolved ambiguity.",
+          "suffix": "--ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway",
+          "full_prompt": "Create a cinematic photoreal medium-wide image of a still figure standing at the edge of a lit doorway in a dark concrete domestic space. Keep the whole threshold readable: the figure in partial silhouette, two untouched chairs inside, a cooling cup on a small table, rain softening the outside steps, and a small key held with tenderness and dread. Preserve sparse composition, strong light/dark threshold tension, realistic domestic detail, and unresolved ambiguity. --ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway"
+        },
+        {
+          "variant_type": "amplified",
+          "prompt_text": "Create a cinematic photoreal close image from a low viewpoint near the figure's hand: the small key dominates the foreground, held with tenderness and dread, while the glowing doorway, two untouched chairs, and cooling cup fall into soft shadowed depth behind it. Use restrained surreal symbolism: the key should feel almost animate, like a fragile breath held still, and the doorway light should feel like memory refusing to go dark. Keep the surrounding room shadowed and withholding.",
+          "suffix": "--ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway",
+          "full_prompt": "Create a cinematic photoreal close image from a low viewpoint near the figure's hand: the small key dominates the foreground, held with tenderness and dread, while the glowing doorway, two untouched chairs, and cooling cup fall into soft shadowed depth behind it. Use restrained surreal symbolism: the key should feel almost animate, like a fragile breath held still, and the doorway light should feel like memory refusing to go dark. Keep the surrounding room shadowed and withholding. --ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway"
+        },
+        {
+          "variant_type": "minimal",
+          "prompt_text": "Create a sparse cinematic photoreal wide image: a dark concrete threshold fills most of the frame, a lit doorway sits off-center, and the figure is reduced to a small still silhouette at the edge of the light. Keep only a tiny glint of the key, two barely visible chair shapes inside, and rain outside as quiet evidence. Use matte film grain, large negative space, restrained contrast, and almost no decorative detail. The story should remain unresolved.",
+          "suffix": "--ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway",
+          "full_prompt": "Create a sparse cinematic photoreal wide image: a dark concrete threshold fills most of the frame, a lit doorway sits off-center, and the figure is reduced to a small still silhouette at the edge of the light. Keep only a tiny glint of the key, two barely visible chair shapes inside, and rain outside as quiet evidence. Use matte film grain, large negative space, restrained contrast, and almost no decorative detail. The story should remain unresolved. --ar 4:5 --s 150 --c 10 --q 1 --no explicit horror antagonist sentimental melodrama glossy fantasy rendering figure entering doorway"
+        }
+      ],
+      "notes": [
+        "Midjourney uses prompt-end parameters, so the provider target renders a suffix while keeping prompt_variants provider-neutral.",
+        "Use rendered_prompts[].full_prompt when the artist asks for Midjourney-ready prompts."
+      ]
+    }
+  ],
   "visual_boards": [
     {
       "board_type": "symbology_board",

@@ -9,6 +9,7 @@ The current dry-run workflows are:
 - Text reference to Provider-Neutral Image Prompt Plan.
 - Text reference to Suno Sound Prompt Plan.
 - Text reference to Text Generation Plan and drafted written output (Text Journey).
+- Album v1 Release Package Plan for ordered tracks, album/track cover planning, release copy, and calibration.
 
 Dry-run means the skills produce briefs, prompt plans, lyrics when requested, written drafts, critique records, and metadata. They do not call paid generation providers without explicit approval.
 
@@ -38,7 +39,7 @@ artist-os-human-voice-pass
 
 Restart Codex or open a new thread after installing so skill discovery refreshes.
 
-Start normal end-to-end work with `artist-os`. It asks whether unclear text should become visual art, a Suno music prompt, or written text, then routes through the required gates.
+Start normal end-to-end work with `artist-os`. It turns any reference into a complete creative release system for albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, audio works, and coordinated release packages. It routes unclear work into image, audio, or text through the required gates.
 
 ## Workflows
 

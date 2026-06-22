@@ -129,6 +129,8 @@ A Provider-Neutral Image Prompt Plan is the structured dry-run generation plan c
 
 Prompt Plans must preserve the lineage IDs from the approved Creative Brief and Image Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
 
+When the artist asks for a specific image generator, store that generator in optional `provider_targets[]` rather than changing the canonical `prompt_variants[]`. For Midjourney, set `provider_prompt_style = "suffix_parameters"`, fill structured parameters such as `aspect_ratio`, `stylize`, `chaos`, `quality`, `raw`, `seed_policy`, and `negative_prompt`, then render both `rendered_suffix` and per-variant `rendered_prompts[].full_prompt`. For API or workflow tools such as OpenAI image generation, Leonardo, Stable Diffusion WebUI, or ComfyUI, use the same block only as a provider translation target with `api_fields`, `structured_settings`, or `workflow_settings`; do not invent Midjourney-style `--` suffixes for tools that do not use them.
+
 ### Prompt Branch Set
 
 A Prompt Branch Set is a curator-facing batch of deliberately different prompts derived from one approved Prompt Plan. It validates against `schemas/prompt-branch-set.schema.json`.
@@ -329,7 +331,7 @@ Each Prompt Variant Plan must preserve the governing Expectation Turn Translatio
 
 Derived Symbols are review-visible inside the full Provider-Neutral Prompt Plan and do not require a separate First Slice approval gate.
 
-`schemas/prompt-plan.schema.json` records the Provider-Neutral Image Prompt Plan. It is provider-neutral by design and must not include provider-specific settings, model names, seeds, cost metadata, or output paths.
+`schemas/prompt-plan.schema.json` records the Provider-Neutral Image Prompt Plan. It is provider-neutral by design: `prompt_variants[]` must not include provider-specific settings, model names, seeds, cost metadata, or output paths. Optional `provider_targets[]` may carry provider-specific translations, suffixes, or API/workflow settings when the artist requested a provider-specific prompt output. Provider targets do not authorize provider-backed generation.
 
 `layout_plan` records final output arrangement before provider translation. It does not store pre-locking exploration boards:
 

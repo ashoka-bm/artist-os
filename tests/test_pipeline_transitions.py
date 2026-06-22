@@ -220,6 +220,27 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(prompt_plan["approval_refs"]["prompt_lock_gate_id"], prompt_lock_gate["gate_decision_id"])
         self.assertEqual(prompt_lock_gate["gate_type"], "prompt_lock")
         self.assertIn(("review_record", prompt_review["review_record_id"]), ref_pairs(prompt_lock_gate["upstream_refs"]))
+        midjourney_targets = [
+            target for target in prompt_plan.get("provider_targets", [])
+            if target["provider"] == "midjourney"
+        ]
+        self.assertEqual(len(midjourney_targets), 1)
+        midjourney_target = midjourney_targets[0]
+        self.assertEqual(midjourney_target["provider_prompt_style"], "suffix_parameters")
+        self.assertEqual(midjourney_target["parameters"]["aspect_ratio"], "4:5")
+        self.assertIn("--ar 4:5", midjourney_target["rendered_suffix"])
+        self.assertIn("--no", midjourney_target["rendered_suffix"])
+        provider_variant_types = {
+            rendered_prompt["variant_type"]
+            for rendered_prompt in midjourney_target["rendered_prompts"]
+        }
+        self.assertEqual(provider_variant_types, {"faithful", "amplified", "minimal"})
+        for variant in prompt_plan["prompt_variants"]:
+            self.assertNotIn("--ar", variant["prompt_text"])
+            self.assertNotIn("--no", variant["prompt_text"])
+        for rendered_prompt in midjourney_target["rendered_prompts"]:
+            self.assertIn(rendered_prompt["prompt_text"], rendered_prompt["full_prompt"])
+            self.assertTrue(rendered_prompt["full_prompt"].endswith(rendered_prompt["suffix"]))
 
     def test_image_prompt_plan_to_prompt_branch_set(self) -> None:
         prompt_plan = load("tests/fixtures/text-to-image/prompt-plan.json")

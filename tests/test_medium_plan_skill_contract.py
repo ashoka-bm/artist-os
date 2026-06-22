@@ -171,6 +171,31 @@ class MediumPlanSkillContractTests(unittest.TestCase):
             with self.subTest(skill=skill_path):
                 self.assertIn(FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT, text)
 
+    def test_orientation_keeps_promise_and_four_primary_choices(self) -> None:
+        text = self._read(CONDUCTOR_SKILL)
+        for phrase in [
+            "Turn any reference into a complete creative release system",
+            "raw spark to finished artifact",
+            "- **Image**:",
+            "- **Video**:",
+            "- **Audio**:",
+            "- **Text**:",
+            "Album v1",
+            "Full Long-Form Project",
+        ]:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+        menu = text.split("> What do you want to create from this Reference?", 1)[1].split(
+            "Then ask the medium-specific output-kind question",
+            1,
+        )[0]
+        self.assertNotIn("- **Create an album**:", menu)
+        self.assertNotIn("- **Develop a novel / long-form writing project**:", menu)
+        self.assertNotIn("- **Publish a sharp blog essay**:", menu)
+        self.assertNotIn("- **Launch a Substack piece**:", menu)
+        self.assertNotIn("- **Create a LinkedIn post**:", menu)
+        self.assertNotIn("- **Build a multi-output release package**:", menu)
+
 
 if __name__ == "__main__":
     unittest.main()
