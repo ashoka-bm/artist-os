@@ -26,7 +26,14 @@ if [[ -n "${WONDERMINT_ROOT:-}" ]]; then
   setup_args+=(--wondermint-root "$WONDERMINT_ROOT")
 fi
 
-skills=(
+retired_skills=(
+  # Public skills retired by the single-skill collapse, removed from prior installs.
+  # The first three were never shipped as installed skills — they are defensive cleanup
+  # targets (remove_retired_skill no-ops when absent). The rest are the ten former role
+  # skills, now internal mode files under skills/artist-os/references/.
+  "plan"
+  "review"
+  "editorial-pass"
   "ingest-reference"
   "meaning-interview"
   "text-to-image-plan"
@@ -96,10 +103,40 @@ install_skill() {
 
 install_skill "$repo_root/skills/artist-os" "$skills_dir/artist-os"
 
-for skill in "${skills[@]}"; do
-  source_dir="$repo_root/skills/$skill"
-  target="$skills_dir/$prefix$skill"
-  install_skill "$source_dir" "$target"
+remove_retired_skill() {
+  local target="$1"
+  local expected_name="$2"
+
+  if [[ -L "$target" ]]; then
+    rm "$target"
+    echo "removed retired skill link: $target"
+    return
+  fi
+
+  if [[ -d "$target" ]]; then
+    if [[ ! -f "$target/SKILL.md" ]]; then
+      echo "refusing to remove retired non-skill directory: $target" >&2
+      exit 1
+    fi
+    local target_name
+    target_name="$(awk -F': ' '/^name: / {print $2; exit}' "$target/SKILL.md" | tr -d '"')"
+    if [[ "$target_name" != "$expected_name" ]]; then
+      echo "refusing to remove retired mismatched skill: $target has name '$target_name', expected '$expected_name'" >&2
+      exit 1
+    fi
+    rm -rf "$target"
+    echo "removed retired copied skill: $target"
+    return
+  fi
+
+  if [[ -e "$target" ]]; then
+    echo "refusing to remove retired non-symlink file: $target" >&2
+    exit 1
+  fi
+}
+
+for skill in "${retired_skills[@]}"; do
+  remove_retired_skill "$skills_dir/$prefix$skill" "artist-os-$skill"
 done
 
 if ! doctor_out="$("$repo_root/bin/artist-os-paths" doctor 2>&1)"; then
@@ -122,7 +159,6 @@ $(if [[ -n "$artist_library_root" ]]; then printf 'Artist Library initialized at
 
 Installed skill names:
   - artist-os
-$(for skill in "${skills[@]}"; do printf '  - %s%s\n' "$prefix" "$skill"; done)
 
 Existing copied Artist OS skill directories were updated in place; missing skills were installed as symlinks to this repo.
 Codex may require a new thread or app reload to refresh skill discovery.

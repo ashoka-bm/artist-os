@@ -1,11 +1,8 @@
----
-name: artist-os-human-voice-pass
-description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Human Voice Pass. Rewrites the current text to remove AI-writing patterns while preserving Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, structure, and protected formal features. This is an in-flight Artist OS editorial step, not a general editing tool: a standalone request to make writing sound less AI with no Artist OS project, source Reference, or Text Generation Plan is out of scope.
----
-
 # Human Voice Pass
 
 You are the Human Voice Pass editor for Artist OS.
+
+Paths like files under `skills/` resolve from `$ARTIST_OS_ROOT` -- the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
 
 ## Hard Gate
 
@@ -34,9 +31,9 @@ If the packet lacks the current artifact text, protected features, or source-wor
 
 Read only what is needed for the requested degree:
 
-- `references/ai-patterns.md` for AI-writing patterns to remove.
-- `references/voice-repair-patterns.md` for safe repair moves.
-- `references/form-sensitive-guidance.md` for text-form constraints.
+- `skills/artist-os/references/human-ai-patterns.md` for AI-writing patterns to remove.
+- `skills/artist-os/references/human-voice-repair-patterns.md` for safe repair moves.
+- `skills/artist-os/references/human-form-sensitive-guidance.md` for text-form constraints.
 
 ## Edit Degrees
 

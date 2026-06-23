@@ -1,21 +1,10 @@
 {
-  "purpose": "Multi-class routing eval for the Artist OS skill family. Each query is labeled with the ONE skill that should win. Used to build a confusion matrix and tune competing descriptions together.",
+  "purpose": "Binary routing eval for the public Artist OS skill. Each query is labeled artist-os or none; internal mode-file delegation is covered by conductor and contract tests.",
   "skills": [
     "artist-os",
-    "ingest-reference",
-    "meaning-interview",
-    "text-to-image-plan",
-    "video-journey",
-    "text-to-suno-plan",
-    "text-journey",
-    "art-critic-review",
-    "critique-asset",
-    "writing-method-review",
-    "clear-writing-pass",
-    "human-voice-pass",
     "none"
   ],
-  "policy": "artist-os wins for whole-flow transformations, resume/continue, and cold/ambiguous output-review. A sub-skill wins only when the user clearly asks for one isolated phase on an existing/in-flight project. video-journey owns the isolated video planning phase once meaning exists; v0 produces storyboard-ready Video Medium Plans, not finished video. text-journey owns the isolated text/writing phase once meaning exists (the written-output peer of text-to-image-plan, video-journey, and text-to-suno-plan). The editorial passes clear-writing-pass and human-voice-pass win only when the user explicitly asks to run that named pass on an in-flight text draft; a generic 'make this clearer / sound less AI' request with no Artist OS project is off-domain (none). A bare 'lyrics' request is ambiguous between text-journey (lyrics as written text) and text-to-suno-plan (a song prompt that uses lyrics), and the conductor disambiguates.",
+  "policy": "artist-os wins for every Artist OS request, including cold transformations, resume/continue, source intake, meaning work, image/video/audio/text planning, prompt plans, text drafting, brief review, prompt or output critique, Beat Plan or writing review, editorial passes, and ambiguous output-review. none wins for off-domain work or standalone editing/writing with no Artist OS project, source Reference, or transformation/review intent.",
   "evals": [
     { "id": 1, "query": "i wrote this breakup poem last night and i want to turn it into a set of images for my instagram, no idea where to start", "target": "artist-os", "rationale": "Cold full transformation, no records yet.", "probe": false },
     { "id": 2, "query": "can we pick back up on the 'tidewrack' project? i think we left off right after the style board", "target": "artist-os", "rationale": "Resume/continue an existing project.", "probe": false },
@@ -24,43 +13,43 @@
     { "id": 5, "query": "here's a monologue from a play i'm writing. eventually i want both an image series and a suno track out of it", "target": "artist-os", "rationale": "Whole multi-medium flow.", "probe": false },
     { "id": 6, "query": "continue the artist os project for my dream journal, you already have the brief", "target": "artist-os", "rationale": "Resume.", "probe": false },
 
-    { "id": 7, "query": "before we do anything else, i just want to log the source. it's a 1998 voicemail transcript from my dad, i own the rights since it's mine", "target": "ingest-reference", "rationale": "Explicit isolated reference intake before interpretation.", "probe": false },
-    { "id": 8, "query": "add this reference photo to the project, it's a scan of an old polaroid, not totally sure about the rights", "target": "ingest-reference", "rationale": "Isolated intake on an existing project.", "probe": false },
+    { "id": 7, "query": "before we do anything else, i just want to log the source. it's a 1998 voicemail transcript from my dad, i own the rights since it's mine", "target": "artist-os", "rationale": "Explicit isolated reference intake before interpretation.", "probe": false },
+    { "id": 8, "query": "add this reference photo to the project, it's a scan of an old polaroid, not totally sure about the rights", "target": "artist-os", "rationale": "Isolated intake on an existing project.", "probe": false },
 
-    { "id": 9, "query": "i don't want to make anything yet. help me get clear on what this poem actually means to me and what has to survive if we change it", "target": "meaning-interview", "rationale": "Explicit meaning capture, no production requested.", "probe": false },
-    { "id": 10, "query": "lets just do the meaning part for now. what's the emotional core here, what am i allowed to change, what's off-limits", "target": "meaning-interview", "rationale": "Isolated Artist Meaning phase.", "probe": false },
+    { "id": 9, "query": "i don't want to make anything yet. help me get clear on what this poem actually means to me and what has to survive if we change it", "target": "artist-os", "rationale": "Explicit meaning capture, no production requested.", "probe": false },
+    { "id": 10, "query": "lets just do the meaning part for now. what's the emotional core here, what am i allowed to change, what's off-limits", "target": "artist-os", "rationale": "Isolated Artist Meaning phase.", "probe": false },
 
-    { "id": 11, "query": "meaning's locked for the 'ash & salt' piece, now build the image creative brief and the visual prompt plan", "target": "text-to-image-plan", "rationale": "Isolated image planning after meaning exists.", "probe": false },
-    { "id": 12, "query": "i want a three-image series for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "text-to-image-plan", "rationale": "Image planning, meaning already captured.", "probe": false },
-    { "id": 13, "query": "give me the faithful / amplified / minimal prompt variants for the approved image brief", "target": "text-to-image-plan", "rationale": "Post-approval prompt plan is owned by the image planner, NOT the critic.", "probe": true },
-    { "id": 34, "query": "meaning is locked for the apartment hallway piece. build the video medium plan with scenes, shot list, camera angles, and storyboard prompts", "target": "video-journey", "rationale": "Isolated video planning after meaning exists.", "probe": false },
-    { "id": 35, "query": "i want to turn this journal entry into a short film storyboard from scratch", "target": "artist-os", "rationale": "Cold full text->video transformation; conductor sets up records then delegates to video-journey.", "probe": true },
+    { "id": 11, "query": "meaning's locked for the 'ash & salt' piece, now build the image creative brief and the visual prompt plan", "target": "artist-os", "rationale": "Isolated image planning after meaning exists.", "probe": false },
+    { "id": 12, "query": "i want a three-image series for this. can you do the image medium plan and the series plan? the meaning interview is done", "target": "artist-os", "rationale": "Image planning, meaning already captured.", "probe": false },
+    { "id": 13, "query": "give me the faithful / amplified / minimal prompt variants for the approved image brief", "target": "artist-os", "rationale": "Post-approval prompt plan is owned by the image planner, NOT the critic.", "probe": true },
+    { "id": 34, "query": "meaning is locked for the apartment hallway piece. build the video medium plan with scenes, shot list, camera angles, and storyboard prompts", "target": "artist-os", "rationale": "Isolated video planning after meaning exists.", "probe": false },
+    { "id": 35, "query": "i want to turn this journal entry into a short film storyboard from scratch", "target": "artist-os", "rationale": "Cold full text->video transformation; conductor sets up records then delegates through the video planning mode.", "probe": true },
 
-    { "id": 14, "query": "redo just the sound brief for the existing project, i want to push the genre more toward ambient drone", "target": "text-to-suno-plan", "rationale": "Isolated sound planning on existing project.", "probe": false },
-    { "id": 15, "query": "write the suno custom-mode prompt and the lyrics now that the sound brief is approved", "target": "text-to-suno-plan", "rationale": "Isolated Suno prompt/lyrics phase.", "probe": false },
+    { "id": 14, "query": "redo just the sound brief for the existing project, i want to push the genre more toward ambient drone", "target": "artist-os", "rationale": "Isolated sound planning on existing project.", "probe": false },
+    { "id": 15, "query": "write the suno custom-mode prompt and the lyrics now that the sound brief is approved", "target": "artist-os", "rationale": "Isolated Suno prompt/lyrics phase.", "probe": false },
 
-    { "id": 16, "query": "before i approve this creative brief draft, can you do the art critic pass on it and deepen it", "target": "art-critic-review", "rationale": "Reviews a DRAFT brief pre-approval - the art-critic's exact job.", "probe": false },
-    { "id": 17, "query": "review my sound creative brief document and strengthen it before we lock anything", "target": "art-critic-review", "rationale": "art-critic-review covers both visual and sound briefs (sound_critic role).", "probe": true },
+    { "id": 16, "query": "before i approve this creative brief draft, can you do the art critic pass on it and deepen it", "target": "artist-os", "rationale": "Reviews a DRAFT brief pre-approval - the art-critic's exact job.", "probe": false },
+    { "id": 17, "query": "review my sound creative brief document and strengthen it before we lock anything", "target": "artist-os", "rationale": "Artist OS covers visual and sound brief review through the internal art-critic review mode (sound_critic role).", "probe": true },
 
-    { "id": 18, "query": "critique these 4 generated images against the approved brief. did they actually keep the meaning", "target": "critique-asset", "rationale": "Output-stage critique of generated work vs approved records.", "probe": false },
-    { "id": 19, "query": "run the prompt critic on my provider-neutral prompt plan and the branch set before i generate", "target": "critique-asset", "rationale": "Prompt Plan / Branch Set critique is critique-asset, not art-critic.", "probe": true },
+    { "id": 18, "query": "critique these 4 generated images against the approved brief. did they actually keep the meaning", "target": "artist-os", "rationale": "Output-stage critique of generated work vs approved records.", "probe": false },
+    { "id": 19, "query": "run the prompt critic on my provider-neutral prompt plan and the branch set before i generate", "target": "artist-os", "rationale": "Prompt Plan / Branch Set critique routes to review, not planning.", "probe": true },
 
-    { "id": 20, "query": "review the beat plan for my image series. does each beat actually carry an emotional turn", "target": "writing-method-review", "rationale": "Beat Reviewer mode.", "probe": false },
-    { "id": 21, "query": "i drafted the written shape of the final piece, can you review the beats and fragments", "target": "writing-method-review", "rationale": "Writing-method review of shape/beats/fragments.", "probe": false },
+    { "id": 20, "query": "review the beat plan for my image series. does each beat actually carry an emotional turn", "target": "artist-os", "rationale": "Beat Reviewer mode.", "probe": false },
+    { "id": 21, "query": "i drafted the written shape of the final piece, can you review the beats and fragments", "target": "artist-os", "rationale": "Writing-method review of shape/beats/fragments.", "probe": false },
 
-    { "id": 22, "query": "can you review my image", "target": "artist-os", "rationale": "PROBE: ambiguous cold output-review with no project context; policy routes output-review to the conductor. Tests artist-os vs critique-asset vs art-critic collision.", "probe": true },
-    { "id": 23, "query": "review my brief", "target": "art-critic-review", "rationale": "PROBE: brief review (not output review) is the art-critic's domain even standalone; tests whether it loses to artist-os.", "probe": true },
+    { "id": 22, "query": "can you review my image", "target": "artist-os", "rationale": "PROBE: ambiguous cold output-review with no project context; policy routes output-review to the conductor before review mode.", "probe": true },
+    { "id": 23, "query": "review my brief", "target": "artist-os", "rationale": "PROBE: brief review (not output review) stays inside Artist OS and should route through the conductor before the internal art-critic mode.", "probe": true },
 
     { "id": 24, "query": "summarize this 30-page PDF research report into bullet points for my monday standup", "target": "none", "rationale": "Off-domain; no Artist OS skill should win.", "probe": false },
     { "id": 25, "query": "help me debug why my stripe webhook keeps returning a 400 in the backend repo", "target": "none", "rationale": "Off-domain near-miss (backend work).", "probe": false },
     { "id": 26, "query": "i need to write a short artist statement about my painting for a gallery submission this week", "target": "none", "rationale": "PROBE: even though the text journey now produces written outputs, Artist OS transforms an existing source Reference's meaning into a new medium. This asks to write a statement ABOUT a painting from scratch, with no source text to transform, so it stays out of domain. Tests that the new text path does not over-trigger on generic from-scratch creative-writing requests.", "probe": true },
 
-    { "id": 27, "query": "i transcribed an old voice memo about my dad's workshop and i want to turn it into a short personal essay, no clue where to start", "target": "artist-os", "rationale": "Cold full text->text transformation of an existing source text; conductor orients to the text output, sets up records, then delegates to text-journey. Contrast with id 26, which has no source text to transform.", "probe": true },
-    { "id": 28, "query": "meaning's locked for the 'tidewrack' poem. now build the text medium plan and the writing brief for a prose-poem version", "target": "text-journey", "rationale": "Isolated text planning phase after meaning exists - the written-output peer of id 11.", "probe": false },
-    { "id": 29, "query": "the text brief is approved, draft the monologue now from the generation plan", "target": "text-journey", "rationale": "Isolated text drafting phase on an in-flight project.", "probe": false },
-    { "id": 30, "query": "can you run the human voice pass on the approved draft? it still reads a bit AI and the text gen plan already allows it", "target": "human-voice-pass", "rationale": "PROBE: explicit named editorial pass on an in-flight text draft with policy in place; sub-skill wins over the conductor. Tests human-voice-pass vs artist-os vs clear-writing-pass.", "probe": true },
-    { "id": 31, "query": "do the clear writing pass on the essay draft and tighten the saggy middle section, the plan marks it recommended", "target": "clear-writing-pass", "rationale": "PROBE: explicit named clear-writing pass on an in-flight draft; tests clear-writing-pass vs human-voice-pass vs artist-os.", "probe": true },
-    { "id": 32, "query": "can you tighten up these two paragraphs of my cover letter and cut the fluff", "target": "none", "rationale": "PROBE: clarity-editing keywords overlap clear-writing-pass, but there is no Artist OS project, source Reference, or text generation plan. A naive keyword match would wrongly fire the editorial pass.", "probe": true },
-    { "id": 33, "query": "i want the lyrics from my song written out as an actual poem on the page, not a song prompt", "target": "artist-os", "rationale": "PROBE: 'lyrics' overlaps text-to-suno-plan, but this is a cold request with no records, so per policy the conductor owns it (it disambiguates 'lyrics' then routes to the text journey). The key thing tested is that the 'lyrics' keyword does NOT pull text-to-suno-plan; text-journey would only win as an isolated phase once meaning exists.", "probe": true }
+    { "id": 27, "query": "i transcribed an old voice memo about my dad's workshop and i want to turn it into a short personal essay, no clue where to start", "target": "artist-os", "rationale": "Cold full text->text transformation of an existing source text; conductor orients to the text output, sets up records, then delegates through text planning mode. Contrast with id 26, which has no source text to transform.", "probe": true },
+    { "id": 28, "query": "meaning's locked for the 'tidewrack' poem. now build the text medium plan and the writing brief for a prose-poem version", "target": "artist-os", "rationale": "Isolated text planning phase after meaning exists - the written-output peer of id 11.", "probe": false },
+    { "id": 29, "query": "the text brief is approved, draft the monologue now from the generation plan", "target": "artist-os", "rationale": "Isolated text drafting phase on an in-flight project.", "probe": false },
+    { "id": 30, "query": "can you run the human voice pass on the approved draft? it still reads a bit AI and the text gen plan already allows it", "target": "artist-os", "rationale": "PROBE: explicit named editorial pass on an in-flight Artist OS text draft with policy in place; the public conductor owns routing to the internal Human Voice Pass.", "probe": true },
+    { "id": 31, "query": "do the clear writing pass on the essay draft and tighten the saggy middle section, the plan marks it recommended", "target": "artist-os", "rationale": "PROBE: explicit named Clear Writing Pass on an in-flight Artist OS draft; the public conductor owns routing to the internal pass.", "probe": true },
+    { "id": 32, "query": "can you tighten up these two paragraphs of my cover letter and cut the fluff", "target": "none", "rationale": "PROBE: clarity-editing keywords overlap editorial-pass language, but there is no Artist OS project, source Reference, or text generation plan. A naive keyword match would wrongly fire the editorial pass.", "probe": true },
+    { "id": 33, "query": "i want the lyrics from my song written out as an actual poem on the page, not a song prompt", "target": "artist-os", "rationale": "PROBE: 'lyrics' overlaps sound and text planning, but this is a cold request with no records, so per policy the conductor owns it and disambiguates the text-vs-song route.", "probe": true }
   ]
 }

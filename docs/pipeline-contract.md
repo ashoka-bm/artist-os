@@ -46,7 +46,7 @@ No step advances unless its output validates against the declared schema. Review
 - Input: artist-provided Reference.
 - Output: Source Record.
 - Schema: `schemas/source-record.schema.json`.
-- Skill: `skills/ingest-reference`.
+- Skill: `skills/artist-os/references/ingest-reference.md`.
 - Reviewer required: no.
 - Gate: Routing Gate if target medium is unclear.
 - Next: `meaning.interview`.
@@ -56,7 +56,7 @@ No step advances unless its output validates against the declared schema. Review
 - Input: Source Record and artist answers.
 - Output: Artist Meaning.
 - Schema: `schemas/artist-meaning.schema.json`.
-- Skill: `skills/meaning-interview`.
+- Skill: `skills/artist-os/references/meaning-interview.md`.
 - Reviewer required: Meaning Reviewer when later drift is suspected.
 - Gate: Meaning Confirmation Gate.
 - Next: `story.transformation_brief`.
@@ -183,7 +183,7 @@ Provider adapters must refuse image or Suno generation unless the request includ
 - Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, visual gate decisions.
 - Output: Image Medium Plan.
 - Schema: `schemas/image-medium-plan.schema.json`.
-- Skill: `skills/text-to-image-plan`.
+- Skill: `skills/artist-os/references/text-to-image-plan.md`.
 - Reviewer required: Beat Reviewer sub-agent when the image plan is multi-beat, series, or ambiguous.
 - Gate: Symbology Gate, Presentation Mode inside Symbology Gate, Style Gate.
 - Next: `long_work.stewardship` enrichment when the image work is cumulative, otherwise `image.creative_brief`.
@@ -193,7 +193,7 @@ Provider adapters must refuse image or Suno generation unless the request includ
 - Input: Image Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, visual gate decisions.
 - Output: Creative Brief Record.
 - Schema: `schemas/creative-brief.schema.json`.
-- Skill: `skills/text-to-image-plan`.
+- Skill: `skills/artist-os/references/text-to-image-plan.md`.
 - Reviewer required: Art Critic sub-agent.
 - Gate: Symbology Gate, Style Gate, Brief Approval Gate.
 - Next: `image.prompt_plan`.
@@ -207,7 +207,7 @@ Prompt Variant Strategy runs after Brief Approval when final prompt variants nee
 - Input: approved Creative Brief Record and Image Medium Plan.
 - Output: Provider-Neutral Image Prompt Plan.
 - Schema: `schemas/prompt-plan.schema.json`.
-- Skill: `skills/text-to-image-plan`.
+- Skill: `skills/artist-os/references/text-to-image-plan.md`.
 - Reviewer required: Prompt Critic sub-agent.
 - Gate: Prompt Lock Gate.
 - Next: dry-run completion, Generation Approval Gate, or Output Review.
@@ -219,7 +219,7 @@ The Provider-Neutral Image Prompt Plan must include `transformation_brief_id`, `
 - Input: approved Provider-Neutral Image Prompt Plan, Creative Brief Record, and Image Medium Plan.
 - Output: Prompt Branch Set.
 - Schema: `schemas/prompt-branch-set.schema.json`.
-- Skill: `skills/text-to-image-plan`.
+- Skill: `skills/artist-os/references/text-to-image-plan.md`.
 - Reviewer required: Prompt Critic sub-agent when the branch set will be used for generation or broad curator selection.
 - Gate: Prompt Branch Gate and Generation Approval Gate before provider-backed generation.
 - Next: dry-run curation, Generation Approval Gate, or Output Review.
@@ -235,7 +235,7 @@ The Prompt Branch Set must carry the governing Intended Feeling, Key Emotional M
 - Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, video gate decisions.
 - Output: Video Medium Plan.
 - Schema: `schemas/video-medium-plan.schema.json`.
-- Skill: `skills/video-journey`.
+- Skill: `skills/artist-os/references/video-journey.md`.
 - Reviewer required: Beat Reviewer sub-agent for scene, sequence, trailer, arc, or long-form plans.
 - Gate: Symbology Gate, Style Gate, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture.
 - Next: `long_work.stewardship` enrichment when the video work is cumulative, otherwise `video.creative_brief`.
@@ -247,7 +247,7 @@ The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Seq
 - Input: Video Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, video gate decisions.
 - Output: Video Creative Brief Document and, after future schema hardening, Video Creative Brief Record.
 - Schema: none required in v0 beyond `schemas/video-medium-plan.schema.json`.
-- Skill: `skills/video-journey`.
+- Skill: `skills/artist-os/references/video-journey.md`.
 - Reviewer required: Video Critic sub-agent.
 - Gate: Brief Approval Gate.
 - Next: storyboard-ready package, optional storyboard still Generation Approval Gate, Output Record when storyboard stills are generated or imported.
@@ -261,7 +261,7 @@ The Video Creative Brief compiles the approved Video Medium Plan into an artist-
 - Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, sound gate decisions.
 - Output: Sound Medium Plan.
 - Schema: `schemas/sound-medium-plan.schema.json`.
-- Skill: `skills/text-to-suno-plan`.
+- Skill: `skills/artist-os/references/text-to-suno-plan.md`.
 - Reviewer required: Beat Reviewer sub-agent for multi-section, sequence, or lyric-bearing plans.
 - Gate: Sound Work Type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form.
 - Next: `sound.creative_brief`.
@@ -271,7 +271,7 @@ The Video Creative Brief compiles the approved Video Medium Plan into an artist-
 - Input: Sound Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, sound gate decisions.
 - Output: Sound Creative Brief Record.
 - Schema: `schemas/sound-creative-brief.schema.json`.
-- Skill: `skills/text-to-suno-plan`.
+- Skill: `skills/artist-os/references/text-to-suno-plan.md`.
 - Reviewer required: Sound Critic sub-agent.
 - Gate: Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form, Brief Approval Gate.
 - Next: `sound.prompt_plan`.
@@ -283,7 +283,7 @@ The Sound Creative Brief Record must include `transformation_brief_id` and `beat
 - Input: approved Sound Creative Brief Record and Sound Medium Plan.
 - Output: Suno Sound Prompt Plan.
 - Schema: `schemas/sound-prompt-plan.schema.json`.
-- Skill: `skills/text-to-suno-plan`.
+- Skill: `skills/artist-os/references/text-to-suno-plan.md`.
 - Reviewer required: Prompt Critic sub-agent.
 - Gate: Prompt Lock Gate.
 - Next: dry-run completion, Generation Approval Gate, or Output Review.
@@ -299,7 +299,7 @@ The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-le
 - Input: Beat Plan, Transformation Brief, Artist Meaning, Source Record, text gate decisions.
 - Output: Text Medium Plan.
 - Schema: `schemas/text-medium-plan.schema.json`.
-- Skill: `skills/text-journey`.
+- Skill: `skills/artist-os/references/text-journey.md`.
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, scene, arc, or structurally ambiguous plans.
 - Gate: Research Grounding when applicable, Writing Method, Format Length override when needed, Text Form, Voice / Point of View, Structure, Fidelity / Transformation, Publication / Use.
 - Next: `long_work.stewardship` enrichment when the text work is cumulative, otherwise `text.creative_brief`.
@@ -317,7 +317,7 @@ Each `structure_plan.sections[]` entry must map to a Beat and Key Emotional Move
 - Input: Text Medium Plan, Beat Plan, Transformation Brief, Artist Meaning, Source Record, text gate decisions.
 - Output: Text Creative Brief Record.
 - Schema: `schemas/text-creative-brief.schema.json`.
-- Skill: `skills/text-journey`.
+- Skill: `skills/artist-os/references/text-journey.md`.
 - Reviewer required: Writing Critic sub-agent.
 - Gate: Brief Approval Gate.
 - Next: `text.generation_plan`.
@@ -329,7 +329,7 @@ The Text Creative Brief Record must include `transformation_brief_id`, `beat_pla
 - Input: approved Text Creative Brief Record and Text Medium Plan.
 - Output: Text Generation Plan.
 - Schema: `schemas/text-generation-plan.schema.json`.
-- Skill: `skills/text-journey`.
+- Skill: `skills/artist-os/references/text-journey.md`.
 - Reviewer required: Prompt Critic sub-agent.
 - Gate: Prompt Lock Gate and Draft Generation Approval Gate.
 - Next: fresh-context draft Output Record, editorial rewrite Output Records, Output Critic Review, or Output Acceptance Gate.

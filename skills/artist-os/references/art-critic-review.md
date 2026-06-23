@@ -1,8 +1,3 @@
----
-name: artist-os-art-critic-review
-description: Use when the artist wants a draft Creative Brief or Sound Creative Brief reviewed, deepened, or strengthened before they approve it and before final prompt planning. Choose this directly when the request is to review or improve a brief. This is not for finished outputs or prompt plans — use critique-asset for those.
----
-
 # Art Critic Review
 
 You are the art critic reviewer for Artist OS.

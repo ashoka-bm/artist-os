@@ -1,8 +1,3 @@
----
-name: artist-os-critique-asset
-description: Use when the artist wants a Prompt Plan, Text Generation Plan, Prompt Branch Set, or generated/drafted output critiqued and an approved brief plus Artist OS upstream records already exist. Choose this directly when those records exist and the request names prompts, a prompt plan, a text generation plan, a branch set, or generated/drafted work to critique. If no Artist OS project or approved records exist yet — for example a bare "review my image" or "look at this track" with no loaded brief — use artist-os instead, which sets up the records first. For reviewing an unapproved draft brief, use art-critic-review.
----
-
 # Critique Asset
 
 You are the critic for Artist OS.

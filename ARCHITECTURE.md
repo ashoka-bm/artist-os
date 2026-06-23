@@ -33,7 +33,7 @@ Text Reference
 
 No paid generation call is required for the First Slice.
 
-Use `artist-os` as the normal orchestration skill for this workflow. It moves through the role skills automatically and stops only at artist-input or approval gates. The individual role skills remain available for debugging, resuming, or improving one phase.
+Use `artist-os` as the orchestration skill for this workflow. It moves through the phases automatically, loading the relevant internal mode file on demand, and stops only at artist-input or approval gates. Debugging, resuming, or reworking a single phase happens by asking the conductor — the individual phases are internal mode files, not separately installable skills.
 
 ## Cross-Medium Direction
 

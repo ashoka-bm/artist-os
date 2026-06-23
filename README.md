@@ -7,6 +7,7 @@ Artist OS is a Codex skill bundle for transforming artist-provided text into str
 The current dry-run workflows are:
 
 - Text reference to Provider-Neutral Image Prompt Plan.
+- Text reference to storyboard-ready Video Medium Plan (Video Journey v0).
 - Text reference to Suno Sound Prompt Plan.
 - Text reference to Text Generation Plan and drafted written output (Text Journey).
 - Album v1 Release Package Plan for ordered tracks, album/track cover planning, release copy, and calibration.
@@ -21,25 +22,15 @@ Clone the repo, then install the local skills:
 bin/install-codex-dev-skills
 ```
 
-This installs:
+This installs one public skill:
 
 ```text
 artist-os
-artist-os-ingest-reference
-artist-os-meaning-interview
-artist-os-text-to-image-plan
-artist-os-text-to-suno-plan
-artist-os-text-journey
-artist-os-art-critic-review
-artist-os-writing-method-review
-artist-os-critique-asset
-artist-os-clear-writing-pass
-artist-os-human-voice-pass
 ```
 
 Restart Codex or open a new thread after installing so skill discovery refreshes.
 
-Start normal end-to-end work with `artist-os`. It turns any reference into a complete creative release system for albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, audio works, and coordinated release packages. It routes unclear work into image, audio, or text through the required gates.
+Start all Artist OS work with `artist-os`. It turns any reference into a complete creative release system for albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, video storyboard plans, audio works, and coordinated release packages. It routes unclear work into image, video, audio, or text through the required gates, then loads internal mode files for isolated planning, review, and editorial-pass work.
 
 ## Workflows
 

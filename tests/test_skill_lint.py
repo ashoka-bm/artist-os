@@ -3,7 +3,7 @@ hand, so contributors get fast, offline feedback before a skill ships.
 
 The linter's checks must stay anchored to the SHIPPED resolver logic
 (bin/artist-os-paths) rather than re-declaring the reference regex, so a fixture
-of deliberately-broken skills drives each failure mode RED while the 11 real
+of deliberately-broken skills drives each failure mode RED while the real public
 skills stay GREEN.
 """
 from __future__ import annotations
@@ -94,11 +94,11 @@ class AnchorTests(unittest.TestCase):
             self.assertEqual(linter.lint_skill(skill, root), [])
 
     def test_ref_free_skill_is_not_required_to_have_anchor(self) -> None:
-        # The two editorial passes (clear-writing-pass, human-voice-pass) name no
-        # repo-root paths and so must NOT be flagged for a missing anchor.
+        # A ref-free skill names no repo-root paths and so must NOT be flagged
+        # for a missing anchor.
         with tempfile.TemporaryDirectory() as tmp:
             root = make_root(tmp)
-            skill = make_skill(root, "foo", FM, body="A pass that names no docs/ or schemas/.")
+            skill = make_skill(root, "foo", FM, body="A pass that names no docs/, schemas/, or skills/.")
             self.assertEqual(linter.lint_skill(skill, root), [])
 
 
@@ -228,8 +228,8 @@ class CliTests(unittest.TestCase):
 
 class RealSkillsTests(unittest.TestCase):
     def test_all_real_skills_pass(self) -> None:
-        # The 11 shipped skills are the green baseline: the linter must not flag
-        # any of them, or it would block every contributor on a false positive.
+        # The shipped public skill set is the green baseline: the linter must not
+        # flag any of them, or it would block every contributor on a false positive.
         failures: dict[str, list[str]] = {}
         for skill_md in sorted((REPO / "skills").glob("*/SKILL.md")):
             result = linter.lint_skill(skill_md, REPO)

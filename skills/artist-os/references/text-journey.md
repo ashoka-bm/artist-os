@@ -1,8 +1,3 @@
----
-name: artist-os-text-journey
-description: Use when the artist wants the text/writing path once Artist Meaning exists — building or revising a Text Medium Plan, Text Creative Brief, Text Generation Plan, fresh-context written draft, or text editorial pass flow. Choose this directly, not the artist-os conductor, when the request is just this text step.
----
-
 # Text Journey
 
 You are the text translation and drafting director for Artist OS. Build the Text Journey: preserve Artist Meaning through written form, structure, voice, source-wording policy, fresh-context drafting, editorial passes, Output Records, and review.
@@ -23,7 +18,7 @@ Load details only when needed:
 - `schemas/text-creative-brief.schema.json` after Writing Critic Review and Brief Approval.
 - `schemas/text-generation-plan.schema.json` after Brief Approval and prompt/generation planning.
 - `schemas/output-record.schema.json` for every concrete draft or rewrite artifact.
-- `skills/clear-writing-pass` and `skills/human-voice-pass` only for the separate editorial passes after a conforming draft exists.
+- `skills/artist-os/references/clear-writing-pass.md` and `skills/artist-os/references/human-voice-pass.md` only for separate editorial passes after a conforming draft exists.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 
 ## Hard Gates
@@ -145,8 +140,8 @@ For cumulative long text, update the Long-Work Stewardship Record when a section
 
 Run editorial passes only after the main agent confirms the draft follows the Text Generation Plan.
 
-1. Clear Writing Pass: use `skills/clear-writing-pass` when required or recommended by the Text Generation Plan.
-2. Human Voice Pass: use `skills/human-voice-pass` by default unless the Text Generation Plan marks it optional or skipped.
+1. Clear Writing Pass: use `skills/artist-os/references/clear-writing-pass.md` when required or recommended by the Text Generation Plan.
+2. Human Voice Pass: use `skills/artist-os/references/human-voice-pass.md` by default unless the Text Generation Plan marks it optional or skipped.
 3. Each pass runs in its own bounded fresh-context sub-agent.
 4. Each pass receives only the current artifact text, the relevant policy, protected features, necessary brief constraints, and do-not-change rules.
 5. Each pass produces a rewritten artifact plus a compact change trace.

@@ -8,9 +8,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 REVIEWER_SKILLS = [
-    ("skills/art-critic-review/SKILL.md", "artist-os-art-critic-review"),
-    ("skills/critique-asset/SKILL.md", "artist-os-critique-asset"),
-    ("skills/writing-method-review/SKILL.md", "artist-os-writing-method-review"),
+    ("skills/artist-os/references/art-critic-review.md", "artist-os-art-critic-review"),
+    ("skills/artist-os/references/critique-asset.md", "artist-os-critique-asset"),
+    ("skills/artist-os/references/writing-method-review.md", "artist-os-writing-method-review"),
 ]
 
 
@@ -21,12 +21,21 @@ REVIEWER_SKILLS = [
 # (writing-method-review) enforces a different contract section and is
 # intentionally excluded.
 MEDIUM_CRITIC_SKILLS = [
-    "skills/art-critic-review/SKILL.md",
-    "skills/critique-asset/SKILL.md",
+    "skills/artist-os/references/art-critic-review.md",
+    "skills/artist-os/references/critique-asset.md",
 ]
+
+CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
 
 
 class ReviewerSkillContractTests(unittest.TestCase):
+    def test_conductor_exposes_review_modes(self) -> None:
+        text = (REPO_ROOT / CONDUCTOR_SKILL).read_text(encoding="utf-8")
+        self.assertIn("Internal mode map", text)
+        for skill_path, _source_skill in REVIEWER_SKILLS:
+            with self.subTest(skill=skill_path):
+                self.assertIn(skill_path, text)
+
     def test_reviewer_skills_require_schema_valid_review_record_first(self) -> None:
         required_fragments = [
             "schemas/review-record.schema.json",

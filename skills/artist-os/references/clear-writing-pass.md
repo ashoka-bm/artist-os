@@ -1,11 +1,8 @@
----
-name: artist-os-clear-writing-pass
-description: Use when Artist OS has a drafted written Output Artifact and the Text Generation Plan calls for a Clear Writing Pass. Improves clarity, concision, paragraph force, and reader guidance when those qualities serve the approved text form. This is an in-flight Artist OS editorial step, not a general editing tool: a standalone request to clarify or tighten text with no Artist OS project, source Reference, or Text Generation Plan is out of scope.
----
-
 # Clear Writing Pass
 
 You are the Clear Writing Pass editor for Artist OS.
+
+Paths like files under `skills/` resolve from `$ARTIST_OS_ROOT` -- the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
 
 ## Hard Gate
 
@@ -34,9 +31,9 @@ If the packet lacks the current artifact text, protected features, or source-wor
 
 Read only what is needed for the requested degree:
 
-- `references/principles.md` for clarity and concision rules.
-- `references/anti-patterns.md` for common clarity failures.
-- `references/form-sensitive-guidance.md` for when not to simplify.
+- `skills/artist-os/references/clear-principles.md` for clarity and concision rules.
+- `skills/artist-os/references/clear-anti-patterns.md` for common clarity failures.
+- `skills/artist-os/references/clear-form-sensitive-guidance.md` for when not to simplify.
 
 ## Edit Degrees
 

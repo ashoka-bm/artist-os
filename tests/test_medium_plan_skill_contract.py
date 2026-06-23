@@ -7,9 +7,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-# Cheap regression guard for leanness work on the always-loaded medium-plan
-# skills. These two skills carry the most always-loaded text, so they are the
-# prime targets for trimming (progressive disclosure) and cross-file dedup.
+# Cheap regression guard for leanness work on the internal medium-plan modes.
+# The public `artist-os` skill stays small; these internal files carry the
+# load-bearing mode behavior and remain protected by contract tests.
 #
 # The guard pins what must SURVIVE a leanness edit, not the prose that may
 # legitimately move out:
@@ -35,8 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 # word-for-word interview script). Pinning those would block the dedup this
 # guard is meant to make safe.
 MEDIUM_PLAN_SKILLS = {
-    "skills/text-to-image-plan/SKILL.md": {
-        "frontmatter_name": "artist-os-text-to-image-plan",
+    "skills/artist-os/references/text-to-image-plan.md": {
         "canonical_refs": [
             "docs/gates-and-reviews.md",
             "THEORY.md",
@@ -66,8 +65,7 @@ MEDIUM_PLAN_SKILLS = {
             "schemas/prompt-branch-set.schema.json",
         ],
     },
-    "skills/text-to-suno-plan/SKILL.md": {
-        "frontmatter_name": "artist-os-text-to-suno-plan",
+    "skills/artist-os/references/text-to-suno-plan.md": {
         "canonical_refs": [
             "docs/gates-and-reviews.md",
             "docs/text-to-sound/THEORY.md",
@@ -98,6 +96,38 @@ MEDIUM_PLAN_SKILLS = {
             "schemas/sound-prompt-plan.schema.json",
         ],
     },
+    "skills/artist-os/references/video-journey.md": {
+        "canonical_refs": [
+            "docs/output-journeys/video.md",
+            "docs/gates-and-reviews.md",
+            "THEORY.md",
+        ],
+        "format_refs": [
+            "Visual Gate Boards",
+        ],
+        "hard_gates": [
+            "standalone run has no conductor",
+            "Never call a video, image, sound, or render provider without explicit approval",
+            "Do not claim finished video generation is supported in v0",
+            "Do not create a Video Prompt Plan in v0",
+            "Do not create generated storyboard stills without Generation Approval",
+            "Chat context is not durable storage",
+        ],
+        "anchors": [
+            "Storyboard Shot",
+            "Video Audio Posture",
+            "Expectation Turn",
+            "Intended Feeling",
+            "Shot Design",
+        ],
+        "schema_ids": [
+            "schemas/transformation-brief.schema.json",
+            "schemas/beat-plan.schema.json",
+            "schemas/video-medium-plan.schema.json",
+            "schemas/long-work-stewardship-record.schema.json",
+            "schemas/output-record.schema.json",
+        ],
+    },
 }
 
 CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
@@ -112,13 +142,12 @@ class MediumPlanSkillContractTests(unittest.TestCase):
     def _read(self, skill_path: str) -> str:
         return (REPO_ROOT / skill_path).read_text(encoding="utf-8")
 
-    def test_keeps_routing_identity(self) -> None:
-        # A leanness refactor must not rename the skill out from under the
-        # routing eval and conductor delegation table.
-        for skill_path, spec in MEDIUM_PLAN_SKILLS.items():
-            text = self._read(skill_path)
+    def test_conductor_exposes_medium_modes(self) -> None:
+        text = self._read(CONDUCTOR_SKILL)
+        self.assertIn("Internal mode map", text)
+        for skill_path in MEDIUM_PLAN_SKILLS:
             with self.subTest(skill=skill_path):
-                self.assertIn(f"name: {spec['frontmatter_name']}", text)
+                self.assertIn(skill_path, text)
 
     def test_keeps_canonical_doc_references(self) -> None:
         # Dedup-by-reference may remove a restated rule, but never the pointer

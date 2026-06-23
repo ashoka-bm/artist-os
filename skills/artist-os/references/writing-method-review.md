@@ -1,8 +1,3 @@
----
-name: artist-os-writing-method-review
-description: Use when the artist wants writing reviewed — a Beat Plan or beat-by-beat journey structure, story beats, lyric movement, writing fragments, or the finished written shape of a piece. Choose this directly when the request is to review beats or writing.
----
-
 # Writing Method Review
 
 You are the writing method reviewer for Artist OS.
@@ -21,9 +16,9 @@ Always check for drift: where the artifact moved away from the source material, 
 
 Read the matching source file before reviewing:
 
-- Fragment Review: `references/writing-fragments.SKILL.md`
-- Beat Review: `references/writing-beats.SKILL.md`
-- Shape Review: `references/writing-shape.SKILL.md`
+- Fragment Review: `docs/writing/references/writing-fragments.SKILL.md`
+- Beat Review: `docs/writing/references/writing-beats.SKILL.md`
+- Shape Review: `docs/writing/references/writing-shape.SKILL.md`
 
 If this skill conflicts with one of those references, prefer the reference for writing-method behavior.
 
@@ -74,7 +69,7 @@ Block when Beats name only facts, events, or symbols without an intended feeling
 
 ### Shape Reviewer
 
-Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing. This is the mode the `artist-os` conductor and `skills/text-journey` mean by "Writing Critic Review" (Phase Order step 9, "Writing Critic mode" for text): run Shape Reviewer against the Text Creative Brief before Brief Approval, and against the written draft when reviewing a finished piece.
+Use when reviewing a Text Creative Brief, finished written artifact, or in-progress written artifact that should become reader-facing. This is the mode the `artist-os` conductor and `skills/artist-os/references/text-journey.md` mean by "Writing Critic Review" (Phase Order step 9, "Writing Critic mode" for text): run Shape Reviewer against the Text Creative Brief before Brief Approval, and against the written draft when reviewing a finished piece.
 
 Check:
 
