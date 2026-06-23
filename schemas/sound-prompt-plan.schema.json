@@ -597,6 +597,51 @@
             }
           },
           "platform_renderings": {
+            "items": {
+              "type": "object",
+              "if": {
+                "required": [
+                  "platform"
+                ],
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "const": "suno"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "outputs": {
+                    "type": "object",
+                    "properties": {
+                      "suno_custom_mode_outputs": {
+                        "type": "object",
+                        "properties": {
+                          "instrumental": {
+                            "type": "boolean",
+                            "const": false
+                          },
+                          "lyrics": {
+                            "type": "object",
+                            "properties": {
+                              "mode": {
+                                "type": "string",
+                                "const": "custom"
+                              },
+                              "text": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "contains": {
               "type": "object",
               "required": [
@@ -626,16 +671,43 @@
                           "properties": {
                             "mode": {
                               "type": "string",
-                              "enum": [
-                                "custom",
-                                "generate_in_suno"
-                              ]
+                              "const": "custom"
                             },
                             "text": {
                               "type": "string",
                               "minLength": 1
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "prompt_variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "platform_output_intent": {
+                  "type": "object",
+                  "properties": {
+                    "instrumental": {
+                      "type": "boolean",
+                      "const": false
+                    },
+                    "lyrics": {
+                      "type": "object",
+                      "properties": {
+                        "mode": {
+                          "type": "string",
+                          "const": "custom"
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1
                         }
                       }
                     }
@@ -675,10 +747,59 @@
               "present": {
                 "type": "boolean",
                 "const": false
+              },
+              "text": {
+                "type": "string",
+                "const": ""
               }
             }
           },
           "platform_renderings": {
+            "items": {
+              "type": "object",
+              "if": {
+                "required": [
+                  "platform"
+                ],
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "const": "suno"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "outputs": {
+                    "type": "object",
+                    "properties": {
+                      "suno_custom_mode_outputs": {
+                        "type": "object",
+                        "properties": {
+                          "instrumental": {
+                            "type": "boolean",
+                            "const": true
+                          },
+                          "lyrics": {
+                            "type": "object",
+                            "properties": {
+                              "mode": {
+                                "type": "string",
+                                "const": "none"
+                              },
+                              "text": {
+                                "type": "string",
+                                "const": ""
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "contains": {
               "type": "object",
               "required": [
@@ -709,8 +830,42 @@
                             "mode": {
                               "type": "string",
                               "const": "none"
+                            },
+                            "text": {
+                              "type": "string",
+                              "const": ""
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "prompt_variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "platform_output_intent": {
+                  "type": "object",
+                  "properties": {
+                    "instrumental": {
+                      "type": "boolean",
+                      "const": true
+                    },
+                    "lyrics": {
+                      "type": "object",
+                      "properties": {
+                        "mode": {
+                          "type": "string",
+                          "const": "none"
+                        },
+                        "text": {
+                          "type": "string",
+                          "const": ""
                         }
                       }
                     }
@@ -758,6 +913,51 @@
             }
           },
           "platform_renderings": {
+            "items": {
+              "type": "object",
+              "if": {
+                "required": [
+                  "platform"
+                ],
+                "properties": {
+                  "platform": {
+                    "type": "string",
+                    "const": "suno"
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "outputs": {
+                    "type": "object",
+                    "properties": {
+                      "suno_custom_mode_outputs": {
+                        "type": "object",
+                        "properties": {
+                          "instrumental": {
+                            "type": "boolean",
+                            "const": false
+                          },
+                          "lyrics": {
+                            "type": "object",
+                            "properties": {
+                              "mode": {
+                                "type": "string",
+                                "const": "generate_in_suno"
+                              },
+                              "text": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "contains": {
               "type": "object",
               "required": [
@@ -794,6 +994,36 @@
                               "minLength": 1
                             }
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "prompt_variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "platform_output_intent": {
+                  "type": "object",
+                  "properties": {
+                    "instrumental": {
+                      "type": "boolean",
+                      "const": false
+                    },
+                    "lyrics": {
+                      "type": "object",
+                      "properties": {
+                        "mode": {
+                          "type": "string",
+                          "const": "generate_in_suno"
+                        },
+                        "text": {
+                          "type": "string",
+                          "minLength": 1
                         }
                       }
                     }

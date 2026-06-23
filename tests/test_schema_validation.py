@@ -589,6 +589,30 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "expected const True"):
             validate(record, schema, schema)
 
+    def test_sound_prompt_plan_rejects_generated_suno_lyrics_when_lyrics_are_approved(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        self.assertEqual(record["vocal_lyric_policy"]["lyrics_mode"], "new_lyrics")
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["lyrics"]["mode"] = "generate_in_suno"
+        suno_outputs["lyrics"]["text"] = "Generate fitting lyrics from the prompt."
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'custom'"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_generated_variant_intent_when_lyrics_are_approved(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        self.assertEqual(record["vocal_lyric_policy"]["lyrics_mode"], "new_lyrics")
+        intent = record["prompt_variants"][0]["platform_output_intent"]
+        intent["lyrics"]["mode"] = "generate_in_suno"
+        intent["lyrics"]["text"] = "Generate fitting lyrics from the prompt."
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'custom'"):
+            validate(record, schema, schema)
+
     def test_sound_prompt_plan_accepts_phonetic_vocals_custom_mode_mapping(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
         data_path = (
@@ -634,8 +658,54 @@ class SchemaValidationTests(unittest.TestCase):
         suno_outputs["instrumental"] = True
         suno_outputs["lyrics"]["mode"] = "none"
         suno_outputs["lyrics"]["text"] = ""
+        for variant in record["prompt_variants"]:
+            intent = variant["platform_output_intent"]
+            intent["instrumental"] = True
+            intent["lyrics"]["mode"] = "none"
+            intent["lyrics"]["text"] = ""
         schema = load_json(schema_path)
         validate(record, schema, schema)  # instrumental branch must validate
+
+    def test_sound_prompt_plan_rejects_instrumental_suno_rendering_with_lyrics_text(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["vocal_lyric_policy"]["lyrics_mode"] = "instrumental"
+        record["lyrics"]["present"] = False
+        record["lyrics"]["text"] = ""
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["instrumental"] = True
+        suno_outputs["lyrics"]["mode"] = "none"
+        suno_outputs["lyrics"]["text"] = "These words should not be here."
+        for variant in record["prompt_variants"]:
+            intent = variant["platform_output_intent"]
+            intent["instrumental"] = True
+            intent["lyrics"]["mode"] = "none"
+            intent["lyrics"]["text"] = ""
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const ''"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_instrumental_variant_intent_with_lyrics_text(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["vocal_lyric_policy"]["lyrics_mode"] = "instrumental"
+        record["lyrics"]["present"] = False
+        record["lyrics"]["text"] = ""
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["instrumental"] = True
+        suno_outputs["lyrics"]["mode"] = "none"
+        suno_outputs["lyrics"]["text"] = ""
+        for variant in record["prompt_variants"]:
+            intent = variant["platform_output_intent"]
+            intent["instrumental"] = True
+            intent["lyrics"]["mode"] = "none"
+            intent["lyrics"]["text"] = ""
+        record["prompt_variants"][0]["platform_output_intent"]["lyrics"]["text"] = "These words should not be here."
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const ''"):
+            validate(record, schema, schema)
 
     def test_sound_prompt_plan_rejects_non_suno_renderer_for_suno_platform(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
