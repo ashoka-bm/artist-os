@@ -7,11 +7,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-# Cheap regression guard for the Text Journey Slice skills. They shipped with
-# routing-eval coverage (the `description:` triggers correctly) but no
-# body-contract guard, unlike the reviewer family
-# (test_reviewer_skill_contract.py) and the medium-plan family
-# (test_medium_plan_skill_contract.py). This closes that gap.
+# Cheap regression guard for the Text Journey Slice mode files behind the public
+# Artist OS conductor. Routing coverage now happens at the conductor level; these
+# tests protect the internal behavior it loads.
 #
 # Same philosophy as the medium-plan guard: pin what must SURVIVE a leanness or
 # dedup edit -- routing identity, canonical-doc pointers, standalone hard gates,
@@ -21,16 +19,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 # Two contract shapes live in one file because these three skills ship together
 # as one feature but are structurally different:
 #
-#   * text-journey is a journey DIRECTOR, a sibling of the text-to-image-plan /
-#     text-to-suno-plan medium-plan skills. Guarded with the same structured
-#     dict the medium-plan guard uses.
+#   * text-journey is a journey DIRECTOR loaded by `artist-os`.
 #   * clear-writing-pass / human-voice-pass are bounded editorial-pass
-#     SUB-AGENTS. Their load-bearing invariant is the boundary that separates
-#     them from the Output Critic: they rewrite the artifact and MUST NOT emit a
-#     Review Record. Guarded with a shared required-fragment list.
+#     SUB-AGENTS loaded by `artist-os`. Their load-bearing
+#     invariant is the boundary that separates them from the Output Critic: they
+#     rewrite the artifact and MUST NOT emit a Review Record.
 
 
-TEXT_JOURNEY_SKILL = "skills/text-journey/SKILL.md"
+CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
+TEXT_JOURNEY_SKILL = "skills/artist-os/references/text-journey.md"
 FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
     "If medium-level `workflow_scale_routing.activated_supports` newly includes "
     "`long_work_stewardship` and no foundation record exists, create the "
@@ -39,7 +36,6 @@ FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
 
 # The director skill. Mirrors MEDIUM_PLAN_SKILLS in the medium-plan guard.
 TEXT_JOURNEY_SPEC = {
-    "frontmatter_name": "artist-os-text-journey",
     # Pointers to single-source-of-truth docs. Dedup may collapse a restated
     # rule, but the pointer itself must remain or the rule becomes unreachable.
     "canonical_refs": [
@@ -88,8 +84,8 @@ TEXT_JOURNEY_SPEC = {
 
 # The two editorial passes. Mirrors REVIEWER_SKILLS in the reviewer guard.
 EDITORIAL_PASS_SKILLS = [
-    ("skills/clear-writing-pass/SKILL.md", "artist-os-clear-writing-pass"),
-    ("skills/human-voice-pass/SKILL.md", "artist-os-human-voice-pass"),
+    "skills/artist-os/references/clear-writing-pass.md",
+    "skills/artist-os/references/human-voice-pass.md",
 ]
 
 
@@ -97,12 +93,10 @@ class TextJourneyDirectorContractTests(unittest.TestCase):
     def _read(self) -> str:
         return (REPO_ROOT / TEXT_JOURNEY_SKILL).read_text(encoding="utf-8")
 
-    def test_keeps_routing_identity(self) -> None:
-        # A leanness refactor must not rename the skill out from under the
-        # routing eval and conductor delegation table.
-        self.assertIn(
-            f"name: {TEXT_JOURNEY_SPEC['frontmatter_name']}", self._read()
-        )
+    def test_conductor_exposes_text_journey_mode(self) -> None:
+        text = (REPO_ROOT / CONDUCTOR_SKILL).read_text(encoding="utf-8")
+        self.assertIn("Internal mode map", text)
+        self.assertIn(TEXT_JOURNEY_SKILL, text)
 
     def test_keeps_canonical_doc_references(self) -> None:
         # Dedup-by-reference may remove a restated rule, but never the pointer
@@ -153,15 +147,17 @@ class EditorialPassContractTests(unittest.TestCase):
     def _read(self, skill_path: str) -> str:
         return (REPO_ROOT / skill_path).read_text(encoding="utf-8")
 
-    def test_keeps_routing_identity(self) -> None:
-        for skill_path, name in EDITORIAL_PASS_SKILLS:
+    def test_conductor_exposes_editorial_pass_modes(self) -> None:
+        text = (REPO_ROOT / CONDUCTOR_SKILL).read_text(encoding="utf-8")
+        self.assertIn("Internal mode map", text)
+        for skill_path in EDITORIAL_PASS_SKILLS:
             with self.subTest(skill=skill_path):
-                self.assertIn(f"name: {name}", self._read(skill_path))
+                self.assertIn(skill_path, text)
 
     def test_runs_as_bounded_rewrite_only_sub_agent(self) -> None:
         # The pass rewrites the current artifact in a fresh-context sub-agent;
         # it must never start a piece from scratch.
-        for skill_path, _name in EDITORIAL_PASS_SKILLS:
+        for skill_path in EDITORIAL_PASS_SKILLS:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
                 self.assertIn("bounded fresh-context editorial sub-agent", text)
@@ -173,7 +169,7 @@ class EditorialPassContractTests(unittest.TestCase):
     def test_keeps_packet_completeness_gate(self) -> None:
         # If the packet lacks the artifact text, protected features, or
         # source-wording policy, the pass stops and asks -- it does not improvise.
-        for skill_path, _name in EDITORIAL_PASS_SKILLS:
+        for skill_path in EDITORIAL_PASS_SKILLS:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
                 self.assertIn("protected features", text)
@@ -184,7 +180,7 @@ class EditorialPassContractTests(unittest.TestCase):
         # Degrees exist and the deep degree is gated on Text Generation Plan
         # authorization, so a pass cannot restructure on its own initiative.
         # Form sensitivity keeps it from flattening poems, lyrics, etc.
-        for skill_path, _name in EDITORIAL_PASS_SKILLS:
+        for skill_path in EDITORIAL_PASS_SKILLS:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
                 for degree in ("Light", "Standard", "Deep"):
@@ -193,7 +189,7 @@ class EditorialPassContractTests(unittest.TestCase):
                 self.assertIn("Do not flatten", text)
 
     def test_keeps_rewrite_output_contract(self) -> None:
-        for skill_path, _name in EDITORIAL_PASS_SKILLS:
+        for skill_path in EDITORIAL_PASS_SKILLS:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
                 for field in (
@@ -209,7 +205,7 @@ class EditorialPassContractTests(unittest.TestCase):
         # The load-bearing boundary: an editorial pass rewrites; it does NOT
         # emit a Review Record. Blurring this would let a polish step
         # masquerade as Output Critic Review and skip the real gate.
-        for skill_path, _name in EDITORIAL_PASS_SKILLS:
+        for skill_path in EDITORIAL_PASS_SKILLS:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
                 self.assertIn("Do not emit a Review Record", text)

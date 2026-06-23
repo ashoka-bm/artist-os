@@ -10,9 +10,10 @@ skills are packaged and installed across hosts. It is not build output.
   future per-host generator; their transform fields are `null` until a host
   actually diverges. See ADR 0008.
 - `MANIFEST.json` — the authoritative set of files that must travel with an
-  installed bundle so skill-body paths resolve from `$ARTIST_OS_ROOT`, plus an
-  exclusion list that keeps private state (`workspace-library/`,
-  `artist-os-library/`, `*.sqlite`, `.env`, …) out of any bundle.
+  installed bundle so the public skill body and internal mode files resolve
+  paths from `$ARTIST_OS_ROOT`, plus an exclusion list that keeps private state
+  (`workspace-library/`, `artist-os-library/`, `*.sqlite`, `.env`, …) out of any
+  bundle.
 
 `globalRoot` in the registry is **relative to `$HOME`** (e.g. `.codex/skills`
 means `$HOME/.codex/skills`); a host installer may override the base (Codex via
@@ -46,8 +47,9 @@ manifest path, or any file named in a skill body, is missing under the root.
 
 Everything the `MANIFEST.json` include list ships — the canonical root docs
 (`THEORY.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CONTEXT.md`), the
-`artist_os_schema_validator.py` module, `bin/`, `docs/`, `schemas/`, `skills/`,
-and this `packaging/` dir — is the single source of truth, edited by hand. The
+`artist_os_schema_validator.py` module, `bin/`, `docs/`, `schemas/`, the public
+`artist-os` skill plus internal mode files under `skills/artist-os/references/`, and this `packaging/`
+dir — is the single source of truth, edited by hand. The
 future generator (`bin/artist-os-generate`, ADR 0008 "Later") will write
 per-host install trees to `packaging/build/<host>/` (gitignored) carrying an
 `AUTO-GENERATED — do not edit` header; those are never edited by hand. See

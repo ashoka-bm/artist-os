@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Faithful multi-class routing eval for the Artist OS skill family.
+"""Faithful routing eval for the public Artist OS skill surface.
 
 Unlike the meta-prompt approach (which asks the model "which would you pick?"
 and is dominated by framing), this mirrors the skill-creator's validated method:
 install all skills as real available skills, fire the RAW user query with no
 framing, and detect which skill Claude actually consults first.
 
-Generalizes run_eval.py from binary (did skill X trigger) to multi-class (which
-of the N skills won, or none).
+The current Artist OS bundle intentionally exposes one public skill (`artist-os`)
+plus internal mode files, so the signed-off label set is binary: `artist-os` or
+`none`. The harness still reads the on-disk skill set so it can catch future
+routing-surface changes without being rewritten.
 """
 from __future__ import annotations
 
@@ -59,8 +61,10 @@ def setup_project(skills: dict[str, dict], root: Path) -> dict[str, str]:
 
 
 def match_name(text: str, names: list[str]) -> str | None:
-    """Return the LONGEST installed name appearing in text (resolves the
-    'artist-os' substring-of-'artist-os-text-to-image-plan' collision)."""
+    """Return the LONGEST installed name appearing in text.
+
+    Longest-match stays correct if future public skill names share prefixes.
+    """
     hits = [n for n in names if n in text]
     return max(hits, key=len) if hits else None
 

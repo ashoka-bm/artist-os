@@ -30,12 +30,12 @@ ROOT_MARKERS = ("THEORY.md", "schemas", "skills")
 RESOLVER_BUNDLE_ROOT = Path(__file__).resolve().parents[1]
 PACKAGING_DIR = "packaging"
 
-# Backtick-quoted tokens in skill bodies that name canonical bundle content
-# (the root docs plus the docs/ and schemas/ trees). `doctor` resolves these to
-# fail loud on an orphaned reference. Workspace state (events.jsonl, project.json)
-# and sibling-skill dirs are deliberately excluded.
+# Backtick-quoted tokens in skill bodies or routed skill references that name
+# canonical bundle content (the root docs plus the docs/, schemas/, and skills/
+# trees). `doctor` resolves these to fail loud on an orphaned reference.
+# Workspace state (events.jsonl, project.json) is deliberately excluded.
 _BACKTICK_RE = re.compile(r"`([^`]+)`")
-_DOC_REF_RE = re.compile(r"^(?:THEORY|ARCHITECTURE|AGENTS|CONTEXT)\.md$|^docs/[^\s]+$|^schemas/[^\s]+$")
+_DOC_REF_RE = re.compile(r"^(?:THEORY|ARCHITECTURE|AGENTS|CONTEXT)\.md$|^docs/[^\s]+$|^schemas/[^\s]+$|^skills/[^\s]+$")
 
 
 class ResolveError(Exception):
@@ -110,7 +110,7 @@ def load_manifest(root: Path) -> dict:
 
 
 def referenced_paths_in_text(text: str) -> list[str]:
-    """Bundle-content paths (root docs, docs/, schemas/) named in a chunk of text."""
+    """Bundle-content paths (root docs, docs/, schemas/, skills/) named in text."""
     refs: set[str] = set()
     for token in _BACKTICK_RE.findall(text):
         token = token.strip()
@@ -125,9 +125,9 @@ def referenced_paths_in(skill_md: Path) -> list[str]:
 
 
 def referenced_paths(root: Path) -> list[str]:
-    """Bundle-content paths named across all skill bodies (the union)."""
+    """Bundle-content paths named across public skills and internal references."""
     refs: set[str] = set()
-    for skill_md in sorted((root / "skills").glob("*/SKILL.md")):
+    for skill_md in sorted((root / "skills").rglob("*.md")):
         refs.update(referenced_paths_in(skill_md))
     return sorted(refs)
 

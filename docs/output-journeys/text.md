@@ -106,7 +106,7 @@ The Text Generation Plan must set `human_voice_pass_policy` to `required`, `reco
 
 The Text Generation Plan must include the accepted `length_policy` and `review_presentation` decision. The drafting packet should tell the fresh-context drafter the target word count and acceptable range; the conformance review should flag drafts that miss the range materially unless the miss is justified by Artist Meaning or an artist-approved override.
 
-A Clear Writing Pass is separate from the Human Voice Pass. The Text Generation Plan must decide whether the Clear Writing Pass is required, recommended, optional, or skipped for the specific text form. Apply `skills/clear-writing-pass/SKILL.md` for direct explanatory, professional, public-facing, or reader-guidance prose; avoid applying it blindly to poems, lyrics, dialogue, manifestos, experimental prose, or source-preserving adaptations where compression or plainness would damage the intended form.
+A Clear Writing Pass is separate from the Human Voice Pass. The Text Generation Plan must decide whether the Clear Writing Pass is required, recommended, optional, or skipped for the specific text form. Apply `skills/artist-os/references/clear-writing-pass.md` for direct explanatory, professional, public-facing, or reader-guidance prose; avoid applying it blindly to poems, lyrics, dialogue, manifestos, experimental prose, or source-preserving adaptations where compression or plainness would damage the intended form.
 
 ## Writing Methods
 

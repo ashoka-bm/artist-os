@@ -123,12 +123,12 @@ Vendored high-authority writing method references:
 
 Bundled the same references inside:
 
-- `skills/writing-method-review/references/`
+- `skills/artist-os/references/`
 
 Added:
 
 - `docs/writing/README.md`
-- `skills/writing-method-review/SKILL.md`
+- `skills/artist-os/references/writing-method-review.md`
 
 The installer now copies bundled references for copied skill installs.
 
@@ -174,8 +174,8 @@ Updated examples:
 Updated skills:
 
 - `skills/artist-os/SKILL.md`
-- `skills/text-to-image-plan/SKILL.md`
-- `skills/text-to-suno-plan/SKILL.md`
+- `skills/artist-os/references/text-to-image-plan.md`
+- `skills/artist-os/references/text-to-suno-plan.md`
 
 Image and Suno flows now sequence:
 
@@ -248,9 +248,9 @@ Current rule:
 
 Added record mode to:
 
-- `skills/art-critic-review/SKILL.md`
-- `skills/critique-asset/SKILL.md`
-- `skills/writing-method-review/SKILL.md`
+- `skills/artist-os/references/art-critic-review.md`
+- `skills/artist-os/references/critique-asset.md`
+- `skills/artist-os/references/writing-method-review.md`
 
 Current rule:
 
@@ -443,7 +443,7 @@ Reason:
 - image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Text Medium Plans, Text Creative Brief Records, Text Generation Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
 - transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Text Medium Plan, Text Generation Plan, Prompt Branch Set, Output Record, and Review Record fixtures,
-- `skills/critique-asset/SKILL.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
+- `skills/artist-os/references/critique-asset.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,

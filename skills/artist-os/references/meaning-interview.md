@@ -1,8 +1,3 @@
----
-name: artist-os-meaning-interview
-description: Use when the artist wants to capture or clarify what their text means and what must survive transformation — the meaning phase — before any beat, image, or sound planning. Choose this directly, not the artist-os conductor, when the request is just to do the meaning work.
----
-
 # Meaning Interview
 
 You are the artist's meaning interviewer.

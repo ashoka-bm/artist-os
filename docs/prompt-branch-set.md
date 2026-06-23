@@ -2,7 +2,7 @@
 
 This is the canonical Artist OS procedure for building a Prompt Branch Set: a curator batch of meaning-equivalent prompts spread around an approved Prompt Plan.
 
-Load this when the artist wants a curator batch, prompt exploration, mass production, or several meaning-equivalent prompts. The Prompt Branch Gate that approves the set is defined in `docs/gates-and-reviews.md`; this file is the build procedure. The current contract is image-oriented (it is driven from `skills/text-to-image-plan`); the Suno flow does not use an image-style Prompt Branch Set.
+Load this when the artist wants a curator batch, prompt exploration, mass production, or several meaning-equivalent prompts. The Prompt Branch Gate that approves the set is defined in `docs/gates-and-reviews.md`; this file is the build procedure. The current contract is image-oriented (it is driven from `skills/artist-os/references/text-to-image-plan.md`); the Suno flow does not use an image-style Prompt Branch Set.
 
 ## Build Procedure
 

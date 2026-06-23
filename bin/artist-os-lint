@@ -5,7 +5,7 @@ check by hand, so contributors get fast, offline, CI-runnable feedback.
 Per skill under skills/<name>/SKILL.md:
   1. frontmatter carries a non-empty `name:` and `description:` (the triggering
      surface a host reads to route to the skill);
-  2. if the BODY references repo-root paths (THEORY.md, docs/…, schemas/…), it
+  2. if the BODY references repo-root paths (THEORY.md, docs/…, schemas/…, skills/…), it
      carries the `$ARTIST_OS_ROOT` anchor sentence so a host can resolve them;
   3. every such referenced doc/schema resolves to a file under the bundle root.
 

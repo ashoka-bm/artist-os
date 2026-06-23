@@ -13,22 +13,21 @@ Prerequisites: the `claude` CLI on `PATH` and `python3` (stdlib only).
 
 ---
 
-## routing/ — multi-class routing eval
+## routing/ — public-skill routing eval
 
 For each labeled query in `routing-evals.json`, it installs all skills as real
 available skills, fires the **raw** query through `claude -p` (no meta-framing),
-and detects which skill Claude actually consults first. Produces a confusion
-matrix + per-skill precision/recall.
+and detects whether Claude consults the public `artist-os` skill first or stays
+off-domain (`none`). Produces a confusion matrix + per-label precision/recall.
 
 ```bash
 python3 evals/routing/routing_eval.py --runs 5
 # writes evals/routing/out/routing-report.md and routing-results.json
 ```
 
-Read precision/recall as the two failure modes: low **precision** = a skill is
-*greedy* (stealing siblings' prompts); low **recall** = a skill is *starved*. A
-greedy skill and a starved skill are usually the same collision seen from both
-sides, so tune the competing descriptions **together** and re-run the whole set.
+Read precision/recall as the two failure modes: low `artist-os` **precision** =
+the public skill is greedy on off-domain work; low `artist-os` **recall** = it
+misses Artist OS work. Tune the public description and re-run the whole set.
 
 **Why "raw query + real available_skills" and not "ask the model which to pick":**
 an abstract "which skill should handle this?" prompt is dominated by its own
@@ -40,8 +39,9 @@ transformation, an off-domain negative) as an instrument check — if one of tho
 flips, distrust the harness before the skill.
 
 `routing-evals.json` is the signed-off label set. `probe: true` marks the
-deliberately-hard cases (sibling collisions, cold-vs-records boundaries); they
-encode routing *policy*, so re-confirm the labels if the policy changes.
+deliberately-hard cases (cold-vs-records boundaries, editorial-pass near misses,
+generic writing/editing overlap); they encode routing *policy*, so re-confirm
+the labels if the policy changes.
 
 ---
 

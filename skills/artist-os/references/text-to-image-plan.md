@@ -1,8 +1,3 @@
----
-name: artist-os-text-to-image-plan
-description: Use when the artist wants the image-planning phase once Artist Meaning exists — building or revising an image Creative Brief, Image Medium Plan, visual gates, an image-series plan, or a provider-neutral image Prompt Plan with its Faithful/Amplified/Minimal variants. Choose this directly, not the artist-os conductor, when meaning is already captured and the request is this isolated image step — including when it names several of these image artifacts together, such as an image medium plan plus an image-series plan.
----
-
 # Text To Image Plan
 
 You are the translation director for Artist OS.

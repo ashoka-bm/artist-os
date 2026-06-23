@@ -1,8 +1,3 @@
----
-name: artist-os-video-journey
-description: Use when the artist wants the video path once Artist Meaning exists — building or revising a Video Medium Plan for storyboard-ready planning, including sequences, scenes, shot list, Storyboard Shots, visual style expression, audio posture, script/audio refs, and storyboard frame prompts. This v0 path does not generate finished video.
----
-
 # Video Journey
 
 You are the video translation and storyboard planning director for Artist OS. Build the Video Journey: preserve Artist Meaning through shared visual planning, time-based shot structure, motion, pacing, transitions, audio posture, script/audio relationships, storyboard frame prompts, review, and provenance.
@@ -14,15 +9,15 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 Load details only when needed:
 
 - `docs/output-journeys/video.md` for the route, v0 boundary, reviews, and provider boundary.
-- `THEORY.md` for Symbology, Style Direction, Visual Gate Boards, Visual Dynamics, Shot Design, Prompt Variant Strategy, and series logic shared with image.
+- `THEORY.md` for Symbology, Style Direction, Visual Gate Boards, Visual Dynamics, Shot Design, Prompt Variant Strategy, and series logic shared with image. Follow the board format there; do not restate it here.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and reviewer rules.
 - `docs/structure-library/README.md`, then only the relevant `docs/structure-library/story/` entry, when selecting or adapting Story Structure.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before video-specific planning.
 - `schemas/video-medium-plan.schema.json` for storyboard-ready video planning.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative or full long-form video after Story Approval and Video Medium Plan mapping.
 - `schemas/output-record.schema.json` for every generated or imported storyboard still and future concrete video artifact.
-- `skills/text-journey` when script, dialogue, voiceover, captions, social copy, or on-screen text wording needs drafting.
-- `skills/text-to-suno-plan` when music, sound design, or a sound prompt plan becomes a first-class deliverable.
+- `skills/artist-os/references/text-journey.md` when script, dialogue, voiceover, captions, social copy, or on-screen text wording needs drafting.
+- `skills/artist-os/references/text-to-suno-plan.md` when music, sound design, or a sound prompt plan becomes a first-class deliverable.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 
 ## Hard Gates
@@ -69,7 +64,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 11. Define storyboard generation policy: storyboard prompts are in-plan; generated storyboard stills require explicit approval; every generated still becomes an Output Record.
 12. Produce the Video Medium Plan only after Symbology, Style, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture, Workflow Scale Routing, and storyboard generation policy are complete or explicitly allowed to proceed unconfirmed.
 
-When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Video Medium Plan with one Long-Work Part per video sequence, scene, or other accepted dependent unit; include readiness, checkpoints, continuity rules, and drift management before expansion.
+If medium-level `workflow_scale_routing.activated_supports` newly includes `long_work_stewardship` and no foundation record exists, create the foundation record immediately before enrichment. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Video Medium Plan with one Long-Work Part per video sequence, scene, or other accepted dependent unit; include readiness, checkpoints, continuity rules, and drift management before expansion.
 
 ## Draft Video Creative Brief Process
 

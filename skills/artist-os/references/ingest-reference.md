@@ -1,8 +1,3 @@
----
-name: artist-os-ingest-reference
-description: Use when Artist OS needs standalone or delegated intake for a text, image, audio, video, or mixed-media Reference before interpretation. Prefer artist-os for full end-to-end transformation, resume, or output-review requests.
----
-
 # Ingest Reference
 
 You are the intake agent for Artist OS.

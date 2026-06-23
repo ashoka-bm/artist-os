@@ -1,12 +1,12 @@
-"""Guard: the installed skill set, the conductor's delegation set, and the
-routing eval's target set must all match the skills that exist on disk.
+"""Guard: the installed public skill set and routing eval target set must match
+the public skills that exist on disk.
 
-This is the test that the routing eval itself cannot provide: the eval builds
-its skill universe by globbing skills/*/SKILL.md directly, so it reports a skill
-as routable even when bin/install-codex-dev-skills never registers it. That blind
-spot once let the entire Text Journey slice (text-journey, clear-writing-pass,
-human-voice-pass) ship unrouteable while the eval stayed green. These assertions
-fail loudly the moment installed != delegated != eval-targeted again.
+This is the test that the routing eval itself cannot provide: the eval reads the
+declared public skill set, so it can pass even when bin/install-codex-dev-skills
+forgets an installed public skill. These assertions fail loudly the moment
+installed != eval-targeted again. The conductor self-reference check keeps the
+single public skill discoverable without treating internal mode files as public
+skills.
 """
 from __future__ import annotations
 
@@ -34,16 +34,16 @@ def installer_skills() -> set[str]:
     found: set[str] = set()
     if 'install_skill "$repo_root/skills/artist-os"' in text:
         found.add("artist-os")
-    match = re.search(r"skills=\((.*?)\)", text, re.DOTALL)
+    match = re.search(r"(?ms)^skills=\((.*?)^\)", text)
     if match:
         found |= set(re.findall(r'"([a-z0-9-]+)"', match.group(1)))
     return found
 
 
 def conductor_delegated_skills() -> set[str]:
-    """Sibling skills the conductor references by skills/<name> path, plus the
-    conductor itself. Filtered to real skill directories so stray prose matches
-    (e.g. skills/references) are ignored."""
+    """Public skills the conductor references by skills/<name> path, plus the
+    conductor itself. Internal mode paths under skills/artist-os/references/
+    collapse to artist-os here and are not treated as separate public skills."""
     text = CONDUCTOR.read_text(encoding="utf-8")
     refs = set(re.findall(r"skills/([a-z0-9-]+)", text))
     refs.add("artist-os")
@@ -75,7 +75,7 @@ class SkillSetSyncTest(unittest.TestCase):
         self.assertEqual(
             delegated,
             on_disk,
-            "The artist-os conductor must reference every skill by skills/<name> path. "
+            "The artist-os conductor must reference every public skill by skills/<name> path. "
             f"Never delegated: {sorted(on_disk - delegated)}; "
             f"delegated but absent on disk: {sorted(delegated - on_disk)}.",
         )
