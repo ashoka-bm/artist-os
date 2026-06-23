@@ -210,6 +210,7 @@ For the first implementation, use `platform: "suno"` and `renderer: "suno_custom
 - `advanced_options.duration_target`: artist-facing length target or model-length note.
 - `advanced_options.model`: optional, left blank when the artist has not chosen a Suno model.
 - `advanced_options.inspo_or_persona`: optional, left blank unless the artist has a rights-safe Suno Inspo or Persona.
+- `suno_notes`: platform-side guidance notes (e.g. audio-reference or Cover-workflow recommendations); required by the schema even when empty.
 
 For `vocal_lyric_policy.lyrics_mode = "phonetic_vocals"`, keep `instrumental: false` and set `lyrics.mode: "generate_in_suno"`. The `lyrics.text` instruction should ask Suno for non-lexical voice such as breath, hums, vowels, or syllables, and `exclude` must block intelligible lyrics, spoken words, and clear language. Do not paste source words or newly written lyrics for this mode.
 

@@ -2,7 +2,7 @@
 
 Use this only after the approved Sound Prompt Plan exists. The Suno renderer is a final platform-specific translation step: it maps the neutral Sound Prompt Plan into Suno Custom Mode fields without changing the approved sound-planning decisions.
 
-Paths resolve from `$ARTIST_OS_ROOT`. This file is loaded by `skills/artist-os/references/text-to-suno-plan.md` when a `platform_renderings[]` entry uses `platform: "suno"` and `renderer: "suno_custom_mode"`.
+Paths resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`. This file is loaded by `skills/artist-os/references/text-to-suno-plan.md` when a `platform_renderings[]` entry uses `platform: "suno"` and `renderer: "suno_custom_mode"`.
 
 ## Inputs
 

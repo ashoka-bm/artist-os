@@ -1,6 +1,6 @@
 {
   "conductor": "skills/artist-os/SKILL.md",
-  "sha256": "4cab98687a549df90795d1cb8517ede62200329bfcceaba622db6e99bb32789b",
+  "sha256": "73e82e77e456b3dd8f2a6fc551b7c62f112c69cd1b51b0a12f4fb4076ab43218",
   "blessed_at": "2026-06-23",
   "note": "Digest of the conductor body last validated by the conductor-behavior eval. Re-bless with `bin/artist-os-eval bless` after re-running the eval (evals/README.md)."
 }
