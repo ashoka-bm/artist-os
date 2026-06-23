@@ -9,19 +9,29 @@
   "target_media_type": "sound",
   "plan_mode": "single_track",
   "sound_work_type": "song",
-  "target_platform": "suno",
+  "target_platform": "platform_neutral",
   "description": "A compact intimate alt-R&B song about standing at the edge of return, where a key carries fragile agency and the room feels both safe and dangerous.",
-  "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse piano, close restrained vocal, low sub pressure, rain-like texture, unresolved harmony, intimate dry vocal against distant room tone, compact two-minute structure, quiet-to-restrained lift, unresolved final return.",
   "sonic_concept_summary": {
     "primary_sonic_concept": "a close nocturnal song where room tone, breath, and piano hold an unresolved threshold",
     "target_sonic_engine": "sparse piano motif, close vocal, low sub pressure, rain texture, unresolved chord extensions",
-    "avoid": ["triumphant chorus", "literal horror effects", "bright acoustic folk"]
+    "avoid": [
+      "triumphant chorus",
+      "literal horror effects",
+      "bright acoustic folk"
+    ]
   },
   "genre_direction_summary": {
     "primary_genre": "alt-R&B",
-    "subgenres": ["downtempo", "ambient pop"],
+    "subgenres": [
+      "downtempo",
+      "ambient pop"
+    ],
     "production_style": "minimal nocturnal studio production",
-    "style_modifiers": ["intimate", "sparse", "grainy"],
+    "style_modifiers": [
+      "intimate",
+      "sparse",
+      "grainy"
+    ],
     "genre_conflicts": [
       {
         "conflict": "Alt-R&B warmth could over-resolve the grief.",
@@ -31,7 +41,10 @@
   },
   "tempo_groove_summary": {
     "bpm": 82,
-    "bpm_range": { "min": 78, "max": 86 },
+    "bpm_range": {
+      "min": 78,
+      "max": 86
+    },
     "tempo_feel": "slow-burning and suspended",
     "tempo_stability": "steady pulse with slight perceived drag",
     "meter": "4/4",
@@ -47,7 +60,10 @@
   "lyrics": {
     "present": true,
     "title": "Where the Light Ends",
-    "section_tags": ["[Verse]", "[Chorus]"],
+    "section_tags": [
+      "[Verse]",
+      "[Chorus]"
+    ],
     "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
   },
   "arrangement_plan": {
@@ -79,7 +95,9 @@
           }
         ],
         "tension_role": "establish the room without resolving it",
-        "section_tags": ["[Intro]"]
+        "section_tags": [
+          "[Intro]"
+        ]
       },
       {
         "section_name": "Verse 1",
@@ -99,7 +117,9 @@
           }
         ],
         "tension_role": "introduce threshold and fragile agency",
-        "section_tags": ["[Verse]"]
+        "section_tags": [
+          "[Verse]"
+        ]
       },
       {
         "section_name": "Chorus",
@@ -119,89 +139,163 @@
           }
         ],
         "tension_role": "state the unresolved hook",
-        "section_tags": ["[Chorus]"]
+        "section_tags": [
+          "[Chorus]"
+        ]
       }
     ]
   },
   "instrumentation_plan": {
-    "primary_instruments": ["felt piano", "close lead vocal"],
-    "supporting_instruments": ["low sub bass", "soft pad", "rain-like noise texture"],
-    "rhythm_components": ["minimal half-time kick", "brushed or muted snare texture"],
-    "texture_layers": ["room tone", "soft tape grain", "distant reversed piano tail"],
-    "excluded_instruments": ["bright acoustic guitar", "large EDM synth lead", "arena drums"]
+    "primary_instruments": [
+      "felt piano",
+      "close lead vocal"
+    ],
+    "supporting_instruments": [
+      "low sub bass",
+      "soft pad",
+      "rain-like noise texture"
+    ],
+    "rhythm_components": [
+      "minimal half-time kick",
+      "brushed or muted snare texture"
+    ],
+    "texture_layers": [
+      "room tone",
+      "soft tape grain",
+      "distant reversed piano tail"
+    ],
+    "excluded_instruments": [
+      "bright acoustic guitar",
+      "large EDM synth lead",
+      "arena drums"
+    ]
   },
   "production_direction": {
     "mix_perspective": "close vocal in front, distant room texture behind",
     "space_reverb": "dry intimate vocal with reverberant piano tails",
     "finish": "polished but grainy and restrained",
     "texture": "soft noise, low pressure, rain-like motion",
-    "negative_constraints": ["no triumphant key change", "no horror stinger", "no dance drop"]
+    "negative_constraints": [
+      "no triumphant key change",
+      "no horror stinger",
+      "no dance drop"
+    ]
   },
   "sonic_dynamics_summary": [
     {
       "name": "Sparse / Dense",
       "poles": {
-        "sparse": { "presence": 0.85 },
-        "dense": { "presence": 0.35 }
+        "sparse": {
+          "presence": 0.85
+        },
+        "dense": {
+          "presence": 0.35
+        }
       },
       "tension_intensity": 0.65,
-      "evidence": ["few details carry most of the emotional weight"],
-      "translation_notes": ["Let negative space carry grief."]
+      "evidence": [
+        "few details carry most of the emotional weight"
+      ],
+      "translation_notes": [
+        "Let negative space carry grief."
+      ]
     },
     {
       "name": "Soft / Loud",
       "poles": {
-        "soft": { "presence": 0.9 },
-        "loud": { "presence": 0.25 }
+        "soft": {
+          "presence": 0.9
+        },
+        "loud": {
+          "presence": 0.25
+        }
       },
       "tension_intensity": 0.55,
-      "evidence": ["the scene is still and restrained"],
-      "translation_notes": ["Keep the vocal close and quiet."]
+      "evidence": [
+        "the scene is still and restrained"
+      ],
+      "translation_notes": [
+        "Keep the vocal close and quiet."
+      ]
     },
     {
       "name": "Stable / Unstable",
       "poles": {
-        "stable": { "presence": 0.4 },
-        "unstable": { "presence": 0.8 }
+        "stable": {
+          "presence": 0.4
+        },
+        "unstable": {
+          "presence": 0.8
+        }
       },
       "tension_intensity": 0.8,
-      "evidence": ["not entering, not leaving"],
-      "translation_notes": ["Use unresolved harmony."]
+      "evidence": [
+        "not entering, not leaving"
+      ],
+      "translation_notes": [
+        "Use unresolved harmony."
+      ]
     },
     {
       "name": "Dry / Reverberant",
       "poles": {
-        "dry": { "presence": 0.65 },
-        "reverberant": { "presence": 0.45 }
+        "dry": {
+          "presence": 0.65
+        },
+        "reverberant": {
+          "presence": 0.45
+        }
       },
       "tension_intensity": 0.45,
-      "evidence": ["intimate threshold and active room memory"],
-      "translation_notes": ["Keep vocal dry; let piano tails carry space."]
+      "evidence": [
+        "intimate threshold and active room memory"
+      ],
+      "translation_notes": [
+        "Keep vocal dry; let piano tails carry space."
+      ]
     },
     {
       "name": "Near / Far",
       "poles": {
-        "near": { "presence": 0.8 },
-        "far": { "presence": 0.55 }
+        "near": {
+          "presence": 0.8
+        },
+        "far": {
+          "presence": 0.55
+        }
       },
       "tension_intensity": 0.75,
-      "evidence": ["physically close but emotionally separated"],
-      "translation_notes": ["Close vocal against distant texture."]
+      "evidence": [
+        "physically close but emotionally separated"
+      ],
+      "translation_notes": [
+        "Close vocal against distant texture."
+      ]
     },
     {
       "name": "Consonant / Dissonant",
       "poles": {
-        "consonant": { "presence": 0.45 },
-        "dissonant": { "presence": 0.65 }
+        "consonant": {
+          "presence": 0.45
+        },
+        "dissonant": {
+          "presence": 0.65
+        }
       },
       "tension_intensity": 0.7,
-      "evidence": ["tenderness and threat coexist"],
-      "translation_notes": ["Use tender chords with unresolved extensions."]
+      "evidence": [
+        "tenderness and threat coexist"
+      ],
+      "translation_notes": [
+        "Use tender chords with unresolved extensions."
+      ]
     }
   ],
   "emotional_tension_contract": {
     "governing_intended_feeling": "the ache of being close to release but unable to choose it",
-    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "key_emotional_movement_ids": [
+      "kem_threshold_001"
+    ],
     "minimum_tension_criteria": {
       "criteria": [
         "The song must keep threshold pressure audible in every section.",
@@ -233,27 +327,26 @@
       ],
       "emotional_tension_preservation": {
         "intended_feeling": "the ache of being close to release but unable to choose it",
-        "key_emotional_movement_ids": ["kem_threshold_001"],
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
         "expectation_turn_translation": "A familiar song structure invites release, but restrained vocal delivery and unresolved harmony keep return suspended.",
         "minimum_tension_criteria": {
-          "criteria": ["Keep threshold pressure audible in every section.", "Avoid triumphant closure."],
+          "criteria": [
+            "Keep threshold pressure audible in every section.",
+            "Avoid triumphant closure."
+          ],
           "minimum_intensity": 0.65,
           "reviewer_check": "Faithful variant must preserve the approved threshold tension without flattening into plot summary."
         },
         "variant_tension_strategy": "Balance intelligible lyric movement with restrained production and non-resolving chords."
       },
       "prompt_text": "Create a compact two-minute nocturnal alt-R&B song at about 82 BPM in 4/4. Use sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like noise, and unresolved chord extensions. Keep the verses almost whispered and the chorus clearer but not triumphant. Use the provided lyrics and preserve the feeling of standing at a threshold where return is tender and dangerous.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "custom",
-          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
-        },
-        "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood.",
-        "exclude": ["EDM drop", "triumphant key change", "horror sound effects", "bright acoustic folk"]
-      },
-      "negative_constraints": ["no EDM drop", "no triumphant key change", "no horror sound effects"],
+      "negative_constraints": [
+        "no EDM drop",
+        "no triumphant key change",
+        "no horror sound effects"
+      ],
       "derived_sonic_elements": [],
       "traceability_notes": [
         {
@@ -266,7 +359,22 @@
         "Does the song preserve unresolved threshold pressure?",
         "Do the lyrics keep the key as fragile agency?",
         "Does the chorus avoid triumphant resolution?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "custom",
+          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
+        },
+        "exclude": [
+          "EDM drop",
+          "triumphant key change",
+          "horror sound effects",
+          "bright acoustic folk"
+        ],
+        "style_prompt": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood."
+      }
     },
     {
       "variant_type": "amplified",
@@ -277,27 +385,26 @@
       ],
       "emotional_tension_preservation": {
         "intended_feeling": "absence becoming active and almost embodied",
-        "key_emotional_movement_ids": ["kem_threshold_001"],
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
         "expectation_turn_translation": "The arrangement appears to intensify toward release, but dropout and distant room tone expose absence instead.",
         "minimum_tension_criteria": {
-          "criteria": ["Amplification must deepen active absence.", "The final return must remain unresolved."],
+          "criteria": [
+            "Amplification must deepen active absence.",
+            "The final return must remain unresolved."
+          ],
           "minimum_intensity": 0.75,
           "reviewer_check": "Amplified variant must not add melodrama that replaces the core threshold feeling."
         },
         "variant_tension_strategy": "Increase near/far contrast and instability while preserving the same unresolved beat."
       },
       "prompt_text": "Create a heightened version of the same two-minute nocturnal alt-R&B song. Keep the 82 BPM slow pulse and provided lyrics, but make absence more active: use a more exposed bridge, percussion dropout, distant room tone, unstable low pad, and close vocal breaths. The final chorus should return transformed but unresolved.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "custom",
-          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
-        },
-        "style_of_music": "Heightened nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, close breathy vocal, sparse piano, deep sub pressure, unstable low pad, distant room tone, more exposed bridge with percussion dropout, strong near-far contrast, unresolved final chorus, active absence, tender dread, cinematic but restrained.",
-        "exclude": ["literal ghost effects", "belted power ballad ending", "bright pop drums", "aggressive drop"]
-      },
-      "negative_constraints": ["no literal ghost effects", "no belted power ballad ending", "no bright pop drums"],
+      "negative_constraints": [
+        "no literal ghost effects",
+        "no belted power ballad ending",
+        "no bright pop drums"
+      ],
       "derived_sonic_elements": [
         {
           "element": "distant room tone that swells under the bridge",
@@ -322,7 +429,22 @@
         "Does amplification deepen absence rather than add melodrama?",
         "Does the bridge feel like rupture?",
         "Does the final return remain unresolved?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "custom",
+          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
+        },
+        "exclude": [
+          "literal ghost effects",
+          "belted power ballad ending",
+          "bright pop drums",
+          "aggressive drop"
+        ],
+        "style_prompt": "Heightened nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, close breathy vocal, sparse piano, deep sub pressure, unstable low pad, distant room tone, more exposed bridge with percussion dropout, strong near-far contrast, unresolved final chorus, active absence, tender dread, cinematic but restrained."
+      }
     },
     {
       "variant_type": "minimal",
@@ -333,27 +455,26 @@
       ],
       "emotional_tension_preservation": {
         "intended_feeling": "the pain of having a choice that cannot be safely made",
-        "key_emotional_movement_ids": ["kem_threshold_001"],
+        "key_emotional_movement_ids": [
+          "kem_threshold_001"
+        ],
         "expectation_turn_translation": "The stripped setting suggests clarity, but silence and held piano leave the choice unresolved.",
         "minimum_tension_criteria": {
-          "criteria": ["Silence must feel active.", "The key must remain a burdened choice, not a resolved answer."],
+          "criteria": [
+            "Silence must feel active.",
+            "The key must remain a burdened choice, not a resolved answer."
+          ],
           "minimum_intensity": 0.6,
           "reviewer_check": "Minimal variant must still create pressure rather than becoming empty quiet."
         },
         "variant_tension_strategy": "Use silence, exposed vocal, and a barely audible pulse as the main tension carriers."
       },
       "prompt_text": "Create a minimal two-minute version using only close restrained vocal, sparse felt piano, room tone, and a barely audible low pulse. Keep the provided lyrics, but leave long breath-length gaps between phrases. Avoid full drums, dense pads, and large chorus expansion. The song should feel like it is holding the key without turning it.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "custom",
-          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
-        },
-        "style_of_music": "Minimal nocturnal alt-R&B ballad, 82 BPM, 4/4, close restrained vocal, sparse felt piano, room tone, barely audible low pulse, almost drumless, long breath-length gaps between phrases, intimate dry vocal, unresolved piano fragments, quiet active absence, no large chorus expansion.",
-        "exclude": ["full drum kit", "lush strings", "dense harmonies", "triumphant ending"]
-      },
-      "negative_constraints": ["no full drum kit", "no lush strings", "no dense harmonies"],
+      "negative_constraints": [
+        "no full drum kit",
+        "no lush strings",
+        "no dense harmonies"
+      ],
       "derived_sonic_elements": [],
       "traceability_notes": [
         {
@@ -366,7 +487,22 @@
         "Does the minimal version still feel emotionally complete?",
         "Does silence carry pressure?",
         "Does the song avoid becoming generic sadness?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "custom",
+          "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
+        },
+        "exclude": [
+          "full drum kit",
+          "lush strings",
+          "dense harmonies",
+          "triumphant ending"
+        ],
+        "style_prompt": "Minimal nocturnal alt-R&B ballad, 82 BPM, 4/4, close restrained vocal, sparse felt piano, room tone, barely audible low pulse, almost drumless, long breath-length gaps between phrases, intimate dry vocal, unresolved piano fragments, quiet active absence, no large chorus expansion."
+      }
     }
   ],
   "sequence_calibration": {
@@ -374,28 +510,6 @@
     "calibration_track_role": "",
     "uses_three_prompt_variants": false,
     "requires_artist_approval_before_sequence": false
-  },
-  "suno_custom_mode_outputs": {
-    "mode": "custom",
-    "title": "Where the Light Ends",
-    "instrumental": false,
-    "lyrics": {
-      "mode": "custom",
-      "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
-    },
-    "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood.",
-    "exclude": ["EDM drop", "triumphant key change", "horror sound effects", "bright acoustic folk"],
-    "advanced_options": {
-      "duration_target": "about 2 minutes",
-      "model": "",
-      "inspo_or_persona": ""
-    },
-    "suno_notes": [
-      "Use Suno Custom Mode.",
-      "Paste lyrics into Lyrics.",
-      "Paste style_of_music into Style of Music.",
-      "Paste exclude items into Advanced Options > Exclude."
-    ]
   },
   "approval_refs": {
     "prompt_critic_review_id": "review_suno_prompt_critic_door_left_lit",
@@ -417,5 +531,80 @@
     "Does the prompt plan preserve Artist Meaning?",
     "Are lyrics, Style of Music, and Exclude separated cleanly for Suno?",
     "Do Faithful, Amplified, and Minimal differ by concrete sonic choices?"
+  ],
+  "style_prompt_summary": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse piano, close restrained vocal, low sub pressure, rain-like texture, unresolved harmony, intimate dry vocal against distant room tone, compact two-minute structure, quiet-to-restrained lift, unresolved final return.",
+  "platform_renderings": [
+    {
+      "platform": "suno",
+      "renderer": "suno_custom_mode",
+      "source_variant_type": "faithful",
+      "rendering_status": "ready",
+      "outputs": {
+        "suno_custom_mode_outputs": {
+          "mode": "custom",
+          "title": "Where the Light Ends",
+          "instrumental": false,
+          "lyrics": {
+            "mode": "custom",
+            "text": "[Verse]\nI came back quiet to the step I knew\nThe room was warm but it would not move\nI held the metal like it had a heart\nToo small to keep, too scared to start\n\n[Chorus]\nWhere the light ends, I am almost home\nWhere the light ends, I am still alone\nIf I turn the key, I lose the door\nIf I walk away, I keep it more"
+          },
+          "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood.",
+          "exclude": [
+            "EDM drop",
+            "triumphant key change",
+            "horror sound effects",
+            "bright acoustic folk"
+          ],
+          "advanced_options": {
+            "duration_target": "about 2 minutes",
+            "model": "",
+            "inspo_or_persona": ""
+          },
+          "suno_notes": [
+            "Use Suno Custom Mode.",
+            "Paste lyrics into Lyrics.",
+            "Paste style_of_music into Style of Music.",
+            "Paste exclude items into Advanced Options > Exclude."
+          ]
+        }
+      },
+      "platform_constraints": [
+        "Suno Custom Mode fields are final platform rendering output, not upstream sound-planning authority.",
+        "Use Suno-facing lyrics, Style of Music, Exclude, and advanced notes only inside this rendering."
+      ],
+      "readiness_check": {
+        "status": "ready",
+        "checks": [
+          {
+            "check": "custom_mode_fields",
+            "status": "pass",
+            "note": "Title, instrumental setting, lyrics mode/text, Style of Music, Exclude, and advanced notes are present."
+          },
+          {
+            "check": "vocal_lyric_policy",
+            "status": "pass",
+            "note": "The Suno rendering follows the approved Vocal / Lyric Policy."
+          },
+          {
+            "check": "traceability",
+            "status": "pass",
+            "note": "The rendering maps the approved Sound Prompt Plan into Suno Custom Mode fields without changing Artist Meaning."
+          }
+        ],
+        "blocking_findings": []
+      },
+      "traceability_summary": [
+        {
+          "source_type": "medium_plan",
+          "source_ref": "smp_door_left_lit",
+          "note": "The Suno renderer maps approved sound-planning decisions into platform-specific Custom Mode fields."
+        },
+        {
+          "source_type": "platform_output_intent",
+          "source_ref": "faithful",
+          "note": "The default Suno rendering uses the Faithful variant as its source intent."
+        }
+      ]
+    }
   ]
 }

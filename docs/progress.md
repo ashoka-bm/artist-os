@@ -42,7 +42,7 @@ Every image, series, or arc-shaped plan should also preserve:
 Implemented dry-run workflows:
 
 - Text Reference to Provider-Neutral Image Prompt Plan.
-- Text Reference to Suno Sound Prompt Plan.
+- Text Reference to Sound Prompt Plan with Suno rendering.
 - Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
 - Text Reference to storyboard-ready Video Medium Plan (Video Journey v0 planning).
 - Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
@@ -225,7 +225,7 @@ Updated schemas so this rule is durable:
 - `schemas/prompt-branch-set.schema.json` requires the meaning kernel and every branch to preserve Intended Feeling, Key Emotional Movement, Expectation Turn Translation, and Minimum Tension Criteria,
 - `schemas/review-record.schema.json` requires `emotional_tension_review` with numeric tension intensity assessments, so every critic packet explicitly reviews Intended Feeling, Minimum Tension Criteria, claimed vs reviewer-assessed intensity, Key Emotional Movements, and Expectation Turns.
 
-Updated examples and fixtures for Artist Meaning, Beat Plans, Image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Prompt Branch Sets, and Review Records to validate against the hardened contracts.
+Updated examples and fixtures for Artist Meaning, Beat Plans, Image Medium Plans, Creative Brief Records, Sound Prompt Plans, Prompt Branch Sets, and Review Records to validate against the hardened contracts.
 
 ### Embedded Beat Summary Cleanup
 
@@ -390,7 +390,7 @@ Added emotional movement integrity coverage:
 
 - Image Medium Plan image roles must reference Key Emotional Movements that exist in the governing Beat Plan.
 - Creative Brief suggested images must reference Key Emotional Movements that exist in the governing Beat Plan.
-- Suno Sound Prompt Plan sections and variants must reference Beat Plan beats and Key Emotional Movements.
+- Sound Prompt Plan sections and variants must reference Beat Plan beats and Key Emotional Movements.
 - Text Medium Plan and Text Generation Plan sections must reference Beat Plan beats and Key Emotional Movements.
 - Text rewrite Output Records must point to a previous Output Record when `origin_type` is `agent_rewritten`.
 - Prompt Branch Set meaning kernels and branches must reference Key Emotional Movements from the governing Beat Plan.
@@ -440,7 +440,7 @@ Reason:
 - Transformation Brief, Beat Plan, Medium Plan, Review Record, Prompt Branch Set, Gate Decision, and Output Record schemas now exist,
 - Artist Meaning now records a Decision Interview instead of relying on silent defaults,
 - Beat Plans now carry Intended Feeling, Key Emotional Movements, Expectation Turns, and tension profiles,
-- image Medium Plans, Creative Brief Records, Suno Sound Prompt Plans, Text Medium Plans, Text Creative Brief Records, Text Generation Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
+- image Medium Plans, Creative Brief Records, Sound Prompt Plans, Text Medium Plans, Text Creative Brief Records, Text Generation Plans, Prompt Branch Sets, and Review Records now preserve emotional movement and tension criteria,
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
 - transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Text Medium Plan, Text Generation Plan, Prompt Branch Set, Output Record, and Review Record fixtures,
 - `skills/artist-os/references/critique-asset.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
@@ -492,7 +492,7 @@ Implemented branches:
 
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
 - Video Journey v0 through storyboard-ready Video Medium Plan, scene and shot mapping, audio posture, storyboard frame prompts, and provider-boundary policy,
-- text-to-Suno through Sound Medium Plan, Sound Creative Brief Record, Suno Sound Prompt Plan, and output lifecycle contracts,
+- text-to-sound through Sound Medium Plan, Sound Creative Brief Record, Sound Prompt Plan with Suno rendering, and output lifecycle contracts,
 - Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures.
 - Structure Library docs for reusable Story Structures and Cultural Format Structures, split into context-efficient per-entry files with chooser indexes.
 

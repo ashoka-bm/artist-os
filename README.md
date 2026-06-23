@@ -8,7 +8,7 @@ The current dry-run workflows are:
 
 - Text reference to Provider-Neutral Image Prompt Plan.
 - Text reference to storyboard-ready Video Medium Plan (Video Journey v0).
-- Text reference to Suno Sound Prompt Plan.
+- Text reference to Sound Prompt Plan with Suno Custom Mode rendering.
 - Text reference to Text Generation Plan and drafted written output (Text Journey).
 - Album v1 Release Package Plan for ordered tracks, album/track cover planning, release copy, and calibration.
 
@@ -80,7 +80,8 @@ Text Reference
   -> Music / Sound Critic Review
   -> Brief Approval
   -> Sound Creative Brief Record
-  -> Suno Sound Prompt Plan
+  -> Sound Prompt Plan
+  -> Suno Custom Mode rendering
   -> Prompt Plan Critique
   -> optional Generation Approval Gate
   -> Output Record, when an artifact exists
@@ -88,7 +89,7 @@ Text Reference
   -> Output Acceptance Gate
 ```
 
-The Vocal / Lyric gate is required. If the artist wants lyrics or intelligible words, Artist OS drafts lyrics and includes them in review before final prompt locking. The first sound output targets Suno Custom Mode fields: title, lyrics or instrumental choice, Style of Music, Exclude, and optional advanced notes.
+The Vocal / Lyric gate is required. If the artist wants lyrics or intelligible words, Artist OS drafts lyrics and includes them in review before final prompt locking. The sound plan stays platform-neutral until the final rendering step. The first sound renderer targets Suno Custom Mode fields: title, lyrics or instrumental choice, Style of Music, Exclude, and optional advanced notes.
 
 ### Text To Text (Text Journey)
 

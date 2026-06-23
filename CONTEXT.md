@@ -401,12 +401,20 @@ The section-by-section mapping of active Emotional Tension Pairs and Sonic Tensi
 _Avoid_: One static tension score for the whole song
 
 **Text-To-Sound Slice**:
-The dry-run workflow that transforms a text Reference into a Suno Sound Prompt Plan for the first sound version.
+The dry-run workflow that transforms a text Reference into a Sound Prompt Plan plus final platform renderings such as Suno Custom Mode.
 _Avoid_: Provider-backed music generation
 
-**Suno Sound Prompt Plan**:
-A Prompt Plan expressed as Artist OS traceable sound concepts plus Suno Custom Mode outputs.
-_Avoid_: Cross-platform provider abstraction in the first sound version
+**Sound Prompt Plan**:
+A platform-neutral Prompt Plan expressed as Artist OS traceable sound concepts, Prompt Variant Plans, and platform output intent before final generator-specific rendering.
+_Avoid_: Suno-only prompt contract, Sound Medium Plan
+
+**Platform Rendering**:
+The final generator-specific translation of a Sound Prompt Plan into provider-native fields, syntax, settings, upload guidance, and readiness checks.
+_Avoid_: Changing Artist Meaning, replacing the Sound Prompt Plan
+
+**Suno Platform Rendering**:
+A Platform Rendering that maps approved sound prompt intent into Suno Custom Mode fields.
+_Avoid_: Treating Suno Custom Mode as upstream sound-planning authority
 
 **Derived Sonic Element**:
 A new motif, sound, instrument, texture, hook, lyric image, or production gesture introduced by a Prompt Variant Plan because it strengthens approved Artist Meaning, Sonic Dynamics, Beat Plan, or Poetic Density.

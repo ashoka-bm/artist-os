@@ -9,9 +9,8 @@
   "target_media_type": "sound",
   "plan_mode": "single_track",
   "sound_work_type": "song",
-  "target_platform": "suno",
-  "description": "A compact wordless vocal Suno prompt plan that uses phonetic vocals to preserve threshold pressure without intelligible lyrics.",
-  "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse piano, close restrained vocal, low sub pressure, rain-like texture, unresolved harmony, intimate dry vocal against distant room tone, compact two-minute structure, quiet-to-restrained lift, unresolved final return., wordless phonetic vocal, no intelligible lyrics",
+  "target_platform": "platform_neutral",
+  "description": "A compact wordless vocal Sound Prompt Plan with Suno rendering that uses phonetic vocals to preserve threshold pressure without intelligible lyrics.",
   "sonic_concept_summary": {
     "primary_sonic_concept": "a close nocturnal song where room tone, breath, and piano hold an unresolved threshold",
     "target_sonic_engine": "sparse piano motif, close vocal, low sub pressure, rain texture, unresolved chord extensions",
@@ -344,24 +343,6 @@
         "variant_tension_strategy": "Balance intelligible lyric movement with restrained production and non-resolving chords. Phonetic vocals preserve human presence without turning the source into literal lyrics."
       },
       "prompt_text": "Create a compact two-minute nocturnal alt-R&B song at about 82 BPM in 4/4. Use sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like noise, and unresolved chord extensions. Keep the verses almost whispered and the chorus clearer but not triumphant. Use the provided lyrics and preserve the feeling of standing at a threshold where return is tender and dangerous. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "generate_in_suno",
-          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
-        },
-        "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics",
-        "exclude": [
-          "EDM drop",
-          "triumphant key change",
-          "horror sound effects",
-          "bright acoustic folk",
-          "intelligible lyrics",
-          "spoken words",
-          "clear English words"
-        ]
-      },
       "negative_constraints": [
         "no EDM drop",
         "no triumphant key change",
@@ -387,7 +368,25 @@
         "Does the song preserve unresolved threshold pressure?",
         "Do the lyrics keep the key as fragile agency?",
         "Does the chorus avoid triumphant resolution?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "exclude": [
+          "EDM drop",
+          "triumphant key change",
+          "horror sound effects",
+          "bright acoustic folk",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ],
+        "style_prompt": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics"
+      }
     },
     {
       "variant_type": "amplified",
@@ -414,24 +413,6 @@
         "variant_tension_strategy": "Increase near/far contrast and instability while preserving the same unresolved beat. Phonetic vocals preserve human presence without turning the source into literal lyrics."
       },
       "prompt_text": "Create a heightened version of the same two-minute nocturnal alt-R&B song. Keep the 82 BPM slow pulse and provided lyrics, but make absence more active: use a more exposed bridge, percussion dropout, distant room tone, unstable low pad, and close vocal breaths. The final chorus should return transformed but unresolved. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "generate_in_suno",
-          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
-        },
-        "style_of_music": "Heightened nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, close breathy vocal, sparse piano, deep sub pressure, unstable low pad, distant room tone, more exposed bridge with percussion dropout, strong near-far contrast, unresolved final chorus, active absence, tender dread, cinematic but restrained., wordless phonetic vocal texture, no intelligible lyrics",
-        "exclude": [
-          "literal ghost effects",
-          "belted power ballad ending",
-          "bright pop drums",
-          "aggressive drop",
-          "intelligible lyrics",
-          "spoken words",
-          "clear English words"
-        ]
-      },
       "negative_constraints": [
         "no literal ghost effects",
         "no belted power ballad ending",
@@ -469,7 +450,25 @@
         "Does amplification deepen absence rather than add melodrama?",
         "Does the bridge feel like rupture?",
         "Does the final return remain unresolved?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "exclude": [
+          "literal ghost effects",
+          "belted power ballad ending",
+          "bright pop drums",
+          "aggressive drop",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ],
+        "style_prompt": "Heightened nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, close breathy vocal, sparse piano, deep sub pressure, unstable low pad, distant room tone, more exposed bridge with percussion dropout, strong near-far contrast, unresolved final chorus, active absence, tender dread, cinematic but restrained., wordless phonetic vocal texture, no intelligible lyrics"
+      }
     },
     {
       "variant_type": "minimal",
@@ -496,24 +495,6 @@
         "variant_tension_strategy": "Use silence, exposed vocal, and a barely audible pulse as the main tension carriers. Phonetic vocals preserve human presence without turning the source into literal lyrics."
       },
       "prompt_text": "Create a minimal two-minute version using only close restrained vocal, sparse felt piano, room tone, and a barely audible low pulse. Keep the provided lyrics, but leave long breath-length gaps between phrases. Avoid full drums, dense pads, and large chorus expansion. The song should feel like it is holding the key without turning it. Use non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words.",
-      "suno_outputs": {
-        "title": "Where the Light Ends",
-        "instrumental": false,
-        "lyrics": {
-          "mode": "generate_in_suno",
-          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
-        },
-        "style_of_music": "Minimal nocturnal alt-R&B ballad, 82 BPM, 4/4, close restrained vocal, sparse felt piano, room tone, barely audible low pulse, almost drumless, long breath-length gaps between phrases, intimate dry vocal, unresolved piano fragments, quiet active absence, no large chorus expansion., wordless phonetic vocal texture, no intelligible lyrics",
-        "exclude": [
-          "full drum kit",
-          "lush strings",
-          "dense harmonies",
-          "triumphant ending",
-          "intelligible lyrics",
-          "spoken words",
-          "clear English words"
-        ]
-      },
       "negative_constraints": [
         "no full drum kit",
         "no lush strings",
@@ -539,7 +520,25 @@
         "Does the minimal version still feel emotionally complete?",
         "Does silence carry pressure?",
         "Does the song avoid becoming generic sadness?"
-      ]
+      ],
+      "platform_output_intent": {
+        "title": "Where the Light Ends",
+        "instrumental": false,
+        "lyrics": {
+          "mode": "generate_in_suno",
+          "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+        },
+        "exclude": [
+          "full drum kit",
+          "lush strings",
+          "dense harmonies",
+          "triumphant ending",
+          "intelligible lyrics",
+          "spoken words",
+          "clear English words"
+        ],
+        "style_prompt": "Minimal nocturnal alt-R&B ballad, 82 BPM, 4/4, close restrained vocal, sparse felt piano, room tone, barely audible low pulse, almost drumless, long breath-length gaps between phrases, intimate dry vocal, unresolved piano fragments, quiet active absence, no large chorus expansion., wordless phonetic vocal texture, no intelligible lyrics"
+      }
     }
   ],
   "sequence_calibration": {
@@ -547,37 +546,6 @@
     "calibration_track_role": "",
     "uses_three_prompt_variants": false,
     "requires_artist_approval_before_sequence": false
-  },
-  "suno_custom_mode_outputs": {
-    "mode": "custom",
-    "title": "Where the Light Ends",
-    "instrumental": false,
-    "lyrics": {
-      "mode": "generate_in_suno",
-      "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
-    },
-    "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics",
-    "exclude": [
-      "EDM drop",
-      "triumphant key change",
-      "horror sound effects",
-      "bright acoustic folk",
-      "intelligible lyrics",
-      "spoken words",
-      "clear English words"
-    ],
-    "advanced_options": {
-      "duration_target": "about 2 minutes",
-      "model": "",
-      "inspo_or_persona": ""
-    },
-    "suno_notes": [
-      "Use Suno Custom Mode.",
-      "Paste lyrics into Lyrics.",
-      "Paste style_of_music into Style of Music.",
-      "Paste exclude items into Advanced Options > Exclude.",
-      "For phonetic_vocals, leave Instrumental off and let Suno generate non-lexical voice; do not paste intelligible lyrics."
-    ]
   },
   "approval_refs": {
     "prompt_critic_review_id": "review_suno_prompt_critic_door_left_lit",
@@ -604,5 +572,84 @@
     "Does the prompt plan preserve Artist Meaning?",
     "Are lyrics, Style of Music, and Exclude separated cleanly for Suno?",
     "Do Faithful, Amplified, and Minimal differ by concrete sonic choices?"
+  ],
+  "style_prompt_summary": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse piano, close restrained vocal, low sub pressure, rain-like texture, unresolved harmony, intimate dry vocal against distant room tone, compact two-minute structure, quiet-to-restrained lift, unresolved final return., wordless phonetic vocal, no intelligible lyrics",
+  "platform_renderings": [
+    {
+      "platform": "suno",
+      "renderer": "suno_custom_mode",
+      "source_variant_type": "faithful",
+      "rendering_status": "ready",
+      "outputs": {
+        "suno_custom_mode_outputs": {
+          "mode": "custom",
+          "title": "Where the Light Ends",
+          "instrumental": false,
+          "lyrics": {
+            "mode": "generate_in_suno",
+            "text": "Generate non-lexical phonetic vocals only: breath, hums, ah/oh/mm syllables, no intelligible words."
+          },
+          "style_of_music": "Slow nocturnal alt-R&B, downtempo ambient pop, 82 BPM, 4/4, sparse felt piano, close restrained lead vocal, low sub pressure, soft rain-like texture, unresolved chord extensions, almost-whispered verses, clearer but non-triumphant chorus, intimate dry vocal against distant room tone, compact two-minute structure, tender and dangerous threshold mood., wordless phonetic vocal texture, no intelligible lyrics",
+          "exclude": [
+            "EDM drop",
+            "triumphant key change",
+            "horror sound effects",
+            "bright acoustic folk",
+            "intelligible lyrics",
+            "spoken words",
+            "clear English words"
+          ],
+          "advanced_options": {
+            "duration_target": "about 2 minutes",
+            "model": "",
+            "inspo_or_persona": ""
+          },
+          "suno_notes": [
+            "Use Suno Custom Mode.",
+            "Paste lyrics into Lyrics.",
+            "Paste style_of_music into Style of Music.",
+            "Paste exclude items into Advanced Options > Exclude.",
+            "For phonetic_vocals, leave Instrumental off and let Suno generate non-lexical voice; do not paste intelligible lyrics."
+          ]
+        }
+      },
+      "platform_constraints": [
+        "Suno Custom Mode fields are final platform rendering output, not upstream sound-planning authority.",
+        "Use Suno-facing lyrics, Style of Music, Exclude, and advanced notes only inside this rendering."
+      ],
+      "readiness_check": {
+        "status": "ready",
+        "checks": [
+          {
+            "check": "custom_mode_fields",
+            "status": "pass",
+            "note": "Title, instrumental setting, lyrics mode/text, Style of Music, Exclude, and advanced notes are present."
+          },
+          {
+            "check": "vocal_lyric_policy",
+            "status": "pass",
+            "note": "The Suno rendering follows the approved Vocal / Lyric Policy."
+          },
+          {
+            "check": "traceability",
+            "status": "pass",
+            "note": "The rendering maps the approved Sound Prompt Plan into Suno Custom Mode fields without changing Artist Meaning."
+          }
+        ],
+        "blocking_findings": []
+      },
+      "traceability_summary": [
+        {
+          "source_type": "medium_plan",
+          "source_ref": "smp_door_left_lit",
+          "note": "The Suno renderer maps approved sound-planning decisions into platform-specific Custom Mode fields."
+        },
+        {
+          "source_type": "platform_output_intent",
+          "source_ref": "faithful",
+          "note": "The default Suno rendering uses the Faithful variant as its source intent."
+        }
+      ]
+    }
   ]
 }

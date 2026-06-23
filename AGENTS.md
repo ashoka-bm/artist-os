@@ -48,7 +48,7 @@ Image Creative Brief records should validate against `schemas/creative-brief.sch
 
 Sound Creative Brief records should validate against `schemas/sound-creative-brief.schema.json`.
 
-Suno Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.
+Sound Prompt Plan records should validate against `schemas/sound-prompt-plan.schema.json`.
 
 Text Creative Brief records should validate against `schemas/text-creative-brief.schema.json`.
 
@@ -94,7 +94,7 @@ Everything else an agent needs at runtime is canonical elsewhere — point to it
 Artist OS ships three dry-run slices:
 
 - **First Slice** — Text Reference → Provider-Neutral Image Prompt Plan.
-- **Text-to-Sound Slice** — Text Reference → Suno Sound Prompt Plan.
+- **Text-to-Sound Slice** — Text Reference → Sound Prompt Plan (with Suno renderings).
 - **Text Journey Slice** — Text Reference → Text Generation Plan and drafted written Output Records.
 
 The authoritative phase order for each is owned by the `artist-os` conductor skill, `skills/artist-os/SKILL.md` → "Phase Order". Read it there rather than maintaining a second copy here.

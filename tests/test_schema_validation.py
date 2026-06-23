@@ -552,15 +552,39 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "matches more than maxContains 1"):
             validate(record, schema, schema)
 
+    def test_sound_prompt_plan_requires_platform_renderings(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record.pop("platform_renderings", None)
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'platform_renderings'"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_suno_rendering_without_custom_mode_outputs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        suno_rendering = record["platform_renderings"][0]
+        self.assertEqual(suno_rendering["platform"], "suno")
+        del suno_rendering["outputs"]["suno_custom_mode_outputs"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(
+            ValidationError,
+            "missing required field 'suno_custom_mode_outputs'|matches fewer than minContains",
+        ):
+            validate(record, schema, schema)
+
     def test_sound_prompt_plan_rejects_lyrics_required_without_lyrics(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
         record = load_json(data_path)
         record["lyrics"]["present"] = False
         record["lyrics"]["text"] = ""
-        record["suno_custom_mode_outputs"]["instrumental"] = True
-        record["suno_custom_mode_outputs"]["lyrics"]["mode"] = "none"
-        record["suno_custom_mode_outputs"]["lyrics"]["text"] = ""
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["instrumental"] = True
+        suno_outputs["lyrics"]["mode"] = "none"
+        suno_outputs["lyrics"]["text"] = ""
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "expected const True"):
             validate(record, schema, schema)
@@ -576,9 +600,10 @@ class SchemaValidationTests(unittest.TestCase):
         )
         record = load_json(data_path)
         self.assertEqual(record["vocal_lyric_policy"]["lyrics_mode"], "phonetic_vocals")
-        self.assertFalse(record["suno_custom_mode_outputs"]["instrumental"])
-        self.assertEqual(record["suno_custom_mode_outputs"]["lyrics"]["mode"], "generate_in_suno")
-        self.assertIn("intelligible lyrics", " ".join(record["suno_custom_mode_outputs"]["exclude"]).lower())
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        self.assertFalse(suno_outputs["instrumental"])
+        self.assertEqual(suno_outputs["lyrics"]["mode"], "generate_in_suno")
+        self.assertIn("intelligible lyrics", " ".join(suno_outputs["exclude"]).lower())
         validate_file(schema_path, data_path)
 
     def test_sound_prompt_plan_rejects_phonetic_vocals_as_instrumental(self) -> None:
@@ -591,10 +616,53 @@ class SchemaValidationTests(unittest.TestCase):
             / "sound-prompt-plan-phonetic-vocals.json"
         )
         record = load_json(data_path)
-        record["suno_custom_mode_outputs"]["instrumental"] = True
-        record["suno_custom_mode_outputs"]["lyrics"]["mode"] = "none"
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["instrumental"] = True
+        suno_outputs["lyrics"]["mode"] = "none"
         schema = load_json(schema_path)
         with self.assertRaises(ValidationError):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_accepts_instrumental_custom_mode_mapping(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["vocal_lyric_policy"]["lyrics_mode"] = "instrumental"
+        record["lyrics"]["present"] = False
+        record["lyrics"]["text"] = ""
+        suno_outputs = record["platform_renderings"][0]["outputs"]["suno_custom_mode_outputs"]
+        suno_outputs["instrumental"] = True
+        suno_outputs["lyrics"]["mode"] = "none"
+        suno_outputs["lyrics"]["text"] = ""
+        schema = load_json(schema_path)
+        validate(record, schema, schema)  # instrumental branch must validate
+
+    def test_sound_prompt_plan_rejects_non_suno_renderer_for_suno_platform(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        self.assertEqual(record["platform_renderings"][0]["platform"], "suno")
+        record["platform_renderings"][0]["renderer"] = "udio_custom"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "suno_custom_mode"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_non_neutral_target_platform(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["target_platform"] = "suno"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'platform_neutral'"):
+            validate(record, schema, schema)
+
+    def test_sound_prompt_plan_rejects_invalid_platform_readiness_status(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "sound-prompt-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "text-to-suno" / "sound-prompt-plan.json"
+        record = load_json(data_path)
+        record["platform_renderings"][0]["readiness_check"]["status"] = "kinda_ready"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "is not one of"):
             validate(record, schema, schema)
 
     def test_beat_plan_requires_story_structure_for_non_single_beat_modes(self) -> None:

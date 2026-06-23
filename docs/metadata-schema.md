@@ -4,7 +4,7 @@ Artist OS uses records to preserve meaning, provenance, and review history as a 
 
 ## Record Types
 
-Lineage id fields follow one naming convention. A record that exists for a single medium names the reference after that medium, matching the producing record's primary key: the Image Prompt Plan carries `image_medium_plan_id`, the Suno Sound Prompt Plan carries `sound_medium_plan_id`. A record that can sit downstream of any medium — the Prompt Branch Set and the Output Record — carries the same value generically as `medium_plan_id`. The value is identical either way; only the field name changes with the record's scope. Do not "fix" this asymmetry when emitting records — each schema rejects the other spelling.
+Lineage id fields follow one naming convention. A record that exists for a single medium names the reference after that medium, matching the producing record's primary key: the Image Prompt Plan carries `image_medium_plan_id`, the Sound Prompt Plan carries `sound_medium_plan_id`. A record that can sit downstream of any medium — the Prompt Branch Set and the Output Record — carries the same value generically as `medium_plan_id`. The value is identical either way; only the field name changes with the record's scope. Do not "fix" this asymmetry when emitting records — each schema rejects the other spelling.
 
 ### Project Manifest
 
@@ -187,17 +187,17 @@ A Text Creative Brief Record is the structured agent handoff created after Writi
 
 Text Creative Brief Records do not embed Beat records. Use `beat_plan_id` to read the authoritative Beat Plan and `text_medium_plan_id` to read the authoritative writing structure.
 
-### Suno Sound Prompt Plan
+### Sound Prompt Plan
 
-A Suno Sound Prompt Plan is the structured dry-run generation plan created from an approved Sound Creative Brief Record. It validates against `schemas/sound-prompt-plan.schema.json`.
+A Sound Prompt Plan is the structured dry-run generation plan created from an approved Sound Creative Brief Record. It validates against `schemas/sound-prompt-plan.schema.json`.
 
-`emotional_tension_contract` records the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and Expectation Turn preservation that the Suno prompt plan must carry from the Beat Plan and Sound Medium Plan. Each `song_structure.sections[]` entry must name its `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile` so the arrangement does not become a genre-only plan.
+`emotional_tension_contract` records the governing Intended Feeling, Key Emotional Movement ids, Minimum Tension Criteria, and Expectation Turn preservation that the Sound Prompt Plan must carry from the Beat Plan and Sound Medium Plan. Each `song_structure.sections[]` entry must name its `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile` so the arrangement does not become a genre-only plan.
 
-The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `emotional_tension_preservation` and `suno_outputs` so the variant can be reviewed against the approved emotional/tension contract and then pasted into Suno Custom Mode.
+The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `emotional_tension_preservation` and `platform_output_intent` so the variant can be reviewed against the approved emotional/tension contract before any provider-specific rendering.
 
-For the first text-to-sound version, `suno_custom_mode_outputs` is the final platform-facing contract. It contains `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform adapters can be added after the Suno flow works.
+`platform_renderings[]` is the final platform-facing contract. For the first text-to-sound version, a Suno rendering stores `outputs.suno_custom_mode_outputs` with `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform renderers add sibling entries without changing upstream sound planning.
 
-Suno Sound Prompt Plans must preserve the lineage IDs from the approved Sound Creative Brief and Sound Medium Plan. `traceability_summary` and Prompt Variant trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
+Sound Prompt Plans must preserve the lineage IDs from the approved Sound Creative Brief and Sound Medium Plan. `traceability_summary`, Prompt Variant trace notes, and platform rendering trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
 
 ### Text Generation Plan
 

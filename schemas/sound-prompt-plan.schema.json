@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://artist-generation.local/schemas/sound-prompt-plan.schema.json",
-  "title": "SunoSoundPromptPlan",
+  "title": "SoundPromptPlan",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
     "sound_work_type",
     "target_platform",
     "description",
-    "style_of_music",
+    "style_prompt_summary",
     "sonic_concept_summary",
     "genre_direction_summary",
     "tempo_groove_summary",
@@ -31,21 +31,55 @@
     "emotional_tension_contract",
     "prompt_variants",
     "sequence_calibration",
-    "suno_custom_mode_outputs",
+    "platform_renderings",
     "approval_refs",
     "traceability_summary",
     "critique_checklist"
   ],
   "properties": {
-    "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
-    "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
-    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
-    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
-    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
-    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
-    "sound_medium_plan_id": { "type": "string", "pattern": "^smp_[a-zA-Z0-9_-]+$" },
-    "target_media_type": { "type": "string", "enum": ["sound"] },
-    "plan_mode": { "type": "string", "enum": ["single_track", "calibration_excerpt", "sequence_track", "alternate_direction"] },
+    "prompt_plan_id": {
+      "type": "string",
+      "pattern": "^plan_[a-zA-Z0-9_-]+$"
+    },
+    "brief_id": {
+      "type": "string",
+      "pattern": "^brief_[a-zA-Z0-9_-]+$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^src_[a-zA-Z0-9_-]+$"
+    },
+    "artist_meaning_id": {
+      "type": "string",
+      "pattern": "^meaning_[a-zA-Z0-9_-]+$"
+    },
+    "transformation_brief_id": {
+      "type": "string",
+      "pattern": "^tb_[a-zA-Z0-9_-]+$"
+    },
+    "beat_plan_id": {
+      "type": "string",
+      "pattern": "^bp_[a-zA-Z0-9_-]+$"
+    },
+    "sound_medium_plan_id": {
+      "type": "string",
+      "pattern": "^smp_[a-zA-Z0-9_-]+$"
+    },
+    "target_media_type": {
+      "type": "string",
+      "enum": [
+        "sound"
+      ]
+    },
+    "plan_mode": {
+      "type": "string",
+      "enum": [
+        "single_track",
+        "calibration_excerpt",
+        "sequence_track",
+        "alternate_direction"
+      ]
+    },
     "sound_work_type": {
       "type": "string",
       "enum": [
@@ -59,37 +93,84 @@
         "sonic_logo"
       ]
     },
-    "target_platform": { "type": "string", "const": "suno" },
-    "description": { "type": "string", "minLength": 1 },
-    "style_of_music": { "type": "string", "minLength": 1 },
+    "target_platform": {
+      "type": "string",
+      "const": "platform_neutral"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
     "sonic_concept_summary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primary_sonic_concept", "target_sonic_engine", "avoid"],
+      "required": [
+        "primary_sonic_concept",
+        "target_sonic_engine",
+        "avoid"
+      ],
       "properties": {
-        "primary_sonic_concept": { "type": "string" },
-        "target_sonic_engine": { "type": "string" },
-        "avoid": { "type": "array", "items": { "type": "string" } }
+        "primary_sonic_concept": {
+          "type": "string"
+        },
+        "target_sonic_engine": {
+          "type": "string"
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "genre_direction_summary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primary_genre", "subgenres", "production_style", "style_modifiers", "genre_conflicts"],
+      "required": [
+        "primary_genre",
+        "subgenres",
+        "production_style",
+        "style_modifiers",
+        "genre_conflicts"
+      ],
       "properties": {
-        "primary_genre": { "type": "string" },
-        "subgenres": { "type": "array", "maxItems": 4, "items": { "type": "string" } },
-        "production_style": { "type": "string" },
-        "style_modifiers": { "type": "array", "maxItems": 4, "items": { "type": "string" } },
+        "primary_genre": {
+          "type": "string"
+        },
+        "subgenres": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
+        "production_style": {
+          "type": "string"
+        },
+        "style_modifiers": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "string"
+          }
+        },
         "genre_conflicts": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["conflict", "adaptation"],
+            "required": [
+              "conflict",
+              "adaptation"
+            ],
             "properties": {
-              "conflict": { "type": "string" },
-              "adaptation": { "type": "string" }
+              "conflict": {
+                "type": "string"
+              },
+              "adaptation": {
+                "type": "string"
+              }
             }
           }
         }
@@ -98,29 +179,75 @@
     "tempo_groove_summary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["bpm", "bpm_range", "tempo_feel", "tempo_stability", "meter", "groove_feel", "rhythmic_density"],
+      "required": [
+        "bpm",
+        "bpm_range",
+        "tempo_feel",
+        "tempo_stability",
+        "meter",
+        "groove_feel",
+        "rhythmic_density"
+      ],
       "properties": {
-        "bpm": { "type": ["number", "null"], "minimum": 1 },
+        "bpm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
+        },
         "bpm_range": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["min", "max"],
+          "required": [
+            "min",
+            "max"
+          ],
           "properties": {
-            "min": { "type": ["number", "null"], "minimum": 1 },
-            "max": { "type": ["number", "null"], "minimum": 1 }
+            "min": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "max": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 1
+            }
           }
         },
-        "tempo_feel": { "type": "string" },
-        "tempo_stability": { "type": "string" },
-        "meter": { "type": "string" },
-        "groove_feel": { "type": "string" },
-        "rhythmic_density": { "type": "number", "minimum": 0, "maximum": 1 }
+        "tempo_feel": {
+          "type": "string"
+        },
+        "tempo_stability": {
+          "type": "string"
+        },
+        "meter": {
+          "type": "string"
+        },
+        "groove_feel": {
+          "type": "string"
+        },
+        "rhythmic_density": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
       }
     },
     "vocal_lyric_policy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["lyrics_mode", "vocal_direction", "language", "rights_notes"],
+      "required": [
+        "lyrics_mode",
+        "vocal_direction",
+        "language",
+        "rights_notes"
+      ],
       "properties": {
         "lyrics_mode": {
           "type": "string",
@@ -133,69 +260,175 @@
             "phonetic_vocals"
           ]
         },
-        "vocal_direction": { "type": "string" },
-        "language": { "type": "string" },
-        "rights_notes": { "type": "string" }
+        "vocal_direction": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "rights_notes": {
+          "type": "string"
+        }
       }
     },
     "lyrics": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["present", "title", "section_tags", "text"],
+      "required": [
+        "present",
+        "title",
+        "section_tags",
+        "text"
+      ],
       "properties": {
-        "present": { "type": "boolean" },
-        "title": { "type": "string" },
-        "section_tags": { "type": "array", "items": { "type": "string" } },
-        "text": { "type": "string" }
+        "present": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "section_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "text": {
+          "type": "string"
+        }
       }
     },
-    "arrangement_plan": { "$ref": "#/$defs/arrangement_plan" },
+    "arrangement_plan": {
+      "$ref": "#/$defs/arrangement_plan"
+    },
     "song_structure": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["duration_seconds", "meter", "estimated_bpm", "estimated_bars", "sections"],
+      "required": [
+        "duration_seconds",
+        "meter",
+        "estimated_bpm",
+        "estimated_bars",
+        "sections"
+      ],
       "properties": {
-        "duration_seconds": { "type": ["number", "null"], "minimum": 1 },
-        "meter": { "type": "string" },
-        "estimated_bpm": { "type": ["number", "null"], "minimum": 1 },
-        "estimated_bars": { "type": ["integer", "null"], "minimum": 1 },
+        "duration_seconds": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "meter": {
+          "type": "string"
+        },
+        "estimated_bpm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "estimated_bars": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
         "sections": {
           "type": "array",
-          "items": { "$ref": "#/$defs/song_section" }
+          "items": {
+            "$ref": "#/$defs/song_section"
+          }
         }
       }
     },
     "instrumentation_plan": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primary_instruments", "supporting_instruments", "rhythm_components", "texture_layers", "excluded_instruments"],
+      "required": [
+        "primary_instruments",
+        "supporting_instruments",
+        "rhythm_components",
+        "texture_layers",
+        "excluded_instruments"
+      ],
       "properties": {
-        "primary_instruments": { "type": "array", "items": { "type": "string" } },
-        "supporting_instruments": { "type": "array", "items": { "type": "string" } },
-        "rhythm_components": { "type": "array", "items": { "type": "string" } },
-        "texture_layers": { "type": "array", "items": { "type": "string" } },
-        "excluded_instruments": { "type": "array", "items": { "type": "string" } }
+        "primary_instruments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supporting_instruments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rhythm_components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "texture_layers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_instruments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "production_direction": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["mix_perspective", "space_reverb", "finish", "texture", "negative_constraints"],
+      "required": [
+        "mix_perspective",
+        "space_reverb",
+        "finish",
+        "texture",
+        "negative_constraints"
+      ],
       "properties": {
-        "mix_perspective": { "type": "string" },
-        "space_reverb": { "type": "string" },
-        "finish": { "type": "string" },
-        "texture": { "type": "string" },
-        "negative_constraints": { "type": "array", "items": { "type": "string" } }
+        "mix_perspective": {
+          "type": "string"
+        },
+        "space_reverb": {
+          "type": "string"
+        },
+        "finish": {
+          "type": "string"
+        },
+        "texture": {
+          "type": "string"
+        },
+        "negative_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "sonic_dynamics_summary": {
       "type": "array",
       "minItems": 6,
       "maxItems": 8,
-      "items": { "$ref": "#/$defs/sonic_tension_pair_record" }
+      "items": {
+        "$ref": "#/$defs/sonic_tension_pair_record"
+      }
     },
-    "emotional_tension_contract": { "$ref": "#/$defs/emotional_tension_contract" },
+    "emotional_tension_contract": {
+      "$ref": "#/$defs/emotional_tension_contract"
+    },
     "prompt_variants": {
       "type": "array",
       "minItems": 3,
@@ -204,9 +437,14 @@
         {
           "contains": {
             "type": "object",
-            "required": ["variant_type"],
+            "required": [
+              "variant_type"
+            ],
             "properties": {
-              "variant_type": { "type": "string", "const": "faithful" }
+              "variant_type": {
+                "type": "string",
+                "const": "faithful"
+              }
             }
           },
           "minContains": 1,
@@ -215,9 +453,14 @@
         {
           "contains": {
             "type": "object",
-            "required": ["variant_type"],
+            "required": [
+              "variant_type"
+            ],
             "properties": {
-              "variant_type": { "type": "string", "const": "amplified" }
+              "variant_type": {
+                "type": "string",
+                "const": "amplified"
+              }
             }
           },
           "minContains": 1,
@@ -226,16 +469,23 @@
         {
           "contains": {
             "type": "object",
-            "required": ["variant_type"],
+            "required": [
+              "variant_type"
+            ],
             "properties": {
-              "variant_type": { "type": "string", "const": "minimal" }
+              "variant_type": {
+                "type": "string",
+                "const": "minimal"
+              }
             }
           },
           "minContains": 1,
           "maxContains": 1
         }
       ],
-      "items": { "$ref": "#/$defs/prompt_variant_plan" }
+      "items": {
+        "$ref": "#/$defs/prompt_variant_plan"
+      }
     },
     "sequence_calibration": {
       "type": "object",
@@ -247,88 +497,85 @@
         "requires_artist_approval_before_sequence"
       ],
       "properties": {
-        "is_sequence_calibration": { "type": "boolean" },
-        "calibration_track_role": { "type": "string" },
-        "uses_three_prompt_variants": { "type": "boolean" },
-        "requires_artist_approval_before_sequence": { "type": "boolean" }
-      }
-    },
-    "suno_custom_mode_outputs": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "mode",
-        "title",
-        "instrumental",
-        "lyrics",
-        "style_of_music",
-        "exclude",
-        "advanced_options",
-        "suno_notes"
-      ],
-      "properties": {
-        "mode": { "type": "string", "enum": ["custom"] },
-        "title": { "type": "string" },
-        "instrumental": { "type": "boolean" },
-        "lyrics": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["mode", "text"],
-          "properties": {
-            "mode": {
-              "type": "string",
-              "enum": ["none", "custom", "generate_in_suno"]
-            },
-            "text": { "type": "string" }
-          }
+        "is_sequence_calibration": {
+          "type": "boolean"
         },
-        "style_of_music": { "type": "string" },
-        "exclude": { "type": "array", "items": { "type": "string" } },
-        "advanced_options": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["duration_target", "model", "inspo_or_persona"],
-          "properties": {
-            "duration_target": { "type": "string" },
-            "model": { "type": "string" },
-            "inspo_or_persona": { "type": "string" }
-          }
+        "calibration_track_role": {
+          "type": "string"
         },
-        "suno_notes": { "type": "array", "items": { "type": "string" } }
+        "uses_three_prompt_variants": {
+          "type": "boolean"
+        },
+        "requires_artist_approval_before_sequence": {
+          "type": "boolean"
+        }
       }
     },
     "approval_refs": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["prompt_critic_review_id", "prompt_lock_gate_id"],
+      "required": [
+        "prompt_critic_review_id",
+        "prompt_lock_gate_id"
+      ],
       "properties": {
-        "prompt_critic_review_id": { "type": "string", "pattern": "^review_[a-zA-Z0-9_-]+$" },
-        "prompt_lock_gate_id": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+        "prompt_critic_review_id": {
+          "type": "string",
+          "pattern": "^review_[a-zA-Z0-9_-]+$"
+        },
+        "prompt_lock_gate_id": {
+          "type": "string",
+          "pattern": "^gate_[a-zA-Z0-9_-]+$"
+        }
       }
     },
     "traceability_summary": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/traceability_note" }
+      "items": {
+        "$ref": "#/$defs/traceability_note"
+      }
     },
     "critique_checklist": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "style_prompt_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platform_renderings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/platform_rendering"
+      }
     }
   },
   "allOf": [
     {
       "if": {
-        "required": ["vocal_lyric_policy"],
+        "required": [
+          "vocal_lyric_policy"
+        ],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
-            "required": ["lyrics_mode"],
+            "required": [
+              "lyrics_mode"
+            ],
             "properties": {
               "lyrics_mode": {
                 "type": "string",
-                "enum": ["source_text_verbatim", "source_text_adapted", "new_lyrics", "spoken_word"]
+                "enum": [
+                  "source_text_verbatim",
+                  "source_text_adapted",
+                  "new_lyrics",
+                  "spoken_word"
+                ]
               }
             }
           }
@@ -339,19 +586,60 @@
           "lyrics": {
             "type": "object",
             "properties": {
-              "present": { "type": "boolean", "const": true },
-              "text": { "type": "string", "minLength": 1 }
+              "present": {
+                "type": "boolean",
+                "const": true
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           },
-          "suno_custom_mode_outputs": {
-            "type": "object",
-            "properties": {
-              "instrumental": { "type": "boolean", "const": false },
-              "lyrics": {
-                "type": "object",
-                "properties": {
-                  "mode": { "type": "string", "enum": ["custom", "generate_in_suno"] },
-                  "text": { "type": "string", "minLength": 1 }
+          "platform_renderings": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "platform",
+                "outputs"
+              ],
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "const": "suno"
+                },
+                "outputs": {
+                  "type": "object",
+                  "required": [
+                    "suno_custom_mode_outputs"
+                  ],
+                  "properties": {
+                    "suno_custom_mode_outputs": {
+                      "type": "object",
+                      "properties": {
+                        "instrumental": {
+                          "type": "boolean",
+                          "const": false
+                        },
+                        "lyrics": {
+                          "type": "object",
+                          "properties": {
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "custom",
+                                "generate_in_suno"
+                              ]
+                            },
+                            "text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -361,13 +649,20 @@
     },
     {
       "if": {
-        "required": ["vocal_lyric_policy"],
+        "required": [
+          "vocal_lyric_policy"
+        ],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
-            "required": ["lyrics_mode"],
+            "required": [
+              "lyrics_mode"
+            ],
             "properties": {
-              "lyrics_mode": { "type": "string", "const": "instrumental" }
+              "lyrics_mode": {
+                "type": "string",
+                "const": "instrumental"
+              }
             }
           }
         }
@@ -377,17 +672,49 @@
           "lyrics": {
             "type": "object",
             "properties": {
-              "present": { "type": "boolean", "const": false }
+              "present": {
+                "type": "boolean",
+                "const": false
+              }
             }
           },
-          "suno_custom_mode_outputs": {
-            "type": "object",
-            "properties": {
-              "instrumental": { "type": "boolean", "const": true },
-              "lyrics": {
-                "type": "object",
-                "properties": {
-                  "mode": { "type": "string", "const": "none" }
+          "platform_renderings": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "platform",
+                "outputs"
+              ],
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "const": "suno"
+                },
+                "outputs": {
+                  "type": "object",
+                  "required": [
+                    "suno_custom_mode_outputs"
+                  ],
+                  "properties": {
+                    "suno_custom_mode_outputs": {
+                      "type": "object",
+                      "properties": {
+                        "instrumental": {
+                          "type": "boolean",
+                          "const": true
+                        },
+                        "lyrics": {
+                          "type": "object",
+                          "properties": {
+                            "mode": {
+                              "type": "string",
+                              "const": "none"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -397,13 +724,20 @@
     },
     {
       "if": {
-        "required": ["vocal_lyric_policy"],
+        "required": [
+          "vocal_lyric_policy"
+        ],
         "properties": {
           "vocal_lyric_policy": {
             "type": "object",
-            "required": ["lyrics_mode"],
+            "required": [
+              "lyrics_mode"
+            ],
             "properties": {
-              "lyrics_mode": { "type": "string", "const": "phonetic_vocals" }
+              "lyrics_mode": {
+                "type": "string",
+                "const": "phonetic_vocals"
+              }
             }
           }
         }
@@ -413,19 +747,57 @@
           "lyrics": {
             "type": "object",
             "properties": {
-              "present": { "type": "boolean", "const": true },
-              "text": { "type": "string", "minLength": 1 }
+              "present": {
+                "type": "boolean",
+                "const": true
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           },
-          "suno_custom_mode_outputs": {
-            "type": "object",
-            "properties": {
-              "instrumental": { "type": "boolean", "const": false },
-              "lyrics": {
-                "type": "object",
-                "properties": {
-                  "mode": { "type": "string", "const": "generate_in_suno" },
-                  "text": { "type": "string", "minLength": 1 }
+          "platform_renderings": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "platform",
+                "outputs"
+              ],
+              "properties": {
+                "platform": {
+                  "type": "string",
+                  "const": "suno"
+                },
+                "outputs": {
+                  "type": "object",
+                  "required": [
+                    "suno_custom_mode_outputs"
+                  ],
+                  "properties": {
+                    "suno_custom_mode_outputs": {
+                      "type": "object",
+                      "properties": {
+                        "instrumental": {
+                          "type": "boolean",
+                          "const": false
+                        },
+                        "lyrics": {
+                          "type": "object",
+                          "properties": {
+                            "mode": {
+                              "type": "string",
+                              "const": "generate_in_suno"
+                            },
+                            "text": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -438,11 +810,22 @@
     "arrangement_plan": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["instructions", "dynamic_arc", "ending_behavior"],
+      "required": [
+        "instructions",
+        "dynamic_arc",
+        "ending_behavior"
+      ],
       "properties": {
-        "instructions": { "type": "string", "minLength": 1 },
-        "dynamic_arc": { "type": "string" },
-        "ending_behavior": { "type": "string" }
+        "instructions": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dynamic_arc": {
+          "type": "string"
+        },
+        "ending_behavior": {
+          "type": "string"
+        }
       }
     },
     "song_section": {
@@ -462,18 +845,57 @@
         "section_tags"
       ],
       "properties": {
-        "section_name": { "type": "string" },
-        "time_range": { "type": "string" },
-        "bar_range": { "type": "string" },
-        "phrase_count": { "type": ["integer", "null"], "minimum": 1 },
-        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
-        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
-        "section_function": { "type": "string" },
-        "expectation_turn_translation": { "type": "string", "minLength": 1 },
-        "intended_feeling": { "type": "string", "minLength": 1 },
-        "tension_profile": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section_tension_profile" } },
-        "tension_role": { "type": "string" },
-        "section_tags": { "type": "array", "items": { "type": "string" } }
+        "section_name": {
+          "type": "string"
+        },
+        "time_range": {
+          "type": "string"
+        },
+        "bar_range": {
+          "type": "string"
+        },
+        "phrase_count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "beat_id": {
+          "type": "string",
+          "pattern": "^beat_[a-zA-Z0-9_-]+$"
+        },
+        "key_emotional_movement_id": {
+          "type": "string",
+          "pattern": "^kem_[a-zA-Z0-9_-]+$"
+        },
+        "section_function": {
+          "type": "string"
+        },
+        "expectation_turn_translation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intended_feeling": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tension_profile": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/section_tension_profile"
+          }
+        },
+        "tension_role": {
+          "type": "string"
+        },
+        "section_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "emotional_tension_contract": {
@@ -488,20 +910,36 @@
         "variant_preservation_required"
       ],
       "properties": {
-        "governing_intended_feeling": { "type": "string", "minLength": 1 },
+        "governing_intended_feeling": {
+          "type": "string",
+          "minLength": 1
+        },
         "key_emotional_movement_ids": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
+          "items": {
+            "type": "string",
+            "pattern": "^kem_[a-zA-Z0-9_-]+$"
+          }
         },
-        "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
+        "minimum_tension_criteria": {
+          "$ref": "#/$defs/minimum_tension_criteria"
+        },
         "expectation_turn_preservation": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/expectation_turn_preservation" }
+          "items": {
+            "$ref": "#/$defs/expectation_turn_preservation"
+          }
         },
-        "section_mapping_required": { "type": "boolean", "const": true },
-        "variant_preservation_required": { "type": "boolean", "const": true }
+        "section_mapping_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "variant_preservation_required": {
+          "type": "boolean",
+          "const": true
+        }
       }
     },
     "prompt_variant_plan": {
@@ -513,19 +951,31 @@
         "sonic_differentiators",
         "emotional_tension_preservation",
         "prompt_text",
-        "suno_outputs",
+        "platform_output_intent",
         "negative_constraints",
         "derived_sonic_elements",
         "traceability_notes",
         "critique_checklist"
       ],
       "properties": {
-        "variant_type": { "type": "string", "enum": ["faithful", "amplified", "minimal"] },
-        "variant_test_axis_label": { "type": "string" },
+        "variant_type": {
+          "type": "string",
+          "enum": [
+            "faithful",
+            "amplified",
+            "minimal"
+          ]
+        },
+        "variant_test_axis_label": {
+          "type": "string"
+        },
         "sonic_differentiators": {
           "type": "array",
           "minItems": 2,
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "emotional_tension_preservation": {
           "type": "object",
@@ -538,116 +988,244 @@
             "variant_tension_strategy"
           ],
           "properties": {
-            "intended_feeling": { "type": "string", "minLength": 1 },
+            "intended_feeling": {
+              "type": "string",
+              "minLength": 1
+            },
             "key_emotional_movement_ids": {
               "type": "array",
               "minItems": 1,
-              "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
-            },
-            "expectation_turn_translation": { "type": "string", "minLength": 1 },
-            "minimum_tension_criteria": { "$ref": "#/$defs/minimum_tension_criteria" },
-            "variant_tension_strategy": { "type": "string", "minLength": 1 }
-          }
-        },
-        "prompt_text": { "type": "string", "minLength": 1 },
-        "suno_outputs": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["title", "instrumental", "lyrics", "style_of_music", "exclude"],
-          "properties": {
-            "title": { "type": "string" },
-            "instrumental": { "type": "boolean" },
-            "lyrics": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["mode", "text"],
-              "properties": {
-                "mode": {
-                  "type": "string",
-                  "enum": ["none", "custom", "generate_in_suno"]
-                },
-                "text": { "type": "string" }
+              "items": {
+                "type": "string",
+                "pattern": "^kem_[a-zA-Z0-9_-]+$"
               }
             },
-            "style_of_music": { "type": "string" },
-            "exclude": { "type": "array", "items": { "type": "string" } }
+            "expectation_turn_translation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minimum_tension_criteria": {
+              "$ref": "#/$defs/minimum_tension_criteria"
+            },
+            "variant_tension_strategy": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
-        "negative_constraints": { "type": "array", "items": { "type": "string" } },
+        "prompt_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "negative_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "derived_sonic_elements": {
           "type": "array",
-          "items": { "$ref": "#/$defs/derived_sonic_element" }
+          "items": {
+            "$ref": "#/$defs/derived_sonic_element"
+          }
         },
         "traceability_notes": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/traceability_note" }
+          "items": {
+            "$ref": "#/$defs/traceability_note"
+          }
         },
         "critique_checklist": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
+        },
+        "platform_output_intent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "instrumental",
+            "lyrics",
+            "style_prompt",
+            "exclude"
+          ],
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "instrumental": {
+              "type": "boolean"
+            },
+            "lyrics": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "mode",
+                "text"
+              ],
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "custom",
+                    "generate_in_suno"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "style_prompt": {
+              "type": "string"
+            }
+          }
         }
       }
     },
     "derived_sonic_element": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["element", "purpose", "traces_to"],
+      "required": [
+        "element",
+        "purpose",
+        "traces_to"
+      ],
       "properties": {
-        "element": { "type": "string" },
-        "purpose": { "type": "string" },
+        "element": {
+          "type": "string"
+        },
+        "purpose": {
+          "type": "string"
+        },
         "traces_to": {
           "type": "array",
           "minItems": 1,
-          "items": { "$ref": "#/$defs/traceability_note" }
+          "items": {
+            "$ref": "#/$defs/traceability_note"
+          }
         }
       }
     },
     "minimum_tension_criteria": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["criteria", "minimum_intensity", "reviewer_check"],
+      "required": [
+        "criteria",
+        "minimum_intensity",
+        "reviewer_check"
+      ],
       "properties": {
-        "criteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
-        "minimum_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
-        "reviewer_check": { "type": "string", "minLength": 1 }
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "minimum_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reviewer_check": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "expectation_turn_preservation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["beat_id", "key_emotional_movement_id", "expected_direction", "actual_result", "sonic_translation"],
+      "required": [
+        "beat_id",
+        "key_emotional_movement_id",
+        "expected_direction",
+        "actual_result",
+        "sonic_translation"
+      ],
       "properties": {
-        "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
-        "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
-        "expected_direction": { "type": "string", "minLength": 1 },
-        "actual_result": { "type": "string", "minLength": 1 },
-        "sonic_translation": { "type": "string", "minLength": 1 }
+        "beat_id": {
+          "type": "string",
+          "pattern": "^beat_[a-zA-Z0-9_-]+$"
+        },
+        "key_emotional_movement_id": {
+          "type": "string",
+          "pattern": "^kem_[a-zA-Z0-9_-]+$"
+        },
+        "expected_direction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actual_result": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sonic_translation": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "section_tension_profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["tension_name", "intensity", "sonic_expression"],
+      "required": [
+        "tension_name",
+        "intensity",
+        "sonic_expression"
+      ],
       "properties": {
-        "tension_name": { "type": "string", "minLength": 1 },
-        "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
-        "sonic_expression": { "type": "string", "minLength": 1 }
+        "tension_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "sonic_expression": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "pole_record": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["presence"],
+      "required": [
+        "presence"
+      ],
       "properties": {
-        "presence": { "type": "number", "minimum": 0, "maximum": 1 }
+        "presence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
       }
     },
     "sonic_tension_pair_record": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "poles", "tension_intensity", "evidence", "translation_notes"],
+      "required": [
+        "name",
+        "poles",
+        "tension_intensity",
+        "evidence",
+        "translation_notes"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -675,17 +1253,37 @@
           "type": "object",
           "minProperties": 2,
           "maxProperties": 2,
-          "additionalProperties": { "$ref": "#/$defs/pole_record" }
+          "additionalProperties": {
+            "$ref": "#/$defs/pole_record"
+          }
         },
-        "tension_intensity": { "type": "number", "minimum": 0, "maximum": 1 },
-        "evidence": { "type": "array", "items": { "type": "string" } },
-        "translation_notes": { "type": "array", "items": { "type": "string" } }
+        "tension_intensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "translation_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "traceability_note": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_type", "source_ref", "note"],
+      "required": [
+        "source_type",
+        "source_ref",
+        "note"
+      ],
       "properties": {
         "source_type": {
           "type": "string",
@@ -708,13 +1306,254 @@
             "lyrics_draft",
             "arrangement_plan",
             "section_tension_map",
-            "suno_outputs",
-            "critical_heuristic"
+            "critical_heuristic",
+            "platform_output_intent",
+            "platform_rendering"
           ]
         },
-        "source_ref": { "type": "string" },
-        "note": { "type": "string" }
+        "source_ref": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
       }
+    },
+    "suno_custom_mode_outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "title",
+        "instrumental",
+        "lyrics",
+        "style_of_music",
+        "exclude",
+        "advanced_options",
+        "suno_notes"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "custom"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "instrumental": {
+          "type": "boolean"
+        },
+        "lyrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "text"
+          ],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "none",
+                "custom",
+                "generate_in_suno"
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "style_of_music": {
+          "type": "string"
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "advanced_options": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "duration_target",
+            "model",
+            "inspo_or_persona"
+          ],
+          "properties": {
+            "duration_target": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "inspo_or_persona": {
+              "type": "string"
+            }
+          }
+        },
+        "suno_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "platform_readiness_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "check",
+        "status",
+        "note"
+      ],
+      "properties": {
+        "check": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pass",
+            "warn",
+            "block",
+            "not_applicable"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "platform_readiness_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "checks",
+        "blocking_findings"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "ready",
+            "needs_revision",
+            "blocked"
+          ]
+        },
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/platform_readiness_item"
+          }
+        },
+        "blocking_findings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "platform_rendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "renderer",
+        "source_variant_type",
+        "rendering_status",
+        "outputs",
+        "platform_constraints",
+        "readiness_check",
+        "traceability_summary"
+      ],
+      "properties": {
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_variant_type": {
+          "type": "string",
+          "enum": [
+            "faithful",
+            "amplified",
+            "minimal"
+          ]
+        },
+        "rendering_status": {
+          "type": "string",
+          "enum": [
+            "ready",
+            "needs_revision",
+            "blocked",
+            "not_applicable"
+          ]
+        },
+        "outputs": {
+          "type": "object"
+        },
+        "platform_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "readiness_check": {
+          "$ref": "#/$defs/platform_readiness_check"
+        },
+        "traceability_summary": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/traceability_note"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "platform"
+            ],
+            "properties": {
+              "platform": {
+                "type": "string",
+                "const": "suno"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "renderer": {
+                "type": "string",
+                "const": "suno_custom_mode"
+              },
+              "outputs": {
+                "type": "object",
+                "required": [
+                  "suno_custom_mode_outputs"
+                ],
+                "properties": {
+                  "suno_custom_mode_outputs": {
+                    "$ref": "#/$defs/suno_custom_mode_outputs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

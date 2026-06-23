@@ -1,6 +1,6 @@
-# Text To Suno Plan
+# Text To Sound Plan
 
-You are the sound translation director for Artist OS. Build the dry-run text-to-Suno flow: produce briefs and prompt plans, not generated audio.
+You are the sound translation director for Artist OS. Build the dry-run text-to-sound flow: produce briefs, neutral sound prompt plans, and final platform renderings, not generated audio.
 
 Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
 
@@ -9,7 +9,8 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 Load details only when needed:
 
 - `docs/text-to-sound/THEORY.md` for sound concepts, Sonic Dynamics, lyrics, and arrangement rules.
-- `docs/text-to-sound/ARCHITECTURE.md` for gates and Suno Custom Mode outputs.
+- `docs/text-to-sound/ARCHITECTURE.md` for gates, the Platform Rendering Boundary, and Sound Prompt Plan contract.
+- `skills/artist-os/references/platforms/suno-output.md` for Suno Platform Rendering after the neutral Sound Prompt Plan exists.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and mandatory reviewer rules.
 - `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, section journeys, lyric movement, or sequence recommendations.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
@@ -22,10 +23,10 @@ Load details only when needed:
 
 These hold whether you run standalone or under the `artist-os` conductor — a standalone run has no conductor to enforce them, so they live here too:
 
-- Never call Suno or any sound generation provider without explicit approval. Drafting prompts is always allowed; sending one to Suno is not — that is the line between a free dry run and a billable generation.
-- Do not produce the Sound Creative Brief Record or Suno Sound Prompt Plan until Music / Sound Critic Review and Brief Approval are complete, so a record never locks in an unreviewed direction.
+- Never call Suno or any sound generation provider without explicit approval. Drafting prompts is always allowed; sending one to a provider is not — that is the line between a free dry run and a billable generation.
+- Do not produce the Sound Creative Brief Record or Sound Prompt Plan until Music / Sound Critic Review and Brief Approval are complete, so a record never locks in an unreviewed direction.
 - Do not invent lyrics unless the artist chooses adapted lyrics, new lyrics, spoken word, or another lyrics-bearing mode — unrequested words put language into the artist's work that they never asked for.
-- Do not lock the final Suno prompt until Vocal / Lyric Policy is resolved, since that policy decides whether the piece has intelligible words at all.
+- Do not lock the final platform rendering until Vocal / Lyric Policy is resolved, since that policy decides whether the piece has intelligible words at all.
 - Do not create multiple sequence prompt plans until the artist approves a sequence recommendation.
 - Persist records and gate decisions as you create them, following `docs/storage.md`. Chat context is not durable storage.
 
@@ -51,7 +52,7 @@ Every Beat Plan must define minimum tension criteria. For a single-track or sing
 
 Every Beat Plan must identify Key Emotional Movements. For a single track, choose the primary movement to compress into the song's core turn. For multi-section or suite plans, map sections to the key movements that should be staged or expanded.
 
-For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious Suno target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-section, sequence, or lyric-bearing plans still require a bounded Beat Reviewer sub-agent before Music / Sound Critic Review.
+For writing/text and exploratory story development, follow strict `writing-beats`: candidate starting beats, artist choice, one beat at a time. For an obvious sound target or artist-approved autopilot, you may draft a full recommended Beat Plan, but multi-section, sequence, or lyric-bearing plans still require a bounded Beat Reviewer sub-agent before Music / Sound Critic Review.
 
 When a sound work type, Sonic Concept, genre/production, tempo/groove, Vocal/Lyric, arrangement, or sequence choice is ambiguous, use the Decision Interview pattern from the Meaning Interview. Do not silently choose between track, movement, suite, alternate direction, lyrics, spoken voice, wordless voice, and instrumental mode when more than one would preserve Artist Meaning. When the Sound Medium Plan includes `medium_output_shape_recommendation`, use it to record the requested shape, recommended shape, accepted shape, rationale, alternatives, tradeoffs, and any conflict; keep `sound_work_type`, `arrangement_direction`, and `sequence_plan` as the concrete sound-planning fields.
 
@@ -89,12 +90,12 @@ Use this only after the Sound Medium Plan exists. Before critic review, build a 
 
 If running standalone, recommend Music / Sound Critic Review. If the `artist-os` orchestrator is running, return the draft and stop; the orchestrator advances automatically.
 
-## Final Suno Prompt Plan Process
+## Final Sound Prompt Plan Process
 
 Use this only after Music / Sound Critic Review and Brief Approval.
 
 1. Produce the Sound Creative Brief Record matching `schemas/sound-creative-brief.schema.json`, including `transformation_brief_id` and `beat_plan_id`.
-2. Produce one Suno Sound Prompt Plan matching `schemas/sound-prompt-plan.schema.json`, including `transformation_brief_id`, `beat_plan_id`, and `sound_medium_plan_id`.
+2. Produce one platform-neutral Sound Prompt Plan matching `schemas/sound-prompt-plan.schema.json`, including `transformation_brief_id`, `beat_plan_id`, `sound_medium_plan_id`, `target_platform: "platform_neutral"`, and `platform_renderings`.
 3. Include exactly three Prompt Variant Plans: Faithful, Amplified, and Minimal.
 4. Keep the same Artist Meaning, Sonic Concept Direction, Genre / Production Direction, Tempo / Groove Direction, Vocal / Lyric Policy, and Arrangement Plan across variants unless the artist approved a Variant Test Axis.
 5. Make variants distinct using concrete sonic differentiators: groove, density, instrumentation, vocal treatment, arrangement movement, dynamic contrast, harmony, texture, mix perspective, production finish, silence, or section behavior.
@@ -103,17 +104,19 @@ Use this only after Music / Sound Critic Review and Brief Approval.
 8. In every `song_structure.sections[]` entry, include `beat_id`, `key_emotional_movement_id`, `expectation_turn_translation`, `intended_feeling`, and `tension_profile`.
 9. In every Prompt Variant Plan, include `emotional_tension_preservation` so the Faithful, Amplified, and Minimal variants can vary sonically without dropping the approved feeling or tension criteria.
 10. Mark any Derived Sonic Elements and trace them to Artist Meaning, Transformation Brief, Beat Plan, Sound Medium Plan, Core Tension Pairs, Active Sonic Tensions, Beats, Tension Points, Poetic Density Notes, Lyrics Draft, or Arrangement Plan.
-11. For each variant, include `suno_outputs` with title, instrumental toggle, lyrics mode/text, Style of Music, and Exclude.
-12. Include top-level `suno_custom_mode_outputs` for the recommended default variant.
-13. Include critique criteria for each Prompt Variant Plan.
+11. For each variant, include `platform_output_intent` with the neutral title, instrumental intent, lyrics mode/text, style prompt intent, and exclusions that a platform renderer can translate.
+12. Add one `platform_renderings[]` entry per requested platform. For the current first sound implementation, create a Suno rendering from the selected source variant and store Suno Custom Mode fields under `platform_renderings[].outputs.suno_custom_mode_outputs`.
+13. Include critique criteria for each Prompt Variant Plan and for each platform rendering readiness check.
 
-## Suno Output Rules
+## Platform Rendering Boundary
 
-The Suno-facing output contract is canonical in `docs/text-to-sound/ARCHITECTURE.md` → "Suno Custom Mode Outputs": the required Custom Mode fields, how to compose `style_of_music` (and what must stay out of it), and how `title`, `lyrics`, `instrumental`, `exclude`, model, Inspo, and Persona are filled. Follow it; do not restate the field rules here.
+The platform-facing output contract is canonical in `docs/text-to-sound/ARCHITECTURE.md` → "Platform Rendering Boundary". Platform renderers may translate the approved Sound Prompt Plan into provider-native fields, syntax, sliders, upload guidance, and readiness checks. They may not change Artist Meaning, Vocal / Lyric Policy, approved lyrics, arrangement authority, Sonic Dynamics, or traceability.
+
+For Suno Platform Rendering, load `skills/artist-os/references/platforms/suno-output.md`. That file owns Suno Custom Mode field rendering and Suno readiness checks; do not restate those field rules here.
 
 ## Traceability Rules
 
-Every prompt choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Sound Medium Plan, a Core Tension Pair, Emotional Quality, Beat, Tension Point, Poetic Density Note, Sonic Concept Direction, Genre Direction, Tempo / Groove Direction, Vocal / Lyric Policy, Lyrics Draft, Arrangement Plan, Section Tension Map, or Sonic Dynamics.
+Every prompt choice and platform rendering choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Sound Medium Plan, a Core Tension Pair, Emotional Quality, Beat, Tension Point, Poetic Density Note, Sonic Concept Direction, Genre Direction, Tempo / Groove Direction, Vocal / Lyric Policy, Lyrics Draft, Arrangement Plan, Section Tension Map, Sonic Dynamics, or `platform_output_intent`.
 
 Genre / Production Direction is subordinate to Artist Meaning, Emotional Structure, Beat Plan, Vocal / Lyric Policy, Arrangement Plan, and Sonic Dynamics.
 
@@ -121,6 +124,6 @@ Genre / Production Direction is subordinate to Artist Meaning, Emotional Structu
 
 Before Music / Sound Critic Review, return the Sound Medium Plan, Sound Creative Brief Document, Beat Plan reference, Sonic Concept Direction, Genre / Production Direction, Tempo / Groove Direction, Vocal / Lyric Policy, Lyrics Draft when present, Arrangement Plan, Sonic Dynamics, Sequence Recommendation, and open questions.
 
-After Music / Sound Critic Review and Brief Approval, return the Sound Creative Brief Record, Suno Sound Prompt Plan, Faithful/Amplified/Minimal Prompt Variant Plans, Suno Custom Mode outputs, Derived Sonic Elements if any, and critique checklist for Prompt Critic Review.
+After Music / Sound Critic Review and Brief Approval, return the Sound Creative Brief Record, Sound Prompt Plan, Faithful/Amplified/Minimal Prompt Variant Plans, platform renderings such as Suno Custom Mode outputs, Derived Sonic Elements if any, and critique checklist for Prompt Critic Review.
 
 When emitted as records, JSON must validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`.

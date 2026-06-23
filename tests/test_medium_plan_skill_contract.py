@@ -72,14 +72,15 @@ MEDIUM_PLAN_SKILLS = {
             "docs/text-to-sound/ARCHITECTURE.md",
         ],
         "format_refs": [
-            "Suno Custom Mode Outputs",
+            "Platform Rendering Boundary",
+            "Suno Platform Rendering",
         ],
         "hard_gates": [
             "a standalone run has no conductor",
             "Never call Suno or any sound generation provider without explicit approval",
-            "Do not produce the Sound Creative Brief Record or Suno Sound Prompt Plan until Music / Sound Critic Review and Brief Approval",
+            "Do not produce the Sound Creative Brief Record or Sound Prompt Plan until Music / Sound Critic Review and Brief Approval",
             "Do not invent lyrics unless the artist chooses",
-            "Do not lock the final Suno prompt until Vocal / Lyric Policy is resolved",
+            "Do not lock the final platform rendering until Vocal / Lyric Policy is resolved",
             "Do not create multiple sequence prompt plans until the artist approves a sequence recommendation",
             "Chat context is not durable storage",
         ],
@@ -94,6 +95,7 @@ MEDIUM_PLAN_SKILLS = {
             "schemas/sound-medium-plan.schema.json",
             "schemas/sound-creative-brief.schema.json",
             "schemas/sound-prompt-plan.schema.json",
+            "skills/artist-os/references/platforms/suno-output.md",
         ],
     },
     "skills/artist-os/references/video-journey.md": {
