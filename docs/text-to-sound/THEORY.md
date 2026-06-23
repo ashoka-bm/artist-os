@@ -1,6 +1,6 @@
 # Text To Sound Theory
 
-Text-to-sound is a meaning-preserving transformation from a Text Reference into a Suno Sound Prompt Plan for the first sound version. It reuses the shared Artist OS layers: Reference, Artist Meaning, Formal Analysis, Emotional Structure, Beat Plan, Poetic Density, Transformation Brief, Sound Medium Plan, Brief Approval, Prompt Variant Plans, Review Records, and provenance.
+Text-to-sound is a meaning-preserving transformation from a Text Reference into a platform-neutral Sound Prompt Plan with final platform renderings, such as Suno Custom Mode for the first sound version. It reuses the shared Artist OS layers: Reference, Artist Meaning, Formal Analysis, Emotional Structure, Beat Plan, Poetic Density, Transformation Brief, Sound Medium Plan, Brief Approval, Prompt Variant Plans, Review Records, and provenance.
 
 This layer defines the sound-specific translation model. It should not duplicate the shared Artist OS theory unless the sound workflow needs a medium-specific rule.
 
@@ -242,7 +242,9 @@ The text-to-sound flow keeps Faithful, Amplified, and Minimal variants.
 
 Each variant must name concrete sonic differentiators, such as tempo, instrumentation, texture, rhythm, harmony, vocal treatment, arrangement density, silence, dynamics, mix perspective, or production finish.
 
-For the first sound version, each Prompt Variant Plan must also produce Suno-ready outputs: title, instrumental toggle, lyrics mode and text, Style of Music, and Exclude. The Style of Music field should read like a polished Suno prompt: compact, musical, comma-separated, and free of Artist OS internal scoring language.
+For the first sound version, each Prompt Variant Plan must also produce `platform_output_intent`: title, instrumental intent, lyrics mode and text, style prompt intent, and exclusions. A platform renderer then turns that neutral intent into provider-native fields such as Suno's Style of Music and Exclude. Platform renderers may change wording and field placement, but they may not change Artist Meaning, Vocal / Lyric Policy, approved lyrics, Arrangement Plan, Sonic Dynamics, or traceability.
+
+Suno Platform Rendering should make the final Custom Mode output practical and production-aware: compact musical style language, section-aware lyric tags when helpful, vocal/lyric policy alignment, controlled endings, concrete exclusions, and readiness checks. Those mechanics belong to the renderer, not to the upstream sound theory.
 
 ## Dry Run Boundary
 

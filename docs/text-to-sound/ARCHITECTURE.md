@@ -1,6 +1,6 @@
 # Text To Sound Architecture
 
-The Text-to-Sound Slice is a complete dry-run Artist OS workflow from Text Reference to Suno Sound Prompt Plan.
+The Text-to-Sound Slice is a complete dry-run Artist OS workflow from Text Reference to a platform-neutral Sound Prompt Plan with a final platform rendering, such as Suno Custom Mode.
 
 ```text
 Text Reference
@@ -25,7 +25,8 @@ Text Reference
   -> revised Sound Creative Brief Document
   -> Brief Approval
   -> Sound Creative Brief Record
-  -> Suno Sound Prompt Plan
+  -> Sound Prompt Plan
+  -> Platform Rendering, Suno Custom Mode for the first implementation
   -> Prompt Critic Review
   -> optional Generation Approval Gate
   -> Output Record, when an artifact exists
@@ -51,7 +52,7 @@ Reuse the existing Artist OS stages where they are medium-neutral:
 9. Create structured records only after Brief Approval. Sound Creative Brief Records validate against `schemas/sound-creative-brief.schema.json`.
 10. Produce Faithful, Amplified, and Minimal Prompt Variant Plans.
 11. Preserve traceability from every prompt choice back to the approved brief, Beat Plan, and Sound Medium Plan.
-12. Produce Suno Custom Mode fields directly for this first sound version.
+12. Produce a platform-neutral Sound Prompt Plan, then render platform-specific fields at the Platform Rendering Boundary.
 
 ## Sound-Specific Gates
 
@@ -138,11 +139,11 @@ Adapt the template for the medium. Modern short-form songs may start with a hook
 
 When the Beat Plan has several significant turns, recommend whether the work should be a single continuous track, a multi-section track, a suite, or separate alternate sound directions. Do not create multiple final sound prompt plans until the artist approves the sequence recommendation.
 
-## Suno Prompt Plan Contract
+## Sound Prompt Plan Contract
 
-A Suno Sound Prompt Plan validates against `schemas/sound-prompt-plan.schema.json`.
+A Sound Prompt Plan validates against `schemas/sound-prompt-plan.schema.json`. It is platform-neutral until `platform_renderings[]` maps one selected Prompt Variant Plan into a provider-native output shape.
 
-A Suno Sound Prompt Plan should include:
+A Sound Prompt Plan should include:
 
 - `prompt_plan_id`
 - `brief_id`
@@ -153,9 +154,9 @@ A Suno Sound Prompt Plan should include:
 - `sound_medium_plan_id`
 - `target_media_type: "sound"`
 - `sound_work_type`
-- `target_platform: "suno"`
+- `target_platform: "platform_neutral"`
 - `description`
-- `style_of_music`
+- `style_prompt_summary`
 - `sonic_concept_summary`
 - `genre_direction_summary`
 - `tempo_groove_summary`
@@ -166,15 +167,38 @@ A Suno Sound Prompt Plan should include:
 - `instrumentation_plan`
 - `sonic_dynamics_summary`
 - `prompt_variants`
-- `suno_custom_mode_outputs`
+- `platform_renderings`
 - `traceability_summary`
 - `critique_checklist`
 
-## Suno Custom Mode Outputs
+Each Prompt Variant Plan should include:
 
-For this first sound version, Artist OS targets Suno only. The final output should be easy to paste into Suno Custom Mode rather than optimized for every music generator.
+- `variant_type`: `faithful`, `amplified`, or `minimal`
+- `variant_test_axis_label`
+- `sonic_differentiators`
+- `prompt_text`
+- `platform_output_intent`
+- `negative_constraints`
+- `derived_sonic_elements`
+- `traceability_notes`
+- `critique_checklist`
 
-Required Suno-facing fields:
+## Platform Rendering Boundary
+
+Platform Rendering is the final generator-specific translation step. It may translate approved neutral prompt intent into provider-native fields, syntax, controls, upload guidance, and readiness checks. It may not change Artist Meaning, Vocal / Lyric Policy, approved lyrics, the Arrangement Plan, Sonic Dynamics, or traceability.
+
+Each `platform_renderings[]` entry should include:
+
+- `platform`
+- `renderer`
+- `source_variant_type`
+- `rendering_status`
+- `outputs`
+- `platform_constraints`
+- `readiness_check`
+- `traceability_summary`
+
+For the first implementation, use `platform: "suno"` and `renderer: "suno_custom_mode"`. The required Suno-facing fields live under `outputs.suno_custom_mode_outputs`:
 
 - `mode: "custom"`
 - `title`
@@ -205,17 +229,7 @@ For `vocal_lyric_policy.lyrics_mode = "phonetic_vocals"`, keep `instrumental: fa
 
 Do not include traceability notes, schema language, pair scores, or Artist OS internal field names inside `style_of_music`. Those remain in the structured record.
 
-Each Prompt Variant Plan should include:
-
-- `variant_type`: `faithful`, `amplified`, or `minimal`
-- `variant_test_axis_label`
-- `sonic_differentiators`
-- `prompt_text`
-- `suno_outputs`
-- `negative_constraints`
-- `derived_sonic_elements`
-- `traceability_notes`
-- `critique_checklist`
+Use `skills/artist-os/references/platforms/suno-output.md` for the Suno Platform Rendering rules. Other generators should add sibling renderer references and emit their own `platform_renderings[]` entries without changing the upstream Sound Medium Plan or Sound Prompt Plan contract.
 
 ## Critique Criteria
 

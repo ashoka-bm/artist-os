@@ -5,19 +5,19 @@
   "artist_meaning_id": "meaning_door_left_lit",
   "gate_type": "prompt_lock",
   "gate_status": "approved",
-  "decision": "Lock the reviewed Suno Sound Prompt Plan.",
+  "decision": "Lock the reviewed Sound Prompt Plan and Suno rendering.",
   "options_presented": [
     {
       "option_id": "lock",
       "label": "Lock",
-      "summary": "Use the reviewed Suno prompt plan for dry-run completion or generation approval."
+      "summary": "Use the reviewed Sound Prompt Plan and Suno rendering for dry-run completion or generation approval."
     }
   ],
   "selected_option": {
     "option_id": "lock",
     "label": "Lock"
   },
-  "artist_response": "Lock the Suno prompt plan.",
+  "artist_response": "Lock the Sound Prompt Plan and Suno rendering.",
   "proceed_unconfirmed": false,
   "upstream_refs": [
     {

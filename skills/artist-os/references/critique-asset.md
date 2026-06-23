@@ -21,7 +21,7 @@ Read:
 - Creative Brief,
 - Beat Plan,
 - Medium Plan when available,
-- Provider-Neutral Image Prompt Plan, Suno Sound Prompt Plan, or Text Generation Plan,
+- Provider-Neutral Image Prompt Plan, Sound Prompt Plan, or Text Generation Plan,
 - Prompt Branch Set when reviewing branch strategy or branch-generated output,
 - Output Record for any concrete generated, imported, drafted, or edited Output Artifact,
 - Generated Work or output description only when no Output Record exists yet.

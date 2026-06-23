@@ -1,6 +1,6 @@
 # Sound Journey
 
-The Sound Journey translates an approved Beat Plan into music, audio, or sound design. The current implemented target is a Suno Sound Prompt Plan, but the journey is broader than Suno.
+The Sound Journey translates an approved Beat Plan into music, audio, or sound design. The current implemented target is a Sound Prompt Plan with a Suno Custom Mode rendering, but the journey is broader than Suno.
 
 ## Best Fit
 
@@ -58,6 +58,6 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Current Implementation
 
-The current text-to-Suno slice implements this route through the Suno Sound Prompt Plan, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The Sound Medium Plan records Medium-Level Workflow Scale Routing. The Sound Creative Brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
+The current text-to-sound slice implements this route through the Sound Prompt Plan with platform renderings, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The Sound Medium Plan records Medium-Level Workflow Scale Routing. The Sound Creative Brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
 
 When Workflow Scale Routing activates Long-Work Stewardship for sound, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Sound Medium Plan maps Beats to tracks, movements, sections, or sequence parts. The Sound Medium Plan owns Sonic Dynamics, sequence planning, arrangement/form, vocal/lyric policy, and sound-role details; the stewardship record references sound part ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

@@ -34,7 +34,7 @@ No step advances unless its output validates against the declared schema. Review
 | Text Creative Brief Record | `schemas/text-creative-brief.schema.json` | `tests/fixtures/text-journey/text-creative-brief.json` |
 | Provider-Neutral Image Prompt Plan | `schemas/prompt-plan.schema.json` | `examples/text-prompt-plan.example.json` |
 | Prompt Branch Set | `schemas/prompt-branch-set.schema.json` | `examples/prompt-branch-set.example.json` |
-| Suno Sound Prompt Plan | `schemas/sound-prompt-plan.schema.json` | `examples/text-sound-prompt-plan.example.json` |
+| Sound Prompt Plan | `schemas/sound-prompt-plan.schema.json` | `examples/text-sound-prompt-plan.example.json` |
 | Text Generation Plan | `schemas/text-generation-plan.schema.json` | `tests/fixtures/text-journey/text-generation-plan.json` |
 | Output Record | `schemas/output-record.schema.json` | `examples/output-record.example.json` |
 | Review Record | `schemas/review-record.schema.json` | `examples/review-record.example.json` |
@@ -162,7 +162,7 @@ The Beat Plan remains the story authority. The Long-Work Stewardship Record refe
 
 The Review Record must include numeric tension intensity assessments. Reviewers compare claimed intensity against their own assessed intensity and the minimum required intensity, then set `meets_minimum`; downstream gates use that verdict when deciding whether a block can be waived or whether revision is required.
 
-Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records, Suno Sound Prompt Plans, Text Creative Brief Records, and Text Generation Plans are locked contract records. Draft brief documents, draft prompt documents, and pre-approval planning packets are not validated against these final-record schemas until their required review and approval gates have completed.
+Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records, Sound Prompt Plans, Text Creative Brief Records, and Text Generation Plans are locked contract records. Draft brief documents, draft prompt documents, and pre-approval planning packets are not validated against these final-record schemas until their required review and approval gates have completed.
 
 ### `output.record`
 
@@ -174,7 +174,7 @@ Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records
 - Gate: Generation Approval Gate for provider-backed generation; Output Acceptance Gate for acceptance.
 - Next: Output Critic Review, Output Acceptance Gate, calibration context, export, archive, or revision.
 
-Provider adapters must refuse image or Suno generation unless the request includes an approved Generation Approval Gate for that exact call or approved batch. The adapter must verify that the gate is approved, not pending; that its upstream refs match the Prompt Plan, Suno Sound Prompt Plan, or Prompt Branch Set being executed; and that the requested provider action fits the approved call or batch scope. Missing, mismatched, stale, or merely waived gates are hard failures. After the provider returns a concrete artifact, the adapter emits an Output Record; it must not create an Output Record for a refused or unexecuted call.
+Provider adapters must refuse image, sound, or other media generation unless the request includes an approved Generation Approval Gate for that exact call or approved batch. The adapter must verify that the gate is approved, not pending; that its upstream refs match the Prompt Plan, Sound Prompt Plan platform rendering, or Prompt Branch Set being executed; and that the requested provider action fits the approved call or batch scope. Missing, mismatched, stale, or merely waived gates are hard failures. After the provider returns a concrete artifact, the adapter emits an Output Record; it must not create an Output Record for a refused or unexecuted call.
 
 ## Text-To-Image Steps
 
@@ -281,16 +281,16 @@ The Sound Creative Brief Record must include `transformation_brief_id` and `beat
 ### `sound.prompt_plan`
 
 - Input: approved Sound Creative Brief Record and Sound Medium Plan.
-- Output: Suno Sound Prompt Plan.
+- Output: Sound Prompt Plan with platform renderings.
 - Schema: `schemas/sound-prompt-plan.schema.json`.
 - Skill: `skills/artist-os/references/text-to-suno-plan.md`.
 - Reviewer required: Prompt Critic sub-agent.
 - Gate: Prompt Lock Gate.
 - Next: dry-run completion, Generation Approval Gate, or Output Review.
 
-The Suno Sound Prompt Plan must include `transformation_brief_id`, `beat_plan_id`, and `sound_medium_plan_id`.
+The Sound Prompt Plan must include `transformation_brief_id`, `beat_plan_id`, and `sound_medium_plan_id`.
 
-The Suno Sound Prompt Plan must include `emotional_tension_contract`, section-level Beat and Key Emotional Movement mapping, section-level Expectation Turn Translation, and variant-level `emotional_tension_preservation`. Prompt variants may vary sonic execution, but they must preserve the approved Intended Feeling and Minimum Tension Criteria.
+The Sound Prompt Plan must include `emotional_tension_contract`, section-level Beat and Key Emotional Movement mapping, section-level Expectation Turn Translation, variant-level `emotional_tension_preservation`, and final `platform_renderings[]`. Prompt variants may vary sonic execution, but they must preserve the approved Intended Feeling and Minimum Tension Criteria.
 
 ## Text Journey Steps
 
@@ -365,7 +365,7 @@ Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
 Output Record -> Long-Work Stewardship Record, when cumulative
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
-Sound Creative Brief Record -> Suno Sound Prompt Plan
+Sound Creative Brief Record -> Sound Prompt Plan
 Review Packet -> Review Record
 ```
 

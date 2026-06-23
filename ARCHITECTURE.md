@@ -92,4 +92,4 @@ Every Prompt Variant Plan, Text Generation Plan, and Output Artifact must trace 
 
 ## Provider Boundary
 
-Generation providers come later. The current implementation produces Provider-Neutral Image Prompt Plans and Suno Sound Prompt Plans as dry-run artifacts. A later Provider Adapter may call a media model, but it must record provider, model, prompt, settings, seed if available, output path, and cost-bearing approval.
+Generation providers come later. The current implementation produces Provider-Neutral Image Prompt Plans and platform-neutral Sound Prompt Plans with Suno renderings as dry-run artifacts. A later Provider Adapter may call a media model, but it must record provider, model, prompt, settings, seed if available, output path, and cost-bearing approval.

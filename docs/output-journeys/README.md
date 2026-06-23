@@ -24,7 +24,7 @@ Journeys in this directory:
 
 - `image.md`: still images and image series. **Implemented.**
 - `video.md`: storyboard-ready Video Medium Plans for clips, scenes, sequences, trailers, and longer arcs. **Implemented as v0 planning.**
-- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, and Suno prompt plans. **Implemented.**
+- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, Sound Prompt Plans, and Suno renderings. **Implemented.**
 - `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms. **Implemented.**
 - `mixed-media.md`: coordinated outputs across multiple media. **Not built yet — forward-looking design.**
 
