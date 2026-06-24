@@ -13,6 +13,7 @@ Use these product docs as durable references:
 - `docs/progress.md`
 - `docs/pipeline-contract.md`
 - `docs/gates-and-reviews.md`
+- `docs/subagent-orchestration.md`
 - `docs/story/THEORY.md`
 - `docs/story/ARCHITECTURE.md`
 - `docs/output-journeys/`
@@ -85,6 +86,7 @@ This repository allows direct commits and pushes to `main` when the user explici
 Everything else an agent needs at runtime is canonical elsewhere — point to it, do not restate it:
 
 - **Gate order, gate semantics, critic/reviewer roles, review execution, blocking findings** → `docs/gates-and-reviews.md`. This is the canonical contract for the shared gate order and review rules; medium-specific docs may add local gates but do not redefine them.
+- **Subagent delegation, parallel production, worker packets, and synchronization barriers** → `docs/subagent-orchestration.md`. This is the canonical contract for what subagents may do, what only the conductor may do, and when parallel work is allowed.
 - **Visual Gate Boards, stage completion, style/series logic, Prompt Variant Plans** → `THEORY.md` (and `docs/text-to-sound/THEORY.md` + `ARCHITECTURE.md` for sound). This is the home for the Visual Gate Board contract, the four-stage completion rules, the separation of Emotional Structure / Visual Dynamics / Sonic Dynamics / Style Direction, Style-as-last-priority, the Wondermint Category Reference rule, and the Series Amplitude Plan.
 - **Persistence and storage** → `docs/storage.md`: persist each phase before advancing (manifest, stage record, event, sidecar-tagged assets, SQLite refresh), use `artist-os.sqlite` as the query index, initialize with `bin/artist-os-db setup` when missing, and treat `status = missing` projects as historical until their files are restored.
 - **The runtime phase order for each slice** → the `artist-os` conductor skill, `skills/artist-os`.

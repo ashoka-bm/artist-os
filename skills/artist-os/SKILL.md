@@ -15,6 +15,7 @@ Paths like `THEORY.md`, files under `docs/` and `schemas/`, and files under `ski
 
 - `THEORY.md` — the canonical source for gate definitions, the Visual Gate Board contract, Stage Completion, Series logic, and Prompt Variant Plans. When a phase needs a board format, a gate question, or a "stage is done" rule, read it there rather than improvising.
 - `docs/storage.md` — Workspace Library layout and the persistence rule.
+- `docs/subagent-orchestration.md` — the delegation contract for worker packets, bounded subagents, Parallel Production, and synchronization barriers.
 - `docs/story/THEORY.md` and `docs/story/ARCHITECTURE.md` — the shared Story / Beat Plan layer.
 - `schemas/long-work-stewardship-record.schema.json` — the stewardship record for Cumulative Work.
 - `schemas/release-package-plan.schema.json` and `docs/output-journeys/mixed-media.md` — the Album v1 Release Package Plan and mixed-media route.
@@ -197,6 +198,16 @@ When a project uses multiple beats, a journey-shaped output, or a written artifa
 All reviewer stages are mandatory bounded sub-agent reviews. Do not self-review the work you just created. Pass the reviewer only the relevant review packet and require a Review Record that validates against `schemas/review-record.schema.json`. Apply blocking findings before advancing unless the artist explicitly waives them.
 
 If the current host cannot spawn a sub-agent, run a degraded reviewer fallback: start a fresh, clearly separated review pass, state that it is a fallback because sub-agents are unavailable, review only the bounded packet, and still emit a Review Record. Treat this as a portability fallback, not the preferred path.
+
+## Subagent Orchestration
+
+Use `docs/subagent-orchestration.md` before delegating planning, validation, review, record-building, or parallel production work.
+
+The conductor keeps pipeline authority. Subagents may analyze, draft, validate, critique, or prepare disposable packets, but they must not ask artist-facing gates, record approvals or waivers, persist authoritative state, mutate manifests/events/indexes, call providers, generate media, or advance phases.
+
+Choose the lightest orchestration mode that protects provenance and quality. Use **Standard Orchestration** for compact single-output work, avoiding fanout unless there is a specific risk. Use **Parallel Production** more regularly for cumulative work, release packages, Prompt Variant Plans, Prompt Branch Set branches, approved series roles, approved album/release-package deliverables, or explicitly approved multi-output package parts. Do not activate Parallel Production merely because multiple mediums are mentioned.
+
+Run delegated work in waves: freeze the input packet, dispatch eligible subagents, collect results, reconcile one candidate stage output, validate, persist, then ask the next gate question or advance. Critique of a draft waits until the draft exists; independent variants, branches, outputs, or review lenses may be critiqued in parallel after their inputs exist. When multiple workers return findings, reduce them by fingerprint and confidence before changing the authoritative artifact or presenting artist-facing decisions.
 
 ## Start Conditions
 

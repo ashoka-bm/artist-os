@@ -15,6 +15,12 @@ Step Input Record(s)
 
 No step advances unless its output validates against the declared schema. Review stages produce Review Records.
 
+## Subagent Orchestration Rule
+
+Subagents may analyze, draft, validate, critique, or prepare disposable work packets, including parallel packets when the work units are independent. They do not advance the pipeline. The conductor alone records artist decisions, persists authoritative state, mutates manifests/events/indexes, and calls providers after explicit approval.
+
+Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orchestration, Parallel Production, synchronization barriers, and safe parallelism rules.
+
 ## Record Types
 
 | Record type | Schema | Example |
