@@ -26,6 +26,7 @@ Journeys in this directory:
 - `video.md`: storyboard-ready Video Medium Plans for clips, scenes, sequences, trailers, and longer arcs. **Implemented as v0 planning.**
 - `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, Sound Prompt Plans, and Suno renderings. **Implemented.**
 - `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms. **Implemented.**
+- `illustrated-written-work.md`: children's books, comics, story-with-images projects, covers plus interiors, and diagram-rich written works coordinated by Illustration Plan. **Planning contract exists.**
 - `mixed-media.md`: coordinated outputs across multiple media. **Not built yet — forward-looking design.**
 
 Writing-method integration lives in `docs/writing/README.md`. Its referenced `writing-fragments`, `writing-beats`, and `writing-shape` skill files are high-authority for raw material capture, beat-by-beat journey creation, and finished written shape.

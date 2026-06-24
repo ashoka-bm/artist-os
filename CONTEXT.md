@@ -92,6 +92,18 @@ _Avoid_: Text Medium Plan, Text Generation Plan
 The structured JSON version of an approved Text Creative Brief for agent handoff, validation, and Text Generation Plan creation.
 _Avoid_: Text Creative Brief Document, Text Medium Plan, Text Generation Plan
 
+**Character Template**:
+A lightweight, versioned planning seed for a character's identity, dramatic function, voice and behavior cues, visual identity, and continuity constraints. It can support text-only continuity, visual reference-sheet prompts, video planning, and illustrated written work, but it is not long-form canon authority.
+_Avoid_: Medium, story bible, Long-Work Stewardship
+
+**Visual Reference Sheet Plan**:
+A provider-neutral prompt package for a four-view or comparable reference sheet for a character, product, object, setting, or style target. Drafting the prompt is allowed automatically; generating the sheet requires Generation Approval and an Output Record.
+_Avoid_: Generated reference sheet, Character Template, Prompt Plan
+
+**Illustration Plan**:
+The cross-medium coordinator for illustrated written work after a Text Medium Plan exists, mapping pages, spreads, panels, diagrams, covers, text-image relationships, character references, visual continuity rules, and downstream image prompt refs.
+_Avoid_: Video Medium Plan, Video Storyboard, Text Medium Plan, Image Medium Plan
+
 **Video Medium Plan**:
 The video-specific Medium Plan that translates an approved Beat Plan into sequences, Video Scenes, timed Storyboard Shots, visual style, shot list, motion, transitions, script or audio relationships, and storyboard planning; v0 stops at storyboard-ready planning rather than finished video generation.
 _Avoid_: Storyboard pre-plan, finished video, provider-specific video job
@@ -171,6 +183,14 @@ _Avoid_: Storyboard Shot, frame, generic image
 **Storyboard Shot**:
 The atomic time-based video realization of a Visual Unit that adds duration, motion, blocking, transition, and script or audio relationships.
 _Avoid_: Image Role, finished video clip, generated video
+
+**Video Storyboard**:
+The time-based storyboard package for video work, built from Storyboard Shots and concerned with duration, camera movement, subject movement, transitions, script/audio relationships, and Video Audio Posture.
+_Avoid_: Illustration Plan, children's book storyboard, comic page plan
+
+**Illustrated Written Work**:
+A written work whose final artifact includes planned images, pages, spreads, panels, diagrams, spot illustrations, or cover/interior art. It is coordinated by Illustration Plan and uses Text Journey plus Image Journey support, not Video Journey.
+_Avoid_: Video, animation by default, Release Package by default
 
 **Shot Design**:
 The Visual Unit decision that names shot scale, camera angle, visual emphasis, and composition strategy. Shot Design serves Intended Feeling and the governing Expectation Turn; it is not a default full-body depiction of the subject.
@@ -1048,6 +1068,9 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Downstream records should reference the governing `artist_meaning_id` directly. `source_id` alone is not enough once a Reference can have multiple Artist Meaning versions.
 - Downstream records may embed Artist Meaning summaries for readability and review packets, but `artist_meaning_id` is the authority. If an embedded summary conflicts with the referenced **Artist Meaning Record**, the referenced record wins.
 - A **Reference** can produce one or more **Creative Briefs** after Artist Meaning, story, and medium planning are established.
+- **Character** is an intent shortcut, not a medium. Character requests route into Character Templates, Visual Reference Sheet Plans, Text Journey, Image Journey, Video Journey, or Illustration Plan depending on the desired output.
+- A **Character Template** may be used provisionally for text-only planning and reference-sheet prompt drafting. Provider-backed generation needs an approved template or an explicit Generation Approval that includes the provisional character details.
+- A **Visual Reference Sheet Plan** may target a character, product, object, setting, or style. Generated or imported sheets are normal Output Records or assets linked back to the plan.
 - A **Visual Unit** is embedded inside the owning Medium Plan or storyboard plan; it is not a standalone record unless future rehearsals prove it needs its own lifecycle.
 - An **Image Role** is the still-image realization of a **Visual Unit**.
 - A **Storyboard Shot** is the time-based video realization of a **Visual Unit**.
@@ -1065,6 +1088,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - Storyboard frame prompts belong to the v0 **Video Medium Plan**; a separate **Video Prompt Plan** waits until provider-neutral video generation instructions prove their fields.
 - Generated storyboard stills are normal **Output Records** linked back to the relevant **Storyboard Shot**.
 - **Video Style Expression** expresses the approved **Style Direction** over time; it does not replace or outrank Style Direction.
+- An **Illustration Plan** is created after the Text Medium Plan for illustrated written work. It coordinates text and still-image outputs; it does not replace Text Medium Plan, Image Medium Plan, Provider-Neutral Image Prompt Plan, or Output Record.
+- Ambiguous user-facing "storyboard" language is disambiguated. Film, animation, reel, trailer, and video-generator storyboards route to **Video Storyboard** / Video Journey. Children's book, comic, picture-book, book, and diagram-rich storyboards route to **Illustration Plan**.
 - A **Release Package** coordinates multiple outputs under one artist-facing release.
 - A **Release Package Plan** coordinates selected Medium Plans and deliverables without replacing medium-specific planning authority.
 - A **Release Package Plan** owns package subtype, deliverable list, required or optional status, Album Cohesion Mode when the package is an Album, track-to-deliverable mapping, package-level production order, Album Calibration state, cross-media continuity decisions, and references to governing plans and outputs.

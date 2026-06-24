@@ -1,0 +1,93 @@
+{
+  "illustration_plan_id": "ilp_threshold_picture_book",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "text_medium_plan_id": "tmp_door_left_lit",
+  "illustrated_work_type": "children_book",
+  "character_reference_strategy": {
+    "status": "accepted",
+    "decision_ref": "gate_character_refs_threshold",
+    "character_template_refs": ["char_door_keeper"],
+    "visual_reference_sheet_plan_refs": ["vrs_door_keeper"],
+    "notes": "The artist wanted templates plus reference-sheet prompts for recurring implied character consistency."
+  },
+  "visual_reference_sheet_strategy": {
+    "status": "accepted",
+    "decision_ref": "gate_character_refs_threshold",
+    "visual_reference_sheet_plan_refs": ["vrs_door_keeper"],
+    "notes": "Reference-sheet prompts are drafted; generated sheets still require Generation Approval."
+  },
+  "page_or_panel_plan": [
+    {
+      "unit_id": "ilu_cover",
+      "unit_type": "cover",
+      "order_index": 1,
+      "text_section_refs": ["section_title"],
+      "beat_ids": ["beat_invitation"],
+      "key_emotional_movement_ids": ["kem_invitation_to_unease"],
+      "visual_role": "Cover image that makes the warm threshold inviting and uncertain.",
+      "image_type": "cover",
+      "prompt_brief": "A quiet hallway cover image with the warm doorway as the main symbolic pull.",
+      "character_refs_used": ["char_door_keeper", "vrs_door_keeper"],
+      "style_continuity_notes": "Keep the unseen host implied through light rather than showing a figure.",
+      "approval_status": "planned"
+    },
+    {
+      "unit_id": "ilu_spread_threshold",
+      "unit_type": "spread",
+      "order_index": 2,
+      "text_section_refs": ["section_threshold"],
+      "beat_ids": ["beat_threshold"],
+      "key_emotional_movement_ids": ["kem_invitation_to_unease"],
+      "visual_role": "Interior spread that turns approach into choice.",
+      "image_type": "spread",
+      "prompt_brief": "A child-readable but emotionally tense spread of the half-open door and warm light.",
+      "character_refs_used": ["char_door_keeper", "vrs_door_keeper"],
+      "style_continuity_notes": "Use the same warm practical light and restrained realism from the cover.",
+      "approval_status": "planned"
+    }
+  ],
+  "visual_continuity_rules": [
+    "Warm practical light is the repeated visual signature.",
+    "Do not show the Door Keeper unless the artist approves changing the absence rule."
+  ],
+  "text_image_relationships": [
+    {
+      "unit_id": "ilu_cover",
+      "relationship": "The cover promises the emotional situation without resolving it.",
+      "must_not_duplicate_text": true
+    },
+    {
+      "unit_id": "ilu_spread_threshold",
+      "relationship": "The spread gives the reader visual pressure while the text stays sparse.",
+      "must_not_duplicate_text": true
+    }
+  ],
+  "image_prompt_plan_refs": [],
+  "generation_policy": {
+    "bulk_prompt_expansion_requires_plan_approval": true,
+    "image_generation_requires_approval": true,
+    "notes": "No page or spread image prompts should expand in bulk before Illustration Plan Approval."
+  },
+  "review_requirements": {
+    "illustration_plan_reviewer_required": true,
+    "review_record_id": null,
+    "approval_gate_id": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "text_medium_plan",
+      "source_ref": "tmp_door_left_lit",
+      "note": "The Illustration Plan waits for text structure before mapping spreads."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The cover and spread map to the invitation and threshold beats."
+    }
+  ],
+  "created_at": "2026-06-24T12:10:00Z"
+}

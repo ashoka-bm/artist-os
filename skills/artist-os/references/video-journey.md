@@ -14,8 +14,10 @@ Load details only when needed:
 - `docs/structure-library/README.md`, then only the relevant `docs/structure-library/story/` entry, when selecting or adapting Story Structure.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before video-specific planning.
 - `schemas/video-medium-plan.schema.json` for storyboard-ready video planning.
+- `schemas/character-template.schema.json` and `schemas/visual-reference-sheet-plan.schema.json` when recurring characters, products, objects, or settings need visual consistency.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative or full long-form video after Story Approval and Video Medium Plan mapping.
 - `schemas/output-record.schema.json` for every generated or imported storyboard still and future concrete video artifact.
+- `skills/artist-os/references/storyboard-prompt-builder.md` for the high-authority two-phase storyboard prompt package method.
 - `skills/artist-os/references/text-journey.md` when script, dialogue, voiceover, captions, social copy, or on-screen text wording needs drafting.
 - `skills/artist-os/references/text-to-suno-plan.md` when music, sound design, or a sound prompt plan becomes a first-class deliverable.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
@@ -30,12 +32,13 @@ These hold whether you run standalone or under the `artist-os` conductor:
 - Do not create a Video Prompt Plan in v0. Storyboard frame prompts live in the Video Medium Plan until provider-neutral video generation instructions prove their own fields.
 - Do not draft script, dialogue, voiceover, captions, social copy, or on-screen text wording inside the Video Medium Plan when a Text Generation Plan is needed. The Video Medium Plan owns timing, placement, role, and refs.
 - Do not create generated storyboard stills without Generation Approval. Each generated or imported storyboard still gets an Output Record linked back to the relevant Storyboard Shot before review or acceptance.
+- Do not re-ask for Character Templates or Visual Reference Sheet Plans after the artist declined or deferred them in this flow.
 - For cumulative or full long-form video, create and maintain a Long-Work Stewardship Record; do not expand later dependent sequences, scenes, or shot batches while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - Persist records and gate decisions as you create them, following `docs/storage.md`. Chat context is not durable storage.
 
 ## Inputs
 
-Use the Reference, Source Record, Artist Meaning Record, Transformation Brief, Beat Plan, Story Critic Review, Story Approval, any Long-Work Stewardship Record, prior Image or Text plans when available, and any artist-provided target format or platform/use constraints.
+Use the Reference, Source Record, Artist Meaning Record, Transformation Brief, Beat Plan, Story Critic Review, Story Approval, any Long-Work Stewardship Record, Character Templates, Visual Reference Sheet Plans or generated/imported reference sheet Output Records when available, prior Image or Text plans when available, and any artist-provided target format or platform/use constraints.
 
 ## Shared Story And Visual Planning
 
@@ -56,12 +59,13 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 3. Select the video format: short social video, single scene, trailer, montage, music video, explainer, performance clip, short film, feature film, episodic sequence, or other.
 4. Record duration target, aspect ratio, publication/use, audience, and format rationale.
 5. Record medium-level Workflow Scale Routing. The Video Medium Plan is scale-general: compact videos can use scenes and shots directly, while feature films, episodic work, and dependent batches activate Long-Work Stewardship when needed.
+5a. Record `character_reference_strategy` and `visual_reference_sheet_strategy` when recurring characters, products, objects, settings, or props affect visual consistency. Use `declined` or `deferred` without re-asking when the conductor already captured that answer.
 6. Decide whether Video Sequences are needed. Use sequences only when scale, pacing, stewardship, or long-form navigation needs scene groups.
 7. Define Video Scenes. Each scene must name its Beat ids or Beat group, setting, local dramatic purpose, duration target, and local tension.
 8. Define Storyboard Shots. Each shot must include `scene_id`, `beat_id`, `key_emotional_movement_id`, time range, Visual Unit, camera movement, subject movement, blocking, transition in/out, script/audio refs, on-screen text refs, and a storyboard frame prompt.
 9. For every Visual Unit, include composition intent, communication intent, Expectation Turn Translation, Intended Feeling, active tension profile, traceable symbolic representation, and Shot Design. Shot Design must name shot scale, camera angle, visual emphasis, composition strategy, emotional rationale, and avoid notes.
 10. Define Video Audio Posture: silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred. Create Text Journey or Sound Journey records only when that posture needs drafted words or sound planning.
-11. Define storyboard generation policy: storyboard prompts are in-plan; generated storyboard stills require explicit approval; every generated still becomes an Output Record.
+11. Define storyboard generation policy: storyboard prompts are in-plan; generated storyboard stills require explicit approval; every generated still becomes an Output Record. When a composite storyboard sheet or Phase 2 cinematic prompt is requested, use `storyboard-prompt-builder.md` as the method, but preserve Artist OS provider boundaries and Video Medium Plan traceability.
 12. Produce the Video Medium Plan only after Symbology, Style, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture, Workflow Scale Routing, and storyboard generation policy are complete or explicitly allowed to proceed unconfirmed.
 
 If medium-level `workflow_scale_routing.activated_supports` newly includes `long_work_stewardship` and no foundation record exists, create the foundation record immediately before enrichment. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Video Medium Plan with one Long-Work Part per video sequence, scene, or other accepted dependent unit; include readiness, checkpoints, continuity rules, and drift management before expansion.
@@ -93,6 +97,7 @@ Check:
 - whether Video Audio Posture is explicit and sufficient,
 - whether long-form expansion needs Long-Work Stewardship before more parts are planned,
 - whether storyboard frame prompts are provider-neutral and do not imply finished video generation.
+- whether Character Templates and Visual Reference Sheet Plans, if used, are aligned with shot continuity and not silently invented.
 
 Use Art Critic, Writing Critic, or Sound Critic criteria as supporting checks when those layers carry risk, but Video Critic Review owns the integrated time-based judgment. Emit a Review Record against `schemas/review-record.schema.json` with `review_role = "video_critic"`.
 

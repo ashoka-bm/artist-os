@@ -85,6 +85,8 @@
     "target_media_type": { "type": "string", "const": "image" },
     "story_mode": { "$ref": "#/$defs/story_mode" },
     "workflow_scale_routing": { "$ref": "#/$defs/workflow_scale_routing" },
+    "character_reference_strategy": { "$ref": "#/$defs/character_reference_strategy" },
+    "visual_reference_sheet_strategy": { "$ref": "#/$defs/visual_reference_sheet_strategy" },
     "symbology_direction": { "$ref": "#/$defs/symbology_direction" },
     "medium_output_shape_recommendation": { "$ref": "#/$defs/medium_output_shape_recommendation" },
     "presentation_mode": {
@@ -247,6 +249,42 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
         }
+      }
+    },
+    "strategy_status": {
+      "type": "string",
+      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+    },
+    "character_reference_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_ref", "character_template_refs", "visual_reference_sheet_plan_refs", "notes"],
+      "properties": {
+        "status": { "$ref": "#/$defs/strategy_status" },
+        "decision_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "character_template_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^char_[a-zA-Z0-9_-]+$" }
+        },
+        "visual_reference_sheet_plan_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^vrs_[a-zA-Z0-9_-]+$" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "visual_reference_sheet_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_ref", "visual_reference_sheet_plan_refs", "notes"],
+      "properties": {
+        "status": { "$ref": "#/$defs/strategy_status" },
+        "decision_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "visual_reference_sheet_plan_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^vrs_[a-zA-Z0-9_-]+$" }
+        },
+        "notes": { "type": "string" }
       }
     },
     "medium_output_shape_recommendation": {

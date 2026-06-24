@@ -14,6 +14,7 @@ Load details only when needed:
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
 - `schemas/image-medium-plan.schema.json` for image-specific translation decisions before Creative Brief creation.
 - `schemas/long-work-stewardship-record.schema.json` for image-series Cumulative Work after Story Approval and Image Medium Plan mapping.
+- `schemas/character-template.schema.json` and `schemas/visual-reference-sheet-plan.schema.json` when recurring characters, objects, settings, products, or props need visual consistency.
 - `docs/prompt-branch-set.md` and `schemas/prompt-branch-set.schema.json` when creating curator batches from an approved Prompt Plan.
 - `docs/metadata-schema.md` for required record fields and layout plans.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
@@ -73,11 +74,13 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 12. Select 6 to 8 Active Visual Tensions for the Target Visual Engine and define the Image Medium Plan's minimum tension criteria.
 13. Surface Style/Visual Conflicts and propose Style Adaptations.
 14. Record medium-level Workflow Scale Routing. A compact multi-beat arc can become a single `compressed_arc`. Activate image-series and Long-Work supports when `workflow_scale_routing` calls for them because the accepted image shape creates dependent image roles, durable canon is needed, recurring characters or world rules must persist, or full long-form image support is required.
+14a. Record `character_reference_strategy` and `visual_reference_sheet_strategy` when recurring visual identity matters. If the artist declined or deferred reference support, preserve that answer and do not ask again in the same flow.
 15. Define image roles from the shared Beat Plan. Each role must include the governing `beat_id`, `key_emotional_movement_id`, composition intent, communication intent, Expectation Turn Translation, emotional payload, intended feeling, active tension profile, Shot Design, and traceable symbolic representation. Shot Design must name shot scale, camera angle, visual emphasis, composition strategy, emotional rationale, and avoid notes. Do not default to full-body character framing; use close shots for reaction, emotional pressure, and symbolic detail; medium shots for body language, action, and immediate context; and wide shots for environment, isolation, active absence, consequence, and scale.
 16. For image-series recommendations, include an internal amplitude profile for each suggested image with 0-1 values for framing distance, subject scale, visual density, motion energy, spatial openness, detail intensity, and emotional pressure.
 17. For image-series recommendations, verify adjacent image roles meet the series adjacency default in `THEORY.md` → minimum tension criteria, tracing any intentional repetition to Artist Meaning.
 18. Produce the Image Medium Plan only after Interpretation, Visualization, Style, and Workflow Scale Routing are complete or explicitly allowed to proceed unconfirmed.
 19. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Image Medium Plan with one Long-Work Part per image role or other accepted image-series/full-long-form part, continuity rules, checkpoint plan, and Long-Work Readiness before any multi-image prompt expansion.
+20. For illustrated written work, Image Journey owns the resulting page, spread, panel, cover, diagram, and reference-sheet image prompts after Illustration Plan Approval. Do not make Image Medium Plan replace the Illustration Plan's text-image coordination role.
 
 ## Draft Creative Brief Process
 

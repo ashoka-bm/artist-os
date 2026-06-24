@@ -26,8 +26,12 @@ Internal mode map:
 
 - Source intake: `skills/artist-os/references/ingest-reference.md`.
 - Meaning capture: `skills/artist-os/references/meaning-interview.md`.
+- Character template planning: `skills/artist-os/references/character-template.md`.
+- Visual reference sheet planning: `skills/artist-os/references/visual-reference-sheet-prompt-builder.md`.
 - Image planning: `skills/artist-os/references/text-to-image-plan.md`.
 - Video storyboard planning and Video Critic Review: `skills/artist-os/references/video-journey.md`.
+- Illustration Plan for illustrated written work: `skills/artist-os/references/illustration-plan.md`.
+- Storyboard prompt package method: `skills/artist-os/references/storyboard-prompt-builder.md`.
 - Sound planning and platform rendering: `skills/artist-os/references/text-to-suno-plan.md`.
 - Text planning and draft orchestration: `skills/artist-os/references/text-journey.md`.
 - Brief review for image or sound: `skills/artist-os/references/art-critic-review.md`.
@@ -65,7 +69,17 @@ First ask:
 > - **Audio**: a song, instrumental, soundscape, score, spoken word, or other sound work
 > - **Text**: a poem, prose, story, script, lyrics, essay, letter, or other writing
 
-Then ask the medium-specific output-kind question for Image, Video, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes.
+Then ask the medium-specific output-kind question for Image, Video, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: character creation routes as an intent shortcut to Character Template and optional Visual Reference Sheet Plan before the chosen medium; Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; illustrated written work such as a children's book, picture book, comic, story with images, cover plus interiors, or diagram-rich piece routes to Text Journey first and then Illustration Plan; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes.
+
+For any story with recurring characters, ask once early:
+
+> This story has recurring characters. Do you want Character Templates and optional Character Reference Sheet prompts before we plan the output? Templates help with voice and continuity; reference sheets add more control if you later generate illustrations, covers, storyboards, or video.
+
+If the artist says yes, ask:
+
+> Do you want templates only, or templates plus visual reference-sheet prompts?
+
+Record `accepted`, `declined`, `deferred`, or `not_applicable` in the relevant `character_reference_strategy`. If declined or deferred, do not ask again in the same flow unless the artist explicitly asks for consistency repair, reference sheets, or character drift help.
 
 **Image**:
 
@@ -92,6 +106,12 @@ Route single image toward the standard image Prompt Plan. Route sequential image
 > - **Not sure**: recommend the best video format
 
 Route Video to `skills/artist-os/references/video-journey.md`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. Optional generated storyboard stills require explicit provider-backed generation approval and normal Output Records.
+
+If the artist says only "storyboard" and the target is ambiguous, ask:
+
+> Do you mean a video storyboard with timed shots and camera/audio direction, or an Illustration Plan for a book, comic, diagram-rich piece, or story with images?
+
+Route children's book storyboard, picture-book storyboard, comic storyboard, book storyboard, story with images, cover plus interiors, and diagram-rich storyboards to Illustration Plan after Text Medium Plan. Route film storyboard, video storyboard, animation storyboard, reel, trailer, Sora, Veo, Runway, Kling, or other video-generator storyboards to Video Journey.
 
 **Text**:
 
@@ -210,11 +230,12 @@ Image, video, audio, and text share one spine. Run the phases in order, hand off
 5. **Story Critic Review And Story Approval** — `skills/artist-os/references/writing-method-review.md`, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan: run Beat Reviewer first for beat mechanics, then Story Critic to consume that Review Record and own the Story Approval contract (see `docs/gates-and-reviews.md` → "Story Critic"). Then present the revised Beat Plan for Story Approval.
 6. **Long-Work Stewardship Creation** — when project-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, create a foundation Long-Work Stewardship Record after Story Approval. This usually corresponds to `cumulative_work` or `full_long_form_project`, but the activated support is the authority. At this stage `medium_plan_id` may be `null` and `part_plan` may be empty because medium-specific parts do not exist yet. The Beat Plan remains story authority. For Album v1, do this before approving the Release Package Plan when Album Cohesion Mode activates stewardship, so the package plan references an existing stewardship record without absorbing progress or checkpoint duties.
 7. **Release Package Plan** — for Album v1 only, create `schemas/release-package-plan.schema.json` after the Album Beat Plan, and after foundation Long-Work Stewardship when Album Cohesion Mode activates it, before full medium-specific expansion. The plan owns package subtype, deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration state, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship, Prompt Plans, Text Generation Plans, or Output Records. Run pre-calibration Mixed-Media Critic Review, then ask for Release Package Plan Approval before calibration Medium Plans.
-8. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), records medium-level `workflow_scale_routing`, and produces the Medium Plan. Persist each gate decision under `gates/`. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, create the foundation Long-Work Stewardship Record immediately if no foundation record exists, then enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion.
+8. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), records medium-level `workflow_scale_routing`, and produces the Medium Plan. Persist each gate decision under `gates/`. When character or visual reference support was accepted, create Character Templates before medium locking when they affect voice, continuity, or visual identity, and create Visual Reference Sheet Plans after Style Direction is known or explicitly provisional. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, create the foundation Long-Work Stewardship Record immediately if no foundation record exists, then enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion.
 9. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
 10. **Critic Review** — `skills/artist-os/references/art-critic-review.md` for image or sound; `skills/artist-os/references/video-journey.md` in Video Critic Review mode for video; `skills/artist-os/references/writing-method-review.md` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
 11. **Brief Approval** — hard gate. On changes, re-run the critic only for affected areas.
 12. **Final Records** — medium skill produces the medium-specific Creative Brief Record and Prompt Plan or Text Generation Plan, each carrying `transformation_brief_id` and `beat_plan_id`. For Video Journey v0, this step produces the approved Video Creative Brief handoff and storyboard-ready package only; do not create a Video Prompt Plan or schema-backed Video Creative Brief Record until that contract exists. Series/sequence expansion needs approval first (see Medium Specifics).
+**Illustration Plan support** — for illustrated written work only, create `schemas/illustration-plan.schema.json` after the Text Medium Plan exists and before bulk page/spread/panel/diagram image prompt expansion. Run Illustration Plan Reviewer, ask for Illustration Plan Approval, then route approved units through Image Journey support. This is not Video Journey.
 13. **Prompt Plan Critique** — `skills/artist-os/references/critique-asset.md` against the approved brief and Prompt Plan, Text Generation Plan, or Prompt Branch Set. For Video Journey v0, skip Prompt Plan Critique unless a future Video Prompt Plan exists; Video Critic Review and Brief Approval are the required planning reviews.
 14. **Generation Approval Gate** — only for provider-backed generation, text Draft Generation Approval, or another external action; approval is explicit per call, approved batch, or draft.
 15. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance. When Long-Work Stewardship is active, update the Long-Work Stewardship Record with the relevant part status and output reference.
@@ -228,6 +249,7 @@ Load the owning mode file for the detailed checklist. Keep only these conductor-
 - **Album v1 / Release Package** stays conductor-owned until a package router exists. Use `schemas/release-package-plan.schema.json`, set `package_subtype = "album"`, create the plan after the Album Beat Plan, run Mixed-Media Critic Review before Album Calibration, require Release Package Plan Approval before calibration Medium Plans, and never accept open-ended "generate the album" approval.
 - **Image** — Symbology precedes Style; Presentation Mode is decided inside Symbology; image records validate against `schemas/image-medium-plan.schema.json`, `schemas/creative-brief.schema.json`, and `schemas/prompt-plan.schema.json`; series expansion requires Series Plan approval and calibration before remaining image-role prompts.
 - **Video** — The v0 path is storyboard-ready planning only: no finished video, no Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, and generated storyboard stills require explicit provider approval plus Output Records.
+- **Illustrated Written Work** — Use `skills/artist-os/references/illustration-plan.md` after Text Medium Plan. Illustration Plan coordinates Text Journey and Image Journey for pages, spreads, panels, covers, diagrams, character references, and visual continuity. It does not create timed Storyboard Shots, Video Audio Posture, or finished-video claims.
 - **Sound / Suno rendering** — Suno-specific output rules live in `skills/artist-os/references/platforms/suno-output.md`. Resolve Vocal / Lyric before locking; final records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`; sequence expansion requires approval; do not add an image-style Prompt Branch Set.
 - **Text** — Draft Generation Approval is required even without a paid provider call; the first draft runs in a fresh-context sub-agent from a Text Draft Packet; conformance review precedes polish; Clear Writing Pass then Human Voice Pass use their internal mode files; every concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.
 - For any medium with Long-Work Stewardship active, the stewardship record tracks readiness, checkpoints, continuity, and drift for that medium's own parts. It must not duplicate the Medium Plan's execution details.

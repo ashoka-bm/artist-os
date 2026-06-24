@@ -1,0 +1,63 @@
+{
+  "visual_reference_sheet_plan_id": "vrs_door_keeper",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "reference_sheet_type": "character",
+  "subject_ref": {
+    "ref_type": "character_template",
+    "ref_id": "char_door_keeper",
+    "path_or_ref": "tests/fixtures/characters/character-template.json"
+  },
+  "subject_description": "The same ordinary, restrained adult apartment host implied by the warm doorway; simple clothing, natural proportions, no theatrical horror details.",
+  "style_direction_summary": "Cinematic live-action realism with clean studio reference lighting.",
+  "view_layout": {
+    "layout_type": "four_view_reference_sheet",
+    "background": "neutral grey background",
+    "views": [
+      {
+        "view_id": "view_front_full",
+        "label": "Full body front three-quarter",
+        "description": "Full-body front-facing three-quarter view, head to feet visible."
+      },
+      {
+        "view_id": "view_rear_full",
+        "label": "Full body rear",
+        "description": "Full-body rear view of the same character, directly from behind."
+      },
+      {
+        "view_id": "view_front_close",
+        "label": "Front close-up",
+        "description": "Head and shoulders close-up, straight-on front view, with clothing detail visible."
+      },
+      {
+        "view_id": "view_left_profile",
+        "label": "Left profile close-up",
+        "description": "Head and shoulders close-up, 90-degree left profile view."
+      }
+    ]
+  },
+  "prompt_text": "Character reference sheet for style. Show the same ordinary restrained adult implied by the warm apartment doorway, simple everyday clothing, natural proportions, no theatrical horror details. Character reference sheet, four views on a neutral grey background: full-body front-facing three-quarter view; full-body rear view directly from behind; head and shoulders straight-on front close-up with clothing detail; head and shoulders 90-degree left profile close-up. Clean studio lighting, soft key light upper left, gentle fill from the right. Consistent character identity, proportions, and clothing details across all four views. No text, no watermarks, no extra figures, no background environment, cinematic live-action realism.",
+  "generation_policy": {
+    "prompt_drafting_allowed": true,
+    "generation_requires_approval": true,
+    "approval_gate_id": null,
+    "notes": "This fixture validates prompt planning only; no reference sheet has been generated."
+  },
+  "output_record_refs": [],
+  "traceability_summary": [
+    {
+      "source_type": "character_template",
+      "source_ref": "char_door_keeper",
+      "note": "The prompt uses the provisional visual identity from the Character Template."
+    },
+    {
+      "source_type": "style_direction",
+      "source_ref": "cinematic live-action realism",
+      "note": "The style is inherited from the current visual direction."
+    }
+  ],
+  "created_at": "2026-06-24T12:05:00Z"
+}

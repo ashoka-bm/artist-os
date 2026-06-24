@@ -76,6 +76,20 @@ Long-Work Readiness may be `pending` before the readiness pass runs. After revie
 
 Proposed continuity updates remain inactive until approved. If a proposed update changes Artist Meaning, Story Mode, Beat movement, or the emotional arc, return to Story Approval before making it active continuity.
 
+### Character Template
+
+A Character Template is a lightweight, versioned planning seed. It validates against `schemas/character-template.schema.json`.
+
+Use it when a character needs continuity across text, image, video, or illustrated written work. It may stay `draft` for one-off planning. When downstream generation depends on it, either approve the template or make the Generation Approval explicitly include the provisional character details.
+
+Character Templates do not replace Long-Work Stewardship. In cumulative or full long-form projects, durable character canon belongs in Long-Work `continuity_rules` with `rule_type = "character"`, and discovered changes become `proposed_continuity_updates` until approved.
+
+### Visual Reference Sheet Plan
+
+A Visual Reference Sheet Plan is a provider-neutral prompt package for a reference sheet. It validates against `schemas/visual-reference-sheet-plan.schema.json`.
+
+It supports `character`, `product`, `object`, `setting`, and `style` reference-sheet targets. Drafting the prompt is planning work. Generated reference sheets require explicit Generation Approval and Output Records; imported reference sheets should keep provenance through asset metadata or Output Records when used downstream.
+
 ### Image Medium Plan
 
 An Image Medium Plan is the typed image translation layer between the shared Beat Plan and the image Creative Brief. It validates against `schemas/image-medium-plan.schema.json`.
@@ -118,6 +132,14 @@ A Text Medium Plan is the typed writing translation layer between the shared Bea
 Each `structure_plan.sections[]` entry must name the governing Beat, Key Emotional Movement, structure role, section job, Intended Feeling, Expectation Turn translation, source-wording notes, and paragraph distinction. Text planning must make every section or paragraph group do a different job instead of producing a smooth summary of the source.
 
 `length_policy` records the accepted Format Length Standard: standard source, target word count, minimum, maximum, flexibility, rationale, and any artist override. Text Medium Plan owns the length decision because length changes the medium structure before drafting.
+
+### Illustration Plan
+
+An Illustration Plan is the cross-medium coordinator for illustrated written work. It validates against `schemas/illustration-plan.schema.json`.
+
+Create it after a Text Medium Plan exists, because page, spread, panel, diagram, and cover decisions need the accepted text form, structure, length/page shape, audience, and publication/use. The Illustration Plan maps Text Medium Plan sections and Beat Plan movements to still-image jobs, visual continuity rules, text-image relationships, Character Templates, Visual Reference Sheet Plans, and downstream Image Prompt Plan refs.
+
+Illustration Plan is not a Video Medium Plan. It has no Video Audio Posture, timed Storyboard Shots, camera-motion contract, or finished-video promise.
 
 ### Review Record
 

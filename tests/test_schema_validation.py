@@ -214,6 +214,24 @@ class SchemaValidationTests(unittest.TestCase):
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
         validate_file(schema_path, data_path)
 
+    def test_character_template_fixture_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "character-template.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "characters" / "character-template.json",
+        )
+
+    def test_visual_reference_sheet_plan_fixture_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "characters" / "visual-reference-sheet-plan.json",
+        )
+
+    def test_illustration_plan_fixture_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "illustration-plan.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "illustration" / "illustration-plan.json",
+        )
+
     def test_release_package_plan_v1_rejects_single_bundle(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
@@ -388,6 +406,26 @@ class SchemaValidationTests(unittest.TestCase):
         schema = load_json(schema_path)
         validate(record, schema, schema)
 
+    def test_review_record_accepts_illustration_plan_review(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
+        record = load_json(data_path)
+        record["review_role"] = "illustration_plan_reviewer"
+        record["artifact_under_review"] = {
+            "artifact_type": "illustration_plan",
+            "artifact_id": "ilp_threshold_picture_book",
+            "path_or_ref": "tests/fixtures/illustration/illustration-plan.json",
+        }
+        record["upstream_context"]["governing_refs"].append(
+            {
+                "ref_type": "illustration_plan",
+                "ref_id": "ilp_threshold_picture_book",
+                "path_or_ref": "tests/fixtures/illustration/illustration-plan.json",
+            }
+        )
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
     def test_text_form_schemas_accept_article(self) -> None:
         for schema_name in [
             "text-medium-plan.schema.json",
@@ -447,6 +485,40 @@ class SchemaValidationTests(unittest.TestCase):
             with self.subTest(gate_type=gate_type):
                 record = load_json(data_path)
                 record["gate_type"] = gate_type
+                validate(record, schema, schema)
+
+    def test_gate_decision_accepts_character_and_illustration_gates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "gates" / "symbology-gate.json"
+        schema = load_json(schema_path)
+        for gate_type, ref_type, ref_id, path in [
+            (
+                "character_reference_strategy",
+                "character_template",
+                "char_door_keeper",
+                "tests/fixtures/characters/character-template.json",
+            ),
+            (
+                "visual_reference_sheet_strategy",
+                "visual_reference_sheet_plan",
+                "vrs_door_keeper",
+                "tests/fixtures/characters/visual-reference-sheet-plan.json",
+            ),
+            (
+                "illustration_plan_approval",
+                "illustration_plan",
+                "ilp_threshold_picture_book",
+                "tests/fixtures/illustration/illustration-plan.json",
+            ),
+        ]:
+            with self.subTest(gate_type=gate_type):
+                record = load_json(data_path)
+                record["gate_type"] = gate_type
+                record["upstream_refs"][0] = {
+                    "ref_type": ref_type,
+                    "ref_id": ref_id,
+                    "path_or_ref": path,
+                }
                 validate(record, schema, schema)
 
     def test_gate_decision_accepts_video_journey_gates(self) -> None:

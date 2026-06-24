@@ -15,6 +15,8 @@ Load details only when needed:
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific planning.
 - `schemas/text-medium-plan.schema.json` for text translation decisions before Text Creative Brief creation.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative long text after Story Approval and Text Medium Plan mapping.
+- `schemas/character-template.schema.json` when recurring characters need voice, behavior, or continuity support.
+- `schemas/illustration-plan.schema.json` when the accepted text form is an illustrated written work.
 - `schemas/text-creative-brief.schema.json` after Writing Critic Review and Brief Approval.
 - `schemas/text-generation-plan.schema.json` after Brief Approval and prompt/generation planning.
 - `schemas/output-record.schema.json` for every concrete draft or rewrite artifact.
@@ -40,7 +42,7 @@ These hold whether you run standalone or under the `artist-os` conductor:
 
 ## Inputs
 
-Use the Text Reference, Source Record, Artist Meaning Record, Transformation Brief, Beat Plan, Text Medium Plan when available, revised Text Creative Brief Document, Writing Critic Review, Brief Approval, Draft Generation Approval, and any existing Output Records.
+Use the Text Reference, Source Record, Artist Meaning Record, Transformation Brief, Beat Plan, Character Templates when accepted, Text Medium Plan when available, revised Text Creative Brief Document, Writing Critic Review, Brief Approval, Draft Generation Approval, and any existing Output Records.
 
 ## Shared Story Records
 
@@ -71,6 +73,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 7. Select or adapt the Cultural Format Structure after the Medium Output Shape Recommendation is accepted, revised, or explicitly allowed to proceed unconfirmed. Use `docs/structure-library/cultural-format/README.md` to choose an entry, then open only that entry file. Include Audience Hook, audience promise, adapted parts, turn or payoff, adaptation policy, failure modes, and any recommended Stewardship Views.
 8. Apply the Format Length Standard from `docs/structure-library/cultural-format/README.md` once Cultural Format Structure and publication use are clear enough. Record `length_policy` with default range, target, flexibility, rationale, and any artist override. Do not ask the artist by default when the standard fits; ask one Format Length Gate question only when the default conflicts with the request, an assignment/platform container specifies a length, or Artist Meaning would be harmed by the default.
 9. Record medium-level Workflow Scale Routing after the Medium Output Shape Recommendation is accepted or explicitly allowed to proceed unconfirmed and after any Medium Output Shape Conflict is resolved. A compact or structured single text artifact does not activate Long-Work Stewardship just because it has several sections; activate cumulative or full long-form supports only when dependent text parts, durable canon, extraction/verification, or long-form drafting across sessions are needed.
+9a. Record `character_reference_strategy` for recurring character-heavy text. If Character Templates were declined or deferred, preserve that answer and do not ask again in this flow.
 10. Define one Primary Text Form, such as poem, article, prose scene, short story, monologue, script, lyrics, letter, essay/artist statement, manifesto, treatment, rewrite, adaptation, or other. If the artist names multiple forms, choose or recommend one primary form and treat the rest as Text Form Modifiers or constraints.
 11. Define voice / point of view: speaker, distance, register, authority, and voice constraints.
 12. Define structure in the form's own terms: paragraphs, sections, acts, scenes, verses, argument moves, hook, turn, refrain, ending, or hybrid structure. Map adapted Cultural Format Structure parts to Text Medium Plan sections rather than replacing section jobs. Keep Cultural Format Structure `function` at the audience-facing format-part level, section `structure_role` at the local position level, and section `section_job` at the concrete drafting-instruction level.
@@ -79,6 +82,7 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 15. Define publication/use and rights/privacy notes.
 16. Produce the Text Medium Plan only after writing method, Research Grounding when applicable, Medium Output Shape Recommendation, Workflow Scale Routing, Cultural Format Structure when relevant, length policy, text form, voice, structure, fidelity, and publication/use choices are complete or explicitly allowed to proceed unconfirmed.
 17. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Text Medium Plan with one Long-Work Part per text section, chapter, scene, or poem movement; include readiness, checkpoints, continuity rules, and drift management before Draft Generation Approval. Plot-tracker-style Stewardship Views are projections over Text Medium Plan and Long-Work Stewardship state, not separate authority records.
+18. If the accepted output is illustrated written work, hand off to `skills/artist-os/references/illustration-plan.md` after the Text Medium Plan exists. Do not route children's book, comic, picture-book, book storyboard, or diagram-rich written work into Video Journey unless the artist explicitly wants animation or video.
 
 ## Draft Text Creative Brief Process
 

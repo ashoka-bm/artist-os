@@ -28,6 +28,8 @@
       "type": "string",
       "enum": [
         "routing",
+        "character_reference_strategy",
+        "visual_reference_sheet_strategy",
         "meaning_confirmation",
         "research_grounding",
         "interpretation",
@@ -57,6 +59,7 @@
         "publication_use",
         "review_presentation",
         "brief_approval",
+        "illustration_plan_approval",
         "prompt_branch",
         "prompt_lock",
         "long_work_checkpoint",
@@ -106,7 +109,7 @@
         "properties": {
           "ref_type": {
             "type": "string",
-                "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
+                "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
           },
           "ref_id": { "type": "string" },
           "path_or_ref": { "type": "string" }

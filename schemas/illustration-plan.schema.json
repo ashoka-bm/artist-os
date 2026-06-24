@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/illustration-plan.schema.json",
+  "title": "IllustrationPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "illustration_plan_id",
+    "project_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "text_medium_plan_id",
+    "illustrated_work_type",
+    "character_reference_strategy",
+    "visual_reference_sheet_strategy",
+    "page_or_panel_plan",
+    "visual_continuity_rules",
+    "text_image_relationships",
+    "image_prompt_plan_refs",
+    "generation_policy",
+    "review_requirements",
+    "traceability_summary",
+    "created_at"
+  ],
+  "properties": {
+    "illustration_plan_id": { "type": "string", "pattern": "^ilp_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "text_medium_plan_id": { "type": "string", "pattern": "^tmp_[a-zA-Z0-9_-]+$" },
+    "illustrated_work_type": {
+      "type": "string",
+      "enum": [
+        "children_book",
+        "comic",
+        "graphic_story",
+        "story_with_spot_illustrations",
+        "diagram_rich_explainer",
+        "cover_plus_interior",
+        "other"
+      ]
+    },
+    "character_reference_strategy": { "$ref": "#/$defs/character_reference_strategy" },
+    "visual_reference_sheet_strategy": { "$ref": "#/$defs/visual_reference_sheet_strategy" },
+    "page_or_panel_plan": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/page_or_panel" }
+    },
+    "visual_continuity_rules": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "text_image_relationships": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/text_image_relationship" }
+    },
+    "image_prompt_plan_refs": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" }
+    },
+    "generation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bulk_prompt_expansion_requires_plan_approval", "image_generation_requires_approval", "notes"],
+      "properties": {
+        "bulk_prompt_expansion_requires_plan_approval": { "type": "boolean", "const": true },
+        "image_generation_requires_approval": { "type": "boolean", "const": true },
+        "notes": { "type": "string" }
+      }
+    },
+    "review_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["illustration_plan_reviewer_required", "review_record_id", "approval_gate_id"],
+      "properties": {
+        "illustration_plan_reviewer_required": { "type": "boolean", "const": true },
+        "review_record_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "approval_gate_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "strategy_status": {
+      "type": "string",
+      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+    },
+    "character_reference_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_ref", "character_template_refs", "visual_reference_sheet_plan_refs", "notes"],
+      "properties": {
+        "status": { "$ref": "#/$defs/strategy_status" },
+        "decision_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "character_template_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^char_[a-zA-Z0-9_-]+$" }
+        },
+        "visual_reference_sheet_plan_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^vrs_[a-zA-Z0-9_-]+$" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "visual_reference_sheet_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_ref", "visual_reference_sheet_plan_refs", "notes"],
+      "properties": {
+        "status": { "$ref": "#/$defs/strategy_status" },
+        "decision_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "visual_reference_sheet_plan_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^vrs_[a-zA-Z0-9_-]+$" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "page_or_panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unit_id",
+        "unit_type",
+        "order_index",
+        "text_section_refs",
+        "beat_ids",
+        "key_emotional_movement_ids",
+        "visual_role",
+        "image_type",
+        "prompt_brief",
+        "character_refs_used",
+        "style_continuity_notes",
+        "approval_status"
+      ],
+      "properties": {
+        "unit_id": { "type": "string", "pattern": "^ilu_[a-zA-Z0-9_-]+$" },
+        "unit_type": { "type": "string", "enum": ["page", "spread", "panel", "diagram", "cover"] },
+        "order_index": { "type": "integer", "minimum": 1 },
+        "text_section_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^section_[a-zA-Z0-9_-]+$" }
+        },
+        "beat_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" }
+        },
+        "key_emotional_movement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" }
+        },
+        "visual_role": { "type": "string", "minLength": 1 },
+        "image_type": {
+          "type": "string",
+          "enum": ["full_page", "spread", "spot_illustration", "panel", "diagram", "cover"]
+        },
+        "prompt_brief": { "type": "string", "minLength": 1 },
+        "character_refs_used": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(char|vrs|out)_[a-zA-Z0-9_-]+$" }
+        },
+        "style_continuity_notes": { "type": "string" },
+        "approval_status": { "type": "string", "enum": ["planned", "approved", "needs_revision", "skipped"] }
+      }
+    },
+    "text_image_relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unit_id", "relationship", "must_not_duplicate_text"],
+      "properties": {
+        "unit_id": { "type": "string", "pattern": "^ilu_[a-zA-Z0-9_-]+$" },
+        "relationship": { "type": "string", "minLength": 1 },
+        "must_not_duplicate_text": { "type": "boolean" }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "transformation_brief", "beat_plan", "text_medium_plan", "character_template", "visual_reference_sheet_plan", "gate_decision"]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

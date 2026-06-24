@@ -1,0 +1,64 @@
+{
+  "character_template_id": "char_door_keeper",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "version": 1,
+  "supersedes_character_template_id": null,
+  "status": "draft",
+  "character_identity": {
+    "name": "The Door Keeper",
+    "role_label": "absent host",
+    "story_function": "Turns the warm doorway into an invitation that never becomes safe.",
+    "first_appearance_ref": "beat_invitation",
+    "identity_notes": "The character may remain unseen in the compact video, but the template preserves the implied presence for later illustrated or video expansion."
+  },
+  "dramatic_function": {
+    "wants": ["to invite without explaining the invitation"],
+    "fears": ["being seen too literally and collapsing the active absence"],
+    "contradictions": ["welcoming signal, withheld presence"],
+    "arc_state": "A suggested presence rather than an on-screen person.",
+    "relationship_pressure": "The viewer feels addressed by someone who never arrives."
+  },
+  "voice_behavior": {
+    "voice_summary": "Quiet, spare, indirect, and never fully explanatory.",
+    "behavior_cues": ["leaves signs instead of appearing", "creates warmth without reassurance"],
+    "avoid": ["explaining the source of the light", "turning into a horror reveal"]
+  },
+  "visual_identity": {
+    "physical_description": "Unseen or only implied; if shown later, keep the figure ordinary and restrained.",
+    "clothing_costume": "Simple apartment clothing if the figure is ever visualized; no theatrical costume.",
+    "distinguishing_features": ["absence is more important than facial detail", "warm practical light is the signature"],
+    "style_proportion_notes": "Cinematic live-action realism, ordinary human proportions, no stylized monster silhouette.",
+    "evidence_status": "agent_inferred",
+    "source_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_door_left_lit",
+        "path_or_ref": "tests/fixtures/video-journey/beat-plan.json"
+      }
+    ]
+  },
+  "continuity_constraints": [
+    {
+      "constraint": "Do not reveal the Door Keeper in the compact threshold plan.",
+      "authority": "template_only",
+      "promote_to_long_work_rule": false
+    }
+  ],
+  "visual_reference_sheet_plan_refs": ["vrs_door_keeper"],
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The template preserves the missing figure as active absence."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "The character function is inferred from the invitation and threshold beats."
+    }
+  ],
+  "created_at": "2026-06-24T12:00:00Z",
+  "updated_at": "2026-06-24T12:00:00Z"
+}

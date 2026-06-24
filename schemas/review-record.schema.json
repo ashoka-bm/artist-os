@@ -32,6 +32,7 @@
         "sound_critic",
         "writing_critic",
         "mixed_media_critic",
+        "illustration_plan_reviewer",
         "prompt_critic",
         "output_critic",
         "fragment_reviewer",
@@ -57,7 +58,7 @@
       "properties": {
         "artifact_type": {
           "type": "string",
-          "enum": ["transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
+          "enum": ["transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
         },
         "artifact_id": { "type": "string" },
         "path_or_ref": { "type": "string" }
@@ -80,7 +81,7 @@
             "properties": {
               "ref_type": {
                 "type": "string",
-                "enum": ["source_record", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
+                "enum": ["source_record", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
               },
               "ref_id": { "type": "string" },
               "path_or_ref": { "type": "string" }

@@ -225,6 +225,31 @@ class PipelineTransitionTests(unittest.TestCase):
 
         self.assertEqual(len(shot_ids), len(video_plan["storyboard_shots"]))
 
+    def test_character_template_to_reference_sheet_to_illustration_plan(self) -> None:
+        character = load("tests/fixtures/characters/character-template.json")
+        reference_sheet = load("tests/fixtures/characters/visual-reference-sheet-plan.json")
+        illustration = load("tests/fixtures/illustration/illustration-plan.json")
+        text_plan = load("tests/fixtures/text-journey/text-medium-plan.json")
+
+        self.assertEqual(reference_sheet["subject_ref"]["ref_id"], character["character_template_id"])
+        self.assertIn(
+            reference_sheet["visual_reference_sheet_plan_id"],
+            character["visual_reference_sheet_plan_refs"],
+        )
+        self.assertEqual(illustration["text_medium_plan_id"], text_plan["text_medium_plan_id"])
+        self.assertIn(
+            character["character_template_id"],
+            illustration["character_reference_strategy"]["character_template_refs"],
+        )
+        self.assertIn(
+            reference_sheet["visual_reference_sheet_plan_id"],
+            illustration["character_reference_strategy"]["visual_reference_sheet_plan_refs"],
+        )
+        self.assertTrue(illustration["generation_policy"]["image_generation_requires_approval"])
+        self.assertTrue(
+            illustration["generation_policy"]["bulk_prompt_expansion_requires_plan_approval"]
+        )
+
     def test_sound_medium_plan_to_sound_creative_brief(self) -> None:
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")
         sound_brief = load("tests/fixtures/text-to-suno/sound-creative-brief.json")

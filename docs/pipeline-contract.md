@@ -26,6 +26,9 @@ No step advances unless its output validates against the declared schema. Review
 | Beat Plan | `schemas/beat-plan.schema.json` | `examples/beat-plan.example.json` |
 | Long-Work Stewardship Record | `schemas/long-work-stewardship-record.schema.json` | `tests/fixtures/long-work/foundation-stewardship-record.json` |
 | Release Package Plan | `schemas/release-package-plan.schema.json` | `tests/fixtures/release-packages/album-release-package-plan.json` |
+| Character Template | `schemas/character-template.schema.json` | `tests/fixtures/characters/character-template.json` |
+| Visual Reference Sheet Plan | `schemas/visual-reference-sheet-plan.schema.json` | `tests/fixtures/characters/visual-reference-sheet-plan.json` |
+| Illustration Plan | `schemas/illustration-plan.schema.json` | `tests/fixtures/illustration/illustration-plan.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
 | Text Medium Plan | `schemas/text-medium-plan.schema.json` | `tests/fixtures/text-journey/text-medium-plan.json` |
@@ -128,6 +131,44 @@ The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album So
 Album Calibration happens after representative Sound and Image Medium Plans exist for the Calibration Track and calibration visual target. The default subchecks are sonic direction, visual direction, and sound-visual fit. Expansion may continue only for deliverables whose relevant subchecks are approved; Track Cover expansion requires approved visual direction and approved sound-visual fit.
 
 Album Calibration is not final acceptance. Final Output Artifacts still require their normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates. Provider-backed generation approval may be per output or per enumerated batch only; the approval must name the exact outputs, provider, model or tool, and cost-bearing scope.
+
+### `character.template`
+
+- Input: Source Record, Artist Meaning, artist character answers, and optionally Transformation Brief or Beat Plan.
+- Output: Character Template.
+- Schema: `schemas/character-template.schema.json`.
+- Skill: conductor or active medium planner using `skills/artist-os/references/character-template.md` when present.
+- Reviewer required: no by default; use the relevant critic if the template drives high-risk generation or long-form continuity.
+- Gate: Character Reference Strategy Gate when recurring characters make the choice relevant.
+- Next: Visual Reference Sheet Plan, Text Medium Plan, Image Medium Plan, Video Medium Plan, Illustration Plan, or Long-Work Stewardship promotion when facts become durable canon.
+
+Ask once whether Character Templates and optional Character Reference Sheet prompts are wanted for recurring characters. If the artist declines, persist `character_reference_strategy.status = "declined"` and do not re-ask in the same flow. If the artist defers, persist `deferred` and proceed.
+
+Character Templates may be provisional for text-only planning and reference-sheet prompt drafting. Provider-backed generation requires an approved template or Generation Approval that explicitly includes the provisional character details.
+
+### `visual_reference_sheet.plan`
+
+- Input: Character Template or another subject description, style direction or provisional style, and upstream provenance records.
+- Output: Visual Reference Sheet Plan.
+- Schema: `schemas/visual-reference-sheet-plan.schema.json`.
+- Skill: `skills/artist-os/references/visual-reference-sheet-prompt-builder.md`.
+- Reviewer required: no by default; review as part of Illustration Plan Review, Video Critic Review, Art Critic Review, or Output Critic Review when used downstream.
+- Gate: Visual Reference Sheet Strategy Gate for products, objects, settings, or props; Generation Approval Gate before producing the actual sheet.
+- Next: generated/imported reference sheet Output Record, Image Medium Plan, Video Medium Plan, Illustration Plan, or Prompt Plan refs.
+
+Visual Reference Sheet Plan is a prompt package, not a generated asset. Generated reference sheets and imported reference sheets get normal provenance before they are used as downstream references.
+
+### `illustration.plan`
+
+- Input: Text Medium Plan, Beat Plan, Artist Meaning, Character Templates, Visual Reference Sheet Plans, and any accepted illustrated-work routing decisions.
+- Output: Illustration Plan.
+- Schema: `schemas/illustration-plan.schema.json`.
+- Skill: `skills/artist-os/references/illustration-plan.md`.
+- Reviewer required: Illustration Plan Reviewer.
+- Gate: Illustration Plan Approval Gate before bulk page/spread/panel/diagram prompt expansion.
+- Next: Image Journey support for page, spread, panel, diagram, cover, or reference-sheet prompts; Generation Approval before provider-backed image generation.
+
+Create Illustration Plan after Text Medium Plan. It coordinates Text Journey and Image Journey for illustrated written work; it is not Video Journey and must not create timed Storyboard Shots, Video Audio Posture, or finished-video claims.
 
 ## Workflow Scale Routing Contract
 
