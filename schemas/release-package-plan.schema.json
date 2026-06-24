@@ -345,7 +345,7 @@
         "required": { "type": "boolean" },
         "track_id": { "type": ["string", "null"], "pattern": "^track_[a-zA-Z0-9_-]+$" },
         "medium_role": { "type": "string", "enum": ["primary", "supporting", "optional"] },
-        "medium_plan_id": { "type": ["string", "null"], "pattern": "^(imp|smp|tmp)_[a-zA-Z0-9_-]+$" },
+        "medium_plan_id": { "type": ["string", "null"], "pattern": "^(imp|smp|tmp)_[a-zA-Z0-9_-]+$", "description": "Release Package deliverables are image (imp), sound (smp), or text (tmp) only. Video (vmp) is excluded because the video journey is storyboard-only (v0, no finished deliverable yet) and a mixed-media plan (mmp) is the package itself, not a deliverable within it. Widen this set when video deliverables ship." },
         "prompt_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
         "text_generation_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
         "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
