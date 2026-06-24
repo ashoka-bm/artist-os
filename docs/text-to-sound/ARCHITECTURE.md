@@ -183,6 +183,8 @@ Each Prompt Variant Plan should include:
 - `traceability_notes`
 - `critique_checklist`
 
+`platform_output_intent` is the deliberate neutral-to-platform bridge inside each otherwise provider-neutral Prompt Variant Plan: it records the variant's intended platform-facing posture (title, instrumental flag, `lyrics.mode`, style prompt, exclusions) without carrying provider-specific format or settings. Its `lyrics.mode` enum includes `generate_in_suno`, a provider-named intent value retained for the Suno-first implementation. This stays consistent with [ADR 0002](../adr/0002-provider-neutral-core.md): the provider-specific *format* lives only in the adapter layer (`platform_renderings.suno_custom_mode_outputs`), while `platform_output_intent` holds a light, declarative intent. If strict provider-neutrality is later enforced here, rename `generate_in_suno` to a neutral token (e.g. `generate_at_platform`) and let the Suno renderer map it. This is why the value is not treated as an ADR-0002 leak.
+
 ## Platform Rendering Boundary
 
 Platform Rendering is the final generator-specific translation step. It may translate approved neutral prompt intent into provider-native fields, syntax, controls, upload guidance, and readiness checks. It may not change Artist Meaning, Vocal / Lyric Policy, approved lyrics, the Arrangement Plan, Sonic Dynamics, or traceability.
