@@ -300,7 +300,7 @@
         },
         "track_level_beat_plan_id": { "type": ["string", "null"], "pattern": "^bp_[a-zA-Z0-9_-]+$" },
         "sound_medium_plan_id": { "type": ["string", "null"], "pattern": "^smp_[a-zA-Z0-9_-]+$" },
-        "sound_prompt_plan_id": { "type": ["string", "null"] },
+        "sound_prompt_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
         "track_cover_deliverable_id": { "type": "string", "pattern": "^deliv_[a-zA-Z0-9_-]+$" },
         "lyrics_policy": {
           "type": "string",
@@ -346,8 +346,8 @@
         "track_id": { "type": ["string", "null"], "pattern": "^track_[a-zA-Z0-9_-]+$" },
         "medium_role": { "type": "string", "enum": ["primary", "supporting", "optional"] },
         "medium_plan_id": { "type": ["string", "null"], "pattern": "^(imp|smp|tmp)_[a-zA-Z0-9_-]+$" },
-        "prompt_plan_id": { "type": ["string", "null"] },
-        "text_generation_plan_id": { "type": ["string", "null"] },
+        "prompt_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
+        "text_generation_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
         "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
         "review_record_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
         "status": { "$ref": "#/$defs/planning_status" }

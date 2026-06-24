@@ -38,7 +38,7 @@
       ]
     },
     "path": { "type": "string" },
-    "created_at": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
     "provenance": {
       "type": "object",
       "additionalProperties": false,
@@ -48,9 +48,9 @@
           "type": "string",
           "enum": ["user_provided", "agent_drafted", "provider_generated", "imported"]
         },
-        "source_record_id": { "type": "string" },
-        "brief_id": { "type": "string" },
-        "prompt_plan_id": { "type": "string" },
+        "source_record_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+        "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
+        "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
         "visual_board_type": { "type": "string" },
         "prompt_variant_id": { "type": "string" },
         "event_id": { "type": "string" }

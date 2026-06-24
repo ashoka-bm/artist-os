@@ -37,8 +37,8 @@
         "complete"
       ]
     },
-    "created_at": { "type": "string" },
-    "updated_at": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
     "summary": { "type": "string" },
     "artist_library": { "$ref": "#/$defs/artist_library_state" },
     "feedback_state": { "$ref": "#/$defs/feedback_state" },
@@ -124,7 +124,7 @@
         },
         "project_pointer_project_id": { "type": ["string", "null"], "pattern": "^proj_[a-zA-Z0-9_-]+$" },
         "visible_state": { "type": "string", "enum": ["not_created", "present", "visible_missing"] },
-        "last_checked_at": { "type": "string" },
+        "last_checked_at": { "type": "string", "format": "date-time" },
         "user_facing_files": {
           "type": "array",
           "items": { "$ref": "#/$defs/user_facing_file" }
@@ -159,7 +159,7 @@
         "file_role": { "type": "string", "enum": ["review_draft", "accepted_work", "readable_summary", "personal_library_note"] },
         "status": { "type": "string", "enum": ["current", "missing", "stale", "archived"] },
         "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
-        "updated_at": { "type": "string" }
+        "updated_at": { "type": "string", "format": "date-time" }
       }
     },
     "feedback_state": {
@@ -169,7 +169,7 @@
       "properties": {
         "feedback_log_path": { "type": "string" },
         "learning_review_status": { "type": "string", "enum": ["not_applicable", "pending", "complete"] },
-        "learning_reviewed_at": { "type": ["string", "null"] },
+        "learning_reviewed_at": { "type": ["string", "null"], "format": "date-time" },
         "learning_refs": {
           "type": "array",
           "items": { "$ref": "#/$defs/learning_ref" }
@@ -222,7 +222,7 @@
           "type": "string",
           "enum": ["proposed", "generated", "imported", "accepted", "rejected", "archived"]
         },
-        "created_at": { "type": "string" }
+        "created_at": { "type": "string", "format": "date-time" }
       }
     }
   }
