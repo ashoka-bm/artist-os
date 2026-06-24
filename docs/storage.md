@@ -43,6 +43,26 @@ All `bin/artist-os-db` commands that read or write the Workspace Library accept 
 
 If a Wondermint Root is inside a cloud-synced folder, warn the user that visible outputs may sync well but internal Workspace Library state, especially SQLite, may encounter sync conflicts.
 
+## Wondermint Skill Alignment
+
+Artist OS and the Wondermint Marketplace skill both use Wondermint-branded local
+folders, but they serve different storage roles.
+
+Artist OS uses the Wondermint Root for creative project storage: visible Artist
+Library files live under `<wondermint_root>/Wondermint/Artist Library/`, and
+internal Workspace Library state lives under `<wondermint_root>/.wondermint/artist-os/`.
+
+The Wondermint Marketplace skill currently stores account setup, onboarding
+state, and non-secret operating preferences under `~/Wondermint/`. It stores
+marketplace purchased files under `~/Documents/Wondermint/downloads/`.
+
+When these systems converge, prefer `~/Documents` as the shared user-facing
+Wondermint Root so Artist OS visible work lands in
+`~/Documents/Wondermint/Artist Library/` alongside marketplace downloads in
+`~/Documents/Wondermint/downloads/`. Keep Wondermint Marketplace account state
+and API-key configuration out of the Artist OS Workspace Library and Artist
+Library unless a later ADR explicitly migrates them.
+
 ## Artist Library Layout
 
 Artist Library project folders are created lazily, only when there are user-facing files to show. Do not mirror internal Workspace Library structure into the visible folder, and do not create empty medium or export folders.

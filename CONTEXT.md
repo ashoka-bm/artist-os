@@ -900,6 +900,14 @@ _Avoid_: Installing private state inside the visible Artist Library
 The user-facing configuration that chooses the Wondermint Root for both the visible Artist Library and hidden Workspace Library.
 _Avoid_: Low-level Workspace Library override
 
+**Wondermint Marketplace Skill State**:
+Wondermint Marketplace account setup, onboarding state, API-key location, and non-secret operating preferences currently stored by the Wondermint Marketplace skill under `~/Wondermint/`.
+_Avoid_: Artist OS Workspace Library, Artist Library, Wondermint Root
+
+**Wondermint Marketplace Downloads**:
+Purchased files saved by the Wondermint Marketplace skill under `~/Documents/Wondermint/downloads/`.
+_Avoid_: Artist Library project output, Workspace Library asset
+
 **Cloud-Synced Wondermint Root**:
 A Wondermint Root placed inside a cloud-synced folder, allowed only with a warning that Workspace Library state may encounter sync conflicts.
 _Avoid_: Treating cloud sync as a conflict-free backup system
