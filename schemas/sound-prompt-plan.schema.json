@@ -616,26 +616,7 @@
                     "type": "object",
                     "properties": {
                       "suno_custom_mode_outputs": {
-                        "type": "object",
-                        "properties": {
-                          "instrumental": {
-                            "type": "boolean",
-                            "const": false
-                          },
-                          "lyrics": {
-                            "type": "object",
-                            "properties": {
-                              "mode": {
-                                "type": "string",
-                                "const": "custom"
-                              },
-                              "text": {
-                                "type": "string",
-                                "minLength": 1
-                              }
-                            }
-                          }
-                        }
+                        "$ref": "#/$defs/lyric_outputs_custom"
                       }
                     }
                   }
@@ -660,26 +641,7 @@
                   ],
                   "properties": {
                     "suno_custom_mode_outputs": {
-                      "type": "object",
-                      "properties": {
-                        "instrumental": {
-                          "type": "boolean",
-                          "const": false
-                        },
-                        "lyrics": {
-                          "type": "object",
-                          "properties": {
-                            "mode": {
-                              "type": "string",
-                              "const": "custom"
-                            },
-                            "text": {
-                              "type": "string",
-                              "minLength": 1
-                            }
-                          }
-                        }
-                      }
+                      "$ref": "#/$defs/lyric_outputs_custom"
                     }
                   }
                 }
@@ -692,26 +654,7 @@
               "type": "object",
               "properties": {
                 "platform_output_intent": {
-                  "type": "object",
-                  "properties": {
-                    "instrumental": {
-                      "type": "boolean",
-                      "const": false
-                    },
-                    "lyrics": {
-                      "type": "object",
-                      "properties": {
-                        "mode": {
-                          "type": "string",
-                          "const": "custom"
-                        },
-                        "text": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/$defs/lyric_outputs_custom"
                 }
               }
             }
@@ -774,26 +717,7 @@
                     "type": "object",
                     "properties": {
                       "suno_custom_mode_outputs": {
-                        "type": "object",
-                        "properties": {
-                          "instrumental": {
-                            "type": "boolean",
-                            "const": true
-                          },
-                          "lyrics": {
-                            "type": "object",
-                            "properties": {
-                              "mode": {
-                                "type": "string",
-                                "const": "none"
-                              },
-                              "text": {
-                                "type": "string",
-                                "const": ""
-                              }
-                            }
-                          }
-                        }
+                        "$ref": "#/$defs/lyric_outputs_instrumental"
                       }
                     }
                   }
@@ -818,26 +742,7 @@
                   ],
                   "properties": {
                     "suno_custom_mode_outputs": {
-                      "type": "object",
-                      "properties": {
-                        "instrumental": {
-                          "type": "boolean",
-                          "const": true
-                        },
-                        "lyrics": {
-                          "type": "object",
-                          "properties": {
-                            "mode": {
-                              "type": "string",
-                              "const": "none"
-                            },
-                            "text": {
-                              "type": "string",
-                              "const": ""
-                            }
-                          }
-                        }
-                      }
+                      "$ref": "#/$defs/lyric_outputs_instrumental"
                     }
                   }
                 }
@@ -850,26 +755,7 @@
               "type": "object",
               "properties": {
                 "platform_output_intent": {
-                  "type": "object",
-                  "properties": {
-                    "instrumental": {
-                      "type": "boolean",
-                      "const": true
-                    },
-                    "lyrics": {
-                      "type": "object",
-                      "properties": {
-                        "mode": {
-                          "type": "string",
-                          "const": "none"
-                        },
-                        "text": {
-                          "type": "string",
-                          "const": ""
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/$defs/lyric_outputs_instrumental"
                 }
               }
             }
@@ -932,26 +818,7 @@
                     "type": "object",
                     "properties": {
                       "suno_custom_mode_outputs": {
-                        "type": "object",
-                        "properties": {
-                          "instrumental": {
-                            "type": "boolean",
-                            "const": false
-                          },
-                          "lyrics": {
-                            "type": "object",
-                            "properties": {
-                              "mode": {
-                                "type": "string",
-                                "const": "generate_in_suno"
-                              },
-                              "text": {
-                                "type": "string",
-                                "minLength": 1
-                              }
-                            }
-                          }
-                        }
+                        "$ref": "#/$defs/lyric_outputs_phonetic"
                       }
                     }
                   }
@@ -976,26 +843,7 @@
                   ],
                   "properties": {
                     "suno_custom_mode_outputs": {
-                      "type": "object",
-                      "properties": {
-                        "instrumental": {
-                          "type": "boolean",
-                          "const": false
-                        },
-                        "lyrics": {
-                          "type": "object",
-                          "properties": {
-                            "mode": {
-                              "type": "string",
-                              "const": "generate_in_suno"
-                            },
-                            "text": {
-                              "type": "string",
-                              "minLength": 1
-                            }
-                          }
-                        }
-                      }
+                      "$ref": "#/$defs/lyric_outputs_phonetic"
                     }
                   }
                 }
@@ -1008,26 +856,7 @@
               "type": "object",
               "properties": {
                 "platform_output_intent": {
-                  "type": "object",
-                  "properties": {
-                    "instrumental": {
-                      "type": "boolean",
-                      "const": false
-                    },
-                    "lyrics": {
-                      "type": "object",
-                      "properties": {
-                        "mode": {
-                          "type": "string",
-                          "const": "generate_in_suno"
-                        },
-                        "text": {
-                          "type": "string",
-                          "minLength": 1
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/$defs/lyric_outputs_phonetic"
                 }
               }
             }
@@ -1784,6 +1613,72 @@
           }
         }
       ]
+    },
+    "lyric_outputs_custom": {
+      "type": "object",
+      "properties": {
+        "instrumental": {
+          "type": "boolean",
+          "const": false
+        },
+        "lyrics": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "const": "custom"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "lyric_outputs_instrumental": {
+      "type": "object",
+      "properties": {
+        "instrumental": {
+          "type": "boolean",
+          "const": true
+        },
+        "lyrics": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "const": "none"
+            },
+            "text": {
+              "type": "string",
+              "const": ""
+            }
+          }
+        }
+      }
+    },
+    "lyric_outputs_phonetic": {
+      "type": "object",
+      "properties": {
+        "instrumental": {
+          "type": "boolean",
+          "const": false
+        },
+        "lyrics": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "const": "generate_in_suno"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
     }
   }
 }

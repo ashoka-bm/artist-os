@@ -34,16 +34,7 @@
     "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
     "text_medium_plan_id": { "type": "string", "pattern": "^tmp_[a-zA-Z0-9_-]+$" },
     "target_media_type": { "type": "string", "const": "text" },
-    "artist_meaning": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["why_it_matters", "must_preserve", "may_transform"],
-      "properties": {
-        "why_it_matters": { "type": "string" },
-        "must_preserve": { "type": "array", "items": { "type": "string" } },
-        "may_transform": { "type": "array", "items": { "type": "string" } }
-      }
-    },
+    "artist_meaning": { "$ref": "#/$defs/artist_meaning" },
     "formal_observations": { "type": "array", "items": { "type": "string" } },
     "primary_text_form": { "$ref": "#/$defs/text_form" },
     "text_form_modifiers": { "type": "array", "items": { "$ref": "#/$defs/text_form" } },
@@ -114,6 +105,16 @@
     }
   },
   "$defs": {
+    "artist_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_it_matters", "must_preserve", "may_transform"],
+      "properties": {
+        "why_it_matters": { "type": "string" },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } }
+      }
+    },
     "text_form": {
       "type": "string",
       "enum": ["poem", "prose_scene", "short_story", "article", "monologue", "script", "lyrics", "letter", "essay_artist_statement", "manifesto", "treatment_outline", "rewrite_adaptation", "other"]

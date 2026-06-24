@@ -23,7 +23,7 @@
     "metric_name": { "type": "string" },
     "metric_value": { "type": ["number", "string"] },
     "signal_direction": { "type": "string", "enum": ["positive", "negative", "neutral", "mixed"] },
-    "evidence_weight": { "type": "string", "enum": ["equal_to_artist_feedback"] },
+    "evidence_weight": { "type": "string", "const": "equal_to_artist_feedback" },
     "notes": { "type": ["string", "null"] }
   }
 }

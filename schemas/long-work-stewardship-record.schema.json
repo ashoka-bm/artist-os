@@ -119,6 +119,14 @@
     "updated_at": { "type": "string", "format": "date-time" }
   },
   "$defs": {
+    "approval_requirement": {
+      "type": "string",
+      "enum": ["artist_confirmation", "story_approval", "medium_approval", "prompt_revision"]
+    },
+    "part_kind": {
+      "type": "string",
+      "enum": ["image_role", "text_section", "chapter", "scene", "poem_movement", "song_section", "sound_movement", "video_scene", "mixed_media_movement"]
+    },
     "long_work_part": {
       "type": "object",
       "additionalProperties": false,
@@ -145,10 +153,7 @@
         "part_id": { "type": "string", "pattern": "^lwpart_[a-zA-Z0-9_-]+$" },
         "part_index": { "type": "integer", "minimum": 1 },
         "part_label": { "type": "string", "minLength": 1 },
-        "part_kind": {
-          "type": "string",
-          "enum": ["image_role", "text_section", "chapter", "scene", "poem_movement", "song_section", "sound_movement", "video_scene", "mixed_media_movement"]
-        },
+        "part_kind": { "$ref": "#/$defs/part_kind" },
         "medium_part_ref": { "$ref": "#/$defs/ref" },
         "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
         "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
@@ -186,10 +191,7 @@
           "items": { "type": "string", "pattern": "^lwpart_[a-zA-Z0-9_-]+$" }
         },
         "source_ref": { "type": "string", "minLength": 1 },
-        "change_requires": {
-          "type": "string",
-          "enum": ["artist_confirmation", "story_approval", "medium_approval", "prompt_revision"]
-        },
+        "change_requires": { "$ref": "#/$defs/approval_requirement" },
         "status": { "type": "string", "enum": ["active", "revised", "retired"] }
       }
     },
@@ -204,10 +206,7 @@
         "evidence": { "type": "string", "minLength": 1 },
         "supports_artist_meaning_because": { "type": "string", "minLength": 1 },
         "conflicts_with": { "type": "array", "items": { "$ref": "#/$defs/ref" } },
-        "required_approval": {
-          "type": "string",
-          "enum": ["artist_confirmation", "story_approval", "medium_approval", "prompt_revision"]
-        },
+        "required_approval": { "$ref": "#/$defs/approval_requirement" },
         "status": { "type": "string", "enum": ["proposed", "accepted", "rejected", "superseded"] }
       }
     },

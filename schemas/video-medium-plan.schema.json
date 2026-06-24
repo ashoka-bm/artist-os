@@ -494,7 +494,7 @@
         },
         "visual_emphasis": {
           "type": "string",
-          "enum": ["face_reaction", "hands_object", "body_action", "relationship_between_figures", "environment", "absence_negative_space", "symbolic_detail", "scale_consequence"]
+          "enum": ["face_reaction", "hands_or_object", "body_action", "relationship", "environment", "absence_negative_space", "symbolic_detail", "scale_consequence"]
         },
         "composition_strategy": { "type": "string", "minLength": 1 },
         "emotional_rationale": { "type": "string", "minLength": 1 },

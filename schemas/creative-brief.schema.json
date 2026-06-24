@@ -28,16 +28,7 @@
     "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
     "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
     "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
-    "artist_meaning": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["why_it_matters", "must_preserve", "may_transform"],
-      "properties": {
-        "why_it_matters": { "type": "string" },
-        "must_preserve": { "type": "array", "items": { "type": "string" } },
-        "may_transform": { "type": "array", "items": { "type": "string" } }
-      }
-    },
+    "artist_meaning": { "$ref": "#/$defs/artist_meaning" },
     "formal_observations": { "type": "array", "items": { "type": "string" } },
     "symbology_direction": {
       "type": "object",
@@ -131,30 +122,7 @@
         }
       }
     },
-    "core_tension_pairs": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "attraction_repulsion",
-        "proximity_distance",
-        "order_chaos",
-        "stillness_motion",
-        "legibility_opacity",
-        "control_surrender",
-        "safety_threat",
-        "presence_absence"
-      ],
-      "properties": {
-        "attraction_repulsion": { "$ref": "#/$defs/tension_pair_record" },
-        "proximity_distance": { "$ref": "#/$defs/tension_pair_record" },
-        "order_chaos": { "$ref": "#/$defs/tension_pair_record" },
-        "stillness_motion": { "$ref": "#/$defs/tension_pair_record" },
-        "legibility_opacity": { "$ref": "#/$defs/tension_pair_record" },
-        "control_surrender": { "$ref": "#/$defs/tension_pair_record" },
-        "safety_threat": { "$ref": "#/$defs/tension_pair_record" },
-        "presence_absence": { "$ref": "#/$defs/tension_pair_record" }
-      }
-    },
+    "core_tension_pairs": { "$ref": "#/$defs/core_tension_pairs" },
     "emotional_qualities": { "type": "array", "items": { "type": "string" } },
     "poetic_density_notes": {
       "type": "object",
@@ -275,6 +243,40 @@
     }
   },
   "$defs": {
+    "artist_meaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["why_it_matters", "must_preserve", "may_transform"],
+      "properties": {
+        "why_it_matters": { "type": "string" },
+        "must_preserve": { "type": "array", "items": { "type": "string" } },
+        "may_transform": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "core_tension_pairs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attraction_repulsion",
+        "proximity_distance",
+        "order_chaos",
+        "stillness_motion",
+        "legibility_opacity",
+        "control_surrender",
+        "safety_threat",
+        "presence_absence"
+      ],
+      "properties": {
+        "attraction_repulsion": { "$ref": "#/$defs/tension_pair_record" },
+        "proximity_distance": { "$ref": "#/$defs/tension_pair_record" },
+        "order_chaos": { "$ref": "#/$defs/tension_pair_record" },
+        "stillness_motion": { "$ref": "#/$defs/tension_pair_record" },
+        "legibility_opacity": { "$ref": "#/$defs/tension_pair_record" },
+        "control_surrender": { "$ref": "#/$defs/tension_pair_record" },
+        "safety_threat": { "$ref": "#/$defs/tension_pair_record" },
+        "presence_absence": { "$ref": "#/$defs/tension_pair_record" }
+      }
+    },
     "pole_record": {
       "type": "object",
       "additionalProperties": false,
