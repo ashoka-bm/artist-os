@@ -201,7 +201,7 @@
     },
     "strategy_status": {
       "type": "string",
-      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+      "enum": ["accepted", "accepted_partial", "declined", "deferred", "not_applicable"]
     },
     "character_reference_strategy": {
       "type": "object",
@@ -454,6 +454,7 @@
         "scene_id",
         "beat_id",
         "key_emotional_movement_id",
+        "reference_refs_used",
         "time_range",
         "visual_unit",
         "camera_movement",
@@ -471,6 +472,10 @@
         "scene_id": { "type": "string", "pattern": "^vscene_[a-zA-Z0-9_-]+$" },
         "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
         "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "reference_refs_used": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(refsub|refout|refimg|vrs|char|out)_[a-zA-Z0-9_-]+$" }
+        },
         "time_range": {
           "type": "object",
           "additionalProperties": false,
@@ -595,14 +600,22 @@
       "additionalProperties": false,
       "required": [
         "storyboard_frame_prompts_in_plan",
+        "default_generated_storyboard_artifact",
+        "composite_storyboard_sheet_default",
+        "output_record_required_for_composite_sheet",
         "generated_storyboard_stills_allowed",
+        "individual_stills_require_separate_approval",
         "requires_explicit_artist_approval",
         "output_record_required_for_generated_stills",
         "notes"
       ],
       "properties": {
         "storyboard_frame_prompts_in_plan": { "type": "boolean", "const": true },
+        "default_generated_storyboard_artifact": { "type": "string", "const": "composite_storyboard_sheet" },
+        "composite_storyboard_sheet_default": { "type": "boolean", "const": true },
+        "output_record_required_for_composite_sheet": { "type": "boolean", "const": true },
         "generated_storyboard_stills_allowed": { "type": "boolean" },
+        "individual_stills_require_separate_approval": { "type": "boolean", "const": true },
         "requires_explicit_artist_approval": { "type": "boolean", "const": true },
         "output_record_required_for_generated_stills": { "type": "boolean", "const": true },
         "notes": { "type": "string" }

@@ -524,6 +524,243 @@ class ArtistOSDbStorageTests(unittest.TestCase):
             )
             self.assertEqual(output_artifact, ("out_door_left_lit_image_001", "image"))
 
+    def test_publish_visible_reference_copies_artifact_updates_inventory_and_indexes_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / "workspace-library" / "artist-os"
+            artist_library_root = root / "Wondermint" / "Artist Library"
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            output_records_dir = workspace_project_dir / "outputs"
+            references_dir = workspace_project_dir / "references"
+            generated_dir = workspace_project_dir / "assets" / "generated"
+            visible_project_dir = artist_library_root / "Projects" / "door-left-lit"
+            output_records_dir.mkdir(parents=True)
+            references_dir.mkdir(parents=True)
+            generated_dir.mkdir(parents=True)
+            visible_project_dir.mkdir(parents=True)
+            (visible_project_dir / ".artist-os-project.json").write_text(
+                json.dumps({"schema_version": 1, "project_id": "proj_door_left_lit"}),
+                encoding="utf-8",
+            )
+            image_path = generated_dir / "door-left-lit.png"
+            image_path.write_bytes(b"fake png")
+            output_record = minimal_image_output_record()
+            (output_records_dir / "output-record-image-001.json").write_text(
+                json.dumps(output_record),
+                encoding="utf-8",
+            )
+            inventory = json.loads(
+                (REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            old_tv_subject = inventory["subjects"][2]
+            old_tv_image = old_tv_subject["expected_outputs"][0]
+            old_tv_image["output_record_id"] = "out_door_left_lit_image_001"
+            old_tv_image["output_record_refs"] = ["out_door_left_lit_image_001"]
+            old_tv_image["output_status"] = "generated_draft"
+            old_tv_image["readiness"] = "draft_generated"
+            old_tv_image["visible_path"] = None
+            old_tv_subject["output_record_refs"] = ["out_door_left_lit_image_001"]
+            old_tv_subject["active_output_refs"] = []
+            old_tv_subject["package_readiness"] = "planned"
+            old_tv_subject["generated_output_count"] = 1
+            old_tv_subject["accepted_output_count"] = 0
+            old_tv_subject["missing_outputs"] = ["object_multi_angle_sheet"]
+            (references_dir / "reference-inventory.json").write_text(
+                json.dumps(inventory),
+                encoding="utf-8",
+            )
+            manifest = minimal_manifest()
+            manifest["paths"]["project_dir"] = "projects/proj_door_left_lit"
+            manifest["paths"]["output_records_dir"] = "projects/proj_door_left_lit/outputs"
+            manifest["paths"]["reference_inventory"] = "projects/proj_door_left_lit/references/reference-inventory.json"
+            manifest["artist_library"] = {
+                "project_dir": "Projects/door-left-lit",
+                "project_pointer_path": "Projects/door-left-lit/.artist-os-project.json",
+                "project_pointer_state": "present",
+                "project_pointer_project_id": "proj_door_left_lit",
+                "visible_state": "present",
+                "user_facing_files": [],
+            }
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                artist_library_root=str(artist_library_root),
+                project_id="proj_door_left_lit",
+                reference_image_id="refimg_old_tv_multi_angle",
+                state="accepted",
+                filename="old-tv-reference.png",
+                review_only=False,
+                overwrite=False,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.publish_visible_reference(args)
+
+            destination = visible_project_dir / "References" / "Objects" / "old-tv" / "Accepted" / "old-tv-reference.png"
+            self.assertEqual(destination.read_bytes(), b"fake png")
+            manifest_after = json.loads((workspace_project_dir / "project.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                manifest_after["artist_library"]["user_facing_files"][0]["path"],
+                "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-reference.png",
+            )
+            self.assertEqual(
+                manifest_after["artist_library"]["user_facing_files"][0]["file_role"],
+                "accepted_reference",
+            )
+            inventory_after = json.loads((references_dir / "reference-inventory.json").read_text(encoding="utf-8"))
+            self.assertEqual(inventory_after["subjects"][2]["package_readiness"], "accepted")
+            self.assertEqual(inventory_after["subjects"][2]["accepted_output_count"], 1)
+            self.assertEqual(inventory_after["subjects"][2]["missing_outputs"], [])
+            self.assertEqual(
+                inventory_after["subjects"][2]["expected_outputs"][0]["visible_path"],
+                "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-reference.png",
+            )
+            self.assertEqual(
+                inventory_after["subjects"][2]["expected_outputs"][0]["output_status"],
+                "accepted",
+            )
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                file_ref = conn.execute(
+                    "SELECT path, file_role, output_record_id FROM artist_library_files"
+                ).fetchone()
+                image_ref = conn.execute(
+                    """
+                    SELECT reference_image_id, status, visible_path, output_record_id
+                    FROM reference_inventory_images
+                    WHERE reference_image_id = 'refimg_old_tv_multi_angle'
+                    """
+                ).fetchone()
+
+            self.assertEqual(
+                file_ref,
+                (
+                    "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-reference.png",
+                    "accepted_reference",
+                    "out_door_left_lit_image_001",
+                ),
+            )
+            self.assertEqual(
+                image_ref,
+                (
+                    "refimg_old_tv_multi_angle",
+                    "accepted",
+                    "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-reference.png",
+                    "out_door_left_lit_image_001",
+                ),
+            )
+
+    def test_publish_visible_reference_preserves_review_only_and_rejects_acceptance(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            library_root = root / "workspace-library" / "artist-os"
+            artist_library_root = root / "Wondermint" / "Artist Library"
+            workspace_project_dir = library_root / "projects" / "proj_door_left_lit"
+            output_records_dir = workspace_project_dir / "outputs"
+            references_dir = workspace_project_dir / "references"
+            generated_dir = workspace_project_dir / "assets" / "generated"
+            visible_project_dir = artist_library_root / "Projects" / "door-left-lit"
+            output_records_dir.mkdir(parents=True)
+            references_dir.mkdir(parents=True)
+            generated_dir.mkdir(parents=True)
+            visible_project_dir.mkdir(parents=True)
+            (visible_project_dir / ".artist-os-project.json").write_text(
+                json.dumps({"schema_version": 1, "project_id": "proj_door_left_lit"}),
+                encoding="utf-8",
+            )
+            image_path = generated_dir / "door-left-lit.png"
+            image_path.write_bytes(b"fake png")
+            output_record = minimal_image_output_record()
+            (output_records_dir / "output-record-image-001.json").write_text(
+                json.dumps(output_record),
+                encoding="utf-8",
+            )
+            inventory = json.loads(
+                (REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            old_tv_subject = inventory["subjects"][2]
+            old_tv_image = old_tv_subject["expected_outputs"][0]
+            old_tv_image["output_record_id"] = "out_door_left_lit_image_001"
+            old_tv_image["output_record_refs"] = ["out_door_left_lit_image_001"]
+            old_tv_image["output_status"] = "generated_draft"
+            old_tv_image["readiness"] = "draft_generated"
+            old_tv_image["visible_path"] = None
+            old_tv_image["review_only"] = True
+            old_tv_image["provider_input_allowed"] = False
+            old_tv_image["provider_role_hints"] = ["review_only"]
+            old_tv_image["allowed_use_scope"] = ["human_review_only", "internal_review"]
+            old_tv_subject["output_record_refs"] = ["out_door_left_lit_image_001"]
+            old_tv_subject["active_output_refs"] = []
+            old_tv_subject["package_readiness"] = "planned"
+            old_tv_subject["generated_output_count"] = 1
+            old_tv_subject["accepted_output_count"] = 0
+            old_tv_subject["missing_outputs"] = ["object_multi_angle_sheet"]
+            (references_dir / "reference-inventory.json").write_text(
+                json.dumps(inventory),
+                encoding="utf-8",
+            )
+            manifest = minimal_manifest()
+            manifest["paths"]["project_dir"] = "projects/proj_door_left_lit"
+            manifest["paths"]["output_records_dir"] = "projects/proj_door_left_lit/outputs"
+            manifest["paths"]["reference_inventory"] = "projects/proj_door_left_lit/references/reference-inventory.json"
+            manifest["artist_library"] = {
+                "project_dir": "Projects/door-left-lit",
+                "project_pointer_path": "Projects/door-left-lit/.artist-os-project.json",
+                "project_pointer_state": "present",
+                "project_pointer_project_id": "proj_door_left_lit",
+                "visible_state": "present",
+                "user_facing_files": [],
+            }
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+                artist_library_root=str(artist_library_root),
+                project_id="proj_door_left_lit",
+                reference_image_id="refimg_old_tv_multi_angle",
+                state="accepted",
+                filename="old-tv-reference.png",
+                review_only=False,
+                overwrite=False,
+            )
+
+            with self.assertRaisesRegex(SystemExit, "review-only reference images cannot be published as accepted"):
+                with redirect_stdout(StringIO()):
+                    artist_os_db.publish_visible_reference(args)
+
+            accepted_destination = (
+                visible_project_dir / "References" / "Objects" / "old-tv" / "Accepted" / "old-tv-reference.png"
+            )
+            self.assertFalse(accepted_destination.exists())
+
+            args.state = "draft"
+            with redirect_stdout(StringIO()):
+                artist_os_db.publish_visible_reference(args)
+
+            inventory_after = json.loads((references_dir / "reference-inventory.json").read_text(encoding="utf-8"))
+            image_after = inventory_after["subjects"][2]["expected_outputs"][0]
+            self.assertTrue(image_after["review_only"])
+            self.assertFalse(image_after["provider_input_allowed"])
+            self.assertEqual(image_after["provider_role_hints"], ["review_only"])
+            self.assertEqual(image_after["allowed_use_scope"], ["human_review_only", "internal_review"])
+            self.assertEqual(image_after["output_status"], "generated_draft")
+            self.assertTrue(
+                (
+                    visible_project_dir
+                    / "References"
+                    / "Objects"
+                    / "old-tv"
+                    / "Review Drafts"
+                    / "old-tv-reference.png"
+                ).is_file()
+            )
+
     def test_installer_passes_wondermint_root_even_with_low_level_workspace_override(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
@@ -806,6 +1043,234 @@ class ArtistOSDbStorageTests(unittest.TestCase):
                     "pending",
                 ),
             )
+
+    def test_sync_indexes_reference_inventory_items_and_images(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            project_id = "proj_door_left_lit"
+            workspace_project_dir = library_root / "projects" / project_id
+            references_dir = workspace_project_dir / "references"
+            references_dir.mkdir(parents=True)
+            manifest = minimal_manifest(project_id)
+            manifest["paths"]["reference_inventory"] = f"projects/{project_id}/references/reference-inventory.json"
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            inventory = json.loads(
+                (REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            (references_dir / "reference-inventory.json").write_text(
+                json.dumps(inventory),
+                encoding="utf-8",
+            )
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                item_rows = conn.execute(
+                    """
+                    SELECT reference_item_id, category, subject_slug, current_status,
+                           strategy_status, continuity_risk_level, visible_subject_dir
+                    FROM reference_inventory_items
+                    WHERE project_id = ?
+                    ORDER BY category, subject_slug
+                    """,
+                    (project_id,),
+                ).fetchall()
+                image_rows = conn.execute(
+                    """
+                    SELECT reference_image_id, reference_item_id, role, status,
+                           output_record_id, visible_path, provider_input_allowed,
+                           review_only
+                    FROM reference_inventory_images
+                    WHERE project_id = ?
+                    ORDER BY reference_item_id, role, reference_image_id
+                    """,
+                    (project_id,),
+                ).fetchall()
+                record_row = conn.execute(
+                    """
+                    SELECT record_type, path
+                    FROM records
+                    WHERE project_id = ? AND record_type = 'reference_inventory'
+                    """,
+                    (project_id,),
+                ).fetchone()
+
+            self.assertEqual(
+                item_rows,
+                [
+                    (
+                        "refsub_door_keeper",
+                        "character",
+                        "door-keeper",
+                        "accepted_for_planning",
+                        "accepted",
+                        "high",
+                        "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper",
+                    ),
+                    (
+                        "refsub_hallway_threshold",
+                        "location",
+                        "hallway-threshold",
+                        "accepted_for_planning",
+                        "accepted_partial",
+                        "high",
+                        "Wondermint/Artist Library/Projects/door-left-lit/References/Locations/hallway-threshold",
+                    ),
+                    (
+                        "refsub_old_tv",
+                        "object",
+                        "old-tv",
+                        "accepted_for_planning",
+                        "accepted",
+                        "high",
+                        "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv",
+                    ),
+                ],
+            )
+            self.assertEqual(len(image_rows), 8)
+            self.assertIn(
+                (
+                    "refimg_door_keeper_raincoat",
+                    "refsub_door_keeper",
+                    "character_wardrobe_sheet",
+                    "planned",
+                    None,
+                    None,
+                    1,
+                    0,
+                ),
+                image_rows,
+            )
+            self.assertIn(
+                (
+                    "refimg_old_tv_multi_angle",
+                    "refsub_old_tv",
+                    "object_multi_angle_sheet",
+                    "accepted",
+                    "out_old_tv_reference",
+                    "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-multi-angle.png",
+                    1,
+                    0,
+                ),
+                image_rows,
+            )
+            self.assertEqual(
+                record_row,
+                (
+                    "reference_inventory",
+                    "projects/proj_door_left_lit/references/reference-inventory.json",
+                ),
+            )
+
+    def test_sync_preserves_reference_index_when_inventory_is_malformed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            project_id = "proj_door_left_lit"
+            workspace_project_dir = library_root / "projects" / project_id
+            references_dir = workspace_project_dir / "references"
+            references_dir.mkdir(parents=True)
+            manifest = minimal_manifest(project_id)
+            manifest["paths"]["reference_inventory"] = f"projects/{project_id}/references/reference-inventory.json"
+            (workspace_project_dir / "project.json").write_text(json.dumps(manifest), encoding="utf-8")
+            inventory = json.loads(
+                (REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            inventory_path = references_dir / "reference-inventory.json"
+            inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+            args = argparse.Namespace(
+                db=None,
+                library_root=str(library_root),
+                wondermint_root=None,
+            )
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)
+
+            malformed_inventory = json.loads(json.dumps(inventory))
+            del malformed_inventory["subjects"][0]["subject_category"]
+            inventory_path.write_text(json.dumps(malformed_inventory), encoding="utf-8")
+
+            with redirect_stdout(StringIO()):
+                artist_os_db.sync_db(args)
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                item_count = conn.execute(
+                    "SELECT COUNT(*) FROM reference_inventory_items WHERE project_id = ?",
+                    (project_id,),
+                ).fetchone()[0]
+                image_count = conn.execute(
+                    "SELECT COUNT(*) FROM reference_inventory_images WHERE project_id = ?",
+                    (project_id,),
+                ).fetchone()[0]
+                project_row = conn.execute(
+                    "SELECT status FROM projects WHERE project_id = ?",
+                    (project_id,),
+                ).fetchone()
+
+            self.assertEqual(project_row, ("active",))
+            self.assertEqual(item_count, 3)
+            self.assertEqual(image_count, 8)
+
+    def test_reference_state_refresh_tolerates_missing_output_role_and_marks_retired(self) -> None:
+        subject = {
+            "expected_outputs": [
+                {
+                    "reference_output_id": "refout_retired_reference",
+                    "output_status": "retired",
+                }
+            ],
+            "planned_output_count": 1,
+            "generated_output_count": 0,
+            "accepted_output_count": 0,
+            "output_record_refs": [],
+            "active_output_refs": [],
+            "missing_outputs": ["custom"],
+            "package_readiness": "planned",
+        }
+
+        artist_os_db.refresh_reference_subject_state(subject)
+
+        self.assertEqual(subject["missing_outputs"], [])
+        self.assertEqual(subject["package_readiness"], "retired")
+
+    def test_reference_readiness_blocks_missing_required_outputs_until_waived(self) -> None:
+        inventory = json.loads(
+            (REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json").read_text(
+                encoding="utf-8"
+            )
+        )
+
+        blockers = artist_os_db.reference_readiness_blockers(inventory, "storyboard_export")
+        blocked_roles = {blocker["output_role"] for blocker in blockers}
+
+        self.assertIn("character_identity_plate", blocked_roles)
+        self.assertIn("location_establishing_angle", blocked_roles)
+        self.assertIn("location_reverse_angle", blocked_roles)
+        self.assertNotIn("object_multi_angle_sheet", blocked_roles)
+
+        for subject in inventory["subjects"]:
+            for output in subject["expected_outputs"]:
+                if output["required_before"] == "storyboard_export" and output["readiness"] != "accepted":
+                    output["readiness"] = "waived"
+                    output["output_status"] = "waived"
+                    output["waiver_ref"] = "gate_reference_readiness_waiver"
+            if subject["missing_outputs"]:
+                subject["risk_notes"].append("Artist waived missing reference outputs for storyboard export.")
+
+        self.assertEqual(
+            artist_os_db.reference_readiness_blockers(inventory, "storyboard_export"),
+            [],
+        )
 
     def test_sync_skips_output_artifact_index_when_required_artifact_fields_are_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

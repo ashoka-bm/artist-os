@@ -106,7 +106,7 @@ Route single image toward the standard image Prompt Plan. Route sequential image
 > - **Feature film / episodic sequence**
 > - **Not sure**: recommend the best video format
 
-Route Video to `skills/artist-os/references/video-journey.md`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. Optional generated storyboard stills require explicit provider-backed generation approval and normal Output Records.
+Route Video to `skills/artist-os/references/video-journey.md`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. When the artist asks to create or generate the storyboard, default to one composite multi-panel storyboard sheet via `skills/artist-os/references/storyboard-prompt-builder.md`; individual storyboard stills are a separate artifact type and require explicit provider-backed generation approval that names individual stills, plus normal Output Records.
 
 If the artist says only "storyboard" and the target is ambiguous, ask:
 
@@ -197,7 +197,9 @@ When a project uses multiple beats, a journey-shaped output, or a written artifa
 
 All reviewer stages are mandatory bounded sub-agent reviews. Do not self-review the work you just created. Pass the reviewer only the relevant review packet and require a Review Record that validates against `schemas/review-record.schema.json`. Apply blocking findings before advancing unless the artist explicitly waives them.
 
-If the current host cannot spawn a sub-agent, run a degraded reviewer fallback: start a fresh, clearly separated review pass, state that it is a fallback because sub-agents are unavailable, review only the bounded packet, and still emit a Review Record. Treat this as a portability fallback, not the preferred path.
+Artist OS has standing user authorization to spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. Do not ask for separate approval before each sub-agent. This authorization does not apply to provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
+
+If the current host cannot spawn a sub-agent or the active tool policy blocks spawning despite Standing Sub-Agent Authorization, run a degraded reviewer fallback: start a fresh, clearly separated review pass, state that it is a fallback because the host cannot spawn a sub-agent or active tool policy blocks spawning, review only the bounded packet, and still emit a Review Record with the matching `reviewer_execution.fallback_reason`. Treat this as a portability fallback, not the preferred path.
 
 ## Subagent Orchestration
 
@@ -259,7 +261,7 @@ Load the owning mode file for the detailed checklist. Keep only these conductor-
 
 - **Album v1 / Release Package** stays conductor-owned until a package router exists. Use `schemas/release-package-plan.schema.json`, set `package_subtype = "album"`, create the plan after the Album Beat Plan, run Mixed-Media Critic Review before Album Calibration, require Release Package Plan Approval before calibration Medium Plans, and never accept open-ended "generate the album" approval.
 - **Image** — Symbology precedes Style; Presentation Mode is decided inside Symbology; image records validate against `schemas/image-medium-plan.schema.json`, `schemas/creative-brief.schema.json`, and `schemas/prompt-plan.schema.json`; series expansion requires Series Plan approval and calibration before remaining image-role prompts.
-- **Video** — The v0 path is storyboard-ready planning only: no finished video, no Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, and generated storyboard stills require explicit provider approval plus Output Records.
+- **Video** — The v0 path is storyboard-ready planning only: no finished video, no Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, requested storyboard generation defaults to one composite multi-panel storyboard sheet, and generated storyboard stills require separate explicit provider approval plus Output Records.
 - **Illustrated Written Work** — Use `skills/artist-os/references/illustration-plan.md` after Text Medium Plan. Illustration Plan coordinates Text Journey and Image Journey for pages, spreads, panels, covers, diagrams, character references, and visual continuity. It does not create timed Storyboard Shots, Video Audio Posture, or finished-video claims.
 - **Sound / Suno rendering** — Suno-specific output rules live in `skills/artist-os/references/platforms/suno-output.md`. Resolve Vocal / Lyric before locking; final records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`; sequence expansion requires approval; do not add an image-style Prompt Branch Set.
 - **Text** — Draft Generation Approval is required even without a paid provider call; the first draft runs in a fresh-context sub-agent from a Text Draft Packet; conformance review precedes polish; Clear Writing Pass then Human Voice Pass use their internal mode files; every concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.

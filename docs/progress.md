@@ -107,6 +107,7 @@ This is the canonical contract for:
 - critic roles,
 - writing method reviewers,
 - mandatory bounded sub-agent review execution,
+- Standing Sub-Agent Authorization for bounded internal subagents,
 - review packet and output format,
 - drift checking,
 - blocking findings and artist waivers.

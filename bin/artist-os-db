@@ -52,6 +52,27 @@ VISIBLE_OUTPUT_STATE_TO_SUBDIR = {
     "draft": "Drafts",
     "accepted": "Accepted",
 }
+VISIBLE_REFERENCE_STATE_TO_ROLE = {
+    "draft": "reference_review_draft",
+    "accepted": "accepted_reference",
+}
+VISIBLE_REFERENCE_STATE_TO_SUBDIR = {
+    "draft": "Review Drafts",
+    "accepted": "Accepted",
+}
+REFERENCE_CATEGORY_TO_VISIBLE_FOLDER = {
+    "character": "Characters",
+    "location": "Locations",
+    "object": "Objects",
+    "product": "Objects",
+    "setting": "Locations",
+    "prop": "Objects",
+    "style": "Styles",
+}
+NEW_REFERENCE_OUTPUT_ACCEPTED = "accepted"
+NEW_REFERENCE_OUTPUT_DRAFT = "generated_draft"
+OLD_REFERENCE_OUTPUT_ACCEPTED = "accepted_reference"
+OLD_REFERENCE_OUTPUT_DRAFT = "generated_draft"
 ARTIFACT_KIND_TO_MEDIUM_FOLDER = {
     "image": "Images",
     "audio": "Audio",
@@ -305,6 +326,294 @@ def output_artifact_row(
         acceptance_state.get("output_acceptance_status"),
         output_record.get("created_at"),
     )
+
+
+def reference_inventory_subjects(inventory: dict) -> list[dict]:
+    return inventory.get("subjects") or inventory.get("items", [])
+
+
+def reference_subject_outputs(subject: dict) -> list[dict]:
+    return subject.get("expected_outputs") or subject.get("reference_images", [])
+
+
+def reference_output_owners(subject: dict) -> list[dict]:
+    return [subject, *subject.get("variants", [])]
+
+
+def reference_subject_all_outputs(subject: dict) -> list[dict]:
+    outputs: list[dict] = []
+    for owner in reference_output_owners(subject):
+        outputs.extend(reference_subject_outputs(owner))
+    return outputs
+
+
+def reference_subject_id(subject: dict) -> str | None:
+    return subject.get("reference_subject_id") or subject.get("reference_item_id")
+
+
+def reference_subject_category(subject: dict) -> str | None:
+    return subject.get("subject_category") or subject.get("category")
+
+
+def reference_subject_label(subject: dict) -> str | None:
+    return subject.get("display_name") or subject.get("subject_label")
+
+
+def reference_subject_status(subject: dict) -> str | None:
+    return subject.get("subject_status") or subject.get("current_status")
+
+
+def reference_output_image_id(output: dict) -> str | None:
+    return output.get("reference_image_id") or output.get("reference_output_id")
+
+
+def reference_output_id(output: dict) -> str | None:
+    return output.get("reference_output_id") or output.get("reference_image_id")
+
+
+def reference_output_role(output: dict) -> str | None:
+    return output.get("output_role") or output.get("role")
+
+
+def reference_output_status(output: dict) -> str | None:
+    return output.get("output_status") or output.get("status")
+
+
+def reference_output_record_refs(output: dict) -> list[str]:
+    refs = list(output.get("output_record_refs", []))
+    output_record_id = output.get("output_record_id")
+    if output_record_id and output_record_id not in refs:
+        refs.append(output_record_id)
+    return refs
+
+
+def reference_subject_output_record_refs(subject: dict, outputs: list[dict]) -> list[str]:
+    refs = list(subject.get("output_record_refs", []))
+    for output in outputs:
+        for output_record_ref in reference_output_record_refs(output):
+            if output_record_ref not in refs:
+                refs.append(output_record_ref)
+    return refs
+
+
+def reference_subject_provider_role_hints(subject: dict, outputs: list[dict]) -> list[str]:
+    hints = list(subject.get("provider_role_hints", []))
+    for output in outputs:
+        for hint in output.get("provider_role_hints", []):
+            if hint not in hints:
+                hints.append(hint)
+    return hints
+
+
+def reference_subject_provider_input_allowed(subject: dict, outputs: list[dict]) -> bool:
+    if "provider_input_allowed" in subject:
+        return bool(subject.get("provider_input_allowed"))
+    return any(bool(output.get("provider_input_allowed")) for output in outputs)
+
+
+def reference_subject_review_only(subject: dict, outputs: list[dict]) -> bool:
+    if "review_only" in subject:
+        return bool(subject.get("review_only"))
+    return any(bool(output.get("review_only")) for output in outputs)
+
+
+def reference_inventory_indexable(inventory: dict) -> bool:
+    """Return whether the inventory can be safely rewritten into SQLite.
+
+    Reference inventories may be hand-edited while projects are in flight. The
+    SQLite index is a cache, so malformed cache input should not abort sync or
+    erase the last known-good rows.
+    """
+    for item in reference_inventory_subjects(inventory):
+        item_id = reference_subject_id(item)
+        if not item_id:
+            continue
+        required_item_values = [
+            reference_subject_category(item),
+            item.get("subject_slug"),
+            reference_subject_label(item),
+            reference_subject_status(item),
+            item.get("strategy_status"),
+            item.get("continuity_risk_level"),
+        ]
+        if not all(required_item_values):
+            return False
+        for image in reference_subject_all_outputs(item):
+            image_id = reference_output_image_id(image)
+            if not image_id:
+                continue
+            if not reference_output_role(image) or not reference_output_status(image):
+                return False
+    return True
+
+
+def reference_readiness_blockers(inventory: dict, required_before: str) -> list[dict]:
+    blockers: list[dict] = []
+    for subject in reference_inventory_subjects(inventory):
+        subject_id = reference_subject_id(subject)
+        if subject.get("subject_status") in {"declined", "deferred"} and subject.get("package_readiness") == "waived":
+            continue
+        for owner in reference_output_owners(subject):
+            for output in reference_subject_outputs(owner):
+                if output.get("required_before") != required_before:
+                    continue
+                readiness = output.get("readiness")
+                if readiness in {"accepted", "waived"}:
+                    continue
+                blockers.append({
+                    "reference_subject_id": subject_id,
+                    "reference_output_id": reference_output_id(output),
+                    "reference_image_id": reference_output_image_id(output),
+                    "output_role": reference_output_role(output),
+                    "readiness": readiness or reference_output_status(output),
+                    "waiver_ref": output.get("waiver_ref"),
+                })
+    return blockers
+
+
+def index_reference_inventory(
+    conn: sqlite3.Connection,
+    project_id: str,
+    inventory_path_value: str | None,
+    project_dir: Path,
+    library_root: Path,
+) -> None:
+    inventory_path = resolve_path(inventory_path_value, project_dir, library_root)
+    if not inventory_path:
+        return
+    try:
+        inventory = read_json(inventory_path)
+    except (OSError, json.JSONDecodeError):
+        return
+    if inventory.get("project_id") != project_id:
+        return
+    inventory_id = inventory.get("reference_inventory_id")
+    if not inventory_id:
+        return
+    if not reference_inventory_indexable(inventory):
+        return
+
+    conn.execute("SAVEPOINT reference_inventory_index")
+    try:
+        conn.execute("DELETE FROM reference_inventory_images WHERE project_id = ?", (project_id,))
+        conn.execute("DELETE FROM reference_inventory_items WHERE project_id = ?", (project_id,))
+        write_reference_inventory_index(conn, project_id, inventory, inventory_id)
+    except sqlite3.IntegrityError:
+        conn.execute("ROLLBACK TO reference_inventory_index")
+    finally:
+        conn.execute("RELEASE reference_inventory_index")
+
+
+def write_reference_inventory_index(
+    conn: sqlite3.Connection,
+    project_id: str,
+    inventory: dict,
+    inventory_id: str,
+) -> None:
+    for item in reference_inventory_subjects(inventory):
+        item_id = reference_subject_id(item)
+        if not item_id:
+            continue
+        visible_paths = item.get("visible_paths") or {}
+        workspace_paths = item.get("workspace_paths") or {}
+        reference_images = reference_subject_all_outputs(item)
+        output_record_refs = reference_subject_output_record_refs(item, reference_images)
+        conn.execute(
+            """
+            INSERT INTO reference_inventory_items (
+              reference_item_id, project_id, reference_inventory_id, category,
+              subject_slug, subject_label, current_status, strategy_status,
+              continuity_risk_level, provider_input_allowed, review_only,
+              visible_subject_dir, visible_review_drafts_dir, visible_accepted_dir,
+              workspace_subject_dir, visual_reference_sheet_plan_refs_json,
+              output_record_refs_json, provider_role_hints_json, payload_json
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(reference_item_id) DO UPDATE SET
+              project_id = excluded.project_id,
+              reference_inventory_id = excluded.reference_inventory_id,
+              category = excluded.category,
+              subject_slug = excluded.subject_slug,
+              subject_label = excluded.subject_label,
+              current_status = excluded.current_status,
+              strategy_status = excluded.strategy_status,
+              continuity_risk_level = excluded.continuity_risk_level,
+              provider_input_allowed = excluded.provider_input_allowed,
+              review_only = excluded.review_only,
+              visible_subject_dir = excluded.visible_subject_dir,
+              visible_review_drafts_dir = excluded.visible_review_drafts_dir,
+              visible_accepted_dir = excluded.visible_accepted_dir,
+              workspace_subject_dir = excluded.workspace_subject_dir,
+              visual_reference_sheet_plan_refs_json = excluded.visual_reference_sheet_plan_refs_json,
+              output_record_refs_json = excluded.output_record_refs_json,
+              provider_role_hints_json = excluded.provider_role_hints_json,
+              payload_json = excluded.payload_json
+            """,
+            (
+                item_id,
+                project_id,
+                inventory_id,
+                reference_subject_category(item),
+                item.get("subject_slug"),
+                reference_subject_label(item),
+                reference_subject_status(item),
+                item.get("strategy_status"),
+                item.get("continuity_risk_level"),
+                int(reference_subject_provider_input_allowed(item, reference_images)),
+                int(reference_subject_review_only(item, reference_images)),
+                visible_paths.get("subject_dir"),
+                visible_paths.get("review_drafts_dir"),
+                visible_paths.get("accepted_dir"),
+                workspace_paths.get("subject_dir"),
+                json.dumps(item.get("visual_reference_sheet_plan_refs", []), sort_keys=True),
+                json.dumps(output_record_refs, sort_keys=True),
+                json.dumps(reference_subject_provider_role_hints(item, reference_images), sort_keys=True),
+                json.dumps(item, sort_keys=True),
+            ),
+        )
+        for image in reference_images:
+            image_id = reference_output_image_id(image)
+            if not image_id:
+                continue
+            conn.execute(
+                """
+                INSERT INTO reference_inventory_images (
+                  reference_image_id, reference_item_id, project_id,
+                  reference_inventory_id, role, status, output_record_id,
+                  visible_path, workspace_path, provider_input_allowed,
+                  review_only, provider_role_hints_json, payload_json
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(reference_image_id) DO UPDATE SET
+                  reference_item_id = excluded.reference_item_id,
+                  project_id = excluded.project_id,
+                  reference_inventory_id = excluded.reference_inventory_id,
+                  role = excluded.role,
+                  status = excluded.status,
+                  output_record_id = excluded.output_record_id,
+                  visible_path = excluded.visible_path,
+                  workspace_path = excluded.workspace_path,
+                  provider_input_allowed = excluded.provider_input_allowed,
+                  review_only = excluded.review_only,
+                  provider_role_hints_json = excluded.provider_role_hints_json,
+                  payload_json = excluded.payload_json
+                """,
+                (
+                    image_id,
+                    item_id,
+                    project_id,
+                    inventory_id,
+                    reference_output_role(image),
+                    reference_output_status(image),
+                    image.get("output_record_id"),
+                    image.get("visible_path"),
+                    image.get("workspace_path"),
+                    int(bool(image.get("provider_input_allowed"))),
+                    int(bool(image.get("review_only"))),
+                    json.dumps(image.get("provider_role_hints", []), sort_keys=True),
+                    json.dumps(image, sort_keys=True),
+                ),
+            )
 
 
 def event_key(payload: dict, fallback_index: int) -> tuple:
@@ -694,8 +1003,16 @@ def upsert_manifest(
             ),
         )
 
-    conn.execute("DELETE FROM assets WHERE project_id = ?", (project_id,))
     project_dir_path = Path(project_dir)
+    index_reference_inventory(
+        conn,
+        project_id,
+        paths.get("reference_inventory"),
+        project_dir_path,
+        library_root,
+    )
+
+    conn.execute("DELETE FROM assets WHERE project_id = ?", (project_id,))
     for asset in manifest.get("assets", []):
         sidecar = optional_json(asset.get("metadata_path"), project_dir_path, library_root)
         provenance = sidecar.get("provenance", {})
@@ -740,6 +1057,7 @@ def upsert_manifest(
         "meaning_interview": "meaning_interview",
         "transformation_brief": "transformation_brief",
         "beat_plan": "beat_plan",
+        "reference_inventory": "reference_inventory",
         "image_medium_plan": "image_medium_plan",
         "sound_medium_plan": "sound_medium_plan",
         "interpretation_gate": "interpretation_gate",
@@ -1363,6 +1681,211 @@ def publish_visible_output(args: argparse.Namespace) -> None:
     print(f"published visible output {destination_path}")
 
 
+def reference_inventory_path(manifest: dict, project_dir: Path, library_root: Path) -> Path:
+    path = resolve_path(manifest.get("paths", {}).get("reference_inventory"), project_dir, library_root)
+    if not path:
+        raise SystemExit("project has no reference inventory; set paths.reference_inventory first")
+    return path
+
+
+def find_reference_image(inventory: dict, reference_image_id: str) -> tuple[dict, dict, dict]:
+    for item in reference_inventory_subjects(inventory):
+        for owner in reference_output_owners(item):
+            for image in reference_subject_outputs(owner):
+                if reference_output_image_id(image) == reference_image_id:
+                    return item, owner, image
+    raise SystemExit(f"reference image not found in inventory: {reference_image_id}")
+
+
+def refresh_reference_output_owner_state(owner: dict) -> None:
+    outputs = reference_subject_outputs(owner)
+    if "active_output_refs" in owner:
+        owner["active_output_refs"] = [
+            reference_output_id(output)
+            for output in outputs
+            if output.get("output_status") == "accepted" and reference_output_id(output)
+        ]
+    if "missing_outputs" in owner:
+        owner["missing_outputs"] = [
+            reference_output_role(output)
+            for output in outputs
+            if (
+                output.get("output_status") not in {"accepted", "waived", "replaced", "retired"}
+                and reference_output_role(output)
+            )
+        ]
+
+
+def refresh_reference_subject_state(subject: dict) -> None:
+    outputs = reference_subject_outputs(subject)
+    if "expected_outputs" not in subject:
+        return
+
+    subject["planned_output_count"] = len(outputs)
+    subject["generated_output_count"] = sum(
+        1
+        for output in outputs
+        if output.get("output_status") in {"generated_draft", "imported_candidate"}
+    )
+    subject["accepted_output_count"] = sum(
+        1
+        for output in outputs
+        if output.get("output_status") == "accepted"
+    )
+    subject["output_record_refs"] = reference_subject_output_record_refs(subject, outputs)
+    refresh_reference_output_owner_state(subject)
+
+    if outputs and all(output.get("output_status") == "accepted" for output in outputs):
+        subject["package_readiness"] = "accepted"
+    elif outputs and all(output.get("output_status") == "waived" for output in outputs):
+        subject["package_readiness"] = "waived"
+    elif outputs and all(output.get("output_status") in {"retired", "replaced"} for output in outputs):
+        subject["package_readiness"] = "retired"
+    elif any(output.get("output_status") == "accepted" for output in outputs):
+        subject["package_readiness"] = "partially_accepted"
+    elif any(output.get("output_status") == "rejected" for output in outputs):
+        subject["package_readiness"] = "needs_regeneration"
+    elif outputs:
+        subject["package_readiness"] = "planned"
+    else:
+        subject["package_readiness"] = "missing"
+
+
+def publish_visible_reference(args: argparse.Namespace) -> None:
+    validate_id(args.project_id, PROJECT_ID_PATTERN, "project_id")
+    library_root = library_root_for(args)
+    artist_library_root = artist_library_root_for(args)
+    if not artist_library_root:
+        raise SystemExit("publish-visible-reference requires --wondermint-root, WONDERMINT_ROOT, or --artist-library-root")
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    artist_library = require_visible_artist_library_state(manifest)
+    project_dir = Path(manifest.get("paths", {}).get("project_dir", manifest_path.parent))
+    inventory_path = reference_inventory_path(manifest, project_dir, library_root)
+    inventory = read_json(inventory_path)
+    item, output_owner, image = find_reference_image(inventory, args.reference_image_id)
+    output_record_id = image.get("output_record_id")
+    if not output_record_id:
+        raise SystemExit(f"reference image has no output_record_id: {args.reference_image_id}")
+    output_record_path, output_record = read_output_record_by_id(
+        manifest,
+        output_record_id,
+        project_dir,
+        library_root,
+    )
+    source_path = artifact_source_path(output_record, project_dir, library_root)
+    artifact = output_record.get("output_artifact") or {}
+    extension = source_path.suffix or Path(artifact.get("uri_or_path", "")).suffix
+    requested_filename = args.filename or f"{args.reference_image_id}{extension}"
+    filename = visible_filename(requested_filename)
+    if extension and not filename.endswith(extension):
+        filename = f"{filename}{extension}"
+
+    category_folder = REFERENCE_CATEGORY_TO_VISIBLE_FOLDER.get(reference_subject_category(item))
+    if not category_folder:
+        raise SystemExit(f"no visible reference folder for category: {reference_subject_category(item)}")
+    state_dir = VISIBLE_REFERENCE_STATE_TO_SUBDIR[args.state]
+    wondermint_root = Path(args.wondermint_root) if getattr(args, "wondermint_root", None) else None
+    visible_project_dir = resolve_artist_library_path(
+        artist_library["project_dir"],
+        artist_library_root,
+    )
+    if not visible_project_dir:
+        raise SystemExit(f"visible project folder cannot be resolved: {artist_library['project_dir']}")
+    owner_visible_paths = output_owner.get("visible_paths") or {}
+    owner_subject_dir = resolve_artist_library_path(
+        owner_visible_paths.get("subject_dir"),
+        artist_library_root,
+    )
+    if owner_subject_dir:
+        destination_dir = owner_subject_dir / state_dir
+    else:
+        destination_dir = visible_project_dir / "References" / category_folder / item["subject_slug"] / state_dir
+    publish_as_review_only = bool(image.get("review_only")) or bool(args.review_only)
+    if publish_as_review_only and args.state == "accepted":
+        raise SystemExit(
+            "review-only reference images cannot be published as accepted references; "
+            "publish a review draft or use a provider-input-safe output"
+        )
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    destination_path = destination_dir / filename
+    if destination_path.exists() and not args.overwrite:
+        raise SystemExit(f"visible reference already exists: {destination_path}; use --overwrite to replace it")
+    shutil.copy2(source_path, destination_path)
+
+    now = utc_now()
+    visible_path = visible_output_ref(destination_path, wondermint_root, artist_library_root)
+    image["visible_path"] = visible_path
+    if "output_status" in image:
+        image["output_status"] = NEW_REFERENCE_OUTPUT_ACCEPTED if args.state == "accepted" else NEW_REFERENCE_OUTPUT_DRAFT
+        image["readiness"] = "accepted" if args.state == "accepted" else "draft_generated"
+        image.setdefault("output_record_refs", [])
+        if output_record_id not in image["output_record_refs"]:
+            image["output_record_refs"].append(output_record_id)
+    else:
+        image["status"] = OLD_REFERENCE_OUTPUT_ACCEPTED if args.state == "accepted" else OLD_REFERENCE_OUTPUT_DRAFT
+    image["review_only"] = publish_as_review_only
+    if publish_as_review_only:
+        image["provider_input_allowed"] = False
+        image["provider_role_hints"] = ["review_only"]
+        if "allowed_use_scope" in image:
+            image["allowed_use_scope"] = ["human_review_only", "internal_review"]
+    if "expected_outputs" in output_owner:
+        output_owner.setdefault("history", []).append({
+            "event_id": f"refevt_{args.project_id.removeprefix('proj_')}_{compact_timestamp(now)}",
+            "event_type": "output_published" if args.state == "draft" else "output_accepted",
+            "occurred_at": now,
+            "summary": f"Published {args.reference_image_id} to visible reference path {visible_path}.",
+            "refs": [args.reference_image_id, output_record_id],
+        })
+        refresh_reference_output_owner_state(output_owner)
+        refresh_reference_subject_state(item)
+    elif args.state == "accepted":
+        item["current_status"] = OLD_REFERENCE_OUTPUT_ACCEPTED
+    elif item.get("current_status") not in {OLD_REFERENCE_OUTPUT_ACCEPTED, "rejected_reference"}:
+        item["current_status"] = OLD_REFERENCE_OUTPUT_DRAFT
+    output_owner["visible_paths"] = {
+        "subject_dir": visible_output_ref(destination_dir.parent, wondermint_root, artist_library_root),
+        "review_drafts_dir": visible_output_ref(destination_dir.parent / "Review Drafts", wondermint_root, artist_library_root),
+        "accepted_dir": visible_output_ref(destination_dir.parent / "Accepted", wondermint_root, artist_library_root),
+    }
+    inventory["updated_at"] = now
+    inventory_path.write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
+
+    new_ref = {
+        "path": visible_path,
+        "file_role": VISIBLE_REFERENCE_STATE_TO_ROLE[args.state],
+        "status": "current",
+        "output_record_id": output_record_id,
+        "updated_at": now,
+    }
+    artist_library["user_facing_files"] = dedupe_user_facing_file_refs(
+        artist_library.get("user_facing_files", []),
+        new_ref,
+    )
+    artist_library["visible_state"] = "present"
+    artist_library["last_checked_at"] = now
+    manifest["artist_library"] = artist_library
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+
+    events_path = resolve_path(manifest.get("paths", {}).get("events"), project_dir, library_root)
+    if events_path:
+        event = {
+            "event_id": f"evt_{args.project_id.removeprefix('proj_')}_{compact_timestamp(now)}",
+            "project_id": args.project_id,
+            "event_type": "visible_reference_published",
+            "stage": "reference_inventory",
+            "created_at": now,
+            "record_path": relative_library_path(inventory_path, library_root),
+            "details": f"Published {args.reference_image_id} to visible reference path {visible_path}.",
+        }
+        with events_path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps(event, sort_keys=True) + "\n")
+
+    sync_db(args)
+    print(f"published visible reference {destination_path}")
+
+
 def update_visible_project_manifest(
     args: argparse.Namespace,
     artist_library_root: Path,
@@ -1508,6 +2031,28 @@ def show_project(args: argparse.Namespace) -> None:
             """,
             (args.project_id,),
         ).fetchall()
+        reference_items = conn.execute(
+            """
+            SELECT reference_item_id, category, subject_slug, subject_label,
+                   current_status, strategy_status, continuity_risk_level,
+                   visible_subject_dir
+            FROM reference_inventory_items
+            WHERE project_id = ?
+            ORDER BY category, subject_slug
+            """,
+            (args.project_id,),
+        ).fetchall()
+        reference_images = conn.execute(
+            """
+            SELECT reference_image_id, reference_item_id, role, status,
+                   output_record_id, visible_path, workspace_path,
+                   provider_input_allowed, review_only
+            FROM reference_inventory_images
+            WHERE project_id = ?
+            ORDER BY reference_item_id, role, reference_image_id
+            """,
+            (args.project_id,),
+        ).fetchall()
     print(json.dumps({
         "project": dict(project),
         "decisions": dict(decisions) if decisions else None,
@@ -1516,6 +2061,8 @@ def show_project(args: argparse.Namespace) -> None:
         "feedback_state": dict(feedback_state) if feedback_state else None,
         "records": [dict(record) for record in records],
         "output_artifacts": [dict(artifact) for artifact in output_artifacts],
+        "reference_inventory_items": [dict(item) for item in reference_items],
+        "reference_inventory_images": [dict(image) for image in reference_images],
         "assets": [dict(asset) for asset in assets],
     }, indent=2))
 
@@ -1629,6 +2176,18 @@ def parser() -> argparse.ArgumentParser:
     publish.add_argument("--artist-library-root", default=None)
     publish.add_argument("--overwrite", action="store_true")
     publish.set_defaults(func=publish_visible_output)
+
+    publish_ref = sub.add_parser("publish-visible-reference", help="copy a reference Output Artifact into visible References folders")
+    publish_ref.add_argument("project_id")
+    publish_ref.add_argument("reference_image_id")
+    publish_ref.add_argument("--state", default="draft", choices=sorted(VISIBLE_REFERENCE_STATE_TO_ROLE))
+    publish_ref.add_argument("--filename", default=None)
+    publish_ref.add_argument("--library-root", default=None)
+    publish_ref.add_argument("--wondermint-root", default=None)
+    publish_ref.add_argument("--artist-library-root", default=None)
+    publish_ref.add_argument("--review-only", action="store_true")
+    publish_ref.add_argument("--overwrite", action="store_true")
+    publish_ref.set_defaults(func=publish_visible_reference)
 
     list_cmd = sub.add_parser("list", help="list indexed projects")
     add_library_args(list_cmd)

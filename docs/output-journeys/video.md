@@ -30,6 +30,7 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Video Format Gate
   -> Scene / Sequence Gate
   -> Shot Logic Gate
+  -> Reference Strategy Gate, when characters, locations, or objects need continuity
   -> Motion / Pacing / Transition Gate
   -> Audio Posture Gate
   -> Video Medium Plan with Medium-Level Workflow Scale Routing
@@ -37,8 +38,10 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Video Critic Review
   -> Brief Approval Gate
   -> storyboard-ready package
-  -> optional storyboard still Generation Approval Gate
-  -> Output Record, when storyboard stills are generated or imported
+  -> optional composite storyboard sheet Generation Approval Gate, default generated storyboard artifact
+  -> Output Record, when a composite storyboard sheet is generated or imported
+  -> optional individual storyboard still Generation Approval Gate, only when explicitly requested
+  -> Output Record, when individual storyboard stills are generated or imported
   -> Output Critic Review
   -> Output Acceptance Gate
 ```
@@ -50,6 +53,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 - Video Format Gate: short social video, single scene, trailer, montage, music video, short film, feature film, episodic sequence, or another format?
 - Scene / Sequence Gate: does this need Video Sequences, Video Scenes only, or long-form stewardship?
 - Shot Logic Gate: how does each Beat, Beat group, or Tension Point become timed Storyboard Shots?
+- Reference Strategy Gate: which main characters, locations, objects, products, or props should be promoted into reference status before storyboard lock?
+- Reference Readiness Gate: are required reference outputs accepted or explicitly waived before storyboard export?
 - Motion / Pacing / Transition Gate: what moves, how fast do shots unfold, and how do they connect?
 - Audio Posture Gate: silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred?
 - Workflow Scale Routing: should this stay compact, expand as a structured single artifact, or activate cumulative/full long-form supports?
@@ -61,13 +66,13 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 - Video Critic Review checks shot progression, scene pacing, motion logic, transition logic, visual continuity over time, and script or audio alignment against Artist Meaning, Beat Plan, and Video Medium Plan.
 - Art Critic Review criteria may support Video Critic Review when visual style, symbology, composition, or Visual Dynamics are unresolved.
 - Writing Critic Review criteria may support Video Critic Review when script, dialogue, voiceover, captions, or on-screen text carry meaning.
-- Output Critic Review checks generated storyboard stills or later generated video artifacts against Artist Meaning, Beat Plan, Video Medium Plan, and the approved plan that produced them.
+- Output Critic Review checks generated or imported composite storyboard sheets, explicitly requested individual storyboard stills, or later generated video artifacts against Artist Meaning, Beat Plan, Video Medium Plan, and the approved plan that produced them.
 
 ## Current Implementation
 
-The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. A separate Video Prompt Plan waits until provider-neutral video generation instructions prove their fields.
+The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. Requested storyboard generation defaults to one composite multi-panel storyboard sheet; individual panel stills are a separate artifact type that require explicit separate approval. A separate Video Prompt Plan waits until provider-neutral video generation instructions prove their fields.
 
-Generated storyboard stills are normal Output Records linked back to the relevant Storyboard Shot. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data but do not define the domain model.
+Generated or imported composite storyboard sheets and individual storyboard stills are normal Output Records linked back to the relevant Video Medium Plan and, for individual stills, the relevant Storyboard Shot. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data but do not define the domain model.
 
 ## Video-Specific Concerns
 
@@ -80,6 +85,7 @@ Video cannot rely on mood words alone. It needs decisions about:
 - camera movement,
 - subject movement and blocking,
 - scene continuity,
+- promoted reference packages for main characters, locations, objects, products, or props,
 - temporal order,
 - transition behavior,
 - visual consistency over time,
@@ -87,4 +93,4 @@ Video cannot rely on mood words alone. It needs decisions about:
 - script, voiceover, dialogue, caption, or on-screen text timing,
 - whether the output loops or resolves.
 
-Longer video should use Long-Work Stewardship, checkpoints, and calibration before broad expansion. Do not create generated clips or storyboard stills without explicit approval.
+Longer video should use Long-Work Stewardship, checkpoints, and calibration before broad expansion. Do not create generated clips, composite storyboard sheets, or storyboard stills without explicit approval. Do not create individual storyboard stills unless the artist explicitly requests separate panel images.

@@ -1,0 +1,485 @@
+{
+  "reference_inventory_id": "refinv_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "inventory_status": "active",
+  "policy": {
+    "main_character_video_default": "strongly_recommend",
+    "locations_objects_default": "promote_when_specific_or_inspectable",
+    "skip_all_references": false,
+    "skip_all_references_waiver_ref": null,
+    "reference_generation_mode": "ask",
+    "notes": "Reference support is recommended by Artist OS, but planning or generation depends on artist gate decisions."
+  },
+  "medium_plan_refs": [
+    {
+      "medium_plan_type": "video_medium_plan",
+      "medium_plan_id": "vmp_door_left_lit",
+      "role": "scan_source"
+    }
+  ],
+  "scan_history": [
+    {
+      "scan_id": "refscan_door_left_lit_video",
+      "scanned_at": "2026-06-25T18:50:00Z",
+      "scan_scope": "video_storyboard",
+      "medium_plan_ref": "vmp_door_left_lit",
+      "summary": "Found one identity-bearing implied host, one blocking-critical hallway, and one story-critical object.",
+      "candidates_found": 3
+    }
+  ],
+  "subjects": [
+    {
+      "reference_subject_id": "refsub_door_keeper",
+      "subject_category": "character",
+      "subject_subtype": "host",
+      "display_name": "Door Keeper",
+      "subject_slug": "door-keeper",
+      "origin": "continuity_scan",
+      "priority": "required_decision",
+      "recommendation_reasons": [
+        "main_character",
+        "multi_shot_identity",
+        "provider_drift_risk"
+      ],
+      "subject_status": "accepted_for_planning",
+      "strategy_status": "accepted",
+      "package_readiness": "planned",
+      "planned_output_count": 3,
+      "generated_output_count": 0,
+      "accepted_output_count": 0,
+      "decision_ref": "gate_character_reference_strategy",
+      "source_evidence_refs": ["src_door_left_lit#implied-host"],
+      "usage_context_refs": ["vmp_door_left_lit#storyboard_shots"],
+      "character_template_refs": ["char_door_keeper"],
+      "visual_reference_sheet_plan_refs": ["vrs_door_keeper_promoted_package"],
+      "output_record_refs": [],
+      "active_output_refs": [],
+      "linked_subject_refs": [],
+      "allowed_use_scope": [
+        "prompt_planning",
+        "storyboard_export",
+        "provider_input"
+      ],
+      "provider_role_hints": [
+        "identity_reference",
+        "turnaround_reference",
+        "detail_reference"
+      ],
+      "visible_paths": {
+        "subject_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper",
+        "review_drafts_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper/Review Drafts",
+        "accepted_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper/Accepted"
+      },
+      "workspace_paths": {
+        "subject_dir": "projects/proj_door_left_lit/assets/generated/references/characters/door-keeper",
+        "review_drafts_dir": "projects/proj_door_left_lit/assets/generated/references/characters/door-keeper/review-drafts",
+        "accepted_dir": "projects/proj_door_left_lit/assets/reference/characters/door-keeper/accepted"
+      },
+      "continuity_risk_level": "high",
+      "risk_notes": [
+        "Without references, later close-ups or full-body shots may invent a different host."
+      ],
+      "variants": [
+        {
+          "variant_id": "refvar_door_keeper_raincoat",
+          "variant_slug": "raincoat",
+          "variant_kind": "wardrobe_variant",
+          "display_name": "Door Keeper Raincoat",
+          "reference_kind": "wardrobe_variant",
+          "active_output_refs": [],
+          "expected_outputs": [
+            {
+              "reference_output_id": "refout_door_keeper_raincoat",
+              "reference_image_id": "refimg_door_keeper_raincoat",
+              "reference_kind": "wardrobe_variant",
+              "output_role": "character_wardrobe_sheet",
+              "output_status": "planned",
+              "required_before": "optional",
+              "readiness": "planned",
+              "waiver_ref": null,
+              "output_record_id": null,
+              "output_record_refs": [],
+              "visible_path": null,
+              "workspace_path": null,
+              "allowed_use_scope": ["prompt_planning"],
+              "provider_role_hints": ["identity_reference"],
+              "provider_input_allowed": true,
+              "review_only": false,
+              "notes": "Optional wardrobe variant linked to the same character identity."
+            }
+          ],
+          "missing_outputs": ["character_wardrobe_sheet"],
+          "visible_paths": {
+            "subject_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper/Wardrobe/raincoat",
+            "review_drafts_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper/Wardrobe/raincoat/Review Drafts",
+            "accepted_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Characters/door-keeper/Wardrobe/raincoat/Accepted"
+          },
+          "workspace_paths": {
+            "subject_dir": "projects/proj_door_left_lit/assets/generated/references/characters/door-keeper/wardrobe/raincoat",
+            "review_drafts_dir": "projects/proj_door_left_lit/assets/generated/references/characters/door-keeper/wardrobe/raincoat/review-drafts",
+            "accepted_dir": "projects/proj_door_left_lit/assets/reference/characters/door-keeper/wardrobe/raincoat/accepted"
+          },
+          "history": [
+            {
+              "event_id": "refevt_door_keeper_raincoat_planned",
+              "event_type": "plan_created",
+              "occurred_at": "2026-06-25T19:01:00Z",
+              "summary": "Recorded optional wardrobe variant for later continuity planning.",
+              "refs": ["refsub_door_keeper"]
+            }
+          ],
+          "notes": "Variants are nested under the base character subject in v1."
+        }
+      ],
+      "expected_outputs": [
+        {
+          "reference_output_id": "refout_door_keeper_identity",
+          "reference_image_id": "refimg_door_keeper_identity",
+          "reference_kind": "base_identity",
+          "output_role": "character_identity_plate",
+          "output_status": "planned",
+          "required_before": "storyboard_export",
+          "readiness": "planned",
+          "waiver_ref": null,
+          "output_record_id": null,
+          "output_record_refs": [],
+          "visible_path": null,
+          "workspace_path": null,
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["identity_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Planned identity plate; no generation has happened."
+        },
+        {
+          "reference_output_id": "refout_door_keeper_turnaround",
+          "reference_image_id": "refimg_door_keeper_turnaround",
+          "reference_kind": "base_identity",
+          "output_role": "character_turnaround_sheet",
+          "output_status": "planned",
+          "required_before": "storyboard_export",
+          "readiness": "planned",
+          "waiver_ref": null,
+          "output_record_id": null,
+          "output_record_refs": [],
+          "visible_path": null,
+          "workspace_path": null,
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["turnaround_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Planned full-body turnaround; no generation has happened."
+        },
+        {
+          "reference_output_id": "refout_door_keeper_macro",
+          "reference_image_id": "refimg_door_keeper_macro",
+          "reference_kind": "base_identity",
+          "output_role": "character_macro_detail_card",
+          "output_status": "planned",
+          "required_before": "storyboard_export",
+          "readiness": "planned",
+          "waiver_ref": null,
+          "output_record_id": null,
+          "output_record_refs": [],
+          "visible_path": null,
+          "workspace_path": null,
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["detail_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Planned macro detail card; no generation has happened."
+        }
+      ],
+      "missing_outputs": [
+        "character_identity_plate",
+        "character_turnaround_sheet",
+        "character_macro_detail_card"
+      ],
+      "history": [
+        {
+          "event_id": "refevt_door_keeper_scanned",
+          "event_type": "scan_created",
+          "occurred_at": "2026-06-25T18:50:00Z",
+          "summary": "Continuity scan promoted the implied host as a required decision.",
+          "refs": ["refscan_door_left_lit_video"]
+        },
+        {
+          "event_id": "refevt_door_keeper_strategy",
+          "event_type": "strategy_decided",
+          "occurred_at": "2026-06-25T19:00:00Z",
+          "summary": "Artist accepted planning for the main character reference package.",
+          "refs": ["gate_character_reference_strategy", "char_door_keeper", "vrs_door_keeper_promoted_package"]
+        }
+      ],
+      "notes": "Accepted for planning; the actual images still require Generation Approval."
+    },
+    {
+      "reference_subject_id": "refsub_hallway_threshold",
+      "subject_category": "location",
+      "subject_subtype": "setting",
+      "display_name": "Hallway Threshold",
+      "subject_slug": "hallway-threshold",
+      "origin": "continuity_scan",
+      "priority": "recommended",
+      "recommendation_reasons": [
+        "specific_inspectable_location",
+        "blocking_critical_location",
+        "shot_level_spatial_need"
+      ],
+      "subject_status": "accepted_for_planning",
+      "strategy_status": "accepted_partial",
+      "package_readiness": "planned",
+      "planned_output_count": 3,
+      "generated_output_count": 1,
+      "accepted_output_count": 0,
+      "decision_ref": "gate_visual_reference_sheet_strategy",
+      "source_evidence_refs": ["src_door_left_lit#hallway"],
+      "usage_context_refs": ["vmp_door_left_lit#vscene_hallway_threshold"],
+      "character_template_refs": [],
+      "visual_reference_sheet_plan_refs": ["vrs_hallway_threshold_location"],
+      "output_record_refs": ["out_hallway_establishing_ref"],
+      "active_output_refs": [],
+      "linked_subject_refs": [],
+      "allowed_use_scope": [
+        "prompt_planning",
+        "storyboard_export",
+        "provider_input"
+      ],
+      "provider_role_hints": ["location_reference"],
+      "visible_paths": {
+        "subject_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Locations/hallway-threshold",
+        "review_drafts_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Locations/hallway-threshold/Review Drafts",
+        "accepted_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Locations/hallway-threshold/Accepted"
+      },
+      "workspace_paths": {
+        "subject_dir": "projects/proj_door_left_lit/assets/generated/references/locations/hallway-threshold",
+        "review_drafts_dir": "projects/proj_door_left_lit/assets/generated/references/locations/hallway-threshold/review-drafts",
+        "accepted_dir": "projects/proj_door_left_lit/assets/reference/locations/hallway-threshold/accepted"
+      },
+      "continuity_risk_level": "high",
+      "risk_notes": [
+        "Location drift would break the relationship between the wide shot, reverse angle, and floor-light close-up."
+      ],
+      "variants": [],
+      "expected_outputs": [
+        {
+          "reference_output_id": "refout_hallway_establishing",
+          "reference_image_id": "refimg_hallway_establishing",
+          "reference_kind": "location_base",
+          "output_role": "location_establishing_angle",
+          "output_status": "generated_draft",
+          "required_before": "storyboard_export",
+          "readiness": "draft_generated",
+          "waiver_ref": null,
+          "output_record_id": "out_hallway_establishing_ref",
+          "output_record_refs": ["out_hallway_establishing_ref"],
+          "visible_path": "Wondermint/Artist Library/Projects/door-left-lit/References/Locations/hallway-threshold/Review Drafts/hallway-establishing.png",
+          "workspace_path": "projects/proj_door_left_lit/assets/generated/references/locations/hallway-threshold/review-drafts/hallway-establishing.png",
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["location_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Generated draft; not yet accepted as canonical."
+        },
+        {
+          "reference_output_id": "refout_hallway_reverse",
+          "reference_image_id": "refimg_hallway_reverse",
+          "reference_kind": "location_base",
+          "output_role": "location_reverse_angle",
+          "output_status": "planned",
+          "required_before": "storyboard_export",
+          "readiness": "planned",
+          "waiver_ref": null,
+          "output_record_id": null,
+          "output_record_refs": [],
+          "visible_path": null,
+          "workspace_path": null,
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["location_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Planned reverse angle; no generation has happened."
+        },
+        {
+          "reference_output_id": "refout_hallway_functional",
+          "reference_image_id": "refimg_hallway_functional",
+          "reference_kind": "location_base",
+          "output_role": "location_functional_angle",
+          "output_status": "planned",
+          "required_before": "storyboard_export",
+          "readiness": "planned",
+          "waiver_ref": null,
+          "output_record_id": null,
+          "output_record_refs": [],
+          "visible_path": null,
+          "workspace_path": null,
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": ["location_reference"],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Planned staging angle; no generation has happened."
+        }
+      ],
+      "missing_outputs": [
+        "location_establishing_angle",
+        "location_reverse_angle",
+        "location_functional_angle"
+      ],
+      "history": [
+        {
+          "event_id": "refevt_hallway_scanned",
+          "event_type": "scan_created",
+          "occurred_at": "2026-06-25T18:50:00Z",
+          "summary": "Continuity scan recommended the hallway as blocking-critical.",
+          "refs": ["refscan_door_left_lit_video"]
+        }
+      ],
+      "notes": "Partial strategy acceptance selected the hallway while leaving other possible background details unpromoted."
+    },
+    {
+      "reference_subject_id": "refsub_old_tv",
+      "subject_category": "object",
+      "subject_subtype": "prop",
+      "display_name": "Old TV",
+      "subject_slug": "old-tv",
+      "origin": "continuity_scan",
+      "priority": "required_decision",
+      "recommendation_reasons": [
+        "story_critical_object",
+        "handled_object",
+        "close_up_or_inspection"
+      ],
+      "subject_status": "accepted_for_planning",
+      "strategy_status": "accepted",
+      "package_readiness": "accepted",
+      "planned_output_count": 1,
+      "generated_output_count": 0,
+      "accepted_output_count": 1,
+      "decision_ref": "gate_visual_reference_sheet_strategy",
+      "source_evidence_refs": ["src_door_left_lit#old-tv"],
+      "usage_context_refs": ["vmp_door_left_lit#storyboard_shots"],
+      "character_template_refs": [],
+      "visual_reference_sheet_plan_refs": ["vrs_old_tv_object"],
+      "output_record_refs": ["out_old_tv_reference"],
+      "active_output_refs": ["refout_old_tv_multi_angle"],
+      "linked_subject_refs": [],
+      "allowed_use_scope": [
+        "prompt_planning",
+        "storyboard_export",
+        "provider_input"
+      ],
+      "provider_role_hints": [
+        "object_reference",
+        "detail_reference"
+      ],
+      "visible_paths": {
+        "subject_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv",
+        "review_drafts_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Review Drafts",
+        "accepted_dir": "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted"
+      },
+      "workspace_paths": {
+        "subject_dir": "projects/proj_door_left_lit/assets/reference/objects/old-tv",
+        "review_drafts_dir": "projects/proj_door_left_lit/assets/generated/references/objects/old-tv/review-drafts",
+        "accepted_dir": "projects/proj_door_left_lit/assets/reference/objects/old-tv/accepted"
+      },
+      "continuity_risk_level": "high",
+      "risk_notes": [
+        "Object drift would weaken the portal action and make later shots appear to use a different television."
+      ],
+      "variants": [],
+      "expected_outputs": [
+        {
+          "reference_output_id": "refout_old_tv_multi_angle",
+          "reference_image_id": "refimg_old_tv_multi_angle",
+          "reference_kind": "object_base",
+          "output_role": "object_multi_angle_sheet",
+          "output_status": "accepted",
+          "required_before": "storyboard_export",
+          "readiness": "accepted",
+          "waiver_ref": null,
+          "output_record_id": "out_old_tv_reference",
+          "output_record_refs": ["out_old_tv_reference"],
+          "visible_path": "Wondermint/Artist Library/Projects/door-left-lit/References/Objects/old-tv/Accepted/old-tv-multi-angle.png",
+          "workspace_path": "projects/proj_door_left_lit/assets/reference/objects/old-tv/accepted/old-tv-multi-angle.png",
+          "allowed_use_scope": [
+            "prompt_planning",
+            "storyboard_export",
+            "provider_input"
+          ],
+          "provider_role_hints": [
+            "object_reference",
+            "detail_reference"
+          ],
+          "provider_input_allowed": true,
+          "review_only": false,
+          "notes": "Accepted as the canonical object reference."
+        }
+      ],
+      "missing_outputs": [],
+      "history": [
+        {
+          "event_id": "refevt_old_tv_accepted",
+          "event_type": "output_accepted",
+          "occurred_at": "2026-06-25T19:10:00Z",
+          "summary": "Accepted the old TV multi-angle sheet as the active object reference.",
+          "refs": ["out_old_tv_reference", "refout_old_tv_multi_angle"]
+        }
+      ],
+      "notes": "The accepted object reference may be linked from Long-Work Stewardship if the project expands."
+    }
+  ],
+  "storage_policy": {
+    "visible_reference_root": "Wondermint/Artist Library/Projects/door-left-lit/References",
+    "workspace_reference_root": "projects/proj_door_left_lit/assets",
+    "draft_folder_name": "Review Drafts",
+    "accepted_folder_name": "Accepted",
+    "visible_folders_created_lazily": true,
+    "workspace_library_is_provenance_authority": true,
+    "notes": "Visible folders are for artist browsing; Output Records and sidecars remain authoritative."
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The inventory protects the active absence, hallway threshold, and object continuity needed to preserve Artist Meaning."
+    },
+    {
+      "source_type": "continuity_scan",
+      "source_ref": "refscan_door_left_lit_video",
+      "note": "The scan surfaced only identity-bearing, blocking-critical, or story-critical subjects."
+    },
+    {
+      "source_type": "output_record",
+      "source_ref": "out_old_tv_reference",
+      "note": "Accepted object reference provenance remains in its Output Record."
+    }
+  ],
+  "created_at": "2026-06-25T19:00:00Z",
+  "updated_at": "2026-06-25T19:10:00Z"
+}

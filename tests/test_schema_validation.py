@@ -52,8 +52,27 @@ class SchemaValidationTests(unittest.TestCase):
         data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
         record = load_json(data_path)
         record["reviewer_execution"]["execution_mode"] = "fallback_separated_pass"
+        record["reviewer_execution"]["fallback_reason"] = "host_cannot_spawn_sub_agent"
         schema = load_json(schema_path)
         validate(record, schema, schema)
+
+    def test_review_record_rejects_fallback_without_reason(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
+        record = load_json(data_path)
+        record["reviewer_execution"]["execution_mode"] = "fallback_separated_pass"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'fallback_reason'"):
+            validate(record, schema, schema)
+
+    def test_review_record_rejects_fallback_reason_for_bounded_sub_agent(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "reviews" / "review-record.json"
+        record = load_json(data_path)
+        record["reviewer_execution"]["fallback_reason"] = "host_cannot_spawn_sub_agent"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "matched a schema it should not"):
+            validate(record, schema, schema)
 
     def test_fallback_review_record_fixture_validates(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "review-record.schema.json"
@@ -61,6 +80,10 @@ class SchemaValidationTests(unittest.TestCase):
         record = load_json(data_path)
         self.assertEqual(record["reviewer_execution"]["execution_mode"], "fallback_separated_pass")
         self.assertTrue(record["reviewer_execution"]["sub_agent_required"])
+        self.assertIn(
+            record["reviewer_execution"]["fallback_reason"],
+            ["host_cannot_spawn_sub_agent", "tool_policy_blocks_sub_agent_spawn"],
+        )
         validate_file(schema_path, data_path)
 
     def test_sound_prompt_plan_requires_emotional_tension_contract(self) -> None:
@@ -225,6 +248,210 @@ class SchemaValidationTests(unittest.TestCase):
             REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json",
             REPO_ROOT / "tests" / "fixtures" / "characters" / "visual-reference-sheet-plan.json",
         )
+
+    def test_reference_inventory_fixture_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "reference-inventory.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json",
+        )
+
+    def test_reference_inventory_review_only_images_are_not_provider_inputs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "reference-inventory.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json"
+        record = load_json(data_path)
+        image = record["subjects"][0]["expected_outputs"][0]
+        image["review_only"] = True
+        image["provider_input_allowed"] = False
+        image["provider_role_hints"] = ["review_only"]
+        image["allowed_use_scope"] = ["human_review_only", "internal_review"]
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_reference_inventory_rejects_review_only_provider_input(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "reference-inventory.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json"
+        record = load_json(data_path)
+        image = record["subjects"][0]["expected_outputs"][0]
+        image["review_only"] = True
+        image["provider_input_allowed"] = True
+        image["allowed_use_scope"] = ["human_review_only", "internal_review"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const False"):
+            validate(record, schema, schema)
+
+    def test_reference_inventory_rejects_review_only_provider_scope(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "reference-inventory.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json"
+        record = load_json(data_path)
+        image = record["subjects"][0]["expected_outputs"][0]
+        image["review_only"] = True
+        image["provider_input_allowed"] = False
+        image["allowed_use_scope"] = ["human_review_only", "provider_input"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "matched a schema it should not"):
+            validate(record, schema, schema)
+
+    def test_reference_inventory_rejects_unknown_lifecycle_status(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "reference-inventory.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json"
+        record = load_json(data_path)
+        record["subjects"][0]["subject_status"] = "maybe_reference"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
+    def test_reference_inventory_accepts_empty_scan_inventory(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "reference-inventory.schema.json"
+        record = load_json(REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json")
+        record["subjects"] = []
+        record["medium_plan_refs"] = []
+        record["scan_history"] = [
+            {
+                "scan_id": "refscan_empty_project",
+                "scanned_at": "2026-06-25T18:55:00Z",
+                "scan_scope": "project",
+                "medium_plan_ref": None,
+                "summary": "Continuity scan found no promoted visual reference subjects.",
+                "candidates_found": 0,
+            }
+        ]
+        record["traceability_summary"] = [
+            {
+                "source_type": "continuity_scan",
+                "source_ref": "refscan_empty_project",
+                "note": "The empty inventory still records the policy and scan result.",
+            }
+        ]
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_reference_inventory_tracks_partial_strategy_missing_outputs_and_variants(self) -> None:
+        record = load_json(REPO_ROOT / "tests" / "fixtures" / "references" / "reference-inventory.json")
+        hallway = record["subjects"][1]
+        character = record["subjects"][0]
+
+        self.assertEqual(hallway["strategy_status"], "accepted_partial")
+        self.assertEqual(hallway["package_readiness"], "planned")
+        self.assertEqual(
+            hallway["missing_outputs"],
+            ["location_establishing_angle", "location_reverse_angle", "location_functional_angle"],
+        )
+        self.assertEqual(character["variants"][0]["variant_kind"], "wardrobe_variant")
+        self.assertEqual(
+            character["variants"][0]["expected_outputs"][0]["reference_kind"],
+            "wardrobe_variant",
+        )
+
+    def test_promoted_visual_reference_sheet_package_fixtures_validate(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json"
+        fixtures = [
+            (
+                REPO_ROOT / "tests" / "fixtures" / "characters" / "promoted-door-keeper" / "visual-reference-sheet-plan.json",
+                "character",
+                "multi_image_reference_package",
+                {
+                    "character_identity_plate": 1,
+                    "character_turnaround_sheet": 1,
+                    "character_macro_detail_card": 1,
+                },
+            ),
+            (
+                REPO_ROOT / "tests" / "fixtures" / "locations" / "hallway-threshold" / "visual-reference-sheet-plan.json",
+                "setting",
+                "three_angle_reference_package",
+                {
+                    "location_establishing_angle": 1,
+                    "location_reverse_angle": 1,
+                    "location_functional_angle": 1,
+                },
+            ),
+            (
+                REPO_ROOT / "tests" / "fixtures" / "objects" / "old-tv" / "visual-reference-sheet-plan.json",
+                "object",
+                "multi_section_reference_sheet",
+                {"object_multi_angle_sheet": 1},
+            ),
+        ]
+        for data_path, sheet_type, layout_type, expected_roles in fixtures:
+            with self.subTest(data=data_path.relative_to(REPO_ROOT)):
+                validate_file(schema_path, data_path)
+                record = load_json(data_path)
+                self.assertEqual(record["reference_sheet_type"], sheet_type)
+                self.assertEqual(record["view_layout"]["layout_type"], layout_type)
+                actual_roles = {
+                    output["output_role"]: output["image_count"]
+                    for output in record["reference_outputs"]
+                }
+                self.assertEqual(actual_roles, expected_roles)
+                self.assertEqual(record["output_record_refs"], [])
+
+    def test_visual_reference_sheet_requires_reference_outputs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "characters" / "visual-reference-sheet-plan.json"
+        record = load_json(data_path)
+        del record["reference_outputs"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'reference_outputs'"):
+            validate(record, schema, schema)
+
+    def test_visual_reference_sheet_accepts_character_variant_output_roles(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "characters" / "visual-reference-sheet-plan.json"
+        roles = [
+            "character_expression_sheet",
+            "character_pose_action_sheet",
+            "character_wardrobe_sheet",
+            "character_style_variant_sheet",
+        ]
+        schema = load_json(schema_path)
+        for role in roles:
+            with self.subTest(role=role):
+                record = load_json(data_path)
+                record["reference_outputs"][0]["output_role"] = role
+                validate(record, schema, schema)
+
+    def test_reference_strategy_accepts_partial_acceptance_across_mediums(self) -> None:
+        fixtures = [
+            (
+                "image-medium-plan.schema.json",
+                "tests/fixtures/text-to-image/image-medium-plan.json",
+                ["character_reference_strategy", "visual_reference_sheet_strategy"],
+            ),
+            (
+                "video-medium-plan.schema.json",
+                "tests/fixtures/video-journey/video-medium-plan.json",
+                ["character_reference_strategy", "visual_reference_sheet_strategy"],
+            ),
+            (
+                "text-medium-plan.schema.json",
+                "tests/fixtures/text-journey/text-medium-plan.json",
+                ["character_reference_strategy"],
+            ),
+            (
+                "illustration-plan.schema.json",
+                "tests/fixtures/illustration/illustration-plan.json",
+                ["character_reference_strategy", "visual_reference_sheet_strategy"],
+            ),
+        ]
+        for schema_name, fixture_path, strategy_fields in fixtures:
+            with self.subTest(fixture=fixture_path):
+                schema_path = REPO_ROOT / "schemas" / schema_name
+                data_path = REPO_ROOT / fixture_path
+                record = load_json(data_path)
+                for field in strategy_fields:
+                    if field not in record:
+                        record[field] = {
+                            "status": "accepted",
+                            "decision_ref": "gate_reference_strategy_partial",
+                            "visual_reference_sheet_plan_refs": ["vrs_selected_reference"],
+                            "notes": "Artist accepted selected recommended reference subjects."
+                        }
+                        if field == "character_reference_strategy":
+                            record[field]["character_template_refs"] = ["char_selected_reference"]
+                    record[field]["status"] = "accepted_partial"
+                    record[field]["notes"] = "Artist accepted selected recommended reference subjects."
+                schema = load_json(schema_path)
+                validate(record, schema, schema)
 
     def test_illustration_plan_fixture_validates(self) -> None:
         validate_file(
@@ -877,6 +1104,15 @@ class SchemaValidationTests(unittest.TestCase):
         schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
         validate_file(schema_path, data_path)
+
+    def test_video_medium_plan_requires_composite_storyboard_default(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        del record["storyboard_generation_policy"]["default_generated_storyboard_artifact"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'default_generated_storyboard_artifact'"):
+            validate(record, schema, schema)
 
     def test_video_medium_plan_requires_workflow_scale_routing(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"

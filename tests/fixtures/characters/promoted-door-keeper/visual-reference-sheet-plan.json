@@ -1,0 +1,84 @@
+{
+  "visual_reference_sheet_plan_id": "vrs_door_keeper_promoted_package",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "reference_sheet_type": "character",
+  "subject_ref": {
+    "ref_type": "character_template",
+    "ref_id": "char_door_keeper",
+    "path_or_ref": "tests/fixtures/characters/character-template.json"
+  },
+  "subject_description": "The same ordinary, restrained adult apartment host implied by the warm doorway; simple clothing, natural proportions, no theatrical horror details.",
+  "style_direction_summary": "Cinematic live-action realism with clean studio reference lighting.",
+  "view_layout": {
+    "layout_type": "multi_image_reference_package",
+    "background": "flat matte neutral gray background",
+    "views": [
+      {
+        "view_id": "view_identity_plate",
+        "label": "Dead-on identity plate",
+        "description": "One straight-on portrait or upper-body image locking face, head shape, hair, skin texture, age, expression baseline, and identity-bearing marks."
+      },
+      {
+        "view_id": "view_turnaround_sheet",
+        "label": "Full-body turnaround sheet",
+        "description": "One full-body sheet with front, side, rear, and three-quarter views locking silhouette, proportions, outfit, footwear, and posture baseline."
+      },
+      {
+        "view_id": "view_macro_detail_card",
+        "label": "Macro detail card",
+        "description": "One multi-section image locking eyes, mouth, skin texture, hair texture, hands, costume material, accessories, markings, and wear."
+      }
+    ]
+  },
+  "reference_outputs": [
+    {
+      "reference_output_id": "refout_door_keeper_identity",
+      "output_role": "character_identity_plate",
+      "image_count": 1,
+      "prompt_text": "Dead-on identity reference plate for the same ordinary restrained adult apartment host, simple everyday clothing, natural proportions, cinematic live-action realism, flat matte neutral gray background, clean studio lighting, neutral expression, preserve face structure, head shape, hair, skin texture, age, and identity-bearing marks, no environment, no text, no extra figures.",
+      "layout_notes": "Single portrait or upper-body identity anchor.",
+      "downstream_use": ["close-up storyboard shots", "face consistency", "identity matching"]
+    },
+    {
+      "reference_output_id": "refout_door_keeper_turnaround",
+      "output_role": "character_turnaround_sheet",
+      "image_count": 1,
+      "prompt_text": "Full-body turnaround reference sheet for the same ordinary restrained adult apartment host, front, side, rear, and three-quarter views, full body visible head to feet in every view, simple everyday clothing, natural proportions, cinematic live-action realism, flat matte neutral gray background, clean studio lighting, preserve silhouette, proportions, outfit, footwear, scale, and posture baseline, no environment, no text, no extra figures.",
+      "layout_notes": "One sheet containing multiple full-body views.",
+      "downstream_use": ["full-body storyboard shots", "blocking consistency", "wardrobe continuity"]
+    },
+    {
+      "reference_output_id": "refout_door_keeper_macro",
+      "output_role": "character_macro_detail_card",
+      "image_count": 1,
+      "prompt_text": "Macro detail card for the same ordinary restrained adult apartment host, clean sections for eyes, mouth, skin texture, hair texture, hands, clothing fabric, accessories, and any identity-bearing marks, cinematic live-action realism, flat matte neutral gray background, clean studio lighting, preserve the same identity and style, no environment, no text unless labels are requested for human review.",
+      "layout_notes": "One multi-section detail image.",
+      "downstream_use": ["close-up prompts", "material detail", "continuity repair"]
+    }
+  ],
+  "prompt_text": "Promoted character reference package. Create three separate reference images for the same ordinary restrained adult apartment host, simple everyday clothing, natural proportions, no theatrical horror details, all on a flat matte neutral gray background, all in cinematic live-action realism. Image 1: dead-on identity plate. Image 2: full-body turnaround sheet. Image 3: macro detail card. Preserve identity, proportions, clothing, and approved details across all outputs. No environment, no watermarks, no extra figures.",
+  "generation_policy": {
+    "prompt_drafting_allowed": true,
+    "generation_requires_approval": true,
+    "approval_gate_id": null,
+    "notes": "This fixture validates prompt planning only; no character reference images have been generated."
+  },
+  "output_record_refs": [],
+  "traceability_summary": [
+    {
+      "source_type": "character_template",
+      "source_ref": "char_door_keeper",
+      "note": "The promoted package uses the provisional visual identity from the Character Template."
+    },
+    {
+      "source_type": "style_direction",
+      "source_ref": "cinematic live-action realism",
+      "note": "All three planned outputs inherit the approved visual style."
+    }
+  ],
+  "created_at": "2026-06-25T18:05:00Z"
+}

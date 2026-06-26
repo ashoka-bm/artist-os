@@ -144,7 +144,8 @@
         "spatial_openness": 0.7,
         "detail_intensity": 0.35,
         "emotional_pressure": 0.72
-      }
+      },
+      "reference_refs_used": []
     },
     {
       "image_role_id": "imgrole_three_image_series_2",
@@ -197,7 +198,8 @@
         "spatial_openness": 0.5499999999999999,
         "detail_intensity": 0.44999999999999996,
         "emotional_pressure": 0.86
-      }
+      },
+      "reference_refs_used": []
     },
     {
       "image_role_id": "imgrole_three_image_series_3",
@@ -250,7 +252,8 @@
         "spatial_openness": 0.39999999999999997,
         "detail_intensity": 0.55,
         "emotional_pressure": 0.68
-      }
+      },
+      "reference_refs_used": []
     }
   ],
   "series_plan": {

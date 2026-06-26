@@ -14,6 +14,7 @@
     "subject_description",
     "style_direction_summary",
     "view_layout",
+    "reference_outputs",
     "prompt_text",
     "generation_policy",
     "output_record_refs",
@@ -39,12 +40,20 @@
       "additionalProperties": false,
       "required": ["layout_type", "background", "views"],
       "properties": {
-        "layout_type": { "type": "string", "enum": ["four_view_reference_sheet"] },
+        "layout_type": {
+          "type": "string",
+          "enum": [
+            "four_view_reference_sheet",
+            "multi_image_reference_package",
+            "three_angle_reference_package",
+            "multi_section_reference_sheet"
+          ]
+        },
         "background": { "type": "string", "minLength": 1 },
         "views": {
           "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
+          "minItems": 1,
+          "maxItems": 8,
           "items": {
             "type": "object",
             "additionalProperties": false,
@@ -54,6 +63,51 @@
               "label": { "type": "string", "minLength": 1 },
               "description": { "type": "string", "minLength": 1 }
             }
+          }
+        }
+      }
+    },
+    "reference_outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reference_output_id",
+          "output_role",
+          "image_count",
+          "prompt_text",
+          "layout_notes",
+          "downstream_use"
+        ],
+        "properties": {
+          "reference_output_id": { "type": "string", "pattern": "^refout_[a-zA-Z0-9_-]+$" },
+          "output_role": {
+            "type": "string",
+            "enum": [
+              "character_identity_plate",
+              "character_turnaround_sheet",
+              "character_macro_detail_card",
+              "character_expression_sheet",
+              "character_pose_action_sheet",
+              "character_wardrobe_sheet",
+              "character_style_variant_sheet",
+              "location_establishing_angle",
+              "location_reverse_angle",
+              "location_functional_angle",
+              "object_multi_angle_sheet",
+              "style_calibration_sheet",
+              "custom"
+            ]
+          },
+          "image_count": { "type": "integer", "minimum": 1 },
+          "prompt_text": { "type": "string", "minLength": 1 },
+          "layout_notes": { "type": "string", "minLength": 1 },
+          "downstream_use": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
           }
         }
       }

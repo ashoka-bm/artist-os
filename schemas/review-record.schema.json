@@ -48,8 +48,34 @@
       "properties": {
         "execution_mode": { "type": "string", "enum": ["bounded_sub_agent", "fallback_separated_pass"] },
         "sub_agent_required": { "type": "boolean", "const": true },
-        "source_skill": { "type": "string" }
-      }
+        "source_skill": { "type": "string" },
+        "fallback_reason": {
+          "type": "string",
+          "enum": ["host_cannot_spawn_sub_agent", "tool_policy_blocks_sub_agent_spawn"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["execution_mode"],
+            "properties": {
+              "execution_mode": { "const": "fallback_separated_pass" }
+            }
+          },
+          "then": { "required": ["fallback_reason"] }
+        },
+        {
+          "if": {
+            "required": ["execution_mode"],
+            "properties": {
+              "execution_mode": { "const": "bounded_sub_agent" }
+            }
+          },
+          "then": {
+            "not": { "required": ["fallback_reason"] }
+          }
+        }
+      ]
     },
     "artifact_under_review": {
       "type": "object",

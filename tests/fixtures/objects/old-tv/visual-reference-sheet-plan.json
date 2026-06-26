@@ -1,0 +1,73 @@
+{
+  "visual_reference_sheet_plan_id": "vrs_old_tv_object",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "reference_sheet_type": "object",
+  "subject_ref": {
+    "ref_type": "source_record",
+    "ref_id": "src_door_left_lit",
+    "path_or_ref": "tests/fixtures/story/source-record.json"
+  },
+  "subject_description": "An old box television used as a story-critical portal object, with dark worn casing, glass screen, vents, legs, scuffed edges, and visible material age.",
+  "style_direction_summary": "Cinematic live-action realism with clean studio object-reference lighting.",
+  "view_layout": {
+    "layout_type": "multi_section_reference_sheet",
+    "background": "flat matte neutral gray background",
+    "views": [
+      {
+        "view_id": "view_front_identity",
+        "label": "Front identity view",
+        "description": "Full front or front three-quarter view locking screen shape, casing, proportions, legs, controls, and worn material."
+      },
+      {
+        "view_id": "view_side_depth",
+        "label": "Side depth view",
+        "description": "Full side view showing box depth, silhouette, casing thickness, legs, seams, vents, and material transitions."
+      },
+      {
+        "view_id": "view_rear_back",
+        "label": "Rear back view",
+        "description": "Full rear view showing back panel, vents, cable area, scuffs, hardware, and approved markings."
+      },
+      {
+        "view_id": "view_macro_detail",
+        "label": "Macro detail",
+        "description": "Close-up of screen glass, dust, scratches, casing texture, buttons, vents, seams, and wear."
+      }
+    ]
+  },
+  "reference_outputs": [
+    {
+      "reference_output_id": "refout_old_tv_multi_angle",
+      "output_role": "object_multi_angle_sheet",
+      "image_count": 1,
+      "prompt_text": "Promoted object multi-angle reference sheet for the same old box television, one image divided into clean sections on a flat matte neutral gray background: front identity view, side depth view, rear back view, and macro detail. Preserve dark worn casing, glass screen, vents, legs, scuffed edges, buttons, seams, material grain, scale, and portal-object identity. Clean studio lighting, cinematic live-action realism, no extra objects, no environment, no hands, no text unless labels are requested for human review.",
+      "layout_notes": "One image with multiple sections for object angles and macro details.",
+      "downstream_use": ["object continuity", "close interaction shots", "portal-object prompts"]
+    }
+  ],
+  "prompt_text": "Promoted object multi-angle reference sheet. Create one image divided into clean sections for the same old box television: front identity view, side depth view, rear back view, and macro detail. Use a flat matte neutral gray background and cinematic live-action realism. Preserve dark worn casing, glass screen, vents, legs, scuffed edges, buttons, seams, material grain, scale, and portal-object identity. No extra objects, no environment, no hands.",
+  "generation_policy": {
+    "prompt_drafting_allowed": true,
+    "generation_requires_approval": true,
+    "approval_gate_id": null,
+    "notes": "This fixture validates prompt planning only; no object reference sheet has been generated."
+  },
+  "output_record_refs": [],
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "src_door_left_lit",
+      "note": "The old television is modeled as a story-critical object whose drift would weaken continuity."
+    },
+    {
+      "source_type": "style_direction",
+      "source_ref": "cinematic live-action realism",
+      "note": "The object sheet inherits the approved visual style while staying a neutral reference asset."
+    }
+  ],
+  "created_at": "2026-06-25T18:07:00Z"
+}

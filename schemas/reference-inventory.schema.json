@@ -1,0 +1,574 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/reference-inventory.schema.json",
+  "title": "ReferenceInventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "reference_inventory_id",
+    "project_id",
+    "source_id",
+    "artist_meaning_id",
+    "inventory_status",
+    "policy",
+    "medium_plan_refs",
+    "scan_history",
+    "subjects",
+    "storage_policy",
+    "traceability_summary",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "reference_inventory_id": { "type": "string", "pattern": "^refinv_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "inventory_status": {
+      "type": "string",
+      "enum": ["draft", "active", "superseded", "archived"]
+    },
+    "policy": { "$ref": "#/$defs/inventory_policy" },
+    "medium_plan_refs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/medium_plan_ref" }
+    },
+    "scan_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/scan_record" }
+    },
+    "subjects": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reference_subject" }
+    },
+    "storage_policy": { "$ref": "#/$defs/storage_policy" },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "inventory_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "main_character_video_default",
+        "locations_objects_default",
+        "skip_all_references",
+        "skip_all_references_waiver_ref",
+        "reference_generation_mode"
+      ],
+      "properties": {
+        "main_character_video_default": {
+          "type": "string",
+          "enum": ["strongly_recommend", "recommend", "ask_only", "disabled"]
+        },
+        "locations_objects_default": {
+          "type": "string",
+          "enum": ["promote_when_specific_or_inspectable", "recommend_all_recurring", "ask_only", "disabled"]
+        },
+        "skip_all_references": { "type": "boolean" },
+        "skip_all_references_waiver_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "reference_generation_mode": {
+          "type": "string",
+          "enum": ["ask", "use_existing", "draft_prompts", "mixed"]
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "medium_plan_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["medium_plan_type", "medium_plan_id", "role"],
+      "properties": {
+        "medium_plan_type": {
+          "type": "string",
+          "enum": ["image_medium_plan", "video_medium_plan", "illustration_plan", "text_medium_plan", "prompt_plan"]
+        },
+        "medium_plan_id": { "type": "string", "pattern": "^(imp|vmp|ilp|tmp|plan)_[a-zA-Z0-9_-]+$" },
+        "role": {
+          "type": "string",
+          "enum": ["scan_source", "planning_consumer", "export_consumer", "usage_context"]
+        }
+      }
+    },
+    "scan_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scan_id", "scanned_at", "scan_scope", "summary", "candidates_found"],
+      "properties": {
+        "scan_id": { "type": "string", "pattern": "^refscan_[a-zA-Z0-9_-]+$" },
+        "scanned_at": { "type": "string", "format": "date-time" },
+        "scan_scope": {
+          "type": "string",
+          "enum": ["project", "video_storyboard", "image_series", "illustration_plan", "provider_repair", "other"]
+        },
+        "medium_plan_ref": { "type": ["string", "null"] },
+        "summary": { "type": "string" },
+        "candidates_found": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "reference_subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_subject_id",
+        "subject_category",
+        "subject_subtype",
+        "display_name",
+        "subject_slug",
+        "origin",
+        "priority",
+        "recommendation_reasons",
+        "subject_status",
+        "strategy_status",
+        "package_readiness",
+        "planned_output_count",
+        "generated_output_count",
+        "accepted_output_count",
+        "decision_ref",
+        "source_evidence_refs",
+        "usage_context_refs",
+        "character_template_refs",
+        "visual_reference_sheet_plan_refs",
+        "output_record_refs",
+        "active_output_refs",
+        "linked_subject_refs",
+        "allowed_use_scope",
+        "provider_role_hints",
+        "visible_paths",
+        "workspace_paths",
+        "continuity_risk_level",
+        "risk_notes",
+        "variants",
+        "expected_outputs",
+        "missing_outputs",
+        "history"
+      ],
+      "properties": {
+        "reference_subject_id": { "type": "string", "pattern": "^refsub_[a-zA-Z0-9_-]+$" },
+        "subject_category": { "$ref": "#/$defs/subject_category" },
+        "subject_subtype": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "vehicle_exterior",
+            "vehicle_interior",
+            "wardrobe",
+            "creature",
+            "animal",
+            "product",
+            "prop",
+            "setting",
+            "host",
+            "avatar",
+            "performer"
+          ]
+        },
+        "display_name": { "type": "string", "minLength": 1 },
+        "subject_slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+        "origin": { "$ref": "#/$defs/subject_origin" },
+        "priority": { "$ref": "#/$defs/reference_priority" },
+        "recommendation_reasons": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/recommendation_reason" }
+        },
+        "subject_status": { "$ref": "#/$defs/subject_status" },
+        "strategy_status": { "$ref": "#/$defs/strategy_status" },
+        "package_readiness": { "$ref": "#/$defs/package_readiness" },
+        "planned_output_count": { "type": "integer", "minimum": 0 },
+        "generated_output_count": { "type": "integer", "minimum": 0 },
+        "accepted_output_count": { "type": "integer", "minimum": 0 },
+        "decision_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "source_evidence_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "usage_context_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "character_template_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^char_[a-zA-Z0-9_-]+$" }
+        },
+        "visual_reference_sheet_plan_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^vrs_[a-zA-Z0-9_-]+$" }
+        },
+        "output_record_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^out_[a-zA-Z0-9_-]+$" }
+        },
+        "active_output_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^refout_[a-zA-Z0-9_-]+$" }
+        },
+        "linked_subject_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^refsub_[a-zA-Z0-9_-]+$" }
+        },
+        "allowed_use_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/allowed_use_scope" }
+        },
+        "provider_role_hints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/provider_role_hint" }
+        },
+        "visible_paths": { "$ref": "#/$defs/subject_paths" },
+        "workspace_paths": { "$ref": "#/$defs/subject_paths" },
+        "continuity_risk_level": { "type": "string", "enum": ["none", "low", "medium", "high"] },
+        "risk_notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "variants": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reference_variant" }
+        },
+        "expected_outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reference_output" }
+        },
+        "missing_outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reference_output_role" }
+        },
+        "history": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/history_event" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "reference_variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_id",
+        "variant_slug",
+        "variant_kind",
+        "display_name",
+        "reference_kind",
+        "active_output_refs",
+        "expected_outputs",
+        "missing_outputs",
+        "visible_paths",
+        "workspace_paths",
+        "history"
+      ],
+      "properties": {
+        "variant_id": { "type": "string", "pattern": "^refvar_[a-zA-Z0-9_-]+$" },
+        "variant_slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+        "variant_kind": {
+          "type": "string",
+          "enum": ["variant_state", "wardrobe_variant", "location_variant", "object_variant", "style_variant"]
+        },
+        "display_name": { "type": "string", "minLength": 1 },
+        "reference_kind": { "$ref": "#/$defs/reference_kind" },
+        "active_output_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^refout_[a-zA-Z0-9_-]+$" }
+        },
+        "expected_outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reference_output" }
+        },
+        "missing_outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reference_output_role" }
+        },
+        "visible_paths": { "$ref": "#/$defs/subject_paths" },
+        "workspace_paths": { "$ref": "#/$defs/subject_paths" },
+        "history": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/history_event" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "reference_output": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "review_only": { "const": true } },
+            "required": ["review_only"]
+          },
+          "then": {
+            "properties": {
+              "provider_input_allowed": { "const": false },
+              "allowed_use_scope": {
+                "not": {
+                  "contains": {
+                    "enum": [
+                      "provider_input",
+                      "storyboard_export",
+                      "image_prompt_export",
+                      "illustration_prompt_export"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "required": [
+        "reference_output_id",
+        "reference_image_id",
+        "reference_kind",
+        "output_role",
+        "output_status",
+        "required_before",
+        "readiness",
+        "waiver_ref",
+        "output_record_id",
+        "output_record_refs",
+        "visible_path",
+        "workspace_path",
+        "allowed_use_scope",
+        "provider_role_hints",
+        "provider_input_allowed",
+        "review_only"
+      ],
+      "properties": {
+        "reference_output_id": { "type": "string", "pattern": "^refout_[a-zA-Z0-9_-]+$" },
+        "reference_image_id": { "type": "string", "pattern": "^refimg_[a-zA-Z0-9_-]+$" },
+        "reference_kind": { "$ref": "#/$defs/reference_kind" },
+        "output_role": { "$ref": "#/$defs/reference_output_role" },
+        "output_status": { "$ref": "#/$defs/output_status" },
+        "required_before": { "$ref": "#/$defs/required_before" },
+        "readiness": { "$ref": "#/$defs/output_readiness" },
+        "waiver_ref": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+        "output_record_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^out_[a-zA-Z0-9_-]+$" }
+        },
+        "visible_path": { "type": ["string", "null"], "minLength": 1 },
+        "workspace_path": { "type": ["string", "null"], "minLength": 1 },
+        "allowed_use_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/allowed_use_scope" }
+        },
+        "provider_role_hints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/provider_role_hint" }
+        },
+        "provider_input_allowed": { "type": "boolean" },
+        "review_only": { "type": "boolean" },
+        "notes": { "type": "string" }
+      }
+    },
+    "subject_paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_dir", "review_drafts_dir", "accepted_dir"],
+      "properties": {
+        "subject_dir": { "type": ["string", "null"], "minLength": 1 },
+        "review_drafts_dir": { "type": ["string", "null"], "minLength": 1 },
+        "accepted_dir": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "storage_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visible_reference_root",
+        "workspace_reference_root",
+        "draft_folder_name",
+        "accepted_folder_name",
+        "visible_folders_created_lazily",
+        "workspace_library_is_provenance_authority"
+      ],
+      "properties": {
+        "visible_reference_root": { "type": "string", "minLength": 1 },
+        "workspace_reference_root": { "type": "string", "minLength": 1 },
+        "draft_folder_name": { "type": "string", "enum": ["Review Drafts"] },
+        "accepted_folder_name": { "type": "string", "enum": ["Accepted"] },
+        "visible_folders_created_lazily": { "type": "boolean" },
+        "workspace_library_is_provenance_authority": { "type": "boolean", "const": true },
+        "notes": { "type": "string" }
+      }
+    },
+    "history_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "event_type", "occurred_at", "summary"],
+      "properties": {
+        "event_id": { "type": "string", "pattern": "^refevt_[a-zA-Z0-9_-]+$" },
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "scan_created",
+            "strategy_decided",
+            "subject_accepted",
+            "subject_declined",
+            "subject_deferred",
+            "plan_created",
+            "output_generated",
+            "output_imported",
+            "output_published",
+            "output_accepted",
+            "output_rejected",
+            "output_replaced",
+            "waiver_recorded",
+            "migration_recorded"
+          ]
+        },
+        "occurred_at": { "type": "string", "format": "date-time" },
+        "summary": { "type": "string" },
+        "refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "subject_category": {
+      "type": "string",
+      "enum": ["character", "location", "object"]
+    },
+    "subject_origin": {
+      "type": "string",
+      "enum": [
+        "continuity_scan",
+        "artist_requested",
+        "reviewer_recommended",
+        "imported_reference",
+        "provider_failure_repair"
+      ]
+    },
+    "reference_priority": {
+      "type": "string",
+      "enum": ["required_decision", "recommended", "optional"]
+    },
+    "recommendation_reason": {
+      "type": "string",
+      "enum": [
+        "main_character",
+        "multi_shot_identity",
+        "recurring_subject",
+        "close_interaction",
+        "specific_inspectable_location",
+        "blocking_critical_location",
+        "story_critical_object",
+        "handled_object",
+        "brand_or_product_identity",
+        "emotional_symbol",
+        "provider_drift_risk",
+        "close_up_or_inspection",
+        "shot_level_spatial_need"
+      ]
+    },
+    "subject_status": {
+      "type": "string",
+      "enum": ["candidate", "recommended", "accepted_for_planning", "declined", "deferred", "reactivated"]
+    },
+    "strategy_status": {
+      "type": "string",
+      "enum": ["accepted", "accepted_partial", "declined", "deferred", "not_applicable"]
+    },
+    "package_readiness": {
+      "type": "string",
+      "enum": ["missing", "planned", "partially_accepted", "accepted", "needs_regeneration", "waived", "retired"]
+    },
+    "reference_kind": {
+      "type": "string",
+      "enum": [
+        "base_identity",
+        "variant_state",
+        "wardrobe_variant",
+        "expression_sheet",
+        "pose_action_sheet",
+        "style_variant",
+        "location_base",
+        "location_variant",
+        "object_base",
+        "object_variant"
+      ]
+    },
+    "reference_output_role": {
+      "type": "string",
+      "enum": [
+        "character_identity_plate",
+        "character_turnaround_sheet",
+        "character_macro_detail_card",
+        "character_expression_sheet",
+        "character_pose_action_sheet",
+        "character_wardrobe_sheet",
+        "character_style_variant_sheet",
+        "location_establishing_angle",
+        "location_reverse_angle",
+        "location_functional_angle",
+        "object_multi_angle_sheet",
+        "custom"
+      ]
+    },
+    "output_status": {
+      "type": "string",
+      "enum": ["planned", "imported_candidate", "generated_draft", "accepted", "rejected", "replaced", "retired", "waived"]
+    },
+    "required_before": {
+      "type": "string",
+      "enum": ["storyboard_export", "image_prompt_export", "illustration_prompt_export", "provider_video_generation", "optional"]
+    },
+    "output_readiness": {
+      "type": "string",
+      "enum": ["missing", "planned", "draft_generated", "accepted", "waived"]
+    },
+    "allowed_use_scope": {
+      "type": "string",
+      "enum": [
+        "prompt_planning",
+        "provider_input",
+        "human_review_only",
+        "storyboard_export",
+        "image_prompt_export",
+        "illustration_prompt_export",
+        "internal_review"
+      ]
+    },
+    "provider_role_hint": {
+      "type": "string",
+      "enum": [
+        "identity_reference",
+        "location_reference",
+        "object_reference",
+        "detail_reference",
+        "turnaround_reference",
+        "style_reference",
+        "review_only"
+      ]
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "artist_meaning",
+            "reference_evidence",
+            "continuity_scan",
+            "character_template",
+            "visual_reference_sheet_plan",
+            "gate_decision",
+            "output_record",
+            "long_work_stewardship",
+            "medium_plan"
+          ]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

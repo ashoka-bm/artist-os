@@ -73,6 +73,14 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
             if "then" in schema:
                 validate(value, schema["then"], root, path)
 
+    if "not" in schema:
+        try:
+            validate(value, schema["not"], root, path)
+        except ValidationError:
+            pass
+        else:
+            raise ValidationError(path, "matched a schema it should not")
+
     if "type" in schema and not type_matches(value, schema["type"]):
         raise ValidationError(path, f"expected {schema['type']}, got {type(value).__name__}")
 
@@ -293,6 +301,7 @@ FIXTURE_SCHEMA_MAP = {
     "video-medium-plan.json": "video-medium-plan.schema.json",
     "character-template.json": "character-template.schema.json",
     "visual-reference-sheet-plan.json": "visual-reference-sheet-plan.schema.json",
+    "reference-inventory.json": "reference-inventory.schema.json",
     "illustration-plan.json": "illustration-plan.schema.json",
     "review-record.json": "review-record.schema.json",
     "album-release-package-plan.json": "release-package-plan.schema.json",

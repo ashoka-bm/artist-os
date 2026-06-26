@@ -90,6 +90,10 @@ A Visual Reference Sheet Plan is a provider-neutral prompt package for a referen
 
 It supports `character`, `product`, `object`, `setting`, and `style` reference-sheet targets. Drafting the prompt is planning work. Generated reference sheets require explicit Generation Approval and Output Records; imported reference sheets should keep provenance through asset metadata or Output Records when used downstream.
 
+When the story promotes a subject into reference status, `reference_outputs` records the expected images before generation and is required on Visual Reference Sheet Plans. Promoted main characters plan three images: identity plate, full-body turnaround, and macro detail card. Promoted locations plan three angle images: establishing, reverse, and functional/staging. Promoted objects plan one multi-section sheet with multiple angles and details. Character variants can add their own expression, pose/action, wardrobe, or style-variant outputs without changing the base subject package counts.
+
+Reference Inventory is a schema-backed record for project-level reference tracking. It validates against `schemas/reference-inventory.schema.json`. It records effective project reference policy, scan history, character/location/object subjects, recommendation reasons, strategy status, package readiness, expected outputs, missing output roles, active reference versions, Visual Reference Sheet Plan refs, Output Record refs, visible storage paths, provider-neutral role hints, and per-output readiness. It does not replace Visual Reference Sheet Plan or Long-Work Stewardship.
+
 ### Image Medium Plan
 
 An Image Medium Plan is the typed image translation layer between the shared Beat Plan and the image Creative Brief. It validates against `schemas/image-medium-plan.schema.json`.
@@ -115,11 +119,11 @@ Do not let `shot_design` default to full-body character framing. Close shots sho
 
 A Video Medium Plan is the typed video translation layer between the shared Beat Plan and the Video Creative Brief. It validates against `schemas/video-medium-plan.schema.json`.
 
-The v0 implementation is storyboard-ready planning only. It owns Video Format, Video Style Expression, Visual Dynamics over time, Video Sequences when needed, Video Scenes, Storyboard Shots, audio posture, text/audio refs, storyboard frame prompts, and storyboard still generation policy. It does not create a Video Prompt Plan or finished video.
+The v0 implementation is storyboard-ready planning only. It owns Video Format, Video Style Expression, Visual Dynamics over time, Video Sequences when needed, Video Scenes, Storyboard Shots, audio posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet. It does not create a Video Prompt Plan or finished video.
 
 Video Medium Plans use the same Symbology Direction and Style Direction concepts as Image Medium Plans. Video adds medium-specific choices for rendering mode, camera style, motion style, edit style, scene/sequence structure, shot logic, motion/pacing/transition logic, and audio posture.
 
-Generated storyboard stills require explicit provider-backed generation approval and normal Output Records linked back to the relevant Storyboard Shot. Finished video generation, render adapters, and provider-specific video jobs are downstream adapters.
+Generated or imported composite storyboard sheets require explicit provider-backed generation approval and normal Output Records linked back to the Video Medium Plan. Individual storyboard stills are a separate artifact type: they require explicit provider-backed generation approval that names individual stills or separate panel images, and normal Output Records linked back to the relevant Storyboard Shot. Finished video generation, render adapters, and provider-specific video jobs are downstream adapters.
 
 ### Sound Medium Plan
 
@@ -144,6 +148,8 @@ Illustration Plan is not a Video Medium Plan. It has no Video Audio Posture, tim
 ### Review Record
 
 A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
+
+Fallback separated review records are allowed only when the host or active tool policy blocks sub-agent spawning despite Standing Sub-Agent Authorization. They must set `reviewer_execution.fallback_reason` to `host_cannot_spawn_sub_agent` or `tool_policy_blocks_sub_agent_spawn`.
 
 All critic and reviewer records include drift checking. A blocking finding must be revised or explicitly waived by the artist before the journey advances.
 

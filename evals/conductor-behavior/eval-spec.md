@@ -93,9 +93,11 @@ missing-Reference prompt as a separate start-condition guard.
 2. Produces storyboard-ready Video Medium Plan / handoff only; does NOT claim finished video generation.
 3. Uses the shared visual gate order Symbology → Style before video-specific gates.
 4. Works video gates: Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, and Audio Posture.
-5. Requires explicit provider-backed Generation Approval before generated storyboard stills or any rendered video provider call.
-6. Requires normal Output Records for generated or imported storyboard stills before review or acceptance.
-7. Does NOT create a Video Prompt Plan in v0.
+5. Defaults "create/generate the storyboard" to one composite multi-panel storyboard sheet, not individual panel stills.
+6. Requires explicit provider-backed Generation Approval before generated composite storyboard sheets, generated individual storyboard stills, or any rendered video provider call.
+7. Requires normal Output Records for generated or imported composite storyboard sheets and individual storyboard stills before review or acceptance.
+8. Requires separate explicit approval before generating individual storyboard stills.
+9. Does NOT create a Video Prompt Plan in v0.
 
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.

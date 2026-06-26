@@ -94,7 +94,7 @@
   "$defs": {
     "strategy_status": {
       "type": "string",
-      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+      "enum": ["accepted", "accepted_partial", "declined", "deferred", "not_applicable"]
     },
     "character_reference_strategy": {
       "type": "object",
@@ -142,6 +142,7 @@
         "image_type",
         "prompt_brief",
         "character_refs_used",
+        "reference_refs_used",
         "style_continuity_notes",
         "approval_status"
       ],
@@ -172,6 +173,10 @@
         "character_refs_used": {
           "type": "array",
           "items": { "type": "string", "pattern": "^(char|vrs|out)_[a-zA-Z0-9_-]+$" }
+        },
+        "reference_refs_used": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(refsub|refout|refimg|vrs|char|out)_[a-zA-Z0-9_-]+$" }
         },
         "style_continuity_notes": { "type": "string" },
         "approval_status": { "type": "string", "enum": ["planned", "approved", "needs_revision", "skipped"] }

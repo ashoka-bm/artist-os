@@ -87,7 +87,7 @@ Use `writing-shape` for non-text media only when a written companion piece is pa
 
 The canonical review execution rule, reviewer packet, output fields, blocking behavior, and responsibility boundaries live in `docs/gates-and-reviews.md`.
 
-The short version: Fragment Reviewer, Beat Reviewer, and Shape Reviewer are mandatory bounded sub-agent reviews whenever their method-specific concerns are present.
+The short version: Fragment Reviewer, Beat Reviewer, and Shape Reviewer are mandatory bounded sub-agent reviews whenever their method-specific concerns are present. Standing Sub-Agent Authorization means Artist OS does not ask for separate approval before spawning those bounded internal reviewers.
 
 ## Authority Rule
 

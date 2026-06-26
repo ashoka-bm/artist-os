@@ -80,6 +80,24 @@ One visible project folder looks like:
 
 Medium folders include only folders with actual Review Drafts, Accepted Works, or other user-facing outputs, for example `Writing/`, `Images/`, or `Audio/`.
 
+Reference folders are created only when generated or imported reference images exist. Organize them by category, subject, and review status:
+
+```text
+<wondermint_root>/Wondermint/Artist Library/Projects/<project_slug>/
+└── References/
+    ├── Characters/<character-slug>/
+    │   ├── Review Drafts/
+    │   └── Accepted/
+    ├── Locations/<location-slug>/
+    │   ├── Review Drafts/
+    │   └── Accepted/
+    └── Objects/<object-slug>/
+        ├── Review Drafts/
+        └── Accepted/
+```
+
+`Review Drafts/` contains generated or imported reference images that the artist can inspect but has not accepted as canonical. `Accepted/` contains reference images the artist accepted for downstream use. The visible folders are for artist browsing; Output Records, sidecar metadata, event logs, and the Reference Inventory remain the provenance source of truth.
+
 The visible project `README.md` is a lightweight orientation file. It may include project title, plain-language summary, current status, visible outputs, last meaningful update, and how to ask Artist OS to resume the project. It should not include full Artist Meaning, full prompts, gate decisions, private feedback logs, performance analytics, schema paths, or raw event history.
 
 The hidden `.artist-os-project.json` Project Pointer links the visible folder to the internal Artist OS Project. The project id is authoritative; relative Workspace Library hints are convenience only.
@@ -162,6 +180,8 @@ Each project gets one folder:
 │   └── creative-brief.record.json
 ├── prompt-plans/
 │   └── prompt-plan.json
+├── references/
+│   └── reference-inventory.json
 ├── critiques/
 ├── outputs/
 ├── exports/
@@ -181,6 +201,7 @@ The SQLite database validates against the schema in `schemas/artist-os-library.s
 - gate and creative decisions,
 - record paths,
 - concrete Output Artifacts from Output Records,
+- Reference Inventory items and reference image paths,
 - assets and image sidecars,
 - event history,
 - visible Artist Library paths and Project Pointer state,
@@ -217,6 +238,7 @@ Every project has `project.json`, validated by `schemas/project-manifest.schema.
 - visible Artist Library path and Project Pointer state,
 - current stage,
 - paths to source, meaning, gate, brief, prompt-plan, critique, and asset files,
+- the Reference Inventory path when promoted reference subjects exist,
 - selected symbology, style, presentation mode, and detail mode,
 - generated image paths and sidecar metadata paths.
 
@@ -248,6 +270,27 @@ Store images under `assets/`:
 - `assets/boards/`: symbology, style, or detail comparison boards.
 - `assets/generated/`: intermediate generated works.
 - `assets/final/`: accepted final works.
+
+Generated and imported promoted reference images should keep category and subject organization inside `assets/reference/` or `assets/generated/`, matching the visible Artist Library reference folders when practical:
+
+```text
+assets/reference/characters/<character-slug>/
+assets/reference/locations/<location-slug>/
+assets/reference/objects/<object-slug>/
+assets/generated/references/characters/<character-slug>/
+assets/generated/references/locations/<location-slug>/
+assets/generated/references/objects/<object-slug>/
+```
+
+Use sidecar metadata and Output Records to connect internal asset paths to visible `References/...` paths.
+
+Use the storage helper to publish a generated or imported reference image into the visible project folder after an Output Record exists:
+
+```bash
+bin/artist-os-db publish-visible-reference proj_door_left_lit refimg_old_tv_multi_angle --state accepted --wondermint-root /path/to/root
+```
+
+The command copies the Output Artifact into `References/<Category>/<subject-slug>/Review Drafts/` or `Accepted/`, updates `reference-inventory.json` output readiness, records the visible file in `project.json`, appends an event when `events.jsonl` exists, and refreshes SQLite.
 
 Each image should have a sidecar metadata file with the same basename plus `.json`, for example:
 

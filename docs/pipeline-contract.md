@@ -19,6 +19,8 @@ No step advances unless its output validates against the declared schema. Review
 
 Subagents may analyze, draft, validate, critique, or prepare disposable work packets, including parallel packets when the work units are independent. They do not advance the pipeline. The conductor alone records artist decisions, persists authoritative state, mutates manifests/events/indexes, and calls providers after explicit approval.
 
+Artist OS has standing user authorization to spawn bounded internal subagents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. This standing authorization does not apply to provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
+
 Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orchestration, Parallel Production, synchronization barriers, and safe parallelism rules.
 
 ## Record Types
@@ -34,6 +36,7 @@ Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orche
 | Release Package Plan | `schemas/release-package-plan.schema.json` | `tests/fixtures/release-packages/album-release-package-plan.json` |
 | Character Template | `schemas/character-template.schema.json` | `tests/fixtures/characters/character-template.json` |
 | Visual Reference Sheet Plan | `schemas/visual-reference-sheet-plan.schema.json` | `tests/fixtures/characters/visual-reference-sheet-plan.json` |
+| Reference Inventory | `schemas/reference-inventory.schema.json` | `tests/fixtures/references/reference-inventory.json` |
 | Illustration Plan | `schemas/illustration-plan.schema.json` | `tests/fixtures/illustration/illustration-plan.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
@@ -148,13 +151,13 @@ Album Calibration is not final acceptance. Final Output Artifacts still require 
 - Gate: Character Reference Strategy Gate when recurring characters make the choice relevant.
 - Next: Visual Reference Sheet Plan, Text Medium Plan, Image Medium Plan, Video Medium Plan, Illustration Plan, or Long-Work Stewardship promotion when facts become durable canon.
 
-Ask once whether Character Templates and optional Character Reference Sheet prompts are wanted for recurring characters. If the artist declines, persist `character_reference_strategy.status = "declined"` and do not re-ask in the same flow. If the artist defers, persist `deferred` and proceed.
+Ask once whether Character Templates and optional Character Reference Sheet prompts are wanted for recurring characters. If the artist accepts only some recommendations, persist `accepted_partial` and record the selected refs and declined subjects. If the artist declines, persist `character_reference_strategy.status = "declined"` and do not re-ask in the same flow. If the artist defers, persist `deferred` and proceed.
 
 Character Templates may be provisional for text-only planning and reference-sheet prompt drafting. Provider-backed generation requires an approved template or Generation Approval that explicitly includes the provisional character details.
 
 ### `visual_reference_sheet.plan`
 
-- Input: Character Template or another subject description, style direction or provisional style, and upstream provenance records.
+- Input: Character Template or another subject description, style direction or provisional style, promotion reason when applicable, and upstream provenance records.
 - Output: Visual Reference Sheet Plan.
 - Schema: `schemas/visual-reference-sheet-plan.schema.json`.
 - Skill: `skills/artist-os/references/visual-reference-sheet-prompt-builder.md`.
@@ -163,6 +166,20 @@ Character Templates may be provisional for text-only planning and reference-shee
 - Next: generated/imported reference sheet Output Record, Image Medium Plan, Video Medium Plan, Illustration Plan, or Prompt Plan refs.
 
 Visual Reference Sheet Plan is a prompt package, not a generated asset. Generated reference sheets and imported reference sheets get normal provenance before they are used as downstream references.
+
+Promoted visual reference subjects use the same record type. A promoted main character plans three separate images: identity plate, full-body turnaround, and macro detail card. A promoted location plans three separate images from different angles: establishing, reverse, and functional/staging. A promoted object plans one multi-section image with front, side, rear, and macro detail sections. Do not promote incidental background props.
+
+### `reference_inventory.update`
+
+- Input: continuity scan results, Character Templates, Visual Reference Sheet Plans, Reference Strategy Gate decisions, Generation Approval gates, Output Records, visible reference paths, and any Long-Work Stewardship refs.
+- Output: Reference Inventory.
+- Schema: `schemas/reference-inventory.schema.json`.
+- Skill: conductor or active medium planner using `skills/artist-os/references/visual-reference-sheet-prompt-builder.md` and storage rules.
+- Reviewer required: no by default; use the relevant medium critic or Output Critic when a reference image is about to become an accepted provider input.
+- Gate: Reference Strategy Gate for promotion and partial acceptance; Generation Approval Gate before image generation; Reference Readiness Gate before storyboard, image-series, or illustration prompt export; Output Acceptance Gate before a reference output becomes `accepted`.
+- Next: Video Medium Plan, Image Medium Plan, Illustration Plan, provider export adapter, or Long-Work Stewardship continuity rule.
+
+Reference Inventory is the project-level table of contents for promoted and candidate reference subjects. It owns effective policy, scan history, subject status, package readiness, per-output readiness, storage paths, Output Record refs, active reference versions, and provider-neutral role hints. Downstream Video Storyboard Shots, Image Roles, and Illustration units must record the specific `reference_refs_used`; the inventory owns availability, not actual usage. It does not own story canon; Long-Work Stewardship links to inventory subjects when a reference becomes a durable continuity rule.
 
 ### `illustration.plan`
 
@@ -287,7 +304,7 @@ The Prompt Branch Set must carry the governing Intended Feeling, Key Emotional M
 - Gate: Symbology Gate, Style Gate, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture.
 - Next: `long_work.stewardship` enrichment when the video work is cumulative, otherwise `video.creative_brief`.
 
-The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Sequences when needed, Video Scenes, Storyboard Shots, Video Style Expression, Video Audio Posture, text/audio refs, storyboard frame prompts, and storyboard still generation policy. It does not create a Video Prompt Plan or finished video.
+The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Sequences when needed, Video Scenes, Storyboard Shots, Video Style Expression, Video Audio Posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet; individual stills are separate explicitly requested artifacts. It does not create a Video Prompt Plan or finished video.
 
 ### `video.creative_brief`
 
@@ -297,9 +314,9 @@ The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Seq
 - Skill: `skills/artist-os/references/video-journey.md`.
 - Reviewer required: Video Critic sub-agent.
 - Gate: Brief Approval Gate.
-- Next: storyboard-ready package, optional storyboard still Generation Approval Gate, Output Record when storyboard stills are generated or imported.
+- Next: storyboard-ready package, optional composite storyboard sheet Generation Approval Gate by default, Output Record when a composite sheet is generated or imported, optional individual storyboard still Generation Approval Gate only when explicitly requested, Output Record when individual stills are generated or imported.
 
-The Video Creative Brief compiles the approved Video Medium Plan into an artist-readable handoff. Generated storyboard stills are normal Output Records linked back to the relevant Storyboard Shot.
+The Video Creative Brief compiles the approved Video Medium Plan into an artist-readable handoff. Generated or imported composite storyboard sheets are normal Output Records linked back to the Video Medium Plan. Individual storyboard stills, when explicitly requested, are normal Output Records linked back to the relevant Storyboard Shot.
 
 ## Text-To-Suno Steps
 

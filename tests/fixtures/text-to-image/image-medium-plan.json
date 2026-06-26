@@ -139,7 +139,8 @@
         "spatial_openness": 0.45,
         "detail_intensity": 0.45,
         "emotional_pressure": 0.8
-      }
+      },
+      "reference_refs_used": []
     }
   ],
   "series_plan": {

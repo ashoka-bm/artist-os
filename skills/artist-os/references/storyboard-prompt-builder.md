@@ -8,11 +8,21 @@ description: >
 
 This skill turns character references and a story overview into a two-phase prompt package:
 
-**Phase 1 — Storyboard Image Prompt:** A single prompt that generates a professional multi-panel storyboard sheet as one composite image, with numbered panels, timecodes, shot descriptions, and scene metadata. Optimised for Nano Banana Pro and GPT Image 2.
+**Phase 1 — Storyboard Image Prompt:** A single prompt that generates a professional multi-panel storyboard sheet as one composite image, with numbered panels, timecodes, shot descriptions, and scene metadata. This is the default artifact whenever the user asks to create, generate, make, or build "the storyboard." Optimised for Nano Banana Pro and GPT Image 2.
 
 **Phase 2 — Cinematic Video Prompt:** Once the user approves the storyboard, expand it into a full cinematic video prompt with per-shot direction, camera specs, dialogue, SFX, and emotional pacing. Designed for AI video generators.
 
 Phase 2 is only delivered after the user confirms they're happy with the storyboard. Always ask before proceeding.
+
+## Default Storyboard Artifact
+
+Default to one composite multi-panel storyboard sheet: one generated image containing all panels, panel numbers, timecodes, captions, notes, and footer metadata.
+
+Do not default to generating individual panel stills. Individual stills are a separate artifact type and require explicit artist approval that names "individual still images for each panel" or equivalent wording.
+
+Approval for "the storyboard" means the composite sheet unless the artist explicitly asks for individual stills, separate panel images, or a rendered video.
+
+When a Video Medium Plan or approved shot list already exists, use its approved shot count, timing, style, and continuity requirements as the source of truth. Do not silently expand an 11-shot plan into a 15-panel sheet. If the sheet needs a different panel count for readability, state the proposed split/merge before requesting generation approval.
 
 ---
 
@@ -31,7 +41,7 @@ You need three things. Collect whatever's missing in a single message:
 3. **Style** — the visual language. If not specified, infer from context (a story about a cute robot implies Pixar-style 3D; a noir detective implies cinematic live-action; a magical girl implies anime). When genuinely ambiguous, ask: *"What visual style — 3D animation, live-action, anime, something else?"*
 
 **Optional inputs the user may provide:**
-- **Panel count** — defaults to 15 (the standard storyboard sheet), but can be 9, 12, or 20 depending on story complexity
+- **Panel count** — defaults to the approved shot/beat count when a plan exists; otherwise defaults to 15 (the standard storyboard sheet), but can be 9, 12, or 20 depending on story complexity
 - **Duration** — defaults to 15 seconds, but can be adjusted (30s, 60s, etc.)
 - **Aspect ratio** — defaults to 16:9, but can be 9:16 (vertical), 1:1, or 4:3
 - **Target model** — Nano Banana Pro or GPT Image 2. Defaults to Nano Banana Pro. Prompt structure is similar but GPT Image 2 benefits from slightly more explicit layout instructions.
@@ -49,6 +59,22 @@ Build a **compact character description** (80–150 characters per character) th
 
 For multiple characters, create distinct identifiers that won't blur together across panels.
 
+### Step 2a — Promote continuity-critical visual state
+
+Before breaking the story into panels, identify any visual state that changes across the story and would weaken meaning, blocking, or audience trust if it drifted.
+
+Promote clothing, props, wounds, objects, vehicles, settings, body states, lighting states, and symbols when they are gained, lost, transformed, handed off, destroyed, revealed, concealed, restored, or repeatedly handled.
+
+For each promoted subject, define:
+
+1. **Starting state** — what must be visible before the change begins
+2. **Change sequence** — the exact panel range where the state changes
+3. **Post-change state** — what must be visibly absent, altered, restored, or replaced afterward
+4. **Safety/dignity handling** — any visual substitution needed to preserve meaning without exposure or sensationalism
+5. **Footer tracker text** — concise continuity labels for the storyboard sheet when the state is central
+
+If clothing is given away, the opening panel must show the full starting outfit clearly enough that each later loss is legible. Later panels must visibly track the missing garment state after each gift. When exposure would be unsafe or sensational, use shadow, silhouette, framing, substitute garments, or symbolic handoff while still making the state change clear.
+
 ### Step 3 — Break the story into beats
 
 Decompose the story overview into the target panel count (default 15). Each beat needs:
@@ -64,6 +90,7 @@ Decompose the story overview into the target panel count (default 15). Each beat
 - **Shot variety:** Vary shot types across the sequence. Never repeat the same shot type in consecutive panels. Alternate between establishing shots and intimate close-ups.
 - **Emotional escalation:** Build intensity through the middle, peak around panel 10–12, then resolve. Use close-ups for emotional peaks, wide shots for context and breathing room.
 - **Character consistency:** Reference character-identifying details in panels where they'd be visible at that shot size.
+- **Continuity state:** Carry promoted visual states panel by panel. Do not let clothing, props, or transformed objects reset between panels unless the story explicitly restores them.
 
 ### Step 4 — Compose the storyboard image prompt
 
@@ -78,12 +105,15 @@ Example opener: *"15-second animated storyboard sheet for a sci-fi adventure sho
 
 The grid layout depends on panel count:
 - 9 panels → 3×3 grid
+- 11 panels → 3×4 grid with one metadata/notes cell, or another clean production-board layout that keeps all 11 story panels distinct
 - 12 panels → 3×4 grid
 - 15 panels → 3×5 grid (default)
 - 20 panels → 4×5 grid
 
 **B) Style Declaration**
 A rich style block tailored to the user's specified or inferred visual language. This is NOT a fixed line — it adapts completely to the style.
+
+If an approved Creative Brief, Video Medium Plan, or user style exists, preserve that style exactly. Do not drift from live-action to animation, from 2D to 3D, or from restrained realism to spectacle unless the artist explicitly requests the change.
 
 For 3D animation: reference Pixar/DreamWorks quality, cinematic rendering, expressive character animation, warm lighting.
 For live-action: reference cinematographic style, film stock look, practical lighting, grounded realism.
@@ -93,6 +123,8 @@ For any other style: adapt accordingly — the style block should read like a cr
 
 **C) Character Descriptions**
 Detailed descriptions of each main character, pulled from uploaded references (Step 2) or built from the story overview. Include physical features, clothing, accessories, and distinguishing visual elements. Written as flowing prose, not a list.
+
+Include promoted continuity-critical clothing, props, objects, or body states in the character/object descriptions. Name their starting state and later visible absence or transformation.
 
 **D) Visual Tone**
 Colour grading, atmosphere, lighting quality, rendering approach. Should be consistent with the style declaration but focused on mood and technical rendering.
@@ -105,11 +137,14 @@ The physical appearance of the storyboard sheet itself:
 - Shot descriptions and scene notes under each frame
 - Clean typography
 - Studio-quality aesthetic
+- Footer continuity tracker for promoted visual states when the story depends on visible gain/loss/transformation
 
 **F) Scene Breakdown**
 Each panel described as: *"Panel [N]: [Shot type] shot. [Scene description with character action, environment, and emotional beat]."*
 
 Distribute character details across panels — mention hair and face in close-ups, full outfit in wide shots, signature accessories when they'd be visible. Don't front-load all character description into Panel 1.
+
+Carry promoted state changes through every affected panel. If a cap is given away in Panel 5, Panels 6 onward must show no cap until the story restores or replaces it.
 
 Include dialogue/action notes where relevant, woven into the panel descriptions naturally.
 
@@ -122,6 +157,8 @@ Final technical specs: render quality cues, aspect ratio, format declaration ("p
 ### Step 5 — Deliver the storyboard prompt
 
 Output the complete prompt in a **single fenced code block**. The user should be able to copy it directly into Nano Banana Pro or GPT Image 2.
+
+If requesting provider-backed generation, ask for approval using artifact-specific language: "Generate one composite multi-panel storyboard sheet as a single image..." Do not ask only "generate the storyboard stills" unless the requested artifact is individual still images.
 
 Below the code block, add a **companion note** (3–5 sentences) covering:
 - Style choices made for anything the user didn't specify

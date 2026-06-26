@@ -100,6 +100,18 @@ _Avoid_: Medium, story bible, Long-Work Stewardship
 A provider-neutral prompt package for a four-view or comparable reference sheet for a character, product, object, setting, or style target. Drafting the prompt is allowed automatically; generating the sheet requires Generation Approval and an Output Record.
 _Avoid_: Generated reference sheet, Character Template, Prompt Plan
 
+**Promoted Visual Reference Subject**:
+A character, location, product, object, setting, or prop that the story promotes into reference status because visual drift would weaken Artist Meaning, story clarity, blocking, or audience trust. Promoted main characters receive three planned reference images: identity plate, full-body turnaround, and macro detail card. Promoted locations receive three planned images from different angles. Promoted objects receive one planned multi-section image with multiple angles and details.
+_Avoid_: Promoting every background detail, treating planned reference outputs as generated assets
+
+**Reference Output**:
+One planned, generated, imported, reviewed, waived, or accepted reference image inside a Visual Reference Sheet Plan and Reference Inventory. A promoted character usually has three Reference Outputs, a promoted location usually has three, and a promoted object usually has one.
+_Avoid_: Treating a whole reference package as one generated image when its parts need separate provenance
+
+**Reference Inventory**:
+The schema-backed project record that lists candidate, recommended, accepted, declined, deferred, generated, waived, and accepted reference subjects across characters, locations, and objects. It owns project reference policy, scan history, subject status, package readiness, per-output readiness, storage paths, Visual Reference Sheet Plan refs, Output Record refs, active reference versions, and provider-neutral role hints. It does not own story canon.
+_Avoid_: Long-Work Stewardship, asset folder scan, provider media binding
+
 **Illustration Plan**:
 The cross-medium coordinator for illustrated written work after a Text Medium Plan exists, mapping pages, spreads, panels, diagrams, covers, text-image relationships, character references, visual continuity rules, and downstream image prompt refs.
 _Avoid_: Video Medium Plan, Video Storyboard, Text Medium Plan, Image Medium Plan
@@ -159,6 +171,10 @@ _Avoid_: Art Critic Review alone, Writing Critic Review alone, Output Critic Rev
 **Review Record**:
 The universal machine-readable output of any bounded reviewer sub-agent. It records reviewer role, reviewed artifact, upstream context, matched material, drift, findings, recommended revision, and approval status.
 _Avoid_: Reviewer-specific machine-readable schemas unless a real downstream need appears
+
+**Standing Sub-Agent Authorization**:
+The project-level authorization for Artist OS to spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. It does not authorize provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
+_Avoid_: Per-review approval, optional single-thread mode, provider authorization
 
 **Critical Heuristics**:
 Reusable art-critical rules that Art Critic Review uses to deepen a Creative Brief without inventing new Artist Meaning.
@@ -1086,7 +1102,9 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Text Generation Plan** owns drafted script, dialogue, voiceover, captions, social copy, and on-screen text wording; a **Video Medium Plan** owns their timing, placement, role, and relationship to Video Scenes and Storyboard Shots.
 - A **Video Medium Plan** always states its **Video Audio Posture**, but Text Journey or Sound Journey records are created only when the selected posture needs drafted words or sound planning.
 - Storyboard frame prompts belong to the v0 **Video Medium Plan**; a separate **Video Prompt Plan** waits until provider-neutral video generation instructions prove their fields.
-- Generated storyboard stills are normal **Output Records** linked back to the relevant **Storyboard Shot**.
+- When an artist asks to create or generate "the storyboard," the default generated artifact is one **Composite Storyboard Sheet**: a single multi-panel image with panel numbers, timecodes, captions, notes, and footer metadata.
+- Generated or imported **Composite Storyboard Sheets** are normal **Output Records** linked back to the governing **Video Medium Plan**.
+- Generated individual storyboard stills are separate opt-in **Output Records** linked back to the relevant **Storyboard Shot**; they require artist approval that explicitly names individual stills or separate panel images.
 - **Video Style Expression** expresses the approved **Style Direction** over time; it does not replace or outrank Style Direction.
 - An **Illustration Plan** is created after the Text Medium Plan for illustrated written work. It coordinates text and still-image outputs; it does not replace Text Medium Plan, Image Medium Plan, Provider-Neutral Image Prompt Plan, or Output Record.
 - Ambiguous user-facing "storyboard" language is disambiguated. Film, animation, reel, trailer, and video-generator storyboards route to **Video Storyboard** / Video Journey. Children's book, comic, picture-book, book, and diagram-rich storyboards route to **Illustration Plan**.

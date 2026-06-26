@@ -31,11 +31,11 @@ Use:
 1. Confirm the work is illustrated written work, not video. If "storyboard" is ambiguous, ask whether the artist means video storyboard or Illustration Plan.
 2. Use the Text Medium Plan as the authority for written structure, section jobs, audience, length/page shape, publication/use, fidelity policy, and review presentation.
 3. Choose `illustrated_work_type`: children's book, comic, graphic story, story with spot illustrations, diagram-rich explainer, cover plus interior, or other.
-4. Resolve `character_reference_strategy` and `visual_reference_sheet_strategy`. Do not re-ask declined strategies.
-5. Build `page_or_panel_plan[]`. Each unit must name its page/spread/panel/diagram/cover job, text section refs, Beat ids, Key Emotional Movement ids, image type, prompt brief, character refs used, and style continuity notes.
+4. Resolve `character_reference_strategy` and `visual_reference_sheet_strategy`, and create or update Reference Inventory subjects when characters, locations, or objects need continuity. Do not re-ask declined strategies.
+5. Build `page_or_panel_plan[]`. Each unit must name its page/spread/panel/diagram/cover job, text section refs, Beat ids, Key Emotional Movement ids, image type, prompt brief, character refs used, `reference_refs_used`, and style continuity notes.
 6. Define text-image relationships. Images should add, reveal, pressure, clarify, or counterpoint the text; they should not merely duplicate it.
 7. Define visual continuity rules, including character, setting, object, palette/light, style, and diagram conventions when relevant.
-8. Set generation policy: Illustration Plan Approval before bulk prompt expansion; Generation Approval before image generation.
+8. Set generation policy: Illustration Plan Approval before bulk prompt expansion; Reference Readiness before illustration prompt export; Generation Approval before image generation.
 9. Emit the Illustration Plan and send it to Illustration Plan Reviewer.
 
 ## Illustration Plan Reviewer

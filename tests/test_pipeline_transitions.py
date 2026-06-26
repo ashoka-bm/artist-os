@@ -104,6 +104,7 @@ class PipelineTransitionTests(unittest.TestCase):
             self.assertIn(role["key_emotional_movement_id"], key_movement_ids)
             self.assertIn("shot_design", role)
             self.assertTrue(role["shot_design"]["emotional_rationale"])
+            self.assertIn("reference_refs_used", role)
 
     def test_image_medium_plan_to_image_creative_brief(self) -> None:
         beat_plan = load("tests/fixtures/story/beat-plan.json")
@@ -194,7 +195,14 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(video_plan["implementation_scope"], "storyboard_plan")
         self.assertEqual(video_plan["rendering_status"], "not_supported")
         self.assertTrue(video_plan["storyboard_generation_policy"]["storyboard_frame_prompts_in_plan"])
+        self.assertEqual(
+            video_plan["storyboard_generation_policy"]["default_generated_storyboard_artifact"],
+            "composite_storyboard_sheet",
+        )
+        self.assertTrue(video_plan["storyboard_generation_policy"]["composite_storyboard_sheet_default"])
+        self.assertTrue(video_plan["storyboard_generation_policy"]["output_record_required_for_composite_sheet"])
         self.assertFalse(video_plan["storyboard_generation_policy"]["generated_storyboard_stills_allowed"])
+        self.assertTrue(video_plan["storyboard_generation_policy"]["individual_stills_require_separate_approval"])
         self.assertTrue(video_plan["storyboard_generation_policy"]["output_record_required_for_generated_stills"])
         self.assert_long_work_support(video_plan, should_activate=False, label="video medium plan")
 
@@ -214,6 +222,7 @@ class PipelineTransitionTests(unittest.TestCase):
             self.assertIn(shot["scene_id"], scene_ids)
             self.assertIn(shot["beat_id"], beat_ids)
             self.assertIn(shot["key_emotional_movement_id"], key_movement_ids)
+            self.assertIn("reference_refs_used", shot)
             self.assertTrue(shot["visual_unit"]["expectation_turn_translation"])
             self.assertTrue(shot["visual_unit"]["shot_design"]["emotional_rationale"])
             if shot["audio_ref"] is not None:
@@ -224,6 +233,94 @@ class PipelineTransitionTests(unittest.TestCase):
                 self.assertIn(shot["script_ref"], text_refs)
 
         self.assertEqual(len(shot_ids), len(video_plan["storyboard_shots"]))
+
+    def test_video_medium_plan_references_promoted_reference_packages(self) -> None:
+        video_plan = load("tests/fixtures/video-journey/video-medium-plan.json")
+        inventory = load("tests/fixtures/references/reference-inventory.json")
+        character_package = load(
+            "tests/fixtures/characters/promoted-door-keeper/visual-reference-sheet-plan.json"
+        )
+        location_package = load(
+            "tests/fixtures/locations/hallway-threshold/visual-reference-sheet-plan.json"
+        )
+        object_package = load(
+            "tests/fixtures/objects/old-tv/visual-reference-sheet-plan.json"
+        )
+
+        character_strategy = video_plan["character_reference_strategy"]
+        visual_strategy = video_plan["visual_reference_sheet_strategy"]
+
+        self.assertEqual(character_strategy["status"], "accepted")
+        self.assertIn("char_door_keeper", character_strategy["character_template_refs"])
+        self.assertIn(
+            character_package["visual_reference_sheet_plan_id"],
+            character_strategy["visual_reference_sheet_plan_refs"],
+        )
+        self.assertEqual(
+            [output["output_role"] for output in character_package["reference_outputs"]],
+            [
+                "character_identity_plate",
+                "character_turnaround_sheet",
+                "character_macro_detail_card",
+            ],
+        )
+        self.assertEqual(
+            sum(output["image_count"] for output in character_package["reference_outputs"]),
+            3,
+        )
+
+        self.assertEqual(visual_strategy["status"], "accepted")
+        self.assertIn(
+            location_package["visual_reference_sheet_plan_id"],
+            visual_strategy["visual_reference_sheet_plan_refs"],
+        )
+        self.assertIn(
+            object_package["visual_reference_sheet_plan_id"],
+            visual_strategy["visual_reference_sheet_plan_refs"],
+        )
+        self.assertEqual(
+            [output["output_role"] for output in location_package["reference_outputs"]],
+            [
+                "location_establishing_angle",
+                "location_reverse_angle",
+                "location_functional_angle",
+            ],
+        )
+        self.assertEqual(
+            sum(output["image_count"] for output in location_package["reference_outputs"]),
+            3,
+        )
+        self.assertEqual(
+            object_package["reference_outputs"][0]["output_role"],
+            "object_multi_angle_sheet",
+        )
+        self.assertEqual(object_package["reference_outputs"][0]["image_count"], 1)
+        self.assertEqual(character_package["output_record_refs"], [])
+        self.assertEqual(location_package["output_record_refs"], [])
+        self.assertEqual(object_package["output_record_refs"], [])
+
+        inventory_subject_refs = {
+            subject["reference_subject_id"] for subject in inventory["subjects"]
+        }
+        inventory_output_refs = {
+            output["reference_output_id"]
+            for subject in inventory["subjects"]
+            for output_owner in [subject, *subject["variants"]]
+            for output in output_owner["expected_outputs"]
+        }
+        used_refs = {
+            ref
+            for shot in video_plan["storyboard_shots"]
+            for ref in shot["reference_refs_used"]
+        }
+        self.assertIn("refsub_hallway_threshold", used_refs)
+        self.assertTrue(
+            all(
+                ref in inventory_subject_refs or ref in inventory_output_refs
+                for ref in used_refs
+            ),
+            used_refs,
+        )
 
     def test_character_template_to_reference_sheet_to_illustration_plan(self) -> None:
         character = load("tests/fixtures/characters/character-template.json")
@@ -249,6 +346,9 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertTrue(
             illustration["generation_policy"]["bulk_prompt_expansion_requires_plan_approval"]
         )
+        for unit in illustration["page_or_panel_plan"]:
+            self.assertIn("refsub_door_keeper", unit["reference_refs_used"])
+            self.assertTrue(set(unit["character_refs_used"]).issubset(unit["reference_refs_used"]))
 
     def test_sound_medium_plan_to_sound_creative_brief(self) -> None:
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")

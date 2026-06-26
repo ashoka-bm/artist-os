@@ -115,6 +115,7 @@ MEDIUM_PLAN_SKILLS = {
             "Do not claim finished video generation is supported in v0",
             "Do not create a Video Prompt Plan in v0",
             "Do not create generated storyboard stills without Generation Approval",
+            "Create/generate the storyboard",
             "Chat context is not durable storage",
         ],
         "anchors": [

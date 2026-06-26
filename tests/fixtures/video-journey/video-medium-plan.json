@@ -16,8 +16,14 @@
   "workflow_scale_routing": {
     "scale_level": "compact_artifact",
     "rationale": "A compact 30 second storyboard can stage invitation, threshold, and residue without long-form continuity support.",
-    "trigger_signals": ["artist_requested_compact_output", "single_artifact_can_hold_movement"],
-    "activated_supports": ["core_pipeline", "medium_section_plan"],
+    "trigger_signals": [
+      "artist_requested_compact_output",
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
+    ],
     "skipped_supports": [
       "long_work_stewardship",
       "long_work_parts",
@@ -40,9 +46,31 @@
       "dependent scene batches require checkpointed expansion"
     ]
   },
+  "character_reference_strategy": {
+    "status": "accepted",
+    "decision_ref": "gate_character_reference_strategy",
+    "character_template_refs": [
+      "char_door_keeper"
+    ],
+    "visual_reference_sheet_plan_refs": [
+      "vrs_door_keeper_promoted_package"
+    ],
+    "notes": "The implied apartment host is promoted as a main continuity subject. The package plans three character reference images: identity plate, turnaround sheet, and macro detail card."
+  },
+  "visual_reference_sheet_strategy": {
+    "status": "accepted",
+    "decision_ref": "gate_visual_reference_sheet_strategy",
+    "visual_reference_sheet_plan_refs": [
+      "vrs_hallway_threshold_location",
+      "vrs_old_tv_object"
+    ],
+    "notes": "The hallway is promoted because blocking and light geometry must stay stable across shots. The old television is promoted as a story-critical object; it gets one multi-section object sheet."
+  },
   "video_format": {
     "primary_video_format": "short_social_video",
-    "format_modifiers": ["micro_trailer"],
+    "format_modifiers": [
+      "micro_trailer"
+    ],
     "duration_target_seconds": 30,
     "duration_flexibility": "standard",
     "aspect_ratio": "9:16",
@@ -56,15 +84,25 @@
     "active_absence": true,
     "confirmation_status": "confirmed",
     "rationale": "The missing person and lit threshold carry the invitation and unease without literal explanation.",
-    "avoid": ["showing the absent figure", "turning the hallway into a horror reveal"]
+    "avoid": [
+      "showing the absent figure",
+      "turning the hallway into a horror reveal"
+    ]
   },
   "style_direction": {
     "selection_method": "style_gate",
     "primary_style": "cinematic live-action realism",
-    "style_modifiers": ["quiet suspense", "natural practical light"],
+    "style_modifiers": [
+      "quiet suspense",
+      "natural practical light"
+    ],
     "confirmation_status": "confirmed",
     "rationale": "The style keeps the ordinary hallway believable so the threshold carries the pressure.",
-    "avoid": ["glossy trailer spectacle", "cartoon exaggeration", "overly dark horror grading"]
+    "avoid": [
+      "glossy trailer spectacle",
+      "cartoon exaggeration",
+      "overly dark horror grading"
+    ]
   },
   "video_style_expression": {
     "medium_rendering_mode": "live_action",
@@ -102,7 +140,11 @@
     {
       "scene_id": "vscene_hallway_threshold",
       "sequence_id": null,
-      "beat_ids": ["beat_invitation", "beat_threshold", "beat_residue"],
+      "beat_ids": [
+        "beat_invitation",
+        "beat_threshold",
+        "beat_residue"
+      ],
       "scene_label": "Hallway Threshold",
       "scene_purpose": "Move from ordinary approach to unresolved invitation.",
       "setting": "A narrow apartment hallway at night.",
@@ -133,7 +175,10 @@
           "visual_emphasis": "environment",
           "composition_strategy": "Long hallway lines converge on the small warm doorway.",
           "emotional_rationale": "Distance lets the invitation feel real before it becomes personal.",
-          "avoid": ["centered full-body subject", "visible person in the doorway"]
+          "avoid": [
+            "centered full-body subject",
+            "visible person in the doorway"
+          ]
         }
       },
       "camera_movement": "slow_push_in",
@@ -144,7 +189,11 @@
       "script_ref": null,
       "audio_ref": "audio_cue_hall_tone",
       "on_screen_text_refs": [],
-      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, narrow apartment hallway at night, cool dark walls, a small half-open door at the far end spilling warm practical light, no people visible, long converging hallway lines, quiet suspense, wide eye-level shot, restrained composition, active absence."
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, narrow apartment hallway at night, cool dark walls, a small half-open door at the far end spilling warm practical light, no people visible, long converging hallway lines, quiet suspense, wide eye-level shot, restrained composition, active absence.",
+      "reference_refs_used": [
+        "refsub_hallway_threshold",
+        "refout_hallway_establishing"
+      ]
     },
     {
       "shot_id": "vshot_002",
@@ -168,7 +217,10 @@
           "visual_emphasis": "absence_negative_space",
           "composition_strategy": "Door edge dominates one side while warm light cuts across the floor.",
           "emotional_rationale": "The low angle gives the ordinary doorway too much authority.",
-          "avoid": ["revealing the room interior", "decorative clutter"]
+          "avoid": [
+            "revealing the room interior",
+            "decorative clutter"
+          ]
         }
       },
       "camera_movement": "held_breath_push",
@@ -178,8 +230,14 @@
       "transition_out": "match_cut",
       "script_ref": "txtblock_vo_threshold_question",
       "audio_ref": "audio_cue_floor_creak",
-      "on_screen_text_refs": ["txtblock_title_still_open"],
-      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, medium close-up low angle of a half-open apartment door, warm practical light spilling over floorboards into cool darkness, no person visible, the door edge imposing, negative space beyond the crack withheld, quiet suspense, minimal lower-third title area."
+      "on_screen_text_refs": [
+        "txtblock_title_still_open"
+      ],
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, medium close-up low angle of a half-open apartment door, warm practical light spilling over floorboards into cool darkness, no person visible, the door edge imposing, negative space beyond the crack withheld, quiet suspense, minimal lower-third title area.",
+      "reference_refs_used": [
+        "refsub_hallway_threshold",
+        "refout_hallway_reverse"
+      ]
     },
     {
       "shot_id": "vshot_003",
@@ -203,7 +261,10 @@
           "visual_emphasis": "symbolic_detail",
           "composition_strategy": "Crop out the door and show only the warm rectangle of light on the floor.",
           "emotional_rationale": "Removing the door makes the residue more unsettling than the source.",
-          "avoid": ["explaining the source", "showing feet or a hand"]
+          "avoid": [
+            "explaining the source",
+            "showing feet or a hand"
+          ]
         }
       },
       "camera_movement": "locked_off",
@@ -214,32 +275,44 @@
       "script_ref": null,
       "audio_ref": "audio_cue_room_tone_drop",
       "on_screen_text_refs": [],
-      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, overhead close-up of an empty hallway floor with a warm rectangle of light falling across worn boards, door itself cropped out, no people, no objects, quiet unresolved residue, sparse composition, cool shadows around the light."
+      "storyboard_frame_prompt": "Vertical 9:16 storyboard frame, cinematic live-action realism, overhead close-up of an empty hallway floor with a warm rectangle of light falling across worn boards, door itself cropped out, no people, no objects, quiet unresolved residue, sparse composition, cool shadows around the light.",
+      "reference_refs_used": [
+        "refsub_hallway_threshold",
+        "refout_hallway_functional"
+      ]
     }
   ],
   "audio_plan": {
     "audio_mode": "voiceover",
     "sound_journey_required": false,
-    "text_generation_plan_refs": ["plan_threshold_reel_script"],
+    "text_generation_plan_refs": [
+      "plan_threshold_reel_script"
+    ],
     "sound_prompt_plan_refs": [],
     "audio_cues": [
       {
         "audio_ref": "audio_cue_hall_tone",
         "role": "ambient_tone",
         "description": "Low room tone, barely audible.",
-        "used_by_shot_ids": ["vshot_001"]
+        "used_by_shot_ids": [
+          "vshot_001"
+        ]
       },
       {
         "audio_ref": "audio_cue_floor_creak",
         "role": "sound_design",
         "description": "One quiet floorboard creak under the voiceover question.",
-        "used_by_shot_ids": ["vshot_002"]
+        "used_by_shot_ids": [
+          "vshot_002"
+        ]
       },
       {
         "audio_ref": "audio_cue_room_tone_drop",
         "role": "silence_shift",
         "description": "The room tone thins into near silence.",
-        "used_by_shot_ids": ["vshot_003"]
+        "used_by_shot_ids": [
+          "vshot_003"
+        ]
       }
     ],
     "notes": "Voiceover carries one question; sound design stays sparse enough for absence to lead."
@@ -249,23 +322,31 @@
       "text_block_id": "txtblock_vo_threshold_question",
       "text_generation_plan_id": "plan_threshold_reel_script",
       "role": "voiceover",
-      "used_by_shot_ids": ["vshot_002"],
+      "used_by_shot_ids": [
+        "vshot_002"
+      ],
       "timing_notes": "Starts after the low-angle shot has held for one second."
     },
     {
       "text_block_id": "txtblock_title_still_open",
       "text_generation_plan_id": "plan_threshold_reel_script",
       "role": "on_screen_text",
-      "used_by_shot_ids": ["vshot_002"],
+      "used_by_shot_ids": [
+        "vshot_002"
+      ],
       "timing_notes": "Minimal lower-third title appears for the final two seconds of the shot."
     }
   ],
   "storyboard_generation_policy": {
     "storyboard_frame_prompts_in_plan": true,
+    "default_generated_storyboard_artifact": "composite_storyboard_sheet",
+    "composite_storyboard_sheet_default": true,
+    "output_record_required_for_composite_sheet": true,
     "generated_storyboard_stills_allowed": false,
+    "individual_stills_require_separate_approval": true,
     "requires_explicit_artist_approval": true,
     "output_record_required_for_generated_stills": true,
-    "notes": "The fixture validates planning only; no storyboard stills have been generated."
+    "notes": "The fixture validates planning only. If storyboard generation is requested, the default generated artifact is one composite multi-panel storyboard sheet; individual stills require separate explicit approval."
   },
   "gates": {
     "symbology_gate": "complete",

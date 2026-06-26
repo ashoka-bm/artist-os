@@ -5,7 +5,8 @@
   "reviewer_execution": {
     "execution_mode": "fallback_separated_pass",
     "sub_agent_required": true,
-    "source_skill": "artist-os-writing-method-review"
+    "source_skill": "artist-os-writing-method-review",
+    "fallback_reason": "host_cannot_spawn_sub_agent"
   },
   "artifact_under_review": {
     "artifact_type": "beat_plan",

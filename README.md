@@ -119,6 +119,8 @@ The Text Journey drafts the written Output Artifact in a fresh-context sub-agent
 
 All critic and reviewer stages run as bounded sub-agent reviews. The creating agent does not self-review its own Story, Medium, Prompt, or Output review stage. Provider-backed generation still requires explicit approval; the output lifecycle applies after a generated, imported, drafted, or edited artifact exists.
 
+Artist OS has standing user authorization to spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. This does not authorize provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
+
 ## Repository Contents
 
 ```text

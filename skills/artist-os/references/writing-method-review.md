@@ -88,9 +88,10 @@ Every review must emit a Review Record JSON object that validates against `schem
 Set Review Record fields as follows:
 
 - `review_role`: `fragment_reviewer`, `beat_reviewer`, `story_critic`, `shape_reviewer`, or `writing_critic` for hybrid writing reviews.
-- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says sub-agents are unavailable.
+- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when the conductor explicitly says the host or tool policy blocked sub-agent spawning despite Standing Sub-Agent Authorization.
 - `reviewer_execution.sub_agent_required`: `true`.
 - `reviewer_execution.source_skill`: `artist-os-writing-method-review`.
+- `reviewer_execution.fallback_reason`: required only for `fallback_separated_pass`; use `host_cannot_spawn_sub_agent` or `tool_policy_blocks_sub_agent_spawn` as directed by the conductor.
 - `artifact_under_review.artifact_type`: `fragment_file`, `beat_plan`, `text_creative_brief`, or `text_draft`.
 - `upstream_context.artist_meaning_id`: include the governing Artist Meaning version.
 - `upstream_context.governing_refs`: include the Source Record when available, Artist Meaning record, Beat Plan when applicable, prior approved beat or opening promise when applicable, and the high-authority writing reference used.

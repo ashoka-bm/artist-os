@@ -253,7 +253,7 @@
     },
     "strategy_status": {
       "type": "string",
-      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+      "enum": ["accepted", "accepted_partial", "declined", "deferred", "not_applicable"]
     },
     "character_reference_strategy": {
       "type": "object",
@@ -393,6 +393,7 @@
         "image_role_id",
         "beat_id",
         "key_emotional_movement_id",
+        "reference_refs_used",
         "role_label",
         "composition_intent",
         "communication_intent",
@@ -407,6 +408,10 @@
         "image_role_id": { "type": "string", "pattern": "^imgrole_[a-zA-Z0-9_-]+$" },
         "beat_id": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" },
         "key_emotional_movement_id": { "type": "string", "pattern": "^kem_[a-zA-Z0-9_-]+$" },
+        "reference_refs_used": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(refsub|refout|refimg|vrs|char|out)_[a-zA-Z0-9_-]+$" }
+        },
         "role_label": { "type": "string" },
         "composition_intent": { "type": "string", "minLength": 1 },
         "communication_intent": { "type": "string", "minLength": 1 },

@@ -41,4 +41,6 @@ A compact multi-beat `arc` does not automatically trigger Long-Work Stewardship,
 
 The canonical shared gate order, critic roles, reviewer roles, mandatory bounded sub-agent review rule, and blocking behavior live in `docs/gates-and-reviews.md`.
 
+Standing Sub-Agent Authorization is also canonical there: Artist OS may spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns.
+
 Each journey file in this directory lists its local medium gates and medium-specific reviewers.

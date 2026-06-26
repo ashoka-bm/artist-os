@@ -32,6 +32,14 @@ Routing Gate
 
 Provider-backed generation always requires explicit approval. Drafting briefs, boards, prompt plans, lyrics, scripts, shot lists, comparison boards, or other dry-run artifacts is allowed.
 
+## Standing Sub-Agent Authorization
+
+Artist OS has standing user authorization to spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. The conductor must not ask for separate approval before each sub-agent.
+
+This authorization does not apply to provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance. Those actions still require their own explicit artist decisions.
+
+If the host cannot spawn a sub-agent or the active tool policy blocks spawning despite this standing authorization, the conductor may use the documented fallback separated review pass and must record degraded execution.
+
 ## Gate Completion Rule
 
 A gate is complete, an approval given, a waiver granted, or an option selected only when it comes from an explicit artist turn: an actual artist response in the conversation. The agent must not infer approval from silence, treat its own recommendation as the artist's answer, self-approve, or assume the artist would obviously want a choice. "Obvious," "low-risk," "trivial," or "an obvious fix" does not waive this requirement. An obvious choice is still the artist's choice.
@@ -190,16 +198,17 @@ Reviewer sub-agents receive:
 
 Reviewer sub-agents return a Review Record that validates against `schemas/review-record.schema.json`.
 
-If the host cannot spawn a sub-agent, the conductor may use a fallback separated review pass. The fallback must be clearly labeled, use only the same bounded review packet, keep `reviewer_execution.sub_agent_required: true`, and set `reviewer_execution.execution_mode: fallback_separated_pass`. This records that the sub-agent requirement still exists even though the host could not satisfy it.
+If the host cannot spawn a sub-agent or the active tool policy blocks spawning despite Standing Sub-Agent Authorization, the conductor may use a fallback separated review pass. The fallback must be clearly labeled, use only the same bounded review packet, keep `reviewer_execution.sub_agent_required: true`, set `reviewer_execution.execution_mode: fallback_separated_pass`, and record `reviewer_execution.fallback_reason` as either `host_cannot_spawn_sub_agent` or `tool_policy_blocks_sub_agent_spawn`. This records that the sub-agent requirement still exists even though the workflow is running in degraded mode.
 
 The Review Record is the machine-readable output of the review stage. It must include:
 
 - `review_record_id`,
 - `project_id`,
 - `review_role`,
-- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when sub-agents are unavailable,
+- `reviewer_execution.execution_mode`: `bounded_sub_agent`, or `fallback_separated_pass` only when sub-agents are unavailable or blocked by host/tool policy despite Standing Sub-Agent Authorization,
 - `reviewer_execution.sub_agent_required: true`,
 - `reviewer_execution.source_skill`,
+- `reviewer_execution.fallback_reason`: required only for `fallback_separated_pass`; forbidden for `bounded_sub_agent`,
 - `artifact_under_review`,
 - `upstream_context`,
 - `emotional_tension_review`,

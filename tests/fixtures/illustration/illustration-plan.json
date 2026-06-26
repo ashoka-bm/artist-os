@@ -10,14 +10,20 @@
   "character_reference_strategy": {
     "status": "accepted",
     "decision_ref": "gate_character_refs_threshold",
-    "character_template_refs": ["char_door_keeper"],
-    "visual_reference_sheet_plan_refs": ["vrs_door_keeper"],
+    "character_template_refs": [
+      "char_door_keeper"
+    ],
+    "visual_reference_sheet_plan_refs": [
+      "vrs_door_keeper"
+    ],
     "notes": "The artist wanted templates plus reference-sheet prompts for recurring implied character consistency."
   },
   "visual_reference_sheet_strategy": {
     "status": "accepted",
     "decision_ref": "gate_character_refs_threshold",
-    "visual_reference_sheet_plan_refs": ["vrs_door_keeper"],
+    "visual_reference_sheet_plan_refs": [
+      "vrs_door_keeper"
+    ],
     "notes": "Reference-sheet prompts are drafted; generated sheets still require Generation Approval."
   },
   "page_or_panel_plan": [
@@ -25,29 +31,57 @@
       "unit_id": "ilu_cover",
       "unit_type": "cover",
       "order_index": 1,
-      "text_section_refs": ["section_title"],
-      "beat_ids": ["beat_invitation"],
-      "key_emotional_movement_ids": ["kem_invitation_to_unease"],
+      "text_section_refs": [
+        "section_title"
+      ],
+      "beat_ids": [
+        "beat_invitation"
+      ],
+      "key_emotional_movement_ids": [
+        "kem_invitation_to_unease"
+      ],
       "visual_role": "Cover image that makes the warm threshold inviting and uncertain.",
       "image_type": "cover",
       "prompt_brief": "A quiet hallway cover image with the warm doorway as the main symbolic pull.",
-      "character_refs_used": ["char_door_keeper", "vrs_door_keeper"],
+      "character_refs_used": [
+        "char_door_keeper",
+        "vrs_door_keeper"
+      ],
       "style_continuity_notes": "Keep the unseen host implied through light rather than showing a figure.",
-      "approval_status": "planned"
+      "approval_status": "planned",
+      "reference_refs_used": [
+        "refsub_door_keeper",
+        "char_door_keeper",
+        "vrs_door_keeper"
+      ]
     },
     {
       "unit_id": "ilu_spread_threshold",
       "unit_type": "spread",
       "order_index": 2,
-      "text_section_refs": ["section_threshold"],
-      "beat_ids": ["beat_threshold"],
-      "key_emotional_movement_ids": ["kem_invitation_to_unease"],
+      "text_section_refs": [
+        "section_threshold"
+      ],
+      "beat_ids": [
+        "beat_threshold"
+      ],
+      "key_emotional_movement_ids": [
+        "kem_invitation_to_unease"
+      ],
       "visual_role": "Interior spread that turns approach into choice.",
       "image_type": "spread",
       "prompt_brief": "A child-readable but emotionally tense spread of the half-open door and warm light.",
-      "character_refs_used": ["char_door_keeper", "vrs_door_keeper"],
+      "character_refs_used": [
+        "char_door_keeper",
+        "vrs_door_keeper"
+      ],
       "style_continuity_notes": "Use the same warm practical light and restrained realism from the cover.",
-      "approval_status": "planned"
+      "approval_status": "planned",
+      "reference_refs_used": [
+        "refsub_door_keeper",
+        "char_door_keeper",
+        "vrs_door_keeper"
+      ]
     }
   ],
   "visual_continuity_rules": [

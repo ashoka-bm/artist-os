@@ -8,6 +8,10 @@ This document defines the runtime contract for delegated work. It applies to req
 
 Subagents may analyze, draft, validate, critique, or prepare disposable work packets.
 
+Artist OS has standing user authorization to spawn bounded internal subagents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. Do not ask for separate approval before each subagent.
+
+This standing authorization only governs internal worker delegation. It never authorizes provider-backed generation, uploads, paid actions, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
+
 Only the conductor may:
 
 - ask artist-facing gate or Decision Interview questions,
@@ -265,10 +269,10 @@ Audit workers return final structured results only. Handle malformed or incomple
 
 Subagent failure must be explicit.
 
-- Required reviewer failure: retry once if practical; if unavailable, use the documented fallback separated review pass and record degraded execution.
+- Required reviewer failure: retry once if practical; if the host or tool policy blocks spawning despite Standing Sub-Agent Authorization, use the documented fallback separated review pass and record degraded execution.
 - Optional prep-worker failure: continue without it when the conductor has enough context.
 - Parallel Production worker failure: report the failed unit, continue only for independent successful units, and do not pretend the missing unit exists.
-- Malformed structured output: ask the worker to repair once, then mark `failed` or run the fallback path.
+- Malformed structured output: ask the worker to repair once, then mark `failed`. Do not use the fallback separated review pass unless the host or tool policy blocks sub-agent spawning despite Standing Sub-Agent Authorization.
 - Rate limits: mark `rate_limited`; the conductor may retry later or switch to sequential execution if the unit remains needed.
 
 Partial fanout results are acceptable only when the missing workers are not required for the current gate, record, or output. Required critics, approval gates, schema validation, Output Records, and provider-boundary checks cannot be silently skipped.

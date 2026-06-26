@@ -216,7 +216,7 @@
     },
     "strategy_status": {
       "type": "string",
-      "enum": ["accepted", "declined", "deferred", "not_applicable"]
+      "enum": ["accepted", "accepted_partial", "declined", "deferred", "not_applicable"]
     },
     "character_reference_strategy": {
       "type": "object",

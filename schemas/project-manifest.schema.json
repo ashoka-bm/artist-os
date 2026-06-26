@@ -63,6 +63,7 @@
         "transformation_brief": { "type": "string" },
         "beat_plan": { "type": "string" },
         "long_work_stewardship_records_dir": { "type": "string" },
+        "reference_inventory": { "type": "string" },
         "image_medium_plan": { "type": "string" },
         "sound_medium_plan": { "type": "string" },
         "interpretation_gate": { "type": "string" },
@@ -156,7 +157,17 @@
       "required": ["path", "file_role", "status"],
       "properties": {
         "path": { "type": "string" },
-        "file_role": { "type": "string", "enum": ["review_draft", "accepted_work", "readable_summary", "personal_library_note"] },
+        "file_role": {
+          "type": "string",
+          "enum": [
+            "review_draft",
+            "accepted_work",
+            "reference_review_draft",
+            "accepted_reference",
+            "readable_summary",
+            "personal_library_note"
+          ]
+        },
         "status": { "type": "string", "enum": ["current", "missing", "stale", "archived"] },
         "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
         "updated_at": { "type": "string", "format": "date-time" }

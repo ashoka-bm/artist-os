@@ -1,0 +1,84 @@
+{
+  "visual_reference_sheet_plan_id": "vrs_hallway_threshold_location",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "reference_sheet_type": "setting",
+  "subject_ref": {
+    "ref_type": "source_record",
+    "ref_id": "src_door_left_lit",
+    "path_or_ref": "tests/fixtures/story/source-record.json"
+  },
+  "subject_description": "The same narrow apartment hallway at night with cool dark walls, worn floorboards, and a half-open apartment door spilling warm practical light.",
+  "style_direction_summary": "Cinematic live-action realism with quiet suspense and natural practical light.",
+  "view_layout": {
+    "layout_type": "three_angle_reference_package",
+    "background": "same location, same time of day, no reference-sheet studio background",
+    "views": [
+      {
+        "view_id": "view_establishing_angle",
+        "label": "Establishing angle",
+        "description": "Wide orientation image locking hallway length, door placement, floorboards, wall color, light source, entrances, exits, and scale."
+      },
+      {
+        "view_id": "view_reverse_angle",
+        "label": "Reverse angle",
+        "description": "Opposite-side view of the same hallway that confirms the spatial relationship to the warm doorway and fixed anchors."
+      },
+      {
+        "view_id": "view_functional_angle",
+        "label": "Functional staging angle",
+        "description": "Practical staging view showing movement path, foreground, midground, background, negative space, and camera-placement options."
+      }
+    ]
+  },
+  "reference_outputs": [
+    {
+      "reference_output_id": "refout_hallway_establishing",
+      "output_role": "location_establishing_angle",
+      "image_count": 1,
+      "prompt_text": "Wide establishing reference image of the same narrow apartment hallway at night, cool dark walls, worn floorboards, half-open apartment door at the far end spilling warm practical light, cinematic live-action realism, quiet suspense, show full layout, hallway length, entrances, exits, wall color, floor material, door placement, and primary light source, no people, leave negative space for staging.",
+      "layout_notes": "One wide orientation image for spatial anchors.",
+      "downstream_use": ["scene blocking", "wide storyboard shots", "location continuity"]
+    },
+    {
+      "reference_output_id": "refout_hallway_reverse",
+      "output_role": "location_reverse_angle",
+      "image_count": 1,
+      "prompt_text": "Reverse-angle reference image of the same narrow apartment hallway at night, viewed from near the warm half-open door back toward the cool dark hall, preserve the same floorboards, wall color, doorway geometry, light direction, scale, and fixed anchors, cinematic live-action realism, no people, no new doors or props.",
+      "layout_notes": "One reverse angle that proves the same space from the opposite side.",
+      "downstream_use": ["reverse shots", "camera orientation", "spatial continuity"]
+    },
+    {
+      "reference_output_id": "refout_hallway_functional",
+      "output_role": "location_functional_angle",
+      "image_count": 1,
+      "prompt_text": "Functional staging reference image of the same narrow apartment hallway at night, camera-height practical view showing where a camera or character could move, clear foreground, midground, and background layers, warm doorway light crossing the worn floorboards, cool wall shadows, consistent architecture and scale, no people, no clutter, leave negative space for blocking.",
+      "layout_notes": "One practical staging image for movement and shot planning.",
+      "downstream_use": ["blocking", "medium shots", "camera movement planning"]
+    }
+  ],
+  "prompt_text": "Promoted setting reference package. Create three separate images of the same narrow apartment hallway at night in cinematic live-action realism: establishing angle, reverse angle, and functional staging angle. Keep the same architecture, worn floorboards, cool dark walls, half-open warm doorway, light direction, scale, entrances, exits, and fixed spatial anchors across all three images. No characters. Leave negative space for staging.",
+  "generation_policy": {
+    "prompt_drafting_allowed": true,
+    "generation_requires_approval": true,
+    "approval_gate_id": null,
+    "notes": "This fixture validates prompt planning only; no location reference images have been generated."
+  },
+  "output_record_refs": [],
+  "traceability_summary": [
+    {
+      "source_type": "reference_evidence",
+      "source_ref": "src_door_left_lit",
+      "note": "The hallway, half-open door, warm light, and absence are taken from the Reference evidence."
+    },
+    {
+      "source_type": "style_direction",
+      "source_ref": "cinematic live-action realism",
+      "note": "All three planned location images preserve the approved style and light behavior."
+    }
+  ],
+  "created_at": "2026-06-25T18:06:00Z"
+}

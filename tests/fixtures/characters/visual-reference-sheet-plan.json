@@ -39,6 +39,19 @@
       }
     ]
   },
+  "reference_outputs": [
+    {
+      "reference_output_id": "refout_door_keeper_turnaround_reference_sheet",
+      "output_role": "character_turnaround_sheet",
+      "image_count": 1,
+      "prompt_text": "Create one four-view character reference sheet preserving the same identity, proportions, clothing, and restrained ordinary presence across all views.",
+      "layout_notes": "One composite sheet with full-body front three-quarter, full-body rear, front close-up, and left profile close-up views on a neutral background.",
+      "downstream_use": [
+        "character continuity planning",
+        "illustration and storyboard reference"
+      ]
+    }
+  ],
   "prompt_text": "Character reference sheet for style. Show the same ordinary restrained adult implied by the warm apartment doorway, simple everyday clothing, natural proportions, no theatrical horror details. Character reference sheet, four views on a neutral grey background: full-body front-facing three-quarter view; full-body rear view directly from behind; head and shoulders straight-on front close-up with clothing detail; head and shoulders 90-degree left profile close-up. Clean studio lighting, soft key light upper left, gentle fill from the right. Consistent character identity, proportions, and clothing details across all four views. No text, no watermarks, no extra figures, no background environment, cinematic live-action realism.",
   "generation_policy": {
     "prompt_drafting_allowed": true,

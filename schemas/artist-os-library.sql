@@ -192,6 +192,59 @@ ON assets(asset_type);
 CREATE INDEX IF NOT EXISTS idx_assets_stage
 ON assets(stage);
 
+CREATE TABLE IF NOT EXISTS reference_inventory_items (
+  reference_item_id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL,
+  reference_inventory_id TEXT NOT NULL,
+  category TEXT NOT NULL,
+  subject_slug TEXT NOT NULL,
+  subject_label TEXT NOT NULL,
+  current_status TEXT NOT NULL,
+  strategy_status TEXT NOT NULL,
+  continuity_risk_level TEXT NOT NULL,
+  provider_input_allowed INTEGER NOT NULL,
+  review_only INTEGER NOT NULL,
+  visible_subject_dir TEXT,
+  visible_review_drafts_dir TEXT,
+  visible_accepted_dir TEXT,
+  workspace_subject_dir TEXT,
+  visual_reference_sheet_plan_refs_json TEXT NOT NULL,
+  output_record_refs_json TEXT NOT NULL,
+  provider_role_hints_json TEXT NOT NULL,
+  payload_json TEXT NOT NULL,
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_reference_inventory_items_project
+ON reference_inventory_items(project_id);
+
+CREATE INDEX IF NOT EXISTS idx_reference_inventory_items_category_status
+ON reference_inventory_items(category, current_status);
+
+CREATE TABLE IF NOT EXISTS reference_inventory_images (
+  reference_image_id TEXT PRIMARY KEY,
+  reference_item_id TEXT NOT NULL,
+  project_id TEXT NOT NULL,
+  reference_inventory_id TEXT NOT NULL,
+  role TEXT NOT NULL,
+  status TEXT NOT NULL,
+  output_record_id TEXT,
+  visible_path TEXT,
+  workspace_path TEXT,
+  provider_input_allowed INTEGER NOT NULL,
+  review_only INTEGER NOT NULL,
+  provider_role_hints_json TEXT NOT NULL,
+  payload_json TEXT NOT NULL,
+  FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE,
+  FOREIGN KEY (reference_item_id) REFERENCES reference_inventory_items(reference_item_id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_reference_inventory_images_project
+ON reference_inventory_images(project_id);
+
+CREATE INDEX IF NOT EXISTS idx_reference_inventory_images_status
+ON reference_inventory_images(status);
+
 CREATE TABLE IF NOT EXISTS events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   event_id TEXT,

@@ -73,6 +73,7 @@ Review Records should validate against `schemas/review-record.schema.json`.
 
 These are the invariants that are not derivable from the product theory. The runtime rules they used to restate now live in their canonical docs (below), so this list stays short and authoritative.
 
+- Artist OS has standing user authorization to spawn bounded internal subagents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. Do not ask for separate approval before each subagent.
 - Do not make provider-backed generation calls without explicit user approval. Drafting prompts and boards is always allowed; sending them to a provider is not.
 - Use Dry Runs before invoking any media generation provider.
 - Do not commit user-provided media, Generated Works, Workspace Library project folders, private artist references, secrets, or API keys.
