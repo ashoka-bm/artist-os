@@ -1123,6 +1123,106 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
             validate(record, schema, schema)
 
+    def test_video_medium_plan_requires_narrative_depth(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        del record["narrative_depth"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'narrative_depth'"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_full_story_requires_story_template_ref(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "full_story"
+        record["story_template_ref"] = None
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected string"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_micro_journey_requires_template_ref(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "micro_journey"
+        record["story_template_ref"] = None
+        record["micro_journey_template_ref"] = None
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected string"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_accepts_micro_journey_template_ref(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "micro_journey"
+        record["story_template_ref"] = None
+        record["micro_journey_template_ref"] = "product_reveal"
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_video_medium_plan_accepts_promoted_micro_journey_template_refs(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        schema = load_json(schema_path)
+
+        for template_ref in ["problem_solution_demo", "how_to_tip_demo"]:
+            with self.subTest(template_ref=template_ref):
+                record = load_json(data_path)
+                record["narrative_depth"] = "micro_journey"
+                record["story_template_ref"] = None
+                record["micro_journey_template_ref"] = template_ref
+                validate(record, schema, schema)
+
+    def test_video_medium_plan_rejects_unpromoted_micro_journey_template_ref(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "micro_journey"
+        record["story_template_ref"] = None
+        record["micro_journey_template_ref"] = "social_proof_receipt"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "is not one of"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_utility_sequence_requires_asset_purpose_brief(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "utility_sequence"
+        record["story_template_ref"] = None
+        record["asset_purpose_brief"] = None
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected object"):
+            validate(record, schema, schema)
+
+    def test_video_medium_plan_accepts_utility_sequence_asset_purpose_brief(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "video-medium-plan.json"
+        record = load_json(data_path)
+        record["narrative_depth"] = "utility_sequence"
+        record["story_template_ref"] = None
+        record["micro_journey_template_ref"] = None
+        record["asset_purpose_brief"] = {
+            "role_use_context": "Reusable insert asset for creator explainer videos.",
+            "subject": "Approved still frame of the AI video workflow toolkit.",
+            "visual_purpose": "Make the workflow feel concrete and repeatable.",
+            "placement": ["under voiceover", "section transition"],
+            "duration_target": "6-8 seconds",
+            "shot_or_asset_count": "one looping B-roll utility asset",
+            "motion_behavior": "Subtle product spin or timeline insert from the approved still.",
+            "loop_or_resolution_behavior": "Returns to the approved still or resolves to a held transition plate.",
+            "style_constraints": ["preserve approved still composition", "avoid generic AI UI"],
+            "reference_or_continuity_needs": ["approved still frame", "workflow toolkit style reference"],
+            "audio_text_posture": "Silent raw asset; preserve only approved still text.",
+            "success_criteria": ["loops cleanly", "keeps the approved still recognizable"],
+            "downstream_export_notes": "Provider-specific loop and frame-rate instructions wait for export."
+        }
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
     def test_workflow_scale_supports_are_enum_backed(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json"

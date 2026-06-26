@@ -13,6 +13,10 @@
     "render_adapter_status": "future_adapter"
   },
   "story_mode": "three_part_sequence",
+  "narrative_depth": "full_story",
+  "story_template_ref": "three_part_threshold_sequence",
+  "micro_journey_template_ref": null,
+  "asset_purpose_brief": null,
   "workflow_scale_routing": {
     "scale_level": "compact_artifact",
     "rationale": "A compact 30 second storyboard can stage invitation, threshold, and residue without long-form continuity support.",

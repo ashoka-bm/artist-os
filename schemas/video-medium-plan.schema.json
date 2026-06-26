@@ -15,6 +15,10 @@
     "rendering_status",
     "provider_boundary",
     "story_mode",
+    "narrative_depth",
+    "story_template_ref",
+    "micro_journey_template_ref",
+    "asset_purpose_brief",
     "workflow_scale_routing",
     "video_format",
     "symbology_direction",
@@ -51,6 +55,24 @@
       }
     },
     "story_mode": { "$ref": "#/$defs/story_mode" },
+    "narrative_depth": { "$ref": "#/$defs/narrative_depth" },
+    "story_template_ref": { "type": ["string", "null"], "minLength": 1 },
+    "micro_journey_template_ref": {
+      "type": ["string", "null"],
+      "enum": [
+        "unboxing_reveal",
+        "product_reveal",
+        "ugc_testimonial",
+        "fashion_fit_check",
+        "quick_before_after_demo",
+        "problem_solution_demo",
+        "how_to_tip_demo",
+        "creator_showcase_moment",
+        "day_in_the_life_signal",
+        null
+      ]
+    },
+    "asset_purpose_brief": { "$ref": "#/$defs/asset_purpose_brief_nullable" },
     "workflow_scale_routing": { "$ref": "#/$defs/workflow_scale_routing" },
     "character_reference_strategy": { "$ref": "#/$defs/character_reference_strategy" },
     "visual_reference_sheet_strategy": { "$ref": "#/$defs/visual_reference_sheet_strategy" },
@@ -117,10 +139,169 @@
       "items": { "$ref": "#/$defs/traceability_note" }
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "required": ["narrative_depth"],
+        "properties": {
+          "narrative_depth": { "const": "full_story" }
+        }
+      },
+      "then": {
+        "properties": {
+          "story_template_ref": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["narrative_depth"],
+        "properties": {
+          "narrative_depth": { "const": "micro_journey" }
+        }
+      },
+      "then": {
+        "properties": {
+          "micro_journey_template_ref": { "$ref": "#/$defs/micro_journey_template_id" }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["narrative_depth"],
+        "properties": {
+          "narrative_depth": { "const": "utility_sequence" }
+        }
+      },
+      "then": {
+        "properties": {
+          "asset_purpose_brief": { "$ref": "#/$defs/asset_purpose_brief" }
+        }
+      }
+    }
+  ],
   "$defs": {
     "story_mode": {
       "type": "string",
       "enum": ["single_beat", "beat_pair", "three_part_sequence", "sequence", "scene", "arc", "world"]
+    },
+    "narrative_depth": {
+      "type": "string",
+      "enum": ["full_story", "micro_journey", "utility_sequence"]
+    },
+    "micro_journey_template_id": {
+      "type": "string",
+      "enum": [
+        "unboxing_reveal",
+        "product_reveal",
+        "ugc_testimonial",
+        "fashion_fit_check",
+        "quick_before_after_demo",
+        "problem_solution_demo",
+        "how_to_tip_demo",
+        "creator_showcase_moment",
+        "day_in_the_life_signal"
+      ]
+    },
+    "asset_purpose_brief_nullable": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "role_use_context",
+        "subject",
+        "visual_purpose",
+        "placement",
+        "duration_target",
+        "shot_or_asset_count",
+        "motion_behavior",
+        "loop_or_resolution_behavior",
+        "style_constraints",
+        "reference_or_continuity_needs",
+        "audio_text_posture",
+        "success_criteria",
+        "downstream_export_notes"
+      ],
+      "properties": {
+        "role_use_context": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string", "minLength": 1 },
+        "visual_purpose": { "type": "string", "minLength": 1 },
+        "placement": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "duration_target": { "type": "string", "minLength": 1 },
+        "shot_or_asset_count": { "type": "string", "minLength": 1 },
+        "motion_behavior": { "type": "string", "minLength": 1 },
+        "loop_or_resolution_behavior": { "type": "string", "minLength": 1 },
+        "style_constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reference_or_continuity_needs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "audio_text_posture": { "type": "string", "minLength": 1 },
+        "success_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "downstream_export_notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "asset_purpose_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_use_context",
+        "subject",
+        "visual_purpose",
+        "placement",
+        "duration_target",
+        "shot_or_asset_count",
+        "motion_behavior",
+        "loop_or_resolution_behavior",
+        "style_constraints",
+        "reference_or_continuity_needs",
+        "audio_text_posture",
+        "success_criteria",
+        "downstream_export_notes"
+      ],
+      "properties": {
+        "role_use_context": { "type": "string", "minLength": 1 },
+        "subject": { "type": "string", "minLength": 1 },
+        "visual_purpose": { "type": "string", "minLength": 1 },
+        "placement": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "duration_target": { "type": "string", "minLength": 1 },
+        "shot_or_asset_count": { "type": "string", "minLength": 1 },
+        "motion_behavior": { "type": "string", "minLength": 1 },
+        "loop_or_resolution_behavior": { "type": "string", "minLength": 1 },
+        "style_constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reference_or_continuity_needs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "audio_text_posture": { "type": "string", "minLength": 1 },
+        "success_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "downstream_export_notes": { "type": "string", "minLength": 1 }
+      }
     },
     "gate_status": {
       "type": "string",

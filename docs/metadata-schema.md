@@ -119,7 +119,7 @@ Do not let `shot_design` default to full-body character framing. Close shots sho
 
 A Video Medium Plan is the typed video translation layer between the shared Beat Plan and the Video Creative Brief. It validates against `schemas/video-medium-plan.schema.json`.
 
-The v0 implementation is storyboard-ready planning only. It owns Video Format, Video Style Expression, Visual Dynamics over time, Video Sequences when needed, Video Scenes, Storyboard Shots, audio posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet. It does not create a Video Prompt Plan or finished video.
+The v0 implementation is storyboard-ready planning only. It owns Narrative Depth, selected Story or Micro-Journey Template refs when present, Asset Purpose Brief for utility sequences, Video Format, Video Style Expression, Visual Dynamics over time, Video Sequences when needed, Video Scenes, Storyboard Shots, audio posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet. It does not create a Video Prompt Plan or finished video.
 
 Video Medium Plans use the same Symbology Direction and Style Direction concepts as Image Medium Plans. Video adds medium-specific choices for rendering mode, camera style, motion style, edit style, scene/sequence structure, shot logic, motion/pacing/transition logic, and audio posture.
 

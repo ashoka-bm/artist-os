@@ -1,0 +1,61 @@
+{
+  "manifest_version": "0.1.0",
+  "scope": "Draft video template research for story structures, hook direction, format templates, and provider export placement.",
+  "references": [
+    {
+      "reference_id": "ref_speech_hook_openings_transcript_001",
+      "title": "Speech Hook Openings Transcript",
+      "source_path": "/Users/ashokaji/.codex/attachments/8786134b-a777-4412-8418-2aa866f1cd48/pasted-text.txt",
+      "source_type": "transcript",
+      "analysis_path": "references/analyses/speech-hook-openings-transcript.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as hook-direction evidence; rewrite in Artist OS language.",
+      "notes": "Identifies five opening hook types: question, surprising statement, story-in-the-moment, big promise, and visual action hook."
+    },
+    {
+      "reference_id": "ref_five_line_story_method_transcript_001",
+      "title": "Five-Line Story Method Transcript",
+      "source_path": "/Users/ashokaji/.codex/attachments/1db048b4-27f9-4e78-91d6-721161a01312/pasted-text.txt",
+      "source_type": "transcript",
+      "analysis_path": "references/analyses/five-line-story-method-transcript.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as story-structure evidence; rewrite in Artist OS language.",
+      "notes": "Defines a scalable story skeleton: situation, desire, conflict, change, result."
+    },
+    {
+      "reference_id": "ref_youtube_speaking_script_delivery_notes_001",
+      "title": "YouTube Speaking And Script Delivery Notes Transcript",
+      "source_path": "/Users/ashokaji/.codex/attachments/4b79d1b5-77e4-4473-9f25-3736c64671ef/pasted-text.txt",
+      "source_type": "transcript",
+      "analysis_path": "references/analyses/youtube-speaking-script-delivery-notes.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as on-camera delivery and script-direction evidence; rewrite in Artist OS language.",
+      "notes": "Identifies five creator-video delivery problems: formal voice, perfection over connection, unclear intended feeling, unsupported points, and going in cold."
+    },
+    {
+      "reference_id": "ref_storytelling_zoom_into_moment_transcript_001",
+      "title": "Storytelling Zoom Into The Moment Transcript",
+      "source_path": "/Users/ashokaji/.codex/attachments/a12123e9-f048-414a-98ba-b2e0c21f115d/pasted-text.txt",
+      "source_type": "transcript",
+      "analysis_path": "references/analyses/storytelling-zoom-into-moment-transcript.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as scene-level storytelling direction; rewrite in Artist OS language.",
+      "notes": "Extracts five embodiment techniques: location, action, raw thought, visible emotion, and dialogue."
+    },
+    {
+      "reference_id": "ref_seven_cuts_editing_storytelling_transcript_001",
+      "title": "Seven Cuts Editing Storytelling Transcript",
+      "source_path": "/Users/ashokaji/.codex/attachments/bbb31231-a400-476e-841b-19ce5c815029/pasted-text.txt",
+      "source_type": "transcript",
+      "analysis_path": "references/analyses/seven-cuts-editing-storytelling-transcript.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as edit-direction evidence; rewrite in Artist OS language.",
+      "notes": "Extracts edit cut functions: flow cut, smash cut, jump cut, action cut, wide-medium-close pattern, match cut, and rhythm cut."
+    }
+  ]
+}

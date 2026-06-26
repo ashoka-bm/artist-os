@@ -194,6 +194,10 @@ class PipelineTransitionTests(unittest.TestCase):
         self.assertEqual(video_plan["target_media_type"], "video")
         self.assertEqual(video_plan["implementation_scope"], "storyboard_plan")
         self.assertEqual(video_plan["rendering_status"], "not_supported")
+        self.assertEqual(video_plan["narrative_depth"], "full_story")
+        self.assertTrue(video_plan["story_template_ref"])
+        self.assertIsNone(video_plan["micro_journey_template_ref"])
+        self.assertIsNone(video_plan["asset_purpose_brief"])
         self.assertTrue(video_plan["storyboard_generation_policy"]["storyboard_frame_prompts_in_plan"])
         self.assertEqual(
             video_plan["storyboard_generation_policy"]["default_generated_storyboard_artifact"],

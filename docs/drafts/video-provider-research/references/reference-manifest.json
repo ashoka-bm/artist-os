@@ -1,0 +1,162 @@
+{
+  "manifest_version": "0.1.0",
+  "scope": "Draft video-provider prompt research after storyboard-ready planning.",
+  "references": [
+    {
+      "reference_id": "ref_higgsfield_seedance_master_prompter_001",
+      "title": "I Clone Master Prompter for Higgsfield",
+      "source_path": "/Users/ashokaji/Downloads/I_Clone_Master_Prompter_for_Higgsfield.md",
+      "source_type": "prompting guide",
+      "providers_mentioned": ["Higgsfield", "Seedance 2.0"],
+      "analysis_path": "references/analyses/higgsfield-seedance-master-prompter.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Analyze and rewrite in original Artist OS language; do not copy wholesale.",
+      "notes": "Strongest source for reusable provider-specific logic and failure-mode patterns."
+    },
+    {
+      "reference_id": "ref_higgsfield_seedance_prompt_pack_001",
+      "title": "Dan Kieft's Create Insane AI Videos of Yourself Using Seedance 2.0 Prompt Pack",
+      "source_path": "/Users/ashokaji/.codex/attachments/39e4be8a-f5ab-4bb4-832d-2031457f937d/pasted-text.txt",
+      "source_type": "prompt pack and examples",
+      "providers_mentioned": ["Higgsfield", "Seedance 2.0"],
+      "analysis_path": "references/analyses/higgsfield-seedance-prompt-pack.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as example coverage and anti-regression material; do not copy prompt examples into production docs.",
+      "notes": "Contains useful sample types but also older patterns superseded by the master guide."
+    },
+    {
+      "reference_id": "ref_higgsfield_supercomputer_sitcom_intro_001",
+      "title": "Intro Video - Prompt for Higgsfield Supercomputer",
+      "source_path": "conversation:2026-06-24:user-pasted-reference",
+      "source_type": "concept prompt and journey seed",
+      "providers_mentioned": ["Higgsfield Supercomputer", "Seedance 2.0"],
+      "analysis_path": "references/analyses/higgsfield-supercomputer-sitcom-intro.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as a journey seed and rewrite as original Artist OS analysis.",
+      "notes": "Introduces a three-scene chronological narrative with sitcom style, character variant generation, repeated career-replacement beats, and fade-to-black transitions."
+    },
+    {
+      "reference_id": "ref_higgsfield_supercomputer_explainer_toolkit_graphics_001",
+      "title": "Motion Graphics - Prompt for Higgsfield Supercomputer",
+      "source_path": "conversation:2026-06-24:user-pasted-reference",
+      "source_type": "motion graphics package brief",
+      "providers_mentioned": ["Higgsfield Supercomputer"],
+      "analysis_path": "references/analyses/higgsfield-supercomputer-explainer-toolkit-graphics.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as a journey seed and rewrite as original Artist OS analysis.",
+      "notes": "Introduces a multi-asset motion-graphics b-roll package with style continuity from an approved still."
+    },
+    {
+      "reference_id": "ref_daankieft_ai_influencer_repo_001",
+      "title": "DaanKieft/ai-influencer",
+      "source_path": "https://github.com/DaanKieft/ai-influencer",
+      "source_type": "GitHub repository and app implementation",
+      "providers_mentioned": ["Higgsfield", "Seedance 2.0", "GPT Image 2", "Marketing Studio", "Higgsfield Soul", "Virality Predictor"],
+      "analysis_path": "references/analyses/daankieft-ai-influencer-repo.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as architecture and pattern evidence; do not copy app code, bundled skills, or long prompt docs into Artist OS.",
+      "notes": "Large reference source covering AI influencer identity creation, reference sheets, photo studio prompts, Higgsfield generation utilities, Seedance video prompting, and Marketing Studio campaign workflows."
+    },
+    {
+      "reference_id": "ref_seedance_animation_prompt_pack_001",
+      "title": "Dan Kieft's Seedance 2.0 AI Animation Prompt Pack",
+      "source_path": "/Users/ashokaji/.codex/attachments/18f50a2a-61c8-4ea3-a069-e5b97ae0a8ec/pasted-text.txt",
+      "source_type": "animation prompt pack and examples",
+      "providers_mentioned": ["Higgsfield", "Seedance 2.0", "GPT Image 2"],
+      "analysis_path": "references/analyses/seedance-animation-prompt-pack.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as animation workflow evidence and rewrite as original Artist OS analysis; do not copy prompt examples into production docs.",
+      "notes": "Introduces character reference sheets, start/end frame animation, storyboard-to-video, mixed-media element integration, camera-control tests, and restyle-before-animation flows."
+    },
+    {
+      "reference_id": "ref_multi_shot_prompt_framework_animation_001",
+      "title": "Multi-Shot Prompt Framework Animation",
+      "source_path": "/Users/ashokaji/Downloads/multi-shot-prompt-framework-animation (1).md",
+      "source_type": "animation prompt-builder framework",
+      "providers_mentioned": ["Seedance", "Kling", "Wan", "Hailuo", "Veo", "Runway", "Luma", "Higgsfield"],
+      "analysis_path": "references/analyses/multi-shot-prompt-framework-animation.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as compact multi-shot prompt-contract evidence and rewrite as original Artist OS analysis.",
+      "notes": "Defines a 15-second, 3-to-7-shot, timecoded animation prompt under 1,500 characters with shot size, lens, angle, movement, location, and audio metadata."
+    },
+    {
+      "reference_id": "ref_animation_frameworks_style_and_scene_pack_001",
+      "title": "Animation Frameworks, Style Build, Character Sheet, Location Sheet, Scene Prompts",
+      "source_path": "/Users/ashokaji/.codex/attachments/27479c05-b3d0-4183-8493-9b37073651b3/pasted-text.txt",
+      "source_type": "animation reference-sheet and scene prompt examples",
+      "providers_mentioned": ["Seedance", "GPT Image 2"],
+      "analysis_path": "references/analyses/animation-frameworks-style-scene-pack.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as reference-kit and scene-pack evidence; do not copy scene examples into production docs.",
+      "notes": "Introduces style build prompts, four-view character sheets, four-view location sheets, still scene prompts, and matching timecoded video prompts."
+    },
+    {
+      "reference_id": "ref_multi_shot_prompt_framework_cinematic_001",
+      "title": "Multi-Shot Prompt Framework",
+      "source_path": "/Users/ashokaji/Downloads/multi-shot-prompt-framework.md",
+      "source_type": "cinematic prompt-builder framework",
+      "providers_mentioned": ["Seedance", "Kling", "Sora", "Veo", "Runway", "Luma", "Hailuo", "Wan", "Higgsfield"],
+      "analysis_path": "references/analyses/multi-shot-prompt-framework-cinematic.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as compact cinematic prompt-contract evidence and rewrite as original Artist OS analysis.",
+      "notes": "Defines a 15-second, 3-to-7-shot cinematic prompt under 1,500 characters from an uploaded reference image, with fixed Location, Style, and Audio metadata."
+    },
+    {
+      "reference_id": "ref_jackvsai_fashion_campaign_prompt_framework_001",
+      "title": "JACKVSAI Fashion Campaign Prompt Framework",
+      "source_path": "/Users/ashokaji/Downloads/jackvsai-fashion-campaign-prompt-framework (1).skill",
+      "source_type": "zipped skill bundle with fashion campaign prompt framework",
+      "providers_mentioned": ["Seedance", "Kling", "Higgsfield", "AI video generators"],
+      "analysis_path": "references/analyses/jackvsai-fashion-campaign-prompt-framework.md",
+      "date_added": "2026-06-24",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as garment-led compact fashion campaign export evidence; do not install or copy the skill wholesale.",
+      "notes": "Defines a 15-second, 6-to-7-shot streetwear/editorial fashion prompt under 1,000 characters with garment-first analysis, constant model movement, negative space, attitude beat, and one-paragraph output."
+    },
+    {
+      "reference_id": "ref_calesthio_openmontage_repo_001",
+      "title": "calesthio/OpenMontage",
+      "source_path": "https://github.com/calesthio/OpenMontage",
+      "source_type": "GitHub repository and agentic video production system",
+      "providers_mentioned": ["Remotion", "HyperFrames", "FFmpeg", "Piper TTS", "Archive.org", "NASA", "Wikimedia Commons", "Pexels", "Unsplash", "Pixabay", "fal.ai", "Veo", "Kling", "Runway", "Suno", "ElevenLabs", "OpenAI"],
+      "analysis_path": "references/analyses/calesthio-openmontage-repo.md",
+      "date_added": "2026-06-25",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as architecture and pipeline-governance evidence; do not copy code, bundled skills, or provider instructions into Artist OS.",
+      "notes": "Introduces a post-storyboard production architecture: pipeline manifests, stage director skills, canonical artifacts, capability menus, scored provider/runtime choices, cost checkpoints, and render validation."
+    },
+    {
+      "reference_id": "ref_seedance_2_platform_notes_001",
+      "title": "Seedance 2 Platform Notes From Conversation",
+      "source_path": "conversation:2026-06-26:user-pasted-reference",
+      "source_type": "provider-specific direction notes",
+      "providers_mentioned": ["Seedance 2"],
+      "analysis_path": "references/analyses/seedance-2-platform-notes.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as provider-export guidance; do not let platform constraints define story templates.",
+      "notes": "Adds Seedance 2 draft rules: 24fps, Chinese prompts, <=15s clips, last-frame continuity, concrete camera and lighting, no subtitles/music by default, close framing for interaction, fewer subjects, background motion, style refs, minimal action, and film grain."
+    },
+    {
+      "reference_id": "ref_dan_kieft_cinematic_seedance_updated_001",
+      "title": "Dan Kieft Cinematic Seedance Updated",
+      "source_path": "/Users/ashokaji/Desktop/Video Ref/Dan Kieft Cinematic Seedance Updated.md",
+      "source_type": "Seedance 2 cinematic prompt protocol",
+      "providers_mentioned": ["Seedance 2", "GPT Image 2"],
+      "analysis_path": "references/analyses/dan-kieft-cinematic-seedance-updated.md",
+      "date_added": "2026-06-26",
+      "analysis_status": "analyzed",
+      "reuse_policy": "Use as provider-export protocol evidence and rewrite in Artist OS language; do not copy prompt templates wholesale.",
+      "notes": "Adds detailed Seedance 2 rules for Chinese prompt shape, duration-derived shot count, reference tray tags, audio tags, shot-list handoff, start-frame mode, camera language, continuity, realism, moderation risks, and GPT Image 2 reference-sheet preparation."
+    }
+  ]
+}

@@ -120,6 +120,18 @@ _Avoid_: Video Medium Plan, Video Storyboard, Text Medium Plan, Image Medium Pla
 The video-specific Medium Plan that translates an approved Beat Plan into sequences, Video Scenes, timed Storyboard Shots, visual style, shot list, motion, transitions, script or audio relationships, and storyboard planning; v0 stops at storyboard-ready planning rather than finished video generation.
 _Avoid_: Storyboard pre-plan, finished video, provider-specific video job
 
+**Narrative Depth**:
+The Video Medium Plan classification of how much story structure a video needs: `full_story` (a complete hook, pressure, turn, consequence, and payoff, using or adapting the Beat Plan's Story Structure), `micro_journey` (a compact hook-to-payoff movement without full Story Structure — unboxings, short creator posts, demos, showcases, quick social videos), or `utility_sequence` (functional footage defined by asset purpose rather than narrative — B-roll packages, motion-graphics sets, process visuals). It drives which template or brief the plan must carry: `full_story` requires a Story Template reference, `micro_journey` a Micro-Journey Template, and `utility_sequence` an Asset Purpose Brief.
+_Avoid_: Video Format, Story Mode, finished render
+
+**Micro-Journey Template**:
+The reusable compact hook-to-payoff shape selected when Narrative Depth is `micro_journey`, recorded on the Video Medium Plan as `micro_journey_template_ref`. It supplies a short movement without forcing full Story Structure.
+_Avoid_: Story Template, full Story Structure, Video Format
+
+**Asset Purpose Brief**:
+The Video Medium Plan record required when Narrative Depth is `utility_sequence`: it defines asset purpose, placement, duration, motion, style constraints, and success criteria in place of narrative structure, for B-roll, motion graphics, and process visuals.
+_Avoid_: Narrative structure, Story Template, finished render
+
 **Video Creative Brief**:
 The video-specific Creative Brief that compiles Artist Meaning, Transformation Brief, Beat Plan, and Video Medium Plan into an approved handoff for video storyboard or future video prompt planning.
 _Avoid_: Video Medium Plan, screenplay, finished storyboard
