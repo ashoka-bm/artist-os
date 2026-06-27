@@ -140,6 +140,10 @@ _Avoid_: Story Template, full Story Structure, Video Format
 The Video Medium Plan record required when Narrative Depth is `utility_sequence`: it defines asset purpose, placement, duration, motion, style constraints, and success criteria in place of narrative structure, for B-roll, motion graphics, and process visuals.
 _Avoid_: Narrative structure, Story Template, finished render
 
+**Video Format Recommendation**:
+The recommendation-first decision that maps the story type and Beat Plan shape into a video format such as short social video, single scene, trailer, montage, music video, short film, feature film, or episodic sequence. It must cite what the story is and how many smallest Story Beats or Story Movements it needs before asking the artist to confirm or correct the format.
+_Avoid_: Asking a broad video menu without analysis, treating the recommendation as artist approval
+
 **Video Creative Brief**:
 The video-specific Creative Brief that compiles Artist Meaning, Transformation Brief, Beat Plan, and Video Medium Plan into an approved handoff for video storyboard or future video prompt planning.
 _Avoid_: Video Medium Plan, screenplay, finished storyboard

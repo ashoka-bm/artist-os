@@ -30,6 +30,7 @@
     "beat_plan_id": { "type": ["string", "null"], "pattern": "^bp_[a-zA-Z0-9_-]+$" },
     "reference_sheet_type": {
       "type": "string",
+      "description": "Visual layout target for the sheet. A promoted Reference Inventory location subject (subject_category \"location\") is planned as reference_sheet_type \"setting\"; the continuity-subject taxonomy and this layout vocabulary use different words for the same subject family.",
       "enum": ["character", "product", "object", "setting", "style"]
     },
     "subject_ref": { "$ref": "#/$defs/ref_or_null" },

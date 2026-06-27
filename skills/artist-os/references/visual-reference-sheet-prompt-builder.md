@@ -8,6 +8,7 @@ Paths like `schemas/visual-reference-sheet-plan.schema.json`, `schemas/character
 
 - Drafting reference-sheet prompts is allowed automatically.
 - Generating the actual reference sheet image requires explicit Generation Approval for that call or approved batch.
+- When a reference sheet or style target would materially reduce drift for image, illustration, or video work, proactively recommend generating it instead of waiting for the artist to ask. Name the planned images and include a rough estimate, usually about 1-3 minutes per image depending on provider queue and image complexity.
 - Every generated or imported reference sheet used downstream needs provenance through an Output Record or Asset Metadata.
 - If the artist declines reference sheets, record `declined` and do not ask again in the same flow.
 - If Style Direction changes after a prompt is drafted, revise the Visual Reference Sheet Plan before generation.
@@ -27,7 +28,7 @@ Use the relevant subject record or description:
 
 Promote a character, location, product, object, setting, or prop into reference status only when the story or downstream medium needs visual continuity. Use promotion when the subject is main, recurring, meaning-bearing, handled closely, blocking-critical, or likely to drift across scenes or generated outputs. Do not promote incidental background details.
 
-For promoted subjects, draft prompt plans only. Generating the actual reference images still requires Generation Approval and later Output Records.
+For promoted subjects, draft prompt plans automatically. Then ask whether to generate the smallest useful batch now, unless the artist has already declined or deferred reference sheets in this flow. Generating the actual reference images still requires Generation Approval and later Output Records.
 
 ## Promoted Character Reference Package Template
 
@@ -141,3 +142,9 @@ The plan must include:
 - traceability back to Artist Meaning, Character Template, style decision, source evidence, or gate decision.
 
 Do not generate the image. Stop at the prompt plan unless the artist explicitly approves generation.
+
+When asking for generation approval, use concrete batch language:
+
+```text
+I recommend generating these reference images now: [LIST EXACT REFERENCE OUTPUTS]. It usually takes about 1-3 minutes per image, depending on provider queue and image complexity, and gives the storyboard/image prompts stronger style and identity anchors. Do you approve generating this batch?
+```

@@ -54,7 +54,7 @@ Reference Inventory uses separate status layers:
 - per-output `output_status`: `planned`, `imported_candidate`, `generated_draft`, `accepted`, `rejected`, `replaced`, `retired`, or `waived`.
 - per-output `readiness`: `missing`, `planned`, `draft_generated`, `accepted`, or `waived`.
 
-`accepted_for_planning` unlocks automatic Visual Reference Sheet Plan prompt drafting. Drafting prompts is non-costly and reversible. Generation remains a separate explicit approval gate. Reference Readiness is a later gate: required outputs must be `accepted` or `waived` before storyboard export, image prompt export, illustration prompt export, or provider video generation.
+`accepted_for_planning` unlocks automatic Visual Reference Sheet Plan prompt drafting. Drafting prompts is non-costly and reversible. Generation remains a separate explicit approval gate. Reference Readiness is a later precondition check (not a recorded Gate Decision; `gate-decision.schema.json` has no `reference_readiness` gate_type): required outputs must be `accepted` or `waived` before storyboard export, image prompt export, illustration prompt export, or provider video generation.
 
 ## Consequences
 
