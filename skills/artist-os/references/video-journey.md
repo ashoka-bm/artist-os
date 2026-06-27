@@ -24,6 +24,14 @@ Load details only when needed:
 - `skills/artist-os/references/text-to-suno-plan.md` when music, sound design, or a sound prompt plan becomes a first-class deliverable.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 
+## Process Topic Files
+
+The detailed planning, drafting, review, and output steps live in per-topic files under `skills/artist-os/references/video/`. Load only the one the current step needs:
+
+- `skills/artist-os/references/video/video-medium-plan-process.md` — the full Video Medium Plan Process: Symbology and Style resolution, the Video Format Recommendation, narrative-depth recording, continuity scan and Reference Inventory, scenes, Storyboard Shots, Shot Design, Video Audio Posture, and storyboard generation policy.
+- `skills/artist-os/references/video/draft-brief-and-review.md` — the Draft Video Creative Brief Process and the Video Critic Review checklist.
+- `skills/artist-os/references/video/traceability-and-outputs.md` — the Traceability Rules and the Video Journey Outputs.
+
 ## Hard Gates
 
 These hold whether you run standalone or under the `artist-os` conductor:
@@ -75,80 +83,8 @@ For `utility_sequence`, create the Video Medium Plan `asset_purpose_brief`. Incl
 
 Utility sequences still need Intended Feeling and traceability, but they should not invent false conflict, character arc, or story turns just to satisfy story-shaped language.
 
-## Video Medium Plan Process
+## Long-Work Foundation Rule
 
-Use this only after the shared Transformation Brief and Beat Plan exist.
-
-1. Resolve Symbology Direction before style: what the video should show as the core symbolic representation of Artist Meaning.
-2. Resolve Style Direction with the shared Style Gate or Style Interview. Then record Video Style Expression: rendering mode, camera style, motion style, edit style, caption typography, and color/light style.
-3. Treat the artist's early video choice as Format Intent, not a hard lock. Confirm the accepted output shape in `medium_output_shape_recommendation` before scene and shot planning harden.
-4. Produce a Video Format Recommendation before asking the artist to choose. Analyze what kind of story this is, count the approved smallest Story Beats and Story Movements, then recommend the format that best fits that shape: short social video, single scene, trailer, montage, music video, explainer, performance clip, short film, feature film, episodic sequence, or other. Present the recommendation first with its story-type and Beat-count rationale, then ask the artist to confirm or correct it; use a broad menu only when the story material is too thin to infer a recommendation.
-5. Classify narrative depth as `full_story`, `micro_journey`, or `utility_sequence`. For `full_story`, ensure the Beat Plan carries the selected or adapted Story Structure when required; if it does not, pause and reroute back to Story Journey / Story Approval. Record `story_template_ref`, `micro_journey_template_ref`, or `asset_purpose_brief` according to the chosen depth.
-6. Select or adapt a Cultural Format Structure only when the accepted video shape has recognizable audience-facing grammar. If no canonical entry exists yet, use a project-specific format note in the Video Medium Plan rationale rather than inventing a new authoritative library entry.
-7. Record duration target, aspect ratio, publication/use, audience, and format rationale. Treat aspect ratio as a cross-stage commitment: storyboard frame prompts, generated storyboard sheets or stills, provider exports, start frames, and final render validation must preserve it or state a proposed exception before Generation Approval.
-8. Record medium-level Workflow Scale Routing. The Video Medium Plan is scale-general: compact videos can use scenes and shots directly, while feature films, episodic work, and dependent batches activate Long-Work Stewardship when needed.
-9. Run a continuity scan before storyboard lock and create or update the Reference Inventory. Record the Reference Strategy Gate result, plus `character_reference_strategy` and `visual_reference_sheet_strategy` compatibility fields, when recurring characters, products, objects, settings, or props affect visual consistency. Promote only subjects whose drift would weaken Artist Meaning, story clarity, blocking, or audience trust. Main or recurring characters should get a three-image character reference package. Recurring, meaning-bearing, or blocking-critical locations should get three location images from different angles. Story-critical objects, products, or props should get one multi-section object sheet with multiple angles and details. Also promote stateful visual facts that must change visibly across the storyboard: clothing, props, wounds, vehicles, locations, body states, lighting states, or symbols that are gained, lost, transformed, handed off, destroyed, revealed, concealed, restored, or repeatedly handled. Use `declined` or `deferred` without re-asking when the conductor already captured that answer.
-10. For locations, consider rooms, hallways, streets, venues, fantasy worlds, sitcom sets, campaign locations, vehicle interiors, stages, and other places where spatial continuity matters. For objects, consider handled, worn, opened, entered, destroyed, revealed, transformed, branded, or evidence-bearing items. Do not promote incidental background props.
-11. For promoted state changes, define the starting state, change sequence, post-change state, safety/dignity handling, and whether the composite storyboard sheet needs footer tracker labels. If clothing is given away, the opening shot/panel must show the full starting outfit clearly enough that each later loss is legible; later shots/panels must visibly track missing garments after each gift. When exposure would be unsafe or sensational, use shadow, silhouette, framing, substitute garments, or symbolic handoff while still making the state change clear.
-12. Decide whether Video Sequences are needed. Use sequences only when scale, pacing, stewardship, or long-form navigation needs scene groups.
-13. Define Video Scenes. Each scene must name its Beat ids or Story Movement grouping, setting, local dramatic purpose, duration target, and local tension.
-14. Before defining Storyboard Shots, apply cinematic coverage guidance as storyboard-direction input, not provider-export syntax. Choose coverage from the scene's emotional job: what the viewer must understand, what the viewer must feel, what should be withheld or revealed, and how shot scale, angle, movement, and stillness serve that job. Use the draft direction note when needed: `docs/drafts/video-template-research/direction-notes/cinematic-coverage-and-camera-direction.md`.
-15. Define Storyboard Shots. Each shot must include `scene_id`, `beat_id`, `key_emotional_movement_id`, `reference_refs_used`, time range, Visual Unit, camera movement, subject movement, blocking, transition in/out, script/audio refs, on-screen text refs, and a storyboard frame prompt. Map shots to the smallest approved Story Beats. Several shots may elaborate one Beat, but one shot or panel must not carry several story turns unless the artist explicitly approves the compression and the review packet records the risk.
-16. For every Visual Unit, include composition intent, communication intent, Expectation Turn Translation, Intended Feeling, active tension profile, traceable symbolic representation, and Shot Design. Shot Design must name shot scale, camera angle, visual emphasis, composition strategy, emotional rationale, and avoid notes. Camera angles, shot sizes, camera movement, subject movement, and blocking should be chosen for meaning: establish context when needed, push tighter as stakes rise, vary angle and scale across cuts, and avoid camera choices that weaken the beat.
-17. Define Video Audio Posture: silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred. Create Text Journey or Sound Journey records only when that posture needs drafted words or sound planning.
-18. Define storyboard generation policy: storyboard prompts and Visual Reference Sheet Plans are in-plan; generated reference sheets, generated storyboard stills, composite storyboard sheets, and rendered clips require explicit approval; every generated or imported reference sheet, composite storyboard sheet, and storyboard still becomes an Output Record or asset metadata before downstream use. Run Reference Readiness before storyboard export: required reference outputs must be accepted or explicitly waived, and waivers must carry risk notes into review packets. When storyboard generation is requested after a Video Medium Plan, route first to `storyboard-prompt-builder.md` Phase 1 and generate one composite multi-panel storyboard sheet by default. Use the Video Medium Plan's approved shot count, timing, style, Video Style Expression, and continuity requirements as the source of truth. Do not silently expand or shrink the approved shot count; if a composite sheet needs a different panel count for readability, state the proposed split/merge before generation approval. Do not generate separate storyboard stills from `storyboard_frame_prompt` fields unless the artist explicitly requests individual panel stills as a separate batch.
-19. Treat provider or platform preferences, such as Seedance, Higgsfield, Runway, Sora, Veo, or Remotion, as non-binding production notes until after storyboard approval. Do not place provider syntax, frame-rate rules, model duration limits, language experiments, or platform-specific camera/lighting recipes in core story, Beat Plan, or Visual Unit fields. Preserve them for downstream export guidance or future provider adapters.
-20. Produce the Video Medium Plan only after Symbology, Style, Video Format, narrative depth, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture, Workflow Scale Routing, and storyboard generation policy are complete or explicitly allowed to proceed unconfirmed.
+This rule governs the Video Medium Plan Process (`skills/artist-os/references/video/video-medium-plan-process.md`) when stewardship activates:
 
 If medium-level `workflow_scale_routing.activated_supports` newly includes `long_work_stewardship` and no foundation record exists, create the foundation record immediately before enrichment. When medium-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, first create the foundation Long-Work Stewardship Record if no foundation record exists, then enrich it from the completed Video Medium Plan with one Long-Work Part per video sequence, scene, or other accepted dependent unit; include readiness, checkpoints, continuity rules, and drift management before expansion.
-
-## Draft Video Creative Brief Process
-
-Use this only after the Video Medium Plan exists. Before Video Critic Review, build a substantive draft brief from the Video Medium Plan:
-
-1. Preserve `transformation_brief_id`, `beat_plan_id`, and `video_medium_plan_id`.
-2. Use the Video Medium Plan as the source of truth for Narrative Depth, Story or Micro-Journey Template refs, Asset Purpose Brief when present, Video Format, Video Style Expression, Visual Dynamics, sequences, scenes, Storyboard Shots, Video Audio Posture, text/audio refs, and storyboard generation policy.
-3. Add Artist Meaning, formal observations, Emotional Qualities, Poetic Density Notes, transformation constraints, and review requirements.
-4. Make the v0 boundary explicit: storyboard-ready planning only, no finished video generation.
-
-If running standalone, recommend Video Critic Review. If the `artist-os` conductor is running, return the draft and stop; the conductor advances automatically.
-
-## Video Critic Review
-
-Use Video Critic Review before Brief Approval. Review only the bounded packet: Artist Meaning, Transformation Brief, Beat Plan, Video Medium Plan, draft Video Creative Brief Document, any supporting Text or Sound refs, and open questions.
-
-Check:
-
-- shot progression across adjacent Storyboard Shots,
-- whether camera angle, shot scale, and camera movement serve the emotional job of the Beat instead of acting as decorative coverage,
-- whether aspect ratio is explicit and preserved across storyboard frame prompts, planned reference outputs, and any requested storyboard generation policy,
-- scene pacing and sequence pacing,
-- motion logic,
-- transition logic,
-- visual continuity over time,
-- script/audio/shot alignment,
-- whether each Storyboard Shot preserves its smallest Story Beat, Intended Feeling, Expectation Turn Translation, and Shot Design,
-- whether any Story Movement has been compressed into a single shot or panel without explicit artist approval,
-- for `full_story`, whether Video Scenes and Storyboard Shots preserve the adapted Story Structure's key turns rather than replacing them with video-only sequence logic,
-- whether promoted continuity-critical visual states remain consistent across adjacent Storyboard Shots and composite storyboard panels,
-- whether Video Audio Posture is explicit and sufficient,
-- whether long-form expansion needs Long-Work Stewardship before more parts are planned,
-- whether storyboard frame prompts are provider-neutral and do not imply finished video generation,
-- whether any requested storyboard generation defaults to one composite multi-panel storyboard sheet unless individual stills were explicitly requested,
-- whether Character Templates and Visual Reference Sheet Plans, if used, are aligned with shot continuity and not silently invented.
-
-Use Art Critic, Writing Critic, or Sound Critic criteria as supporting checks when those layers carry risk, but Video Critic Review owns the integrated time-based judgment. Emit a Review Record against `schemas/review-record.schema.json` with `review_role = "video_critic"`.
-
-## Traceability Rules
-
-Every video choice must trace back to Artist Meaning, Reference evidence, Transformation Brief, Beat Plan, Adapted Story Structure when present, Video Medium Plan, Symbology Direction, Style Direction, Video Style Expression, Visual Dynamics, a Video Sequence, Video Scene, Storyboard Shot, Visual Unit, Shot Design, Video Audio Posture, or storyboard generation policy.
-
-Style Direction and Video Style Expression are subordinate to Artist Meaning, Beat Plan, Visual Dynamics, Shot Design, motion/pacing needs, and provider boundaries.
-
-## Outputs
-
-Before Video Critic Review, return the Video Medium Plan, draft Video Creative Brief Document, Beat Plan reference, Narrative Depth, selected Story or Micro-Journey Template refs when present, Asset Purpose Brief when present, Video Style Expression, scene/shot structure, Video Audio Posture, storyboard generation policy, and open questions.
-
-After Video Critic Review and Brief Approval, return the approved Video Creative Brief handoff and the storyboard-ready package. Do not emit a Video Prompt Plan in v0.
-
-When emitted as records, JSON must validate against `schemas/video-medium-plan.schema.json`, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/output-record.schema.json` for generated or imported composite storyboard sheets and storyboard stills.

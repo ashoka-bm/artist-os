@@ -2,6 +2,7 @@
   "description": "The reference surface that must travel with an installed Artist OS skill bundle so skill-body paths (THEORY.md, docs/..., schemas/...) resolve from $ARTIST_OS_ROOT. Paths are bundle-root-relative; a trailing slash denotes a directory tree. See docs/adr/0008-multi-host-skill-distribution.md.",
   "include": [
     "THEORY.md",
+    "theory/",
     "ARCHITECTURE.md",
     "AGENTS.md",
     "CONTEXT.md",
