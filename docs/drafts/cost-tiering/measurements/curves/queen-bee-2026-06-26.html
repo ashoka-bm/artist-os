@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Queen Bee (Codex gpt-5.5, 2026-06-26) — baseline — token curve</title>
+<style>
+ :root{--bg:#fff;--fg:#1a1a18;--muted:#6b6a64;--surface:#faf9f5;--border:rgba(0,0,0,.12)}
+ @media(prefers-color-scheme:dark){:root{--bg:#1d1c1a;--fg:#ece9e2;--muted:#a6a49b;--surface:#262522;--border:rgba(255,255,255,.14)}}
+ body{margin:0;padding:24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+ .wrap{max-width:920px;margin:0 auto}h1{font-size:20px;font-weight:500}
+ .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+ .card{background:var(--surface);border-radius:8px;padding:12px 16px}.card .l{font-size:13px;color:var(--muted)}.card .v{font-size:24px;font-weight:500}
+ .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+ .legend span{display:flex;align-items:center;gap:6px}
+</style></head><body><div class="wrap">
+<h1>Queen Bee (Codex gpt-5.5, 2026-06-26) — baseline</h1>
+<div class="cards">
+ <div class="card"><div class="l">peak context / turn</div><div class="v">236k</div></div>
+ <div class="card"><div class="l">mean context / turn</div><div class="v">126k</div></div>
+ <div class="card"><div class="l">total over 244 turns</div><div class="v">30.7M</div></div>
+</div>
+<div class="legend">
+ <span><span style="width:14px;height:3px;background:#E24B4A"></span>context re-read / turn (left)</span>
+ <span><span style="width:14px;height:10px;background:rgba(55,138,221,.25);border-top:2px solid #378ADD"></span>cumulative (right)</span>
+ <span><span style="width:14px;height:0;border-top:2px dashed #BA7517"></span>target cap ~90k</span>
+</div>
+<div style="position:relative;width:100%;height:340px"><canvas id="c" role="img" aria-label="Queen Bee (Codex gpt-5.5, 2026-06-26) — baseline: per-turn context peaks at 236k, mean 126k, over 244 turns; cumulative reaches 30.7M."></canvas></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha384-dug+JxfBvklEQdJ4AYuBBAIScUz0bVN73xpy273gcAwHjb3qI0fXmuYNaNfdyYJG" crossorigin="anonymous"></script>
+<script>
+const CTX=[28012, 35394, 36506, 39888, 44288, 46761, 47350, 47350, 47824, 49460, 50002, 50549, 49403, 50742, 50964, 51170, 51506, 51248, 52842, 53385, 53720, 53223, 54930, 56938, 57998, 58329, 57477, 66739, 68372, 69058, 69678, 70158, 72523, 71201, 79527, 82885, 84329, 84851, 85147, 83759, 92272, 100356, 101259, 101588, 101445, 103984, 104751, 105085, 105095, 114045, 114861, 115193, 115230, 121828, 127882, 133085, 143681, 144275, 147680, 148220, 158955, 159773, 161875, 162958, 163619, 167834, 170899, 171518, 172627, 178145, 181697, 182401, 187254, 185816, 189927, 190167, 190674, 192478, 193068, 198914, 199678, 200174, 199909, 200179, 202177, 202661, 202669, 204823, 206505, 206969, 206815, 207386, 208901, 209369, 209057, 217239, 218692, 219158, 219128, 222028, 223471, 224255, 224492, 225003, 224960, 225200, 226642, 227112, 227138, 0, 23582, 31069, 36824, 38323, 39449, 48046, 56972, 64875, 65349, 69833, 75683, 76005, 87248, 87439, 97541, 98216, 98830, 101775, 103156, 107188, 107823, 108272, 112078, 114666, 117309, 117468, 117370, 119448, 122230, 122765, 122838, 122952, 129030, 131444, 135375, 135755, 136183, 136514, 137081, 139038, 139653, 141470, 142010, 142437, 143131, 143660, 144189, 144314, 144897, 145078, 145694, 146179, 146419, 147950, 150751, 153876, 154469, 154591, 154815, 155204, 155573, 164855, 169233, 169819, 169362, 176667, 171092, 186137, 186626, 216875, 225631, 233886, 236217, 0, 22401, 36717, 52789, 59801, 64805, 65667, 66183, 66700, 67512, 68190, 68936, 69167, 69462, 71634, 72087, 72968, 75557, 87364, 88512, 88794, 91336, 91336, 0, 90587, 98507, 121257, 124871, 129011, 129837, 129701, 137065, 138098, 138540, 138785, 141229, 141542, 143296, 142517, 144036, 145225, 146073, 146614, 147252, 147430, 147704, 148087, 146638, 157856, 166806, 171103, 171570, 172092, 172356, 172667, 172936, 173307, 173674, 173977, 174333, 177563],CUM=[28652, 64162, 101233, 141434, 186093, 233233, 281011, 281011, 330366, 380200, 430490, 481686, 531699, 582613, 633739, 685137, 736741, 788755, 842072, 895687, 949494, 1003433, 1058587, 1116517, 1174739, 1233132, 1291399, 1358775, 1427765, 1497392, 1567372, 1638009, 1710798, 1782635, 1862872, 1947133, 2031773, 2116808, 2202014, 2285967, 2378542, 2479733, 2581216, 2682875, 2784653, 2889336, 2994315, 3099484, 3204978, 3319771, 3434857, 3550151, 3665841, 3788077, 3916245, 4059795, 4203914, 4348524, 4496567, 4645121, 4804203, 4964068, 5126978, 5290233, 5453942, 5624721, 5796042, 5968625, 6141336, 6322914, 6505118, 6687649, 6875038, 7061350, 7251431, 7441672, 7634041, 7826917, 8020230, 8219857, 8419830, 8620199, 8820317, 9022404, 9224910, 9427660, 9630741, 9837159, 10043976, 10251053, 10458381, 10667194, 10876411, 11085865, 11295311, 11513913, 11732920, 11952170, 12171609, 12394990, 12618599, 12843046, 13067897, 13292988, 13518129, 13744680, 13971638, 14198843, 14426453, 14426453, 14450336, 14481705, 14519939, 14558623, 14598361, 14646688, 14703955, 14769070, 14838781, 14914314, 14990232, 15077404, 15164796, 15262281, 15360429, 15459079, 15558152, 15661214, 15764456, 15872232, 15980350, 16088720, 16203287, 16318288, 16435693, 16553280, 16671036, 16793128, 16915697, 17038661, 17162104, 17285599, 17416944, 17548685, 17686929, 17822978, 17959377, 18096277, 18233445, 18373015, 18512883, 18654802, 18797104, 18940185, 19083410, 19227289, 19371553, 19516121, 19661149, 19806515, 19952331, 20098700, 20245309, 20393359, 20547110, 20701380, 20855949, 21010741, 21166116, 21321675, 21477996, 21647058, 21816678, 21986764, 22157042, 22334779, 22506518, 22694137, 22881512, 23099205, 23325396, 23561548, 23798064, 23798064, 23820813, 23857952, 23911020, 23971139, 24036752, 24102883, 24169529, 24236985, 24305116, 24373992, 24443106, 24512514, 24582342, 24654050, 24726966, 24800222, 24876196, 24964225, 25052968, 25142005, 25233979, 25233979, 25233979, 25324794, 25424072, 25545746, 25670972, 25800625, 25931466, 26062016, 26200051, 26338538, 26477272, 26616263, 26757592, 26899512, 27043203, 27186504, 27331187, 27477215, 27623563, 27770369, 27917719, 28065272, 28213142, 28361393, 28508457, 28666774, 28833920, 29005439, 29177475, 29349777, 29522385, 29695267, 29868520, 30042140, 30215996, 30390115, 30564780, 30742618],n=CTX.length,labels=CTX.map((_,i)=>i+1),cap=CTX.map(()=>90000);
+const dark=matchMedia('(prefers-color-scheme:dark)').matches,tk=dark?'#a6a49b':'#5f5e5a',gr=dark?'rgba(255,255,255,.08)':'rgba(0,0,0,.08)';
+new Chart(document.getElementById('c'),{type:'line',data:{labels,datasets:[
+ {label:'context/turn',data:CTX,yAxisID:'y',borderColor:'#E24B4A',borderWidth:1.5,pointRadius:0,tension:.15},
+ {label:'cumulative',data:CUM,yAxisID:'y1',borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,.18)',borderWidth:2,pointRadius:0,fill:true,tension:.1},
+ {label:'cap',data:cap,yAxisID:'y',borderColor:'#BA7517',borderWidth:1,borderDash:[6,4],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+ plugins:{legend:{display:false}},scales:{
+  x:{title:{display:true,text:'turn',color:tk},ticks:{color:tk,maxTicksLimit:9},grid:{color:gr}},
+  y:{position:'left',title:{display:true,text:'context tokens / turn',color:tk},ticks:{color:tk,callback:v=>(v/1000).toFixed(0)+'k'},grid:{color:gr},min:0},
+  y1:{position:'right',title:{display:true,text:'cumulative',color:tk},ticks:{color:tk,callback:v=>(v/1e6).toFixed(1)+'M'},grid:{drawOnChartArea:false},min:0}
+}}});
+</script></body></html>
