@@ -41,6 +41,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Scene / Sequence Gate
   -> Shot Logic Gate
   -> Reference Strategy Gate, when characters, locations, or objects need continuity
+  -> optional style/reference image Generation Approval Gate, proactively offered before storyboard export
+  -> Output Records, when style calibration or reference images are generated or imported
   -> Motion / Pacing / Transition Gate
   -> Audio Posture Gate
   -> Video Medium Plan with Medium-Level Workflow Scale Routing
@@ -60,13 +62,14 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 - Symbology Gate: what should the work show as the core symbolic representation?
 - Style Gate: what visual language should carry the meaning?
-- Video Format Gate: short social video, single scene, trailer, montage, music video, short film, feature film, episodic sequence, or another format?
+- Video Format Gate: what video format best fits this story and Beat Plan shape? Before asking, state what kind of story it is, how many smallest Story Beats or Story Movements it needs, the recommended format, and why that format fits better than nearby alternatives. Ask the artist to confirm or correct the recommendation; use a broad menu only when the story material is too thin to infer a recommendation.
 - Aspect Ratio Check: record the required aspect ratio in the Video Medium Plan and carry it into storyboard prompts, reference-output planning, provider export, and render validation.
 - Scene / Sequence Gate: does this need Video Sequences, Video Scenes only, or long-form stewardship?
-- Shot Logic Gate: how does each Beat, Beat group, or Tension Point become timed Storyboard Shots?
+- Shot Logic Gate: how does each smallest Story Beat, Story Movement, or Tension Point become timed Storyboard Shots? If one proposed shot or storyboard panel carries several causal or emotional turns, split the underlying Beats or add shots before storyboard lock.
 - Coverage / Camera Direction: during Shot Logic, choose shot scale, camera angle, and camera movement from the emotional job of the moment: what the viewer must understand, what they must feel, and what should be withheld, revealed, clarified, or landed.
 - Reference Strategy Gate: which main characters, locations, objects, products, or props should be promoted into reference status before storyboard lock?
-- Reference Readiness Gate: are required reference outputs accepted or explicitly waived before storyboard export?
+- Style / Reference Generation Approval Gate: should Artist OS generate a small style calibration and reference image batch now? Ask proactively when Style Direction and promoted subjects are known; name the exact images, state the provider boundary, and give a rough time estimate such as about 1-3 minutes per image depending on provider queue and image complexity.
+- Reference Readiness check: are required reference outputs accepted or explicitly waived before storyboard export? (a precondition check over inventory readiness, not a recorded Gate Decision)
 - Motion / Pacing / Transition Gate: what moves, how fast do shots unfold, and how do they connect?
 - Audio Posture Gate: silent, music-only, voiceover-led, dialogue-led, sound-design-led, mixed, or deferred?
 - Workflow Scale Routing: should this stay compact, expand as a structured single artifact, or activate cumulative/full long-form supports?
@@ -86,6 +89,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. Requested storyboard generation defaults to one composite multi-panel storyboard sheet; individual panel stills are a separate artifact type that require explicit separate approval. A separate Video Prompt Plan waits until provider-neutral video generation instructions prove their fields.
 
 The schema-backed Video Medium Plan now carries narrative-depth routing. `full_story` requires a Story Template reference, `micro_journey` requires a Micro-Journey Template reference, and `utility_sequence` requires an Asset Purpose Brief.
+
+A storyboard panel usually realizes one smallest Story Beat. Several shots may elaborate one Beat when timing, performance, or camera grammar needs room. One panel should not carry several story turns unless the artist explicitly approves that compression and the risk is recorded.
 
 Generated or imported composite storyboard sheets and individual storyboard stills are normal Output Records linked back to the relevant Video Medium Plan and, for individual stills, the relevant Storyboard Shot. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data but do not define the domain model.
 
@@ -110,4 +115,4 @@ Video cannot rely on mood words alone. It needs decisions about:
 - script, voiceover, dialogue, caption, or on-screen text timing,
 - whether the output loops or resolves.
 
-Longer video should use Long-Work Stewardship, checkpoints, and calibration before broad expansion. Do not create generated clips, composite storyboard sheets, or storyboard stills without explicit approval. Do not create individual storyboard stills unless the artist explicitly requests separate panel images.
+Longer video should use Long-Work Stewardship, checkpoints, and calibration before broad expansion. Do not create generated clips, composite storyboard sheets, reference images, style calibration images, or storyboard stills without explicit approval. Do not create individual storyboard stills unless the artist explicitly requests separate panel images. When style or character drift is likely, proactively offer the low-cost image batch rather than waiting for a manual request.

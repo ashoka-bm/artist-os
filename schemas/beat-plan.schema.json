@@ -30,8 +30,13 @@
     "story_gate_status": { "$ref": "#/$defs/approval_status" },
     "story_structure": { "$ref": "#/$defs/story_structure" },
     "workflow_scale_routing": { "$ref": "#/$defs/workflow_scale_routing" },
+    "story_movements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/story_movement" }
+    },
     "beats": {
       "type": "array",
+      "description": "The required smallest meaningful story movements. Larger act, sequence, or mini-arc containers belong in story_movements, not here.",
       "minItems": 1,
       "items": { "$ref": "#/$defs/beat_record" }
     },
@@ -219,6 +224,44 @@
         }
       }
     },
+    "story_movement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "movement_id",
+        "movement_label",
+        "movement_role",
+        "summary",
+        "beat_ids",
+        "purpose",
+        "scale_notes"
+      ],
+      "properties": {
+        "movement_id": { "type": "string", "pattern": "^smov_[a-zA-Z0-9_-]+$" },
+        "movement_label": { "type": "string", "minLength": 1 },
+        "movement_role": {
+          "type": "string",
+          "enum": [
+            "setup",
+            "development",
+            "threshold",
+            "trial",
+            "return",
+            "restoration",
+            "aftermath",
+            "custom"
+          ]
+        },
+        "summary": { "type": "string", "minLength": 1 },
+        "beat_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^beat_[a-zA-Z0-9_-]+$" }
+        },
+        "purpose": { "type": "string", "minLength": 1 },
+        "scale_notes": { "type": "string", "minLength": 1 }
+      }
+    },
     "beat_record": {
       "type": "object",
       "additionalProperties": false,
@@ -261,7 +304,10 @@
             "unresolved_echo"
           ]
         },
-        "one_move_summary": { "type": "string" },
+        "one_move_summary": {
+          "type": "string",
+          "description": "One smallest meaningful emotional, symbolic, or causal job. If this needs several jobs, split the Beat and group the pieces with story_movements."
+        },
         "builds_toward_key_movement_id": { "type": ["string", "null"], "pattern": "^kem_[a-zA-Z0-9_-]+$" },
         "before_state": { "type": "string" },
         "after_state": { "type": "string" },

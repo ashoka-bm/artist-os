@@ -121,6 +121,7 @@ MEDIUM_PLAN_SKILLS = {
         "anchors": [
             "Storyboard Shot",
             "Video Audio Posture",
+            "Video Format Recommendation",
             "Expectation Turn",
             "Intended Feeling",
             "Shot Design",
@@ -156,6 +157,19 @@ class MediumPlanSkillContractTests(unittest.TestCase):
         for skill_path in MEDIUM_PLAN_SKILLS:
             with self.subTest(skill=skill_path):
                 self.assertIn(skill_path, text)
+
+    def test_conductor_recommends_video_format_from_story_shape(self) -> None:
+        text = self._read(CONDUCTOR_SKILL)
+        for required in (
+            "Before asking for a video format, make a Video Format Recommendation",
+            "what kind of story this is",
+            "how many smallest Story Beats or Story Movements",
+            "recommended video format",
+            "why that format fits better than the nearest alternatives",
+            "Use broad menus only when there is not enough story material",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, text)
 
     def test_keeps_canonical_doc_references(self) -> None:
         # Dedup-by-reference may remove a restated rule, but never the pointer

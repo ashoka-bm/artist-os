@@ -72,7 +72,7 @@ First ask:
 
 Then ask the medium-specific output-kind question for Image, Video, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: character creation routes as an intent shortcut to Character Template and optional Visual Reference Sheet Plan before the chosen medium; Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; illustrated written work such as a children's book, picture book, comic, story with images, cover plus interiors, or diagram-rich piece routes to Text Journey first and then Illustration Plan; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes.
 
-For any story with recurring characters, ask once early:
+For any story with recurring characters, ask once early and make the generation value clear:
 
 > This story has recurring characters. Do you want Character Templates and optional Character Reference Sheet prompts before we plan the output? Templates help with voice and continuity; reference sheets add more control if you later generate illustrations, covers, storyboards, or video.
 
@@ -95,18 +95,28 @@ Route single image toward the standard image Prompt Plan. Route sequential image
 
 **Video**:
 
-> What kind of video plan do you want?
->
-> - **Short social video**
-> - **Single scene**
-> - **Trailer / teaser**
-> - **Montage**
-> - **Music video**
-> - **Short film**
-> - **Feature film / episodic sequence**
-> - **Not sure**: recommend the best video format
+Before asking for a video format, make a Video Format Recommendation from the Reference, Artist Meaning if captured, and any Story Mode or Beat Plan already available. State:
 
-Route Video to `skills/artist-os/references/video-journey.md`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. When the artist asks to create or generate the storyboard, default to one composite multi-panel storyboard sheet via `skills/artist-os/references/storyboard-prompt-builder.md`; individual storyboard stills are a separate artifact type and require explicit provider-backed generation approval that names individual stills, plus normal Output Records.
+- what kind of story this is,
+- how many smallest Story Beats or Story Movements it appears to need,
+- the recommended video format,
+- why that format fits better than the nearest alternatives.
+
+Then ask a recommendation-first gate question:
+
+> My recommendation is **[recommended video format]** because this story is **[story type]** and needs **[beat count / movement structure]**. Does that feel right, or do you want a different video format?
+>
+> Other viable options: short social video, single scene, trailer / teaser, montage, music video, short film, feature film / episodic sequence.
+
+Use broad menus only when there is not enough story material to infer a format or when the artist asks to explore options.
+
+Route Video to `skills/artist-os/references/video-journey.md`. The current video path produces a storyboard-ready Video Medium Plan only: sequences when needed, scenes, Storyboard Shots, shot list, motion, transitions, audio posture, text/audio references, and storyboard frame prompts. It does not generate finished video. When the artist asks to create or generate the storyboard, default to one composite multi-panel storyboard sheet via `skills/artist-os/references/storyboard-prompt-builder.md`; generating that sheet is itself a provider-backed action requiring per-call approval and an Output Record. Individual storyboard stills are a separate artifact type and require separate explicit provider-backed generation approval that names individual stills, plus their own Output Records.
+
+For video work, proactively offer low-cost image generation checkpoints once Style Direction and the continuity scan identify useful subjects. Do not wait for the artist to ask for style or character samples. Ask for explicit approval to generate the smallest useful visual reference batch, usually one style calibration image plus reference images for promoted main characters, locations, objects, or state changes. State the scope, the rough time expectation, and the boundary, for example:
+
+> Before storyboard export, I recommend generating a small visual reference batch: one style calibration image and the promoted character/reference images we just planned. This usually takes about 1-3 minutes per image, depending on provider queue and image complexity, and it can prevent character or style drift later. Do you approve generating this batch now?
+
+If the artist approves, generate only the named batch and create Output Records. If they decline or defer, record the choice and continue with text-only planning unless Reference Readiness blocks storyboard export.
 
 If the artist says only "storyboard" and the target is ambiguous, ask:
 
@@ -239,7 +249,7 @@ Image, video, audio, and text share one spine. Run the phases in order, hand off
 1. **Source Record** — `skills/artist-os/references/ingest-reference.md`.
 2. **Artist Meaning** — `skills/artist-os/references/meaning-interview.md` (bounded Decision Interview).
 3. **Transformation Brief** — medium skill; `schemas/transformation-brief.schema.json`.
-4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`, read `docs/structure-library/README.md`, then `docs/structure-library/story/README.md`, then only the selected Story Structure entry; adapt it into `story_structure` on the Beat Plan rather than applying it unchanged. Add project-level `workflow_scale_routing` to the Beat Plan so later agents know whether the project is a compact artifact, structured single artifact, cumulative work, or full long-form project. For `single_beat`, use Story Structure only when a reusable movement pattern would clarify the compressed moment. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat names its intended feeling.
+4. **Beat Plan** — medium skill; `schemas/beat-plan.schema.json`. For `beat_pair`, `three_part_sequence`, `sequence`, `scene`, `arc`, or `world`, read `docs/structure-library/README.md`, then `docs/structure-library/story/README.md`, then only the selected Story Structure entry; adapt it into `story_structure` on the Beat Plan rather than applying it unchanged. Add project-level `workflow_scale_routing` to the Beat Plan so later agents know whether the project is a compact artifact, structured single artifact, cumulative work, or full long-form project. For `single_beat`, use Story Structure only when a reusable movement pattern would clarify the compressed moment. For writing/text and exploratory story development, preserve the strict `writing-beats` choice rhythm (2-3 candidate beats, artist chooses, one beat at a time); for image or Suno autopilot you may draft a full recommended Beat Plan. Each Beat is the smallest meaningful story movement, does one emotional/symbolic/causal job, and names its intended feeling. Put larger act, sequence, montage, trial, return, or cinematic-ending containers in optional `story_movements[]`; do not label those containers as Beats.
 5. **Story Critic Review And Story Approval** — `skills/artist-os/references/writing-method-review.md`, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan: run Beat Reviewer first for beat mechanics, then Story Critic to consume that Review Record and own the Story Approval contract (see `docs/gates-and-reviews.md` → "Story Critic"). Then present the revised Beat Plan for Story Approval.
 6. **Long-Work Stewardship Creation** — when project-level `workflow_scale_routing.activated_supports` includes `long_work_stewardship`, create a foundation Long-Work Stewardship Record after Story Approval. This usually corresponds to `cumulative_work` or `full_long_form_project`, but the activated support is the authority. At this stage `medium_plan_id` may be `null` and `part_plan` may be empty because medium-specific parts do not exist yet. The Beat Plan remains story authority. For Album v1, do this before approving the Release Package Plan when Album Cohesion Mode activates stewardship, so the package plan references an existing stewardship record without absorbing progress or checkpoint duties.
 7. **Release Package Plan** — for Album v1 only, create `schemas/release-package-plan.schema.json` after the Album Beat Plan, and after foundation Long-Work Stewardship when Album Cohesion Mode activates it, before full medium-specific expansion. The plan owns package subtype, deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration state, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship, Prompt Plans, Text Generation Plans, or Output Records. Run pre-calibration Mixed-Media Critic Review, then ask for Release Package Plan Approval before calibration Medium Plans.
@@ -261,7 +271,7 @@ Load the owning mode file for the detailed checklist. Keep only these conductor-
 
 - **Album v1 / Release Package** stays conductor-owned until a package router exists. Use `schemas/release-package-plan.schema.json`, set `package_subtype = "album"`, create the plan after the Album Beat Plan, run Mixed-Media Critic Review before Album Calibration, require Release Package Plan Approval before calibration Medium Plans, and never accept open-ended "generate the album" approval.
 - **Image** — Symbology precedes Style; Presentation Mode is decided inside Symbology; image records validate against `schemas/image-medium-plan.schema.json`, `schemas/creative-brief.schema.json`, and `schemas/prompt-plan.schema.json`; series expansion requires Series Plan approval and calibration before remaining image-role prompts.
-- **Video** — The v0 path is storyboard-ready planning only: no finished video, no Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, requested storyboard generation defaults to one composite multi-panel storyboard sheet, and generated storyboard stills require separate explicit provider approval plus Output Records.
+- **Video** — The v0 path is storyboard-ready planning only: no finished video, no Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, requested storyboard generation defaults to one composite multi-panel storyboard sheet (itself a provider-backed action requiring per-call approval plus an Output Record), and individual storyboard stills require separate explicit provider approval plus their own Output Records. Proactively offer a small style/reference image batch before storyboard export when Style Direction and continuity needs are known; include a rough per-image time estimate. The storyboard must map approved smallest Story Beats to panels or shots; if a requested panel count would force several turns into one panel, state the split before generation approval instead of silently compressing the story.
 - **Illustrated Written Work** — Use `skills/artist-os/references/illustration-plan.md` after Text Medium Plan. Illustration Plan coordinates Text Journey and Image Journey for pages, spreads, panels, covers, diagrams, character references, and visual continuity. It does not create timed Storyboard Shots, Video Audio Posture, or finished-video claims.
 - **Sound / Suno rendering** — Suno-specific output rules live in `skills/artist-os/references/platforms/suno-output.md`. Resolve Vocal / Lyric before locking; final records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`; sequence expansion requires approval; do not add an image-style Prompt Branch Set.
 - **Text** — Draft Generation Approval is required even without a paid provider call; the first draft runs in a fresh-context sub-agent from a Text Draft Packet; conformance review precedes polish; Clear Writing Pass then Human Voice Pass use their internal mode files; every concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.

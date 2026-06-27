@@ -43,6 +43,33 @@
       "the ending ties off plot while avoiding mixed emotional residue"
     ]
   },
+  "story_movements": [
+    {
+      "movement_id": "smov_tower_rise",
+      "movement_label": "Rise To Irreversible Warning",
+      "movement_role": "development",
+      "summary": "The tower moves from dismissed human attention into the pressure of a warning that must be sent before certainty arrives.",
+      "beat_ids": [
+        "beat_tower_exposition_force",
+        "beat_tower_rising_action",
+        "beat_tower_climax"
+      ],
+      "purpose": "Group the rising side of the Freytag arc without replacing the smaller Beat records.",
+      "scale_notes": "This is larger than a Beat because it contains grounding, rising pressure, and irreversible choice."
+    },
+    {
+      "movement_id": "smov_tower_restoration",
+      "movement_label": "Consequence And Residue",
+      "movement_role": "aftermath",
+      "summary": "The warning proves necessary, but its human cost turns proof into unresolved residue.",
+      "beat_ids": [
+        "beat_tower_falling_action",
+        "beat_tower_denouement"
+      ],
+      "purpose": "Group the falling side of the Freytag arc without letting consequence collapse into one Beat.",
+      "scale_notes": "This is larger than a Beat because it contains accounting and unresolved residue."
+    }
+  ],
   "beats": [
     {
       "beat_id": "beat_tower_exposition_force",

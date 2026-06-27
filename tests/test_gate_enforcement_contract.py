@@ -55,6 +55,18 @@ class GateEnforcementContractTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, text)
 
+    def test_video_format_gate_requires_story_shape_recommendation(self) -> None:
+        text = (REPO_ROOT / GATES_DOC).read_text(encoding="utf-8")
+        for fragment in (
+            "For the Video Format Gate",
+            "story type and Beat Plan shape",
+            "how many smallest Story Beats or Story Movements",
+            "recommended video format",
+            "Do not start with a broad video format menu",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, text)
+
 
 if __name__ == "__main__":
     unittest.main()

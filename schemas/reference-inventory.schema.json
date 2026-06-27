@@ -40,6 +40,7 @@
     },
     "subjects": {
       "type": "array",
+      "description": "Promoted and candidate reference subjects. Intentionally allows an empty array (no minItems): a scanned project that promotes nothing is a valid terminal state, unlike scan_history and traceability_summary, which always record the scan itself.",
       "items": { "$ref": "#/$defs/reference_subject" }
     },
     "storage_policy": { "$ref": "#/$defs/storage_policy" },
@@ -433,6 +434,7 @@
     },
     "subject_category": {
       "type": "string",
+      "description": "Continuity-subject taxonomy. A \"location\" subject's Visual Reference Sheet Plan uses reference_sheet_type \"setting\" (the VRS layout vocabulary), not \"location\".",
       "enum": ["character", "location", "object"]
     },
     "subject_origin": {
@@ -508,6 +510,7 @@
         "location_reverse_angle",
         "location_functional_angle",
         "object_multi_angle_sheet",
+        "style_calibration_sheet",
         "custom"
       ]
     },

@@ -8,6 +8,34 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ## [Unreleased]
 
+### Added
+
+- Reference Inventory (`schemas/reference-inventory.schema.json`): a project-level
+  continuity record for promoted character, location, and object references — it
+  owns effective policy, scan history, subject / package / per-output readiness,
+  storage paths, Output Record refs, and provider-neutral role hints. Promoted
+  subjects reuse `VisualReferenceSheetPlan` (character = 3 images, location = 3
+  angles, object = 1 multi-section sheet). See ADR 0011.
+- `bin/artist-os-db`: indexes Reference Inventory items and reference images
+  (new `reference_inventory_items` / `reference_inventory_images` tables) and adds
+  `publish-visible-reference`, which copies a reference Output Artifact into the
+  visible Artist Library `References/<Category>/<subject>/{Review Drafts,Accepted}`
+  folders and refreshes the SQLite index.
+- Standing Sub-Agent Authorization: the conductor may spawn bounded internal
+  sub-agents for mandatory reviews, validation, drafting passes, and approved
+  orchestration without per-spawn approval. Review Records carry
+  `reviewer_execution.fallback_reason` when a host or active tool policy forces
+  the degraded reviewer fallback.
+- Video path defaults a requested storyboard generation to one composite
+  multi-panel storyboard sheet; individual storyboard stills are a separate
+  artifact requiring their own provider approval and Output Records.
+
+### Changed
+
+- Image outputs now record `reference_refs_used` so downstream usage is traceable
+  back to Reference Inventory subjects (availability lives in the inventory; usage
+  lives on the consuming output).
+
 ## [0.4.0] - 2026-06-21
 
 ### Added

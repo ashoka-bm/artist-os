@@ -58,7 +58,11 @@ A Transformation Brief is the cross-medium interpretation record created after A
 
 A Beat Plan is the shared story spine consumed by image, video, sound, text, and mixed-media journeys. It validates against `schemas/beat-plan.schema.json`.
 
-Each Beat must do one move, name `intended_feeling` separately from factual content, include `expectation_turn`, and include a `tension_profile`. `expectation_turn` records the expected direction, actual result, surprise function, and emotional counterpoint. `tension_movement_plan.minimum_tension_criteria` defines the project-local contrast threshold reviewers use to decide whether the plan has enough pressure. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
+Each Beat is the smallest meaningful story movement and must do one emotional, symbolic, or causal job. It must name `intended_feeling` separately from factual content, include `expectation_turn`, and include a `tension_profile`. If a candidate Beat combines setup, threat, choice, consequence, and aftermath, split it into smaller Beats before Story Approval.
+
+`story_movements[]` is optional and names larger act, sequence, trial, return, restoration, montage, or cinematic-ending containers that group approved Beat ids. Story Movements organize Beats; they do not replace the required Beat-level story authority.
+
+`expectation_turn` records the expected direction, actual result, surprise function, and emotional counterpoint. `tension_movement_plan.minimum_tension_criteria` defines the project-local contrast threshold reviewers use to decide whether the plan has enough pressure. Multi-beat plans should be reviewed by a bounded Beat Reviewer sub-agent before medium translation.
 
 `key_emotional_movements[]` identifies the major emotional shift points that should survive compression or expansion. Single-image plans usually identify one primary movement; image series and longer arcs may identify several.
 

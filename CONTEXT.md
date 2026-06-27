@@ -40,6 +40,14 @@ _Avoid_: Treating beats, style, composition, or prompt detail as successful when
 The audience feeling the transformation is trying to create as the emotional expression of Artist Meaning. A Beat Plan serves Intended Feeling; it is not successful merely because it has interesting structure.
 _Avoid_: Mood label, style mood, factual theme
 
+**Story Beat**:
+The smallest meaningful story movement that carries one emotional, symbolic, or causal job. In storyboard and film-development usage, one panel, shot, section, or script moment may be a Story Beat when it expresses one meaningful turn. If a proposed beat contains multiple causal or emotional jobs, split it before medium planning.
+_Avoid_: Act, chapter, sequence, scene group, plot summary, multi-job story chunk
+
+**Story Movement**:
+A larger grouping of Story Beats, such as an act, passage, phase, mini-arc, sequence movement, or restoration sequence. Story Movements organize Beats, but they are not Beats and must not be stored as Beats just because they are important.
+_Avoid_: Beat, Story Beat, Key Emotional Movement
+
 **Minimum Tension Criteria**:
 The project-local reviewer threshold that defines how much contrast or movement a work needs to create its Intended Feeling. Defaults can seed the criteria, but the approved criteria belong to the specific work and can be raised, lowered, or redirected when Artist Meaning requires it.
 _Avoid_: Universal taste score, global quality number, tension for its own sake
@@ -132,6 +140,10 @@ _Avoid_: Story Template, full Story Structure, Video Format
 The Video Medium Plan record required when Narrative Depth is `utility_sequence`: it defines asset purpose, placement, duration, motion, style constraints, and success criteria in place of narrative structure, for B-roll, motion graphics, and process visuals.
 _Avoid_: Narrative structure, Story Template, finished render
 
+**Video Format Recommendation**:
+The recommendation-first decision that maps the story type and Beat Plan shape into a video format such as short social video, single scene, trailer, montage, music video, short film, feature film, or episodic sequence. It must cite what the story is and how many smallest Story Beats or Story Movements it needs before asking the artist to confirm or correct the format.
+_Avoid_: Asking a broad video menu without analysis, treating the recommendation as artist approval
+
 **Video Creative Brief**:
 The video-specific Creative Brief that compiles Artist Meaning, Transformation Brief, Beat Plan, and Video Medium Plan into an approved handoff for video storyboard or future video prompt planning.
 _Avoid_: Video Medium Plan, screenplay, finished storyboard
@@ -211,6 +223,10 @@ _Avoid_: Storyboard Shot, frame, generic image
 **Storyboard Shot**:
 The atomic time-based video realization of a Visual Unit that adds duration, motion, blocking, transition, and script or audio relationships.
 _Avoid_: Image Role, finished video clip, generated video
+
+**Storyboard Panel**:
+One cell in a composite storyboard sheet. A panel commonly represents one Story Beat, but it may also be one visual shot inside a larger Story Beat or one of several shots that express a single Story Beat. If a panel has to explain several turns at once, split the Story Beat or add more panels before generation.
+_Avoid_: Beat Plan authority, finished video clip, individual still by default
 
 **Video Storyboard**:
 The time-based storyboard package for video work, built from Storyboard Shots and concerned with duration, camera movement, subject movement, transitions, script/audio relationships, and Video Audio Posture.
@@ -665,8 +681,8 @@ The felt meaning carried by one Beat.
 _Avoid_: Emotion, vibe
 
 **Beat**:
-The smallest meaningful change, contrast, turn, or pressure point in a Reference that carries Emotional Payload.
-_Avoid_: Plot point, scene
+The same concept as Story Beat: the smallest meaningful story movement that carries one emotional, symbolic, or causal job and carries Emotional Payload.
+_Avoid_: Plot point, scene, act, sequence group, multi-job summary
 
 **Series Recommendation**:
 A Creative Brief recommendation for whether a Reference should become a single image or image series. A three-image sequence is an image series with three suggested images.
