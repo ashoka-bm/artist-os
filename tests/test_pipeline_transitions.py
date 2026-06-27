@@ -173,6 +173,24 @@ class PipelineTransitionTests(unittest.TestCase):
             if builds_toward is not None:
                 self.assertIn(builds_toward, key_movement_ids)
 
+    def test_story_movements_reference_existing_beats(self) -> None:
+        beat_plan_paths = sorted((REPO_ROOT / "tests" / "fixtures").rglob("beat-plan.json"))
+        self.assertTrue(beat_plan_paths)
+        plans_with_story_movements = 0
+
+        for path in beat_plan_paths:
+            beat_plan = json.loads(path.read_text(encoding="utf-8"))
+            beat_ids = {beat["beat_id"] for beat in beat_plan["beats"]}
+            story_movements = beat_plan.get("story_movements", [])
+            if story_movements:
+                plans_with_story_movements += 1
+            with self.subTest(path=path.relative_to(REPO_ROOT)):
+                for movement in story_movements:
+                    for beat_id in movement["beat_ids"]:
+                        self.assertIn(beat_id, beat_ids)
+
+        self.assertGreaterEqual(plans_with_story_movements, 1)
+
     def test_beat_plan_to_sound_medium_plan(self) -> None:
         beat_plan = load("tests/fixtures/story/beat-plan.json")
         sound_plan = load("tests/fixtures/text-to-suno/sound-medium-plan.json")

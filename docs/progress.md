@@ -397,6 +397,7 @@ Added emotional movement integrity coverage:
 - Prompt Branch Set meaning kernels and branches must reference Key Emotional Movements from the governing Beat Plan.
 - Review Records must include numeric tension intensity assessments and reviewer verdicts against minimum intensity.
 - Key Emotional Movement `beat_ids` must point to existing Beat Plan beats.
+- Story Movement `beat_ids`, when present, must point to existing Beat Plan beats.
 - Beat `builds_toward_key_movement_id`, when present, must point to an existing Key Emotional Movement.
 
 ### Long-Work Stewardship

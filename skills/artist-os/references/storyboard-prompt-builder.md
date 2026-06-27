@@ -41,7 +41,7 @@ You need three things. Collect whatever's missing in a single message:
 3. **Style** — the visual language. If not specified, infer from context (a story about a cute robot implies Pixar-style 3D; a noir detective implies cinematic live-action; a magical girl implies anime). When genuinely ambiguous, ask: *"What visual style — 3D animation, live-action, anime, something else?"*
 
 **Optional inputs the user may provide:**
-- **Panel count** — defaults to the approved shot/beat count when a plan exists; otherwise defaults to 15 (the standard storyboard sheet), but can be 9, 12, or 20 depending on story complexity
+- **Panel count** — defaults to the approved shot/Beat count when a plan exists; otherwise defaults to 15 (the standard storyboard sheet), but can be 9, 12, or 20 depending on story complexity. Do not silently compress several smallest Story Beats into one panel just to fit the default count.
 - **Duration** — defaults to 15 seconds, but can be adjusted (30s, 60s, etc.)
 - **Aspect ratio** — defaults to 16:9, but can be 9:16 (vertical), 1:1, or 4:3
 - **Target model** — Nano Banana Pro or GPT Image 2. Defaults to Nano Banana Pro. Prompt structure is similar but GPT Image 2 benefits from slightly more explicit layout instructions.
@@ -75,9 +75,11 @@ For each promoted subject, define:
 
 If clothing is given away, the opening panel must show the full starting outfit clearly enough that each later loss is legible. Later panels must visibly track the missing garment state after each gift. When exposure would be unsafe or sensational, use shadow, silhouette, framing, substitute garments, or symbolic handoff while still making the state change clear.
 
-### Step 3 — Break the story into beats
+### Step 3 — Break the story into Story Beats
 
-Decompose the story overview into the target panel count (default 15). Each beat needs:
+Decompose the story overview into the smallest meaningful story movements before assigning panels. A Story Beat does one emotional, symbolic, or causal job. If a proposed beat contains setup plus threat plus choice plus result, split it; if the story needs a larger act, sequence, montage, or ending label, treat that label as a Story Movement that groups several Beats.
+
+Decompose the story overview into the target panel count (default 15) only after the Beat scale is clear. If the target count would force several story turns into one panel, state the proposed split/merge and ask for or record the revised panel count before provider-backed generation. Each Story Beat or panel needs:
 
 1. **Panel number** (1–15)
 2. **Timecode** (e.g., 00:00 – 01:00 for a 15-second/15-panel breakdown)
@@ -86,7 +88,8 @@ Decompose the story overview into the target panel count (default 15). Each beat
 5. **Action / Dialogue** — any character dialogue or specific actions (can be "None")
 
 **Narrative arc principles:**
-- **Acts structure:** Even in 15 panels, follow a three-act structure. Panels 1–3: setup. Panels 4–6: inciting incident. Panels 7–10: rising tension. Panels 11–13: climax/resolution. Panels 14–15: denouement/emotional landing.
+- **Story Movements:** Use acts, trials, returns, montages, and cinematic endings as grouping labels over multiple Story Beats, not as single Beats.
+- **Acts structure:** Even in 15 panels, follow a three-act structure. Panels 1–3: setup. Panels 4–6: inciting incident. Panels 7–10: rising tension. Panels 11–13: climax/resolution. Panels 14–15: denouement/emotional landing. These ranges are guidance, not permission to collapse several turns into one panel.
 - **Shot variety:** Vary shot types across the sequence. Never repeat the same shot type in consecutive panels. Alternate between establishing shots and intimate close-ups.
 - **Emotional escalation:** Build intensity through the middle, peak around panel 10–12, then resolve. Use close-ups for emotional peaks, wide shots for context and breathing room.
 - **Character consistency:** Reference character-identifying details in panels where they'd be visible at that shot size.
@@ -185,7 +188,7 @@ Only proceed to this phase when the user explicitly confirms they're happy with 
 
 ### Step 1 — Map storyboard panels to video shots
 
-Each storyboard panel becomes a timed video shot. The total duration matches the storyboard's specified length (default 15 seconds). Each shot gets a timecode range matching the panel's position.
+Each storyboard panel becomes a timed video shot unless the approved Video Medium Plan says several shots elaborate one panel or one Story Beat. The total duration matches the storyboard's specified length (default 15 seconds). Each shot gets a timecode range matching the panel's position.
 
 For a 15-panel, 15-second storyboard: each shot is 1 second (Panel 1 = [0s – 1s], Panel 2 = [1s – 2s], etc.).
 

@@ -1064,6 +1064,46 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "missing required field 'workflow_scale_routing'"):
             validate(record, schema, schema)
 
+    def test_beat_plan_accepts_story_movements_grouping_small_beats(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "freytag-rehearsal" / "beat-plan.json"
+        record = load_json(data_path)
+        record["story_movements"] = [
+            {
+                "movement_id": "smov_tower_restoration",
+                "movement_label": "Restoration Passage",
+                "movement_role": "restoration",
+                "summary": "The warning is received, the tower's purpose changes, and the aftermath lands.",
+                "beat_ids": [
+                    "beat_tower_climax",
+                    "beat_tower_falling_action",
+                    "beat_tower_denouement",
+                ],
+                "purpose": "Group the restoration-sized passage without replacing the smaller Beat records.",
+                "scale_notes": "This is larger than a Beat because it contains warning, consequence, and residue.",
+            }
+        ]
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_beat_plan_story_movements_require_grouped_beat_ids(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "freytag-rehearsal" / "beat-plan.json"
+        record = load_json(data_path)
+        record["story_movements"] = [
+            {
+                "movement_id": "smov_tower_restoration",
+                "movement_label": "Restoration Passage",
+                "movement_role": "restoration",
+                "summary": "A larger passage is present, but it has no Beat ids.",
+                "purpose": "Invalid movement without grouped Beats.",
+                "scale_notes": "Story Movements organize Beats; they do not replace them.",
+            }
+        ]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'beat_ids'"):
+            validate(record, schema, schema)
+
     def test_text_medium_plan_requires_workflow_scale_routing(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "text-medium-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "text-journey" / "text-medium-plan.json"

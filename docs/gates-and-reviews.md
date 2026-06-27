@@ -234,15 +234,15 @@ Use when later interpretation, story, medium translation, or output appears to o
 
 ### Story Critic
 
-Checks meaning preservation, Story Mode scale, Beat Plan coherence, tension movement, symbolic continuity, and whether the Beat Plan should exist at this length.
+Checks meaning preservation, Story Mode scale, Beat Plan coherence, Beat size, tension movement, symbolic continuity, and whether the Beat Plan should exist at this length.
 
-Boundary: Story Critic owns the Story Approval contract. It decides whether the Beat Plan preserves Artist Meaning, uses the right Story Mode scale, carries enough arc or sequence logic, keeps symbolic progression coherent, and defines minimum tension criteria strong enough for downstream medium work. It does not replace the Beat Reviewer when individual beat mechanics need method review.
+Boundary: Story Critic owns the Story Approval contract. It decides whether the Beat Plan preserves Artist Meaning, uses the right Story Mode scale, carries enough arc or sequence logic, keeps symbolic progression coherent, keeps Story Movements separate from Beats, and defines minimum tension criteria strong enough for downstream medium work. It does not replace the Beat Reviewer when individual beat mechanics need method review.
 
-Use Story Critic when Story Mode, length, meaning preservation, symbolic progression, or Beat Plan authority is uncertain, or when a proposed later change would alter Story Approval. Use Beat Reviewer when the question is whether each beat performs one meaningful move, pivots cleanly, earns its turn, differs from adjacent beats, and avoids false endings or locked-ahead journeys. When both are needed, run Beat Reviewer first, then have Story Critic consume that Review Record before Story Approval.
+Use Story Critic when Story Mode, length, meaning preservation, symbolic progression, Story Movement grouping, or Beat Plan authority is uncertain, or when a proposed later change would alter Story Approval. Use Beat Reviewer when the question is whether each Beat performs one smallest meaningful move, pivots cleanly, earns its turn, differs from adjacent Beats, and avoids false endings or locked-ahead journeys. When both are needed, run Beat Reviewer first, then have Story Critic consume that Review Record before Story Approval.
 
 Drift check: compare the Beat Plan against the Reference, Artist Meaning, Transformation Brief, Emotional Structure, and must-preserve constraints.
 
-Block when Beats name only facts, events, or symbols without an intended feeling, when a Beat lacks a real Expectation Turn, when the Beat Plan does not define minimum tension criteria, when a Beat falls below the required primary tension intensity, or when adjacent Beats in a sequence repeat the same tension profile without an artist-approved reason.
+Block when Beats name only facts, events, or symbols without an intended feeling, when a Beat lacks a real Expectation Turn, when a Beat is actually a glued-together Story Movement doing several independent jobs, when the Beat Plan does not define minimum tension criteria, when a Beat falls below the required primary tension intensity, or when adjacent Beats in a sequence repeat the same tension profile without an artist-approved reason.
 
 ### Art Critic
 
@@ -324,11 +324,11 @@ Drift check: compare captured fragments against the artist's actual language and
 
 ### Beat Reviewer
 
-Checks the `writing-beats` method: one move per beat, meaningful pivots, no glued-together beats, no false endings, and no locked-ahead journey without approval.
+Checks the `writing-beats` method: each beat is the smallest meaningful movement, one move per beat, meaningful pivots, no glued-together beats, no Story Movement mislabeled as a Beat, no false endings, and no locked-ahead journey without approval.
 
 Use for multi-beat Story Plans, image series, video scenes/sequences, sound arrangements, lyric-bearing plans, mixed-media beat assignment, and journey-shaped text.
 
-Drift check: compare each beat against the previous beat, the chosen journey path, Artist Meaning, and source material. Flag beats that pivot because they are interesting rather than because the journey earned them.
+Drift check: compare each beat against the previous beat, the chosen journey path, Artist Meaning, and source material. Flag beats that pivot because they are interesting rather than because the journey earned them. Block when a candidate Beat contains multiple causal or emotional jobs that should be split before Story Approval.
 
 ### Shape Reviewer
 

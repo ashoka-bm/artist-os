@@ -41,8 +41,8 @@ Artist OS adaptation:
 
 Reviewer use:
 
-- A Beat Reviewer checks whether each beat does one thing, whether the journey has natural pivots, and whether later beats were written ahead without approval.
-- It should flag glued-together beats, missing pivots, false endings, and beats added only because a medium needs more content.
+- A Beat Reviewer checks whether each beat is the smallest meaningful movement, whether it does one thing, whether the journey has natural pivots, and whether later beats were written ahead without approval.
+- It should flag glued-together beats, act-sized or sequence-sized groupings mislabeled as beats, missing pivots, false endings, and beats added only because a medium needs more content.
 
 ### Writing Shape
 

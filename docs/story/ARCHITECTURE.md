@@ -93,6 +93,7 @@ Outputs:
 - Story Mode,
 - Adapted Story Structure, required for non-`single_beat` story modes,
 - Beat Plan,
+- Story Movements, when larger act or sequence groups are needed,
 - Beat Roles,
 - tension movement,
 - symbolic progression,
@@ -108,6 +109,8 @@ Review:
 
 - Story Critic Review.
 - Beat Reviewer sub-agent, when beat sequencing or beat size needs a dedicated pass.
+
+Enforcement: Beats are the smallest meaningful story movements. Use Story Movements for act-sized, scene-sized, or sequence-sized containers. If a candidate Beat contains several independent causal or emotional jobs, split it before Story Approval and place the larger label in Story Movements instead.
 
 ### Long-Work Stewardship
 
