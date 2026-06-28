@@ -57,11 +57,21 @@
     "activation_reason": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["story_mode", "artist_requested_cumulative_work", "requires_part_to_part_dependency", "reason"],
+      "required": ["story_mode", "artist_requested_cumulative_work", "requires_part_to_part_dependency", "meets_length_floor", "length_floor_override", "reason"],
       "properties": {
         "story_mode": { "type": "string", "enum": ["single_beat", "beat_pair", "three_part_sequence", "sequence", "scene", "arc", "world"] },
         "artist_requested_cumulative_work": { "type": "boolean" },
         "requires_part_to_part_dependency": { "type": "boolean" },
+        "meets_length_floor": { "type": "boolean" },
+        "length_floor_override": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["overridden", "rationale"],
+          "properties": {
+            "overridden": { "type": "boolean" },
+            "rationale": { "type": "string" }
+          }
+        },
         "reason": { "type": "string", "minLength": 1 }
       }
     },

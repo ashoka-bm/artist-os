@@ -17,3 +17,5 @@ Artist OS does not create a standalone Workflow Scale Routing Record by default.
 - Each Medium Plan can record whether that medium stays compact, expands inside one artifact, or activates cumulative/long-form supports.
 - Long-Work Stewardship remains the guardrail layer for Cumulative Work; Workflow Scale Routing only decides whether that layer and related helpers should activate.
 - A standalone routing record should be added only if future projects prove routing needs independent lifecycle, review, querying, or revision history.
+
+Amendment (ADR 0013): `long_work_stewardship` is now gated by the ADR 0013 two-condition threshold (cumulative dependency AND the per-medium length floor) rather than auto-activated by the `cumulative_work` / `full_long_form_project` levels. Those levels still describe scale and still drive other supports; they no longer add stewardship by themselves. See ADR 0013.
