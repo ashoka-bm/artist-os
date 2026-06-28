@@ -7,7 +7,7 @@ These notes apply after story and format decisions. They shape a Seedance 2 expo
 ## Provider Defaults To Test
 
 - Use 24 frames per second.
-- Try the prompt in Chinese.
+- Write the prompt in English. Do not add a Chinese prompt pass unless the artist explicitly requests a separate experimental translation.
 - Keep each generated clip at 15 seconds or less.
 - Use the last frame of the previous clip as the next clip's continuity reference when sequencing.
 - Name the camera or capture style.

@@ -35,7 +35,7 @@ The hard gates are unchanged — the lean path relaxes none of them:
   default; individual stills are a separate, separately-approved batch.
 - Every generated or imported sheet/still gets an Output Record before review or acceptance.
 - Persist each step before advancing (`docs/storage.md`); chat is not durable storage.
-- v0: no Video Prompt Plan; storyboard frame prompts live in the Video Medium Plan.
+- v0: no provider-neutral Video Prompt Plan; storyboard frame prompts live in the Video Medium Plan. Seedance Prompt Packages are optional post-storyboard provider exports.
 - Preserve traceability: every shot traces to Artist Meaning, the Beat Plan, and the
   Video Medium Plan.
 

@@ -21,6 +21,7 @@ Load details only when needed. Read a schema only when you produce or validate t
 - `schemas/text-generation-plan.schema.json` after Brief Approval and prompt/generation planning.
 - `schemas/output-record.schema.json` for every concrete draft or rewrite artifact.
 - `skills/artist-os/references/clear-writing-pass.md` and `skills/artist-os/references/human-voice-pass.md` only for separate editorial passes after a conforming draft exists.
+- `skills/artist-os/references/platforms/elevenlabs-v3-voiceover.md` when an approved script, dialogue, narration, monologue, or other spoken text needs ElevenLabs v3 voice-over prompt preparation.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 
 ## Hard Gates
@@ -32,6 +33,7 @@ These hold whether you run standalone or under the `artist-os` conductor:
 - Do not draft the final written Output Artifact until Draft Generation Approval is explicit, even when the agent drafts locally without a paid provider call.
 - Do not silently ignore Format Length Standards for recognizable written formats. Apply the default from `docs/structure-library/cultural-format/README.md` unless the artist, assignment, platform container, or Artist Meaning requires an override.
 - Ask whether the artist wants a local HTML mockup for review before drafting written format outputs. Creating the HTML mockup is allowed only after a concrete draft exists; it is a review presentation artifact, not publication or a replacement for the canonical written Output Artifact.
+- Do not prepare an ElevenLabs v3 voice-over prompt until the governing script, dialogue, narration, monologue, or spoken text exists. The ElevenLabs v3 pass may add voice-only audio tags and permitted emphasis, but it must not invent dialogue or change meaning.
 - Draft the written Output Artifact in a fresh-context sub-agent using a bounded Text Draft Packet.
 - For cumulative long text, create and maintain a Long-Work Stewardship Record; do not draft later sections while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - The fresh-context drafting sub-agent must not run the Human Voice Pass or Clear Writing Pass during first drafting.

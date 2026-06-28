@@ -16,7 +16,7 @@ Aspect ratio is an early format commitment carried by `VideoMediumPlan.video_for
 
 GPT Image 2 is the default implemented image-generation route for approved reference outputs, storyboard stills, start frames, identity plates, turnarounds, macro detail cards, and calibration stills until another image generator is intentionally promoted. Domain records remain provider-neutral; GPT Image 2 belongs in the Generation Approval packet or provider request layer.
 
-Provider-specific prompt behavior stays after storyboard approval in Production Route, Provider Media Bindings, and Provider Export. This includes Chinese prompt shape, `@image` / `@audio` tags, current reference tray mapping, Seedance duration brackets, 24fps language, prompt packet formatting, moderation preflight, and output-only provider packet rules.
+Provider-specific prompt behavior stays after storyboard approval in Production Route, Provider Media Bindings, and Provider Export. This includes English prompt shape, `@image` / `@audio` tags, current reference tray mapping, Seedance duration brackets, 24fps language, prompt packet formatting, moderation preflight, and output-only provider packet rules.
 
 Long or multi-part generation continuity is split by authority: the Video Medium Plan records continuity needs, while Production Route and Provider Media Bindings decide when the last frame of one generated clip becomes the starting frame of the next clip. Generated clips and extracted continuity frames require normal Output Record handling.
 

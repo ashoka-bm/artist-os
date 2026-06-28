@@ -125,7 +125,7 @@ The cross-medium coordinator for illustrated written work after a Text Medium Pl
 _Avoid_: Video Medium Plan, Video Storyboard, Text Medium Plan, Image Medium Plan
 
 **Video Medium Plan**:
-The video-specific Medium Plan that translates an approved Beat Plan into sequences, Video Scenes, timed Storyboard Shots, visual style, shot list, motion, transitions, script or audio relationships, and storyboard planning; v0 stops at storyboard-ready planning rather than finished video generation.
+The video-specific Medium Plan that translates an approved Beat Plan into sequences, Video Scenes, timed Storyboard Shots, visual style, shot list, motion, transitions, script or audio relationships, and storyboard planning; v0 stops at storyboard-ready planning plus optional post-storyboard provider prompt packaging rather than finished video generation.
 _Avoid_: Storyboard pre-plan, finished video, provider-specific video job
 
 **Narrative Depth**:

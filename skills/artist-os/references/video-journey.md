@@ -16,11 +16,15 @@ Load details only when needed. Read a schema only when you produce or validate t
 - `docs/drafts/video-template-research/direction-notes/cinematic-coverage-and-camera-direction.md` when defining Storyboard Shot Design, camera angle, shot scale progression, coverage economy, or camera movement rationale.
 - `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` govern the Transformation Brief and Beat Plan records — read each only when producing or validating that record.
 - `schemas/video-medium-plan.schema.json` for storyboard-ready video planning.
+- `schemas/seedance-prompt-package.schema.json` when Seedance is selected after storyboard approval.
+- `skills/artist-os/references/platforms/seedance-cinematic-animation-prompting.md` when Seedance is selected for cinematic live-action, animated narrative, stylized animation, scene coverage, storyboard-panel animation, or start/end-frame animation.
+- `skills/artist-os/references/platforms/seedance-instagram-prompting.md` when Seedance is selected for Instagram/Reels, TikTok-style clips, creator vlogs, talking heads, UGC ads, fashion/editorial campaigns, product reveals, or social B-roll.
 - `schemas/character-template.schema.json` and `schemas/visual-reference-sheet-plan.schema.json` when recurring characters, products, objects, or settings need visual consistency.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative or full long-form video after Story Approval and Video Medium Plan mapping.
 - `schemas/output-record.schema.json` for every generated or imported composite storyboard sheet, storyboard still, and future concrete video artifact.
 - `skills/artist-os/references/storyboard-prompt-builder.md` for the high-authority two-phase storyboard prompt package method. When the artist asks to create or generate "the storyboard," this method defaults to one composite multi-panel storyboard sheet, not individual still images.
 - `skills/artist-os/references/text-journey.md` when script, dialogue, voiceover, captions, social copy, or on-screen text wording needs drafting.
+- `skills/artist-os/references/platforms/elevenlabs-v3-voiceover.md` when approved script, dialogue, or voiceover wording needs ElevenLabs v3 voice-over prompt preparation.
 - `skills/artist-os/references/text-to-suno-plan.md` when music, sound design, or a sound prompt plan becomes a first-class deliverable.
 - `docs/storage.md` when writing or updating project records in the Workspace Library.
 
@@ -38,10 +42,12 @@ These hold whether you run standalone or under the `artist-os` conductor:
 
 - A standalone run has no conductor. Enforce the same gates yourself.
 - Never call a video, image, sound, or render provider without explicit approval for that exact call or approved batch. Drafting a Video Medium Plan and storyboard frame prompts is allowed; generating composite storyboard sheets, storyboard stills, or rendered video is not.
-- Do not claim finished video generation is supported in v0. The current path stops at storyboard-ready planning.
-- Do not create a Video Prompt Plan in v0. Storyboard frame prompts live in the Video Medium Plan until provider-neutral video generation instructions prove their own fields.
+- Do not claim finished video generation is supported in v0. The current path stops at storyboard-ready planning plus optional post-storyboard provider prompt packaging.
+- Do not create a provider-neutral Video Prompt Plan in v0. Storyboard frame prompts live in the Video Medium Plan until provider-neutral video generation instructions prove their own fields. Seedance Prompt Packages are provider-specific post-storyboard exports, not the provider-neutral Video Prompt Plan.
 - Do not draft script, dialogue, voiceover, captions, social copy, or on-screen text wording inside the Video Medium Plan when a Text Generation Plan is needed. The Video Medium Plan owns timing, placement, role, and refs.
+- When the target provider/use is ElevenLabs v3 voice-over, draft or approve the spoken wording through Text Journey first, then use `skills/artist-os/references/platforms/elevenlabs-v3-voiceover.md` to prepare the voice-over prompt. Do not treat audio-tag preparation as permission to render TTS.
 - Do not create generated storyboard stills without Generation Approval. "Create/generate the storyboard" means one composite multi-panel storyboard sheet by default. Individual panel stills are a separate artifact type and require explicit artist approval that names individual still images or separate panel images. Each generated or imported storyboard still gets an Output Record linked back to the relevant Storyboard Shot before review or acceptance.
+- Do not create Seedance prompts before storyboard approval. After storyboard approval, a Seedance Prompt Package may be drafted automatically when Seedance is selected, but Seedance generation remains a provider-backed action requiring explicit approval. Seedance prompt text must be English by default and must list reference files and provider bindings.
 - Do not re-ask for Character Templates or Visual Reference Sheet Plans after the artist declined or deferred them in this flow.
 - For cumulative or full long-form video, create and maintain a Long-Work Stewardship Record; do not expand later dependent sequences, scenes, or shot batches while Long-Work Readiness is `repair_before_expansion` unless the artist repairs or explicitly waives the block.
 - Persist records and gate decisions as you create them, following `docs/storage.md`. Chat context is not durable storage.

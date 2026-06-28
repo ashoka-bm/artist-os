@@ -97,7 +97,7 @@ missing-Reference prompt as a separate start-condition guard.
 6. Requires explicit provider-backed Generation Approval before generated composite storyboard sheets, generated individual storyboard stills, or any rendered video provider call.
 7. Requires normal Output Records for generated or imported composite storyboard sheets and individual storyboard stills before review or acceptance.
 8. Requires separate explicit approval before generating individual storyboard stills.
-9. Does NOT create a Video Prompt Plan in v0.
+9. Does NOT create a provider-neutral Video Prompt Plan in v0; if Seedance is selected after storyboard approval, it may create an English Seedance Prompt Package before Seedance Generation Approval.
 
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.
@@ -134,7 +134,7 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > missing Reference stop, no invented source material, and phases that must not
 > run yet) + "HARD GATES ENFORCED". T6: "VIDEO STORYBOARD SPECIFICS" (video
 > route; v0 storyboard-only boundary; Symbology → Style; video gates; storyboard
-> still approval; Output Records for stills; no Video Prompt Plan) + "HARD GATES
+> still approval; Output Records for stills; no provider-neutral Video Prompt Plan; optional English Seedance Prompt Package after storyboard approval) + "HARD GATES
 > ENFORCED".
 >
 > Quote the skill line/section each major step comes from. Write the trace to

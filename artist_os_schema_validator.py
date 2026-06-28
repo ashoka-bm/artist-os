@@ -574,6 +574,7 @@ FIXTURE_SCHEMA_MAP = {
     "text-generation-plan.json": "text-generation-plan.schema.json",
     "text-medium-plan.json": "text-medium-plan.schema.json",
     "video-medium-plan.json": "video-medium-plan.schema.json",
+    "seedance-prompt-package.json": "seedance-prompt-package.schema.json",
     "character-template.json": "character-template.schema.json",
     "visual-reference-sheet-plan.json": "visual-reference-sheet-plan.schema.json",
     "reference-inventory.json": "reference-inventory.schema.json",

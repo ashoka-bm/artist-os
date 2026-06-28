@@ -7,7 +7,7 @@ Seedance appears in the current references as the model behavior being prompted 
 ## Current Pattern Hypotheses
 
 - Seedance 2 exports should default to 24 frames per second when the provider prompt accepts frame-rate language.
-- A Seedance 2 prompt may perform better in Chinese; keep English only as an authoring or review translation when needed.
+- Artist OS Seedance prompt packages should be authored in English by default. Do not produce Chinese prompt blocks unless the artist explicitly requests a separate experimental translation.
 - A single generation should be planned as a 15-second-or-less clip unless the provider settings prove otherwise.
 - Multi-clip sequences should use the last frame of the previous clip as the next clip's starting continuity reference when the platform supports it.
 - Provider prompts should name a concrete camera body or capture style, plus a specific lighting setup, when those details support the approved Video Style Expression.
@@ -27,7 +27,7 @@ Seedance appears in the current references as the model behavior being prompted 
 - Influencer video prompting adds stronger identity locks, wardrobe-reference routing, product/logo visibility rules, and content recipes such as UGC talking head, product reveal, lifestyle plandid, GRWM, and brand integration.
 - Animation workflows may use a simpler style/action/camera prompt when character sheets, storyboard panels, or start/end frames already carry the design.
 - Seedance should be tested by camera-control type: pan, tracking, POV, orbit, macro zoom, side-scroll, fixed camera, and jump-cut/editing behavior.
-- Cinematic Seedance exports need a stricter renderer protocol than the general checklist: duration-derived shot count, six-shot default cap, Chinese prompt body, 24fps scene header, no beat headers, no per-shot durations, mirrored English review translation, and complete re-output on revision.
+- Cinematic Seedance exports need a stricter renderer protocol than the general checklist: duration-derived shot count, six-shot default cap, English prompt body, 24fps scene header, no beat headers, no per-shot durations, explicit reference binding table, and complete re-output on revision.
 - Reference tray tags are volatile provider bindings. They should be confirmed before prompt export, placed next to the noun they control, repeated in every shot where needed, and mirrored in the English review translation.
 - Start-frame animation should be handled separately from all-reference prompting; a start frame usually needs motion instructions, not repeated image tags.
 - Audio references should be bound inline to the speaking action. If the audio clip carries the line, the prompt should not also transcribe the same line as text.

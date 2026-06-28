@@ -1,0 +1,114 @@
+{
+  "seedance_prompt_package_id": "seedance_pkg_threshold_reel_001",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "video_medium_plan_id": "vmp_threshold_reel_storyboard",
+  "target_provider": "seedance",
+  "package_stage": "post_storyboard_prompt_package",
+  "language_policy": {
+    "prompt_language": "English",
+    "chinese_prompt_allowed": false,
+    "translation_notes": "Do not create a Chinese prompt pass for this package."
+  },
+  "provider_boundary": {
+    "prompt_drafting": "allowed_without_provider_call",
+    "provider_generation": "requires_explicit_artist_approval",
+    "upload_or_render": "requires_explicit_artist_approval"
+  },
+  "storyboard_approval_ref": "gate_video_brief_approval",
+  "selected_storyboard_shot_ids": [
+    "vshot_001",
+    "vshot_002",
+    "vshot_003"
+  ],
+  "reference_bindings": [
+    {
+      "binding_id": "seedance_ref_hallway_location",
+      "provider_tray_tag": "@hallway",
+      "reference_role": "location",
+      "reference_file": "workspace-library/artist-os/projects/door-left-lit/outputs/references/hallway-threshold-location.png",
+      "output_record_id": "out_hallway_threshold_location",
+      "applies_to_shot_ids": [
+        "vshot_001",
+        "vshot_002",
+        "vshot_003"
+      ],
+      "scope_notes": "Use only for hallway geometry, wall texture, door placement, and floor continuity."
+    },
+    {
+      "binding_id": "seedance_ref_style_calibration",
+      "provider_tray_tag": "@style",
+      "reference_role": "style",
+      "reference_file": "workspace-library/artist-os/projects/door-left-lit/outputs/references/cinematic-practical-light-style.png",
+      "output_record_id": "out_cinematic_practical_light_style",
+      "applies_to_shot_ids": [
+        "vshot_001",
+        "vshot_002",
+        "vshot_003"
+      ],
+      "scope_notes": "Use only for warm practical light, cool hallway shadow, film texture, and restrained realism."
+    }
+  ],
+  "clip_batches": [
+    {
+      "batch_id": "seedance_batch_threshold_reel_001",
+      "shot_ids": [
+        "vshot_001",
+        "vshot_002",
+        "vshot_003"
+      ],
+      "duration_seconds": 12,
+      "frames_per_second": 24,
+      "aspect_ratio": "9:16",
+      "prompt_text": "Vertical 9:16 cinematic live-action realism, 24fps. Use @hallway for the narrow apartment hallway and @style for warm practical light against cool hallway shadow. Shot 1: a wide eye-level view slowly pushes toward the half-open apartment door at the far end; no people are visible, the warm light feels like an invitation with no host. Shot 2: cut to a low medium close-up of the door edge and light spilling over the floorboards; hold the absence, one subtle light flicker only. Shot 3: match cut to an overhead close-up of the empty floor with the warm rectangle of light, the door cropped out, the room tone falling away. Keep movement restrained, one camera movement per shot, no subtitles, no music.",
+      "negative_instructions": [
+        "Do not reveal a person in the doorway.",
+        "Do not add horror jump scares, extra props, decorative clutter, subtitles, or music."
+      ],
+      "reference_binding_ids": [
+        "seedance_ref_hallway_location",
+        "seedance_ref_style_calibration"
+      ],
+      "continuity_inputs": [
+        "Preserve the same hallway geometry, door position, floorboards, and warm/cool light relationship across all shots."
+      ],
+      "export_notes": "Three approved storyboard shots fit in one 12 second Seedance batch. If the provider struggles with continuity, split after shot 2 and use the last accepted frame as the next start frame."
+    }
+  ],
+  "audio_text_policy": {
+    "audio_posture": "voiceover-led with sparse sound design",
+    "music_policy": "No music unless the artist separately approves a music bed.",
+    "subtitle_policy": "No subtitles in the raw Seedance clip; on-screen title treatment belongs to the approved text track or later edit layer.",
+    "spoken_line_policy": "Do not invent or transcribe new dialogue. Bind approved voiceover audio separately if speech is rendered in-provider."
+  },
+  "approval_refs": {
+    "prompt_critic_review_id": null,
+    "prompt_lock_gate_id": null,
+    "generation_approval_gate_id": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "The prompt preserves absence by forbidding a visible host."
+    },
+    {
+      "source_type": "video_medium_plan",
+      "source_ref": "vmp_threshold_reel_storyboard",
+      "note": "Aspect ratio, shot order, audio posture, and storyboard shot movement come from the approved Video Medium Plan."
+    },
+    {
+      "source_type": "reference_binding",
+      "source_ref": "seedance_ref_hallway_location",
+      "note": "The location reference file controls hallway continuity without adding new story material."
+    }
+  ],
+  "critique_checklist": [
+    "Prompt text is English and does not include a Chinese prompt block.",
+    "Every provider tray tag has a reference file and scoped role.",
+    "The batch uses no more than six storyboard shots and stays within 4-15 seconds.",
+    "No story events, symbols, dialogue, subtitles, music, or visual subjects are invented beyond the approved storyboard package."
+  ]
+}

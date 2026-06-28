@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/seedance-prompt-package.schema.json",
+  "title": "SeedancePromptPackage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "seedance_prompt_package_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "video_medium_plan_id",
+    "target_provider",
+    "package_stage",
+    "language_policy",
+    "provider_boundary",
+    "storyboard_approval_ref",
+    "selected_storyboard_shot_ids",
+    "reference_bindings",
+    "clip_batches",
+    "audio_text_policy",
+    "approval_refs",
+    "traceability_summary",
+    "critique_checklist"
+  ],
+  "properties": {
+    "seedance_prompt_package_id": { "type": "string", "pattern": "^seedance_pkg_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "video_medium_plan_id": { "type": "string", "pattern": "^vmp_[a-zA-Z0-9_-]+$" },
+    "target_provider": { "type": "string", "const": "seedance" },
+    "package_stage": { "type": "string", "enum": ["post_storyboard_prompt_package"] },
+    "language_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_language", "chinese_prompt_allowed", "translation_notes"],
+      "properties": {
+        "prompt_language": { "type": "string", "const": "English" },
+        "chinese_prompt_allowed": { "type": "boolean", "const": false },
+        "translation_notes": { "type": "string" }
+      }
+    },
+    "provider_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_drafting", "provider_generation", "upload_or_render"],
+      "properties": {
+        "prompt_drafting": { "type": "string", "enum": ["allowed_without_provider_call"] },
+        "provider_generation": { "type": "string", "enum": ["requires_explicit_artist_approval"] },
+        "upload_or_render": { "type": "string", "enum": ["requires_explicit_artist_approval"] }
+      }
+    },
+    "storyboard_approval_ref": { "type": "string", "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+    "selected_storyboard_shot_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^vshot_[a-zA-Z0-9_-]+$" }
+    },
+    "reference_bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/reference_binding" }
+    },
+    "clip_batches": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/clip_batch" }
+    },
+    "audio_text_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audio_posture", "music_policy", "subtitle_policy", "spoken_line_policy"],
+      "properties": {
+        "audio_posture": { "type": "string", "minLength": 1 },
+        "music_policy": { "type": "string", "minLength": 1 },
+        "subtitle_policy": { "type": "string", "minLength": 1 },
+        "spoken_line_policy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approval_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_critic_review_id", "prompt_lock_gate_id", "generation_approval_gate_id"],
+      "properties": {
+        "prompt_critic_review_id": { "type": ["string", "null"], "pattern": "^review_[a-zA-Z0-9_-]+$" },
+        "prompt_lock_gate_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "generation_approval_gate_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" }
+      }
+    },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "critique_checklist": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "reference_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding_id",
+        "provider_tray_tag",
+        "reference_role",
+        "reference_file",
+        "output_record_id",
+        "applies_to_shot_ids",
+        "scope_notes"
+      ],
+      "properties": {
+        "binding_id": { "type": "string", "pattern": "^seedance_ref_[a-zA-Z0-9_-]+$" },
+        "provider_tray_tag": { "type": "string", "pattern": "^@[A-Za-z0-9_-]+$" },
+        "reference_role": {
+          "type": "string",
+          "enum": ["identity", "body_turnaround", "macro_detail", "location", "object", "style", "start_frame", "audio"]
+        },
+        "reference_file": { "type": "string", "minLength": 1 },
+        "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+        "applies_to_shot_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^vshot_[a-zA-Z0-9_-]+$" }
+        },
+        "scope_notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "clip_batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "batch_id",
+        "shot_ids",
+        "duration_seconds",
+        "frames_per_second",
+        "aspect_ratio",
+        "prompt_text",
+        "negative_instructions",
+        "reference_binding_ids",
+        "continuity_inputs",
+        "export_notes"
+      ],
+      "properties": {
+        "batch_id": { "type": "string", "pattern": "^seedance_batch_[a-zA-Z0-9_-]+$" },
+        "shot_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": { "type": "string", "pattern": "^vshot_[a-zA-Z0-9_-]+$" }
+        },
+        "duration_seconds": { "type": "integer", "minimum": 4, "maximum": 15 },
+        "frames_per_second": { "type": "integer", "const": 24 },
+        "aspect_ratio": { "type": "string", "minLength": 1 },
+        "prompt_text": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "pattern": ".*[\\u4E00-\\u9FFF].*" }
+        },
+        "negative_instructions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "reference_binding_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^seedance_ref_[a-zA-Z0-9_-]+$" }
+        },
+        "continuity_inputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "export_notes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "source_ref", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["artist_meaning", "reference", "transformation_brief", "beat_plan", "video_medium_plan", "storyboard_shot", "reference_binding", "review", "gate"]
+        },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
