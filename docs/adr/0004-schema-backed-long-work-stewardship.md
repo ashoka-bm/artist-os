@@ -15,3 +15,5 @@ The record has a foundation state and an enriched state. The foundation record i
 ## Consequences
 
 Long-Work Stewardship is schema-backed from the start. Collection Coherence Review remains review behavior until collection-level acceptance, store readiness, or batch-level promotion creates a real need for a separate schema.
+
+Amendment (ADR 0013): activation is no longer keyed to Cumulative Work scale alone. Long-Work Stewardship now activates only when both cumulative dependency (parts depend on each other for continuity) and the per-medium length floor hold; an album, EP, portfolio, or collection of individual parts never activates it however large. Both conditions are recorded in `activation_reason` (`requires_part_to_part_dependency`, `meets_length_floor`, and any `length_floor_override`). See ADR 0013 for the threshold and per-medium floors.

@@ -72,6 +72,28 @@ class StoryStructureContractTests(unittest.TestCase):
             text,
         )
 
+    def test_output_journeys_names_both_stewardship_conditions(self) -> None:
+        text = self._read("docs/output-journeys/README.md")
+
+        for required in ("cumulative dependency", "length floor"):
+            with self.subTest(required=required):
+                self.assertIn(required, text)
+
+        self.assertIn(
+            "collection of individual parts never activates stewardship",
+            text,
+        )
+
+        # The two compact-arc substrings must stay intact alongside the threshold prose.
+        self.assertIn(
+            "A compact multi-beat `arc` does not automatically trigger Long-Work Stewardship",
+            text,
+        )
+        self.assertIn(
+            "short written work, compressed visual arc, or single multi-section sound work",
+            text,
+        )
+
     def test_conductor_routes_story_structure_into_beat_plan(self) -> None:
         text = self._read("skills/artist-os/SKILL.md")
 

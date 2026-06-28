@@ -15,6 +15,11 @@
     "story_mode": "arc",
     "artist_requested_cumulative_work": true,
     "requires_part_to_part_dependency": true,
+    "meets_length_floor": true,
+    "length_floor_override": {
+      "overridden": false,
+      "rationale": ""
+    },
     "reason": "The three text sections build from object to atmosphere to withheld ending, so later sections depend on prior emotional pressure."
   },
   "governing_arc": {

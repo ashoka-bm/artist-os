@@ -15,6 +15,11 @@
     "story_mode": "sequence",
     "artist_requested_cumulative_work": true,
     "requires_part_to_part_dependency": true,
+    "meets_length_floor": true,
+    "length_floor_override": {
+      "overridden": false,
+      "rationale": ""
+    },
     "reason": "Story Approval selected a cumulative sequence, so the project needs a stewardship record before medium-specific image roles exist."
   },
   "governing_arc": {
