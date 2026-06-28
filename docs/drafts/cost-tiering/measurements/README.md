@@ -85,6 +85,46 @@ Baselines live in `curves/`. `curves/queen-bee-2026-06-26.html` is the pre-chang
 the express-path / reset changes land, generate the new run's curve into `curves/` and the area
 under the red line should drop sharply.
 
+## Paired lean rerun (the next measurement)
+
+The 06-27 Sage Wells rows are the FLAT "before." To get the "after" — and prove the
+lean micro-journey recipe + Schema Load Economy actually lower cost — run the paired test:
+
+1. **Refresh the dev bundle** so the installed skill has the latest edits (the bundle is a
+   *copy*, not a symlink, so repo edits do not reach Codex until you re-install):
+   ```
+   bin/install-codex-dev-skills      # then start a NEW Codex thread to pick it up
+   ```
+2. **Run one short-form social video** comparable to the Sage Wells stages (reel / Instagram /
+   short social), one project per session. The conductor should route to the lean recipe.
+3. **Wait for the session to finish**, then confirm the rollout has stopped growing before
+   measuring (`stat -f '%Sm' <rollout>` — see the stale-row note below for why this matters).
+4. **Compare and verify it went lean** (not another silent flat run):
+   ```
+   python3 compare-run.py --session <id> --label "lean rerun"
+   ```
+   It reuses `token-report.py` for the cost numbers (so they match logged rows), prints the
+   per-turn distribution vs the 90k cap, and PASS/WARN lean-path signals (recipe loaded? full
+   stack avoided? `micro_journey` set?). All-PASS means the path was actually lean.
+5. If it went lean, append a row to `token-log.jsonl` (`notes: "lean: recipe + schema-load
+   economy"`) and write its curve into `curves/` with `token-curve.py`.
+
+## Logged baselines — note on the 06-27 Sage Wells rows
+
+The three `Sage Wells short-form social` rows (stages 1–3) are a **flat short-form
+baseline**, and flat was *forced*, not chosen: the lean `video-micro-journey-recipe.md`
+was first committed at 11:32 and only synced into the installed Codex bundle
+(`~/.codex/skills/`) at 13:34, whereas the runs routed at ~10:21, ~10:51, and 13:30.
+All three loaded the full `video-journey.md` + `storyboard-prompt-builder.md` stack and
+never set `micro_journey`. So they are not a failed lean run — they are the clean
+**"before"** for a future micro-journey-recipe run on the same kind of work.
+
+One caveat when reading them: their per-turn context (~41–54k/turn) is far below the
+single-session fairy-tale runs (~100–126k/turn), but that drop is from **splitting the
+journey across short sessions** (the reset / one-project-per-session lever), *not* from
+the lean recipe, which was never loaded. Keep the two levers separate when attributing
+any win — recipe vs. session-splitting are independent.
+
 ## Goal
 
 After ~5 runs across cells (especially video/compact and a long-form journey), the
