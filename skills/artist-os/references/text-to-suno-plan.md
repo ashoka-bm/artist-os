@@ -6,14 +6,14 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 
 ## References
 
-Load details only when needed:
+Load details only when needed. Read a schema only when you produce or validate the record it governs — never preload one before planning (see SKILL.md → Schema load economy):
 
 - `docs/text-to-sound/THEORY.md` for sound concepts, Sonic Dynamics, lyrics, and arrangement rules.
 - `docs/text-to-sound/ARCHITECTURE.md` for gates, the Platform Rendering Boundary, and Sound Prompt Plan contract.
 - `skills/artist-os/references/platforms/suno-output.md` for Suno Platform Rendering after the neutral Sound Prompt Plan exists.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and mandatory reviewer rules.
 - `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, section journeys, lyric movement, or sequence recommendations.
-- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
+- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` govern the Transformation Brief and Beat Plan records — read each only when producing or validating that record.
 - `schemas/sound-medium-plan.schema.json` for sound-specific translation decisions before Sound Creative Brief creation.
 - `docs/metadata-schema.md` for required record fields.
 - `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json` when emitting final JSON.
