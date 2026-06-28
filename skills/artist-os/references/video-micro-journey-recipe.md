@@ -25,6 +25,8 @@ thinning the edit.
 Inputs (from the conductor, or confirm they exist if standalone): Reference, Artist
 Meaning, Transformation Brief, Beat Plan.
 
+If this medium is being activated on an existing project, these spine inputs already exist — consume the **Shared Story Spine** (Transformation Brief, Beat Plan, standing Story Approval) by reference; **do not re-derive** meaning or rebuild the Beat Plan.
+
 The hard gates are unchanged — the lean path relaxes none of them:
 
 - No video/image/render provider call without explicit per-call (or approved-batch)

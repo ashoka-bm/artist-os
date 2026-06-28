@@ -52,6 +52,8 @@ Use the Reference, Source Record, Artist Meaning Record, Transformation Brief, B
 
 ## Shared Story And Visual Planning
 
+If video is being activated on an existing project, consume the existing **Shared Story Spine** (Transformation Brief, Beat Plan, and the standing Story Approval) by reference; **do not re-derive** meaning or re-run the Story gate. Produce the records below only when the spine does not already exist.
+
 Before creating a Video Medium Plan, produce or consume:
 
 1. A Transformation Brief matching `schemas/transformation-brief.schema.json`.

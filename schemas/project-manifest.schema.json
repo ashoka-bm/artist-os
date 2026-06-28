@@ -42,6 +42,7 @@
     "summary": { "type": "string" },
     "artist_library": { "$ref": "#/$defs/artist_library_state" },
     "feedback_state": { "$ref": "#/$defs/feedback_state" },
+    "resume_state": { "$ref": "#/$defs/resume_state" },
     "paths": {
       "type": "object",
       "additionalProperties": false,
@@ -234,6 +235,35 @@
           "enum": ["proposed", "generated", "imported", "accepted", "rejected", "archived"]
         },
         "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "resume_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_checkpoint", "next_phase", "media_index"],
+      "properties": {
+        "current_checkpoint": { "type": "string" },
+        "next_phase": { "type": "string" },
+        "effective_project_scale": { "type": "string" },
+        "cross_medium_plan_ref": { "type": ["string", "null"] },
+        "media_index": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/media_index_entry" }
+        }
+      }
+    },
+    "media_index_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["medium", "status"],
+      "properties": {
+        "medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+        "medium_role": { "type": "string", "enum": ["primary", "supporting"] },
+        "medium_plan_ref": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["planned", "active", "complete"] },
+        "artist_meaning_id": { "type": ["string", "null"] },
+        "transformation_brief_id": { "type": ["string", "null"] },
+        "beat_plan_id": { "type": ["string", "null"] }
       }
     }
   }

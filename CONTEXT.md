@@ -600,6 +600,50 @@ _Avoid_: Treating each asset as an unrelated project, Platform Container
 The schema-backed package-level coordination record for a Release Package, owning deliverables, medium roles, calibration status, production order, and cross-media continuity decisions.
 _Avoid_: Medium Plan, Long-Work Stewardship Record, prose-only package notes
 
+**Shared Story Spine**:
+The medium-neutral records that define a project: the Artist Meaning Record, Transformation Brief, and Beat Plan, together with the Beat Plan's Story Approval. It is immutable shared truth; every active medium reuses it verbatim and expresses divergence downstream in its own Medium Plan through Expectation Turn Translation.
+_Avoid_: Forking or editing the Beat Plan per medium, treating a Medium Plan or Creative Brief as part of the spine
+
+**Medium Activation**:
+Turning on one of a project's possible media. A project has one Shared Story Spine and a medium layer that can carry any subset of image, video, audio, and text; the artist activates the ones they want, now or later. Activating a medium creates its Medium Plan and runs only the medium-specific tail — the spine is shared by construction, not inherited across a boundary, so it is never re-derived. Activating a later medium in a fresh thread rehydrates from Project Resume State.
+_Avoid_: Re-running Source Record, Meaning Interview, Transformation Brief, Beat Plan, or Story Approval when activating another medium on the same meaning; treating a second medium as a new project or as a special "warm start" mode; a genuinely different meaning is a new project linked to the same Source Record
+
+**Cross-Medium Plan**:
+The lazy, project-level coordinator over a multi-medium project. It lists each medium and its medium-plan ref and owns each medium's Medium Role, production order, cross-medium continuity, and Effective Project Scale, while the medium-specific bodies stay separate and independently locked. The Release Package Plan is its album-specialized form.
+_Avoid_: Collapsing the per-medium Medium Plans into one record, duplicating medium-specific body fields, creating it for a single-medium project
+
+**Medium Role**:
+The role a medium plays in a multi-medium project, recorded on the Cross-Medium Plan as primary or supporting. The role sets the default treatment depth and is distinct from Workflow Scale Routing: role names importance, scale names depth, and the role seeds the default scale the artist can override.
+_Avoid_: Conflating Medium Role with Workflow Scale Routing, giving every medium equal treatment by default
+
+**Primary Medium**:
+The lead medium of a project, fully fleshed out, that supporting media serve. The conductor recommends it from the output type (video for a video, the song for a music video, text for an article with photos) and the artist confirms; it is not hard-coded.
+_Avoid_: Hard-coding the primary by output type without artist confirmation, assuming every project must have exactly one primary
+
+**Supporting Medium**:
+A medium subordinate to the Primary Medium, defaulting to the compact treatment tier (lean Medium Plan, fewer reviews) and obeying the primary medium's realization for continuity in addition to the Shared Story Spine. Generalizes Album Track Covers and Illustration Plan images.
+_Avoid_: Running the full medium spine and full review set for a supporting medium by default, letting a supporting medium drift from the primary
+
+**Package Compilation**:
+The terminal stage that runs after generations return: it intakes the returned or imported assets as Output Records, arranges them by the chosen Package Format, gates on completeness, and produces the Asset Package. Stage 1 produces prompts; Stage 2 compiles the finished bundle. It calls no provider, preserving the dry-run boundary.
+_Avoid_: Treating package assembly as part of prompt planning, declaring a package done without the completeness gate
+
+**Package Format**:
+A named template for how a finished release arranges its assets, such as album (album title, album thumbnail, and per-song audio plus cover image and titles), article-with-photos, or video-with-soundtrack. A Package Format mirrors Medium Roles: one primary asset with supporting assets arranged around it. Package Formats live in an index-first library at `docs/structure-library/package-format/`, one file per format, and their completeness rules are the Package Compilation gate's checklist.
+_Avoid_: Hard-coding one bundle shape, conflating a Package Format with a Cross-Medium Plan
+
+**Asset Package**:
+The compiled output artifact produced by Package Compilation: a thin, persisted, schema-backed manifest that references the accepted Output Records by id, arranges them into the Package Format's slots, and records per-slot completeness status (filled, missing, or waived). It copies no asset content — Output Records stay the source of truth. It is the finished, artist-facing bundle, distinct from the Release Package Plan that planned it and the Cross-Medium Plan that coordinated it.
+_Avoid_: Confusing the Asset Package (compiled output) with the Release Package Plan (plan) or Cross-Medium Plan (coordinator)
+
+**Effective Project Scale**:
+The project's working Workflow Scale level, computed as the maximum over its media and surfaced on the Cross-Medium Plan and project.json. The Beat Plan's Project-Level Workflow Scale Routing remains the frozen as-of-Story-Approval baseline; a later medium may escalate the effective scale without rewriting the Beat Plan.
+_Avoid_: Rewriting the Beat Plan's scale field, treating the first medium's scale as a project ceiling
+
+**Project Resume State**:
+The durable resume projection on project.json — current checkpoint, next phase, and a media index pointing at the Cross-Medium Plan and Shared Story Spine. The reset-handoff prompt, post-compaction rehydration, and fresh-thread Medium Activation are all on-demand projections of it.
+_Avoid_: Persisting a separate resume-packet record, improvising the handoff from live chat context
+
 **Album**:
 A Release Package whose primary medium is sound and whose parts usually include ordered tracks plus supporting text and visual assets.
 _Avoid_: Generic Cumulative Work, Sound Medium Plan

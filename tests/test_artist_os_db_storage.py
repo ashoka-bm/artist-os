@@ -1323,6 +1323,62 @@ class ArtistOSDbStorageTests(unittest.TestCase):
 
         validate(manifest, schema, schema)
 
+    def test_project_manifest_schema_accepts_resume_state(self) -> None:
+        # Slice 1 (ADR 0012 D5): optional resume_state projection + media index.
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "medium_plan",
+            "next_phase": "Medium Plan",
+            "effective_project_scale": "structured_single_artifact",
+            "cross_medium_plan_ref": None,
+            "media_index": [
+                {
+                    "medium": "image",
+                    "medium_role": "primary",
+                    "medium_plan_ref": "imp_door_left_lit",
+                    "status": "complete",
+                    "artist_meaning_id": "am_door_left_lit",
+                    "transformation_brief_id": "tb_door_left_lit",
+                    "beat_plan_id": "bp_door_left_lit",
+                },
+                {"medium": "audio", "status": "active", "beat_plan_id": "bp_door_left_lit"},
+            ],
+        }
+        validate(manifest, schema, schema)
+
+    def test_project_manifest_schema_resume_state_is_optional(self) -> None:
+        # Backward compatibility: manifests with no resume_state still validate.
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        self.assertNotIn("resume_state", manifest)
+        validate(manifest, schema, schema)
+
+    def test_project_manifest_schema_rejects_unknown_medium_token(self) -> None:
+        # 'sound' is not a medium token (the medium is 'audio'); the enum must bite.
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "medium_plan",
+            "next_phase": "Medium Plan",
+            "media_index": [{"medium": "sound", "status": "active"}],
+        }
+        with self.assertRaisesRegex(ValidationError, "is not one of"):
+            validate(manifest, schema, schema)
+
+    def test_project_manifest_schema_resume_state_rejects_unknown_key(self) -> None:
+        # additionalProperties:false must reject stray keys inside resume_state.
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "medium_plan",
+            "next_phase": "Medium Plan",
+            "media_index": [],
+            "resume_packet": "nope",
+        }
+        with self.assertRaisesRegex(ValidationError, "unexpected fields"):
+            validate(manifest, schema, schema)
+
     def test_sync_marks_retargeted_project_pointer_as_visible_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
