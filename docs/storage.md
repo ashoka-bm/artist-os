@@ -156,6 +156,7 @@ Each project gets one folder:
 ├── project.json
 ├── events.jsonl
 ├── feedback-log.jsonl
+├── cross-medium-plan.json
 ├── source/
 │   ├── source-record.json
 │   ├── reference.txt
@@ -317,6 +318,7 @@ Use these destinations for each asset type:
 - Image Medium Plan: `medium-plans/image-medium-plan.json`
 - Sound Medium Plan: `medium-plans/sound-medium-plan.json`
 - Text Medium Plan: `medium-plans/text-medium-plan.json`
+- Cross-Medium Plan: `cross-medium-plan.json` (project root; created lazily only when a second medium is active)
 - gate decisions: `gates/*.json`
 - generated or imported visual boards: `assets/boards/` with sidecar metadata
 - draft Creative Brief: `briefs/creative-brief.draft.md`

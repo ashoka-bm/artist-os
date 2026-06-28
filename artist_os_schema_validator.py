@@ -141,6 +141,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
         if path == "$" and root.get("title") == "ReleasePackagePlan":
             validate_release_package_plan_contract(value)
+        elif path == "$" and root.get("title") == "CrossMediumPlan":
+            validate_cross_medium_plan_contract(value)
 
 
 def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
@@ -218,6 +220,58 @@ def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
                 "$.tracks",
                 f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
             )
+
+
+_WORKFLOW_SCALE_ORDER = [
+    "compact_artifact",
+    "structured_single_artifact",
+    "cumulative_work",
+    "full_long_form_project",
+]
+
+
+def validate_cross_medium_plan_contract(record: dict[str, Any]) -> None:
+    """Validate Cross-Medium Plan cross-field invariants not expressible in our schema subset."""
+    media = record.get("media", [])
+
+    media_scale_levels = [entry.get("medium_scale_level") for entry in media]
+    known_scales = [
+        level for level in media_scale_levels if level in _WORKFLOW_SCALE_ORDER
+    ]
+    if known_scales:
+        max_scale = max(known_scales, key=_WORKFLOW_SCALE_ORDER.index)
+        effective_scale = record.get("effective_project_scale", {})
+        if effective_scale.get("scale_level") != max_scale:
+            raise ValidationError(
+                "$.effective_project_scale.scale_level",
+                f"Effective Project Scale must be the max over media scale levels ({max_scale!r})",
+            )
+
+    primary_entries = [
+        entry for entry in media if entry.get("medium_role") == "primary"
+    ]
+    if len(primary_entries) == 1:
+        primary_medium = record.get("primary_medium")
+        if primary_entries[0].get("medium") != primary_medium:
+            raise ValidationError(
+                "$.primary_medium",
+                f"primary_medium {primary_medium!r} must equal the medium of the single primary-role media entry",
+            )
+
+    primary_medium = record.get("primary_medium")
+    for entry in media:
+        if entry.get("medium_role") == "primary":
+            if entry.get("serves_primary") is not None:
+                raise ValidationError(
+                    "$.media",
+                    f"primary media entry {entry.get('medium')!r} serves_primary must be null",
+                )
+        elif entry.get("medium_role") == "supporting":
+            if entry.get("serves_primary") != primary_medium:
+                raise ValidationError(
+                    "$.media",
+                    f"supporting media entry {entry.get('medium')!r} serves_primary must equal primary_medium {primary_medium!r}",
+                )
 
 
 def validate_file(schema_path: Path, data_path: Path) -> None:
@@ -305,6 +359,7 @@ FIXTURE_SCHEMA_MAP = {
     "illustration-plan.json": "illustration-plan.schema.json",
     "review-record.json": "review-record.schema.json",
     "album-release-package-plan.json": "release-package-plan.schema.json",
+    "cross-medium-plan.json": "cross-medium-plan.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
     "project-feedback-log-entry.json": "project-feedback-log-entry.schema.json",

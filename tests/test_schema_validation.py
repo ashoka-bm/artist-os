@@ -237,6 +237,72 @@ class SchemaValidationTests(unittest.TestCase):
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
         validate_file(schema_path, data_path)
 
+    def test_cross_medium_plan_fixture_validates(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        validate_file(schema_path, data_path)
+
+    def test_cross_medium_plan_requires_exactly_one_primary(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["media"][1]["medium_role"] = "primary"
+        record["media"][1]["serves_primary"] = None
+        with self.assertRaisesRegex(
+            ValidationError,
+            "matches fewer than minContains|matches more than maxContains",
+        ):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_requires_two_media(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["media"] = [record["media"][0]]
+        with self.assertRaisesRegex(ValidationError, "has fewer than 2 items"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_effective_scale_must_be_max(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["effective_project_scale"]["scale_level"] = "structured_single_artifact"
+        with self.assertRaisesRegex(ValidationError, "Effective Project Scale must be the max"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_primary_medium_must_match_primary_role(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["primary_medium"] = "audio"
+        with self.assertRaisesRegex(
+            ValidationError,
+            "primary_medium 'audio' must equal the medium of the single primary-role media entry",
+        ):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_supporting_serves_primary_must_match(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["media"][1]["serves_primary"] = "audio"  # supporting must serve the primary ("video")
+        with self.assertRaisesRegex(ValidationError, "serves_primary must equal primary_medium"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_primary_serves_primary_must_be_null(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["media"][0]["serves_primary"] = "video"  # the primary entry must have serves_primary null
+        with self.assertRaisesRegex(ValidationError, "serves_primary must be null"):
+            validate(record, schema, schema)
+
     def test_character_template_fixture_validates(self) -> None:
         validate_file(
             REPO_ROOT / "schemas" / "character-template.schema.json",

@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/cross-medium-plan.schema.json",
+  "title": "CrossMediumPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "properties": {
+        "media": {
+          "contains": {
+            "type": "object",
+            "required": ["medium_role"],
+            "properties": {
+              "medium_role": { "const": "primary" }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      }
+    }
+  ],
+  "required": [
+    "cross_medium_plan_id",
+    "project_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+    "primary_medium",
+    "media",
+    "effective_project_scale",
+    "production_order",
+    "cross_medium_continuity",
+    "traceability_summary",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "cross_medium_plan_id": { "type": "string", "pattern": "^cmp_[a-zA-Z0-9_-]+$" },
+    "project_id": { "type": "string", "pattern": "^proj_[a-zA-Z0-9_-]+$" },
+    "source_id": { "type": "string", "pattern": "^src_[a-zA-Z0-9_-]+$" },
+    "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
+    "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
+    "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
+    "primary_medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+    "media": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/media_entry" }
+    },
+    "effective_project_scale": { "$ref": "#/$defs/effective_scale" },
+    "production_order": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/production_step" }
+    },
+    "cross_medium_continuity": { "$ref": "#/$defs/cross_medium_continuity" },
+    "traceability_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/traceability_note" }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "media_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["medium", "medium_role", "medium_plan_ref", "medium_scale_level", "status"],
+      "properties": {
+        "medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+        "medium_role": { "$ref": "#/$defs/medium_role" },
+        "medium_plan_ref": { "$ref": "#/$defs/medium_plan_ref" },
+        "medium_scale_level": { "$ref": "#/$defs/workflow_scale_level" },
+        "status": { "$ref": "#/$defs/medium_status" },
+        "serves_primary": {
+          "type": ["string", "null"],
+          "description": "Names the primary medium a supporting medium obeys; null for the primary."
+        },
+        "continuity_from_primary_realization": { "type": "boolean" }
+      }
+    },
+    "medium_plan_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan_type", "path_or_ref"],
+      "properties": {
+        "plan_type": {
+          "type": "string",
+          "enum": [
+            "image_medium_plan",
+            "video_medium_plan",
+            "sound_medium_plan",
+            "text_medium_plan",
+            "release_package_plan"
+          ]
+        },
+        "plan_id": { "type": ["string", "null"], "pattern": "^(imp|vmp|smp|tmp|rpp)_[a-zA-Z0-9_-]+$" },
+        "path_or_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "medium_role": {
+      "type": "string",
+      "enum": ["primary", "supporting"]
+    },
+    "medium_status": {
+      "type": "string",
+      "enum": ["planned", "in_progress", "locked", "complete", "deferred"]
+    },
+    "workflow_scale_level": {
+      "type": "string",
+      "enum": ["compact_artifact", "structured_single_artifact", "cumulative_work", "full_long_form_project"]
+    },
+    "effective_scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scale_level", "derived_from", "rationale"],
+      "properties": {
+        "scale_level": { "$ref": "#/$defs/workflow_scale_level" },
+        "derived_from": {
+          "type": "array",
+          "description": "Descriptive per-medium scale breakdown for human review. The binding rule (scale_level equals the max over media scale levels) is enforced by the Python contract; derived_from itself is not cross-checked against the media array.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["medium", "medium_scale_level"],
+            "properties": {
+              "medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+              "medium_scale_level": { "$ref": "#/$defs/workflow_scale_level" }
+            }
+          }
+        },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "production_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order_index", "medium", "step_summary", "status"],
+      "properties": {
+        "order_index": { "type": "integer", "minimum": 1 },
+        "medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+        "step_summary": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/planning_status" },
+        "required_before_media": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["image", "video", "audio", "text"] }
+        }
+      }
+    },
+    "planning_status": {
+      "type": "string",
+      "enum": ["planned", "in_progress", "complete", "blocked", "deferred"]
+    },
+    "cross_medium_continuity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared_meaning_rules", "shared_symbols", "allowed_variation", "must_not_drift"],
+      "properties": {
+        "shared_meaning_rules": { "type": "array", "items": { "type": "string" } },
+        "shared_symbols": { "type": "array", "items": { "type": "string" } },
+        "allowed_variation": { "type": "array", "items": { "type": "string" } },
+        "must_not_drift": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "traceability_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "note"],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "artist_meaning",
+            "transformation_brief",
+            "beat_plan",
+            "medium_plan",
+            "review_record",
+            "gate_decision"
+          ]
+        },
+        "source_ref": { "type": "string" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
