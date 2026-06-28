@@ -6,12 +6,12 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 
 ## References
 
-Load details only when needed:
+Load details only when needed. Read a schema only when you produce or validate the record it governs — never preload one before planning (see SKILL.md → Schema load economy):
 
 - `THEORY.md` for Core Tension Pairs, Visual Dynamics, Poetic Density, gates, and series logic.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and mandatory reviewer rules.
 - `docs/writing/references/writing-beats.SKILL.md` when creating or reviewing Beat Plans, image-series progression, or any journey-shaped plan.
-- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific brief locking.
+- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` govern the Transformation Brief and Beat Plan records — read each only when producing or validating that record.
 - `schemas/image-medium-plan.schema.json` for image-specific translation decisions before Creative Brief creation.
 - `schemas/long-work-stewardship-record.schema.json` for image-series Cumulative Work after Story Approval and Image Medium Plan mapping.
 - `schemas/character-template.schema.json` and `schemas/visual-reference-sheet-plan.schema.json` when recurring characters, objects, settings, products, or props need visual consistency.

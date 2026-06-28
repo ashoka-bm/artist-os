@@ -13,6 +13,8 @@ This skill is deliberately thin. The "how" of each phase lives in canonical docs
 
 Paths like `THEORY.md`, files under `docs/` and `schemas/`, and files under `skills/` resolve from `$ARTIST_OS_ROOT` — the repo root in a checkout, the bundle root in a Codex install. If a referenced file is missing, run `bin/artist-os-paths doctor`.
 
+**Schema load economy.** A schema path named in a phase step or mode file points to *which* schema governs *which* record — it is not an instruction to preload it. Schemas are large and, once read, are re-read on every later turn, so read one only when you produce or validate the record it governs: read it, shape the conforming JSON, and validate in the same pass, then treat it as consulted and do not re-read it. Plan and interview from the mode file's guidance, never from a preloaded schema. Loading a schema "before planning" makes it ride every intervening turn for no benefit and is the most common avoidable context cost.
+
 - `THEORY.md` — the canonical source for gate definitions, the Visual Gate Board contract, Stage Completion, Series logic, and Prompt Variant Plans. When a phase needs a board format, a gate question, or a "stage is done" rule, read it there rather than improvising.
 - `docs/storage.md` — Workspace Library layout and the persistence rule.
 - `docs/subagent-orchestration.md` — the delegation contract for worker packets, bounded subagents, Parallel Production, and synchronization barriers.

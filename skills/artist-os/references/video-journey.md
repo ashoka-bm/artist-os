@@ -6,7 +6,7 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 
 ## References
 
-Load details only when needed:
+Load details only when needed. Read a schema only when you produce or validate the record it governs — never preload one before planning (see SKILL.md → Schema load economy):
 
 - `docs/output-journeys/video.md` for the route, v0 boundary, reviews, and provider boundary.
 - `THEORY.md` for Symbology, Style Direction, Visual Gate Boards, Visual Dynamics, Shot Design, Prompt Variant Strategy, and series logic shared with image. Follow the board format there; do not restate it here.
@@ -14,7 +14,7 @@ Load details only when needed:
 - `docs/structure-library/README.md`, then only the relevant `docs/structure-library/story/` entry, when selecting or adapting Story Structure.
 - `docs/structure-library/cultural-format/README.md`, then only the relevant entry or draft project note, when the accepted video output shape needs recognizable audience-facing format grammar.
 - `docs/drafts/video-template-research/direction-notes/cinematic-coverage-and-camera-direction.md` when defining Storyboard Shot Design, camera angle, shot scale progression, coverage economy, or camera movement rationale.
-- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before video-specific planning.
+- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` govern the Transformation Brief and Beat Plan records — read each only when producing or validating that record.
 - `schemas/video-medium-plan.schema.json` for storyboard-ready video planning.
 - `schemas/character-template.schema.json` and `schemas/visual-reference-sheet-plan.schema.json` when recurring characters, products, objects, or settings need visual consistency.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative or full long-form video after Story Approval and Video Medium Plan mapping.

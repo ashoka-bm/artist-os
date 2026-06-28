@@ -6,13 +6,13 @@ Paths like `THEORY.md` and files under `docs/` and `schemas/` resolve from `$ART
 
 ## References
 
-Load details only when needed:
+Load details only when needed. Read a schema only when you produce or validate the record it governs — never preload one before planning (see SKILL.md → Schema load economy):
 
 - `docs/output-journeys/text.md` for the route, drafting boundary, editorial pass order, and Text Draft Packet rules.
 - `docs/writing/README.md` and `docs/writing/references/` for fragments, beats, and shape.
 - `docs/structure-library/README.md`, then only the relevant `docs/structure-library/story/` or `docs/structure-library/cultural-format/` entry, when selecting or adapting Story Structure or Cultural Format Structure.
 - `docs/story/THEORY.md` and `docs/gates-and-reviews.md` for the shared Transformation Brief, Beat Plan, Story Gate, and reviewer rules.
-- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` before medium-specific planning.
+- `schemas/transformation-brief.schema.json` and `schemas/beat-plan.schema.json` govern the Transformation Brief and Beat Plan records — read each only when producing or validating that record.
 - `schemas/text-medium-plan.schema.json` for text translation decisions before Text Creative Brief creation.
 - `schemas/long-work-stewardship-record.schema.json` for cumulative long text after Story Approval and Text Medium Plan mapping.
 - `schemas/character-template.schema.json` when recurring characters need voice, behavior, or continuity support.
