@@ -46,6 +46,8 @@ Use the Text Reference, Source Record, Artist Meaning Record, Transformation Bri
 
 ## Shared Story Records
 
+If this medium is being activated on an existing project, consume the existing **Shared Story Spine** (Transformation Brief, Beat Plan, and the standing Story Approval) by reference; **do not re-derive** or re-interview meaning. Produce the records below only when the spine does not already exist.
+
 Before creating the text-specific brief, produce:
 
 1. A Transformation Brief matching `schemas/transformation-brief.schema.json`.

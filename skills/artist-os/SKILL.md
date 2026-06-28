@@ -187,7 +187,7 @@ Music, song, instrumental, lyrics for a song, audio, Suno, soundtrack, score, so
 
 Album or sound-primary release package requests route to Album v1 when the artist wants ordered tracks plus supporting visual or text deliverables. EP, Single Bundle, Visual Album, campaign, and broader Release Package subtypes are future sibling routes; capture them as planning notes or ask whether the artist wants to proceed as Album v1.
 
-If the artist wants more than one medium outside Album v1, ask which medium to start with, run that flow to completion, then run the next one.
+If the artist wants more than one medium outside Album v1, treat it as one project with one Shared Story Spine, not as separate runs. The first medium builds the spine; activating any later medium reuses it — do not re-derive Artist Meaning, Transformation Brief, or Beat Plan, and do not re-run the Story gate. See **Medium Activation** below.
 
 ## Autopilot
 
@@ -235,6 +235,17 @@ If Artist Meaning is missing, ask:
 > What does this Reference mean to you, and what must survive when it changes form?
 
 Infer safe placeholders for title, rights notes, and source context unless rights, privacy, or consent could be affected.
+
+## Medium Activation
+
+A project is one Shared Story Spine — Artist Meaning, Transformation Brief, and Beat Plan, with its standing Story Approval — plus a medium layer that can carry any subset of image, video, audio, and text. The first medium builds the spine; activating a not-yet-active medium on an existing project reuses it. This is automatic in the one-project model, not a separate "warm start" mode.
+
+When the artist asks to add or activate a medium on work that already exists:
+
+- **Detect the project first.** Query `artist-os.sqlite`, then read the matching `project.json`, before asking the artist to restate anything (the rule in Persisting State). One clear match: name it and offer to activate the new medium on it. Several: ask which. None: treat as a cold start.
+- **Reuse the spine; do not re-derive it.** Name the Shared Story Spine being reused and state that the standing Story Approval on the unchanged Beat Plan still holds — that satisfies the Gate Completion Rule, so do not re-run the Story gate or re-interview meaning. Reference `transformation_brief_id` and `beat_plan_id`; never fork or edit the Beat Plan for the new medium.
+- **Enter at Phase 8 (Medium Plan).** Run only the medium-specific tail (Phases 8–17). Conditional phases re-evaluate fresh for this medium (Long-Work Stewardship per ADR 0013; Release Package for album shape), and the medium's own reviews and downstream gates still run fresh. A not-yet-active medium is a reset-eligible checkpoint: when context is high, offer the reset handoff (the `project.json` resume-state projection from Persisting State) instead of continuing in-thread.
+- **Record the hop lightly.** Write the new medium's Medium Plan and append a `medium_activated` event to `events.jsonl`. There is no inheritance record and no sibling field — cross-medium lineage is implicit through the existing `*_id` references. Do not write a `resume-packet.json`.
 
 ## Visual Gates
 
@@ -284,7 +295,7 @@ Load the owning mode file for the detailed checklist. Keep only these conductor-
 
 Use the Workspace Library for durable internal project state. The accepted installed-user storage model is the Wondermint Root layout in `docs/storage.md`; current tooling supports basic `WONDERMINT_ROOT` setup, while repo-local `workspace-library/artist-os/` remains the development/test fallback. For current storage flows where `artist-os.sqlite` exists, keep using it as the searchable index. The full folder layout, file names, and persistence cadence live in `docs/storage.md` — follow it; do not re-enumerate the paths here.
 
-The cadence that matters for you: persist each phase before advancing — write the stage record, update `project.json`, append to `events.jsonl`, store any board/image with a same-basename sidecar, write Artist Library files only when producing user-facing outputs, Review Drafts, accepted work, or readable summaries, and refresh the SQLite index when that index is available for the active Workspace Library. When an artist returns to prior work and `artist-os.sqlite` exists, query it first, then read the relevant `project.json` before asking them to restate context. If the Workspace Library is missing, use the correct storage root for the mode: `WONDERMINT_ROOT` for the installed-user sibling layout, `ARTIST_OS_LIBRARY_ROOT=<workspace_library>` for a low-level override, or repo-local setup only for development/test fallback. If SQLite shows `status = missing`, treat the row as historical and ask for the project files before resuming. If internal state exists but the visible Artist Library folder is missing, treat the project as visible-missing rather than deleted.
+The cadence that matters for you: persist each phase before advancing — write the stage record, update `project.json`, append to `events.jsonl`, store any board/image with a same-basename sidecar, write Artist Library files only when producing user-facing outputs, Review Drafts, accepted work, or readable summaries, and refresh the SQLite index when that index is available for the active Workspace Library. Maintain the `resume_state` projection on `project.json` as you persist — current checkpoint, next phase, and a media index of per-medium status and Shared Story Spine refs (see `schemas/project-manifest.schema.json`); it is the single durable source the reset handoff, post-compaction rehydration, and fresh-thread Medium Activation all project from, so do not write a separate `resume-packet.json`. When an artist returns to prior work and `artist-os.sqlite` exists, query it first, then read the relevant `project.json` before asking them to restate context. If the Workspace Library is missing, use the correct storage root for the mode: `WONDERMINT_ROOT` for the installed-user sibling layout, `ARTIST_OS_LIBRARY_ROOT=<workspace_library>` for a low-level override, or repo-local setup only for development/test fallback. If SQLite shows `status = missing`, treat the row as historical and ask for the project files before resuming. If internal state exists but the visible Artist Library folder is missing, treat the project as visible-missing rather than deleted.
 
 ## Output Style
 

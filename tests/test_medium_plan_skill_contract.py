@@ -248,5 +248,56 @@ class MediumPlanSkillContractTests(unittest.TestCase):
         self.assertNotIn("- **Build a multi-output release package**:", menu)
 
 
+# Slice 1 — Medium Activation (ADR 0012, D1-D8). These guard the behavioral fix
+# at the text level, independent of the manual conductor-behavior eval: every
+# medium mode reuses an existing Shared Story Spine instead of re-deriving it
+# (the Suno re-spin fix), and the conductor carries the Medium Activation
+# entry-mode rather than telling the artist to run each medium as a separate flow.
+MEDIUM_SPINE_REUSE_FILES = [
+    "skills/artist-os/references/text-to-image-plan.md",
+    "skills/artist-os/references/text-to-suno-plan.md",
+    "skills/artist-os/references/text-journey.md",
+    "skills/artist-os/references/video-journey.md",
+    "skills/artist-os/references/video-micro-journey-recipe.md",
+]
+SPINE_REUSE_MARKERS = ("Shared Story Spine", "do not re-derive")
+SUNO_SPIN_LINE = "run that flow to completion, then run the next one"
+
+
+class MediumActivationContractTests(unittest.TestCase):
+    def _read(self, skill_path: str) -> str:
+        return (REPO_ROOT / skill_path).read_text(encoding="utf-8")
+
+    def test_medium_modes_consume_existing_spine(self) -> None:
+        # A future leanness edit must not silently drop the anti-re-derivation rule.
+        for skill_path in MEDIUM_SPINE_REUSE_FILES:
+            text = self._read(skill_path)
+            with self.subTest(skill=skill_path):
+                self.assertIn("consume", text)
+                for marker in SPINE_REUSE_MARKERS:
+                    self.assertIn(marker, text)
+
+    def test_conductor_has_medium_activation_section(self) -> None:
+        text = self._read(CONDUCTOR_SKILL)
+        for marker in (
+            "## Medium Activation",
+            "Shared Story Spine",
+            "Enter at Phase 8",
+            "medium_activated",
+            "do not re-derive",
+            "resume_state",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, text)
+
+    def test_conductor_no_longer_runs_each_medium_as_a_separate_flow(self) -> None:
+        # The Suno re-spin line is gone; reuse is now automatic via Medium Activation.
+        self.assertNotIn(SUNO_SPIN_LINE, self._read(CONDUCTOR_SKILL))
+
+    def test_conductor_does_not_introduce_a_resume_packet(self) -> None:
+        # Decided-against guard (D5): resume state is a projection on project.json.
+        self.assertIn("do not write a separate `resume-packet.json`", self._read(CONDUCTOR_SKILL))
+
+
 if __name__ == "__main__":
     unittest.main()
