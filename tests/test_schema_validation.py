@@ -227,10 +227,41 @@ class SchemaValidationTests(unittest.TestCase):
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "album-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "image-series-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "text-stewardship-record.json",
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "cumulative-text-rehearsal" / "text-stewardship-record.json",
         ]
         for data_path in fixture_paths:
             with self.subTest(data=data_path.relative_to(REPO_ROOT)):
                 validate_file(schema_path, data_path)
+
+    def test_stewardship_activation_reason_accepts_length_floor_fields(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        self.assertTrue(record["activation_reason"]["meets_length_floor"])
+        self.assertEqual(
+            record["activation_reason"]["length_floor_override"],
+            {"overridden": False, "rationale": ""},
+        )
+        schema = load_json(schema_path)
+        validate(record, schema, schema)
+
+    def test_stewardship_activation_reason_requires_meets_length_floor(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        del record["activation_reason"]["meets_length_floor"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'meets_length_floor'"):
+            validate(record, schema, schema)
+
+    def test_stewardship_activation_reason_requires_length_floor_override(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        del record["activation_reason"]["length_floor_override"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'length_floor_override'"):
+            validate(record, schema, schema)
 
     def test_album_release_package_plan_fixture_validates(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"

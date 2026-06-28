@@ -15,6 +15,11 @@
     "story_mode": "sequence",
     "artist_requested_cumulative_work": true,
     "requires_part_to_part_dependency": true,
+    "meets_length_floor": true,
+    "length_floor_override": {
+      "overridden": false,
+      "rationale": ""
+    },
     "reason": "The three text sections depend on each other: the key creates agency, the lit room makes it dangerous, and the withheld crossing preserves residue."
   },
   "governing_arc": {

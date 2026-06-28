@@ -15,6 +15,11 @@
     "story_mode": "sequence",
     "artist_requested_cumulative_work": true,
     "requires_part_to_part_dependency": true,
+    "meets_length_floor": true,
+    "length_floor_override": {
+      "overridden": false,
+      "rationale": ""
+    },
     "reason": "The image series should preserve the threshold pressure as a cumulative visual sequence rather than a set of unrelated variants."
   },
   "governing_arc": {
