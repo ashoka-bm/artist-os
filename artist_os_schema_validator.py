@@ -252,10 +252,20 @@ def validate_asset_package_contract(record: dict[str, Any]) -> None:
                 "$.slots",
                 "waived slot requires a recorded waiver_gate_id",
             )
+        if completeness == "waived" and output_record_id is not None:
+            raise ValidationError(
+                "$.slots",
+                "waived slot must not carry an output_record_id",
+            )
         if completeness == "missing" and output_record_id is not None:
             raise ValidationError(
                 "$.slots",
                 "missing slot must not carry an output_record_id",
+            )
+        if completeness == "missing" and waiver_gate_id is not None:
+            raise ValidationError(
+                "$.slots",
+                "missing slot must not carry a waiver_gate_id",
             )
 
     if record.get("status") == "complete" and any(
@@ -265,6 +275,84 @@ def validate_asset_package_contract(record: dict[str, Any]) -> None:
             "$.status",
             "complete package has a missing slot",
         )
+
+    validate_asset_package_format_contract(record)
+
+
+def validate_asset_package_format_contract(record: dict[str, Any]) -> None:
+    """Enforce the per-Package-Format slot checklists documented in docs/structure-library/package-format/."""
+    package_format_id = record.get("package_format_id")
+    slots = record.get("slots", [])
+    slot_ids = [slot.get("slot_id") for slot in slots]
+    active_slot_ids = [
+        slot.get("slot_id")
+        for slot in slots
+        if slot.get("completeness") in {"filled", "waived"}
+    ]
+
+    def reject_unknown_slots(allowed: set[str]) -> None:
+        unknown = sorted({slot_id for slot_id in slot_ids if slot_id not in allowed})
+        if unknown:
+            raise ValidationError(
+                "$.slots",
+                f"{package_format_id!r} package has slots not defined by its Package Format: {unknown!r}",
+            )
+
+    def require_exact(slot_id: str, count: int) -> None:
+        actual = active_slot_ids.count(slot_id)
+        if actual != count:
+            raise ValidationError(
+                "$.slots",
+                f"{package_format_id!r} package requires exactly {count} active {slot_id!r} slot(s), found {actual}",
+            )
+
+    def require_at_least(slot_id: str, count: int) -> None:
+        actual = active_slot_ids.count(slot_id)
+        if actual < count:
+            raise ValidationError(
+                "$.slots",
+                f"{package_format_id!r} package requires at least {count} active {slot_id!r} slot(s), found {actual}",
+            )
+
+    if package_format_id == "video_with_soundtrack":
+        reject_unknown_slots({"video", "soundtrack_audio", "poster_image"})
+        if record.get("status") == "complete":
+            require_exact("video", 1)
+            require_exact("soundtrack_audio", 1)
+            if active_slot_ids.count("poster_image") > 1:
+                raise ValidationError(
+                    "$.slots",
+                    "'video_with_soundtrack' package allows at most one active 'poster_image' slot",
+                )
+    elif package_format_id == "article_with_photos":
+        reject_unknown_slots({"article_text", "inline_photo"})
+        if record.get("status") == "complete":
+            require_exact("article_text", 1)
+            require_at_least("inline_photo", 1)
+    elif package_format_id == "album":
+        repeating_slots = {
+            "album_audio_track",
+            "song_cover_image",
+            "song_title",
+            "image_title",
+        }
+        reject_unknown_slots({"album_title", "album_thumbnail", *repeating_slots})
+        if record.get("status") == "complete":
+            require_exact("album_title", 1)
+            require_exact("album_thumbnail", 1)
+            track_count = active_slot_ids.count("album_audio_track")
+            if track_count < 1:
+                raise ValidationError(
+                    "$.slots",
+                    "'album' package requires at least one active 'album_audio_track' slot",
+                )
+            for slot_id in repeating_slots:
+                actual = active_slot_ids.count(slot_id)
+                if actual != track_count:
+                    raise ValidationError(
+                        "$.slots",
+                        f"'album' package requires {track_count} active {slot_id!r} slot(s), found {actual}",
+                    )
 
 
 def validate_long_work_stewardship_record_contract(record: dict[str, Any]) -> None:
