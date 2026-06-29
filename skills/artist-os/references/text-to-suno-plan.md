@@ -38,6 +38,8 @@ Use the Text Reference, Source Record, Meaning Interview output, revised Sound C
 
 If this medium is being activated on an existing project, consume the existing **Shared Story Spine** (Transformation Brief, Beat Plan, and the standing Story Approval) by reference; **do not re-derive** or re-interview meaning. Produce the records below only when the spine does not already exist.
 
+When sound is activated as a **supporting medium** per the Cross-Medium Plan's Medium Role, plan a compact-tier Medium Plan that takes continuity from the **primary medium's realization** in addition to the Shared Story Spine; when sound is the primary medium, plan at full depth.
+
 Before creating the sound-specific Creative Brief, produce:
 
 1. A Transformation Brief matching `schemas/transformation-brief.schema.json`.

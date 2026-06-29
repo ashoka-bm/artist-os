@@ -61,6 +61,18 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Output Acceptance Gate
 ```
 
+### Medium Roles
+
+For a general (non-album) multi-medium project, each active medium carries a **Medium Role** recorded on the **Cross-Medium Plan**. One medium is **primary** and the rest are **supporting**:
+
+- The primary medium is recommended from the requested output type — video for a video, the song for a music video, text for an article with photos — and the artist confirms it. This is recommendation-first, not hard-coded, and honors the Gate Completion Rule.
+- A **supporting medium** defaults to the compact treatment tier: a lean Medium Plan that takes continuity from the primary medium's realization in addition to the immutable Shared Story Spine (via Expectation Turn Translation), rather than forking the spine.
+- **Medium Role** names importance (`primary` | `supporting`); **Workflow Scale Routing** names depth. The role seeds each medium's default Workflow Scale, and the artist may override it. The two are distinct.
+
+The Album v1 Release Package Plan — with its `primary_medium` and per-deliverable `medium_role` — is the specialized ancestor of this general primary/supporting contract; Album Track Covers and Illustration Plan images are the established supporting-asset precedents.
+
+The review-reduction half of the compact tier is deferred: supporting media reuse the full standard bounded review set for now, until the scale-gated-review-count lever lands. See the **Cross-Medium Plan**, **Medium Role**, **Primary Medium**, and **Supporting Medium** glossary entries in `CONTEXT.md`.
+
 ## Gates
 
 - Release Package Plan Approval Gate: does the artist approve Album Cohesion Mode, deliverables, Album Sonic System, Album Visual System, Calibration Track, and calibration visual target as ready for representative Medium Plan creation?

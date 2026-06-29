@@ -621,8 +621,8 @@ The lead medium of a project, fully fleshed out, that supporting media serve. Th
 _Avoid_: Hard-coding the primary by output type without artist confirmation, assuming every project must have exactly one primary
 
 **Supporting Medium**:
-A medium subordinate to the Primary Medium, defaulting to the compact treatment tier (lean Medium Plan, fewer reviews) and obeying the primary medium's realization for continuity in addition to the Shared Story Spine. Generalizes Album Track Covers and Illustration Plan images.
-_Avoid_: Running the full medium spine and full review set for a supporting medium by default, letting a supporting medium drift from the primary
+A medium subordinate to the Primary Medium, defaulting to the compact treatment tier (lean Medium Plan) and obeying the primary medium's realization for continuity in addition to the Shared Story Spine. A reduced review count is the deferred design target for the compact tier (pending the scale-gated-review lever); supporting media use the full standard bounded review set until then. Generalizes Album Track Covers and Illustration Plan images.
+_Avoid_: Running the full medium spine for a supporting medium by default, letting a supporting medium drift from the primary
 
 **Package Compilation**:
 The terminal stage that runs after generations return: it intakes the returned or imported assets as Output Records, arranges them by the chosen Package Format, gates on completeness, and produces the Asset Package. Stage 1 produces prompts; Stage 2 compiles the finished bundle. It calls no provider, preserving the dry-run boundary.

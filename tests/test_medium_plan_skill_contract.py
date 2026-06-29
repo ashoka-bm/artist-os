@@ -55,6 +55,7 @@ MEDIUM_PLAN_SKILLS = {
             "minimum tension criteria",
             "Expectation Turn",
             "Shot Design",
+            "primary medium's realization",
         ],
         "schema_ids": [
             "schemas/transformation-brief.schema.json",
@@ -90,6 +91,7 @@ MEDIUM_PLAN_SKILLS = {
             "Decision Interview",
             "minimum tension criteria",
             "Expectation Turn",
+            "primary medium's realization",
         ],
         "schema_ids": [
             "schemas/transformation-brief.schema.json",
@@ -125,6 +127,7 @@ MEDIUM_PLAN_SKILLS = {
             "Expectation Turn",
             "Intended Feeling",
             "Shot Design",
+            "primary medium's realization",
         ],
         "schema_ids": [
             "schemas/transformation-brief.schema.json",
@@ -297,6 +300,46 @@ class MediumActivationContractTests(unittest.TestCase):
     def test_conductor_does_not_introduce_a_resume_packet(self) -> None:
         # Decided-against guard (D5): resume state is a projection on project.json.
         self.assertIn("do not write a separate `resume-packet.json`", self._read(CONDUCTOR_SKILL))
+
+
+# Slice 2 — Medium Roles (ADR 0012, D10). Multi-medium projects outside Album v1
+# assign a primary/supporting Medium Role on the Cross-Medium Plan: the primary is
+# recommended from the output type and the artist confirms (recommendation-first),
+# supporting media default to the compact tier and take continuity from the primary
+# medium's realization, and Medium Role (importance) stays distinct from Workflow
+# Scale Routing (depth). The review-count reduction half is deferred.
+class MediumRoleContractTests(unittest.TestCase):
+    def _read(self, skill_path: str) -> str:
+        return (REPO_ROOT / skill_path).read_text(encoding="utf-8")
+
+    def test_conductor_states_medium_role_behavior(self) -> None:
+        text = self._read(CONDUCTOR_SKILL)
+        # Scope to the Medium Role Medium-Specifics bullet so common words
+        # ("primary", "supporting", "compact") cannot satisfy the assertion from
+        # elsewhere in the conductor.
+        self.assertIn("- **Medium Role**", text)
+        bullet = text.split("- **Medium Role**", 1)[1].split("\n- ", 1)[0]
+        for marker in (
+            "primary",
+            "supporting",
+            "compact treatment tier",
+            "obeys the primary medium's realization",
+            # Role-vs-scale distinction must be co-located so the two stay distinct.
+            "Workflow Scale Routing",
+            "seeds the default scale",
+        ):
+            with self.subTest(marker=marker, scope="medium_role_bullet"):
+                self.assertIn(marker, bullet)
+        # Recommendation-first primary selection (not hard-coded) lives in the
+        # Medium Activation block.
+        self.assertIn("Recommend the primary medium from the requested output type", text)
+        self.assertIn("ask the artist to **confirm**", text)
+
+    def test_conductor_does_not_leak_deferred_review_reduction(self) -> None:
+        # Decided-against guard (D10): the reduced review count for the compact tier
+        # is deferred to the scale-gated-review-count lever. Supporting media still
+        # use the full standard bounded review set, so this marker must be ABSENT.
+        self.assertNotIn("compact_scale_inline_review", self._read(CONDUCTOR_SKILL))
 
 
 if __name__ == "__main__":
