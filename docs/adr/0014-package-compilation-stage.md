@@ -1,6 +1,6 @@
 # Package Compilation and Asset Packages
 
-Status: proposed.
+Status: accepted.
 
 The dry-run spine (ADR 0001) plans prompts: the artist runs them through external
 generators and brings assets back. The pipeline intakes those assets as Output
@@ -81,8 +81,12 @@ The project is really two stages:
 - Planning and packaging become each other's verification: the plan is the checklist,
   the package is the proof.
 - The shipped Release Package Plan migrates (planning → Cross-Medium Plan; bundle
-  definition → Package Format / Asset Package). Design-only now; the migration is
-  separate work and must keep Album v1 tests green.
+  definition → Package Format / Asset Package). The reconciliation seam is now
+  recorded — a non-breaking schema `description` annotation on
+  `release-package-plan.schema.json` plus pipeline-contract and metadata-schema
+  cross-references, with the Package Format library + Asset Package generalizing the
+  bundle role — and the shipped record is retained unchanged for Album v1 back-compat.
+  A full field-by-field record rewrite remains deferred (see Open).
 - No provider is called during compilation; ADR 0001's dry-run boundary holds.
 
 ## Open

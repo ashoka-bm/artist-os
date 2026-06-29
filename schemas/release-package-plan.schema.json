@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://artist-generation.local/schemas/release-package-plan.schema.json",
   "title": "ReleasePackagePlan",
+  "description": "Album v1's specialized, still-shipped realization of the plan/output seam in ADR 0014 (D11): its planning/coordination role generalizes to the Cross-Medium Plan (cross-medium-plan.schema.json, ADR 0012 D4'), and its finished-bundle role generalizes to the Package Format library (docs/structure-library/package-format/) plus the Asset Package (asset-package.schema.json, ADR 0014 D14). This record is retained as-is for Album v1 back-compat; net-new multi-medium projects use the Cross-Medium Plan + Asset Package pair. A full field-by-field record split is deferred (ADR 0014 Open).",
   "type": "object",
   "additionalProperties": false,
   "allOf": [
