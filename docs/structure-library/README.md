@@ -2,12 +2,13 @@
 
 The Structure Library gives Artist OS reusable movement and format patterns without turning them into rigid templates.
 
-It has two parts:
+It has three parts:
 
 - **Story Structure Library**: reusable deep movement patterns selected during Story Journey and adapted inside the Beat Plan.
 - **Cultural Format Structure Library**: reusable audience-facing format grammars selected during Medium Plan creation after Medium Output Shape Recommendation.
+- **Package Format Library**: reusable assembly-stage arrangement templates selected during Package Compilation, after Output Acceptance, to compile accepted assets into a finished release.
 
-There are currently only these two Structure Library families. Other repo libraries, such as Workspace Library or visual-tension vocabulary, are separate systems and are not Structure Library families.
+Story Structure and Cultural Format Structure guide planning; Package Format guides Stage-2 Package Compilation assembly. These are currently the three Structure Library families. Other repo libraries, such as Workspace Library or visual-tension vocabulary, are separate systems and are not Structure Library families.
 
 Library entries stay concise and operational. Research can ground an entry, but the entry itself should store the usable structure, not a citation list.
 
@@ -88,7 +89,8 @@ Read the smallest file that answers the planning question:
 
 1. Read this README for the shared contract.
 2. Read [story/README.md](story/README.md) or [cultural-format/README.md](cultural-format/README.md) to choose an entry.
-3. Open only the selected entry file.
+3. When assembling a finished bundle during Package Compilation, read [package-format/README.md](package-format/README.md) to choose a Package Format entry.
+4. Open only the selected entry file.
 
 Current Story Structure entries:
 
