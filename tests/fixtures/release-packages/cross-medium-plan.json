@@ -1,0 +1,96 @@
+{
+  "cross_medium_plan_id": "cmp_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "transformation_brief_id": "tb_door_left_lit",
+  "beat_plan_id": "bp_door_left_lit",
+  "primary_medium": "video",
+  "media": [
+    {
+      "medium": "video",
+      "medium_role": "primary",
+      "medium_plan_ref": {
+        "plan_type": "video_medium_plan",
+        "plan_id": "vmp_door_left_lit",
+        "path_or_ref": "medium-plans/video-medium-plan.json"
+      },
+      "medium_scale_level": "cumulative_work",
+      "status": "in_progress",
+      "serves_primary": null,
+      "continuity_from_primary_realization": false
+    },
+    {
+      "medium": "audio",
+      "medium_role": "supporting",
+      "medium_plan_ref": {
+        "plan_type": "sound_medium_plan",
+        "plan_id": "smp_door_left_lit",
+        "path_or_ref": "medium-plans/sound-medium-plan.json"
+      },
+      "medium_scale_level": "structured_single_artifact",
+      "status": "planned",
+      "serves_primary": "video",
+      "continuity_from_primary_realization": true
+    }
+  ],
+  "effective_project_scale": {
+    "scale_level": "cumulative_work",
+    "derived_from": [
+      {
+        "medium": "video",
+        "medium_scale_level": "cumulative_work"
+      },
+      {
+        "medium": "audio",
+        "medium_scale_level": "structured_single_artifact"
+      }
+    ],
+    "rationale": "The video storyboard runs as a cumulative work, so the project as a whole inherits that effective scale even though the supporting audio is a single structured artifact."
+  },
+  "production_order": [
+    {
+      "order_index": 1,
+      "medium": "video",
+      "step_summary": "Realize the primary video storyboard so its locked frames anchor downstream media.",
+      "status": "in_progress",
+      "required_before_media": ["audio"]
+    },
+    {
+      "order_index": 2,
+      "medium": "audio",
+      "step_summary": "Plan the supporting audio against the locked video realization.",
+      "status": "planned",
+      "required_before_media": []
+    }
+  ],
+  "cross_medium_continuity": {
+    "shared_meaning_rules": [
+      "The threshold stays uncrossed; both media hold the moment of standing close to release without forcing it."
+    ],
+    "shared_symbols": [
+      "the lit doorway",
+      "the key still in hand"
+    ],
+    "allowed_variation": [
+      "Audio may lengthen the dwell on the threshold beyond the video's pacing."
+    ],
+    "must_not_drift": [
+      "Neither medium may resolve the crossing or remove the light from the doorway."
+    ]
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_door_left_lit",
+      "note": "Cross-medium continuity and production order trace to the approved beat plan's threshold arc."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_door_left_lit",
+      "note": "Primary video and supporting audio both serve the meaning of standing at an open door without crossing."
+    }
+  ],
+  "created_at": "2026-06-28T12:00:00Z",
+  "updated_at": "2026-06-28T12:00:00Z"
+}
