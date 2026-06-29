@@ -141,6 +141,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
         if path == "$" and root.get("title") == "ReleasePackagePlan":
             validate_release_package_plan_contract(value)
+        elif path == "$" and root.get("title") == "LongWorkStewardshipRecord":
+            validate_long_work_stewardship_record_contract(value)
         elif path == "$" and root.get("title") == "ArtistOSProjectManifest":
             validate_project_manifest_contract(value)
 
@@ -219,6 +221,29 @@ def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
             raise ValidationError(
                 "$.tracks",
                 f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
+            )
+
+
+def validate_long_work_stewardship_record_contract(record: dict[str, Any]) -> None:
+    """Validate Long-Work Stewardship activation threshold invariants."""
+    activation_reason = record.get("activation_reason", {})
+    if activation_reason.get("requires_part_to_part_dependency") is not True:
+        raise ValidationError(
+            "$.activation_reason.requires_part_to_part_dependency",
+            "Long-Work Stewardship requires cumulative dependency",
+        )
+
+    length_floor_override = activation_reason.get("length_floor_override", {})
+    if activation_reason.get("meets_length_floor") is not True:
+        if length_floor_override.get("overridden") is not True:
+            raise ValidationError(
+                "$.activation_reason.meets_length_floor",
+                "Long-Work Stewardship requires the length floor unless explicitly overridden",
+            )
+        if not str(length_floor_override.get("rationale", "")).strip():
+            raise ValidationError(
+                "$.activation_reason.length_floor_override.rationale",
+                "length_floor_override rationale is required when the length floor is overridden",
             )
 
 
