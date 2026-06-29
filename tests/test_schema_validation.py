@@ -1590,6 +1590,14 @@ class AssetPackageContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "waived slot requires a recorded waiver_gate_id"):
             validate(record, schema, schema)
 
+    def test_asset_package_waived_slot_forbids_output_record(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["slots"][1]["completeness"] = "waived"
+        record["slots"][1]["waiver_gate_id"] = "gate_missing_soundtrack_waived"
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "waived slot must not carry an output_record_id"):
+            validate(record, schema, schema)
+
     def test_asset_package_complete_status_forbids_missing_slot(self) -> None:
         record = load_json(self.FIXTURE_PATH)
         record["slots"][1]["completeness"] = "missing"
@@ -1604,6 +1612,21 @@ class AssetPackageContractTests(unittest.TestCase):
         record["slots"][1]["completeness"] = "missing"  # leave output_record_id non-null
         schema = load_json(self.SCHEMA_PATH)
         with self.assertRaisesRegex(ValidationError, "missing slot must not carry an output_record_id"):
+            validate(record, schema, schema)
+
+    def test_asset_package_album_rejects_video_slots(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["package_format_id"] = "album"
+        record["package_format_ref"] = "docs/structure-library/package-format/album.md"
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "slots not defined by its Package Format"):
+            validate(record, schema, schema)
+
+    def test_asset_package_complete_video_package_requires_soundtrack(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["slots"] = [record["slots"][0]]
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "requires exactly 1 active 'soundtrack_audio'"):
             validate(record, schema, schema)
 
     def test_asset_package_rejects_unknown_top_level_field(self) -> None:
