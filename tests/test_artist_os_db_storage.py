@@ -1366,6 +1366,32 @@ class ArtistOSDbStorageTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "is not one of"):
             validate(manifest, schema, schema)
 
+    def test_project_manifest_schema_rejects_unknown_effective_scale(self) -> None:
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "medium_plan",
+            "next_phase": "Medium Plan",
+            "effective_project_scale": "nonsense",
+            "media_index": [],
+        }
+        with self.assertRaisesRegex(ValidationError, "is not one of"):
+            validate(manifest, schema, schema)
+
+    def test_project_manifest_schema_rejects_duplicate_resume_media(self) -> None:
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "medium_plan",
+            "next_phase": "Medium Plan",
+            "media_index": [
+                {"medium": "image", "status": "active"},
+                {"medium": "image", "status": "complete"},
+            ],
+        }
+        with self.assertRaisesRegex(ValidationError, "media_index must not duplicate medium entries"):
+            validate(manifest, schema, schema)
+
     def test_project_manifest_schema_resume_state_rejects_unknown_key(self) -> None:
         # additionalProperties:false must reject stray keys inside resume_state.
         schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))

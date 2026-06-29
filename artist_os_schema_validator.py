@@ -141,6 +141,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
         if path == "$" and root.get("title") == "ReleasePackagePlan":
             validate_release_package_plan_contract(value)
+        elif path == "$" and root.get("title") == "ArtistOSProjectManifest":
+            validate_project_manifest_contract(value)
 
 
 def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
@@ -218,6 +220,21 @@ def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
                 "$.tracks",
                 f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
             )
+
+
+def validate_project_manifest_contract(record: dict[str, Any]) -> None:
+    """Validate project manifest projection invariants not expressible in our schema subset."""
+    resume_state = record.get("resume_state")
+    if not isinstance(resume_state, dict):
+        return
+
+    media_index = resume_state.get("media_index", [])
+    media = [entry.get("medium") for entry in media_index]
+    if len(media) != len(set(media)):
+        raise ValidationError(
+            "$.resume_state.media_index",
+            "resume_state media_index must not duplicate medium entries",
+        )
 
 
 def validate_file(schema_path: Path, data_path: Path) -> None:
