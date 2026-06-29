@@ -335,11 +335,14 @@ class MediumRoleContractTests(unittest.TestCase):
         self.assertIn("Recommend the primary medium from the requested output type", text)
         self.assertIn("ask the artist to **confirm**", text)
 
-    def test_conductor_does_not_leak_deferred_review_reduction(self) -> None:
-        # Decided-against guard (D10): the reduced review count for the compact tier
-        # is deferred to the scale-gated-review-count lever. Supporting media still
-        # use the full standard bounded review set, so this marker must be ABSENT.
-        self.assertNotIn("compact_scale_inline_review", self._read(CONDUCTOR_SKILL))
+    def test_conductor_defers_review_reduction_for_supporting_media(self) -> None:
+        # D10: the reduced review count for the compact tier is deferred to the
+        # scale-gated-review-count lever, so supporting media must reuse the full
+        # standard bounded review set for now. Assert the conductor states the
+        # deferral (positive) AND has not prematurely wired the deferred marker.
+        text = self._read(CONDUCTOR_SKILL)
+        self.assertIn("full standard bounded review set for now", text)
+        self.assertNotIn("compact_scale_inline_review", text)
 
 
 if __name__ == "__main__":

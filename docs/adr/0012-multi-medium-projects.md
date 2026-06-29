@@ -91,8 +91,10 @@ one-project model and only build the medium-specific part.
 
 - **D10 — Primary and supporting media.** The Cross-Medium Plan records a **Medium
   Role** per active medium: `primary` or `supporting`. The primary medium is fully
-  fleshed out; a supporting medium defaults to the compact treatment tier (lean Medium
-  Plan, fewer reviews) and takes continuity direction from the *primary medium's
+  fleshed out; a supporting medium defaults to the compact treatment tier (a lean Medium
+  Plan; the reduced review count is deferred until the scale-gated-review-count lever
+  lands, so supporting media reuse the full standard bounded review set for now) and
+  takes continuity direction from the *primary medium's
   realization* in addition to the Shared Story Spine (the cover obeys the song; the
   photos obey the article's framing). Medium Role (importance) and medium-level
   Workflow Scale Routing (depth) are distinct axes — the role seeds the default scale,
