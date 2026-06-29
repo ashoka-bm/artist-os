@@ -263,6 +263,41 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "missing required field 'length_floor_override'"):
             validate(record, schema, schema)
 
+    def test_stewardship_activation_reason_requires_cumulative_dependency(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        record["activation_reason"]["requires_part_to_part_dependency"] = False
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "requires cumulative dependency"):
+            validate(record, schema, schema)
+
+    def test_stewardship_activation_reason_requires_length_floor_or_override(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        record["activation_reason"]["meets_length_floor"] = False
+        record["activation_reason"]["length_floor_override"] = {
+            "overridden": False,
+            "rationale": "",
+        }
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "requires the length floor"):
+            validate(record, schema, schema)
+
+    def test_stewardship_activation_reason_length_floor_override_requires_rationale(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        record["activation_reason"]["meets_length_floor"] = False
+        record["activation_reason"]["length_floor_override"] = {
+            "overridden": True,
+            "rationale": "",
+        }
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "override rationale is required"):
+            validate(record, schema, schema)
+
     def test_album_release_package_plan_fixture_validates(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
