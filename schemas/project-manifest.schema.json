@@ -244,7 +244,10 @@
       "properties": {
         "current_checkpoint": { "type": "string" },
         "next_phase": { "type": "string" },
-        "effective_project_scale": { "type": "string" },
+        "effective_project_scale": {
+          "type": "string",
+          "enum": ["compact_artifact", "structured_single_artifact", "cumulative_work", "full_long_form_project"]
+        },
         "cross_medium_plan_ref": { "type": ["string", "null"] },
         "media_index": {
           "type": "array",
