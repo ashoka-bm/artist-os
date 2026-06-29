@@ -141,6 +141,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
         if path == "$" and root.get("title") == "ReleasePackagePlan":
             validate_release_package_plan_contract(value)
+        elif path == "$" and root.get("title") == "CrossMediumPlan":
+            validate_cross_medium_plan_contract(value)
         elif path == "$" and root.get("title") == "AssetPackage":
             validate_asset_package_contract(value)
         elif path == "$" and root.get("title") == "LongWorkStewardshipRecord":
@@ -223,6 +225,106 @@ def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
             raise ValidationError(
                 "$.tracks",
                 f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
+            )
+
+
+_WORKFLOW_SCALE_ORDER = [
+    "compact_artifact",
+    "structured_single_artifact",
+    "cumulative_work",
+    "full_long_form_project",
+]
+
+
+def validate_cross_medium_plan_contract(record: dict[str, Any]) -> None:
+    """Validate Cross-Medium Plan cross-field invariants not expressible in our schema subset."""
+    media = record.get("media", [])
+    active_media = [entry.get("medium") for entry in media]
+    unique_active_media = set(active_media)
+
+    if len(active_media) != len(unique_active_media):
+        raise ValidationError(
+            "$.media",
+            "Cross-Medium Plan must not duplicate media entries",
+        )
+
+    media_scale_levels = [entry.get("medium_scale_level") for entry in media]
+    known_scales = [
+        level for level in media_scale_levels if level in _WORKFLOW_SCALE_ORDER
+    ]
+    if known_scales:
+        max_scale = max(known_scales, key=_WORKFLOW_SCALE_ORDER.index)
+        effective_scale = record.get("effective_project_scale", {})
+        if effective_scale.get("scale_level") != max_scale:
+            raise ValidationError(
+                "$.effective_project_scale.scale_level",
+                f"Effective Project Scale must be the max over media scale levels ({max_scale!r})",
+            )
+
+    primary_entries = [
+        entry for entry in media if entry.get("medium_role") == "primary"
+    ]
+    if len(primary_entries) == 1:
+        primary_medium = record.get("primary_medium")
+        if primary_entries[0].get("medium") != primary_medium:
+            raise ValidationError(
+                "$.primary_medium",
+                f"primary_medium {primary_medium!r} must equal the medium of the single primary-role media entry",
+            )
+
+    primary_medium = record.get("primary_medium")
+    for entry in media:
+        if entry.get("medium_role") == "primary":
+            if entry.get("serves_primary") is not None:
+                raise ValidationError(
+                    "$.media",
+                    f"primary media entry {entry.get('medium')!r} serves_primary must be null",
+                )
+        elif entry.get("medium_role") == "supporting":
+            if entry.get("serves_primary") != primary_medium:
+                raise ValidationError(
+                    "$.media",
+                    f"supporting media entry {entry.get('medium')!r} serves_primary must equal primary_medium {primary_medium!r}",
+                )
+
+    derived_from = record.get("effective_project_scale", {}).get("derived_from", [])
+    derived_media = [entry.get("medium") for entry in derived_from]
+    if len(derived_media) != len(set(derived_media)):
+        raise ValidationError(
+            "$.effective_project_scale.derived_from",
+            "Effective Project Scale must not duplicate media entries",
+        )
+    if set(derived_media) != unique_active_media:
+        raise ValidationError(
+            "$.effective_project_scale.derived_from",
+            "Effective Project Scale derived_from media must match active media",
+        )
+
+    production_order = record.get("production_order", [])
+    ordered_media = [step.get("medium") for step in production_order]
+    if len(ordered_media) != len(set(ordered_media)):
+        raise ValidationError(
+            "$.production_order",
+            "Production order must not duplicate media entries",
+        )
+    if set(ordered_media) != unique_active_media:
+        raise ValidationError(
+            "$.production_order",
+            "Production order media must match active media",
+        )
+
+    order_indexes = [step.get("order_index") for step in production_order]
+    if len(order_indexes) != len(set(order_indexes)):
+        raise ValidationError(
+            "$.production_order",
+            "Production order must not duplicate order_index values",
+        )
+    for step in production_order:
+        required_before_media = set(step.get("required_before_media", []))
+        if not required_before_media.issubset(unique_active_media):
+            raise ValidationError(
+                "$.production_order",
+                "Production order required_before_media must only reference active media",
             )
 
 
@@ -478,6 +580,7 @@ FIXTURE_SCHEMA_MAP = {
     "illustration-plan.json": "illustration-plan.schema.json",
     "review-record.json": "review-record.schema.json",
     "album-release-package-plan.json": "release-package-plan.schema.json",
+    "cross-medium-plan.json": "cross-medium-plan.schema.json",
     "asset-package.json": "asset-package.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
