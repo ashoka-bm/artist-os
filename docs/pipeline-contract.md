@@ -137,6 +137,8 @@ When Album Cohesion Mode activates Long-Work Stewardship, create the foundation 
 
 The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, calibration status, production order, track mapping, and cross-media continuity. It does not own song arrangement details, lyrics, genre, Sonic Dynamics, image Shot Design, Style Direction, prompt variants, title or description drafting rules, cumulative execution state, or part status.
 
+Per ADR 0014, the Release Package Plan is conceptually split along the plan/output seam: its planning/coordination role generalizes to the Cross-Medium Plan (Stage 1) and its finished-bundle role to the Package Format library plus the Asset Package (Stage 2). Album v1 keeps shipping the Release Package Plan record unchanged as its specialized realization; net-new multi-medium projects use the Cross-Medium Plan plus an Asset Package compiled through a Package Format. A full field-by-field record split is deferred.
+
 Album Calibration happens after representative Sound and Image Medium Plans exist for the Calibration Track and calibration visual target. The default subchecks are sonic direction, visual direction, and sound-visual fit. Expansion may continue only for deliverables whose relevant subchecks are approved; Track Cover expansion requires approved visual direction and approved sound-visual fit.
 
 Album Calibration is not final acceptance. Final Output Artifacts still require their normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates. Provider-backed generation approval may be per output or per enumerated batch only; the approval must name the exact outputs, provider, model or tool, and cost-bearing scope.

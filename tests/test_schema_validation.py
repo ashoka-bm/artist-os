@@ -303,6 +303,27 @@ class SchemaValidationTests(unittest.TestCase):
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
         validate_file(schema_path, data_path)
 
+    def test_release_package_plan_still_validates_after_seam_annotation(self) -> None:
+        # Slice 6 (ADR 0014 D11) added a non-functional top-level description; the
+        # shipped Album v1 record must still validate (the only schema edit this slice makes).
+        schema_path = REPO_ROOT / "schemas" / "release-package-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "album-release-package-plan.json"
+        validate_file(schema_path, data_path)
+
+    def test_release_package_plan_title_unchanged(self) -> None:
+        # The validator dispatches validate_release_package_plan_contract on this exact
+        # title; a rename would silently disable every Album v1 cross-item invariant.
+        schema = load_json(REPO_ROOT / "schemas" / "release-package-plan.schema.json")
+        self.assertEqual(schema["title"], "ReleasePackagePlan")
+
+    def test_release_package_plan_records_seam_migration(self) -> None:
+        # The ADR 0014 D11 plan/output seam is recorded in the schema itself, not only in prose.
+        schema = load_json(REPO_ROOT / "schemas" / "release-package-plan.schema.json")
+        description = schema.get("description", "")
+        for marker in ("Cross-Medium Plan", "Asset Package", "ADR 0014"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, description)
+
     def test_character_template_fixture_validates(self) -> None:
         validate_file(
             REPO_ROOT / "schemas" / "character-template.schema.json",
