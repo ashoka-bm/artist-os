@@ -333,6 +333,7 @@ Use these destinations for each asset type:
 - intermediate Generated Works: `assets/generated/` with sidecar metadata
 - accepted final images: `assets/final/` with sidecar metadata
 - shareable packages or exports: `exports/`
+- Asset Package manifest: `exports/asset-package.json` (the internal persisted manifest; the compiled, artist-facing bundle materializes into the visible Artist Library `exports/` area)
 
 ## Persistence Rule
 

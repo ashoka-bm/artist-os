@@ -1,0 +1,31 @@
+{
+  "asset_package_id": "assetpkg_door_left_lit",
+  "project_id": "proj_door_left_lit",
+  "package_format_id": "video_with_soundtrack",
+  "package_format_ref": "docs/structure-library/package-format/video-with-soundtrack.md",
+  "cross_medium_plan_ref": "workspace-library/artist-os/projects/proj_door_left_lit/cross-medium-plan.json",
+  "status": "complete",
+  "provider_boundary": {
+    "arranges_only": true,
+    "calls_provider": false
+  },
+  "slots": [
+    {
+      "slot_id": "video",
+      "slot_role": "primary",
+      "completeness": "filled",
+      "output_record_id": "out_door_left_lit_video",
+      "slot_metadata": {
+        "title": "The Door Left Lit"
+      }
+    },
+    {
+      "slot_id": "soundtrack_audio",
+      "slot_role": "supporting",
+      "completeness": "filled",
+      "output_record_id": "out_door_left_lit_soundtrack"
+    }
+  ],
+  "created_at": "2026-06-28T00:00:00Z",
+  "updated_at": "2026-06-28T00:00:00Z"
+}

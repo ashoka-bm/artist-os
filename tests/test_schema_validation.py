@@ -1568,5 +1568,51 @@ class SchemaValidationTests(unittest.TestCase):
             validate(image_plan, schema, schema)
 
 
+class AssetPackageContractTests(unittest.TestCase):
+    SCHEMA_PATH = REPO_ROOT / "schemas" / "asset-package.schema.json"
+    FIXTURE_PATH = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "asset-package.json"
+
+    def test_asset_package_fixture_validates(self) -> None:
+        validate_file(self.SCHEMA_PATH, self.FIXTURE_PATH)
+
+    def test_asset_package_filled_slot_requires_output_record(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["slots"][0]["output_record_id"] = None
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "filled slot requires an output_record_id"):
+            validate(record, schema, schema)
+
+    def test_asset_package_waived_slot_requires_waiver_gate(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["slots"][1]["completeness"] = "waived"
+        record["slots"][1]["output_record_id"] = None
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "waived slot requires a recorded waiver_gate_id"):
+            validate(record, schema, schema)
+
+    def test_asset_package_complete_status_forbids_missing_slot(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["slots"][1]["completeness"] = "missing"
+        record["slots"][1]["output_record_id"] = None
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "complete package has a missing slot"):
+            validate(record, schema, schema)
+
+    def test_asset_package_missing_slot_forbids_output_record(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["status"] = "partial"  # avoid the complete-status check so the missing->null check fires
+        record["slots"][1]["completeness"] = "missing"  # leave output_record_id non-null
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "missing slot must not carry an output_record_id"):
+            validate(record, schema, schema)
+
+    def test_asset_package_rejects_unknown_top_level_field(self) -> None:
+        record = load_json(self.FIXTURE_PATH)
+        record["unexpected_field"] = "nope"
+        schema = load_json(self.SCHEMA_PATH)
+        with self.assertRaisesRegex(ValidationError, "unexpected fields"):
+            validate(record, schema, schema)
+
+
 if __name__ == "__main__":
     unittest.main()

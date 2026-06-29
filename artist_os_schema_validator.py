@@ -141,6 +141,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
         if path == "$" and root.get("title") == "ReleasePackagePlan":
             validate_release_package_plan_contract(value)
+        elif path == "$" and root.get("title") == "AssetPackage":
+            validate_asset_package_contract(value)
         elif path == "$" and root.get("title") == "LongWorkStewardshipRecord":
             validate_long_work_stewardship_record_contract(value)
         elif path == "$" and root.get("title") == "ArtistOSProjectManifest":
@@ -222,6 +224,47 @@ def validate_release_package_plan_contract(record: dict[str, Any]) -> None:
                 "$.tracks",
                 f"Album v1 track {track_id!r} track_cover_deliverable_id must reference its required Track Cover deliverable",
             )
+
+
+def validate_asset_package_contract(record: dict[str, Any]) -> None:
+    """Validate Asset Package cross-field invariants not expressible in our schema subset.
+
+    Package Compilation arranges accepted Output Records into format slots; it never
+    calls a provider (ADR 0001 / D12). The Completeness gate cannot be bypassed: a
+    filled slot must carry an Output Record, a waived slot must carry a recorded
+    waiver gate, a missing slot must carry no Output Record, and a package may not
+    declare itself complete while any slot is still missing.
+    """
+    slots = record.get("slots", [])
+
+    for slot in slots:
+        completeness = slot.get("completeness")
+        output_record_id = slot.get("output_record_id")
+        waiver_gate_id = slot.get("waiver_gate_id")
+
+        if completeness == "filled" and output_record_id is None:
+            raise ValidationError(
+                "$.slots",
+                "filled slot requires an output_record_id",
+            )
+        if completeness == "waived" and waiver_gate_id is None:
+            raise ValidationError(
+                "$.slots",
+                "waived slot requires a recorded waiver_gate_id",
+            )
+        if completeness == "missing" and output_record_id is not None:
+            raise ValidationError(
+                "$.slots",
+                "missing slot must not carry an output_record_id",
+            )
+
+    if record.get("status") == "complete" and any(
+        slot.get("completeness") == "missing" for slot in slots
+    ):
+        raise ValidationError(
+            "$.status",
+            "complete package has a missing slot",
+        )
 
 
 def validate_long_work_stewardship_record_contract(record: dict[str, Any]) -> None:
@@ -347,6 +390,7 @@ FIXTURE_SCHEMA_MAP = {
     "illustration-plan.json": "illustration-plan.schema.json",
     "review-record.json": "review-record.schema.json",
     "album-release-package-plan.json": "release-package-plan.schema.json",
+    "asset-package.json": "asset-package.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
     "project-feedback-log-entry.json": "project-feedback-log-entry.schema.json",
