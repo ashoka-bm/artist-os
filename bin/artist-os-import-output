@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Import an existing artifact as an Artist OS Output Record."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import mimetypes
+import re
+import sys
+from datetime import UTC
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from artist_os_adapter_guards import AdapterGuardError  # noqa: E402
+from artist_os_adapter_guards import assert_import_output_record  # noqa: E402
+from artist_os_schema_validator import ValidationError  # noqa: E402
+from artist_os_schema_validator import load_json  # noqa: E402
+from artist_os_schema_validator import validate  # noqa: E402
+
+
+OUTPUT_SCHEMA = load_json(REPO_ROOT / "schemas" / "output-record.schema.json")
+
+
+def utc_now() -> str:
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def project_dir(args: argparse.Namespace) -> Path:
+    return Path(args.library_root) / "projects" / args.project_id
+
+
+def project_manifest_path(args: argparse.Namespace) -> Path:
+    return project_dir(args) / "project.json"
+
+
+def read_project_manifest(args: argparse.Namespace) -> dict[str, Any]:
+    path = project_manifest_path(args)
+    if not path.is_file():
+        raise AdapterGuardError(f"project.json is required before importing outputs: {path}")
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if manifest.get("project_id") != args.project_id:
+        raise AdapterGuardError("project.json project_id does not match import request")
+    return manifest
+
+
+def manifest_write_path(path_value: str | None, args: argparse.Namespace, default: Path) -> Path:
+    if not path_value:
+        return default
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    library_root = Path(args.library_root)
+    if path.parts[:1] == ("projects",):
+        return library_root / path
+    return project_dir(args) / path
+
+
+def output_group(args: argparse.Namespace) -> str:
+    if args.artifact_kind == "mixed_media_package":
+        return "mixed_media"
+    return args.artifact_kind
+
+
+def output_records_base(args: argparse.Namespace, manifest: dict[str, Any]) -> Path:
+    return manifest_write_path(
+        manifest.get("paths", {}).get("output_records_dir"),
+        args,
+        project_dir(args) / "outputs",
+    )
+
+
+def events_path(args: argparse.Namespace, manifest: dict[str, Any]) -> Path:
+    return manifest_write_path(
+        manifest.get("paths", {}).get("events"),
+        args,
+        project_dir(args) / "events.jsonl",
+    )
+
+
+def output_record_path(args: argparse.Namespace, manifest: dict[str, Any]) -> Path:
+    return (
+        output_records_base(args, manifest)
+        / output_group(args)
+        / "output-records"
+        / f"{args.output_record_id}.json"
+    )
+
+
+def guess_mime_type(path: Path) -> str:
+    guessed, _encoding = mimetypes.guess_type(str(path))
+    return guessed or "application/octet-stream"
+
+
+def optional_ref(value: str | None) -> str | None:
+    return value if value else None
+
+
+def validate_datetime(value: str) -> None:
+    try:
+        datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise AdapterGuardError(f"created-at must be ISO 8601 date-time: {value}") from exc
+
+
+def compact_timestamp(value: str) -> str:
+    return re.sub(r"[^0-9A-Za-z]", "", value)
+
+
+def build_output_record(args: argparse.Namespace) -> dict[str, Any]:
+    artifact_path = Path(args.file).expanduser().resolve()
+    created_at = args.created_at or utc_now()
+    validate_datetime(created_at)
+    record: dict[str, Any] = {
+        "output_record_id": args.output_record_id,
+        "previous_output_record_id": optional_ref(args.previous_output_record_id),
+        "project_id": args.project_id,
+        "source_id": args.source_id,
+        "artist_meaning_id": args.artist_meaning_id,
+        "transformation_brief_id": args.transformation_brief_id,
+        "beat_plan_id": args.beat_plan_id,
+        "medium_plan_id": args.medium_plan_id,
+        "brief_id": args.brief_id,
+        "prompt_plan_id": args.prompt_plan_id,
+        "target_media_type": args.target_media_type,
+        "output_artifact": {
+            "artifact_id": args.artifact_id,
+            "artifact_kind": args.artifact_kind,
+            "uri_or_path": str(artifact_path),
+            "mime_type": args.mime_type or guess_mime_type(artifact_path),
+            "description": args.description,
+            "rights_notes": args.rights_notes,
+        },
+        "origin": {
+            "origin_type": args.origin,
+            "created_by": args.created_by,
+            "generation_approval_ref": None,
+        },
+        "generation": {
+            "provider": None,
+            "model": None,
+            "settings": {},
+            "seed": None,
+            "estimated_cost": None,
+            "actual_cost": None,
+        },
+        "review_state": {
+            "output_critic_review_required": True,
+            "review_record_id": None,
+            "review_status": "not_reviewed",
+        },
+        "acceptance_state": {
+            "output_acceptance_status": "pending",
+            "accepted_work": False,
+            "artist_decision_ref": None,
+            "waiver_reason": None,
+        },
+        "traceability_summary": [
+            {
+                "source_type": "prompt_plan",
+                "source_ref": args.prompt_plan_id,
+                "note": "Imported artifact is linked to the governing prompt or generation plan for downstream review.",
+            }
+        ],
+        "created_at": created_at,
+    }
+
+    for key, value in (
+        ("text_generation_plan_id", args.text_generation_plan_id),
+        ("prompt_branch_set_id", args.prompt_branch_set_id),
+        ("prompt_branch_id", args.prompt_branch_id),
+        ("prompt_variant_type", args.prompt_variant_type),
+    ):
+        if value is not None:
+            record[key] = value
+
+    return record
+
+
+def append_event(args: argparse.Namespace, manifest: dict[str, Any], record: dict[str, Any]) -> None:
+    event_slug = args.output_record_id.removeprefix("out_")
+    event = {
+        "event_id": f"evt_{event_slug}_{compact_timestamp(record['created_at'])}",
+        "event_type": "output_imported",
+        "project_id": args.project_id,
+        "stage": "output_record",
+        "output_record_id": args.output_record_id,
+        "origin_type": args.origin,
+        "artifact_path": record["output_artifact"]["uri_or_path"],
+        "output_record_path": str(output_record_path(args, manifest)),
+        "created_at": record["created_at"],
+    }
+    path = events_path(args, manifest)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(event, sort_keys=True) + "\n")
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Import an existing file as a schema-valid Artist OS Output Record.",
+    )
+    parser.add_argument("--library-root", required=True)
+    parser.add_argument("--project-id", required=True)
+    parser.add_argument("--file", required=True)
+    parser.add_argument("--origin", choices=["artist_imported", "human_edited"], required=True)
+    parser.add_argument("--output-record-id", required=True)
+    parser.add_argument("--previous-output-record-id")
+    parser.add_argument("--artifact-id", required=True)
+    parser.add_argument("--source-id", required=True)
+    parser.add_argument("--artist-meaning-id", required=True)
+    parser.add_argument("--transformation-brief-id", required=True)
+    parser.add_argument("--beat-plan-id", required=True)
+    parser.add_argument("--medium-plan-id", required=True)
+    parser.add_argument("--brief-id", required=True)
+    parser.add_argument("--prompt-plan-id", required=True)
+    parser.add_argument("--text-generation-plan-id")
+    parser.add_argument("--prompt-branch-set-id")
+    parser.add_argument("--prompt-branch-id")
+    parser.add_argument("--prompt-variant-type", choices=["faithful", "amplified", "minimal"])
+    parser.add_argument(
+        "--target-media-type",
+        choices=["image", "sound", "video", "text", "mixed_media"],
+        required=True,
+    )
+    parser.add_argument(
+        "--artifact-kind",
+        choices=["image", "audio", "video", "text", "mixed_media_package"],
+        required=True,
+    )
+    parser.add_argument("--mime-type")
+    parser.add_argument("--description", required=True)
+    parser.add_argument("--rights-notes", required=True)
+    parser.add_argument("--created-by", default="artist")
+    parser.add_argument("--created-at")
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv or sys.argv[1:])
+    artifact_path = Path(args.file).expanduser()
+    if not artifact_path.is_file():
+        print(f"artifact file does not exist: {artifact_path}", file=sys.stderr)
+        return 1
+    if not project_dir(args).is_dir():
+        print(f"project does not exist in Workspace Library: {project_dir(args)}", file=sys.stderr)
+        return 1
+
+    try:
+        manifest = read_project_manifest(args)
+        record = build_output_record(args)
+        validate(record, OUTPUT_SCHEMA, OUTPUT_SCHEMA)
+        assert_import_output_record(record)
+    except (AdapterGuardError, ValidationError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    destination = output_record_path(args, manifest)
+    if destination.exists():
+        print(f"output record already exists: {destination}", file=sys.stderr)
+        return 1
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    append_event(args, manifest, record)
+    print(f"imported output record {args.output_record_id} -> {destination}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

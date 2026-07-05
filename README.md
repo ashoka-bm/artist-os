@@ -178,6 +178,8 @@ The accepted storage model for installed user runs stores user-facing files and 
 
 `Wondermint/Artist Library/` contains visible project outputs, Review Drafts, readable summaries, and artist-useful Personal Library notes. The hidden sibling `.wondermint/artist-os/` contains internal Workspace Library state such as project manifests, event logs, prompt plans, critiques, sidecars, feedback evidence, learning records, and performance signals. Basic installed-root setup, Project Pointer creation, manifest fields, SQLite indexing, visible-missing sync, and feedback/learning/performance record scaffolding are available. See `docs/storage.md` and `docs/progress.md`.
 
+Use `bin/artist-os-import-output` to record an artist-owned or human-edited local artifact as an Output Record without calling a provider.
+
 For repo development and tests, the internal Workspace Library can still live at:
 
 ```text

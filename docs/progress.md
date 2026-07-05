@@ -4,7 +4,7 @@ This document records what has been created, what is transitional, and what come
 
 ## Current Goal
 
-Artist OS has established the core typed transformation pipeline for the current image, Suno, and text dry-run slices. The current refinement pass adds an emotional-primacy contract on top of that pipeline: records must now name the intended feeling, preserve the artist's authority through a Decision Interview, and carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact.
+Artist OS has established the core typed transformation pipeline for the current image, video storyboard, Suno, text, reference-continuity, and package-compilation dry-run slices. The current refinement pass adds an emotional-primacy and provenance contract on top of that pipeline: records must name the intended feeling, preserve the artist's authority through a Decision Interview, carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact, and keep generated/imported/reference/package artifacts traceable through Output Records and thin manifests.
 
 Current implementation priority is dry-run output quality: generate the right briefs, plans, prompts, drafts, reviews, and records at the highest possible quality before adding external generation. API setup, provider credentials, provider adapters, and actual external image or Suno generation are intentionally deferred until the dry-run contracts and output quality are strong enough to support them.
 
@@ -45,9 +45,35 @@ Implemented dry-run workflows:
 - Text Reference to Sound Prompt Plan with Suno rendering.
 - Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
 - Text Reference to storyboard-ready Video Medium Plan (Video Journey v0 planning).
+- Video storyboard approval to provider-specific Seedance Prompt Package, before any Seedance generation approval.
+- Existing script, dialogue, narration, or approved text to ElevenLabs v3 voice-over prompt preparation, before any TTS provider call.
 - Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
+- Multi-medium Cross-Medium Plan plus terminal Asset Package compilation for accepted Output Records.
 
 Provider-backed generation remains out of scope without explicit approval.
+
+### Reference Inventory And Reference Readiness
+
+Added the first schema-backed promoted-reference continuity record:
+
+- `schemas/reference-inventory.schema.json`,
+- `tests/fixtures/references/reference-inventory.json`,
+- schema validation coverage for Reference Inventory lifecycle/status rules,
+- `reference_inventory` support in Project Manifests,
+- Reference Inventory paths in storage and metadata docs,
+- Reference Inventory item and image indexing in `artist-os.sqlite`,
+- `bin/artist-os-db publish-visible-reference` for copying accepted or review-draft reference Output Artifacts into the visible Artist Library,
+- `bin/artist-os-import-output` for recording artist-owned or human-edited artifacts as schema-valid Output Records without provider calls,
+- `reference_refs_used` support on image, video, and illustration planning records so downstream usage is traceable back to accepted reference subjects.
+
+Reference Inventory owns promoted character, location, and object reference asset state: effective policy, scan history, subject/package/per-output readiness, Visual Reference Sheet Plan refs, Output Record refs, visible storage paths, and provider-neutral role hints. It does not own story canon; Long-Work Stewardship records canon-critical continuity rules when a promoted reference becomes part of cumulative story authority.
+
+Current rule:
+
+- accepted reference subjects unlock automatic Visual Reference Sheet Plan prompt drafting,
+- generating or importing each reference image still requires the normal provider/import boundary and an Output Record,
+- reference readiness is checked before storyboard export, image prompt export, illustration prompt export, or provider video generation,
+- provider-specific upload ids, media bindings, and runtime tags belong in adapter/export records, not Reference Inventory.
 
 ### Release Package / Album v1
 
@@ -63,6 +89,38 @@ Added the first schema-backed Release Package coordination record:
 Album is the only implemented Release Package subtype in v1. EP, Single Bundle, Visual Album, campaign, and broader package routes remain future sibling subtypes. The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship Records, Prompt Plans, Text Generation Plans, or Output Records.
 
 Album Calibration is directional only. Representative Sound and Image Medium Plans come before calibration; remaining track Sound Prompt Plans, album cover, Track Covers, and optional text deliverables expand only after the relevant subchecks approve. Final artifacts still use normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates.
+
+### Cross-Medium Plan And Package Compilation
+
+Added the general multi-medium coordination and terminal package stage:
+
+- `schemas/cross-medium-plan.schema.json`,
+- `schemas/asset-package.schema.json`,
+- `tests/fixtures/release-packages/cross-medium-plan.json`,
+- `tests/fixtures/release-packages/asset-package.json`,
+- package format library entries under `docs/structure-library/package-format/`,
+- `docs/adr/0014-package-compilation-stage.md`,
+- schema and transition coverage for Asset Package completeness.
+
+Cross-Medium Plan records one primary medium and supporting media, Medium Roles, production order, effective project scale, and cross-medium continuity. It is the general multi-medium planning seam outside Album v1.
+
+Package Compilation is now Phase 18. It runs after Output Acceptance, calls no provider, selects a Package Format, arranges accepted Output Records into slots, and persists a thin Asset Package manifest. A complete Asset Package cannot keep missing slots unless the artist explicitly waives the missing deliverable and the waiver is recorded.
+
+Album v1's shipped Release Package Plan remains for back-compat, while its planning/output seam is now documented as generalizing toward Cross-Medium Plan plus Package Format plus Asset Package.
+
+### Video Provider Export And Voice Prompt Prep
+
+Added post-storyboard and voice-prep contracts without crossing the provider boundary:
+
+- `schemas/seedance-prompt-package.schema.json`,
+- `tests/fixtures/video-journey/seedance-prompt-package.json`,
+- Seedance cinematic prompt protocol docs under `docs/drafts/video-provider-research/providers/`,
+- Seedance package support in the conductor phase order and prompt critique path,
+- composite multi-panel storyboard sheet as the default generated storyboard artifact when the artist asks to generate "the storyboard",
+- individual storyboard stills as separate provider-backed artifacts requiring separate explicit approval and Output Records,
+- ElevenLabs v3 voice-over prompt preparation guidance for existing scripts, dialogue, narration, or approved text.
+
+Seedance Prompt Packages are provider-specific exports after storyboard approval. They are not a provider-neutral Video Prompt Plan and still require Prompt Plan Critique plus explicit Seedance Generation Approval before upload, render, or generation.
 
 ### Shared Story Architecture
 
@@ -336,8 +394,8 @@ Each step should define:
 
 Success condition met:
 
-- text-to-image and text-to-Suno have explicit typed step maps,
-- future video, text, mixed-media, and expanded sound branches can add steps without redefining the model.
+- text-to-image, text-to-Suno, Text Journey, Video Journey, reference inventory, and package-compilation routes have explicit typed contracts,
+- future provider adapters, EP / Single Bundle / Visual Album routes, and expanded sound branches can add steps without redefining the model.
 
 ### 3. Test Fixtures
 
@@ -349,6 +407,10 @@ tests/fixtures/
   text-to-suno/
   story/
   reviews/
+  video-journey/
+  text-journey/
+  release-packages/
+  references/
 ```
 
 Success condition met:
@@ -383,6 +445,8 @@ Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
 Review Packet -> Review Record
+Cross-Medium Plan + accepted Output Records -> Asset Package
+Reference Inventory -> visible reference publication/index rows
 ```
 
 These tests should check structure and routing, not AI quality.
@@ -445,9 +509,18 @@ Promoted findings:
 - added a schema-validated Generation Approval fixture,
 - added `docs/provider-import-adapter-contracts.md` and `artist_os_adapter_guards.py` so future provider/import adapters have reusable pre-call and provenance guards.
 
+### First Import Adapter
+
+Added:
+
+- `bin/artist-os-import-output`,
+- `tests/test_import_output_adapter.py`.
+
+The import adapter records artist-owned or human-edited files as Output Records without calling a provider. It validates the record against `schemas/output-record.schema.json`, runs `assert_import_output_record(...)`, writes the record under `projects/<project_id>/outputs/<target_media_type>/output-records/`, and appends an `output_imported` event. Human-edited imports must provide `previous_output_record_id`; imported artifacts must not carry Generation Approval refs or provider metadata.
+
 ## Current Best Next Step
 
-The consolidation rehearsal pass is complete enough to move into adapter implementation planning without weakening the dry-run boundary. The immediate next pass should implement the first import adapter for artist-provided or human-edited Output Artifacts, because it exercises Output Record provenance without paid provider calls. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
+The consolidation rehearsal pass and first import adapter are complete enough to move into adapter hardening without weakening the dry-run boundary. The immediate next pass should add human-edited Artist Library file detection and Output Record revision creation, because it builds on the import adapter and closes the visible-edit loop. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
 
 Reason:
 
@@ -458,18 +531,17 @@ Reason:
 - fixtures and tests now cover the output review, artist waiver, and acceptance lifecycle,
 - transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Text Medium Plan, Text Generation Plan, Prompt Branch Set, Output Record, and Review Record fixtures,
 - `skills/artist-os/references/critique-asset.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
-- `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
-- promotion concepts need real curation workflows before they become schemas or Output Record fields,
+- `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, Output Acceptance Gate, and Package Compilation phases after generation/import/draft/edit,
+- promoted reference continuity now has a schema-backed Reference Inventory; accepted-work promotion and durable taste/curation records still need real curation workflows before becoming schemas,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,
-- Album v1 now has a package plan schema, representative fixture, and fixture-backed rehearsal coverage, but EP, Single Bundle, Visual Album, and export/publishing package artifacts should still wait for more real output/import workflows.
+- Album v1 now has a package plan schema, representative fixture, and fixture-backed rehearsal coverage; Cross-Medium Plan and Asset Package cover the general plan/output seam, while EP, Single Bundle, Visual Album, and campaign-specific routers should still wait for more real output/import workflows.
 
 Near-term plan:
 
-1. Implement the first import adapter path for artist-provided and human-edited Output Artifacts, using `assert_import_output_record` before persistence.
-2. Add human-edited Artist Library file detection and Output Record revision creation so edited Review Drafts or Accepted Works become `human_edited` revisions.
-3. Implement the first provider adapter only behind `assert_generation_approval`, starting with a no-network dry-run adapter harness before any real provider call.
-4. Keep focused regression coverage for adapter findings: missing/mismatched Generation Approval, exact approved batch scope, and imported-output provider metadata rejection.
-5. Defer EP, Single Bundle, Visual Album, and broader publishing package schemas until imported or generated accepted outputs expose real package needs.
+1. Add human-edited Artist Library file detection and Output Record revision creation so edited Review Drafts or Accepted Works become `human_edited` revisions.
+2. Implement the first provider adapter only behind `assert_generation_approval`, starting with a no-network dry-run adapter harness before any real provider call.
+3. Keep focused regression coverage for adapter findings: missing/mismatched Generation Approval, exact approved batch scope, and imported-output provider metadata rejection.
+4. Defer EP, Single Bundle, Visual Album, and broader publishing package schemas until imported or generated accepted outputs expose real package needs.
 
 Final verification for this pass:
 
@@ -490,7 +562,7 @@ Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Beat Plan
-  -> optional Release Package Plan
+  -> optional Cross-Medium Plan / Release Package Plan
   -> Medium Plan
   -> Creative Brief Record
   -> Prompt Plan / Text Generation Plan
@@ -498,29 +570,33 @@ Reference
   -> Output Record
   -> Review Record
   -> Gate Decision
+  -> optional Asset Package
 ```
 
 Implemented branches:
 
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
-- Video Journey v0 through storyboard-ready Video Medium Plan, scene and shot mapping, audio posture, storyboard frame prompts, and provider-boundary policy,
+- Video Journey through storyboard-ready Video Medium Plan, scene and shot mapping, audio posture, storyboard frame prompts, composite storyboard-sheet policy, and optional Seedance Prompt Package export before provider approval,
 - text-to-sound through Sound Medium Plan, Sound Creative Brief Record, Sound Prompt Plan with Suno rendering, and output lifecycle contracts,
-- Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures.
-- Structure Library docs for reusable Story Structures and Cultural Format Structures, split into context-efficient per-entry files with chooser indexes.
+- ElevenLabs v3 voice-over prompt preparation from existing script, dialogue, narration, or approved text, without calling the provider,
+- Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures,
+- Reference Inventory through promoted subject planning, reference Output Record tracking, visible reference publication, and SQLite indexing,
+- Cross-Medium Plan plus Package Format plus Asset Package for terminal package compilation after Output Acceptance,
+- Structure Library docs for reusable Story Structures, Cultural Format Structures, and Package Formats, split into context-efficient per-entry files with chooser indexes.
 
 Not implemented yet:
 
-- Mixed-Media Plan schema,
-- EP, Single Bundle, Visual Album, campaign, export, or publishing Release Package subtypes,
+- EP, Single Bundle, Visual Album, campaign, export, or publishing-specific routers on top of the Cross-Medium Plan / Asset Package seam,
 - provider adapters and real provider-backed generation calls,
-- import adapters for artist-provided output artifacts,
+- automatic human-edited Artist Library file detection,
 - durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records.
 
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
-- rehearse the image and Suno dry-run flows end to end against the hardened Story Structure and emotional-primacy model,
-- rehearse the Text Journey end to end and harden any schema or skill gaps found in use,
-- build provider/import adapter contracts that emit Output Records,
+- add visible Artist Library edit detection on top of `bin/artist-os-import-output`,
+- add executable subagent/delegation packet schemas so mandatory reviewer orchestration is validated like Review Records,
+- harden the conductor eval bless flow so a digest can only be re-blessed against a fresh passing grade,
+- add a project status view over `project.json`, `events.jsonl`, and SQLite so progress is queryable without re-reading the workspace by hand,
 - design curation records after real accepted outputs exist.
 
 Structure Library rehearsal status:
@@ -559,6 +635,7 @@ Structure Library rehearsal status:
 - Add `taste-memory-record.schema.json` only when accepted outputs need durable reusable taste guidance.
 - Add `calibration-choice.schema.json` only when calibration choices need to update future prompt planning in a structured way.
 - Add an Output Batch or Provider Run record only when provider adapters need batch-level cost tracking, retry tracking, or comparative curation.
+- Promote the highest-impact `docs/skill-pattern-audit.md` findings into implementation issues: subagent result/delegation schemas, guarded eval re-bless, provider chokepoint hard gates, and a durable project status view.
 - Consider a shared emotional-movement definition or schema fragment after image and sound both need the same fields. Do not abstract it earlier than necessary.
 
 ## Definition Of Done For The Typed Pipeline

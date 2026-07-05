@@ -7,6 +7,7 @@
     "AGENTS.md",
     "CONTEXT.md",
     "VERSION",
+    "artist_os_adapter_guards.py",
     "artist_os_schema_validator.py",
     "bin/",
     "docs/",

@@ -47,7 +47,7 @@ manifest path, or any file named in a skill body, is missing under the root.
 
 Everything the `MANIFEST.json` include list ships — the canonical root docs
 (`THEORY.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CONTEXT.md`), the
-`artist_os_schema_validator.py` module, `bin/`, `docs/`, `schemas/`, the public
+root helper modules, `bin/`, `docs/`, `schemas/`, the public
 `artist-os` skill plus internal mode files under `skills/artist-os/references/`, and this `packaging/`
 dir — is the single source of truth, edited by hand. The
 future generator (`bin/artist-os-generate`, ADR 0008 "Later") will write
