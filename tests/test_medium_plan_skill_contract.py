@@ -302,6 +302,35 @@ class MediumActivationContractTests(unittest.TestCase):
         self.assertIn("do not write a separate `resume-packet.json`", self._read(CONDUCTOR_SKILL))
 
 
+class MicroJourneyLeanPathContractTests(unittest.TestCase):
+    def _read(self, skill_path: str) -> str:
+        return (REPO_ROOT / skill_path).read_text(encoding="utf-8")
+
+    def test_micro_journey_uses_thin_authoring_packet_before_schema(self) -> None:
+        text = self._read("skills/artist-os/references/video-micro-journey-recipe.md")
+        required = (
+            "Compact Video Authoring Packet",
+            "thin planning surface",
+            "Do not read the schema for this step",
+            "Finalize the Video Medium Plan Record",
+            "bin/artist-os-video-finalize",
+            "Do not use the full schema as the authoring surface",
+            "bounded `record_builder` / `schema_validator` finalization pass",
+            "stop at the completed Compact Video Authoring Packet with a\nreset handoff",
+        )
+        for marker in required:
+            with self.subTest(marker=marker):
+                self.assertIn(marker, text)
+
+    def test_micro_journey_schema_read_is_after_packet_completion(self) -> None:
+        text = self._read("skills/artist-os/references/video-micro-journey-recipe.md")
+        packet_index = text.index("Produce the Compact Video Authoring Packet")
+        finalization_index = text.index("Finalize the Video Medium Plan Record")
+        schema_index = text.index("read\n   `schemas/video-medium-plan.schema.json` once")
+        self.assertLess(packet_index, finalization_index)
+        self.assertLess(finalization_index, schema_index)
+
+
 # Slice 2 — Medium Roles (ADR 0012, D10). Multi-medium projects outside Album v1
 # assign a primary/supporting Medium Role on the Cross-Medium Plan: the primary is
 # recommended from the output type and the artist confirms (recommendation-first),

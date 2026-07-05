@@ -68,19 +68,67 @@ def ctx_series(path):
     return out
 
 
+def _function_command(obj):
+    """Return the shell command from Codex exec function calls, if present."""
+    payload = obj.get("payload") if isinstance(obj, dict) else None
+    if not isinstance(payload, dict):
+        return None
+    if payload.get("type") != "function_call":
+        return None
+    args = payload.get("arguments")
+    if not isinstance(args, str):
+        return None
+    try:
+        parsed = json.loads(args)
+    except Exception:
+        return None
+    cmd = parsed.get("cmd")
+    return cmd if isinstance(cmd, str) else None
+
+
+def _looks_like_file_read(cmd):
+    """Approximate whether a shell command is loading file contents into context."""
+    stripped = cmd.strip()
+    read_prefixes = (
+        "cat ",
+        "sed ",
+        "nl ",
+        "head ",
+        "tail ",
+        "awk ",
+        "python ",
+        "python3 ",
+        "node ",
+    )
+    return stripped.startswith(read_prefixes) or ".read_text(" in stripped or "open(" in stripped
+
+
 def signals(path):
-    keys = {
-        "recipe": "video-micro-journey-recipe",
-        "video_journey": "video-journey.md",
-        "storyboard_builder": "storyboard-prompt-builder",
-        "micro_journey": "micro_journey",
-        "schema_reads": ".schema.json",
+    counts = {
+        "recipe": 0,
+        "video_journey": 0,
+        "storyboard_builder": 0,
+        "micro_journey": 0,
+        "schema_reads": 0,
     }
-    counts = {k: 0 for k in keys}
-    for line in open(path, encoding="utf-8", errors="ignore"):
-        for k, s in keys.items():
-            if s in line:
-                counts[k] += line.count(s)
+    with open(path, encoding="utf-8", errors="ignore") as handle:
+        for line in handle:
+            if "micro_journey" in line:
+                counts["micro_journey"] += line.count("micro_journey")
+            try:
+                obj = json.loads(line)
+            except Exception:
+                continue
+            cmd = _function_command(obj)
+            if not cmd or not _looks_like_file_read(cmd):
+                continue
+            if "video-micro-journey-recipe" in cmd:
+                counts["recipe"] += cmd.count("video-micro-journey-recipe")
+            if "video-journey.md" in cmd:
+                counts["video_journey"] += cmd.count("video-journey.md")
+            if "storyboard-prompt-builder" in cmd:
+                counts["storyboard_builder"] += cmd.count("storyboard-prompt-builder")
+            counts["schema_reads"] += cmd.count(".schema.json")
     return counts
 
 
@@ -140,7 +188,7 @@ def main(argv):
     print(f"  [{mark(sig['video_journey']==0 and sig['storyboard_builder']==0)}] avoided full video stack       "
           f"(video-journey: {sig['video_journey']}, storyboard-builder: {sig['storyboard_builder']})")
     print(f"  [{mark(sig['micro_journey']>0)}] set micro_journey depth        (hits: {sig['micro_journey']})")
-    print(f"  [info] schema (.schema.json) references: {sig['schema_reads']}  "
+    print(f"  [info] schema file reads: {sig['schema_reads']}  "
           f"(lower + later = better — Schema Load Economy expects a small late cluster)")
 
     base = baseline()

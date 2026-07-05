@@ -1,0 +1,284 @@
+{
+  "video_medium_plan_id": "vmp_midnight_laundromat_spin_reel",
+  "source_id": "src_midnight_laundromat_spin",
+  "artist_meaning_id": "meaning_midnight_laundromat_spin",
+  "transformation_brief_id": "tb_midnight_laundromat_spin",
+  "beat_plan_id": "bp_midnight_laundromat_spin",
+  "target_media_type": "video",
+  "implementation_scope": "storyboard_plan",
+  "rendering_status": "not_supported",
+  "provider_boundary": {
+    "video_generation": "not_supported",
+    "storyboard_still_generation": "requires_explicit_artist_approval",
+    "render_adapter_status": "future_adapter"
+  },
+  "story_mode": "sequence",
+  "narrative_depth": "micro_journey",
+  "story_template_ref": null,
+  "micro_journey_template_ref": "problem_solution_demo",
+  "asset_purpose_brief": null,
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "A short social micro-journey can hold the warning-to-blackout movement without long-work support.",
+    "trigger_signals": [
+      "artist_requested_compact_output",
+      "single_artifact_can_hold_movement"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views",
+      "plot_tracker",
+      "character_sheets",
+      "world_building",
+      "chapter_or_scene_briefs",
+      "style_guide",
+      "extraction_verification",
+      "synthesis_checkpoints",
+      "publishing_or_completion_audit",
+      "collection_coherence_review"
+    ],
+    "reroute_triggers": [
+      "artist expands this into a longer film",
+      "artist asks for a generated storyboard still batch",
+      "recurring continuity becomes necessary"
+    ]
+  },
+  "character_reference_strategy": {
+    "status": "not_applicable",
+    "decision_ref": null,
+    "character_template_refs": [],
+    "visual_reference_sheet_plan_refs": [],
+    "notes": "No recurring character reference is needed for this object-led compact reel."
+  },
+  "visual_reference_sheet_strategy": {
+    "status": "deferred",
+    "decision_ref": null,
+    "visual_reference_sheet_plan_refs": [],
+    "notes": "Reference batch deferred for this measurement; no storyboard still generation approved."
+  },
+  "medium_output_shape_recommendation": {
+    "requested_shape": "short social video",
+    "recommended_shape": "short_social_video",
+    "accepted_shape": "short_social_video",
+    "rationale": "The haunted-object beat fits a compact vertical reel better than a longer film structure.",
+    "alternatives_considered": [
+      "micro_trailer",
+      "single_scene"
+    ],
+    "tradeoffs": [
+      "Keeps continuity light",
+      "Defers generated storyboard stills"
+    ],
+    "conflict": {
+      "has_conflict": false,
+      "conflict_summary": null,
+      "resolution": "not_needed",
+      "gate_decision_id": null
+    }
+  },
+  "video_format": {
+    "primary_video_format": "short_social_video",
+    "format_modifiers": [
+      "micro_trailer"
+    ],
+    "duration_target_seconds": 48,
+    "duration_flexibility": "standard",
+    "aspect_ratio": "9:16",
+    "publication_use": "social_post",
+    "audience": "TikTok/Reels/Shorts review.",
+    "rationale": "A compact haunted-object reel can carry one warning-to-blackout movement without full-story support."
+  },
+  "symbology_direction": {
+    "selection_method": "agent_recommended",
+    "primary_symbolic_representation": "A red sock tapping from inside the washer glass.",
+    "active_absence": true,
+    "confirmation_status": "unconfirmed",
+    "rationale": "The sock turns an ordinary appliance into an active warning without revealing a monster or cause.",
+    "avoid": [
+      "showing a monster",
+      "explaining the cause"
+    ]
+  },
+  "style_direction": {
+    "selection_method": "agent_recommended",
+    "primary_style": "grounded cinematic horror",
+    "style_modifiers": [
+      "practical fluorescent light",
+      "shallow-depth close-ups",
+      "wet tile reflections",
+      "rhythmic sharp cuts"
+    ],
+    "confirmation_status": "unconfirmed",
+    "rationale": "The ordinary laundromat must remain believable so the impossible object carries the dread.",
+    "avoid": [
+      "gore",
+      "jump-scare creature reveal",
+      "glossy trailer spectacle"
+    ]
+  },
+  "video_style_expression": {
+    "medium_rendering_mode": "live_action",
+    "camera_style": "slow push-ins interrupted by sharp inserts",
+    "motion_style": "restrained environment movement plus washer rhythm",
+    "edit_style": "dense short-form cuts every 1-3 seconds",
+    "caption_typography_style": "none/minimal",
+    "color_light_style": "sickly green-white fluorescents, dull chrome, one saturated red sock",
+    "style_direction_notes": "The ordinary space should remain believable."
+  },
+  "visual_dynamics": {
+    "target_visual_engine": "Empty laundromat repetition becomes threatening through one impossible moving object.",
+    "active_visual_tensions": [
+      {
+        "pair": "Ordinary/Haunted",
+        "active_pole_summary": "An ordinary appliance behaves like a warning.",
+        "intensity": "high",
+        "translation_notes": "Keep the machine banal while the sock acts intentional."
+      },
+      {
+        "pair": "Motion/Stillness",
+        "active_pole_summary": "The washer keeps moving after human order leaves.",
+        "intensity": "high",
+        "translation_notes": "Use spin, taps, and light failures as the only active forces."
+      }
+    ],
+    "minimum_tension_criteria": {
+      "criteria": "Each adjacent shot changes distance, information, light state, or pressure around the spinning machine.",
+      "required_adjacent_difference": "Vary at least one shot-design axis and one dread/intensity axis unless repetition is serving dread."
+    },
+    "style_visual_conflicts": []
+  },
+  "video_sequences": [
+    {
+      "sequence_id": "vseq_warning_to_blackout",
+      "sequence_label": "Warning to blackout",
+      "sequence_purpose": "Warning-to-blackout micro journey.",
+      "scene_ids": [
+        "vscene_laundromat_after_hours"
+      ]
+    }
+  ],
+  "video_scenes": [
+    {
+      "scene_id": "vscene_laundromat_after_hours",
+      "sequence_id": "vseq_warning_to_blackout",
+      "beat_ids": [
+        "beat_hook_machine_moves",
+        "beat_sock_warning",
+        "beat_blackout_payoff"
+      ],
+      "scene_label": "After-hours laundromat",
+      "scene_purpose": "Move from wrong motion to unresolved darkness.",
+      "setting": "Empty laundromat at midnight.",
+      "duration_target_seconds": 48,
+      "local_tension": "The washer continues after the room should be dead."
+    }
+  ],
+  "audio_plan": {
+    "audio_mode": "sound_design",
+    "sound_journey_required": false,
+    "text_generation_plan_refs": [],
+    "sound_prompt_plan_refs": [],
+    "audio_cues": [
+      {
+        "audio_ref": "audio_washer_spin",
+        "role": "machine rhythm",
+        "description": "Washer rotation and low circular hum.",
+        "used_by_shot_ids": [
+          "vshot_001",
+          "vshot_002"
+        ]
+      }
+    ],
+    "notes": "No music, dialogue, or voiceover."
+  },
+  "text_track_refs": [],
+  "storyboard_generation_policy": {
+    "storyboard_frame_prompts_in_plan": true,
+    "default_generated_storyboard_artifact": "composite_storyboard_sheet",
+    "composite_storyboard_sheet_default": true,
+    "output_record_required_for_composite_sheet": true,
+    "generated_storyboard_stills_allowed": false,
+    "individual_stills_require_separate_approval": true,
+    "requires_explicit_artist_approval": true,
+    "output_record_required_for_generated_stills": true,
+    "notes": "Storyboard frame prompts are draft text only. Composite sheets and individual stills require explicit provider approval."
+  },
+  "gates": {
+    "symbology_gate": "unconfirmed",
+    "style_gate": "unconfirmed",
+    "video_format_gate": "unconfirmed",
+    "scene_shot_logic_gate": "unconfirmed",
+    "motion_pacing_transition_gate": "unconfirmed",
+    "audio_posture_gate": "unconfirmed"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": false,
+    "video_critic_required": true,
+    "prompt_critic_required": false,
+    "output_critic_required": false
+  },
+  "traceability_summary": [
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_midnight_laundromat_spin",
+      "note": "The plan preserves the ordinary-space dread and active absence."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_midnight_laundromat_spin",
+      "note": "Shots map to hook, warning, and blackout payoff beats."
+    }
+  ],
+  "traceable_symbolic_representation": "The red sock tapping from inside the washer glass.",
+  "active_tension_profile": "High ordinary/haunted tension with restrained motion and increasing blackout pressure.",
+  "shot_avoid": [
+    "monster reveal",
+    "explaining the cause",
+    "gore"
+  ],
+  "shots": [
+    {
+      "shot_id": "vshot_001",
+      "beat_id": "beat_hook_machine_moves",
+      "kem_id": "kem_wrong_motion",
+      "start": 0,
+      "duration": 2,
+      "scale": "wide",
+      "angle": "eye_level",
+      "emphasis": "environment",
+      "camera_movement": "static security-cam angle",
+      "subject_movement": "one washer spins while the room stays empty",
+      "blocking": "empty laundromat one washer moving",
+      "transition_in": "fade_from_black",
+      "transition_out": "hard_cut",
+      "feeling": "wrongness",
+      "audio_ref": "audio_washer_spin",
+      "prompt": "Empty midnight laundromat, one lit washer spinning, fluorescent green-white light."
+    },
+    {
+      "shot_id": "vshot_002",
+      "beat_id": "beat_sock_warning",
+      "kem_id": "kem_warning_signal",
+      "start": 2,
+      "duration": 2,
+      "scale": "extreme_close_up",
+      "angle": "eye_level",
+      "emphasis": "symbolic_detail",
+      "camera_movement": "micro push toward washer glass",
+      "subject_movement": "the red sock presses flat against the glass",
+      "blocking": "sock presses flat against washer glass",
+      "transition_in": "hard_cut",
+      "transition_out": "cut_to_black",
+      "feeling": "dread",
+      "audio_ref": "audio_washer_spin",
+      "prompt": "Red sock flattened against washer window like a palm."
+    }
+  ]
+}

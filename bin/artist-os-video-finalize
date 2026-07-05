@@ -1,0 +1,930 @@
+#!/usr/bin/env python3
+"""Finalize a compact video authoring packet into a Video Medium Plan record."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+from typing import Any
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT))
+
+from artist_os_schema_validator import ValidationError, validate_file
+
+
+VIDEO_MEDIUM_SCHEMA = REPO_ROOT / "schemas" / "video-medium-plan.schema.json"
+
+COMPACT_REQUIRED = (
+    "video_medium_plan_id",
+    "source_id",
+    "artist_meaning_id",
+    "transformation_brief_id",
+    "beat_plan_id",
+)
+
+LONG_WORK_SUPPORTS = [
+    "long_work_stewardship",
+    "long_work_parts",
+    "long_work_readiness",
+    "long_work_checkpoints",
+    "stewardship_views",
+    "plot_tracker",
+    "character_sheets",
+    "world_building",
+    "chapter_or_scene_briefs",
+    "style_guide",
+    "extraction_verification",
+    "synthesis_checkpoints",
+    "publishing_or_completion_audit",
+    "collection_coherence_review",
+]
+
+COMPACT_TEMPLATE: dict[str, Any] = {
+    "video_medium_plan_id": "vmp_example_micro_journey",
+    "source_id": "src_example_reference",
+    "artist_meaning_id": "meaning_example",
+    "transformation_brief_id": "tb_example",
+    "beat_plan_id": "bp_example",
+    "narrative_depth": "micro_journey",
+    "micro_journey_template_ref": "problem_solution_demo",
+    "format": {
+        "video_format": "short_social_video",
+        "modifier": "micro_trailer",
+        "duration_seconds": 48,
+        "aspect_ratio": "9:16",
+        "publication_use": "social_post",
+        "audience": "short-form social viewers",
+        "rationale": "A compact hook-to-payoff movement can hold the idea without full-story support.",
+    },
+    "symbology": {
+        "core_image": "red sock tapping from inside washer glass",
+        "active_absence": True,
+        "confirmation_status": "unconfirmed",
+        "rationale": "The core image turns ordinary action into a warning while withholding the cause.",
+        "avoid": ["monster reveal", "gore", "explaining the cause"],
+    },
+    "style_direction": {
+        "rendering_style": "grounded cinematic horror",
+        "camera_style": "practical fluorescent light",
+        "visual_texture": "wet tile reflections",
+        "edit_style": "rhythmic sharp cuts",
+        "confirmation_status": "unconfirmed",
+        "rationale": "Keep the scene believable so the impossible object carries the dread.",
+        "avoid": ["gore", "creature reveal", "glossy spectacle"],
+    },
+    "visual_dynamics": [
+        {
+            "tension": "ordinary/haunted",
+            "intensity": "high",
+            "translation_notes": "Keep the space ordinary while one detail behaves like a warning.",
+        },
+        {
+            "tension": "motion/stillness",
+            "intensity": "high",
+            "translation_notes": "Let one moving object pressure an otherwise still room.",
+        },
+    ],
+    "video_sequences": [
+        {
+            "sequence_id": "vseq_example_warning_to_blackout",
+            "sequence_label": "Warning to blackout",
+            "sequence_purpose": "Compact hook-to-payoff movement.",
+            "scene_ids": ["vscene_example_main"],
+        }
+    ],
+    "video_scenes": [
+        {
+            "scene_id": "vscene_example_main",
+            "sequence_id": "vseq_example_warning_to_blackout",
+            "beat_ids": ["beat_hook", "beat_warning"],
+            "scene_label": "Main setting",
+            "scene_purpose": "Move from wrong motion to unresolved payoff.",
+            "setting": "empty midnight laundromat",
+            "duration_target_seconds": 48,
+            "local_tension": "The washer continues after the room should be still.",
+        }
+    ],
+    "audio_plan": {
+        "audio_mode": "sound_design",
+        "notes": "No music, dialogue, or voiceover.",
+    },
+    "text_track_refs": [],
+    "shots": [
+        {
+            "shot_id": "vshot_001",
+            "beat_id": "beat_hook",
+            "kem_id": "kem_wrong_motion",
+            "start": 0,
+            "duration": 2,
+            "scale": "wide",
+            "angle": "eye_level",
+            "emphasis": "environment",
+            "camera_movement": "static security-cam angle",
+            "subject_movement": "one washer spins while the room stays empty",
+            "blocking": "empty laundromat, one washer moving",
+            "transition_in": "fade_from_black",
+            "transition_out": "hard_cut",
+            "feeling": "wrongness",
+            "audio_ref": "audio_washer_spin",
+            "prompt": "Empty midnight laundromat, one lit washer spinning under fluorescent light.",
+        },
+        {
+            "shot_id": "vshot_002",
+            "beat_id": "beat_warning",
+            "kem_id": "kem_warning_signal",
+            "start": 2,
+            "duration": 2,
+            "scale": "extreme_close_up",
+            "angle": "eye_level",
+            "emphasis": "symbolic_detail",
+            "camera_movement": "micro push toward washer glass",
+            "subject_movement": "the red sock presses flat against the glass",
+            "blocking": "sock presses flat against washer glass",
+            "transition_in": "hard_cut",
+            "transition_out": "cut_to_black",
+            "feeling": "dread",
+            "audio_ref": "audio_washer_spin",
+            "prompt": "Red sock flattened against washer window like a warning.",
+        },
+    ],
+}
+
+CONTRACT_TEXT = """Compact Video Authoring Packet contract
+
+Required:
+- video_medium_plan_id, source_id, artist_meaning_id, transformation_brief_id, beat_plan_id
+- shots or storyboard_shots: non-empty array
+
+Recommended compact fields:
+- narrative_depth: micro_journey
+- micro_journey_template_ref
+- format: video_format, modifier, duration_seconds, aspect_ratio, publication_use, audience, rationale
+- symbology: core_image, active_absence, confirmation_status, rationale, avoid
+- style_direction: rendering_style, camera_style, visual_texture, edit_style, confirmation_status, rationale, avoid
+- visual_dynamics: array of {tension, intensity, translation_notes}
+- video_sequences, video_scenes
+- audio_plan: audio_mode, notes, optional audio_cues
+  - audio_cues may use audio_ref/ref/cue_id and used_by_shot_ids/shot_ids
+- text_track_refs: [] when no text tracks
+
+Each shot requires:
+- shot_id, beat_id, kem_id, start, duration, scale, angle, emphasis, prompt
+- camera_movement, subject_movement or blocking, transition_in, transition_out, feeling
+
+The command supplies schema boilerplate for provider boundary, story/template refs,
+workflow scale routing, gates, review requirements, storyboard generation policy,
+and optional character/reference strategies when omitted.
+Use --print-template for a minimal valid JSON packet.
+"""
+
+
+class PacketError(ValueError):
+    """Raised when the compact packet is missing data needed for finalization."""
+
+
+def parser() -> argparse.ArgumentParser:
+    root = argparse.ArgumentParser(description=__doc__)
+    root.add_argument("packet", nargs="?", type=Path, help="compact video authoring packet JSON")
+    root.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        help="path to write the schema-backed Video Medium Plan JSON",
+    )
+    root.add_argument(
+        "--schema",
+        default=VIDEO_MEDIUM_SCHEMA,
+        type=Path,
+        help="Video Medium Plan schema path",
+    )
+    root.add_argument(
+        "--print-template",
+        action="store_true",
+        help="print a minimal valid compact packet JSON template and exit",
+    )
+    root.add_argument(
+        "--print-contract",
+        action="store_true",
+        help="print the compact packet field contract and exit",
+    )
+    return root
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise PacketError(f"{path}: invalid JSON: {exc}") from exc
+    if not isinstance(data, dict):
+        raise PacketError(f"{path}: expected a JSON object")
+    return data
+
+
+def require_list(data: dict[str, Any], key: str) -> list[Any]:
+    value = data.get(key)
+    if not isinstance(value, list):
+        raise PacketError(f"expected array field {key!r}")
+    return value
+
+
+def scalar(data: dict[str, Any], *keys: str, default: Any = None) -> Any:
+    for key in keys:
+        if key in data:
+            return data[key]
+    return default
+
+
+def compact_packet_errors(packet: dict[str, Any]) -> list[str]:
+    errors = [f"missing required compact field {key!r}" for key in COMPACT_REQUIRED if not packet.get(key)]
+    if not isinstance(packet.get("storyboard_shots", packet.get("shots")), list):
+        errors.append("missing required compact field 'shots' or 'storyboard_shots'")
+    return errors
+
+
+def to_number(value: Any, field: str) -> int | float:
+    if isinstance(value, (int, float)):
+        return value
+    if isinstance(value, str):
+        try:
+            number = float(value)
+        except ValueError as exc:
+            raise PacketError(f"{field!r} must be numeric, got {value!r}") from exc
+        return int(number) if number.is_integer() else number
+    raise PacketError(f"{field!r} must be numeric")
+
+
+def as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def compact_id(value: Any, prefix: str, fallback: str) -> str:
+    raw = str(value or fallback).strip()
+    if raw.startswith(prefix):
+        return raw
+    slug = "".join(ch.lower() if ch.isalnum() else "_" for ch in raw).strip("_")
+    while "__" in slug:
+        slug = slug.replace("__", "_")
+    return f"{prefix}{slug or fallback}"
+
+
+def shot_ids(packet: dict[str, Any]) -> list[str]:
+    shots = packet.get("storyboard_shots", packet.get("shots", []))
+    if not isinstance(shots, list):
+        return []
+    return [str(shot["shot_id"]) for shot in shots if isinstance(shot, dict) and shot.get("shot_id")]
+
+
+def beat_ids(packet: dict[str, Any]) -> list[str]:
+    shots = packet.get("storyboard_shots", packet.get("shots", []))
+    if not isinstance(shots, list):
+        return []
+    ids: list[str] = []
+    for shot in shots:
+        if not isinstance(shot, dict) or not shot.get("beat_id"):
+            continue
+        beat_id = str(shot["beat_id"])
+        if beat_id not in ids:
+            ids.append(beat_id)
+    return ids or ["beat_compact_micro_journey"]
+
+
+def first_scene_id(packet: dict[str, Any]) -> str:
+    scenes = packet.get("video_scenes")
+    if isinstance(scenes, list) and scenes and isinstance(scenes[0], dict) and scenes[0].get("scene_id"):
+        return str(scenes[0]["scene_id"])
+    scenes = packet.get("scenes")
+    if isinstance(scenes, list) and scenes and isinstance(scenes[0], dict) and scenes[0].get("scene_id"):
+        return str(scenes[0]["scene_id"])
+    sequences = packet.get("sequences")
+    if isinstance(sequences, list):
+        for sequence in sequences:
+            if not isinstance(sequence, dict):
+                continue
+            nested = sequence.get("scenes")
+            if isinstance(nested, list) and nested and isinstance(nested[0], dict) and nested[0].get("scene_id"):
+                return str(nested[0]["scene_id"])
+    return "vscene_compact_micro_journey"
+
+
+def normalize_time_range(shot: dict[str, Any]) -> dict[str, int | float]:
+    if isinstance(shot.get("time_range"), dict):
+        return shot["time_range"]
+    start = scalar(shot, "start_seconds", "start")
+    duration = scalar(shot, "duration_seconds", "duration")
+    if start is None or duration is None:
+        raise PacketError(f"{shot.get('shot_id', '<unknown>')}: missing start/duration")
+    return {
+        "start_seconds": to_number(start, "start_seconds"),
+        "duration_seconds": to_number(duration, "duration_seconds"),
+    }
+
+
+def normalize_shot_design(shot: dict[str, Any], packet: dict[str, Any]) -> dict[str, Any]:
+    if isinstance(shot.get("shot_design"), dict):
+        return shot["shot_design"]
+    avoid = scalar(shot, "avoid", default=packet.get("shot_avoid", []))
+    return {
+        "shot_scale": scalar(shot, "shot_scale", "scale"),
+        "camera_angle": scalar(shot, "camera_angle", "angle"),
+        "visual_emphasis": scalar(shot, "visual_emphasis", "emphasis"),
+        "composition_strategy": scalar(
+            shot,
+            "composition_strategy",
+            "blocking",
+            "camera_movement",
+            default="Use shot blocking to preserve the Beat Plan movement.",
+        ),
+        "emotional_rationale": scalar(
+            shot,
+            "emotional_rationale",
+            "feeling",
+            default="This shot changes proximity, information, light, or pressure.",
+        ),
+        "avoid": avoid,
+    }
+
+
+def normalize_visual_unit(shot: dict[str, Any], packet: dict[str, Any]) -> dict[str, Any]:
+    if isinstance(shot.get("visual_unit"), dict):
+        return shot["visual_unit"]
+    feeling = scalar(shot, "intended_feeling", "feeling", default="unresolved pressure")
+    symbol = scalar(
+        shot,
+        "traceable_symbolic_representation",
+        "symbolic_note",
+        default=packet.get("traceable_symbolic_representation", "Traceable visual symbol from the packet."),
+    )
+    return {
+        "composition_intent": scalar(
+            shot,
+            "composition_intent",
+            "blocking",
+            default="Translate the Beat Plan movement into one clear storyboard frame.",
+        ),
+        "communication_intent": scalar(
+            shot,
+            "communication_intent",
+            "prompt",
+            default="Carry the compact video's hook-to-payoff movement.",
+        ),
+        "expectation_turn_translation": scalar(
+            shot,
+            "expectation_turn_translation",
+            default="Turn an ordinary expected image into the packet's intended emotional pressure.",
+        ),
+        "intended_feeling": feeling,
+        "active_tension_profile": scalar(
+            shot,
+            "active_tension_profile",
+            default=packet.get("active_tension_profile", "Compact micro-journey tension."),
+        ),
+        "traceable_symbolic_representation": symbol,
+        "shot_design": normalize_shot_design(shot, packet),
+    }
+
+
+def normalize_shot(shot: dict[str, Any], packet: dict[str, Any], scene_id: str) -> dict[str, Any]:
+    shot_id = scalar(shot, "shot_id")
+    if not shot_id:
+        raise PacketError("each shot must include shot_id")
+    return {
+        "shot_id": shot_id,
+        "scene_id": scalar(shot, "scene_id", default=scene_id),
+        "beat_id": scalar(shot, "beat_id"),
+        "key_emotional_movement_id": scalar(shot, "key_emotional_movement_id", "kem_id"),
+        "reference_refs_used": scalar(shot, "reference_refs_used", default=[]),
+        "time_range": normalize_time_range(shot),
+        "visual_unit": normalize_visual_unit(shot, packet),
+        "camera_movement": scalar(shot, "camera_movement", default="none"),
+        "subject_movement": scalar(
+            shot,
+            "subject_movement",
+            "blocking",
+            default="as described by blocking and prompt",
+        ),
+        "blocking": scalar(shot, "blocking", "subject_movement", default="No additional blocking supplied."),
+        "transition_in": scalar(shot, "transition_in", default="hard_cut"),
+        "transition_out": scalar(shot, "transition_out", default="hard_cut"),
+        "script_ref": scalar(shot, "script_ref", default=None),
+        "audio_ref": scalar(shot, "audio_ref", default=None),
+        "on_screen_text_refs": scalar(shot, "on_screen_text_refs", default=[]),
+        "storyboard_frame_prompt": scalar(shot, "storyboard_frame_prompt", "prompt"),
+    }
+
+
+def normalize_storyboard_shots(packet: dict[str, Any]) -> list[dict[str, Any]]:
+    raw_shots = packet.get("storyboard_shots", packet.get("shots"))
+    if not isinstance(raw_shots, list) or not raw_shots:
+        raise PacketError("expected non-empty 'shots' or 'storyboard_shots' array")
+    scene_id = first_scene_id(packet)
+    normalized = []
+    for raw in raw_shots:
+        if not isinstance(raw, dict):
+            raise PacketError("each shot must be an object")
+        normalized.append(normalize_shot(raw, packet, scene_id))
+    return normalized
+
+
+def normalize_provider_boundary(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("provider_boundary")
+    if not isinstance(value, dict):
+        value = {}
+    return {
+        "video_generation": value.get("video_generation", "not_supported"),
+        "storyboard_still_generation": value.get(
+            "storyboard_still_generation",
+            "requires_explicit_artist_approval",
+        ),
+        "render_adapter_status": value.get("render_adapter_status", value.get("render_adapter", "future_adapter")),
+    }
+
+
+def normalize_workflow_scale_routing(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("workflow_scale_routing")
+    if not isinstance(value, dict):
+        value = {}
+    return {
+        "scale_level": value.get("scale_level", "compact_artifact"),
+        "rationale": value.get(
+            "rationale",
+            "A short social micro-journey can hold the movement without long-work support.",
+        ),
+        "trigger_signals": value.get(
+            "trigger_signals",
+            ["artist_requested_compact_output", "single_artifact_can_hold_movement"],
+        ),
+        "activated_supports": value.get("activated_supports", ["core_pipeline", "medium_section_plan"]),
+        "skipped_supports": value.get("skipped_supports", LONG_WORK_SUPPORTS),
+        "reroute_triggers": value.get(
+            "reroute_triggers",
+            [
+                "artist expands this into a longer film",
+                "artist asks for a generated storyboard still batch",
+                "recurring continuity becomes necessary",
+            ],
+        ),
+    }
+
+
+def normalize_video_format(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("video_format")
+    compact = packet.get("format")
+    if not isinstance(value, dict):
+        value = compact if isinstance(compact, dict) else {}
+    primary = scalar(value, "primary_video_format", "video_format", "format", default="short_social_video")
+    modifier = scalar(value, "format_modifiers", "modifiers", "modifier", default=["micro_trailer"])
+    return {
+        "primary_video_format": primary,
+        "format_modifiers": as_list(modifier),
+        "duration_target_seconds": scalar(value, "duration_target_seconds", "duration_seconds", default=48),
+        "duration_flexibility": scalar(value, "duration_flexibility", default="standard"),
+        "aspect_ratio": scalar(value, "aspect_ratio", default="9:16"),
+        "publication_use": scalar(value, "publication_use", default="social_post"),
+        "audience": scalar(value, "audience", default="short-form social viewers"),
+        "rationale": scalar(
+            value,
+            "rationale",
+            default="A compact micro-journey can carry one hook-to-payoff movement without full-story support.",
+        ),
+    }
+
+
+def normalize_symbology_direction(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("symbology_direction")
+    compact = packet.get("symbology")
+    if not isinstance(value, dict):
+        value = compact if isinstance(compact, dict) else {}
+    return {
+        "selection_method": scalar(value, "selection_method", default="agent_recommended"),
+        "primary_symbolic_representation": scalar(
+            value,
+            "primary_symbolic_representation",
+            "core_symbol",
+            "core_image",
+            default=packet.get("traceable_symbolic_representation", "core visual symbol"),
+        ),
+        "active_absence": scalar(value, "active_absence", default=True),
+        "confirmation_status": scalar(value, "confirmation_status", "status", default="unconfirmed"),
+        "rationale": scalar(
+            value,
+            "rationale",
+            "meaning_role",
+            default="The core image carries the compact video's meaning while preserving active absence.",
+        ),
+        "avoid": scalar(value, "avoid", default=packet.get("shot_avoid", [])),
+    }
+
+
+def normalize_style_direction(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("style_direction")
+    if not isinstance(value, dict):
+        value = {}
+    modifiers = scalar(value, "style_modifiers", default=None)
+    if modifiers is None:
+        modifiers = [
+            item
+            for item in [
+                value.get("camera_style"),
+                value.get("visual_texture"),
+                value.get("edit_style"),
+            ]
+            if item
+        ]
+    return {
+        "selection_method": scalar(value, "selection_method", default="agent_recommended"),
+        "primary_style": scalar(value, "primary_style", "rendering_style", "style", default="grounded cinematic horror"),
+        "style_modifiers": modifiers,
+        "confirmation_status": scalar(value, "confirmation_status", "status", default="unconfirmed"),
+        "rationale": scalar(
+            value,
+            "rationale",
+            default="The style should preserve the intended feeling without overpowering the symbol.",
+        ),
+        "avoid": scalar(value, "avoid", default=[]),
+    }
+
+
+def normalize_video_style_expression(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("video_style_expression")
+    style = packet.get("style_direction")
+    if not isinstance(value, dict):
+        value = {}
+    if not isinstance(style, dict):
+        style = {}
+    return {
+        "medium_rendering_mode": scalar(value, "medium_rendering_mode", default="live_action"),
+        "camera_style": scalar(value, "camera_style", default=style.get("camera_style", "restrained camera movement")),
+        "motion_style": scalar(value, "motion_style", default="compact movement driven by the active symbol"),
+        "edit_style": scalar(value, "edit_style", default=style.get("edit_style", "dense short-form cuts")),
+        "caption_typography_style": scalar(value, "caption_typography_style", default="none/minimal"),
+        "color_light_style": scalar(value, "color_light_style", default=style.get("visual_texture", "practical light")),
+        "style_direction_notes": scalar(
+            value,
+            "style_direction_notes",
+            default=style.get("rationale", "Keep style subordinate to intended feeling."),
+        ),
+    }
+
+
+def normalize_visual_dynamics(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("visual_dynamics")
+    if isinstance(value, dict):
+        return value
+    tensions = []
+    if isinstance(value, list):
+        for item in value:
+            if not isinstance(item, dict):
+                continue
+            tensions.append(
+                {
+                    "pair": scalar(item, "pair", "tension", default="ordinary/haunted"),
+                    "active_pole_summary": scalar(
+                        item,
+                        "active_pole_summary",
+                        default=f"{scalar(item, 'tension', default='visual tension')} remains active.",
+                    ),
+                    "intensity": scalar(item, "intensity", default="high"),
+                    "translation_notes": scalar(item, "translation_notes", default="Vary shot design to keep pressure active."),
+                }
+            )
+    if not tensions:
+        tensions = [
+            {
+                "pair": "ordinary/haunted",
+                "active_pole_summary": "An ordinary image behaves like a warning.",
+                "intensity": "high",
+                "translation_notes": "Keep the situation recognizable while one detail carries pressure.",
+            }
+        ]
+    return {
+        "target_visual_engine": scalar(
+            packet,
+            "target_visual_engine",
+            default="A compact visual symbol drives the hook-to-payoff movement.",
+        ),
+        "active_visual_tensions": tensions,
+        "minimum_tension_criteria": {
+            "criteria": "Adjacent shots change distance, information, light state, or pressure.",
+            "required_adjacent_difference": "Vary at least one shot-design axis or one dread/intensity axis.",
+        },
+        "style_visual_conflicts": [],
+    }
+
+
+def normalize_video_sequences(packet: dict[str, Any]) -> list[dict[str, Any]]:
+    value = packet.get("video_sequences", packet.get("sequences"))
+    if isinstance(value, list) and value:
+        normalized = []
+        for index, item in enumerate(value, 1):
+            if not isinstance(item, dict):
+                continue
+            scene_ids = item.get("scene_ids")
+            if scene_ids is None and isinstance(item.get("scenes"), list):
+                scene_ids = [scene["scene_id"] for scene in item["scenes"] if isinstance(scene, dict) and scene.get("scene_id")]
+            normalized.append(
+                {
+                    "sequence_id": item.get("sequence_id", f"vseq_compact_{index:03d}"),
+                    "sequence_label": item.get("sequence_label", item.get("label", "Compact sequence")),
+                    "sequence_purpose": item.get("sequence_purpose", item.get("summary", item.get("purpose", "Compact movement."))),
+                    "scene_ids": scene_ids or [first_scene_id(packet)],
+                }
+            )
+        if normalized:
+            return normalized
+    return [
+        {
+            "sequence_id": "vseq_compact_micro_journey",
+            "sequence_label": "Compact micro-journey",
+            "sequence_purpose": "One hook-to-payoff movement.",
+            "scene_ids": [first_scene_id(packet)],
+        }
+    ]
+
+
+def normalize_video_scenes(packet: dict[str, Any]) -> list[dict[str, Any]]:
+    value = packet.get("video_scenes", packet.get("scenes"))
+    if not isinstance(value, list):
+        value = []
+        sequences = packet.get("sequences")
+        if isinstance(sequences, list):
+            for sequence in sequences:
+                if isinstance(sequence, dict) and isinstance(sequence.get("scenes"), list):
+                    value.extend(sequence["scenes"])
+    if value:
+        normalized = []
+        sequence_id = normalize_video_sequences(packet)[0]["sequence_id"]
+        for index, item in enumerate(value, 1):
+            if not isinstance(item, dict):
+                continue
+            normalized.append(
+                {
+                    "scene_id": item.get("scene_id", f"vscene_compact_{index:03d}"),
+                    "sequence_id": item.get("sequence_id", sequence_id),
+                    "beat_ids": item.get("beat_ids") or beat_ids(packet),
+                    "scene_label": item.get("scene_label", item.get("label", item.get("location", "Compact scene"))),
+                    "scene_purpose": item.get("scene_purpose", item.get("summary", item.get("purpose", "Carry the compact movement."))),
+                    "setting": item.get("setting", item.get("location", "compact setting")),
+                    "duration_target_seconds": item.get("duration_target_seconds", normalize_video_format(packet)["duration_target_seconds"]),
+                    "local_tension": item.get("local_tension", item.get("feeling", "compact local tension")),
+                }
+            )
+        if normalized:
+            return normalized
+    return [
+        {
+            "scene_id": first_scene_id(packet),
+            "sequence_id": normalize_video_sequences(packet)[0]["sequence_id"],
+            "beat_ids": beat_ids(packet),
+            "scene_label": "Compact scene",
+            "scene_purpose": "Carry the compact movement.",
+            "setting": "compact setting",
+            "duration_target_seconds": normalize_video_format(packet)["duration_target_seconds"],
+            "local_tension": "compact local tension",
+        }
+    ]
+
+
+def normalize_audio_plan(packet: dict[str, Any]) -> dict[str, Any]:
+    value = packet.get("audio_plan")
+    if not isinstance(value, dict):
+        value = {}
+    cues = value.get("audio_cues")
+    if isinstance(cues, list):
+        cues = normalize_audio_cues(cues, packet)
+    else:
+        cues = [
+            {
+                "audio_ref": "audio_compact_video",
+                "role": value.get("audio_mode", "sound design"),
+                "description": value.get("notes", "Compact video audio posture."),
+                "used_by_shot_ids": shot_ids(packet),
+            }
+        ]
+    return {
+        "audio_mode": value.get("audio_mode", "sound_design"),
+        "sound_journey_required": value.get("sound_journey_required", False),
+        "text_generation_plan_refs": value.get("text_generation_plan_refs", []),
+        "sound_prompt_plan_refs": value.get("sound_prompt_plan_refs", []),
+        "audio_cues": cues,
+        "notes": value.get("notes", "No separate sound journey required."),
+    }
+
+
+def normalize_audio_cues(raw_cues: list[Any], packet: dict[str, Any]) -> list[dict[str, Any]]:
+    normalized = []
+    fallback_shots = shot_ids(packet)
+    for index, cue in enumerate(raw_cues, 1):
+        if isinstance(cue, str):
+            normalized.append(
+                {
+                    "audio_ref": compact_id(cue, "audio_", f"cue_{index:03d}"),
+                    "role": "sound cue",
+                    "description": cue,
+                    "used_by_shot_ids": fallback_shots,
+                }
+            )
+            continue
+        if not isinstance(cue, dict):
+            raise PacketError("audio_cues entries must be objects or strings")
+        cue_ref = scalar(cue, "audio_ref", "ref", "cue_id", "id", default=f"cue_{index:03d}")
+        used_by = scalar(cue, "used_by_shot_ids", "shot_ids", "shots", default=fallback_shots)
+        normalized.append(
+            {
+                "audio_ref": compact_id(cue_ref, "audio_", f"cue_{index:03d}"),
+                "role": scalar(cue, "role", "purpose", default="sound cue"),
+                "description": scalar(cue, "description", "note", "notes", default="Compact video audio cue."),
+                "used_by_shot_ids": as_list(used_by),
+            }
+        )
+    return normalized
+
+
+def default_storyboard_generation_policy() -> dict[str, Any]:
+    return {
+        "storyboard_frame_prompts_in_plan": True,
+        "default_generated_storyboard_artifact": "composite_storyboard_sheet",
+        "composite_storyboard_sheet_default": True,
+        "output_record_required_for_composite_sheet": True,
+        "generated_storyboard_stills_allowed": False,
+        "individual_stills_require_separate_approval": True,
+        "requires_explicit_artist_approval": True,
+        "output_record_required_for_generated_stills": True,
+        "notes": "Storyboard frame prompts are draft text only. Composite sheets and individual stills require explicit provider approval.",
+    }
+
+
+def default_gates() -> dict[str, str]:
+    return {
+        "symbology_gate": "unconfirmed",
+        "style_gate": "unconfirmed",
+        "video_format_gate": "unconfirmed",
+        "scene_shot_logic_gate": "unconfirmed",
+        "motion_pacing_transition_gate": "unconfirmed",
+        "audio_posture_gate": "unconfirmed",
+    }
+
+
+def default_review_requirements() -> dict[str, bool]:
+    return {
+        "beat_reviewer_required": False,
+        "video_critic_required": True,
+        "prompt_critic_required": False,
+        "output_critic_required": False,
+    }
+
+
+def normalize_traceability_summary(packet: dict[str, Any]) -> list[dict[str, Any]]:
+    value = packet.get("traceability_summary")
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        return [
+            {
+                "source_type": "medium_plan",
+                "source_ref": packet["video_medium_plan_id"],
+                "note": value,
+            }
+        ]
+    return [
+        {
+            "source_type": "artist_meaning",
+            "source_ref": packet["artist_meaning_id"],
+            "note": "The compact video plan traces to Artist Meaning and preserves intended feeling.",
+        },
+        {
+            "source_type": "beat_plan",
+            "source_ref": packet["beat_plan_id"],
+            "note": "Storyboard shots map to the compact Beat Plan movement.",
+        },
+    ]
+
+
+def default_character_reference_strategy() -> dict[str, Any]:
+    return {
+        "status": "not_applicable",
+        "decision_ref": None,
+        "character_template_refs": [],
+        "visual_reference_sheet_plan_refs": [],
+        "notes": "No recurring character reference is required for this compact video packet.",
+    }
+
+
+def default_visual_reference_sheet_strategy() -> dict[str, Any]:
+    return {
+        "status": "deferred",
+        "decision_ref": None,
+        "visual_reference_sheet_plan_refs": [],
+        "notes": "Reference batch deferred; no storyboard still generation approved.",
+    }
+
+
+def default_medium_output_shape_recommendation(packet: dict[str, Any]) -> dict[str, Any]:
+    video_format = normalize_video_format(packet)
+    return {
+        "requested_shape": video_format["primary_video_format"],
+        "recommended_shape": video_format["primary_video_format"],
+        "accepted_shape": video_format["primary_video_format"],
+        "rationale": video_format["rationale"],
+        "alternatives_considered": ["single_scene", "trailer"],
+        "tradeoffs": ["Keeps continuity light", "Defers generated storyboard stills"],
+        "conflict": {
+            "has_conflict": False,
+            "conflict_summary": None,
+            "resolution": "not_needed",
+            "gate_decision_id": None,
+        },
+    }
+
+
+def build_video_medium_plan(packet: dict[str, Any]) -> dict[str, Any]:
+    errors = compact_packet_errors(packet)
+    if errors:
+        raise PacketError("; ".join(errors))
+
+    record = {
+        "video_medium_plan_id": packet["video_medium_plan_id"],
+        "source_id": packet["source_id"],
+        "artist_meaning_id": packet["artist_meaning_id"],
+        "transformation_brief_id": packet["transformation_brief_id"],
+        "beat_plan_id": packet["beat_plan_id"],
+        "target_media_type": packet.get("target_media_type", "video"),
+        "implementation_scope": packet.get("implementation_scope", "storyboard_plan"),
+        "rendering_status": packet.get("rendering_status", "not_supported"),
+        "provider_boundary": normalize_provider_boundary(packet),
+        "story_mode": packet.get("story_mode", "sequence"),
+        "narrative_depth": packet.get("narrative_depth", "micro_journey"),
+        "story_template_ref": packet.get("story_template_ref"),
+        "micro_journey_template_ref": packet.get("micro_journey_template_ref", "problem_solution_demo"),
+        "asset_purpose_brief": packet.get("asset_purpose_brief"),
+        "workflow_scale_routing": normalize_workflow_scale_routing(packet),
+        "character_reference_strategy": packet.get("character_reference_strategy", default_character_reference_strategy()),
+        "visual_reference_sheet_strategy": packet.get(
+            "visual_reference_sheet_strategy",
+            default_visual_reference_sheet_strategy(),
+        ),
+        "medium_output_shape_recommendation": packet.get(
+            "medium_output_shape_recommendation",
+            default_medium_output_shape_recommendation(packet),
+        ),
+        "video_format": normalize_video_format(packet),
+        "symbology_direction": normalize_symbology_direction(packet),
+        "style_direction": normalize_style_direction(packet),
+        "video_style_expression": normalize_video_style_expression(packet),
+        "visual_dynamics": normalize_visual_dynamics(packet),
+        "video_sequences": normalize_video_sequences(packet),
+        "video_scenes": normalize_video_scenes(packet),
+        "storyboard_shots": normalize_storyboard_shots(packet),
+        "audio_plan": normalize_audio_plan(packet),
+        "text_track_refs": packet.get("text_track_refs", packet.get("text_tracks", [])),
+        "storyboard_generation_policy": packet.get(
+            "storyboard_generation_policy",
+            default_storyboard_generation_policy(),
+        ),
+        "gates": packet.get("gates", default_gates()),
+        "review_requirements": packet.get("review_requirements", default_review_requirements()),
+        "traceability_summary": normalize_traceability_summary(packet),
+    }
+    return record
+
+
+def main() -> int:
+    args = parser().parse_args()
+    if args.print_template:
+        print(json.dumps(deepcopy(COMPACT_TEMPLATE), indent=2))
+        return 0
+    if args.print_contract:
+        print(CONTRACT_TEXT)
+        return 0
+    if args.packet is None:
+        print("FAIL: packet path is required unless --print-template or --print-contract is used", file=sys.stderr)
+        return 2
+    if args.output is None:
+        print("FAIL: --output is required when finalizing a packet", file=sys.stderr)
+        return 2
+
+    try:
+        packet = load_json(args.packet)
+        record = build_video_medium_plan(packet)
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+        validate_file(args.schema, args.output)
+    except (PacketError, ValidationError, ValueError, KeyError) as exc:
+        print(f"FAIL: {exc}", file=sys.stderr)
+        return 1
+
+    print(f"wrote {args.output}")
+    print(f"validated {args.output} -> {args.schema}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
