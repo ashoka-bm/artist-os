@@ -39,6 +39,7 @@ Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orche
 | Reference Inventory | `schemas/reference-inventory.schema.json` | `tests/fixtures/references/reference-inventory.json` |
 | Illustration Plan | `schemas/illustration-plan.schema.json` | `tests/fixtures/illustration/illustration-plan.json` |
 | Image Medium Plan | `schemas/image-medium-plan.schema.json` | `examples/image-medium-plan.example.json` |
+| Video Medium Plan | `schemas/video-medium-plan.schema.json` | `tests/fixtures/video-journey/video-medium-plan.json` |
 | Sound Medium Plan | `schemas/sound-medium-plan.schema.json` | `examples/sound-medium-plan.example.json` |
 | Text Medium Plan | `schemas/text-medium-plan.schema.json` | `tests/fixtures/text-journey/text-medium-plan.json` |
 | Creative Brief Record | `schemas/creative-brief.schema.json` | `examples/text-creative-brief.example.json` |
@@ -241,6 +242,8 @@ Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records
 - Next: Output Critic Review, Output Acceptance Gate, calibration context, export, archive, or revision.
 
 Provider adapters must refuse image, sound, or other media generation unless the request includes an approved Generation Approval Gate for that exact call or approved batch. The adapter must verify that the gate is approved, not pending; that its upstream refs match the Prompt Plan, Sound Prompt Plan platform rendering, or Prompt Branch Set being executed; and that the requested provider action fits the approved call or batch scope. Missing, mismatched, stale, or merely waived gates are hard failures. After the provider returns a concrete artifact, the adapter emits an Output Record; it must not create an Output Record for a refused or unexecuted call.
+
+Use `docs/provider-import-adapter-contracts.md` and `artist_os_adapter_guards.py` for the reusable local guard contract before implementing any provider or import adapter.
 
 ## Text-To-Image Steps
 

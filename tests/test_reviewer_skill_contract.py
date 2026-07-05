@@ -69,6 +69,57 @@ class ReviewerSkillContractTests(unittest.TestCase):
                 self.assertIn("Always check for drift", text)
                 self.assertIn("Only the artist can waive", text)
 
+    def test_reviewers_fail_closed_when_required_gate_context_is_missing(self) -> None:
+        expected_gate_fragments = {
+            "skills/artist-os/references/art-critic-review.md": [
+                "If the packet omits required gate context",
+                "Symbology",
+                "Style",
+                "Vocal / Lyric",
+                "Video Format",
+                "Shot Logic",
+                "missing_context",
+                "revise",
+                "block",
+            ],
+            "skills/artist-os/references/critique-asset.md": [
+                "If the packet omits required gate context",
+                "Prompt Lock",
+                "Draft Generation Approval",
+                "Generation Approval",
+                "Output Acceptance",
+                "missing_context",
+                "revise",
+                "block",
+            ],
+            "skills/artist-os/references/writing-method-review.md": [
+                "If the packet omits required writing gate context",
+                "Writing Method",
+                "Text Form",
+                "Fidelity / Transformation",
+                "Draft Generation Approval",
+                "missing_context",
+                "revise",
+                "block",
+            ],
+        }
+
+        for skill_path, fragments in expected_gate_fragments.items():
+            text = (REPO_ROOT / skill_path).read_text(encoding="utf-8")
+            with self.subTest(skill=skill_path):
+                for fragment in fragments:
+                    self.assertIn(fragment, text)
+
+    def test_review_fixtures_cover_text_generation_and_text_output_critique(self) -> None:
+        text_prompt_review = (REPO_ROOT / "tests/fixtures/reviews/text-prompt-critic-review-record.json").read_text(encoding="utf-8")
+        text_output_review = (REPO_ROOT / "tests/fixtures/reviews/text-output-review-record.json").read_text(encoding="utf-8")
+
+        self.assertIn('"artifact_type": "text_generation_plan"', text_prompt_review)
+        self.assertIn('"review_role": "prompt_critic"', text_prompt_review)
+        self.assertIn('"artifact_type": "output_record"', text_output_review)
+        self.assertIn('"artifact_id": "out_text_door_left_lit_draft_001"', text_output_review)
+        self.assertIn('"review_role": "output_critic"', text_output_review)
+
     def test_medium_critics_reference_gates_contract(self) -> None:
         for skill_path in MEDIUM_CRITIC_SKILLS:
             text = (REPO_ROOT / skill_path).read_text(encoding="utf-8")

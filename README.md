@@ -132,6 +132,7 @@ docs/metadata-schema.md      Metadata field reference
 docs/storage.md              Local Workspace Library rules
 docs/progress.md             Current roadmap, transition state, and completed milestones
 docs/pipeline-contract.md    Typed step input/output contract
+docs/provider-import-adapter-contracts.md Provider/import execution boundary
 docs/gates-and-reviews.md    Canonical gates, critic roles, and reviewer contract
 docs/story/                  Shared story and beat architecture
 docs/structure-library/      Story Structures and Cultural Format Structures

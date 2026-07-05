@@ -82,7 +82,7 @@ Promoted representative fixtures for `save_the_cat_beat_sheet` and `fichtean_cur
 
 A cross-medium rehearsal using the shared `fichtean_curve` Beat Plan found that Text, Image, and Sound can all preserve the same Story Structure while recommending compact medium shapes: short written work, compressed visual arc, and single multi-section sound work. Length and expansion gates should therefore consider dependency, accepted expansion, continuity, and medium-specific part planning rather than triggering from beat count or `story_mode = "arc"` alone.
 
-Added Workflow Scale Routing as the internal scale decision layer. Beat Plans now carry Project-Level Workflow Scale Routing, and Text, Image, and Sound Medium Plans carry Medium-Level Workflow Scale Routing. The field records `scale_level`, rationale, trigger signals, activated supports, skipped supports, and reroute triggers so agents can choose the right support bundle without overusing Long-Work Stewardship for compact artifacts.
+Added Workflow Scale Routing as the internal scale decision layer. Beat Plans now carry Project-Level Workflow Scale Routing, and Text, Image, Sound, and Video Medium Plans carry Medium-Level Workflow Scale Routing. The field records `scale_level`, rationale, trigger signals, activated supports, skipped supports, and reroute triggers so agents can choose the right support bundle without overusing Long-Work Stewardship for compact artifacts.
 
 Workflow Scale Routing is schema-backed and required on:
 
@@ -280,13 +280,14 @@ Current validation coverage:
 
 ### Medium Plans
 
-Medium Plan is now partially typed.
+Medium Plan is now typed for the implemented dry-run slices.
 
 Added:
 
 - `schemas/image-medium-plan.schema.json`
 - `schemas/sound-medium-plan.schema.json`
 - `schemas/text-medium-plan.schema.json`
+- `schemas/video-medium-plan.schema.json`
 
 Added examples:
 
@@ -295,7 +296,6 @@ Added examples:
 
 Still future:
 
-- `schemas/video-medium-plan.schema.json`
 - possibly a shared `schemas/medium-plan.schema.json`
 
 ## Completed Implementation Milestones
@@ -433,9 +433,21 @@ Added fixtures for:
 
 These make the output lifecycle concrete without expanding Output Record into taste memory, calibration, or batch orchestration. They cover both the normal approval path and the blocked-review path where the artist explicitly waives a blocking Output Critic finding before Output Acceptance Gate proceeds.
 
+### Consolidation Rehearsal Pass
+
+Ran a fixture-backed end-to-end dry-run rehearsal for the implemented Image, Suno, Text Journey, and Album v1 routes. Scratch evidence lives in `.tmp/rehearsals/2026-07-05/end-to-end-rehearsal.md`.
+
+Promoted findings:
+
+- fixed stale Video Medium Plan summary docs so `schemas/video-medium-plan.schema.json` is no longer described as future,
+- added fail-closed reviewer instructions for missing required gate context,
+- added a Text Journey Output Critic fixture for a drafted Output Record,
+- added a schema-validated Generation Approval fixture,
+- added `docs/provider-import-adapter-contracts.md` and `artist_os_adapter_guards.py` so future provider/import adapters have reusable pre-call and provenance guards.
+
 ## Current Best Next Step
 
-This cleanup pass is complete enough to move from repair into consolidation. The immediate next pass should run end-to-end dry-run rehearsals from Reference to Prompt Plan, Text Generation Plan, or Album v1 Release Package Plan, then tighten any docs, skill instructions, or schemas that still feel under-specified before adding another package subtype or provider adapter.
+The consolidation rehearsal pass is complete enough to move into adapter implementation planning without weakening the dry-run boundary. The immediate next pass should implement the first import adapter for artist-provided or human-edited Output Artifacts, because it exercises Output Record provenance without paid provider calls. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
 
 Reason:
 
@@ -449,17 +461,15 @@ Reason:
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, and Output Acceptance Gate phases after generation/import/draft/edit,
 - promotion concepts need real curation workflows before they become schemas or Output Record fields,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,
-- Album v1 now has a package plan schema and representative fixture, but still needs end-to-end rehearsal before EP, Single Bundle, Visual Album, or export/publishing package artifacts become schemas.
+- Album v1 now has a package plan schema, representative fixture, and fixture-backed rehearsal coverage, but EP, Single Bundle, Visual Album, and export/publishing package artifacts should still wait for more real output/import workflows.
 
 Near-term plan:
 
-1. Run one end-to-end dry-run rehearsal from Reference to Prompt Plan or Text Generation Plan for image, Suno, and Text Journey, and update any docs or skill instructions that still feel under-specified.
-2. Run one Album v1 dry-run rehearsal through Release Package Plan, pre-calibration Mixed-Media Critic Review, representative calibration Medium Plans, and Album Calibration.
-3. Add reviewer fixture tests for symbolic gate status and medium-gate completeness when review packets omit required gate context.
-4. Add reviewer fixture tests for Text Generation Plan critique and text Output Critic packets once a full rehearsal produces natural review examples.
-5. Design provider/import adapter contracts that emit Output Records without weakening the dry-run approval boundary.
-6. Add provider-adapter hard guards: image and Suno adapters must refuse provider calls unless the request includes a matching approved Generation Approval Gate for that exact call or approved batch.
-7. Keep focused regression coverage for rehearsal findings: fallback separated review execution and Suno `phonetic_vocals` Custom Mode mapping.
+1. Implement the first import adapter path for artist-provided and human-edited Output Artifacts, using `assert_import_output_record` before persistence.
+2. Add human-edited Artist Library file detection and Output Record revision creation so edited Review Drafts or Accepted Works become `human_edited` revisions.
+3. Implement the first provider adapter only behind `assert_generation_approval`, starting with a no-network dry-run adapter harness before any real provider call.
+4. Keep focused regression coverage for adapter findings: missing/mismatched Generation Approval, exact approved batch scope, and imported-output provider metadata rejection.
+5. Defer EP, Single Bundle, Visual Album, and broader publishing package schemas until imported or generated accepted outputs expose real package needs.
 
 Final verification for this pass:
 
