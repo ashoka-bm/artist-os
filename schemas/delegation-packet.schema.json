@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://artist-generation.local/schemas/delegation-packet.schema.json",
+  "title": "DelegationPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "orchestration_mode",
+    "phase",
+    "role",
+    "mode",
+    "upstream_records",
+    "input_paths",
+    "allowed_outputs",
+    "forbidden_actions",
+    "return_format"
+  ],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "orchestration_mode": {
+      "type": "string",
+      "enum": ["standard_orchestration", "parallel_production", "specialist_fanout"]
+    },
+    "phase": { "type": "string", "minLength": 1 },
+    "role": { "$ref": "#/$defs/worker_role" },
+    "mode": {
+      "type": "string",
+      "enum": ["draft_only", "review_only", "validate_only", "record_builder", "audit_only", "reduction_only"]
+    },
+    "upstream_records": {
+      "type": "object",
+      "properties": {
+        "source_record_id": { "type": "string" },
+        "artist_meaning_id": { "type": "string" },
+        "transformation_brief_id": { "type": "string" },
+        "beat_plan_id": { "type": "string" },
+        "medium_plan_id": { "type": "string" },
+        "creative_brief_id": { "type": "string" },
+        "prompt_plan_id": { "type": "string" },
+        "text_generation_plan_id": { "type": "string" },
+        "output_record_id": { "type": "string" }
+      }
+    },
+    "input_paths": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "allowed_outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/allowed_output" }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/forbidden_action" }
+    },
+    "return_format": { "type": "string", "const": "subagent_result" }
+  },
+  "$defs": {
+    "worker_role": {
+      "type": "string",
+      "enum": [
+        "evidence_worker",
+        "story_candidate_worker",
+        "medium_analysis_worker",
+        "variant_worker",
+        "branch_worker",
+        "record_builder",
+        "schema_validator",
+        "critic_worker",
+        "blind_verifier",
+        "audit_worker",
+        "reduction_worker",
+        "output_record_worker"
+      ]
+    },
+    "allowed_output": {
+      "type": "string",
+      "enum": [
+        "draft_artifact",
+        "review_record",
+        "schema_validation_report",
+        "output_record",
+        "traceability_notes",
+        "risk_notes",
+        "open_questions",
+        "validation_notes",
+        "findings",
+        "finding_fingerprints",
+        "revised_artifact"
+      ]
+    },
+    "forbidden_action": {
+      "type": "string",
+      "enum": [
+        "do_not_ask_artist",
+        "do_not_record_gate_decisions",
+        "do_not_persist_authoritative_state",
+        "do_not_mutate_project_manifest_or_events",
+        "do_not_call_providers",
+        "do_not_generate_media"
+      ]
+    }
+  }
+}

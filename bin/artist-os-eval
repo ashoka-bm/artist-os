@@ -20,6 +20,7 @@ import hashlib
 import importlib.machinery
 import importlib.util
 import json
+import re
 import shutil
 import sys
 from datetime import date
@@ -35,6 +36,7 @@ CONDUCTOR_REL = "skills/artist-os/SKILL.md"
 LOCK_REL = "evals/conductor-behavior/blessed.lock"
 SPEC_REL = "evals/conductor-behavior/eval-spec.md"
 GRADE_TEMPLATE_REL = "evals/conductor-behavior/grade-template.md"
+GRADE_ROLES = ("trimmed", "baseline")
 
 
 def conductor_digest(root: Path) -> str:
@@ -86,6 +88,57 @@ def write_lock(root: Path, blessed_at: str | None = None) -> dict:
     return lock
 
 
+def grade_path(root: Path, role: str) -> Path:
+    return root / "evals" / "conductor-behavior" / role / "grade.md"
+
+
+def stamp_grade_template(root: Path, destination: Path) -> None:
+    template = root / GRADE_TEMPLATE_REL
+    digest = conductor_digest(root)
+    body = template.read_text(encoding="utf-8")
+    destination.write_text(
+        f"graded_against_sha256: {digest}\n\n{body}",
+        encoding="utf-8",
+    )
+
+
+def parse_grade(path: Path) -> dict[str, object]:
+    text = path.read_text(encoding="utf-8")
+    digest_match = re.search(r"(?m)^\s*graded_against_sha256:\s*([0-9a-f]{64})\s*$", text)
+    pass_match = re.search(r"(?im)^\s*-?\s*Overall result:\s*PASS\s*$", text)
+    return {
+        "path": path,
+        "digest": digest_match.group(1) if digest_match else None,
+        "passed": bool(pass_match),
+    }
+
+
+def validated_grade_for_live_conductor(root: Path) -> tuple[Path | None, str | None]:
+    live_digest = conductor_digest(root)
+    grade_paths = [grade_path(root, role) for role in GRADE_ROLES]
+    existing = [path for path in grade_paths if path.exists()]
+    if not existing:
+        return None, "missing grade.md; run `bin/artist-os-eval start trimmed`, complete the grade, then bless"
+
+    parsed = [parse_grade(path) for path in existing]
+    missing_digest = [item for item in parsed if item["digest"] is None]
+    if missing_digest:
+        rel = missing_digest[0]["path"].relative_to(root)
+        return None, f"{rel} is missing graded_against_sha256"
+
+    matching = [item for item in parsed if item["digest"] == live_digest]
+    if not matching:
+        rels = ", ".join(str(item["path"].relative_to(root)) for item in parsed)
+        return None, f"stale grade digest in {rels}; re-run the eval against the live conductor"
+
+    passing = [item for item in matching if item["passed"]]
+    if not passing:
+        rel = matching[0]["path"].relative_to(root)
+        return None, f"{rel} must record `Overall result: PASS` before bless"
+
+    return passing[0]["path"], None
+
+
 def cmd_status(argv: list[str]) -> int:
     root = resolver.resolve_root()
     lock = read_lock(root)
@@ -103,8 +156,13 @@ def cmd_status(argv: list[str]) -> int:
 
 def cmd_bless(argv: list[str]) -> int:
     root = resolver.resolve_root()
+    grade, error = validated_grade_for_live_conductor(root)
+    if error:
+        print(f"FAIL  {error}", file=sys.stderr)
+        return 1
     lock = write_lock(root)
     print(f"blessed conductor at sha256 {lock['sha256'][:12]}… ({lock['blessed_at']})")
+    print(f"grade   {grade.relative_to(root)}")
     return 0
 
 
@@ -143,7 +201,7 @@ def cmd_start(argv: list[str]) -> int:
             stale.unlink()
         grade.unlink(missing_ok=True)
     if not grade.exists():
-        shutil.copyfile(template, grade)
+        stamp_grade_template(root, grade)
     print(f"snapshot   {snapshot.relative_to(root)}")
     print(f"trace dir  {trace_dir.relative_to(root)}/  (write T1.md … T5.md here)")
     print(f"grade      {grade.relative_to(root)}")

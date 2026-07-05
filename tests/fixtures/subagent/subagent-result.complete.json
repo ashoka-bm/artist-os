@@ -1,0 +1,30 @@
+{
+  "task_id": "task_image_prompt_variant_faithful",
+  "status": "complete",
+  "upstream_records_used": {
+    "beat_plan_id": "bp_door_left_lit",
+    "medium_plan_id": "imp_door_left_lit",
+    "creative_brief_id": "brief_door_left_lit"
+  },
+  "draft_artifact": {
+    "artifact_type": "prompt_variant_plan",
+    "summary": "Faithful variant preserving the approved threshold image."
+  },
+  "findings": [],
+  "finding_fingerprints": [
+    {
+      "artifact_id": "prompt_variant_faithful",
+      "location_or_field": "meaning_kernel",
+      "upstream_rule": "preserve_artist_meaning",
+      "claimed_drift": "none"
+    }
+  ],
+  "confidence": "medium",
+  "traceability_notes": [
+    "Uses bp_door_left_lit and imp_door_left_lit."
+  ],
+  "risk_notes": [],
+  "open_questions": [],
+  "validation_notes": [],
+  "recommended_next_action": "integrate"
+}

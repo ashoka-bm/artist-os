@@ -518,9 +518,30 @@ Added:
 
 The import adapter records artist-owned or human-edited files as Output Records without calling a provider. It validates the record against `schemas/output-record.schema.json`, runs `assert_import_output_record(...)`, writes the record under `projects/<project_id>/outputs/<target_media_type>/output-records/`, and appends an `output_imported` event. Human-edited imports must provide `previous_output_record_id`; imported artifacts must not carry Generation Approval refs or provider metadata.
 
+### Subagent Packet Contracts And Eval Bless Guard
+
+Added executable schemas for bounded worker orchestration:
+
+- `schemas/delegation-packet.schema.json`,
+- `schemas/subagent-result.schema.json`,
+- `tests/fixtures/subagent/delegation-packet.json`,
+- `tests/fixtures/subagent/subagent-result.complete.json`,
+- `tests/test_subagent_orchestration_contract.py`.
+
+Delegation Packets now have a schema-backed task envelope, worker role vocabulary, allowed output vocabulary, forbidden action vocabulary, and `return_format = "subagent_result"`. Subagent Results now have a schema-backed status enum, confidence enum, recommended next action enum, upstream record usage, notes, open questions, and finding fingerprints. Reviewer subagents still emit Review Records; this contract covers the general worker envelope around non-review helpers and orchestration workers.
+
+Hardened the conductor eval re-bless path:
+
+- `bin/artist-os-eval start` stamps `graded_against_sha256` into the scaffolded grade sheet,
+- `bin/artist-os-eval bless` refuses missing grades,
+- `bless` refuses grades for a stale conductor digest,
+- `bless` refuses grades that do not record `Overall result: PASS`.
+
+This makes the conductor digest gate harder to bypass accidentally: a changed conductor cannot be re-blessed by rewriting `blessed.lock` alone.
+
 ## Current Best Next Step
 
-The consolidation rehearsal pass and first import adapter are complete enough to move into adapter hardening without weakening the dry-run boundary. The immediate next pass should add human-edited Artist Library file detection and Output Record revision creation, because it builds on the import adapter and closes the visible-edit loop. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
+The consolidation rehearsal pass, first import adapter, subagent packet schemas, and guarded eval re-bless path are complete enough to move into adapter hardening without weakening the dry-run boundary. The immediate next pass should add human-edited Artist Library file detection and Output Record revision creation, because it builds on the import adapter and closes the visible-edit loop. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
 
 Reason:
 
@@ -532,6 +553,8 @@ Reason:
 - transition tests now check emotional movement references across Beat Plan, Image Medium Plan, Creative Brief, Sound Prompt Plan, Text Medium Plan, Text Generation Plan, Prompt Branch Set, Output Record, and Review Record fixtures,
 - `skills/artist-os/references/critique-asset.md` now treats Output Record as the preferred reviewed artifact for concrete outputs and can review Text Generation Plans,
 - `skills/artist-os/SKILL.md` now includes Output Record, Output Critic Review, Output Acceptance Gate, and Package Compilation phases after generation/import/draft/edit,
+- delegated worker packets and non-review subagent results now validate against schemas instead of living only as prose examples,
+- `bin/artist-os-eval bless` now requires a current passing grade before it can refresh the conductor digest lock,
 - promoted reference continuity now has a schema-backed Reference Inventory; accepted-work promotion and durable taste/curation records still need real curation workflows before becoming schemas,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,
 - Album v1 now has a package plan schema, representative fixture, and fixture-backed rehearsal coverage; Cross-Medium Plan and Asset Package cover the general plan/output seam, while EP, Single Bundle, Visual Album, and campaign-specific routers should still wait for more real output/import workflows.
@@ -594,9 +617,8 @@ Not implemented yet:
 This means the next work should be consolidation first, then expansion. Good next passes are:
 
 - add visible Artist Library edit detection on top of `bin/artist-os-import-output`,
-- add executable subagent/delegation packet schemas so mandatory reviewer orchestration is validated like Review Records,
-- harden the conductor eval bless flow so a digest can only be re-blessed against a fresh passing grade,
 - add a project status view over `project.json`, `events.jsonl`, and SQLite so progress is queryable without re-reading the workspace by hand,
+- add provider chokepoint hard gates for locked provider/model availability and approval-scope checks,
 - design curation records after real accepted outputs exist.
 
 Structure Library rehearsal status:
@@ -635,7 +657,7 @@ Structure Library rehearsal status:
 - Add `taste-memory-record.schema.json` only when accepted outputs need durable reusable taste guidance.
 - Add `calibration-choice.schema.json` only when calibration choices need to update future prompt planning in a structured way.
 - Add an Output Batch or Provider Run record only when provider adapters need batch-level cost tracking, retry tracking, or comparative curation.
-- Promote the highest-impact `docs/skill-pattern-audit.md` findings into implementation issues: subagent result/delegation schemas, guarded eval re-bless, provider chokepoint hard gates, and a durable project status view.
+- Promote the remaining high-impact `docs/skill-pattern-audit.md` findings into implementation issues: provider chokepoint hard gates, a durable project status view, logical phase revert, and higher-traffic mode-file eval coverage.
 - Consider a shared emotional-movement definition or schema fragment after image and sound both need the same fields. Do not abstract it earlier than necessary.
 
 ## Definition Of Done For The Typed Pipeline

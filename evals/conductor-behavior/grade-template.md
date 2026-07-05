@@ -4,6 +4,8 @@ Run date:
 
 Conductor snapshot:
 
+graded_against_sha256:
+
 Trace directory:
 
 Scope: subagent traces against `skills/artist-os/SKILL.md`, using the prompts in `evals/conductor-behavior/eval-spec.md`. No provider calls and no Workspace Library/project files.

@@ -121,6 +121,7 @@ Every delegated task should receive a bounded packet:
 }
 ```
 
+Delegation Packets validate against `schemas/delegation-packet.schema.json`.
 Use exact upstream record ids and paths whenever they exist. Workers must cite the upstream ids they used so the conductor can detect stale packets.
 
 ## Subagent Result
@@ -154,6 +155,8 @@ Subagents return one compact result:
   "recommended_next_action": "integrate"
 }
 ```
+
+Subagent Results validate against `schemas/subagent-result.schema.json`.
 
 Valid statuses are:
 

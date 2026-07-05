@@ -75,11 +75,14 @@ bin/artist-os-eval status              # is the live conductor still blessed?
 bin/artist-os-eval start baseline      # snapshot conductor + scaffold baseline/grade.md
 # ...edit the conductor, then:
 bin/artist-os-eval start trimmed       # snapshot + scaffold trimmed/grade.md, run the prompts
-bin/artist-os-eval bless               # after the trimmed grade matches the baseline pass-set
+bin/artist-os-eval bless               # after grade.md records the live digest and Overall result: PASS
 ```
 
 So a conductor edit turns CI red until you re-run the eval and `bless` the new
 version — the same drift-guard discipline the schema/sync tests apply elsewhere.
+`start` stamps `graded_against_sha256` into the grade sheet. `bless` refuses to
+update `blessed.lock` when the grade is missing, was produced for a different
+conductor digest, or does not record `Overall result: PASS`.
 
 ## disposable rehearsal artifacts
 

@@ -585,6 +585,8 @@ FIXTURE_SCHEMA_MAP = {
     "album-release-package-plan.json": "release-package-plan.schema.json",
     "cross-medium-plan.json": "cross-medium-plan.schema.json",
     "asset-package.json": "asset-package.schema.json",
+    "delegation-packet.json": "delegation-packet.schema.json",
+    "subagent-result.complete.json": "subagent-result.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",
     "project-manifest.json": "project-manifest.schema.json",
     "project-feedback-log-entry.json": "project-feedback-log-entry.schema.json",

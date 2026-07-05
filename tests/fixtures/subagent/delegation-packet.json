@@ -1,0 +1,34 @@
+{
+  "task_id": "task_image_prompt_variant_faithful",
+  "orchestration_mode": "parallel_production",
+  "phase": "image.prompt_plan",
+  "role": "variant_worker",
+  "mode": "draft_only",
+  "upstream_records": {
+    "source_record_id": "src_door_left_lit",
+    "artist_meaning_id": "meaning_door_left_lit",
+    "transformation_brief_id": "tb_door_left_lit",
+    "beat_plan_id": "bp_door_left_lit",
+    "medium_plan_id": "imp_door_left_lit",
+    "creative_brief_id": "brief_door_left_lit"
+  },
+  "input_paths": [
+    "story/beat-plan.json",
+    "image/image-medium-plan.json"
+  ],
+  "allowed_outputs": [
+    "draft_artifact",
+    "traceability_notes",
+    "risk_notes",
+    "open_questions"
+  ],
+  "forbidden_actions": [
+    "do_not_ask_artist",
+    "do_not_record_gate_decisions",
+    "do_not_persist_authoritative_state",
+    "do_not_mutate_project_manifest_or_events",
+    "do_not_call_providers",
+    "do_not_generate_media"
+  ],
+  "return_format": "subagent_result"
+}

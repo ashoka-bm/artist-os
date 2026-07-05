@@ -29,12 +29,19 @@ A changelog entry records the user-facing change, not the branch or commit narra
 - Video path defaults a requested storyboard generation to one composite
   multi-panel storyboard sheet; individual storyboard stills are a separate
   artifact requiring their own provider approval and Output Records.
+- Delegated worker I/O is now schema-backed with
+  `schemas/delegation-packet.schema.json` and
+  `schemas/subagent-result.schema.json`, plus fixture and contract coverage for
+  status, recommended action, and forbidden-action vocabularies.
 
 ### Changed
 
 - Image outputs now record `reference_refs_used` so downstream usage is traceable
   back to Reference Inventory subjects (availability lives in the inventory; usage
   lives on the consuming output).
+- `bin/artist-os-eval bless` now refuses to update `blessed.lock` unless the
+  conductor-behavior grade records the live conductor digest and
+  `Overall result: PASS`; `start` stamps the digest into the scaffolded grade.
 
 ## [0.4.0] - 2026-06-21
 

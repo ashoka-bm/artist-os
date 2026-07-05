@@ -147,6 +147,82 @@ class CliTests(unittest.TestCase):
                              "a forced re-snapshot must not keep the prior grade sheet")
             self.assertFalse((trace_dir / "T1.md").exists(), "stale traces must be cleared on --force")
 
+    def test_start_stamps_conductor_digest_into_grade(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_bundle(tmp, "v1\n")
+            ev.write_lock(root)
+            (root / "evals" / "conductor-behavior" / "grade-template.md").write_text("# grade template\n", encoding="utf-8")
+
+            proc = self._run(root, "start", "trimmed")
+
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            grade = (root / "evals" / "conductor-behavior" / "trimmed" / "grade.md").read_text(encoding="utf-8")
+            self.assertIn(f"graded_against_sha256: {ev.conductor_digest(root)}", grade)
+
+    def test_bless_refuses_missing_grade(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_bundle(tmp, "v1\n")
+            proc = self._run(root, "bless")
+
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("grade", proc.stdout + proc.stderr)
+            self.assertFalse(ev.is_blessed(root))
+
+    def test_bless_refuses_stale_grade_digest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_bundle(tmp, "v1\n")
+            ev.write_lock(root)
+            (root / "evals" / "conductor-behavior" / "grade-template.md").write_text("# grade template\n", encoding="utf-8")
+            self.assertEqual(self._run(root, "start", "trimmed").returncode, 0)
+            (root / "skills" / "artist-os" / "SKILL.md").write_text("v2\n", encoding="utf-8")
+            grade = root / "evals" / "conductor-behavior" / "trimmed" / "grade.md"
+            grade.write_text(
+                f"graded_against_sha256: {'0' * 64}\nOverall result: PASS\n",
+                encoding="utf-8",
+            )
+
+            proc = self._run(root, "bless")
+
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("stale", proc.stdout + proc.stderr)
+            self.assertFalse(ev.is_blessed(root))
+
+    def test_bless_refuses_grade_without_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_bundle(tmp, "v1\n")
+            (root / "evals" / "conductor-behavior" / "grade-template.md").write_text("# grade template\n", encoding="utf-8")
+            self.assertEqual(self._run(root, "start", "trimmed").returncode, 0)
+            grade = root / "evals" / "conductor-behavior" / "trimmed" / "grade.md"
+            grade.write_text(
+                f"graded_against_sha256: {ev.conductor_digest(root)}\nOverall result: FAIL\n",
+                encoding="utf-8",
+            )
+
+            proc = self._run(root, "bless")
+
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("PASS", proc.stdout + proc.stderr)
+            self.assertFalse(ev.is_blessed(root))
+
+    def test_bless_accepts_current_passing_grade(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_bundle(tmp, "v1\n")
+            ev.write_lock(root)
+            (root / "evals" / "conductor-behavior" / "grade-template.md").write_text("# grade template\n", encoding="utf-8")
+            (root / "skills" / "artist-os" / "SKILL.md").write_text("v2\n", encoding="utf-8")
+            self.assertEqual(self._run(root, "start", "trimmed", "--force").returncode, 0)
+            digest = ev.conductor_digest(root)
+            grade = root / "evals" / "conductor-behavior" / "trimmed" / "grade.md"
+            grade.write_text(
+                f"graded_against_sha256: {digest}\nOverall result: PASS\n",
+                encoding="utf-8",
+            )
+
+            proc = self._run(root, "bless")
+
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertTrue(ev.is_blessed(root))
+
 
 if __name__ == "__main__":
     unittest.main()
