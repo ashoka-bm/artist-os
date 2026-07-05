@@ -12,8 +12,9 @@ Seedance 2 is a post-storyboard export target. It should receive compact scene s
 - Format selected.
 - Clip duration is 15 seconds or less.
 - 24 frames per second included.
-- Chinese prompt tested or prepared.
-- If using the cinematic protocol, prompt body is Chinese, one scene/batch is rendered at a time, shot count is derived from total duration, and six shots is the default cap.
+- Prompt body is written in English.
+- No Chinese prompt text is produced unless the artist explicitly requests a separate experimental translation.
+- If using the cinematic protocol, one scene/batch is rendered at a time, shot count is derived from total duration, six shots is the default cap, and reference files are listed with their provider tray bindings.
 - Camera or capture style named.
 - Lighting style named.
 - No subtitles unless the approved plan requires them.

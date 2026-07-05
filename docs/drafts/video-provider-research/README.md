@@ -36,6 +36,6 @@ The first draft cluster covers Higgsfield and Seedance-style creator-clone video
 
 The newer draft cluster expands beyond prompt export into post-storyboard production routes: real-footage montage, generated explainers, hybrid source-support videos, local rigged character animation, render runtime governance, cost checkpoints, and post-render validation. These files are research notes, not production behavior.
 
-The Seedance draft cluster now includes both a compact checklist and a stricter cinematic prompt protocol. The protocol covers Chinese prompt shape, reference-tray tags, audio tags, shot-list handoff, start-frame handling, and GPT Image 2 reference prep. It remains a provider-export draft, not canonical Video Journey behavior.
+The Seedance draft cluster now includes both a compact checklist and a stricter cinematic prompt protocol. The protocol covers English prompt shape, reference-tray tags, audio tags, shot-list handoff, start-frame handling, and GPT Image 2 reference prep. It remains a provider-export draft, not canonical Video Journey behavior.
 
 See [Seedance Cinematic Reference Section Placement](seedance-cinematic-section-placement.md) for the current section-by-section implementation map.

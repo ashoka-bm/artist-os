@@ -50,6 +50,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Video Critic Review
   -> Brief Approval Gate
   -> storyboard-ready package
+  -> optional Seedance Prompt Package, after storyboard approval and only when Seedance is selected
+  -> Prompt Plan Critique, when a Seedance Prompt Package exists
   -> optional composite storyboard sheet Generation Approval Gate, default generated storyboard artifact
   -> Output Record, when a composite storyboard sheet is generated or imported
   -> optional individual storyboard still Generation Approval Gate, only when explicitly requested
@@ -82,17 +84,18 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 - Video Critic Review also checks whether aspect ratio, shot scale, camera angle, camera movement, subject movement, and blocking still match the accepted format and emotional job.
 - Art Critic Review criteria may support Video Critic Review when visual style, symbology, composition, or Visual Dynamics are unresolved.
 - Writing Critic Review criteria may support Video Critic Review when script, dialogue, voiceover, captions, or on-screen text carry meaning.
-- Output Critic Review checks generated or imported composite storyboard sheets, explicitly requested individual storyboard stills, or later generated video artifacts against Artist Meaning, Beat Plan, Video Medium Plan, and the approved plan that produced them.
+- Prompt Plan Critique checks Seedance Prompt Packages against the approved storyboard, reference files, provider bindings, English-only prompt policy, and provider boundary before Seedance Generation Approval.
+- Output Critic Review checks generated or imported composite storyboard sheets, explicitly requested individual storyboard stills, or later generated video artifacts against Artist Meaning, Beat Plan, Video Medium Plan, Seedance Prompt Package when present, and the approved plan that produced them.
 
 ## Current Implementation
 
-The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. Requested storyboard generation defaults to one composite multi-panel storyboard sheet; individual panel stills are a separate artifact type that require explicit separate approval. A separate Video Prompt Plan waits until provider-neutral video generation instructions prove their fields.
+The current Video Journey v0 implements a schema-backed Video Medium Plan and validates a compact fixture. Storyboard frame prompts belong to the Video Medium Plan. Requested storyboard generation defaults to one composite multi-panel storyboard sheet; individual panel stills are a separate artifact type that require explicit separate approval. A provider-neutral Video Prompt Plan waits until provider-neutral video generation instructions prove their fields. A Seedance Prompt Package is allowed after storyboard approval because it is a provider-specific export record, not provider-neutral story authority.
 
 The schema-backed Video Medium Plan now carries narrative-depth routing. `full_story` requires a Story Template reference, `micro_journey` requires a Micro-Journey Template reference, and `utility_sequence` requires an Asset Purpose Brief.
 
 A storyboard panel usually realizes one smallest Story Beat. Several shots may elaborate one Beat when timing, performance, or camera grammar needs room. One panel should not carry several story turns unless the artist explicitly approves that compression and the risk is recorded.
 
-Generated or imported composite storyboard sheets and individual storyboard stills are normal Output Records linked back to the relevant Video Medium Plan and, for individual stills, the relevant Storyboard Shot. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data but do not define the domain model.
+Generated or imported composite storyboard sheets and individual storyboard stills are normal Output Records linked back to the relevant Video Medium Plan and, for individual stills, the relevant Storyboard Shot. Seedance Prompt Packages link to the approved storyboard shots and accepted reference files, write prompts in English, and prepare the provider packet before any Seedance generation approval. Finished video generation, Remotion rendering, and provider-specific video jobs are future adapters; they consume Video Medium Plan data and provider prompt packages but do not define the domain model.
 
 ## Video-Specific Concerns
 

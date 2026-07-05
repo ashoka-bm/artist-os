@@ -442,6 +442,30 @@ class SchemaValidationTests(unittest.TestCase):
             REPO_ROOT / "tests" / "fixtures" / "characters" / "character-template.json",
         )
 
+    def test_seedance_prompt_package_fixture_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "seedance-prompt-package.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "video-journey" / "seedance-prompt-package.json",
+        )
+
+    def test_seedance_prompt_package_requires_english_policy(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "seedance-prompt-package.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "seedance-prompt-package.json"
+        record = load_json(data_path)
+        record["language_policy"]["prompt_language"] = "Chinese"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "expected const 'English'"):
+            validate(record, schema, schema)
+
+    def test_seedance_prompt_package_rejects_chinese_prompt_text(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "seedance-prompt-package.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "video-journey" / "seedance-prompt-package.json"
+        record = load_json(data_path)
+        record["clip_batches"][0]["prompt_text"] = "镜头缓慢推进到半开的门。"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "matched a schema it should not"):
+            validate(record, schema, schema)
+
     def test_visual_reference_sheet_plan_fixture_validates(self) -> None:
         validate_file(
             REPO_ROOT / "schemas" / "visual-reference-sheet-plan.schema.json",

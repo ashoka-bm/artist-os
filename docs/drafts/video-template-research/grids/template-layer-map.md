@@ -7,7 +7,7 @@ This grid separates story structure from format and provider export.
 | Story template | Hook, turn, payoff, viewer journey | Five-Line Emotional Story; Misread Signal -> Reframe -> Move; Myth -> Reality -> Move; Problem -> Failed Fix -> Better Move | Camera language, provider syntax, exact clip duration |
 | Direction notes | Craft and execution principles | Hook-entry patterns, on-camera connection, zoom into the moment, edit cut vocabulary, close shots for interaction, minimize action, 24fps, film grain | The narrative turn |
 | Format template | Container and media shape | Talking head, b-roll, motion graphics, documentary montage, UGC, fashion, animation | The core argument or payoff |
-| Provider export | Platform-specific rendering | Seedance 2 Chinese prompt, Higgsfield prompt, OpenMontage production route | Artist Meaning or story structure |
+| Provider export | Platform-specific rendering | Seedance 2 English prompt, Higgsfield prompt, OpenMontage production route | Artist Meaning or story structure |
 
 ## Narrative Depth
 

@@ -306,7 +306,7 @@ The Prompt Branch Set must carry the governing Intended Feeling, Key Emotional M
 - Gate: Symbology Gate, Style Gate, Video Format, Scene / Sequence, Shot Logic, Motion / Pacing / Transition, Audio Posture.
 - Next: `long_work.stewardship` enrichment when the video work is cumulative, otherwise `video.creative_brief`.
 
-The Video Medium Plan is storyboard-ready planning only in v0. It owns Video Sequences when needed, Video Scenes, Storyboard Shots, Video Style Expression, Video Audio Posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet; individual stills are separate explicitly requested artifacts. It does not create a Video Prompt Plan or finished video.
+The Video Medium Plan is storyboard-ready planning plus optional post-storyboard provider prompt packaging in v0. It owns Video Sequences when needed, Video Scenes, Storyboard Shots, Video Style Expression, Video Audio Posture, text/audio refs, storyboard frame prompts, and storyboard generation policy. The default generated storyboard artifact is one composite multi-panel storyboard sheet; individual stills are separate explicitly requested artifacts. It does not create a provider-neutral Video Prompt Plan or finished video. Seedance Prompt Packages are provider-specific exports after storyboard approval and must keep prompts in English with reference files and provider bindings.
 
 ### `video.creative_brief`
 

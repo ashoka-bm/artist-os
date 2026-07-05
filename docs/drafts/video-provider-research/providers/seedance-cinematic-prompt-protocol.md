@@ -24,12 +24,13 @@ If the user gives a finished shot list and asks for prompts, do not assume the w
 
 A Seedance cinematic prompt packet should carry:
 
-- one Chinese prompt block for the whole selected scene or batch;
-- one terse English review translation that mirrors the same shot structure and provider tags;
+- one English prompt block for the whole selected scene or batch;
+- one reference binding table that names every reference file, provider tray tag, role, and shot scope;
 - one recommended duration line for the whole scene or batch.
 
 Draft renderer constraints:
 
+- Write final prompts in English. Do not create Chinese prompt blocks, Chinese translations, or Chinese provider tags unless the artist explicitly asks for a separate experimental translation.
 - Keep the generated clip at 4-15 seconds unless the user explicitly chooses otherwise.
 - Derive shot count from duration: 4-6 seconds usually supports 1-2 shots, 7-10 seconds supports 3-4 shots, and 11-15 seconds supports 4-6 shots.
 - Keep six shots as the default maximum.
@@ -39,6 +40,8 @@ Draft renderer constraints:
 - Do not add per-shot durations inside the shots.
 - Re-output the complete prompt packet on revision so no stale shot or tag state is left behind.
 - Keep music, ambience, and subtitles governed by the approved audio/text posture instead of defaulting them into every prompt.
+- Preserve the approved aspect ratio and storyboard shot order from the Video Medium Plan.
+- Do not add new story events, character decisions, camera motivations, spoken lines, music, subtitles, wardrobe, props, or symbols that are not present in the approved storyboard package or approved references.
 
 ## Reference Tag Protocol
 
@@ -51,7 +54,8 @@ Draft rules:
 - Attach a tag to the noun it controls.
 - Use the identity noun on first mention in each shot before switching to pronouns.
 - Do not over-describe details already controlled by a reference tag.
-- Mirror the same tags in the English review translation.
+- Keep tags in English-readable prompt text exactly as they appear in the current provider tray.
+- Bind every tag to a local reference file path or accepted Output Record before final prompt rendering.
 
 Reference selection should follow shot scale:
 

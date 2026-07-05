@@ -10,6 +10,6 @@ Style Direction and Video Style Expression are subordinate to Artist Meaning, Be
 
 Before Video Critic Review, return the Video Medium Plan, draft Video Creative Brief Document, Beat Plan reference, Narrative Depth, selected Story or Micro-Journey Template refs when present, Asset Purpose Brief when present, Video Style Expression, scene/shot structure, Video Audio Posture, storyboard generation policy, and open questions.
 
-After Video Critic Review and Brief Approval, return the approved Video Creative Brief handoff and the storyboard-ready package. Do not emit a Video Prompt Plan in v0.
+After Video Critic Review and Brief Approval, return the approved Video Creative Brief handoff and the storyboard-ready package. Do not emit a provider-neutral Video Prompt Plan in v0. If Seedance is selected after storyboard approval, emit a provider-specific Seedance Prompt Package that validates against `schemas/seedance-prompt-package.schema.json`, uses English prompt text, and includes reference files plus provider bindings.
 
-When emitted as records, JSON must validate against `schemas/video-medium-plan.schema.json`, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/output-record.schema.json` for generated or imported composite storyboard sheets and storyboard stills.
+When emitted as records, JSON must validate against `schemas/video-medium-plan.schema.json`, `schemas/seedance-prompt-package.schema.json` for Seedance post-storyboard prompt packages, `schemas/long-work-stewardship-record.schema.json` when stewardship is active, and `schemas/output-record.schema.json` for generated or imported composite storyboard sheets and storyboard stills.
