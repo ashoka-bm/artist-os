@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>strict no-example finalizer diagnostic 2026-07-05 — token curve</title>
+<style>
+ :root{--bg:#fff;--fg:#1a1a18;--muted:#6b6a64;--surface:#faf9f5;--border:rgba(0,0,0,.12)}
+ @media(prefers-color-scheme:dark){:root{--bg:#1d1c1a;--fg:#ece9e2;--muted:#a6a49b;--surface:#262522;--border:rgba(255,255,255,.14)}}
+ body{margin:0;padding:24px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg)}
+ .wrap{max-width:920px;margin:0 auto}h1{font-size:20px;font-weight:500}
+ .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+ .card{background:var(--surface);border-radius:8px;padding:12px 16px}.card .l{font-size:13px;color:var(--muted)}.card .v{font-size:24px;font-weight:500}
+ .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+ .legend span{display:flex;align-items:center;gap:6px}
+</style></head><body><div class="wrap">
+<h1>strict no-example finalizer diagnostic 2026-07-05</h1>
+<div class="cards">
+ <div class="card"><div class="l">peak context / turn</div><div class="v">54k</div></div>
+ <div class="card"><div class="l">mean context / turn</div><div class="v">46k</div></div>
+ <div class="card"><div class="l">total over 85 turns</div><div class="v">3.9M</div></div>
+</div>
+<div class="legend">
+ <span><span style="width:14px;height:3px;background:#E24B4A"></span>context re-read / turn (left)</span>
+ <span><span style="width:14px;height:10px;background:rgba(55,138,221,.25);border-top:2px solid #378ADD"></span>cumulative (right)</span>
+ <span><span style="width:14px;height:0;border-top:2px dashed #BA7517"></span>target cap ~90k</span>
+</div>
+<div style="position:relative;width:100%;height:340px"><canvas id="c" role="img" aria-label="strict no-example finalizer diagnostic 2026-07-05: per-turn context peaks at 54k, mean 46k, over 85 turns; cumulative reaches 3.9M."></canvas></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" integrity="sha384-dug+JxfBvklEQdJ4AYuBBAIScUz0bVN73xpy273gcAwHjb3qI0fXmuYNaNfdyYJG" crossorigin="anonymous"></script>
+<script>
+const CTX=[20891, 27311, 33784, 34220, 38359, 38593, 39521, 39671, 39888, 40034, 40249, 40424, 40639, 40791, 41084, 41235, 41440, 41590, 41782, 41933, 42157, 42306, 42521, 42670, 42871, 43023, 43204, 43354, 43563, 43716, 43929, 44079, 44339, 44495, 44722, 44875, 45080, 45231, 45466, 45620, 45826, 45982, 46252, 46402, 46571, 46724, 46897, 47046, 47260, 47410, 47650, 47802, 48043, 48195, 48438, 48586, 48764, 49020, 49278, 49542, 49774, 50030, 50334, 50484, 50660, 50810, 50994, 51143, 51322, 51470, 51649, 51797, 51984, 52132, 52345, 52496, 52753, 52920, 53096, 53245, 53421, 53573, 53754, 53902, 54214],CUM=[21231, 48822, 82996, 121292, 159791, 199249, 238859, 278684, 318661, 358847, 399185, 439761, 480489, 521510, 562683, 604060, 645589, 687308, 729179, 771273, 813519, 855977, 898587, 941395, 984355, 1027496, 1070789, 1114289, 1157941, 1201807, 1245825, 1290101, 1334529, 1379188, 1423999, 1469016, 1514185, 1559588, 1605143, 1650906, 1696821, 1743010, 1789351, 1835859, 1882519, 1929353, 1976339, 2023536, 2070885, 2118472, 2166211, 2214191, 2262323, 2310698, 2359225, 2407926, 2456779, 2505994, 2555361, 2605072, 2654935, 2705206, 2755629, 2806226, 2856975, 2907906, 2958989, 3010248, 3061659, 3113245, 3164983, 3216904, 3268977, 3321259, 3373693, 3426383, 3479225, 3532258, 3585443, 3638801, 3692311, 3746002, 3799845, 3853883, 3908491],n=CTX.length,labels=CTX.map((_,i)=>i+1),cap=CTX.map(()=>90000);
+const dark=matchMedia('(prefers-color-scheme:dark)').matches,tk=dark?'#a6a49b':'#5f5e5a',gr=dark?'rgba(255,255,255,.08)':'rgba(0,0,0,.08)';
+new Chart(document.getElementById('c'),{type:'line',data:{labels,datasets:[
+ {label:'context/turn',data:CTX,yAxisID:'y',borderColor:'#E24B4A',borderWidth:1.5,pointRadius:0,tension:.15},
+ {label:'cumulative',data:CUM,yAxisID:'y1',borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,.18)',borderWidth:2,pointRadius:0,fill:true,tension:.1},
+ {label:'cap',data:cap,yAxisID:'y',borderColor:'#BA7517',borderWidth:1,borderDash:[6,4],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
+ plugins:{legend:{display:false}},scales:{
+  x:{title:{display:true,text:'turn',color:tk},ticks:{color:tk,maxTicksLimit:9},grid:{color:gr}},
+  y:{position:'left',title:{display:true,text:'context tokens / turn',color:tk},ticks:{color:tk,callback:v=>(v/1000).toFixed(0)+'k'},grid:{color:gr},min:0},
+  y1:{position:'right',title:{display:true,text:'cumulative',color:tk},ticks:{color:tk,callback:v=>(v/1e6).toFixed(1)+'M'},grid:{drawOnChartArea:false},min:0}
+}}});
+</script></body></html>
