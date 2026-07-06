@@ -8,6 +8,7 @@ import sqlite3
 import tempfile
 import unittest
 from contextlib import closing
+from contextlib import redirect_stderr
 from contextlib import redirect_stdout
 from importlib.machinery import SourceFileLoader
 from io import StringIO
@@ -2735,6 +2736,225 @@ class LearningsLoopTests(unittest.TestCase):
             self.assertIn("review=not_applicable", report)
             self.assertIn("not applicable", report)
             self.assertNotIn("with no feedback yet", report)
+
+
+class SyncFaultIsolationTests(unittest.TestCase):
+    """ADR 0016 Step 1: one broken project degrades to skipped-and-reported,
+    events indexing is parse-before-delete (never destructive without a
+    successful read), and the self-improvement writers emit events."""
+
+    def _seed_project(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _sync(self, base: dict) -> str:
+        err = StringIO()
+        with redirect_stdout(StringIO()), redirect_stderr(err):
+            artist_os_db.sync_db(argparse.Namespace(**base))
+        return err.getvalue()
+
+    def _event_rows(self, library_root: Path, project_id: str) -> list[tuple]:
+        with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+            return conn.execute(
+                "SELECT event_type FROM events WHERE project_id = ? ORDER BY id",
+                (project_id,),
+            ).fetchall()
+
+    def _write_events(self, library_root: Path, project_id: str, lines: list[str]) -> Path:
+        events_path = library_root / "projects" / project_id / "events.jsonl"
+        events_path.write_text("".join(line + "\n" for line in lines), encoding="utf-8")
+        return events_path
+
+    def test_connect_sets_busy_timeout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with closing(artist_os_db.connect(Path(tmpdir) / "artist-os.sqlite")) as conn:
+                value = conn.execute("PRAGMA busy_timeout").fetchone()[0]
+        self.assertEqual(value, 5000)
+
+    def test_sync_isolates_corrupt_sibling_manifest_and_continues(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root, "proj_alpha")
+            self._sync(base)
+
+            # Corrupt alpha's manifest, then add a fresh sibling.
+            alpha_manifest = library_root / "projects" / "proj_alpha" / "project.json"
+            alpha_manifest.write_text("{not json", encoding="utf-8")
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+
+            stderr_text = self._sync(base)
+
+            self.assertIn("skipped", stderr_text)
+            self.assertIn("proj_alpha", stderr_text)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                rows = dict(
+                    conn.execute("SELECT project_id, status FROM projects").fetchall()
+                )
+            # The sibling indexed despite the corruption...
+            self.assertEqual(rows["proj_beta"], "active")
+            # ...and the broken-but-present project keeps its last known-good
+            # row: NOT flipped to 'missing' (its manifest exists, it is merely
+            # unreadable right now).
+            self.assertEqual(rows["proj_alpha"], "active")
+
+    def test_sync_preserves_events_when_events_file_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+            events_path.unlink()
+            self._sync(base)
+            self.assertEqual(
+                len(self._event_rows(library_root, "proj_door_left_lit")),
+                2,
+                "a missing events.jsonl must preserve the previously indexed events",
+            )
+
+    def test_sync_preserves_events_when_events_file_unreadable(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [json.dumps({"event_id": "evt_a", "event_type": "stage_entered"})],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 1)
+
+            os.chmod(events_path, 0)
+            try:
+                self._sync(base)
+            finally:
+                os.chmod(events_path, 0o644)
+            self.assertEqual(
+                len(self._event_rows(library_root, "proj_door_left_lit")),
+                1,
+                "an unreadable events.jsonl must preserve the previously indexed events",
+            )
+
+    def test_sync_skips_malformed_event_line_and_keeps_good_lines(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+            # A mid-write crash appends a truncated line, then a good one lands.
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                    '{"event_id": "evt_c", "event_type": "trunca',
+                    json.dumps({"event_id": "evt_d", "event_type": "output_accepted"}),
+                ],
+            )
+            stderr_text = self._sync(base)
+
+            self.assertIn("malformed", stderr_text)
+            rows = self._event_rows(library_root, "proj_door_left_lit")
+            self.assertEqual(
+                len(rows),
+                3,
+                "good lines around a malformed one must all stay indexed",
+            )
+
+    def test_self_improvement_writers_append_events(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(library_root, "proj_door_left_lit", [])
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+                artist_os_db.add_learning(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    learning_id="learn_rawer_first_drafts",
+                    learning_type="soft",
+                    learning_rule="Keep first drafts rawer before polishing.",
+                    scope=None,
+                    evidence_type="feedback_entry",
+                    evidence_ref=["fb_rawer_draft"],
+                    evidence_summary=None,
+                    occurrence_count=1,
+                    promotion_reason=None,
+                    mark_review_complete=False,
+                    overwrite=False,
+                ))
+                artist_os_db.add_performance_signal(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    signal_id="perf_save_rate_001",
+                    metric_name="save_rate",
+                    metric_value="0.32",
+                    signal_direction="positive",
+                    source="manual_import",
+                    output_record_id=None,
+                    notes=None,
+                    overwrite=False,
+                ))
+                artist_os_db.mark_learning_review_complete(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback_id=None,
+                    classification_status="applied",
+                ))
+
+            event_types = [
+                json.loads(line)["event_type"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(
+                event_types,
+                [
+                    "feedback_received",
+                    "learning_recorded",
+                    "performance_signal_imported",
+                    "learning_review_marked",
+                ],
+            )
+            # The same sync each writer runs must have indexed its event.
+            indexed = [row[0] for row in self._event_rows(library_root, "proj_door_left_lit")]
+            self.assertEqual(sorted(indexed), sorted(event_types))
 
 
 if __name__ == "__main__":

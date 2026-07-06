@@ -86,6 +86,11 @@ def connect(db_path: Path) -> sqlite3.Connection:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.execute("PRAGMA foreign_keys = ON")
+    # Concurrent access (a reader during a writer's sync, or two write
+    # commands racing) should wait briefly instead of failing with "database
+    # is locked" — the exact failure that would leave durable JSON written
+    # but the index row missing.
+    conn.execute("PRAGMA busy_timeout = 5000")
     return conn
 
 
@@ -623,6 +628,48 @@ def event_key(payload: dict, fallback_index: int) -> tuple:
     return ("row", fallback_index)
 
 
+def read_event_rows(events_path: Path | None, project_id: str) -> tuple[list[tuple] | None, int]:
+    """Read events.jsonl into insertable rows BEFORE any destructive index write.
+
+    Returns (rows, skipped_line_count). rows is None when the file is missing
+    or unreadable — the caller must then preserve the previously indexed
+    events instead of deleting them (the index is a cache; a transient or
+    mid-write file must not erase last known-good history). Malformed lines
+    are skipped and counted so one bad tail line (a mid-append crash) does
+    not discard the readable history around it.
+    """
+    if not events_path or not events_path.exists():
+        return None, 0
+    try:
+        text = events_path.read_text(encoding="utf-8")
+    except OSError:
+        return None, 0
+    rows: list[tuple] = []
+    skipped = 0
+    for index, line in enumerate(text.splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            payload = json.loads(line)
+        except json.JSONDecodeError:
+            skipped += 1
+            continue
+        key_type, key_value = event_key(payload, index)
+        event_id = key_value if key_type == "event_id" else None
+        rows.append(
+            (
+                event_id,
+                payload.get("project_id", project_id),
+                payload.get("occurred_at") or payload.get("created_at") or payload.get("timestamp"),
+                payload.get("stage"),
+                payload.get("event_type") or payload.get("type"),
+                payload.get("summary"),
+                json.dumps(payload, sort_keys=True),
+            )
+        )
+    return rows, skipped
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -656,6 +703,42 @@ def load_project_manifest(library_root: Path, project_id: str) -> tuple[Path, di
 
 def write_project_manifest(manifest_path: Path, manifest: dict) -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+
+def append_project_event(
+    library_root: Path,
+    manifest: dict,
+    project_id: str,
+    event_type: str,
+    stage: str,
+    details: str,
+    occurred_at: str,
+    refs: list[str] | None = None,
+) -> None:
+    """Append one event to the project's events.jsonl when that log exists.
+
+    The storage contract requires feedback, learning, and performance-signal
+    writes to appear in the event history, same as the publish commands.
+    Mirrors publish_visible_output: appends only when events.jsonl is already
+    present (resolve_path returns the path only for existing files).
+    """
+    paths = manifest.get("paths", {})
+    project_dir = Path(paths.get("project_dir", str(project_manifest_path(library_root, project_id).parent)))
+    events_path = resolve_path(paths.get("events"), project_dir, library_root)
+    if not events_path:
+        return
+    event = {
+        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}",
+        "project_id": project_id,
+        "event_type": event_type,
+        "stage": stage,
+        "created_at": occurred_at,
+        "details": details,
+    }
+    if refs:
+        event["refs"] = refs
+    with events_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(event, sort_keys=True) + "\n")
 
 
 def feedback_state_for(manifest: dict, project_id: str) -> dict:
@@ -1132,32 +1215,39 @@ def upsert_manifest(
     events_path_value = paths.get("events")
     if events_path_value:
         events_path = resolve_path(events_path_value, project_dir_path, library_root)
-        conn.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
-        if events_path and events_path.exists():
-            for index, line in enumerate(events_path.read_text(encoding="utf-8").splitlines(), 1):
-                if not line.strip():
-                    continue
-                payload = json.loads(line)
-                key_type, key_value = event_key(payload, index)
-                event_id = key_value if key_type == "event_id" else None
-                conn.execute(
-                    """
-                    INSERT INTO events (
-                      event_id, project_id, occurred_at, stage, event_type,
-                      summary, payload_json
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        event_id,
-                        payload.get("project_id", project_id),
-                        payload.get("occurred_at") or payload.get("created_at") or payload.get("timestamp"),
-                        payload.get("stage"),
-                        payload.get("event_type") or payload.get("type"),
-                        payload.get("summary"),
-                        json.dumps(payload, sort_keys=True),
-                    ),
+        event_rows, skipped_event_lines = read_event_rows(events_path, project_id)
+        if event_rows is not None:
+            # The full file parsed (bad lines skipped and counted), so it is
+            # now safe to replace this project's event index. When rows is
+            # None (missing or unreadable file) the previously indexed events
+            # are deliberately preserved — never delete before a successful
+            # read.
+            conn.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
+            conn.executemany(
+                """
+                INSERT INTO events (
+                  event_id, project_id, occurred_at, stage, event_type,
+                  summary, payload_json
                 )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                event_rows,
+            )
+        if skipped_event_lines:
+            print(
+                f"warning: skipped {skipped_event_lines} malformed event line(s) in {project_id}",
+                file=sys.stderr,
+            )
+
+    return project_id
+
+
+# Exceptions one broken project may raise during its own indexing. The index
+# is a cache, so a corrupt manifest, record, or event file must degrade to a
+# skipped-and-reported project — never abort the sync for its siblings.
+# Deliberately excludes KeyboardInterrupt/SystemExit so a Ctrl-C still aborts
+# the whole transaction.
+SYNC_MANIFEST_ERRORS = (OSError, json.JSONDecodeError, KeyError, ValueError, sqlite3.Error)
 
 
 def sync_db(args: argparse.Namespace) -> None:
@@ -1166,35 +1256,52 @@ def sync_db(args: argparse.Namespace) -> None:
     artist_library_root = artist_library_root_for(args)
     checked_at = datetime.now(timezone.utc).isoformat()
     manifests = sorted((library_root / "projects").glob("*/project.json"))
+    skipped: list[tuple[Path, str]] = []
     with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
         found_project_ids = set()
         for manifest_path in manifests:
-            upsert_manifest(conn, manifest_path, library_root, artist_library_root, checked_at)
-            found_project_ids.add(read_json(manifest_path)["project_id"])
+            # Per-manifest savepoint: one corrupt project rolls back its own
+            # partial rows and is reported, while every sibling still indexes.
+            conn.execute("SAVEPOINT artist_os_manifest_sync")
+            try:
+                project_id = upsert_manifest(
+                    conn, manifest_path, library_root, artist_library_root, checked_at
+                )
+            except SYNC_MANIFEST_ERRORS as exc:
+                conn.execute("ROLLBACK TO SAVEPOINT artist_os_manifest_sync")
+                conn.execute("RELEASE SAVEPOINT artist_os_manifest_sync")
+                skipped.append((manifest_path, f"{type(exc).__name__}: {exc}"))
+                continue
+            conn.execute("RELEASE SAVEPOINT artist_os_manifest_sync")
+            found_project_ids.add(project_id)
+        # Missing-sweep: a project is only 'missing' when its manifest is
+        # genuinely absent. A skipped (present-but-broken) manifest must not
+        # be flipped to missing — match by manifest_path since its project_id
+        # is unreadable by definition.
+        clauses = ["status != 'archived'"]
+        params: list[str] = [checked_at]
         if found_project_ids:
             placeholders = ",".join("?" for _ in found_project_ids)
-            conn.execute(
-                f"""
-                UPDATE projects
-                SET status = 'missing',
-                    updated_at = ?
-                WHERE project_id NOT IN ({placeholders})
-                  AND status != 'archived'
-                """,
-                (checked_at, *sorted(found_project_ids)),
-            )
-        else:
-            conn.execute(
-                """
-                UPDATE projects
-                SET status = 'missing',
-                    updated_at = ?
-                WHERE status != 'archived'
-                """,
-                (checked_at,),
-            )
-    print(f"synced {len(manifests)} project(s) into {db_path}")
+            clauses.append(f"project_id NOT IN ({placeholders})")
+            params.extend(sorted(found_project_ids))
+        skipped_paths = [str(path) for path, _ in skipped]
+        if skipped_paths:
+            placeholders = ",".join("?" for _ in skipped_paths)
+            clauses.append(f"manifest_path NOT IN ({placeholders})")
+            params.extend(skipped_paths)
+        conn.execute(
+            f"""
+            UPDATE projects
+            SET status = 'missing',
+                updated_at = ?
+            WHERE {' AND '.join(clauses)}
+            """,
+            params,
+        )
+    print(f"synced {len(manifests) - len(skipped)} project(s) into {db_path}")
+    for manifest_path, reason in skipped:
+        print(f"warning: skipped {manifest_path}: {reason}", file=sys.stderr)
 
 
 def validate_record(record: dict, schema_name: str) -> None:
@@ -1245,6 +1352,16 @@ def add_feedback(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = received_at
     write_project_manifest(manifest_path, manifest)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="feedback_received",
+        stage=args.stage or "feedback",
+        details=f"Recorded feedback {feedback_id}; learning review pending.",
+        occurred_at=received_at,
+        refs=[feedback_id],
+    )
     sync_db(args)
     print(f"appended feedback {feedback_id}")
 
@@ -1313,6 +1430,16 @@ def add_learning(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="learning_recorded",
+        stage="learning_review",
+        details=f"Recorded {args.learning_type} learning {args.learning_id}.",
+        occurred_at=now,
+        refs=[args.learning_id],
+    )
     sync_db(args)
     print(f"wrote learning record {learning_path}")
 
@@ -1361,6 +1488,16 @@ def add_performance_signal(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="performance_signal_imported",
+        stage="performance_signals",
+        details=f"Imported performance signal {args.signal_id} ({args.metric_name}).",
+        occurred_at=now,
+        refs=[args.signal_id],
+    )
     sync_db(args)
     print(f"wrote performance signal {signal_path}")
 
@@ -1380,6 +1517,16 @@ def mark_learning_review_complete(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
+    review_state = "complete" if all_feedback_reviewed else "pending"
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="learning_review_marked",
+        stage="learning_review",
+        details=f"Marked learning review {review_state} ({args.classification_status}).",
+        occurred_at=now,
+    )
     sync_db(args)
     print(f"marked learning review complete for {args.project_id}")
 
