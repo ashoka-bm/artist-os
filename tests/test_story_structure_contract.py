@@ -80,7 +80,7 @@ class StoryStructureContractTests(unittest.TestCase):
                 self.assertIn(required, text)
 
         self.assertIn(
-            "collection of individual parts never activates stewardship",
+            "collection of individual parts should not recommend stewardship",
             text,
         )
 

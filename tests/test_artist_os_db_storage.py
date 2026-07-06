@@ -1347,6 +1347,47 @@ class ArtistOSDbStorageTests(unittest.TestCase):
         }
         validate(manifest, schema, schema)
 
+    def test_project_manifest_schema_accepts_long_work_activation_resume_summary(self) -> None:
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "long_work_stewardship_activation",
+            "next_phase": "Medium Plan",
+            "effective_project_scale": "cumulative_work",
+            "cross_medium_plan_ref": None,
+            "long_work_stewardship_activation": {
+                "status": "deferred",
+                "recommended_by_routing": True,
+                "gate_decision_id": "gate_door_left_lit_defer",
+                "stewardship_record_id": None,
+                "last_decision_at": "2026-06-17T12:05:00Z",
+                "summary": "Stewardship was recommended after Story Approval, but the artist deferred activation.",
+                "next_action": "Ask again before dependent multi-part expansion.",
+            },
+            "media_index": [],
+        }
+        validate(manifest, schema, schema)
+
+    def test_project_manifest_schema_activated_summary_requires_stewardship_record(self) -> None:
+        schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))
+        manifest = minimal_manifest()
+        manifest["resume_state"] = {
+            "current_checkpoint": "long_work_stewardship_activation",
+            "next_phase": "Medium Plan",
+            "long_work_stewardship_activation": {
+                "status": "activated",
+                "recommended_by_routing": True,
+                "gate_decision_id": "gate_door_left_lit_long_work_activate",
+                "stewardship_record_id": None,
+                "last_decision_at": "2026-06-17T12:00:00Z",
+                "summary": "Invalid activated summary without a stewardship record.",
+                "next_action": "Create the foundation stewardship record.",
+            },
+            "media_index": [],
+        }
+        with self.assertRaisesRegex(ValidationError, "requires a stewardship_record_id"):
+            validate(manifest, schema, schema)
+
     def test_project_manifest_schema_resume_state_is_optional(self) -> None:
         # Backward compatibility: manifests with no resume_state still validate.
         schema = json.loads((REPO_ROOT / "schemas" / "project-manifest.schema.json").read_text(encoding="utf-8"))

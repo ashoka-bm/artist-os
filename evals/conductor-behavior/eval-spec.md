@@ -45,6 +45,15 @@ missing-Reference prompt as a separate start-condition guard.
   motion, audio posture, and storyboard frame prompts. Autopilot — assume I
   approve the recommended choice at every gate, but do not generate any actual
   images or finished video."
+- **T7 (long-work stewardship activation):** "Here is the outline for a
+  linked illustrated novella:
+  'Chapter one: Mara finds a locked greenhouse in winter. Chapter two: she
+  learns her mother hid letters in the seed drawers. Chapter three: each letter
+  changes how the greenhouse should be restored. Chapter four: Mara must decide
+  whether to preserve the ruin or make it usable again.'
+  Turn this into a multi-chapter illustrated written work. Autopilot — assume I
+  approve the recommended story plan and activate Long-Work Stewardship if you
+  recommend it. Do not generate any images."
 
 ## Checklist (assertions per trace)
 
@@ -99,6 +108,16 @@ missing-Reference prompt as a separate start-condition guard.
 8. Requires separate explicit approval before generating individual storyboard stills.
 9. Does NOT create a provider-neutral Video Prompt Plan in v0; if Seedance is selected after storyboard approval, it may create an English Seedance Prompt Package before Seedance Generation Approval.
 
+### T7 — long-work stewardship activation
+1. Workflow Scale Routing records Long-Work Stewardship in `recommended_supports`, not `activated_supports`, when ADR 0013's cumulative-dependency and length-floor threshold is met.
+2. After Story Critic Review and Story Approval, before Medium Plan expansion, the conductor presents the ADR 0015 Long-Work Stewardship Activation Gate.
+3. The gate offers exactly Activate, Defer, and Waive and continue for the recommendation path.
+4. Autopilot approval to activate creates a foundation Long-Work Stewardship Record immediately; defer and waive would create Gate Decisions only and no placeholder stewardship record.
+5. The foundation record may have `medium_plan_id = null`, empty `part_plan[]`, and pending readiness because medium-specific parts do not exist yet.
+6. Medium Plan later enriches active stewardship with medium-specific parts, continuity rules, checkpoints, and Long-Work Readiness before bulk expansion.
+7. If the Medium Plan proves the project compact after activation, the conductor asks for lightweight deactivation confirmation and supersedes the stewardship record only after artist confirmation.
+8. The initial Medium Mapping Checkpoint is artist-facing when the active stewardship project maps into multiple dependent parts; Long-Work Reviewer checks the map before the artist sees it, and multiple dependent parts do not expand before approval or explicit waiver.
+
 ## Scoring
 Each assertion: pass / partial / fail with evidence quote from the trace.
 Baseline establishes the target; trimmed must match the baseline's pass set.
@@ -114,7 +133,7 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > `<repo>/skills/artist-os/SKILL.md` (plus any files IT explicitly tells you to
 > read). Do not improvise behavior that isn't in the skill.
 >
-> Scenario (the user's message): "<T1 / T2 / T3 / T4 / T5 / T6 prompt>"
+> Scenario (the user's message): "<T1 / T2 / T3 / T4 / T5 / T6 / T7 prompt>"
 >
 > Produce a precise ORDERED TRACE of what the conductor does. Do NOT call any
 > generator and do NOT write project files. The trace is a numbered list; each
@@ -135,7 +154,11 @@ trimmed with identical prompts; only the SKILL.md on disk differs between runs.
 > run yet) + "HARD GATES ENFORCED". T6: "VIDEO STORYBOARD SPECIFICS" (video
 > route; v0 storyboard-only boundary; Symbology → Style; video gates; storyboard
 > still approval; Output Records for stills; no provider-neutral Video Prompt Plan; optional English Seedance Prompt Package after storyboard approval) + "HARD GATES
-> ENFORCED".
+> ENFORCED". T7: "LONG-WORK ACTIVATION SPECIFICS" (`recommended_supports` vs.
+> `activated_supports`; ADR 0015 activation gate timing and options; activation
+> vs. defer/waive record effects; foundation record shape; Medium Plan
+> enrichment; deactivation path; Medium Mapping Checkpoint behavior) + "HARD
+> GATES ENFORCED".
 >
 > Quote the skill line/section each major step comes from. Write the trace to
 > `<repo>/evals/conductor-behavior/<baseline|trimmed>/T<N>.md` and return it.

@@ -14,15 +14,17 @@
       "voice_or_style_continuity_needed",
       "artist_requested_sequence_or_series"
     ],
-    "activated_supports": [
-      "core_pipeline",
-      "medium_section_plan",
-      "cultural_format_structure",
+    "recommended_supports": [
       "long_work_stewardship",
       "long_work_parts",
       "long_work_readiness",
       "long_work_checkpoints",
       "stewardship_views"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan",
+      "cultural_format_structure"
     ],
     "skipped_supports": [
       "collection_coherence_review",

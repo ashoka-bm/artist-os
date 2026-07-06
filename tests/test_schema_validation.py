@@ -28,6 +28,11 @@ def routing_support_overlap(record: dict) -> set[str]:
     return set(routing["activated_supports"]) & set(routing["skipped_supports"])
 
 
+def routing_recommended_skip_overlap(record: dict) -> set[str]:
+    routing = record["workflow_scale_routing"]
+    return set(routing["recommended_supports"]) & set(routing["skipped_supports"])
+
+
 class SchemaValidationTests(unittest.TestCase):
     def test_examples_and_fixtures_validate(self) -> None:
         targets = iter_validation_targets(include_fixtures=True)
@@ -224,6 +229,7 @@ class SchemaValidationTests(unittest.TestCase):
         schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
         fixture_paths = [
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json",
+            REPO_ROOT / "tests" / "fixtures" / "long-work" / "deactivated-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "album-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "image-series-stewardship-record.json",
             REPO_ROOT / "tests" / "fixtures" / "long-work" / "text-stewardship-record.json",
@@ -244,6 +250,33 @@ class SchemaValidationTests(unittest.TestCase):
         )
         schema = load_json(schema_path)
         validate(record, schema, schema)
+
+    def test_stewardship_record_requires_activation_summary(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        del record["long_work_stewardship_activation"]
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "missing required field 'long_work_stewardship_activation'"):
+            validate(record, schema, schema)
+
+    def test_stewardship_record_rejects_paused_status(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "foundation-stewardship-record.json"
+        record = load_json(data_path)
+        record["stewardship_status"] = "paused"
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "not one of"):
+            validate(record, schema, schema)
+
+    def test_deactivated_stewardship_record_requires_deactivation_reason(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "long-work" / "deactivated-stewardship-record.json"
+        record = load_json(data_path)
+        record["long_work_stewardship_activation"]["deactivation_reason"] = ""
+        schema = load_json(schema_path)
+        with self.assertRaisesRegex(ValidationError, "deactivation reason"):
+            validate(record, schema, schema)
 
     def test_stewardship_activation_reason_requires_meets_length_floor(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "long-work-stewardship-record.schema.json"
@@ -1490,7 +1523,7 @@ class SchemaValidationTests(unittest.TestCase):
         schema_path = REPO_ROOT / "schemas" / "beat-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json"
         record = load_json(data_path)
-        record["workflow_scale_routing"]["activated_supports"].append("unsupported_helper")
+        record["workflow_scale_routing"]["recommended_supports"].append("unsupported_helper")
         schema = load_json(schema_path)
         with self.assertRaisesRegex(ValidationError, "not one of"):
             validate(record, schema, schema)
@@ -1525,6 +1558,7 @@ class SchemaValidationTests(unittest.TestCase):
             record = load_json(data_path)
             with self.subTest(data=data_path.relative_to(REPO_ROOT)):
                 self.assertEqual(set(), routing_support_overlap(record))
+                self.assertEqual(set(), routing_recommended_skip_overlap(record))
 
     def test_workflow_scale_routing_detects_long_work_activation_skip_contradiction(self) -> None:
         record = load_json(REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json")
@@ -1532,7 +1566,7 @@ class SchemaValidationTests(unittest.TestCase):
 
         self.assertIn(LONG_WORK_SUPPORT, routing_support_overlap(record))
 
-    def test_workflow_scale_routing_long_work_activation_matches_scale_fixture_intent(self) -> None:
+    def test_workflow_scale_routing_long_work_recommendation_matches_scale_fixture_intent(self) -> None:
         compact_or_structured_paths = [
             REPO_ROOT / "tests" / "fixtures" / "story" / "beat-plan.json",
             REPO_ROOT / "tests" / "fixtures" / "text-to-image" / "single-image-rehearsal" / "beat-plan.json",
@@ -1555,6 +1589,7 @@ class SchemaValidationTests(unittest.TestCase):
             routing = record["workflow_scale_routing"]
             with self.subTest(data=data_path.relative_to(REPO_ROOT)):
                 self.assertIn(routing["scale_level"], {"compact_artifact", "structured_single_artifact"})
+                self.assertNotIn(LONG_WORK_SUPPORT, routing["recommended_supports"])
                 self.assertNotIn(LONG_WORK_SUPPORT, routing["activated_supports"])
                 self.assertIn(LONG_WORK_SUPPORT, routing["skipped_supports"])
 
@@ -1563,7 +1598,8 @@ class SchemaValidationTests(unittest.TestCase):
             routing = record["workflow_scale_routing"]
             with self.subTest(data=data_path.relative_to(REPO_ROOT)):
                 self.assertEqual("cumulative_work", routing["scale_level"])
-                self.assertIn(LONG_WORK_SUPPORT, routing["activated_supports"])
+                self.assertIn(LONG_WORK_SUPPORT, routing["recommended_supports"])
+                self.assertNotIn(LONG_WORK_SUPPORT, routing["activated_supports"])
                 self.assertNotIn(LONG_WORK_SUPPORT, routing["skipped_supports"])
 
     def test_image_output_shapes_do_not_use_three_part_sequence(self) -> None:

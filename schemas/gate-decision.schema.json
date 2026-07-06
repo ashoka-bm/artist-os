@@ -62,6 +62,7 @@
         "illustration_plan_approval",
         "prompt_branch",
         "prompt_lock",
+        "long_work_stewardship_activation",
         "long_work_checkpoint",
         "release_package_plan_approval",
         "album_calibration",

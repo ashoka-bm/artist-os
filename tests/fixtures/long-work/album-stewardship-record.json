@@ -22,6 +22,17 @@
     },
     "reason": "Album Cohesion Mode selected an arc album, so track order and emotional continuity require stewardship before full expansion."
   },
+  "long_work_stewardship_activation": {
+    "activation_status": "activated",
+    "activation_decision": "activate",
+    "activation_gate_decision_id": "gate_door_left_lit_long_work_activate",
+    "artist_requested": false,
+    "recommended_by_routing": true,
+    "activated_at": "2026-06-21T11:30:00Z",
+    "deactivation_gate_decision_id": null,
+    "deactivated_at": null,
+    "deactivation_reason": null
+  },
   "governing_arc": {
     "arc_summary": "The album moves from approach to threshold pressure to residue without granting a completed crossing.",
     "key_emotional_movement_ids": [

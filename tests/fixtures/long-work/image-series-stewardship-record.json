@@ -22,9 +22,22 @@
     },
     "reason": "The image series should preserve the threshold pressure as a cumulative visual sequence rather than a set of unrelated variants."
   },
+  "long_work_stewardship_activation": {
+    "activation_status": "activated",
+    "activation_decision": "activate",
+    "activation_gate_decision_id": "gate_door_left_lit_long_work_activate",
+    "artist_requested": false,
+    "recommended_by_routing": true,
+    "activated_at": "2026-06-17T12:00:00Z",
+    "deactivation_gate_decision_id": null,
+    "deactivated_at": null,
+    "deactivation_reason": null
+  },
   "governing_arc": {
     "arc_summary": "Approach stays suspended at the threshold and must not resolve into entry.",
-    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "key_emotional_movement_ids": [
+      "kem_threshold_001"
+    ],
     "minimum_tension_criteria_ref": "bp_door_left_lit#tension_movement_plan.minimum_tension_criteria",
     "story_authority_ref": "bp_door_left_lit",
     "may_revise_story_authority": false
@@ -46,8 +59,16 @@
       "part_job": "Prove that the visual language can hold unresolved nearness without crossing.",
       "intended_feeling": "the ache of being close to release but unable to choose it",
       "expected_state": "The figure remains suspended at the threshold.",
-      "must_preserve": ["held motion", "active absence", "unresolved ending"],
-      "must_not_resolve_yet": ["entry through the doorway", "clear reunion", "peaceful acceptance"],
+      "must_preserve": [
+        "held motion",
+        "active absence",
+        "unresolved ending"
+      ],
+      "must_not_resolve_yet": [
+        "entry through the doorway",
+        "clear reunion",
+        "peaceful acceptance"
+      ],
       "depends_on_part_ids": [],
       "status": "planned",
       "output_record_id": null,
@@ -59,7 +80,9 @@
       "rule_id": "lwcr_threshold_unresolved",
       "rule_type": "emotional_arc",
       "rule": "The series may intensify nearness, but it must not show the figure crossing the threshold unless Story Approval changes.",
-      "applies_to_part_ids": ["lwpart_image_threshold_001"],
+      "applies_to_part_ids": [
+        "lwpart_image_threshold_001"
+      ],
       "source_ref": "bp_door_left_lit",
       "change_requires": "story_approval",
       "status": "active"
@@ -68,7 +91,9 @@
       "rule_id": "lwcr_key_motif",
       "rule_type": "motif",
       "rule": "The key remains a small agency symbol rather than a solved object.",
-      "applies_to_part_ids": ["lwpart_image_threshold_001"],
+      "applies_to_part_ids": [
+        "lwpart_image_threshold_001"
+      ],
       "source_ref": "imgrole_threshold_001",
       "change_requires": "medium_approval",
       "status": "active"
@@ -95,7 +120,9 @@
       "status": "approved",
       "gate_decision_id": "gate_story_approval_door_left_lit",
       "review_record_id": "review_story_door_left_lit",
-      "affected_part_ids": ["lwpart_image_threshold_001"],
+      "affected_part_ids": [
+        "lwpart_image_threshold_001"
+      ],
       "next_action": "Proceed to image medium planning and calibration before creating additional image prompts.",
       "summary": "Story Approval established threshold suspension as the governing cumulative movement."
     },
@@ -107,7 +134,9 @@
       "status": "pending",
       "gate_decision_id": null,
       "review_record_id": null,
-      "affected_part_ids": ["lwpart_image_threshold_001"],
+      "affected_part_ids": [
+        "lwpart_image_threshold_001"
+      ],
       "next_action": "Generate or draft calibration directions only after explicit approval.",
       "summary": "Calibration must prove the selected visual language can hold unresolved threshold pressure."
     }

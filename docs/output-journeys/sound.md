@@ -19,7 +19,8 @@ Use the Sound Journey when the final work should be:
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
-  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship Record, when activated by the artist
   -> Sound Work Type Gate
   -> Sonic Concept Gate
   -> Genre / Production Gate
@@ -60,4 +61,4 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 The current text-to-sound slice implements this route through the Sound Prompt Plan with platform renderings, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The Sound Medium Plan records Medium-Level Workflow Scale Routing. The Sound Creative Brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
 
-When Workflow Scale Routing activates Long-Work Stewardship for sound, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Sound Medium Plan maps Beats to tracks, movements, sections, or sequence parts. The Sound Medium Plan owns Sonic Dynamics, sequence planning, arrangement/form, vocal/lyric policy, and sound-role details; the stewardship record references sound part ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.
+When sound routing recommends Long-Work Stewardship, present the ADR 0015 activation gate after Story Approval and create a foundation Long-Work Stewardship Record only if the artist activates it. Enrich active stewardship after the Sound Medium Plan maps Beats to tracks, movements, sections, or sequence parts. The Sound Medium Plan owns Sonic Dynamics, sequence planning, arrangement/form, vocal/lyric policy, and sound-role details; the stewardship record references sound part ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

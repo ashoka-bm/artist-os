@@ -749,8 +749,16 @@ A multi-output or long-form Artist OS Project where each part builds on prior pa
 _Avoid_: Collection, portfolio, batch
 
 **Long-Work Stewardship**:
-The Artist OS guardrail layer for Cumulative Work that protects story structure, emotional arc, continuity, checkpoints, and approved part-to-part dependency.
-_Avoid_: Story bible, collection review
+The opt-in Artist OS guardrail layer for Cumulative Work that protects story structure, emotional arc, continuity, checkpoints, and approved part-to-part dependency after the artist activates it.
+_Avoid_: Story bible, collection review, silent activation
+
+**Long-Work Stewardship Activation Gate**:
+The artist-facing gate after Story Approval where Artist OS recommends Long-Work Stewardship for a longer dependent work and the artist chooses Activate, Defer, or Waive and continue.
+_Avoid_: Silent routing support, Long-Work Checkpoint, Story Approval
+
+**Long-Work Stewardship Waiver**:
+The risky waiver recorded when Artist OS recommends Long-Work Stewardship and the artist chooses to continue without it. It does not create a Long-Work Stewardship Record.
+_Avoid_: Neutral preference, deleting the recommendation, requiring a user-written reason
 
 **Long-Work Stewardship Record**:
 The schema-backed Project Memory record for a Cumulative Work, centered on planned parts, checkpoints, continuity rules, readiness, and drift while referencing the Beat Plan as story authority.
@@ -765,8 +773,12 @@ The readiness state for expanding a Cumulative Work. It may be pending before th
 _Avoid_: Quality score, taste score
 
 **Long-Work Checkpoint**:
-A required or optional stop in Long-Work Stewardship where Artist OS reviews cumulative integrity before continuing.
-_Avoid_: Generic progress note
+A checkpoint inside active Long-Work Stewardship where Artist OS reviews cumulative integrity. Clean routine checkpoints run automatically; artist-facing checkpoint gates appear only when a checkpoint blocks, proposes a continuity or story-authority change, needs a waiver, or presents the initial Medium Mapping map for multiple dependent parts.
+_Avoid_: Generic progress note, approval request for every routine checkpoint
+
+**Medium Mapping Checkpoint**:
+The initial artist-facing Long-Work Checkpoint, required only when active stewardship and the Medium Plan create multiple dependent parts. It presents the concise map from approved arc to chapters, scenes, tracks, image roles, or other parts before bulk expansion.
+_Avoid_: Medium Critic Review, full stewardship record dump, automatic bulk expansion
 
 **Long-Work Reviewer**:
 The bounded reviewer role that applies Long-Work Stewardship to readiness, checkpoints, cumulative drift, and proposed continuity updates.
@@ -861,7 +873,7 @@ A surfaced conflict between the artist-requested output shape and the Medium Pla
 _Avoid_: Silent override, silently obeying a shape that weakens Artist Meaning
 
 **Workflow Scale Routing**:
-The internal Artist OS routing decision that determines which planning, stewardship, review, and continuity supports are needed for the scale of a work. It keeps compact outputs from carrying long-work overhead while activating Long-Work Stewardship, Stewardship Views, checkpoints, and continuity helpers when a work becomes cumulative or long-form.
+The internal Artist OS routing decision that determines which planning, stewardship, review, and continuity supports are needed for the scale of a work. It keeps compact outputs from carrying long-work overhead while recommending Long-Work Stewardship, Stewardship Views, checkpoints, and continuity helpers when a work becomes cumulative or long-form. Routing may recommend Long-Work Stewardship, but artist activation is required before it is active.
 _Avoid_: Length Gate, user-facing gate, word-count trigger, asset-count trigger
 
 **Workflow Scale Level**:
@@ -885,7 +897,7 @@ A revised Workflow Scale Routing decision caused by artist scope change or evide
 _Avoid_: Silent downgrade, deleting stewardship state
 
 **Workflow Scale Routing Field**:
-The compact schema field used to persist Workflow Scale Routing on existing pipeline records. It contains `scale_level`, `rationale`, `trigger_signals`, `activated_supports`, `skipped_supports`, and `reroute_triggers`. Project-Level Workflow Scale Routing belongs on the Beat Plan. Medium-Level Workflow Scale Routing belongs on each Medium Plan. Artist OS does not use a standalone Workflow Scale Routing Record unless future projects prove routing needs its own lifecycle.
+The compact schema field used to persist Workflow Scale Routing on existing pipeline records. It contains `scale_level`, `rationale`, `trigger_signals`, `recommended_supports`, `activated_supports`, `skipped_supports`, and `reroute_triggers`, so routing can recommend Long-Work Stewardship before artist activation. Project-Level Workflow Scale Routing belongs on the Beat Plan. Medium-Level Workflow Scale Routing belongs on each Medium Plan. Artist OS does not use a standalone Workflow Scale Routing Record unless future projects prove routing needs its own lifecycle.
 _Avoid_: Standalone routing record by default, chat-only routing decision
 
 **Workflow Scale Routing Schema Adoption**:
@@ -1196,8 +1208,8 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - An **Album Beat Plan** is the album story authority; **Track-Level Beat Plans** may deepen individual tracks but must trace back to the governing Album Beat Plan.
 - Every Album track is represented by an Album Beat Plan Beat or Long-Work Part, but a **Track-Level Beat Plan** is created only when the track needs internal emotional movement beyond its album-level job.
 - **Album Cohesion Mode** may be arc album, collection album, or hybrid album.
-- An arc album activates **Cumulative Work** and **Long-Work Stewardship** by default; a collection album uses **Collection Coherence Review** by default; a hybrid album activates stewardship only for dependent clusters or a governing album arc.
-- When **Album Cohesion Mode** activates **Long-Work Stewardship**, create the foundation Long-Work Stewardship Record after Story Approval and before approving the Release Package Plan so the Release Package Plan can reference an existing stewardship record.
+- An arc album activates **Cumulative Work** and recommends **Long-Work Stewardship** by default; a collection album uses **Collection Coherence Review** by default; a hybrid album recommends stewardship only for dependent clusters or a governing album arc.
+- When **Album Cohesion Mode** recommends **Long-Work Stewardship**, present the activation gate after Story Approval. If the artist activates it, create the foundation Long-Work Stewardship Record before approving the Release Package Plan so the Release Package Plan can reference an existing stewardship record.
 - A collection album still requires explicit Album Sonic System, Album Visual System, Working Release Copy, and Collection Coherence Review, but it should not invent track-to-track escalation or dependency.
 - A hybrid album uses one album-level **Release Package Plan** and one **Long-Work Stewardship Record** per dependent cluster or governing album arc.
 - A **Track Cover** is governed by the track's assigned emotional movement and by album-level visual continuity rules.
@@ -1307,7 +1319,7 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - An **Image Series** fits any approved multi-image output, including exactly three images.
 - A **Cumulative Work** needs long-work stewardship because later parts depend on prior parts or on an approved emotional arc.
 - A portfolio, collection, curator batch, or store set is not automatically a **Cumulative Work** when the outputs are related but non-sequential.
-- **Long-Work Stewardship** applies to **Cumulative Work**.
+- **Long-Work Stewardship** is recommended for **Cumulative Work** that meets the activation threshold, but it applies only after the artist activates it or explicitly requests it below threshold.
 - **Collection Coherence Review** applies to related non-sequential sets without imposing **Long-Work Stewardship**.
 - **Long-Work Stewardship** is schema-backed by a **Long-Work Stewardship Record**.
 - **Collection Coherence Review** stays review behavior for now and should not get a separate schema until collection-level acceptance, store readiness, or batch-level promotion creates a real need.
@@ -1324,14 +1336,14 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - A **Long-Work Part** is not a **Prompt Variant Plan** or **Variant**; prompt variants test directions, while Long-Work Parts carry cumulative story or emotional structure.
 - A **Long-Work Part** stores generic stewardship state plus a reference to its medium-specific part; it does not duplicate Shot Design, amplitude profiles, section execution details, voice rules, or other Medium Plan-owned fields.
 - A **Single-Generation Variant Comparison** does not create Long-Work Parts unless it represents an approved image series rather than a Minimal/Faithful/Amplified comparison.
-- Create the **Long-Work Stewardship Record** after **Story Approval**, then enrich it after the **Medium Plan** maps approved Beats into medium-specific parts.
-- For **Cumulative Work**, the route is Story Approval, then **Long-Work Stewardship Record** creation, then Medium Plan, then stewardship enrichment with Long-Work Parts, then Long-Work Readiness before expansion.
+- After **Story Approval**, present the **Long-Work Stewardship Activation Gate** when stewardship is recommended. Create the **Long-Work Stewardship Record** only if the artist activates it, then enrich it after the **Medium Plan** maps approved Beats into medium-specific parts.
+- For active **Long-Work Stewardship**, the route is Story Approval, activation gate, foundation stewardship record, Medium Plan, Long-Work Reviewer mapping review, artist-facing Medium Mapping Checkpoint when multiple dependent parts exist, then stewardship enrichment with Long-Work Parts and Long-Work Readiness before bulk expansion.
 - **Long-Work Readiness** can block expansion when the state is pending or repair before expansion; expansion may continue only after readiness runs, repair happens, or the artist explicitly waives the block.
 - **Long-Work Readiness** should use bands, not numeric quality scores.
 - **Long-Work Readiness** checks story authority, part mapping, part job clarity, Expectation Turn preservation, emotional arc movement, premature resolution, continuity rules, checkpoint plan, open risks, and waiver path.
 - **Long-Work Checkpoints** may be foundation, medium mapping, calibration, first part, interval, pre-completion, or completion checkpoints.
-- A **Long-Work Stewardship Record** supports all checkpoint types, but only the checkpoints relevant to the medium, size, and risk of the Cumulative Work are required.
-- A **Long-Work Checkpoint** decision is recorded as a **Gate Decision** and summarized in the **Long-Work Stewardship Record** for resume state.
+- A **Long-Work Stewardship Record** supports all checkpoint types, but clean routine checkpoints run automatically and only artist-facing checkpoint decisions are recorded as **Gate Decisions**.
+- The initial **Medium Mapping Checkpoint** is artist-facing when active stewardship maps into multiple dependent parts; later checkpoints become artist-facing only when they block, propose continuity or story-authority changes, or need a waiver.
 - **Long-Work Reviewer** returns a **Review Record** for readiness, checkpoints, cumulative drift, and proposed continuity updates.
 - **Long-Work Continuity Rules** are first-class objects in the **Long-Work Stewardship Record**.
 - Changing a **Long-Work Continuity Rule** requires artist confirmation, Story Approval, Medium Plan approval, or prompt revision according to the rule's authority level.

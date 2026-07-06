@@ -22,6 +22,17 @@
     },
     "reason": "The three text sections depend on each other: the key creates agency, the lit room makes it dangerous, and the withheld crossing preserves residue."
   },
+  "long_work_stewardship_activation": {
+    "activation_status": "activated",
+    "activation_decision": "activate",
+    "activation_gate_decision_id": "gate_door_left_lit_long_work_activate",
+    "artist_requested": false,
+    "recommended_by_routing": true,
+    "activated_at": "2026-06-20T00:00:00Z",
+    "deactivation_gate_decision_id": null,
+    "deactivated_at": null,
+    "deactivation_reason": null
+  },
   "governing_arc": {
     "arc_summary": "The key introduces agency, the lit room turns welcome into danger, and the withheld crossing preserves unresolved motion.",
     "key_emotional_movement_ids": [

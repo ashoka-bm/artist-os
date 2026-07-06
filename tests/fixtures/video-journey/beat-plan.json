@@ -12,6 +12,7 @@
       "single_artifact_can_hold_movement",
       "internal_sections_or_movements_needed"
     ],
+    "recommended_supports": [],
     "activated_supports": [
       "core_pipeline",
       "medium_section_plan"

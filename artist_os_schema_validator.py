@@ -479,6 +479,31 @@ def validate_long_work_stewardship_record_contract(record: dict[str, Any]) -> No
                 "length_floor_override rationale is required when the length floor is overridden",
             )
 
+    activation = record.get("long_work_stewardship_activation", {})
+    activation_status = activation.get("activation_status")
+    stewardship_status = record.get("stewardship_status")
+    if activation_status == "activated" and stewardship_status == "superseded":
+        raise ValidationError(
+            "$.long_work_stewardship_activation.activation_status",
+            "superseded stewardship records must carry deactivated activation status",
+        )
+    if activation_status == "deactivated":
+        if stewardship_status != "superseded":
+            raise ValidationError(
+                "$.stewardship_status",
+                "deactivated stewardship records must be superseded",
+            )
+        if not activation.get("deactivation_gate_decision_id"):
+            raise ValidationError(
+                "$.long_work_stewardship_activation.deactivation_gate_decision_id",
+                "deactivated stewardship records require a deactivation gate decision id",
+            )
+        if not str(activation.get("deactivation_reason") or "").strip():
+            raise ValidationError(
+                "$.long_work_stewardship_activation.deactivation_reason",
+                "deactivated stewardship records require a deactivation reason",
+            )
+
 
 def validate_project_manifest_contract(record: dict[str, Any]) -> None:
     """Validate project manifest projection invariants not expressible in our schema subset."""
@@ -493,6 +518,20 @@ def validate_project_manifest_contract(record: dict[str, Any]) -> None:
             "$.resume_state.media_index",
             "resume_state media_index must not duplicate medium entries",
         )
+
+    activation = resume_state.get("long_work_stewardship_activation")
+    if isinstance(activation, dict):
+        status = activation.get("status")
+        if status in {"activated", "deactivated"} and not activation.get("stewardship_record_id"):
+            raise ValidationError(
+                "$.resume_state.long_work_stewardship_activation.stewardship_record_id",
+                f"resume_state long-work activation status {status!r} requires a stewardship_record_id",
+            )
+        if status in {"activated", "deferred", "waived", "deactivated"} and not activation.get("gate_decision_id"):
+            raise ValidationError(
+                "$.resume_state.long_work_stewardship_activation.gate_decision_id",
+                f"resume_state long-work activation status {status!r} requires a gate_decision_id",
+            )
 
 
 def validate_file(schema_path: Path, data_path: Path) -> None:
@@ -530,6 +569,10 @@ FIXTURE_SCHEMA_MAP = {
     "artist-meaning.json": "artist-meaning.schema.json",
     "output-acceptance-gate.json": "gate-decision.schema.json",
     "output-acceptance-waiver-gate.json": "gate-decision.schema.json",
+    "long-work-stewardship-activation-gate.json": "gate-decision.schema.json",
+    "long-work-stewardship-defer-gate.json": "gate-decision.schema.json",
+    "long-work-stewardship-waive-gate.json": "gate-decision.schema.json",
+    "long-work-stewardship-deactivation-gate.json": "gate-decision.schema.json",
     "image-style-gate.json": "gate-decision.schema.json",
     "image-detail-intensity-gate.json": "gate-decision.schema.json",
     "image-brief-approval-gate.json": "gate-decision.schema.json",
@@ -593,6 +636,7 @@ FIXTURE_SCHEMA_MAP = {
     "learning-record.json": "learning-record.schema.json",
     "performance-signal.json": "performance-signal.schema.json",
     "foundation-stewardship-record.json": "long-work-stewardship-record.schema.json",
+    "deactivated-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "album-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "image-series-stewardship-record.json": "long-work-stewardship-record.schema.json",
     "text-stewardship-record.json": "long-work-stewardship-record.schema.json",

@@ -165,7 +165,7 @@
     "workflow_scale_routing": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["scale_level", "rationale", "trigger_signals", "activated_supports", "skipped_supports", "reroute_triggers"],
+      "required": ["scale_level", "rationale", "trigger_signals", "recommended_supports", "activated_supports", "skipped_supports", "reroute_triggers"],
       "properties": {
         "scale_level": { "$ref": "#/$defs/workflow_scale_level" },
         "rationale": { "type": "string", "minLength": 1 },
@@ -173,6 +173,10 @@
           "type": "array",
           "minItems": 1,
           "items": { "$ref": "#/$defs/workflow_scale_trigger_signal" }
+        },
+        "recommended_supports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/workflow_scale_support" }
         },
         "activated_supports": {
           "type": "array",

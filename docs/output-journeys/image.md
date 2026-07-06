@@ -17,7 +17,8 @@ Use the Image Journey when the final work should be:
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
-  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship Record, when activated by the artist
   -> Symbology Gate
   -> Style Gate
   -> Image Medium Plan with Medium-Level Workflow Scale Routing
@@ -57,4 +58,4 @@ The current First Slice implements this route through the Provider-Neutral Image
 
 When the artist asks for Midjourney prompts, keep the Prompt Variant Plans provider-neutral and add a `provider_targets[]` entry for Midjourney. That entry stores structured controls and renders the Midjourney paste-ready suffix / full prompts. Do not add Midjourney `--` parameters to providers that use API fields, settings panels, or workflows.
 
-For image series or other cumulative image work, create a foundation Long-Work Stewardship Record after Story Approval when Project-Level Workflow Scale Routing activates it, then enrich it after the Image Medium Plan maps Beats to Image Roles and records Medium-Level Workflow Scale Routing. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.
+For image series or other cumulative image work, recommend Long-Work Stewardship after Story Approval when the ADR 0013 threshold holds, then create the foundation record only if the artist activates it under ADR 0015. Enrich active stewardship after the Image Medium Plan maps Beats to Image Roles and records Medium-Level Workflow Scale Routing. The Image Medium Plan owns Shot Design, amplitude, visual tensions, and image-role details; the stewardship record references Image Role ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

@@ -42,6 +42,22 @@ Complete when Story Mode, Beat Roles, intended feeling, tension movement, symbol
 
 The Beat Plan must include minimum tension criteria before Story Approval. These criteria define the minimum active tensions and adjacent-beat movement required for the work to create enough contrast.
 
+### Long-Work Stewardship Activation Gate
+
+Chooses whether to activate Long-Work Stewardship when Artist OS recommends it or the artist asks for it. This is a separate artist-facing pause immediately after Story Approval and before Medium Plan expansion.
+
+Complete when the artist activates, defers, waives, or deactivates Long-Work Stewardship. Activation creates the foundation Long-Work Stewardship Record immediately. Defer and waive create Gate Decisions only; they do not create placeholder stewardship records. Waiving a recommended activation is a risky waiver, but no artist-authored reason is required.
+
+Use shared core wording with one medium-specific sentence. Core wording:
+
+> This is starting to behave like a longer work, where later parts will need to remember what earlier parts set up. I recommend activating Long-Work Stewardship. It gives the project a lightweight memory: what each part is meant to carry, what must stay consistent, what should not resolve too early, and where we should pause to check the arc. It adds a little structure, but it helps protect the feeling and continuity of the work as it grows.
+>
+> Do you want to activate it now?
+
+Offer exactly: Activate, Defer, Waive and continue. Clear agreement activates. Ambiguous soft agreement defers. Explicit refusal waives. If the artist requested stewardship below the normal threshold, record that it was artist-requested rather than system-required.
+
+If active stewardship later proves unnecessary because the Medium Plan is compact, ask for lightweight confirmation to deactivate it as unnecessary, record the decision through this gate type, mark the stewardship record superseded, and continue with the compact flow.
+
 ### Medium Gate
 
 Chooses how the approved Beat Plan becomes a medium-specific work.
@@ -88,11 +104,19 @@ Complete when the artist accepts the branching goal, branch count, meaning kerne
 
 ### Long-Work Checkpoint Gate
 
-Approves or blocks a Long-Work Checkpoint inside a Cumulative Work.
+Handles artist-facing decisions from a Long-Work Checkpoint inside active stewardship.
 
-Complete when the artist approves, revises, waives, or blocks the checkpoint decision. Checkpoints can be foundation, medium mapping, calibration, first part, interval, pre-completion, or completion checks. Store the artist-facing decision as a Gate Decision with `gate_type = "long_work_checkpoint"` and summarize it in the Long-Work Stewardship Record for resume state.
+Once Long-Work Stewardship is active, checkpoint creation and clean checkpoint passes are automatic. A clean pass may be summarized with a short status line such as "Continuity checkpoint passed." Do not ask the artist to approve routine process mechanics.
+
+Complete when a checkpoint requires an artist-facing decision and the artist approves, revises, waives, or blocks that decision. Artist-facing checkpoint decisions are required when the checkpoint blocks, proposes a continuity or story-authority change, needs a waiver to continue, or when the initial Medium Mapping Checkpoint maps an active stewardship project into multiple dependent parts.
+
+The initial Medium Mapping Checkpoint is artist-facing only when the Medium Plan creates multiple dependent parts. Run Long-Work Reviewer first, present the revised concise part map, and ask whether the longer work is unfolding correctly before bulk expansion. The artist may approve, revise, or explicitly waive this mapping review. A waiver affects only that checkpoint; stewardship remains active.
+
+Store artist-facing checkpoint decisions as Gate Decisions with `gate_type = "long_work_checkpoint"` and summarize them in the Long-Work Stewardship Record for resume state.
 
 When Long-Work Readiness is `pending`, run the readiness pass before expansion. When Long-Work Readiness is `repair_before_expansion`, do not produce multiple downstream prompts, drafts, or outputs until the issue is repaired or the artist explicitly waives the block.
+
+Before the initial Medium Mapping Checkpoint is approved or waived, Artist OS may create one clearly labeled calibration or sample part if it helps the artist judge direction. It must not expand multiple dependent parts. Existing approval gates still apply: dry-run sample plans need no new approval, text draft samples need Draft Generation Approval, and provider-backed media samples need Generation Approval.
 
 ### Generation Approval Gate
 

@@ -249,10 +249,36 @@
           "enum": ["compact_artifact", "structured_single_artifact", "cumulative_work", "full_long_form_project"]
         },
         "cross_medium_plan_ref": { "type": ["string", "null"] },
+        "long_work_stewardship_activation": { "$ref": "#/$defs/long_work_stewardship_activation_summary" },
         "media_index": {
           "type": "array",
           "items": { "$ref": "#/$defs/media_index_entry" }
         }
+      }
+    },
+    "long_work_stewardship_activation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "recommended_by_routing",
+        "gate_decision_id",
+        "stewardship_record_id",
+        "last_decision_at",
+        "summary",
+        "next_action"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_recommended", "recommended_unresolved", "activated", "deferred", "waived", "deactivated"]
+        },
+        "recommended_by_routing": { "type": "boolean" },
+        "gate_decision_id": { "type": ["string", "null"], "pattern": "^gate_[a-zA-Z0-9_-]+$" },
+        "stewardship_record_id": { "type": ["string", "null"], "pattern": "^lws_[a-zA-Z0-9_-]+$" },
+        "last_decision_at": { "type": ["string", "null"], "format": "date-time" },
+        "summary": { "type": "string", "minLength": 1 },
+        "next_action": { "type": "string", "minLength": 1 }
       }
     },
     "media_index_entry": {

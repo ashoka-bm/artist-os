@@ -32,7 +32,8 @@ Early format choices are Format Intent. The accepted output shape is confirmed i
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
-  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship Record, when activated by the artist
   -> Symbology Gate
   -> Style Gate
   -> Narrative Depth classification

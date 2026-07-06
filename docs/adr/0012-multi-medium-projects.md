@@ -40,14 +40,14 @@ one-project model and only build the medium-specific part.
   Critic, Brief Approval) and downstream gates still run fresh for the new medium.
 
 - **D4 — Per-medium scale is additive; effective project scale is derived.**
-  Medium-Level Workflow Scale Routing is decided per medium and may activate supports
+  Medium-Level Workflow Scale Routing is decided per medium and may recommend supports
   the others did not. The Beat Plan's Project-Level Workflow Scale Routing stays the
   frozen as-of-Story-Approval baseline (consistent with D1). The project's Effective
   Project Scale is the maximum over its active media and is surfaced on the
   Cross-Medium Plan / `project.json`, not by rewriting the Beat Plan. This amends ADR
   0007: project scale is the Beat-Plan baseline plus per-medium escalation, read from
-  the coordinator. (Whether a medium activates Long-Work Stewardship is governed by
-  ADR 0013, not by scale level alone.)
+  the coordinator. (Whether a medium recommends Long-Work Stewardship is governed by
+  ADR 0013, and whether stewardship becomes active is governed by ADR 0015.)
 
 - **D4′ — Thin coordinator over separate medium bodies.** The medium layer is a lazy,
   project-level **Cross-Medium Plan** (a generalization of the album-only Release

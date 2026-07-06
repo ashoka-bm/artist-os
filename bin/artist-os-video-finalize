@@ -462,6 +462,7 @@ def normalize_workflow_scale_routing(packet: dict[str, Any]) -> dict[str, Any]:
             "trigger_signals",
             ["artist_requested_compact_output", "single_artifact_can_hold_movement"],
         ),
+        "recommended_supports": value.get("recommended_supports", []),
         "activated_supports": value.get("activated_supports", ["core_pipeline", "medium_section_plan"]),
         "skipped_supports": value.get("skipped_supports", LONG_WORK_SUPPORTS),
         "reroute_triggers": value.get(

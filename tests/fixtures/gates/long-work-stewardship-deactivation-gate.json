@@ -1,0 +1,40 @@
+{
+  "gate_decision_id": "gate_door_left_lit_deactivate_as_unnecessary",
+  "project_id": "proj_door_left_lit",
+  "source_id": "src_door_left_lit",
+  "artist_meaning_id": "meaning_door_left_lit",
+  "gate_type": "long_work_stewardship_activation",
+  "gate_status": "approved",
+  "decision": "Deactivate Long-Work Stewardship as unnecessary after medium mapping proved compact.",
+  "options_presented": [
+    {
+      "option_id": "keep_active",
+      "label": "Keep active",
+      "summary": "Continue stewardship because dependent continuity still needs checkpoints."
+    },
+    {
+      "option_id": "deactivate_as_unnecessary",
+      "label": "Deactivate",
+      "summary": "Supersede the active stewardship record because the project proved compact."
+    }
+  ],
+  "selected_option": {
+    "option_id": "deactivate_as_unnecessary",
+    "label": "Deactivate"
+  },
+  "artist_response": "Deactivate stewardship; this is no longer a dependent sequence.",
+  "proceed_unconfirmed": false,
+  "upstream_refs": [
+    {
+      "ref_type": "long_work_stewardship",
+      "ref_id": "lws_door_left_lit_foundation",
+      "path_or_ref": "tests/fixtures/long-work/foundation-stewardship-record.json"
+    },
+    {
+      "ref_type": "medium_plan",
+      "ref_id": "imp_door_left_lit",
+      "path_or_ref": "tests/fixtures/text-to-image/image-medium-plan.json"
+    }
+  ],
+  "created_at": "2026-06-17T12:30:00Z"
+}

@@ -10,6 +10,7 @@
     "trigger_signals": [
       "single_artifact_can_hold_movement"
     ],
+    "recommended_supports": [],
     "activated_supports": [
       "core_pipeline"
     ],

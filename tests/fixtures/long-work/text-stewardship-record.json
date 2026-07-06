@@ -22,9 +22,22 @@
     },
     "reason": "The three text sections build from object to atmosphere to withheld ending, so later sections depend on prior emotional pressure."
   },
+  "long_work_stewardship_activation": {
+    "activation_status": "activated",
+    "activation_decision": "activate",
+    "activation_gate_decision_id": "gate_door_left_lit_long_work_activate",
+    "artist_requested": false,
+    "recommended_by_routing": true,
+    "activated_at": "2026-06-17T12:00:00Z",
+    "deactivation_gate_decision_id": null,
+    "deactivated_at": null,
+    "deactivation_reason": null
+  },
   "governing_arc": {
     "arc_summary": "The key introduces agency, the light turns welcome into danger, and the stop preserves unresolved motion.",
-    "key_emotional_movement_ids": ["kem_threshold_001"],
+    "key_emotional_movement_ids": [
+      "kem_threshold_001"
+    ],
     "minimum_tension_criteria_ref": "bp_door_left_lit#tension_movement_plan.minimum_tension_criteria",
     "story_authority_ref": "bp_door_left_lit",
     "may_revise_story_authority": false
@@ -46,8 +59,15 @@
       "part_job": "Open with agency that cannot yet be used.",
       "intended_feeling": "the ache of being close to release but unable to choose it",
       "expected_state": "The key is tactile and unresolved.",
-      "must_preserve": ["key as unusable agency", "object-focused pressure"],
-      "must_not_resolve_yet": ["entry", "decision", "aftermath"],
+      "must_preserve": [
+        "key as unusable agency",
+        "object-focused pressure"
+      ],
+      "must_not_resolve_yet": [
+        "entry",
+        "decision",
+        "aftermath"
+      ],
       "depends_on_part_ids": [],
       "status": "planned",
       "output_record_id": null,
@@ -69,9 +89,18 @@
       "part_job": "Turn welcome into tender danger.",
       "intended_feeling": "tender danger",
       "expected_state": "The doorway promises safety while increasing risk.",
-      "must_preserve": ["welcome turning dangerous", "tenderness without resolution"],
-      "must_not_resolve_yet": ["crossing", "explanation", "peaceful acceptance"],
-      "depends_on_part_ids": ["lwpart_text_key_001"],
+      "must_preserve": [
+        "welcome turning dangerous",
+        "tenderness without resolution"
+      ],
+      "must_not_resolve_yet": [
+        "crossing",
+        "explanation",
+        "peaceful acceptance"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_text_key_001"
+      ],
       "status": "planned",
       "output_record_id": null,
       "review_record_id": null
@@ -92,9 +121,19 @@
       "part_job": "End by withholding the expected crossing.",
       "intended_feeling": "unresolved held motion",
       "expected_state": "The ending stops before the decision.",
-      "must_preserve": ["withheld resolution", "shorter final pressure"],
-      "must_not_resolve_yet": ["decision", "moral lesson", "afterward"],
-      "depends_on_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001"],
+      "must_preserve": [
+        "withheld resolution",
+        "shorter final pressure"
+      ],
+      "must_not_resolve_yet": [
+        "decision",
+        "moral lesson",
+        "afterward"
+      ],
+      "depends_on_part_ids": [
+        "lwpart_text_key_001",
+        "lwpart_text_light_001"
+      ],
       "status": "planned",
       "output_record_id": null,
       "review_record_id": null
@@ -105,7 +144,11 @@
       "rule_id": "lwcr_text_withheld_crossing",
       "rule_type": "structure",
       "rule": "Each section may deepen pressure, but the text must not narrate the crossing or its aftermath.",
-      "applies_to_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "applies_to_part_ids": [
+        "lwpart_text_key_001",
+        "lwpart_text_light_001",
+        "lwpart_text_stop_001"
+      ],
       "source_ref": "tmp_door_left_lit#structure_plan",
       "change_requires": "story_approval",
       "status": "active"
@@ -114,7 +157,11 @@
       "rule_id": "lwcr_text_voice_restraint",
       "rule_type": "voice",
       "rule": "Voice stays restrained and image-led; clarity edits must not turn the text into explanation.",
-      "applies_to_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "applies_to_part_ids": [
+        "lwpart_text_key_001",
+        "lwpart_text_light_001",
+        "lwpart_text_stop_001"
+      ],
       "source_ref": "tmp_door_left_lit#voice_point_of_view",
       "change_requires": "medium_approval",
       "status": "active"
@@ -130,7 +177,11 @@
       "status": "approved",
       "gate_decision_id": "gate_story_approval_door_left_lit",
       "review_record_id": "review_story_door_left_lit",
-      "affected_part_ids": ["lwpart_text_key_001", "lwpart_text_light_001", "lwpart_text_stop_001"],
+      "affected_part_ids": [
+        "lwpart_text_key_001",
+        "lwpart_text_light_001",
+        "lwpart_text_stop_001"
+      ],
       "next_action": "Proceed to long-text drafting readiness before Draft Generation Approval.",
       "summary": "The text arc preserves the threshold by moving from object to atmosphere to withheld ending."
     },
@@ -142,7 +193,9 @@
       "status": "pending",
       "gate_decision_id": null,
       "review_record_id": null,
-      "affected_part_ids": ["lwpart_text_key_001"],
+      "affected_part_ids": [
+        "lwpart_text_key_001"
+      ],
       "next_action": "Draft the first section and check voice, fidelity, and unresolved pressure before drafting later sections.",
       "summary": "The first section must prove the object-focused voice can carry the arc."
     }

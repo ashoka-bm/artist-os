@@ -13,14 +13,16 @@
       "artist_requested_sequence_or_series",
       "dependent_parts_needed"
     ],
-    "activated_supports": [
-      "core_pipeline",
-      "medium_section_plan",
+    "recommended_supports": [
       "long_work_stewardship",
       "long_work_parts",
       "long_work_readiness",
       "long_work_checkpoints",
       "stewardship_views"
+    ],
+    "activated_supports": [
+      "core_pipeline",
+      "medium_section_plan"
     ],
     "skipped_supports": [
       "extraction_verification",

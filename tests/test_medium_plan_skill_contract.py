@@ -145,10 +145,8 @@ MEDIUM_PLAN_SKILLS = {
 }
 
 CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
-FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
-    "If medium-level `workflow_scale_routing.activated_supports` newly includes "
-    "`long_work_stewardship` and no foundation record exists, create the "
-    "foundation record immediately before enrichment."
+LONG_WORK_ACTIVATION_GATE_FRAGMENT = (
+    "present the ADR 0015 activation gate"
 )
 
 
@@ -220,12 +218,12 @@ class MediumPlanSkillContractTests(unittest.TestCase):
                 for schema_id in spec["schema_ids"]:
                     self.assertIn(schema_id, text)
 
-    def test_medium_level_long_work_activation_creates_foundation_before_enrichment(self) -> None:
+    def test_medium_level_long_work_recommendation_uses_activation_gate(self) -> None:
         skill_paths = [CONDUCTOR_SKILL, *MEDIUM_PLAN_SKILLS]
         for skill_path in skill_paths:
             text = self._read(skill_path)
             with self.subTest(skill=skill_path):
-                self.assertIn(FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT, text)
+                self.assertIn(LONG_WORK_ACTIVATION_GATE_FRAGMENT, text)
 
     def test_orientation_keeps_promise_and_four_primary_choices(self) -> None:
         text = self._read(CONDUCTOR_SKILL)

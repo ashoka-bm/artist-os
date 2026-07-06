@@ -18,6 +18,7 @@
     "cumulative_work_type",
     "stewardship_status",
     "activation_reason",
+    "long_work_stewardship_activation",
     "governing_arc",
     "part_plan",
     "continuity_rules",
@@ -52,7 +53,7 @@
     },
     "stewardship_status": {
       "type": "string",
-      "enum": ["planned", "active", "paused", "blocked", "complete", "superseded"]
+      "enum": ["planned", "active", "blocked", "complete", "superseded"]
     },
     "activation_reason": {
       "type": "object",
@@ -75,6 +76,7 @@
         "reason": { "type": "string", "minLength": 1 }
       }
     },
+    "long_work_stewardship_activation": { "$ref": "#/$defs/long_work_stewardship_activation" },
     "governing_arc": {
       "type": "object",
       "additionalProperties": false,
@@ -132,6 +134,44 @@
     "approval_requirement": {
       "type": "string",
       "enum": ["artist_confirmation", "story_approval", "medium_approval", "prompt_revision"]
+    },
+    "long_work_stewardship_activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "activation_status",
+        "activation_decision",
+        "activation_gate_decision_id",
+        "artist_requested",
+        "recommended_by_routing",
+        "activated_at",
+        "deactivation_gate_decision_id",
+        "deactivated_at",
+        "deactivation_reason"
+      ],
+      "properties": {
+        "activation_status": {
+          "type": "string",
+          "enum": ["activated", "deactivated"]
+        },
+        "activation_decision": {
+          "type": "string",
+          "enum": ["activate", "artist_requested_activate", "deactivate_as_unnecessary"]
+        },
+        "activation_gate_decision_id": {
+          "type": "string",
+          "pattern": "^gate_[a-zA-Z0-9_-]+$"
+        },
+        "artist_requested": { "type": "boolean" },
+        "recommended_by_routing": { "type": "boolean" },
+        "activated_at": { "type": "string", "format": "date-time" },
+        "deactivation_gate_decision_id": {
+          "type": ["string", "null"],
+          "pattern": "^gate_[a-zA-Z0-9_-]+$"
+        },
+        "deactivated_at": { "type": ["string", "null"], "format": "date-time" },
+        "deactivation_reason": { "type": ["string", "null"] }
+      }
     },
     "part_kind": {
       "type": "string",

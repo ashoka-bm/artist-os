@@ -43,6 +43,32 @@
       }
     ]
   },
+  "resume_state": {
+    "current_checkpoint": "long_work_stewardship_activation",
+    "next_phase": "Medium Plan",
+    "effective_project_scale": "cumulative_work",
+    "cross_medium_plan_ref": null,
+    "long_work_stewardship_activation": {
+      "status": "activated",
+      "recommended_by_routing": true,
+      "gate_decision_id": "gate_door_left_lit_long_work_activate",
+      "stewardship_record_id": "lws_door_left_lit_foundation",
+      "last_decision_at": "2026-06-17T12:00:00Z",
+      "summary": "The artist activated stewardship after Story Approval, so the foundation stewardship record exists before medium mapping.",
+      "next_action": "Create the Medium Plan and enrich the active stewardship record with medium-specific parts."
+    },
+    "media_index": [
+      {
+        "medium": "image",
+        "medium_role": "primary",
+        "medium_plan_ref": "imp_door_left_lit",
+        "status": "active",
+        "artist_meaning_id": "meaning_door_left_lit",
+        "transformation_brief_id": "tb_door_left_lit",
+        "beat_plan_id": "bp_door_left_lit"
+      }
+    ]
+  },
   "paths": {
     "project_dir": "workspace-library/artist-os/projects/proj_door_left_lit",
     "events": "workspace-library/artist-os/projects/proj_door_left_lit/events.jsonl",

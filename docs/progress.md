@@ -539,6 +539,25 @@ Hardened the conductor eval re-bless path:
 
 This makes the conductor digest gate harder to bypass accidentally: a changed conductor cannot be re-blessed by rewriting `blessed.lock` alone.
 
+### Long-Work Stewardship Activation UX
+
+Accepted the artist-facing activation model for Long-Work Stewardship:
+
+- ADR 0015 defines a separate activation gate after Story Approval and before Medium Plan expansion.
+- Workflow Scale Routing may recommend stewardship, but artist activation is required before a Long-Work Stewardship Record exists.
+- Activation creates the foundation stewardship record immediately; defer and waive create Gate Decisions only.
+- Waiving recommended stewardship is a risky waiver that needs no artist-authored reason.
+- Clean routine checkpoints run automatically after activation; artist-facing checkpoint gates appear only for blocks, proposed continuity/story-authority changes, waivers, or the initial Medium Mapping review when multiple dependent parts exist.
+- The initial Medium Mapping Checkpoint is reviewed by Long-Work Reviewer first, then shown as a concise part map before bulk expansion.
+
+Implemented the schema pass for the accepted activation model:
+
+- Gate Decisions now accept `long_work_stewardship_activation`.
+- Workflow Scale Routing now separates `recommended_supports` from `activated_supports`.
+- `project.json.resume_state` can carry a Long-Work Stewardship activation summary.
+- Long-Work Stewardship records now carry activation metadata, and `paused` is no longer a stewardship status.
+- Fixtures cover activation, defer, waive, deactivation, and a superseded stewardship record.
+
 ## Current Best Next Step
 
 The consolidation rehearsal pass, first import adapter, subagent packet schemas, and guarded eval re-bless path are complete enough to move into adapter hardening without weakening the dry-run boundary. The immediate next pass should add human-edited Artist Library file detection and Output Record revision creation, because it builds on the import adapter and closes the visible-edit loop. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.

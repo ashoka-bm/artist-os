@@ -134,7 +134,7 @@ Album v1 is the only implemented Release Package subtype. EP, Single Bundle, Vis
 
 The Release Package Plan starts after the Album Beat Plan and before full medium-specific expansion. It may begin with placeholder deliverables and is enriched with Medium Plan, Prompt Plan, Text Generation Plan, Review Record, Gate Decision, and Output Record refs as those records are created.
 
-When Album Cohesion Mode activates Long-Work Stewardship, create the foundation Long-Work Stewardship Record after Story Approval and before Release Package Plan approval. The Release Package Plan may reference the stewardship record, but stewardship keeps ownership of part status, readiness, checkpoints, continuity updates, and cumulative drift management.
+When Album Cohesion Mode recommends Long-Work Stewardship, present the ADR 0015 activation gate after Story Approval and before Release Package Plan approval. If the artist activates it, create the foundation Long-Work Stewardship Record before Release Package Plan approval. The Release Package Plan may reference the stewardship record, but stewardship keeps ownership of part status, readiness, checkpoints, continuity updates, and cumulative drift management.
 
 The Release Package Plan coordinates deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, calibration status, production order, track mapping, and cross-media continuity. It does not own song arrangement details, lyrics, genre, Sonic Dynamics, image Shot Design, Style Direction, prompt variants, title or description drafting rules, cumulative execution state, or part status.
 
@@ -198,20 +198,20 @@ Create Illustration Plan after Text Medium Plan. It coordinates Text Journey and
 
 ## Workflow Scale Routing Contract
 
-Workflow Scale Routing is the internal scale decision recorded on Beat Plans and Medium Plans. It decides which support bundle is active before downstream agents expand a work.
+Workflow Scale Routing is the internal scale decision recorded on Beat Plans and Medium Plans. It decides which support bundle is recommended, active, or skipped before downstream agents expand a work.
 
 Valid routing combinations:
 
 - `compact_artifact`: one compact artifact can carry the approved movement. `long_work_stewardship`, `long_work_parts`, `long_work_readiness`, and `long_work_checkpoints` stay in `skipped_supports`.
 - `structured_single_artifact`: one artifact has internal sections, movements, scenes, or arguments, but later parts do not depend on prior outputs. Long-Work supports stay in `skipped_supports`.
-- `cumulative_work`: multiple dependent parts, sequence units, chapters, tracks, image roles, or other cumulative units must preserve continuity across outputs. Long-Work supports belong in `activated_supports`.
-- `full_long_form_project`: long-form creation needs durable canon, part planning, readiness checks, checkpoints, and completion support. Long-Work supports belong in `activated_supports`.
+- `cumulative_work`: multiple dependent parts, sequence units, chapters, tracks, image roles, or other cumulative units must preserve continuity across outputs. Long-Work supports belong in `recommended_supports` until the artist activates stewardship.
+- `full_long_form_project`: long-form creation needs durable canon, part planning, readiness checks, checkpoints, and completion support. Long-Work supports belong in `recommended_supports` until the artist activates stewardship.
 
-`activated_supports` and `skipped_supports` must be disjoint. A support cannot be both active and skipped in the same routing decision.
+`recommended_supports`, `activated_supports`, and `skipped_supports` must not contradict each other. A support cannot be both recommended or active and skipped in the same routing decision.
 
-Project-level routing belongs on the Beat Plan. Medium-level routing belongs on the Medium Plan and may stay compact/structured or escalate the medium into cumulative/full long-form support. If medium-level routing newly activates Long-Work Stewardship after Story Approval and no foundation record exists, create the foundation Long-Work Stewardship Record immediately before enrichment.
+Project-level routing belongs on the Beat Plan. Medium-level routing belongs on the Medium Plan and may stay compact/structured or recommend cumulative/full long-form support. If medium-level routing newly recommends Long-Work Stewardship after Story Approval and no activation decision exists, present the ADR 0015 activation gate before expansion. If the artist activates it, create the foundation Long-Work Stewardship Record immediately, then enrich it with medium-specific parts.
 
-Create the Long-Work Stewardship Record only for Cumulative Work: image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative.
+Create the Long-Work Stewardship Record only when Long-Work Stewardship is active or was active and later superseded. Routing recommendation alone is not activation. Eligible Cumulative Work includes image series, long text, song sequences, video sequences, mixed-media sequences, or other work where later parts depend on prior parts or on an approved emotional arc. Do not create it for non-sequential portfolios, store sets, curator batches, or Prompt Branch Sets unless the artist makes them cumulative and activates stewardship.
 
 The foundation Long-Work Stewardship Record is valid immediately after Story Approval. At that point `medium_plan_id` may be `null`, `part_plan[]` may be empty, and Long-Work Readiness may be `pending`. After the Medium Plan exists, enrich the same record with `medium_plan_id`, one `part_plan[]` entry per cumulative unit, continuity rules, checkpoints, and readiness before expansion.
 

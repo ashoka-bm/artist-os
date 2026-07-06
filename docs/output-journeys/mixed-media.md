@@ -24,7 +24,8 @@ Use the Mixed-Media Journey when the final work should include:
 
 ```text
 Approved Album Beat Plan
-  -> Foundation Long-Work Stewardship when Album Cohesion Mode activates it
+  -> Long-Work Stewardship Activation Gate, when Album Cohesion Mode recommends it
+  -> Foundation Long-Work Stewardship, when activated by the artist
   -> Release Package Plan
   -> Pre-Calibration Mixed-Media Critic Review
   -> Release Package Plan Approval Gate
@@ -40,7 +41,7 @@ Approved Album Beat Plan
 
 The Release Package Plan is package-level coordination only. It owns deliverables, track mapping, Album Cohesion Mode, Album Sonic System, Album Visual System, calibration status, production order, and cross-media continuity. It does not replace Sound Medium Plans, Image Medium Plans, Text Medium Plans, Long-Work Stewardship Records, Prompt Plans, Text Generation Plans, or Output Records.
 
-When Album Cohesion Mode activates Long-Work Stewardship, create the foundation Long-Work Stewardship Record before Release Package Plan approval. The Release Package Plan may reference that stewardship record, but it does not own part status, checkpoint state, readiness, or cumulative drift management.
+When Album Cohesion Mode recommends Long-Work Stewardship, present the ADR 0015 activation gate before Release Package Plan approval. If the artist activates it, create the foundation Long-Work Stewardship Record before Release Package Plan approval. The Release Package Plan may reference that stewardship record, but it does not own part status, checkpoint state, readiness, or cumulative drift management.
 
 Album Calibration is directional. It checks sonic direction, visual direction, and sound-visual fit after representative Sound and Image Medium Plans exist, before the remaining album deliverables expand. Final artifacts still go through the normal per-output gates.
 

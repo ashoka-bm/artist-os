@@ -10,7 +10,8 @@ Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Story / Beat Plan with Project-Level Workflow Scale Routing
-  -> Long-Work Stewardship, when Workflow Scale Routing activates it
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship, when activated by the artist
   -> Medium Plan with Medium-Level Workflow Scale Routing
   -> Creative Brief or storyboard-ready handoff
   -> Prompt Plan or Text Generation Plan, when the medium has one
@@ -31,9 +32,9 @@ Journeys in this directory:
 
 Writing-method integration lives in `docs/writing/README.md`. Its referenced `writing-fragments`, `writing-beats`, and `writing-shape` skill files are high-authority for raw material capture, beat-by-beat journey creation, and finished written shape.
 
-Workflow Scale Routing decides which scale supports are active. It is persisted on the Beat Plan at project level and on each Medium Plan at medium level.
+Workflow Scale Routing decides which scale supports are recommended or active. It is persisted on the Beat Plan at project level and on each Medium Plan at medium level.
 
-Long-Work Stewardship applies only when Workflow Scale Routing activates it under the ADR 0013 two-condition threshold: BOTH a real cumulative dependency (outputs build on each other through sequence, dependency, emotional arc, or cumulative continuity) AND the per-medium length floor (video longer than ~5 minutes; text multi-chapter; audio a cumulative arc across tracks that is full-length ~8+ dependent tracks / ~30 minutes; image a book-scale ~20+ recurring-subject series). An album, EP, portfolio, or collection of individual parts never activates stewardship however large — those, along with store sets and broad prompt branches, stay on the lighter collection review path. Neither the `cumulative_work` nor `full_long_form_project` scale level activates stewardship by itself.
+Long-Work Stewardship is recommended only when ADR 0013's two-condition threshold holds: BOTH a real cumulative dependency (outputs build on each other through sequence, dependency, emotional arc, or cumulative continuity) AND the per-medium length floor (video longer than ~5 minutes; text multi-chapter; audio a cumulative arc across tracks that is full-length ~8+ dependent tracks / ~30 minutes; image a book-scale ~20+ recurring-subject series), or when the artist explicitly asks for continuity tracking below threshold. ADR 0015 governs the artist-facing activation gate. An album, EP, portfolio, or collection of individual parts should not recommend stewardship by default however large — those, along with store sets and broad prompt branches, stay on the lighter collection review path. Neither the `cumulative_work` nor `full_long_form_project` scale level recommends stewardship by itself.
 
 A compact multi-beat `arc` does not automatically trigger Long-Work Stewardship, image-series expansion, sound-sequence planning, or long-text handling. Trigger those paths when the artist accepts expansion or when the medium plan creates dependent parts whose later outputs rely on earlier outputs. When adjacent beats overlap or can be held together, the medium may recommend a compact shape such as a short written work, compressed visual arc, or single multi-section sound work.
 

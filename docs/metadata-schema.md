@@ -48,7 +48,7 @@ Artist Meaning overrides agent interpretation. Later records should trace meanin
 
 A Gate Decision records one artist-facing choice or explicit permission to proceed unconfirmed. It validates against `schemas/gate-decision.schema.json`.
 
-Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Long-Work Checkpoints, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions.
+Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Long-Work Stewardship Activation, Long-Work Checkpoints, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions. The schema now includes `long_work_stewardship_activation` so activation, defer, waive, and deactivation choices can validate as normal Gate Decisions.
 
 ### Transformation Brief
 
@@ -72,9 +72,11 @@ Beats may optionally include `builds_toward_key_movement_id` when they are suppo
 
 A Long-Work Stewardship Record is per-project memory for Cumulative Work: a long written work, image series, song sequence, video sequence, or mixed-media sequence whose parts build on earlier parts. It validates against `schemas/long-work-stewardship-record.schema.json`.
 
-Create this record after Story Approval only when the project contains Cumulative Work. The foundation version may set `medium_plan_id` to `null` and leave `part_plan` empty because medium-specific parts do not exist yet. Enrich it after the Medium Plan maps approved beats into medium-specific parts. It does not replace Artist Meaning, the Beat Plan, or the Medium Plan: the Beat Plan remains the story authority, the Medium Plan owns medium execution details, and stewardship tracks part-to-part integrity, readiness, checkpoints, continuity rules, progress, and drift.
+Create this record after Story Approval only when the project contains Cumulative Work and the artist activates Long-Work Stewardship, or when the artist explicitly requests stewardship below the default threshold. The foundation version may set `medium_plan_id` to `null` and leave `part_plan` empty because medium-specific parts do not exist yet. Enrich it after the Medium Plan maps approved beats into medium-specific parts. It does not replace Artist Meaning, the Beat Plan, or the Medium Plan: the Beat Plan remains the story authority, the Medium Plan owns medium execution details, and stewardship tracks part-to-part integrity, readiness, checkpoints, continuity rules, progress, and drift.
 
 Do not create a Long-Work Stewardship Record only because a project contains many related outputs. Non-sequential portfolios, store collections, style explorations, and curator batches should use lighter collection review behavior unless the parts build on each other.
+
+Do not create a Long-Work Stewardship Record only because routing recommends it. ADR 0015 requires the artist-facing activation gate first. Activate creates the foundation record; defer and waive create Gate Decisions only. If an active stewardship record later proves unnecessary after Medium Plan mapping, supersede it after lightweight artist confirmation.
 
 Long-Work Readiness may be `pending` before the readiness pass runs. After review, use `ready`, `ready_with_risks`, `repair_before_expansion`, or `waived`. `repair_before_expansion` blocks later-part expansion until the issue is repaired or the artist explicitly waives the block through a Gate Decision.
 

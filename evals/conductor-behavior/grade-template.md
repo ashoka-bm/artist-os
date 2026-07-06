@@ -65,6 +65,30 @@ Scope: subagent traces against `skills/artist-os/SKILL.md`, using the prompts in
 - Evidence:
 - Finding:
 
+## T6 Video Storyboard
+
+- Video route:
+- Storyboard-only boundary:
+- Visual and video gates:
+- Storyboard generation approvals:
+- Output Records:
+- Seedance / provider prompt boundary:
+- Evidence:
+- Finding:
+
+## T7 Long-Work Stewardship Activation
+
+- Routing recommendation:
+- Activation gate timing:
+- Gate options:
+- Activation/defer/waive record effects:
+- Foundation stewardship shape:
+- Medium Plan enrichment:
+- Deactivation path:
+- Medium Mapping Checkpoint:
+- Evidence:
+- Finding:
+
 ## Follow-Up
 
 - Keep:

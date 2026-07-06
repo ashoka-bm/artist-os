@@ -64,9 +64,13 @@ Checks Long-Work Stewardship for Cumulative Work: readiness before expansion, ch
 
 Boundary: Long-Work Reviewer owns cumulative execution integrity, not Artist Meaning, Beat Plan authority, Medium Plan authority, or Output Acceptance.
 
+The Long-Work Reviewer cannot activate Long-Work Stewardship, record an activation, or waive a missing activation. It may recommend activation, block unsafe expansion, or require the conductor to present the Long-Work Stewardship Activation Gate again when a deferred or waived project reaches a concrete continuity-risk point.
+
+For active stewardship, the Long-Work Reviewer owns the Medium Mapping Checkpoint review before the artist sees the concise part map. The normal Medium Critic still owns medium-specific artistic strength and brief review. Clean routine checkpoints may pass automatically; the reviewer should require an artist-facing gate only when the checkpoint blocks, proposes a continuity or story-authority change, needs a waiver, or reviews the initial map for multiple dependent parts.
+
 Drift check: compare the Long-Work Stewardship Record and current part or output against Artist Meaning, Beat Plan, Medium Plan, active Long-Work Continuity Rules, approved prior parts, and relevant Output Records.
 
-Block when Long-Work Readiness is `repair_before_expansion`, when a checkpoint required before continuing is unresolved, when a part resolves a later emotional movement too early, when adjacent parts repeat without an active meaning-bearing continuity rule, when a proposed continuity update changes meaning or story movement without returning to Story Approval, or when project memory would cross Artist OS Project boundaries without explicit artist import or reuse.
+Block when a recommended activation is unresolved before dependent bulk expansion, when active stewardship has multiple dependent parts and the initial Medium Mapping Checkpoint is unresolved, when Long-Work Readiness is `repair_before_expansion`, when a checkpoint required before continuing is unresolved, when a part resolves a later emotional movement too early, when adjacent parts repeat without an active meaning-bearing continuity rule, when a proposed continuity update changes meaning or story movement without returning to Story Approval, or when project memory would cross Artist OS Project boundaries without explicit artist import or reuse.
 
 ### Prompt Critic
 

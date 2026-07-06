@@ -12,9 +12,11 @@ it pays the overhead.
 
 ## Decision
 
-Long-Work Stewardship activates only when **both** conditions hold — it is the
-guardrail for continuity that is both real and too large to hold in working context,
-so either condition alone is not enough:
+Long-Work Stewardship is recommended only when **both** conditions hold — it is
+the guardrail for continuity that is both real and too large to hold in working
+context, so either condition alone is not enough. ADR 0015 defines the separate
+artist-facing activation gate; this threshold is recommendation evidence, not
+artist approval:
 
 1. **Cumulative dependency** — the parts depend on each other for continuity
    (recurring characters, world, or narrative carry across parts). A standalone
@@ -34,21 +36,21 @@ Per-medium length-floor defaults (artist-overridable):
   threshold above.
 
 Below the gate — including most albums, EPs, portfolios, and short multi-part works —
-stewardship does not activate even when Workflow Scale Routing is multi-part.
-Medium-Level Workflow Scale Routing records the decision; this gate is the authority
-for whether `activated_supports` includes `long_work_stewardship`, and for audio it
-reuses the existing Album Cohesion Mode field for condition 1.
+Artist OS should not recommend stewardship by default even when Workflow Scale
+Routing is multi-part. Medium-Level Workflow Scale Routing records the evidence;
+ADR 0015 governs whether the artist activates, defers, or waives stewardship,
+and for audio it reuses the existing Album Cohesion Mode field for condition 1.
 
 ## Consequences
 
-- Amends ADR 0004 and ADR 0007: stewardship is gated on the length/continuity
+- Amends ADR 0004 and ADR 0007: stewardship is recommended by the length/continuity
   threshold above, decoupled from the raw `cumulative_work` / `full_long_form_project`
   levels. Those levels still describe scale and still drive other supports; they no
-  longer auto-activate stewardship by themselves.
+  longer auto-recommend stewardship by themselves.
 - Cost: short and mid works (the common case, and the cost-tiering target) skip the
   stewardship records and readiness gates entirely.
 - In a multi-medium project, each medium evaluates the threshold independently, so a
   project's Effective Project Scale (ADR 0012, D4) can be cumulative while no medium
-  activates stewardship.
+  recommends stewardship by default.
 - Open: whether the length-floor defaults live in each medium mode file or in one
   shared routing rule; and how an artist override of a default is recorded.

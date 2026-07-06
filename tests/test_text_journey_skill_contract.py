@@ -28,11 +28,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 CONDUCTOR_SKILL = "skills/artist-os/SKILL.md"
 TEXT_JOURNEY_SKILL = "skills/artist-os/references/text-journey.md"
-FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT = (
-    "If medium-level `workflow_scale_routing.activated_supports` newly includes "
-    "`long_work_stewardship` and no foundation record exists, create the "
-    "foundation record immediately before enrichment."
-)
+LONG_WORK_ACTIVATION_GATE_FRAGMENT = "present the ADR 0015 activation gate"
 
 # The director skill. Mirrors MEDIUM_PLAN_SKILLS in the medium-plan guard.
 TEXT_JOURNEY_SPEC = {
@@ -139,8 +135,8 @@ class TextJourneyDirectorContractTests(unittest.TestCase):
             text,
         )
 
-    def test_medium_level_long_work_activation_creates_foundation_before_enrichment(self) -> None:
-        self.assertIn(FOUNDATION_BEFORE_ENRICHMENT_FRAGMENT, self._read())
+    def test_medium_level_long_work_recommendation_uses_activation_gate(self) -> None:
+        self.assertIn(LONG_WORK_ACTIVATION_GATE_FRAGMENT, self._read())
 
 
 class EditorialPassContractTests(unittest.TestCase):

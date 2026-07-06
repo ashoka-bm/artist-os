@@ -16,7 +16,8 @@ Routing Gate
   -> Story Gate
   -> Story Critic Review
   -> Story Approval Gate
-  -> Long-Work Readiness / Checkpoints, when the work is cumulative
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Readiness / Checkpoints, when stewardship is active
   -> Medium Gates
   -> Format Length Gate, when the artist overrides the default length standard
   -> Medium Critic Review
@@ -62,6 +63,18 @@ This is especially important for small confirmations and corrections such as spe
 The Video Format Gate is one of the Medium Gates; its full definition lives in `docs/gates/canonical-gates.md` → "Medium Gate". The story-shape requirement is load-bearing and stays here:
 
 For the Video Format Gate, the recommendation must include the story type and Beat Plan shape before the artist is asked to choose. State what the story is, how many smallest Story Beats or Story Movements it appears to need, the recommended video format, and why that format fits better than nearby alternatives. Do not start with a broad video format menu when the Reference or Beat Plan gives enough material to recommend.
+
+## Long-Work Stewardship Activation
+
+Long-Work Stewardship is recommended only when ADR 0013's cumulative dependency and length-floor threshold holds, or when the artist explicitly asks for continuity tracking below that threshold. The recommendation is not activation. The conductor must ask the artist immediately after Story Approval and before Medium Plan expansion.
+
+Use the artist-facing language and authority model in `docs/adr/0015-artist-facing-long-work-stewardship-activation.md`. The short rule:
+
+- **Activate** creates the foundation Long-Work Stewardship Record immediately.
+- **Defer** records a Gate Decision only and resurfaces at the next concrete continuity-risk point.
+- **Waive and continue** records a risky waiver only; no stewardship record is created.
+
+If a deferred or waived project later reaches dependent expansion, continuity drift, or long-gap resume risk, present the activation choice again before continuing. Reviewers may recommend activation, block unsafe expansion, or require the conductor to present the activation gate again, but only the artist can activate, defer, waive, or deactivate stewardship.
 
 ## Topic Files
 

@@ -24,6 +24,7 @@
       "artist_requested_compact_output",
       "single_artifact_can_hold_movement"
     ],
+    "recommended_supports": [],
     "activated_supports": [
       "core_pipeline",
       "medium_section_plan"

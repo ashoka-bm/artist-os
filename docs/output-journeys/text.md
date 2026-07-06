@@ -22,7 +22,8 @@ Use the Text Journey when the final work should be:
 
 ```text
 Approved Beat Plan with Project-Level Workflow Scale Routing
-  -> Long-Work Stewardship Record, when Workflow Scale Routing activates it
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship Record, when activated by the artist
   -> Research Grounding Gate, when timely or public-facing work may need current evidence
   -> Writing Method Gate
   -> Medium Output Shape Recommendation
