@@ -1968,11 +1968,11 @@ def review_learnings(args: argparse.Namespace) -> None:
             received = (entry.get("received_at") or "")[:10]
             print(f"  feedback {feedback_id} ({received}): {entry.get('feedback_text')}")
             print("    if this is a repeatable creative preference (applies by default, disclosed):")
-            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type soft --learning-rule \"<rule>\" --evidence-ref {feedback_id}{root_suffix}")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type soft --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
             print("    if it must always hold:")
-            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type hard --learning-rule \"<rule>\" --evidence-ref {feedback_id}{root_suffix}")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type hard --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
             print("    if it describes how the CONDUCTOR itself should behave (stages a proposal, changes nothing yet):")
-            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type candidate --scope conductor --learning-rule \"<rule>\" --evidence-ref {feedback_id}{root_suffix}")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type candidate --scope conductor --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
             print("    if there is no lasting lesson:")
             print(f"      bin/artist-os-db mark-learning-review-complete {project_id} --feedback-id {feedback_id} --classification-status dismissed{root_suffix}")
 

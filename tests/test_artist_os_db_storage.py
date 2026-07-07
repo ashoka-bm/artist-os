@@ -3461,6 +3461,10 @@ class StatusAndPromotionTests(unittest.TestCase):
             self.assertIn("The middle section drags.", out)
             self.assertIn("add-learning proj_door_left_lit", out)
             self.assertIn("--learning-type candidate --scope conductor", out)
+            # Following a printed command must fully resolve the item: the
+            # add-learning suggestions carry --mark-review-complete so the
+            # feedback does not stay review=pending afterwards.
+            self.assertIn("--mark-review-complete", out)
             self.assertIn(
                 "mark-learning-review-complete proj_door_left_lit --feedback-id fb_middle_drags",
                 out,
