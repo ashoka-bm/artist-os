@@ -7,6 +7,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import shutil
 import sqlite3
 import sys
@@ -1845,29 +1846,48 @@ def add_conductor_rule(args: argparse.Namespace) -> None:
     rule = " ".join(args.rule.split())
     if not rule:
         raise SystemExit("conductor rule must not be empty")
-    if len(rule) > 300:
-        raise SystemExit("conductor rule must be 300 characters or fewer (one dated line)")
-    from_learning = validate_optional_id(args.from_learning, LEARNING_ID_PATTERN, "from_learning")
+    if len(rule) > 600:
+        raise SystemExit("conductor rule must be 600 characters or fewer (one dated line)")
+    from_learning = validate_id(args.from_learning, LEARNING_ID_PATTERN, "from_learning")
     now = utc_now()
 
-    refs: list[str] = []
-    if from_learning:
-        learning_path = library_root / "personal-library" / "learnings" / f"{from_learning}.json"
-        if not learning_path.exists():
-            raise SystemExit(f"learning record not found: {learning_path}")
-        record = read_json(learning_path)
-        record["status"] = "superseded"
-        record.setdefault("promotion_state", {})["promotion_reason"] = "adopted as local conductor rule"
-        record["updated_at"] = now
-        validate_record(record, "learning-record.schema.json")
-        learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
-        feedback_state = feedback_state_for(manifest, args.project_id)
-        feedback_state["learning_refs"] = [
-            {**ref, "status": "superseded"} if ref.get("ref_id") == from_learning else ref
-            for ref in feedback_state.get("learning_refs", [])
-        ]
-        manifest["feedback_state"] = feedback_state
-        refs = [from_learning]
+    # Tier-2 promotion adopts a STAGED CONDUCTOR CANDIDATE — never a free-form
+    # rule and never a creative (soft/hard) learning. Provenance is the point:
+    # the candidate carries the evidence chain the adopted rule inherits.
+    learning_path = library_root / "personal-library" / "learnings" / f"{from_learning}.json"
+    if not learning_path.exists():
+        raise SystemExit(f"learning record not found: {learning_path}")
+    record = read_json(learning_path)
+    if not (
+        isinstance(record, dict)
+        and record.get("learning_type") == "candidate"
+        and record.get("scope") == "conductor"
+        and record.get("status") == "active"
+    ):
+        raise SystemExit(
+            f"{from_learning} is not a staged conductor candidate "
+            "(requires learning_type=candidate, scope=conductor, status=active); "
+            "stage one with add-learning --learning-type candidate --scope conductor"
+        )
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    if not any(
+        ref.get("ref_id") == from_learning and ref.get("status") == "active"
+        for ref in feedback_state.get("learning_refs", [])
+    ):
+        raise SystemExit(
+            f"project {args.project_id} has no active learning ref {from_learning}"
+        )
+    record["status"] = "superseded"
+    record.setdefault("promotion_state", {})["promotion_reason"] = "adopted as local conductor rule"
+    record["updated_at"] = now
+    validate_record(record, "learning-record.schema.json")
+    learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+    feedback_state["learning_refs"] = [
+        {**ref, "status": "superseded"} if ref.get("ref_id") == from_learning else ref
+        for ref in feedback_state.get("learning_refs", [])
+    ]
+    manifest["feedback_state"] = feedback_state
+    refs = [from_learning]
 
     rules_path = conductor_rules_path(library_root)
     if not rules_path.exists():
@@ -1899,31 +1919,33 @@ def review_learnings(args: argparse.Namespace) -> None:
     library_root = library_root_for(args)
     with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
-        pending_projects = conn.execute(
-            """
-            SELECT p.project_id, p.title
-            FROM project_feedback_state f
-            JOIN projects p ON p.project_id = f.project_id
-            WHERE f.learning_review_status = 'pending'
-            ORDER BY p.updated_at DESC
-            """
+        # The index only DISCOVERS projects; pending-ness is decided from the
+        # feedback log FILE below (files are truth — a stale or wrong indexed
+        # review state must not hide a pending entry that exists on disk).
+        projects = conn.execute(
+            "SELECT project_id, title FROM projects ORDER BY updated_at DESC"
         ).fetchall()
         learning_rows = conn.execute(
             "SELECT project_id, ref_id, path FROM learning_refs ORDER BY project_id, ref_id"
         ).fetchall()
 
     printed = False
-    for project_id, title in pending_projects:
+    for project_id, title in projects:
         manifest_path = project_manifest_path(library_root, project_id)
         if not manifest_path.exists():
             continue
-        manifest = read_json(manifest_path)
-        entries = read_feedback_entries(
-            feedback_log_path_for(library_root, manifest, project_id)
-        )
+        try:
+            manifest = read_json(manifest_path)
+            if not isinstance(manifest, dict):
+                continue
+            entries = read_feedback_entries(
+                feedback_log_path_for(library_root, manifest, project_id)
+            )
+        except (OSError, json.JSONDecodeError, SystemExit):
+            continue
         pending_entries = [
             entry for entry in entries
-            if entry.get("learning_review_status") == "pending"
+            if isinstance(entry, dict) and entry.get("learning_review_status") == "pending"
         ]
         if not pending_entries:
             continue
@@ -1958,14 +1980,16 @@ def review_learnings(args: argparse.Namespace) -> None:
             and record.get("scope") == "conductor"
             and record.get("status") == "active"
         ):
-            candidates.append((project_id, ref_id, record.get("learning_rule")))
+            candidates.append(
+                (project_id, ref_id, record.get("learning_rule"), len(record.get("evidence_refs", [])))
+            )
     if candidates:
         printed = True
         print("\nproposed changes to how the conductor works (staged, nothing applied yet):")
-        for project_id, ref_id, rule in candidates:
-            print(f"  {ref_id} (from {project_id}): {rule}")
+        for project_id, ref_id, rule, evidence_count in candidates:
+            print(f"  {ref_id} (from {project_id}): {rule}  [scope: conductor; evidence: {evidence_count}]")
             print("    adopt for this installation (safe, reversible, survives upgrades, no re-bless):")
-            print(f"      bin/artist-os-db add-conductor-rule {project_id} --rule \"{rule}\" --from-learning {ref_id}")
+            print(f"      bin/artist-os-db add-conductor-rule {project_id} --rule {shlex.quote(rule or '')} --from-learning {ref_id}")
             print("    ship to every installation (maintainer act):")
             print("      add a dated line to skills/artist-os/SKILL.md '## Rules', then re-run and bless the conductor eval")
 
@@ -2669,7 +2693,7 @@ def parser() -> argparse.ArgumentParser:
     )
     conductor_rule.add_argument("project_id")
     conductor_rule.add_argument("--rule", required=True)
-    conductor_rule.add_argument("--from-learning", default=None)
+    conductor_rule.add_argument("--from-learning", required=True)
     add_library_args(conductor_rule)
     conductor_rule.set_defaults(func=add_conductor_rule)
 

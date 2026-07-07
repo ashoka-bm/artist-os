@@ -3362,15 +3362,23 @@ class StatusAndPromotionTests(unittest.TestCase):
                 notes=None,
             ))
 
-    def _stage_conductor_candidate(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+    def _stage_conductor_candidate(
+        self,
+        base: dict,
+        project_id: str = "proj_door_left_lit",
+        learning_id: str = "learn_confirm_before_expand",
+        rule: str = "Confirm the part map before expanding multiple parts.",
+        learning_type: str = "candidate",
+        scope: str | None = "conductor",
+    ) -> None:
         with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
             artist_os_db.add_learning(argparse.Namespace(
                 **base,
                 project_id=project_id,
-                learning_id="learn_confirm_before_expand",
-                learning_type="candidate",
-                learning_rule="Confirm the part map before expanding multiple parts.",
-                scope="conductor",
+                learning_id=learning_id,
+                learning_type=learning_type,
+                learning_rule=rule,
+                scope=scope,
                 evidence_type="feedback_entry",
                 evidence_ref=["fb_middle_drags"],
                 evidence_summary=None,
@@ -3537,18 +3545,80 @@ class StatusAndPromotionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             library_root = Path(tmpdir)
             base = self._seed(library_root)
-            for rule in ("First local rule.", "Second local rule."):
+            for learning_id, rule in (
+                ("learn_rule_one", "First local rule."),
+                ("learn_rule_two", "Second local rule."),
+            ):
+                self._stage_conductor_candidate(base, learning_id=learning_id, rule=rule)
                 with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
                     artist_os_db.add_conductor_rule(argparse.Namespace(
                         **base,
                         project_id="proj_door_left_lit",
                         rule=rule,
-                        from_learning=None,
+                        from_learning=learning_id,
                     ))
             rules_text = (library_root / "conductor-rules.md").read_text(encoding="utf-8")
             self.assertEqual(rules_text.count("# Conductor Rules (Local)"), 1)
             self.assertIn("First local rule.", rules_text)
             self.assertIn("Second local rule.", rules_text)
+
+    def test_add_conductor_rule_rejects_non_candidate_source(self) -> None:
+        """Tier-2 promotion adopts staged conductor candidates only — a soft
+        creative learning must be refused."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._stage_conductor_candidate(
+                base,
+                learning_id="learn_soft_taste",
+                rule="Keep first drafts rawer.",
+                learning_type="soft",
+                scope="images",
+            )
+            with self.assertRaisesRegex(SystemExit, "not a staged conductor candidate"):
+                artist_os_db.add_conductor_rule(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    rule="Keep first drafts rawer.",
+                    from_learning="learn_soft_taste",
+                ))
+
+    def test_review_learnings_derives_pending_from_log_file(self) -> None:
+        """Files are truth at the read: a pending entry hand-appended to the
+        feedback log must surface even though the manifest/index say the
+        review is complete."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.mark_learning_review_complete(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback_id=None,
+                    classification_status="dismissed",
+                ))
+
+            log_path = library_root / "projects" / "proj_door_left_lit" / "feedback-log.jsonl"
+            with log_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({
+                    "feedback_id": "fb_hand_added",
+                    "project_id": "proj_door_left_lit",
+                    "received_at": "2026-07-06T00:00:00Z",
+                    "source": "artist",
+                    "stage": None,
+                    "output_record_id": None,
+                    "feedback_text": "The ending needs more silence.",
+                    "classification_status": "unclassified",
+                    "learning_review_status": "pending",
+                    "notes": None,
+                }) + "\n")
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("fb_hand_added", out)
+            self.assertIn("The ending needs more silence.", out)
 
 
 if __name__ == "__main__":
