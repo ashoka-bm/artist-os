@@ -2887,6 +2887,115 @@ class SyncFaultIsolationTests(unittest.TestCase):
                 "good lines around a malformed one must all stay indexed",
             )
 
+    def test_sync_isolates_wrong_shape_manifest_and_continues(self) -> None:
+        """Valid JSON that is not an object ([]) must degrade to a skipped
+        project, not abort the sync (raises TypeError, not JSONDecodeError)."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root, "proj_alpha")
+            self._sync(base)
+
+            (library_root / "projects" / "proj_alpha" / "project.json").write_text(
+                "[]", encoding="utf-8"
+            )
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+
+            stderr_text = self._sync(base)
+
+            self.assertIn("proj_alpha", stderr_text)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                rows = dict(
+                    conn.execute("SELECT project_id, status FROM projects").fetchall()
+                )
+            self.assertEqual(rows["proj_beta"], "active")
+            self.assertEqual(rows["proj_alpha"], "active")
+
+    def test_sync_skips_wrong_shape_event_line(self) -> None:
+        """A valid-JSON-but-not-dict event line ([]) is malformed: skipped
+        with a warning while the good lines still index."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    "[]",
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            stderr_text = self._sync(base)
+
+            self.assertIn("malformed", stderr_text)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+    def test_writers_create_events_log_when_missing(self) -> None:
+        """The manifest declares paths.events but the file was never created:
+        the writer must create it and append, not silently skip the event."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            self.assertFalse(events_path.exists())
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            self.assertTrue(events_path.exists())
+            event = json.loads(events_path.read_text(encoding="utf-8").strip())
+            self.assertEqual(event["event_type"], "feedback_received")
+            self.assertEqual(
+                [row[0] for row in self._event_rows(library_root, "proj_door_left_lit")],
+                ["feedback_received"],
+            )
+
+    def test_append_project_event_ids_distinct_for_same_timestamp(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed_project(library_root)
+            manifest = minimal_manifest()
+            occurred_at = "2026-07-06T12:00:00.000000+00:00"
+            for event_type, refs in (
+                ("feedback_received", ["fb_one"]),
+                ("learning_recorded", ["learn_two"]),
+                ("learning_review_marked", None),
+            ):
+                artist_os_db.append_project_event(
+                    library_root,
+                    manifest,
+                    "proj_door_left_lit",
+                    event_type=event_type,
+                    stage="learning_review",
+                    details="collision probe",
+                    occurred_at=occurred_at,
+                    refs=refs,
+                )
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            event_ids = [
+                json.loads(line)["event_id"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(
+                len(set(event_ids)),
+                3,
+                "same-timestamp events must still get distinct event ids",
+            )
+
     def test_self_improvement_writers_append_events(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             library_root = Path(tmpdir)

@@ -654,6 +654,11 @@ def read_event_rows(events_path: Path | None, project_id: str) -> tuple[list[tup
         except json.JSONDecodeError:
             skipped += 1
             continue
+        if not isinstance(payload, dict):
+            # Valid JSON but the wrong shape (`[]`, `"x"`, `123`) is just as
+            # malformed as a truncated line — skip it, don't abort the sync.
+            skipped += 1
+            continue
         key_type, key_value = event_key(payload, index)
         event_id = key_value if key_type == "event_id" else None
         rows.append(
@@ -715,20 +720,29 @@ def append_project_event(
     occurred_at: str,
     refs: list[str] | None = None,
 ) -> None:
-    """Append one event to the project's events.jsonl when that log exists.
+    """Append one event to the project's events.jsonl, creating it if absent.
 
     The storage contract requires feedback, learning, and performance-signal
-    writes to appear in the event history, same as the publish commands.
-    Mirrors publish_visible_output: appends only when events.jsonl is already
-    present (resolve_path returns the path only for existing files).
+    writes to appear in the event history, so the log must be created when the
+    manifest declares an events path that has no file yet — resolve_path only
+    returns existing files, hence the write-path fallback to the declared
+    location (Workspace-Library-relative by convention).
     """
     paths = manifest.get("paths", {})
-    project_dir = Path(paths.get("project_dir", str(project_manifest_path(library_root, project_id).parent)))
-    events_path = resolve_path(paths.get("events"), project_dir, library_root)
-    if not events_path:
+    events_value = paths.get("events")
+    if not events_value:
         return
+    project_dir = Path(paths.get("project_dir", str(project_manifest_path(library_root, project_id).parent)))
+    events_path = resolve_path(events_value, project_dir, library_root)
+    if not events_path:
+        value_path = Path(events_value)
+        events_path = value_path if value_path.is_absolute() else library_root / value_path
+    events_path.parent.mkdir(parents=True, exist_ok=True)
+    # Suffix the id with the primary ref (or the event type) so two writer
+    # events in the same microsecond still get distinct, meaningful ids.
+    suffix = re.sub(r"[^a-zA-Z0-9_-]+", "-", refs[0] if refs else event_type)
     event = {
-        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}",
+        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}_{suffix}",
         "project_id": project_id,
         "event_type": event_type,
         "stage": stage,
@@ -1245,9 +1259,19 @@ def upsert_manifest(
 # Exceptions one broken project may raise during its own indexing. The index
 # is a cache, so a corrupt manifest, record, or event file must degrade to a
 # skipped-and-reported project — never abort the sync for its siblings.
-# Deliberately excludes KeyboardInterrupt/SystemExit so a Ctrl-C still aborts
-# the whole transaction.
-SYNC_MANIFEST_ERRORS = (OSError, json.JSONDecodeError, KeyError, ValueError, sqlite3.Error)
+# TypeError/AttributeError cover valid-JSON-wrong-shape files (a project.json
+# holding `[]` indexes as a TypeError, not a JSONDecodeError). Deliberately
+# excludes KeyboardInterrupt/SystemExit so a Ctrl-C still aborts the whole
+# transaction.
+SYNC_MANIFEST_ERRORS = (
+    OSError,
+    json.JSONDecodeError,
+    KeyError,
+    ValueError,
+    TypeError,
+    AttributeError,
+    sqlite3.Error,
+)
 
 
 def sync_library(
