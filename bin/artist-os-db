@@ -1747,6 +1747,232 @@ def learnings_report(args: argparse.Namespace) -> None:
             print(f"\nno projects await a learning review{detail}.")
 
 
+def index_staleness(library_root: Path, project_id: str, indexed_updated_at: str | None) -> str | None:
+    """Fingerprint-free staleness: the index stores the manifest's updated_at,
+    so a mismatch with the on-disk manifest means the row predates the file.
+    Returns a marker string, or None when the index reflects the file."""
+    manifest_path = project_manifest_path(library_root, project_id)
+    if not manifest_path.exists():
+        return "manifest-missing"
+    try:
+        manifest = read_json(manifest_path)
+    except (OSError, json.JSONDecodeError):
+        return "manifest-unreadable"
+    if not isinstance(manifest, dict) or manifest.get("updated_at") != indexed_updated_at:
+        return "stale"
+    return None
+
+
+def status_projects(args: argparse.Namespace) -> None:
+    """Minimal status view: one row per project with review state and
+    staleness. Strictly read-only on the index (mode=ro) — a status read must
+    never be able to write, so it reports staleness rather than self-healing;
+    the surfacing verbs are the self-healing readers."""
+    library_root = library_root_for(args)
+    db_path = db_path_for(args)
+    hint = "no index found; run `bin/artist-os-db sync` first"
+    if not db_path.exists():
+        print(hint, file=sys.stderr)
+        return
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    except sqlite3.OperationalError:
+        print(hint, file=sys.stderr)
+        return
+    with closing(conn):
+        try:
+            rows = conn.execute(
+                """
+                SELECT p.project_id, p.status, p.current_stage, p.updated_at,
+                       COALESCE(f.learning_review_status, 'none')
+                FROM projects p
+                LEFT JOIN project_feedback_state f ON f.project_id = p.project_id
+                ORDER BY p.updated_at DESC
+                """
+            ).fetchall()
+        except sqlite3.OperationalError:
+            print(hint, file=sys.stderr)
+            return
+    if getattr(args, "project_id", None):
+        rows = [row for row in rows if row[0] == args.project_id]
+        if not rows:
+            raise SystemExit(f"project not found in index: {args.project_id}")
+    pending = 0
+    for project_id, project_status, stage, updated_at, review in rows:
+        if review == "pending":
+            pending += 1
+        stale = index_staleness(library_root, project_id, updated_at)
+        print(
+            "\t".join(
+                [
+                    project_id,
+                    project_status,
+                    stage,
+                    f"review={review}",
+                    stale or "fresh",
+                    str(updated_at or ""),
+                ]
+            )
+        )
+    if pending and not getattr(args, "project_id", None):
+        print(f"\n{pending} project(s) pending learning review")
+
+
+def conductor_rules_path(library_root: Path) -> Path:
+    return library_root / "conductor-rules.md"
+
+
+CONDUCTOR_RULES_HEADER = """# Conductor Rules (Local)
+
+Local, additive rules adopted from this installation's learnings. The
+conductor reads them at session start after the canonical `## Rules` in
+skills/artist-os/SKILL.md. They may tighten behavior or record preferences;
+they must never disable canonical gates, approvals, or the never-auto-decide
+class. Upgrades never touch this file.
+
+"""
+
+
+def add_conductor_rule(args: argparse.Namespace) -> None:
+    """Adopt a staged conductor-rule candidate as a local rule (tier 2).
+
+    Appends one dated line to <workspace_library>/conductor-rules.md, marks
+    the source candidate learning superseded, appends the event, and
+    scoped-syncs — the upgrade-safe middle tier between a staged candidate and
+    a canonical SKILL.md rule (which alone requires an eval re-bless)."""
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    rule = " ".join(args.rule.split())
+    if not rule:
+        raise SystemExit("conductor rule must not be empty")
+    if len(rule) > 300:
+        raise SystemExit("conductor rule must be 300 characters or fewer (one dated line)")
+    from_learning = validate_optional_id(args.from_learning, LEARNING_ID_PATTERN, "from_learning")
+    now = utc_now()
+
+    refs: list[str] = []
+    if from_learning:
+        learning_path = library_root / "personal-library" / "learnings" / f"{from_learning}.json"
+        if not learning_path.exists():
+            raise SystemExit(f"learning record not found: {learning_path}")
+        record = read_json(learning_path)
+        record["status"] = "superseded"
+        record.setdefault("promotion_state", {})["promotion_reason"] = "adopted as local conductor rule"
+        record["updated_at"] = now
+        validate_record(record, "learning-record.schema.json")
+        learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+        feedback_state = feedback_state_for(manifest, args.project_id)
+        feedback_state["learning_refs"] = [
+            {**ref, "status": "superseded"} if ref.get("ref_id") == from_learning else ref
+            for ref in feedback_state.get("learning_refs", [])
+        ]
+        manifest["feedback_state"] = feedback_state
+        refs = [from_learning]
+
+    rules_path = conductor_rules_path(library_root)
+    if not rules_path.exists():
+        rules_path.write_text(CONDUCTOR_RULES_HEADER, encoding="utf-8")
+    with rules_path.open("a", encoding="utf-8") as handle:
+        handle.write(f"- {now[:10]}: {rule}\n")
+
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="conductor_rule_adopted",
+        stage="learning_review",
+        details=f"Adopted local conductor rule: {rule}",
+        occurred_at=now,
+        refs=refs or None,
+    )
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
+    print(f"adopted local conductor rule in {rules_path}")
+
+
+def review_learnings(args: argparse.Namespace) -> None:
+    """Plain-language promotion queue for someone unfamiliar with the system:
+    pending feedback with the exact command per choice, then staged conductor
+    candidates. Applies nothing itself."""
+    self_heal_sync(args)
+    library_root = library_root_for(args)
+    with closing(connect(db_path_for(args))) as conn, conn:
+        apply_schema(conn)
+        pending_projects = conn.execute(
+            """
+            SELECT p.project_id, p.title
+            FROM project_feedback_state f
+            JOIN projects p ON p.project_id = f.project_id
+            WHERE f.learning_review_status = 'pending'
+            ORDER BY p.updated_at DESC
+            """
+        ).fetchall()
+        learning_rows = conn.execute(
+            "SELECT project_id, ref_id, path FROM learning_refs ORDER BY project_id, ref_id"
+        ).fetchall()
+
+    printed = False
+    for project_id, title in pending_projects:
+        manifest_path = project_manifest_path(library_root, project_id)
+        if not manifest_path.exists():
+            continue
+        manifest = read_json(manifest_path)
+        entries = read_feedback_entries(
+            feedback_log_path_for(library_root, manifest, project_id)
+        )
+        pending_entries = [
+            entry for entry in entries
+            if entry.get("learning_review_status") == "pending"
+        ]
+        if not pending_entries:
+            continue
+        printed = True
+        print(f"{project_id}  [{title or 'untitled'}] — {len(pending_entries)} feedback item(s) awaiting review")
+        for entry in pending_entries:
+            feedback_id = entry.get("feedback_id")
+            received = (entry.get("received_at") or "")[:10]
+            print(f"  feedback {feedback_id} ({received}): {entry.get('feedback_text')}")
+            print("    if this is a repeatable creative preference (applies by default, disclosed):")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type soft --learning-rule \"<rule>\" --evidence-ref {feedback_id}")
+            print("    if it must always hold:")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type hard --learning-rule \"<rule>\" --evidence-ref {feedback_id}")
+            print("    if it describes how the CONDUCTOR itself should behave (stages a proposal, changes nothing yet):")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type candidate --scope conductor --learning-rule \"<rule>\" --evidence-ref {feedback_id}")
+            print("    if there is no lasting lesson:")
+            print(f"      bin/artist-os-db mark-learning-review-complete {project_id} --feedback-id {feedback_id} --classification-status dismissed")
+
+    candidates = []
+    for project_id, ref_id, ref_path in learning_rows:
+        record_path = library_root / ref_path
+        if not record_path.exists():
+            continue
+        try:
+            record = read_json(record_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(record, dict):
+            continue
+        if (
+            record.get("learning_type") == "candidate"
+            and record.get("scope") == "conductor"
+            and record.get("status") == "active"
+        ):
+            candidates.append((project_id, ref_id, record.get("learning_rule")))
+    if candidates:
+        printed = True
+        print("\nproposed changes to how the conductor works (staged, nothing applied yet):")
+        for project_id, ref_id, rule in candidates:
+            print(f"  {ref_id} (from {project_id}): {rule}")
+            print("    adopt for this installation (safe, reversible, survives upgrades, no re-bless):")
+            print(f"      bin/artist-os-db add-conductor-rule {project_id} --rule \"{rule}\" --from-learning {ref_id}")
+            print("    ship to every installation (maintainer act):")
+            print("      add a dated line to skills/artist-os/SKILL.md '## Rules', then re-run and bless the conductor eval")
+
+    if not printed:
+        print("nothing awaiting review — no pending feedback and no staged conductor candidates.")
+
+
 def project_pointer_payload(project_id: str, workspace_root_hint: str | None) -> dict:
     validate_id(project_id, PROJECT_ID_PATTERN, "project_id")
     payload = {
@@ -2429,6 +2655,31 @@ def parser() -> argparse.ArgumentParser:
     report.add_argument("project_id", nargs="?", default=None)
     add_library_args(report)
     report.set_defaults(func=learnings_report)
+
+    review_queue = sub.add_parser(
+        "review-learnings",
+        help="plain-language promotion queue: pending feedback and staged conductor candidates with the exact command per choice",
+    )
+    add_library_args(review_queue)
+    review_queue.set_defaults(func=review_learnings)
+
+    conductor_rule = sub.add_parser(
+        "add-conductor-rule",
+        help="adopt a local conductor rule (dated line in conductor-rules.md; survives upgrades, no re-bless)",
+    )
+    conductor_rule.add_argument("project_id")
+    conductor_rule.add_argument("--rule", required=True)
+    conductor_rule.add_argument("--from-learning", default=None)
+    add_library_args(conductor_rule)
+    conductor_rule.set_defaults(func=add_conductor_rule)
+
+    status = sub.add_parser(
+        "status",
+        help="one row per project: status, stage, learning-review state, staleness (read-only)",
+    )
+    status.add_argument("project_id", nargs="?", default=None)
+    add_library_args(status)
+    status.set_defaults(func=status_projects)
 
     link = sub.add_parser("link-visible-project", help="create a visible Artist Library project folder and Project Pointer")
     link.add_argument("project_id")

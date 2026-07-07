@@ -3326,5 +3326,230 @@ class ReadPathSelfHealingTests(unittest.TestCase):
             self.assertIn("proj_door_left_lit", listing)
 
 
+class StatusAndPromotionTests(unittest.TestCase):
+    """ADR 0016 Step 3 (surface half): minimal read-only status, the
+    plain-language review-learnings queue, and tier-2 local conductor-rule
+    adoption via add-conductor-rule."""
+
+    def _seed(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _capture(self, func, args) -> tuple[str, str]:
+        out, err = StringIO(), StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            func(args)
+        return out.getvalue(), err.getvalue()
+
+    def _sync(self, base: dict) -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.sync_db(argparse.Namespace(**base, project=None))
+
+    def _add_feedback(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_feedback(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                feedback="The middle section drags.",
+                feedback_id="fb_middle_drags",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            ))
+
+    def _stage_conductor_candidate(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_learning(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                learning_id="learn_confirm_before_expand",
+                learning_type="candidate",
+                learning_rule="Confirm the part map before expanding multiple parts.",
+                scope="conductor",
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_middle_drags"],
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            ))
+
+    def test_status_lists_projects_with_review_state_and_staleness(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root, "proj_alpha")
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+            self._sync(base)
+            self._add_feedback(base, "proj_alpha")
+
+            out, _ = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            alpha_line = next(line for line in out.splitlines() if line.startswith("proj_alpha"))
+            beta_line = next(line for line in out.splitlines() if line.startswith("proj_beta"))
+            self.assertIn("review=pending", alpha_line)
+            self.assertIn("fresh", alpha_line)
+            self.assertIn("review=none", beta_line)
+            self.assertIn("1 project(s) pending learning review", out)
+
+            # Out-of-band manifest edit: status must call it out, not lie.
+            manifest_path = beta_dir / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["updated_at"] = "2026-07-07T00:00:00Z"
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            out, _ = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            beta_line = next(line for line in out.splitlines() if line.startswith("proj_beta"))
+            self.assertIn("stale", beta_line)
+
+    def test_status_is_read_only_and_degrades_without_db(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+
+            # No DB yet: a hint, not a crash — and crucially, no DB created.
+            out, err = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            self.assertIn("run `bin/artist-os-db sync` first", err)
+            self.assertFalse((library_root / "artist-os.sqlite").exists())
+
+            # With a read-only DB file, status still works (it never writes).
+            self._sync(base)
+            db_path = library_root / "artist-os.sqlite"
+            os.chmod(db_path, 0o444)
+            try:
+                out, _ = self._capture(
+                    artist_os_db.status_projects,
+                    argparse.Namespace(**base, project_id=None),
+                )
+            finally:
+                os.chmod(db_path, 0o644)
+            self.assertIn("proj_door_left_lit", out)
+
+    def test_review_learnings_lists_pending_feedback_with_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("The middle section drags.", out)
+            self.assertIn("add-learning proj_door_left_lit", out)
+            self.assertIn("--learning-type candidate --scope conductor", out)
+            self.assertIn(
+                "mark-learning-review-complete proj_door_left_lit --feedback-id fb_middle_drags",
+                out,
+            )
+
+    def test_review_learnings_lists_staged_conductor_candidates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            self._stage_conductor_candidate(base)
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("proposed changes to how the conductor works", out)
+            self.assertIn("Confirm the part map before expanding multiple parts.", out)
+            self.assertIn("add-conductor-rule proj_door_left_lit --rule", out)
+            self.assertIn("--from-learning learn_confirm_before_expand", out)
+
+    def test_add_conductor_rule_appends_marks_and_events(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            self._stage_conductor_candidate(base)
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_conductor_rule(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    rule="Confirm the part\nmap   before expanding multiple parts.",
+                    from_learning="learn_confirm_before_expand",
+                ))
+
+            # Dated, single-line rule in the sidecar (whitespace collapsed).
+            rules_text = (library_root / "conductor-rules.md").read_text(encoding="utf-8")
+            self.assertIn("# Conductor Rules (Local)", rules_text)
+            self.assertRegex(
+                rules_text,
+                r"- \d{4}-\d{2}-\d{2}: Confirm the part map before expanding multiple parts\.",
+            )
+            # Source candidate superseded on disk and in the manifest ref.
+            record = json.loads(
+                (library_root / "personal-library" / "learnings" / "learn_confirm_before_expand.json")
+                .read_text(encoding="utf-8")
+            )
+            self.assertEqual(record["status"], "superseded")
+            self.assertEqual(
+                record["promotion_state"]["promotion_reason"],
+                "adopted as local conductor rule",
+            )
+            manifest = json.loads(
+                (library_root / "projects" / "proj_door_left_lit" / "project.json")
+                .read_text(encoding="utf-8")
+            )
+            ref = next(
+                ref for ref in manifest["feedback_state"]["learning_refs"]
+                if ref["ref_id"] == "learn_confirm_before_expand"
+            )
+            self.assertEqual(ref["status"], "superseded")
+            # Event appended and indexed by the scoped sync.
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            event_types = [
+                json.loads(line)["event_type"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertIn("conductor_rule_adopted", event_types)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                indexed = conn.execute(
+                    "SELECT COUNT(*) FROM events WHERE event_type = 'conductor_rule_adopted'"
+                ).fetchone()[0]
+            self.assertEqual(indexed, 1)
+            # The adopted candidate no longer shows as staged.
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertNotIn("proposed changes to how the conductor works", out)
+
+    def test_add_conductor_rule_appends_to_existing_file_once_headed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            for rule in ("First local rule.", "Second local rule."):
+                with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                    artist_os_db.add_conductor_rule(argparse.Namespace(
+                        **base,
+                        project_id="proj_door_left_lit",
+                        rule=rule,
+                        from_learning=None,
+                    ))
+            rules_text = (library_root / "conductor-rules.md").read_text(encoding="utf-8")
+            self.assertEqual(rules_text.count("# Conductor Rules (Local)"), 1)
+            self.assertIn("First local rule.", rules_text)
+            self.assertIn("Second local rule.", rules_text)
+
+
 if __name__ == "__main__":
     unittest.main()
