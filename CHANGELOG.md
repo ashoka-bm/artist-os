@@ -10,6 +10,31 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ### Added
 
+- `bin/artist-os-db status [project_id]`: read-only per-project status rows —
+  status, stage, learning-review state, and index staleness against the
+  on-disk manifest (ADR 0016).
+- `bin/artist-os-db review-learnings`: plain-language promotion queue showing
+  pending feedback with the exact command per choice, plus staged conductor
+  candidates.
+- `bin/artist-os-db add-conductor-rule`: adopt a local conductor rule as a
+  dated line in `<workspace_library>/conductor-rules.md` (upgrade-safe, no
+  eval re-bless), superseding the source candidate learning.
+- `bin/artist-os-db sync --project <project_id>`: scoped sync that indexes one
+  manifest and skips the missing-sweep; the feedback/learning/performance/
+  review write commands now ride on it and also append their events to
+  `events.jsonl`.
+- `learnings-report` now prints each learning's actual rule text, scope, and
+  evidence count; the learning-surfacing verbs self-heal (re-index from files
+  before reading) and work on a fresh clone with no database.
+
+### Fixed
+
+- `bin/artist-os-db sync` is fault-isolated: one corrupt or wrong-shape
+  `project.json` or event line no longer aborts indexing for sibling
+  projects, present-but-broken manifests are not swept to `missing`, and a
+  missing or unreadable `events.jsonl` preserves previously indexed events
+  instead of erasing them (ADR 0016).
+
 - Reference Inventory (`schemas/reference-inventory.schema.json`): a project-level
   continuity record for promoted character, location, and object references — it
   owns effective policy, scan history, subject / package / per-output readiness,
