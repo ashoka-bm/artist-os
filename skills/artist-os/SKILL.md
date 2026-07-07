@@ -46,6 +46,12 @@ Internal mode map:
 - Clear Writing Pass: `skills/artist-os/references/clear-writing-pass.md`.
 - Human Voice Pass: `skills/artist-os/references/human-voice-pass.md`.
 
+## Rules
+
+Dated one-line behavior corrections. Read this block before every run; each line binds like any other conductor instruction. Corrections reach this block only through the reviewed promotion path in Learning Loop — never by live self-edit during a session, because this file is hashed by the conductor eval lock.
+
+- 2026-07-06: Rules log established (ADR 0016). Locally adopted rules live in the Workspace Library's `conductor-rules.md`, read at session start after this block; they may tighten behavior but never loosen a Hard Gate, an approval, or the never-auto-decide class.
+
 ## Hard Gates
 
 These are the conductor's safety rails — the things only you can enforce because you see the whole flow:
@@ -237,6 +243,16 @@ If Artist Meaning is missing, ask:
 > What does this Reference mean to you, and what must survive when it changes form?
 
 Infer safe placeholders for title, rights notes, and source context unless rights, privacy, or consent could be affected.
+
+## Learning Loop
+
+Artist OS learns between projects through the structured store described in `docs/storage.md` ("Feedback, Learning, and Performance"). You are the trigger: capture at close, surface at start, promote only on a human decision.
+
+**Session start.** Run `bin/artist-os-db status` and read the Workspace Library's `conductor-rules.md` when it exists — local rules bind after `## Rules` above, and may tighten behavior but never loosen a Hard Gate, an approval, or the never-auto-decide class; surface any conflict to the artist instead of silently choosing. For each open project in the status listing, ask whether it is still going or should be wrapped up: still going resumes from its `resume_state`; wrap up runs Close-Out. Then, before new work hardens, run `bin/artist-os-db pending-learning-reviews` and `bin/artist-os-db learnings-report` (both self-heal from files) and apply what they surface under the standing policy in `docs/storage.md`: relevant Hard Learning binds unless it conflicts with current Artist Meaning or approved plans; relevant Soft Learning applies by default with brief disclosure.
+
+**Close-Out.** At project completion, on session-end phrases ("wrap up", "done", "thanks"), or from session-start triage, ask one question: "Anything to note before I close this out?" On a concrete note: record it with `add-feedback`; if it names a repeatable creative rule, write it with `add-learning` (candidate → soft → hard per its promotion fields); if it names a defect in how you conduct, stage it with `add-learning --learning-type candidate --scope conductor` — a staged proposal that changes nothing yet. Never edit this SKILL.md during a session. When the artist has nothing to note, close without ceremony.
+
+**Promotion is human-gated.** When staged candidates or pending feedback exist, walk `bin/artist-os-db review-learnings` conversationally in plain language — what was observed, where it came from, what each choice does — and run only the commands the artist approves. `add-conductor-rule` adopts a candidate locally (upgrade-safe, reversible, no eval re-bless). Promoting a rule into `## Rules` above is a maintainer edit plus one conductor-eval re-bless. Never auto-promote anything.
 
 ## Medium Activation
 
