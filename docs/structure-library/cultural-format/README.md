@@ -109,14 +109,19 @@ Use these as automatic Text Medium Plan defaults for `length_policy` when the ar
 | `trend_analysis` | 1,000-1,800 words | 1,400 | Needs signal, drivers, uncertainty, stakes, and watch points. |
 | `service_article_how_to` | 900-1,600 words | 1,200 | Practical guidance needs steps, caveats, and next action. |
 | `case_study` | 900-1,500 words | 1,200 | Situation, intervention, result, and lesson need balanced space. |
+| `personal_essay` | 1,000-2,000 words | 1,500 | Scene, reflection, and turn need room to arrive at earned meaning. |
 | `newsletter_dispatch` | 600-1,200 words | 900 | Preserves voice, continuity, and one meaningful payoff. |
 | `artist_statement` / `essay_artist_statement` | 250-500 words | 350 | Orient without over-explaining the work. |
 | `manifesto` | 500-1,000 words | 750 | Declaration needs rhythm and force, not exhaustive proof. |
 | `speech` | 900-1,500 words | 1,200 | Roughly supports a concise spoken address; adjust for actual delivery time. |
 | `pitch` | 400-900 words | 650 | Enough for problem, proof, ask, and consequence. |
 | `short_story` | 1,500-5,000 words | 3,000 | Treat shorter or longer targets as artist-defined. |
+| `literary_scene` | 600-1,500 words | 1,000 | One inhabited prose moment; when embedded in a larger work, scale to the host structure. |
+| `monologue` | 300-900 words | 600 | Roughly two to six spoken minutes; adjust for actual performance time. |
+| `screenplay_scene` | 1-3 script pages | 2 pages | Script length is page-based, about one minute of screen time per page, not word-based. |
 | `letter` / `open_letter` | 500-1,200 words | 800 | Allows address, pressure, turn, and closing gesture. |
 | `lyric_poem` / `prose_poem` / `narrative_poem` | 80-500 words | 250 | Poetry length is highly form-sensitive; use loose flexibility. |
+| Song lyrics / `lyrics` text form | 100-400 words | 250 | Music structure governs; defer to the audio plan's song form when one exists. |
 | `treatment_outline` | 800-1,500 words | 1,100 | Enough to present shape, stakes, world, and ending direction. |
 
 ## Common Confusion Pairs
