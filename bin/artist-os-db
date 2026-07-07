@@ -13,6 +13,7 @@ import sys
 from collections import namedtuple
 from contextlib import closing
 from datetime import datetime, timezone
+from itertools import count
 from pathlib import Path
 
 
@@ -710,6 +711,11 @@ def write_project_manifest(manifest_path: Path, manifest: dict) -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
 
+# Per-process sequence for writer event ids: same-microsecond events (even
+# ref-less ones) must never share an id.
+_EVENT_ID_SEQUENCE = count(1)
+
+
 def append_project_event(
     library_root: Path,
     manifest: dict,
@@ -735,14 +741,25 @@ def append_project_event(
     project_dir = Path(paths.get("project_dir", str(project_manifest_path(library_root, project_id).parent)))
     events_path = resolve_path(events_value, project_dir, library_root)
     if not events_path:
+        # New log: mirror resolve_path's resolution rules for the write.
+        # "projects/<id>/..." is Workspace-Library-relative (the storage
+        # convention); any other relative value is project-relative.
         value_path = Path(events_value)
-        events_path = value_path if value_path.is_absolute() else library_root / value_path
+        if value_path.is_absolute():
+            events_path = value_path
+        elif value_path.parts[:1] == ("projects",):
+            events_path = library_root / value_path
+        else:
+            anchor = project_dir if project_dir.is_absolute() else library_root / project_dir
+            events_path = anchor / value_path
     events_path.parent.mkdir(parents=True, exist_ok=True)
-    # Suffix the id with the primary ref (or the event type) so two writer
-    # events in the same microsecond still get distinct, meaningful ids.
+    # Suffix the id with the primary ref (or the event type) plus a
+    # per-process sequence number, so two writer events in the same
+    # microsecond — even ref-less ones like two review marks — still get
+    # distinct, meaningful ids.
     suffix = re.sub(r"[^a-zA-Z0-9_-]+", "-", refs[0] if refs else event_type)
     event = {
-        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}_{suffix}",
+        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}_{suffix}_{next(_EVENT_ID_SEQUENCE)}",
         "project_id": project_id,
         "event_type": event_type,
         "stage": stage,

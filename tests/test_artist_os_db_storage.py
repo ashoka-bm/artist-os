@@ -2972,6 +2972,9 @@ class SyncFaultIsolationTests(unittest.TestCase):
             for event_type, refs in (
                 ("feedback_received", ["fb_one"]),
                 ("learning_recorded", ["learn_two"]),
+                # Two ref-less events of the SAME type: the hardest collision
+                # case (same project, timestamp, and suffix source).
+                ("learning_review_marked", None),
                 ("learning_review_marked", None),
             ):
                 artist_os_db.append_project_event(
@@ -2992,8 +2995,41 @@ class SyncFaultIsolationTests(unittest.TestCase):
             ]
             self.assertEqual(
                 len(set(event_ids)),
-                3,
+                4,
                 "same-timestamp events must still get distinct event ids",
+            )
+
+    def test_writer_creates_project_relative_events_log_at_project_dir(self) -> None:
+        """paths.events declared project-relative ("events.jsonl") with no
+        file yet: the writer must create it inside the project folder, not at
+        the Workspace Library root."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            manifest_path = library_root / "projects" / "proj_door_left_lit" / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["paths"]["events"] = "events.jsonl"
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            self.assertTrue(
+                (library_root / "projects" / "proj_door_left_lit" / "events.jsonl").exists(),
+                "project-relative events log must be created inside the project dir",
+            )
+            self.assertFalse(
+                (library_root / "events.jsonl").exists(),
+                "the log must not be created at the Workspace Library root",
             )
 
     def test_self_improvement_writers_append_events(self) -> None:
