@@ -3225,5 +3225,106 @@ class ScopedSyncTests(unittest.TestCase):
             )
 
 
+class ReadPathSelfHealingTests(unittest.TestCase):
+    """ADR 0016 Step 3 (read half): the surfacing verbs re-index from files
+    before reading, emit actual rule text, and work on a fresh clone."""
+
+    def _seed(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _capture(self, func, args) -> str:
+        buf = StringIO()
+        with redirect_stdout(buf), redirect_stderr(StringIO()):
+            func(args)
+        return buf.getvalue()
+
+    def _add_learning(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_learning(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                learning_id="learn_rawer_first_drafts",
+                learning_type="soft",
+                learning_rule="Keep first drafts rawer before polishing.",
+                scope="images",
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_rawer_draft"],
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            ))
+
+    def test_learnings_report_surfaces_rule_text_scope_and_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("Keep first drafts rawer before polishing.", report)
+            self.assertIn("scope: images", report)
+            self.assertIn("evidence: 1", report)
+
+    def test_learnings_report_notes_missing_learning_record(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+            (library_root / "personal-library" / "learnings" / "learn_rawer_first_drafts.json").unlink()
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("record missing on disk", report)
+
+    def test_learning_in_files_but_not_index_is_still_surfaced(self) -> None:
+        """The self-heal proof: delete the SQLite DB entirely (files intact)
+        and the report must still surface the learning."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+            (library_root / "artist-os.sqlite").unlink()
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("learn_rawer_first_drafts", report)
+            self.assertIn("Keep first drafts rawer before polishing.", report)
+
+    def test_pending_learning_reviews_self_heals_on_fresh_clone(self) -> None:
+        """Files exist with a pending review, but no DB was ever created —
+        the listing must sync from files instead of silently printing nothing."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            manifest_path = library_root / "projects" / "proj_door_left_lit" / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["feedback_state"] = {
+                "feedback_log_path": "projects/proj_door_left_lit/feedback-log.jsonl",
+                "learning_review_status": "pending",
+                "learning_reviewed_at": None,
+            }
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            self.assertFalse((library_root / "artist-os.sqlite").exists())
+
+            listing = self._capture(
+                artist_os_db.pending_learning_reviews, argparse.Namespace(**base)
+            )
+            self.assertIn("proj_door_left_lit", listing)
+
+
 if __name__ == "__main__":
     unittest.main()

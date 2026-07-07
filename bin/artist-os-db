@@ -1296,6 +1296,7 @@ def sync_library(
     db_path: Path,
     artist_library_root: Path | None,
     only_project_id: str | None = None,
+    quiet: bool = False,
 ) -> None:
     """Refresh the SQLite index from project files.
 
@@ -1360,9 +1361,28 @@ def sync_library(
                 """,
                 params,
             )
-    print(f"synced {len(manifests) - len(skipped)} project(s) into {db_path}")
+    if not quiet:
+        print(f"synced {len(manifests) - len(skipped)} project(s) into {db_path}")
     for manifest_path, reason in skipped:
         print(f"warning: skipped {manifest_path}: {reason}", file=sys.stderr)
+
+
+def self_heal_sync(args: argparse.Namespace, project_id: str | None = None) -> None:
+    """Re-index from files immediately before a read that will trust the index.
+
+    The read verbs that surface learnings must reflect files-as-truth: a write
+    that reached JSON but not the index (crash, lock, old bug) would otherwise
+    make the conductor silently under-surface. Scoped when the target project's
+    manifest exists; otherwise a full (fault-isolated) sync, which also makes
+    the verbs work on a fresh clone where the DB does not exist yet.
+    """
+    library_root = library_root_for(args)
+    db_path = db_path_for(args)
+    artist_library_root = artist_library_root_for(args)
+    if project_id and project_manifest_path(library_root, project_id).exists():
+        sync_library(library_root, db_path, artist_library_root, only_project_id=project_id, quiet=True)
+    else:
+        sync_library(library_root, db_path, artist_library_root, quiet=True)
 
 
 def sync_db(args: argparse.Namespace) -> None:
@@ -1607,6 +1627,9 @@ def mark_learning_review_complete(args: argparse.Namespace) -> None:
 
 
 def pending_learning_reviews(args: argparse.Namespace) -> None:
+    # Self-heal before reading: this listing is what Learning-Review-at-Start
+    # trusts, so the index must reflect files at the moment it is read.
+    self_heal_sync(args)
     with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         rows = conn.execute(
@@ -1622,9 +1645,37 @@ def pending_learning_reviews(args: argparse.Namespace) -> None:
         print("\t".join(str(value or "") for value in row))
 
 
+def learning_record_summary(library_root: Path, ref_path: str) -> str:
+    """One plain-language line of the actual rule behind a learning ref.
+
+    The learning_refs index stores only ids and paths; the rule text the
+    conductor must APPLY lives in the referenced JSON record. Files are truth,
+    so read it live — and degrade honestly when the record is gone."""
+    record_path = library_root / ref_path
+    if not record_path.exists():
+        return f"(record missing on disk: {ref_path})"
+    try:
+        record = read_json(record_path)
+    except (OSError, json.JSONDecodeError):
+        return f"(record unreadable: {ref_path})"
+    if not isinstance(record, dict):
+        return f"(record malformed: {ref_path})"
+    rule = record.get("learning_rule") or "(no rule text)"
+    annotations = []
+    if record.get("scope"):
+        annotations.append(f"scope: {record['scope']}")
+    annotations.append(f"evidence: {len(record.get('evidence_refs', []))}")
+    return f"{rule}  [{'; '.join(annotations)}]"
+
+
 def learnings_report(args: argparse.Namespace) -> None:
-    """Close-out summary: per-project learning-review state, linked learnings, and
-    performance signals, ending with the next action. Read-only."""
+    """Close-out summary: per-project learning-review state, linked learnings
+    with their rule text, and performance signals, ending with the next
+    action. Read-only apart from the self-heal sync."""
+    # Self-heal before reading (scoped when a project is named): a learning
+    # present in files but missing from the index must still be surfaced.
+    self_heal_sync(args, getattr(args, "project_id", None))
+    library_root = library_root_for(args)
     with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         if args.project_id:
@@ -1633,13 +1684,13 @@ def learnings_report(args: argparse.Namespace) -> None:
                 (args.project_id,),
             ).fetchall()
             if not rows:
-                raise SystemExit(f"no indexed project {args.project_id!r}; run `artist-os-db sync` first")
+                raise SystemExit(f"no such project {args.project_id!r} in the Workspace Library or index")
         else:
             rows = conn.execute(
                 "SELECT project_id, title, updated_at FROM projects ORDER BY updated_at DESC"
             ).fetchall()
         if not rows:
-            print("no indexed projects; run `artist-os-db sync` first")
+            print("no projects found in the Workspace Library or index")
             return
 
         pending = complete = not_applicable = no_feedback = 0
@@ -1659,7 +1710,7 @@ def learnings_report(args: argparse.Namespace) -> None:
             else:  # no project_feedback_state row -> review=none
                 no_feedback += 1
             learnings = conn.execute(
-                "SELECT ref_id, learning_type, status FROM learning_refs WHERE project_id = ? ORDER BY ref_id",
+                "SELECT ref_id, learning_type, path, status FROM learning_refs WHERE project_id = ? ORDER BY ref_id",
                 (project_id,),
             ).fetchall()
             signals = conn.execute(
@@ -1671,8 +1722,9 @@ def learnings_report(args: argparse.Namespace) -> None:
             if reviewed_at:
                 header += f"  reviewed_at={reviewed_at}"
             print(header)
-            for ref_id, learning_type, ref_status in learnings:
+            for ref_id, learning_type, ref_path, ref_status in learnings:
                 print(f"    learning  {ref_id}  ({learning_type}, {ref_status})")
+                print(f"        rule: {learning_record_summary(library_root, ref_path)}")
             for signal_id, ref_status in signals:
                 print(f"    signal    {signal_id}  ({ref_status})")
             if not learnings and not signals and status in ("none", None):
