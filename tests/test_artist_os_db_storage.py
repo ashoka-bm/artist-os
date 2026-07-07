@@ -3465,6 +3465,9 @@ class StatusAndPromotionTests(unittest.TestCase):
                 "mark-learning-review-complete proj_door_left_lit --feedback-id fb_middle_drags",
                 out,
             )
+            # The printed commands must target the SAME library that was
+            # reviewed, not the repo default.
+            self.assertIn(f"--library-root {library_root}", out)
 
     def test_review_learnings_lists_staged_conductor_candidates(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
