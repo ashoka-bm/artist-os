@@ -10,6 +10,12 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ### Added
 
+- The conductor now carries the self-improvement loop (ADR 0016 Step 4):
+  a `## Rules` block read before every run, session-start open-project triage
+  via `status`, Learning-Review-at-Start applying surfaced learnings under the
+  storage.md policy, a one-question Close-Out writing through the CLI, and
+  human-gated promotion via `review-learnings` — with local rules read from
+  `conductor-rules.md` and never edited into `SKILL.md` during a session.
 - `bin/artist-os-db status [project_id]`: read-only per-project status rows —
   status, stage, learning-review state, and index staleness against the
   on-disk manifest (ADR 0016).
