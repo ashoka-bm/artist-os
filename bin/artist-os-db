@@ -1250,12 +1250,27 @@ def upsert_manifest(
 SYNC_MANIFEST_ERRORS = (OSError, json.JSONDecodeError, KeyError, ValueError, sqlite3.Error)
 
 
-def sync_db(args: argparse.Namespace) -> None:
-    library_root = library_root_for(args)
-    db_path = db_path_for(args)
-    artist_library_root = artist_library_root_for(args)
+def sync_library(
+    library_root: Path,
+    db_path: Path,
+    artist_library_root: Path | None,
+    only_project_id: str | None = None,
+) -> None:
+    """Refresh the SQLite index from project files.
+
+    With only_project_id, index exactly that project's manifest (the scoped
+    sync the self-improvement writers ride on): cheap, and immune to a corrupt
+    sibling because no sibling is ever scanned. Without it, index the whole
+    library and run the missing-sweep.
+    """
     checked_at = datetime.now(timezone.utc).isoformat()
-    manifests = sorted((library_root / "projects").glob("*/project.json"))
+    if only_project_id:
+        manifest_path = project_manifest_path(library_root, only_project_id)
+        if not manifest_path.exists():
+            raise SystemExit(f"project manifest not found: {manifest_path}")
+        manifests = [manifest_path]
+    else:
+        manifests = sorted((library_root / "projects").glob("*/project.json"))
     skipped: list[tuple[Path, str]] = []
     with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
@@ -1276,32 +1291,49 @@ def sync_db(args: argparse.Namespace) -> None:
             conn.execute("RELEASE SAVEPOINT artist_os_manifest_sync")
             found_project_ids.add(project_id)
         # Missing-sweep: a project is only 'missing' when its manifest is
-        # genuinely absent. A skipped (present-but-broken) manifest must not
-        # be flipped to missing — match by manifest_path since its project_id
-        # is unreadable by definition.
-        clauses = ["status != 'archived'"]
-        params: list[str] = [checked_at]
-        if found_project_ids:
-            placeholders = ",".join("?" for _ in found_project_ids)
-            clauses.append(f"project_id NOT IN ({placeholders})")
-            params.extend(sorted(found_project_ids))
-        skipped_paths = [str(path) for path, _ in skipped]
-        if skipped_paths:
-            placeholders = ",".join("?" for _ in skipped_paths)
-            clauses.append(f"manifest_path NOT IN ({placeholders})")
-            params.extend(skipped_paths)
-        conn.execute(
-            f"""
-            UPDATE projects
-            SET status = 'missing',
-                updated_at = ?
-            WHERE {' AND '.join(clauses)}
-            """,
-            params,
-        )
+        # genuinely absent. Two guards keep the sweep honest:
+        #   1. It runs ONLY on a full sync. A scoped sync scans exactly one
+        #      manifest, so sweeping there would mark every other project
+        #      missing on every feedback/learning write.
+        #   2. A skipped (present-but-broken) manifest must not be flipped to
+        #      missing — match by manifest_path since its project_id is
+        #      unreadable by definition.
+        if only_project_id is None:
+            clauses = ["status != 'archived'"]
+            params: list[str] = [checked_at]
+            if found_project_ids:
+                placeholders = ",".join("?" for _ in found_project_ids)
+                clauses.append(f"project_id NOT IN ({placeholders})")
+                params.extend(sorted(found_project_ids))
+            skipped_paths = [str(path) for path, _ in skipped]
+            if skipped_paths:
+                placeholders = ",".join("?" for _ in skipped_paths)
+                clauses.append(f"manifest_path NOT IN ({placeholders})")
+                params.extend(skipped_paths)
+            conn.execute(
+                f"""
+                UPDATE projects
+                SET status = 'missing',
+                    updated_at = ?
+                WHERE {' AND '.join(clauses)}
+                """,
+                params,
+            )
     print(f"synced {len(manifests) - len(skipped)} project(s) into {db_path}")
     for manifest_path, reason in skipped:
         print(f"warning: skipped {manifest_path}: {reason}", file=sys.stderr)
+
+
+def sync_db(args: argparse.Namespace) -> None:
+    only_project_id = getattr(args, "project", None)
+    if only_project_id:
+        validate_id(only_project_id, PROJECT_ID_PATTERN, "project")
+    sync_library(
+        library_root_for(args),
+        db_path_for(args),
+        artist_library_root_for(args),
+        only_project_id=only_project_id,
+    )
 
 
 def validate_record(record: dict, schema_name: str) -> None:
@@ -1362,7 +1394,9 @@ def add_feedback(args: argparse.Namespace) -> None:
         occurred_at=received_at,
         refs=[feedback_id],
     )
-    sync_db(args)
+    # Scoped: the write must reach the index even when a sibling project's
+    # manifest is corrupt, so never scan the siblings at all.
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"appended feedback {feedback_id}")
 
 
@@ -1440,7 +1474,7 @@ def add_learning(args: argparse.Namespace) -> None:
         occurred_at=now,
         refs=[args.learning_id],
     )
-    sync_db(args)
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"wrote learning record {learning_path}")
 
 
@@ -1498,7 +1532,7 @@ def add_performance_signal(args: argparse.Namespace) -> None:
         occurred_at=now,
         refs=[args.signal_id],
     )
-    sync_db(args)
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"wrote performance signal {signal_path}")
 
 
@@ -1527,7 +1561,7 @@ def mark_learning_review_complete(args: argparse.Namespace) -> None:
         details=f"Marked learning review {review_state} ({args.classification_status}).",
         occurred_at=now,
     )
-    sync_db(args)
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"marked learning review complete for {args.project_id}")
 
 
@@ -2232,6 +2266,11 @@ def parser() -> argparse.ArgumentParser:
     setup.set_defaults(func=setup_db)
 
     sync = sub.add_parser("sync", help="sync project manifests into the SQLite index")
+    sync.add_argument(
+        "--project",
+        default=None,
+        help="sync exactly one project's manifest (skips the missing-sweep)",
+    )
     add_library_args(sync)
     sync.set_defaults(func=sync_db)
 

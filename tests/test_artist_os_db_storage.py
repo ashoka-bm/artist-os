@@ -2957,5 +2957,128 @@ class SyncFaultIsolationTests(unittest.TestCase):
             self.assertEqual(sorted(indexed), sorted(event_types))
 
 
+class ScopedSyncTests(unittest.TestCase):
+    """ADR 0016 Step 2: `sync --project` indexes exactly one manifest, never
+    runs the missing-sweep, and is what the self-improvement writers ride on
+    so their writes reach the index despite a corrupt sibling."""
+
+    def _seed(self, library_root: Path, project_id: str) -> None:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+
+    def _base(self, library_root: Path) -> dict:
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _sync(self, base: dict, project: str | None = None) -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.sync_db(argparse.Namespace(**base, project=project))
+
+    def _project_rows(self, library_root: Path) -> dict[str, tuple[str, str]]:
+        with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+            return {
+                row[0]: (row[1], row[2])
+                for row in conn.execute(
+                    "SELECT project_id, status, title FROM projects"
+                ).fetchall()
+            }
+
+    def test_scoped_sync_updates_only_target_and_leaves_foreign_rows_intact(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_beta")
+            base = self._base(library_root)
+            self._sync(base)
+
+            # Edit both manifests on disk, then scoped-sync only alpha.
+            for project_id in ("proj_alpha", "proj_beta"):
+                manifest_path = library_root / "projects" / project_id / "project.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest["title"] = f"Retitled {project_id}"
+                manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            self._sync(base, project="proj_alpha")
+
+            rows = self._project_rows(library_root)
+            self.assertEqual(rows["proj_alpha"][1], "Retitled proj_alpha")
+            self.assertEqual(
+                rows["proj_beta"][1],
+                "Door Left Lit",
+                "a scoped sync must not touch a foreign project's rows",
+            )
+
+    def test_scoped_sync_does_not_mark_foreign_projects_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_beta")
+            base = self._base(library_root)
+            self._sync(base)
+
+            self._sync(base, project="proj_alpha")
+
+            rows = self._project_rows(library_root)
+            self.assertEqual(
+                rows["proj_beta"][0],
+                "active",
+                "the missing-sweep must never run under a scoped sync",
+            )
+
+    def test_scoped_sync_rejects_missing_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            base = self._base(library_root)
+            with self.assertRaisesRegex(SystemExit, "manifest not found"):
+                self._sync(base, project="proj_ghost")
+
+    def test_add_feedback_reaches_index_despite_corrupt_sibling(self) -> None:
+        """The load-bearing integration proof for the self-improvement loop:
+        a close-out write on one project reaches the index even when another
+        project's manifest is corrupt."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_broken")
+            base = self._base(library_root)
+            self._sync(base)
+
+            (library_root / "projects" / "proj_broken" / "project.json").write_text(
+                "{definitely not json", encoding="utf-8"
+            )
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_alpha",
+                    feedback="The pacing drags in the middle.",
+                    feedback_id="fb_pacing_drags",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                pending = conn.execute(
+                    """
+                    SELECT learning_review_status FROM project_feedback_state
+                    WHERE project_id = 'proj_alpha'
+                    """
+                ).fetchone()
+                broken_status = conn.execute(
+                    "SELECT status FROM projects WHERE project_id = 'proj_broken'"
+                ).fetchone()[0]
+            self.assertIsNotNone(pending, "the feedback write must reach the index")
+            self.assertEqual(pending[0], "pending")
+            self.assertEqual(
+                broken_status,
+                "active",
+                "a scoped write must leave the corrupt sibling's last known-good row untouched",
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
