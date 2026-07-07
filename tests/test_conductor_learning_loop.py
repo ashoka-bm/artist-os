@@ -106,6 +106,23 @@ class ConductorLearningLoopProseTests(unittest.TestCase):
         self.assertIn("still going or should be wrapped up", self.text)
         self.assertIn("Never edit this SKILL.md during a session.", self.text)
 
+    def test_close_out_has_three_triggers(self) -> None:
+        self.assertIn("At project completion", self.text)
+        self.assertIn("session-end phrases", self.text)
+        self.assertIn("session-start triage", self.text)
+
+    def test_triage_scopes_to_open_projects_only(self) -> None:
+        self.assertIn("status not `complete`, `archived`, or `missing`", self.text)
+
+    def test_promotion_is_human_gated_and_staging_changes_nothing(self) -> None:
+        self.assertIn("Never auto-promote anything.", self.text)
+        self.assertIn("changes nothing yet", self.text)
+        self.assertIn("human-gated", self.text)
+
+    def test_local_rules_read_after_canonical_and_conflicts_surface(self) -> None:
+        self.assertIn("after `## Rules` above", self.text)
+        self.assertIn("surface any conflict", self.text)
+
 
 class LearningLoopRoundTripTests(unittest.TestCase):
     """The full loop, exactly as the conductor drives it."""
