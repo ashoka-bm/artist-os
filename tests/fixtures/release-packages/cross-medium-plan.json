@@ -34,6 +34,36 @@
       "continuity_from_primary_realization": true
     }
   ],
+  "planned_deliverables": [
+    {
+      "deliverable_id": "deliv_door_left_lit_video",
+      "medium": "video",
+      "deliverable_summary": "The storyboard-ready video realization of the threshold arc.",
+      "required": true,
+      "package_slot_id": "video",
+      "output_record_id": "out_door_left_lit_video",
+      "status": "in_progress"
+    },
+    {
+      "deliverable_id": "deliv_door_left_lit_soundtrack",
+      "medium": "audio",
+      "deliverable_summary": "One soundtrack that holds the dwell at the threshold under the locked video pacing.",
+      "required": true,
+      "package_slot_id": "soundtrack_audio",
+      "output_record_id": null,
+      "status": "planned"
+    }
+  ],
+  "shared_references": [
+    {
+      "shared_reference_id": "sref_door_left_lit_doorway",
+      "reference_type": "reference_inventory",
+      "ref_id": "refinv_door_left_lit",
+      "path_or_ref": "references/reference-inventory.json",
+      "shared_with_media": ["video", "audio"],
+      "continuity_role": "Fixes the lit-doorway palette and room tone both media must agree on."
+    }
+  ],
   "effective_project_scale": {
     "scale_level": "cumulative_work",
     "derived_from": [

@@ -327,6 +327,68 @@ def validate_cross_medium_plan_contract(record: dict[str, Any]) -> None:
                 "Production order required_before_media must only reference active media",
             )
 
+    # The top-level allOf pass re-enters this contract before the schema layer's
+    # `required` check runs, so a missing key must fall through to that check rather
+    # than surface here as a confusing cross-field error.
+    if record.get("planned_deliverables") is not None:
+        validate_planned_deliverables(record, unique_active_media)
+    if record.get("shared_references") is not None:
+        validate_shared_references(record, unique_active_media)
+
+
+def validate_planned_deliverables(record: dict[str, Any], unique_active_media: set[Any]) -> None:
+    """Cross-field rules for the Cross-Medium Plan's Package Compilation checklist."""
+    deliverables = record["planned_deliverables"]
+
+    deliverable_ids = [item.get("deliverable_id") for item in deliverables]
+    if len(deliverable_ids) != len(set(deliverable_ids)):
+        raise ValidationError(
+            "$.planned_deliverables",
+            "Planned deliverables must not duplicate deliverable_id values",
+        )
+    deliverable_media = {item.get("medium") for item in deliverables}
+    if not deliverable_media.issubset(unique_active_media):
+        raise ValidationError(
+            "$.planned_deliverables",
+            "Planned deliverables must only reference active media",
+        )
+    missing_deliverables = sorted(unique_active_media - deliverable_media)
+    if missing_deliverables:
+        raise ValidationError(
+            "$.planned_deliverables",
+            f"every active medium needs at least one planned deliverable; missing {missing_deliverables!r}",
+        )
+    for item in deliverables:
+        if item.get("status") == "complete" and item.get("output_record_id") is None:
+            raise ValidationError(
+                "$.planned_deliverables",
+                f"complete deliverable {item.get('deliverable_id')!r} requires an output_record_id",
+            )
+
+
+def validate_shared_references(record: dict[str, Any], unique_active_media: set[Any]) -> None:
+    """Cross-field rules for references the coordinator holds on behalf of several media."""
+    shared_references = record["shared_references"]
+
+    shared_reference_ids = [item.get("shared_reference_id") for item in shared_references]
+    if len(shared_reference_ids) != len(set(shared_reference_ids)):
+        raise ValidationError(
+            "$.shared_references",
+            "Shared references must not duplicate shared_reference_id values",
+        )
+    for item in shared_references:
+        shared_with = item.get("shared_with_media", [])
+        if len(shared_with) != len(set(shared_with)):
+            raise ValidationError(
+                "$.shared_references",
+                f"shared reference {item.get('shared_reference_id')!r} must not duplicate media",
+            )
+        if not set(shared_with).issubset(unique_active_media):
+            raise ValidationError(
+                "$.shared_references",
+                f"shared reference {item.get('shared_reference_id')!r} must only reference active media",
+            )
+
 
 def validate_asset_package_contract(record: dict[str, Any]) -> None:
     """Validate Asset Package cross-field invariants not expressible in our schema subset.
@@ -336,18 +398,33 @@ def validate_asset_package_contract(record: dict[str, Any]) -> None:
     filled slot must carry an Output Record, a waived slot must carry a recorded
     waiver gate, a missing slot must carry no Output Record, and a package may not
     declare itself complete while any slot is still missing.
+
+    A waiver is per named slot (ADR 0014 / docs/gates/canonical-gates.md): each waived
+    slot carries its OWN Gate Decision. Reusing one gate id across several waived slots
+    is the general "ship anyway" decision the release contract forbids, so waiver gate
+    ids must be distinct.
     """
     slots = record.get("slots", [])
+
+    waiver_gate_ids: list[str] = []
 
     for slot in slots:
         completeness = slot.get("completeness")
         output_record_id = slot.get("output_record_id")
         waiver_gate_id = slot.get("waiver_gate_id")
 
+        if completeness == "waived":
+            waiver_gate_ids.append(waiver_gate_id)
+
         if completeness == "filled" and output_record_id is None:
             raise ValidationError(
                 "$.slots",
                 "filled slot requires an output_record_id",
+            )
+        if completeness == "filled" and waiver_gate_id is not None:
+            raise ValidationError(
+                "$.slots",
+                "filled slot must not carry a waiver_gate_id",
             )
         if completeness == "waived" and waiver_gate_id is None:
             raise ValidationError(
@@ -369,6 +446,12 @@ def validate_asset_package_contract(record: dict[str, Any]) -> None:
                 "$.slots",
                 "missing slot must not carry a waiver_gate_id",
             )
+
+    if len(waiver_gate_ids) != len(set(waiver_gate_ids)):
+        raise ValidationError(
+            "$.slots",
+            "each waived slot requires its own Gate Decision; waiver_gate_id must not be shared across slots",
+        )
 
     if record.get("status") == "complete" and any(
         slot.get("completeness") == "missing" for slot in slots
@@ -628,6 +711,15 @@ FIXTURE_SCHEMA_MAP = {
     "album-release-package-plan.json": "release-package-plan.schema.json",
     "cross-medium-plan.json": "cross-medium-plan.schema.json",
     "asset-package.json": "asset-package.schema.json",
+    "cross-medium-plan-article.json": "cross-medium-plan.schema.json",
+    "mixed-media-critic-review-record.json": "review-record.schema.json",
+    "cross-medium-plan-approval-gate.json": "gate-decision.schema.json",
+    "package-format-completeness-gate.json": "gate-decision.schema.json",
+    "package-slot-waiver-gate.json": "gate-decision.schema.json",
+    "output-record-article-text.json": "output-record.schema.json",
+    "output-record-inline-photo-shoe.json": "output-record.schema.json",
+    "output-record-inline-photo-hose.json": "output-record.schema.json",
+    "asset-package-article.json": "asset-package.schema.json",
     "delegation-packet.json": "delegation-packet.schema.json",
     "subagent-result.complete.json": "subagent-result.schema.json",
     "asset-metadata.json": "asset-metadata.schema.json",

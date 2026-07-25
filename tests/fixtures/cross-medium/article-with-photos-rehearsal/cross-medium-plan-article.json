@@ -1,0 +1,140 @@
+{
+  "cross_medium_plan_id": "cmp_civic_garden_hook_article",
+  "project_id": "proj_civic_garden_hook_article",
+  "source_id": "src_civic_garden_hook_article",
+  "artist_meaning_id": "meaning_civic_garden_hook_article",
+  "transformation_brief_id": "tb_civic_garden_hook_article",
+  "beat_plan_id": "bp_civic_garden_hook_article",
+  "primary_medium": "text",
+  "media": [
+    {
+      "medium": "text",
+      "medium_role": "primary",
+      "medium_plan_ref": {
+        "plan_type": "text_medium_plan",
+        "plan_id": "tmp_civic_garden_hook_article",
+        "path_or_ref": "tests/fixtures/text-journey/article-rehearsal/text-medium-plan.json"
+      },
+      "medium_scale_level": "structured_single_artifact",
+      "status": "complete",
+      "serves_primary": null,
+      "continuity_from_primary_realization": false
+    },
+    {
+      "medium": "image",
+      "medium_role": "supporting",
+      "medium_plan_ref": {
+        "plan_type": "image_medium_plan",
+        "plan_id": "imp_civic_garden_hook_article",
+        "path_or_ref": "medium-plans/image-medium-plan.json"
+      },
+      "medium_scale_level": "compact_artifact",
+      "status": "complete",
+      "serves_primary": "text",
+      "continuity_from_primary_realization": true
+    }
+  ],
+  "planned_deliverables": [
+    {
+      "deliverable_id": "deliv_civic_garden_article_text",
+      "medium": "text",
+      "deliverable_summary": "The finished hook-driven article carrying the muddy-shoe question through to changed noticing.",
+      "required": true,
+      "package_slot_id": "article_text",
+      "output_record_id": "out_civic_garden_article_text_001",
+      "status": "complete"
+    },
+    {
+      "deliverable_id": "deliv_civic_garden_photo_shoe",
+      "medium": "image",
+      "deliverable_summary": "Inline photo of the muddy shoe print at the bed edge, placed at the hook.",
+      "required": true,
+      "package_slot_id": "inline_photo",
+      "output_record_id": "out_civic_garden_inline_photo_shoe_001",
+      "status": "complete"
+    },
+    {
+      "deliverable_id": "deliv_civic_garden_photo_hose",
+      "medium": "image",
+      "deliverable_summary": "Inline photo of the coiled hose left ready, placed at the reframing turn.",
+      "required": true,
+      "package_slot_id": "inline_photo",
+      "output_record_id": "out_civic_garden_inline_photo_hose_001",
+      "status": "complete"
+    }
+  ],
+  "shared_references": [
+    {
+      "shared_reference_id": "sref_civic_garden_maintenance_signs",
+      "reference_type": "writing_reference",
+      "ref_id": "wref_civic_garden_maintenance_signs",
+      "path_or_ref": "references/maintenance-signs-notes.md",
+      "shared_with_media": ["text", "image"],
+      "continuity_role": "Fixes which maintenance signs count as evidence, so the prose and the photos point at the same unseen labor."
+    }
+  ],
+  "effective_project_scale": {
+    "scale_level": "structured_single_artifact",
+    "derived_from": [
+      {
+        "medium": "text",
+        "medium_scale_level": "structured_single_artifact"
+      },
+      {
+        "medium": "image",
+        "medium_scale_level": "compact_artifact"
+      }
+    ],
+    "rationale": "The article is one structured artifact and the supporting photos are compact, so the project inherits the article's structured single-artifact scale."
+  },
+  "production_order": [
+    {
+      "order_index": 1,
+      "medium": "text",
+      "step_summary": "Realize the primary article so its accepted prose fixes where photos belong and what they must show.",
+      "status": "complete",
+      "required_before_media": ["image"]
+    },
+    {
+      "order_index": 2,
+      "medium": "image",
+      "step_summary": "Plan and place the two supporting inline photos against the accepted article realization.",
+      "status": "complete",
+      "required_before_media": []
+    }
+  ],
+  "cross_medium_continuity": {
+    "shared_meaning_rules": [
+      "Both media hold attention on maintenance as unseen labor; neither names a hero or thanks anyone by name."
+    ],
+    "shared_symbols": [
+      "the muddy shoe print",
+      "the coiled hose left ready"
+    ],
+    "allowed_variation": [
+      "The photos may show a different bed than the prose describes, as long as the maintenance sign is the same kind."
+    ],
+    "must_not_drift": [
+      "Neither medium may resolve the question into praise, complaint, or a call to volunteer."
+    ]
+  },
+  "traceability_summary": [
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_civic_garden_hook_article",
+      "note": "Production order and photo placement trace to the approved hook, turn, and payoff beats; the Beat Plan is reused unchanged."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_civic_garden_hook_article",
+      "note": "Primary article and supporting photos both serve noticing the labor that keeps a shared garden usable."
+    },
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_civic_garden_hook_article",
+      "note": "The existing Text Medium Plan is the primary realization the supporting image medium takes continuity from."
+    }
+  ],
+  "created_at": "2026-07-25T10:00:00Z",
+  "updated_at": "2026-07-25T14:30:00Z"
+}

@@ -166,10 +166,18 @@ Spine. It records one artist-confirmed primary medium, supporting media,
 Effective Project Scale, sequential production order, and cross-medium
 continuity without absorbing medium-specific creative authority.
 
-The current schema is a foundation. The frozen 1.0 record must also carry
-schema-backed planned deliverables and shared references; those fields, the
-approval/review vocabulary, and end-to-end transition coverage remain release
-blockers.
+The record carries `planned_deliverables` — the cross-medium checklist Package
+Compilation ticks off — and `shared_references`, which the coordinator holds only
+when at least two active media depend on them. Cross-field rules (unique ids,
+deliverables covering every active medium, a complete deliverable carrying its
+Output Record id, shared references naming active media only) live in
+`validate_cross_medium_plan_contract`, because the local validator has no keyword
+that can express them.
+
+A Cross-Medium Plan is reviewed by the Mixed-Media Critic
+(`artifact_under_review.artifact_type = "cross_medium_plan"`) and approved through
+a Gate Decision with `gate_type = "cross_medium_plan_approval"`, which must name
+both the plan and its Review Record in `upstream_refs`.
 
 ### Asset Package
 
@@ -179,9 +187,12 @@ selected Package Format. It validates against
 and does not copy their content.
 
 Every required missing slot needs its own explicit artist waiver Gate Decision.
-The Package Format Selection and Completeness gate vocabulary and upstream refs
-are not yet implemented in the Gate Decision schema; Package Compilation is
-therefore a foundation rather than a release-certified general route.
+That gate is `gate_type = "package_format_selection_and_completeness"`; its
+`package_completeness` block records the selected `package_format_id`, the
+`completeness_verdict`, and — for the `required_slot_waived` verdict only — the
+single `waived_slot_id`. The Asset Package carries that gate's id in the slot's
+`waiver_gate_id`, and waiver gate ids must be distinct across waived slots, so a
+general "ship anyway" decision cannot waive unnamed deliverables.
 
 ### Review Record
 

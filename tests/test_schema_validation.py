@@ -448,6 +448,195 @@ class SchemaValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValidationError, "derived_from media must match active media"):
             validate(record, schema, schema)
 
+    # --- Cross-Medium Plan: planned deliverables and shared references ---
+    #
+    # The exactly-one-primary, duplicate-media, primary-role, serves_primary,
+    # derived_from, and production-order negatives are already covered above; these
+    # cover only the fields this slice adds. The schema pins each entry's shape; the
+    # cross-field rules live in validate_cross_medium_plan_contract because the local
+    # validator has no keyword that can express them.
+
+    CMP_SCHEMA = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+    CMP_FIXTURE = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "cross-medium-plan-article.json"
+
+    def cross_medium_rehearsal(self) -> tuple[dict, dict]:
+        return load_json(self.CMP_SCHEMA), load_json(self.CMP_FIXTURE)
+
+    def test_cross_medium_rehearsal_plan_validates(self) -> None:
+        validate_file(self.CMP_SCHEMA, self.CMP_FIXTURE)
+
+    def test_cross_medium_plan_requires_planned_deliverables(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        del record["planned_deliverables"]
+        with self.assertRaisesRegex(ValidationError, "missing required field 'planned_deliverables'"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_requires_shared_references_key(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        del record["shared_references"]
+        with self.assertRaisesRegex(ValidationError, "missing required field 'shared_references'"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_allows_empty_shared_references(self) -> None:
+        # The Shared Story Spine may be the only shared material; an empty list is honest.
+        schema, record = self.cross_medium_rehearsal()
+        record["shared_references"] = []
+        validate(record, schema, schema)
+
+    def test_cross_medium_plan_rejects_duplicate_deliverable_ids(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["planned_deliverables"][1]["deliverable_id"] = record["planned_deliverables"][0]["deliverable_id"]
+        with self.assertRaisesRegex(ValidationError, "must not duplicate deliverable_id"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_deliverables_must_name_active_media(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["planned_deliverables"][1]["medium"] = "audio"
+        with self.assertRaisesRegex(ValidationError, "deliverables must only reference active media"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_requires_a_deliverable_for_every_active_medium(self) -> None:
+        # The plan is the Package Compilation checklist; an activated medium that
+        # promises nothing cannot be checked off later.
+        schema, record = self.cross_medium_rehearsal()
+        record["planned_deliverables"] = [
+            item for item in record["planned_deliverables"] if item["medium"] != "image"
+        ]
+        with self.assertRaisesRegex(ValidationError, "needs at least one planned deliverable"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_complete_deliverable_requires_output_record(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["planned_deliverables"][0]["output_record_id"] = None
+        with self.assertRaisesRegex(ValidationError, "complete deliverable .* requires an output_record_id"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_deliverable_id_pattern_is_enforced(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["planned_deliverables"][0]["deliverable_id"] = "civic_garden_article_text"
+        with self.assertRaisesRegex(ValidationError, "does not match"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_rejects_duplicate_shared_reference_ids(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        duplicate = dict(record["shared_references"][0])
+        record["shared_references"].append(duplicate)
+        with self.assertRaisesRegex(ValidationError, "must not duplicate shared_reference_id"):
+            validate(record, schema, schema)
+
+    def test_shared_reference_must_serve_at_least_two_media(self) -> None:
+        # A single-medium reference belongs to that Medium Plan, not the coordinator.
+        schema, record = self.cross_medium_rehearsal()
+        record["shared_references"][0]["shared_with_media"] = ["text"]
+        with self.assertRaisesRegex(ValidationError, "fewer than 2 items"):
+            validate(record, schema, schema)
+
+    def test_shared_reference_media_must_be_active(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["shared_references"][0]["shared_with_media"] = ["text", "audio"]
+        with self.assertRaisesRegex(ValidationError, "must only reference active media"):
+            validate(record, schema, schema)
+
+    def test_shared_reference_rejects_duplicate_media(self) -> None:
+        schema, record = self.cross_medium_rehearsal()
+        record["shared_references"][0]["shared_with_media"] = ["text", "text"]
+        with self.assertRaisesRegex(ValidationError, "must not duplicate media"):
+            validate(record, schema, schema)
+
+    # --- Cross-Medium Plan approval and Mixed-Media Critic vocabulary ---
+
+    GATE_SCHEMA = REPO_ROOT / "schemas" / "gate-decision.schema.json"
+    APPROVAL_GATE = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "cross-medium-plan-approval-gate.json"
+    COMPLETENESS_GATE = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "package-format-completeness-gate.json"
+    WAIVER_GATE = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "package-slot-waiver-gate.json"
+    MIXED_MEDIA_REVIEW = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "mixed-media-critic-review-record.json"
+
+    def test_cross_medium_gate_and_review_fixtures_validate(self) -> None:
+        for schema_path, data_path in [
+            (self.GATE_SCHEMA, self.APPROVAL_GATE),
+            (self.GATE_SCHEMA, self.COMPLETENESS_GATE),
+            (self.GATE_SCHEMA, self.WAIVER_GATE),
+            (REPO_ROOT / "schemas" / "review-record.schema.json", self.MIXED_MEDIA_REVIEW),
+        ]:
+            with self.subTest(data=data_path.name):
+                validate_file(schema_path, data_path)
+
+    def test_cross_medium_approval_gate_requires_the_plan_ref(self) -> None:
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.APPROVAL_GATE)
+        record["upstream_refs"] = [
+            ref for ref in record["upstream_refs"] if ref["ref_type"] != "cross_medium_plan"
+        ]
+        with self.assertRaisesRegex(ValidationError, "matches fewer than minContains"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_approval_gate_requires_the_review_ref(self) -> None:
+        # Approval cannot precede Mixed-Media Critic Review, so the gate must name it.
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.APPROVAL_GATE)
+        record["upstream_refs"] = [
+            ref for ref in record["upstream_refs"] if ref["ref_type"] != "review_record"
+        ]
+        with self.assertRaisesRegex(ValidationError, "matches fewer than minContains"):
+            validate(record, schema, schema)
+
+    def test_mixed_media_review_of_a_plan_must_name_the_beat_plan(self) -> None:
+        # Executable form of "the Shared Story Spine is reused by id".
+        schema = load_json(REPO_ROOT / "schemas" / "review-record.schema.json")
+        record = load_json(self.MIXED_MEDIA_REVIEW)
+        record["upstream_context"]["governing_refs"] = [
+            ref for ref in record["upstream_context"]["governing_refs"] if ref["ref_type"] != "beat_plan"
+        ]
+        with self.assertRaisesRegex(ValidationError, "matches fewer than minContains"):
+            validate(record, schema, schema)
+
+    def test_cross_medium_plan_review_must_be_the_mixed_media_critic(self) -> None:
+        schema = load_json(REPO_ROOT / "schemas" / "review-record.schema.json")
+        record = load_json(self.MIXED_MEDIA_REVIEW)
+        record["review_role"] = "story_critic"
+        with self.assertRaisesRegex(ValidationError, "expected const 'mixed_media_critic'"):
+            validate(record, schema, schema)
+
+    # --- Package Format Selection And Completeness Gate ---
+
+    def test_package_gate_requires_the_completeness_block(self) -> None:
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.COMPLETENESS_GATE)
+        del record["package_completeness"]
+        with self.assertRaisesRegex(ValidationError, "missing required field 'package_completeness'"):
+            validate(record, schema, schema)
+
+    def test_completeness_block_belongs_only_to_the_package_gate(self) -> None:
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.COMPLETENESS_GATE)
+        record["gate_type"] = "output_acceptance"
+        with self.assertRaisesRegex(
+            ValidationError, "expected const 'package_format_selection_and_completeness'"
+        ):
+            validate(record, schema, schema)
+
+    def test_waiver_verdict_requires_a_named_slot(self) -> None:
+        # "A general 'ship anyway' decision does not waive unnamed missing deliverables."
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.WAIVER_GATE)
+        del record["package_completeness"]["waived_slot_id"]
+        with self.assertRaisesRegex(ValidationError, "missing required field 'waived_slot_id'"):
+            validate(record, schema, schema)
+
+    def test_named_slot_requires_the_waiver_verdict(self) -> None:
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.COMPLETENESS_GATE)
+        record["package_completeness"]["waived_slot_id"] = "inline_photo"
+        with self.assertRaisesRegex(ValidationError, "expected const 'required_slot_waived'"):
+            validate(record, schema, schema)
+
+    def test_package_gate_rejects_unknown_completeness_verdict(self) -> None:
+        schema = load_json(self.GATE_SCHEMA)
+        record = load_json(self.COMPLETENESS_GATE)
+        record["package_completeness"]["completeness_verdict"] = "ship_anyway"
+        with self.assertRaisesRegex(ValidationError, "is not one of"):
+            validate(record, schema, schema)
+
     def test_release_package_plan_still_validates_after_seam_annotation(self) -> None:
         # Slice 6 (ADR 0014 D11) added a non-functional top-level description; the
         # shipped Album v1 record must still validate (the only schema edit this slice makes).
@@ -1827,6 +2016,63 @@ class AssetPackageContractTests(unittest.TestCase):
         record["unexpected_field"] = "nope"
         schema = load_json(self.SCHEMA_PATH)
         with self.assertRaisesRegex(ValidationError, "unexpected fields"):
+            validate(record, schema, schema)
+
+    # --- Per-slot waivers: one Gate Decision per waived required slot ---
+    #
+    # ADR 0014 and docs/gates/canonical-gates.md both say a waiver names ONE slot, so
+    # "a general 'ship anyway' decision does not waive unnamed missing deliverables".
+    # Before this slice a single shared waiver_gate_id across every waived slot
+    # validated, which is exactly that forbidden decision.
+
+    ARTICLE_PACKAGE = REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "asset-package-article.json"
+
+    def article_package(self) -> tuple[dict, dict]:
+        return load_json(self.SCHEMA_PATH), load_json(self.ARTICLE_PACKAGE)
+
+    def test_article_package_fixture_validates(self) -> None:
+        validate_file(self.SCHEMA_PATH, self.ARTICLE_PACKAGE)
+
+    def test_waived_slots_must_not_share_one_gate_decision(self) -> None:
+        schema, record = self.article_package()
+        for slot in record["slots"]:
+            slot["completeness"] = "waived"
+            slot["output_record_id"] = None
+            slot["waiver_gate_id"] = "gate_civic_garden_ship_anyway"
+        with self.assertRaisesRegex(ValidationError, "waiver_gate_id must not be shared across slots"):
+            validate(record, schema, schema)
+
+    def test_distinct_per_slot_waivers_are_accepted(self) -> None:
+        # The escape hatch stays open, but only one named slot at a time.
+        schema, record = self.article_package()
+        record["slots"][2]["completeness"] = "waived"
+        record["slots"][2]["output_record_id"] = None
+        record["slots"][2]["waiver_gate_id"] = "gate_civic_garden_waive_inline_photo_hose"
+        validate(record, schema, schema)
+
+    def test_filled_slot_must_not_carry_a_waiver_gate(self) -> None:
+        schema, record = self.article_package()
+        record["slots"][0]["waiver_gate_id"] = "gate_civic_garden_waive_inline_photo_hose"
+        with self.assertRaisesRegex(ValidationError, "filled slot must not carry a waiver_gate_id"):
+            validate(record, schema, schema)
+
+    def test_article_package_cannot_complete_with_a_missing_required_slot(self) -> None:
+        schema, record = self.article_package()
+        record["slots"][2]["completeness"] = "missing"
+        record["slots"][2]["output_record_id"] = None
+        with self.assertRaisesRegex(ValidationError, "complete package has a missing slot"):
+            validate(record, schema, schema)
+
+    def test_article_package_requires_exactly_one_article_text(self) -> None:
+        schema, record = self.article_package()
+        record["slots"].append(dict(record["slots"][0], output_record_id="out_civic_garden_article_text_002"))
+        with self.assertRaisesRegex(ValidationError, "requires exactly 1 active 'article_text'"):
+            validate(record, schema, schema)
+
+    def test_article_package_requires_at_least_one_inline_photo(self) -> None:
+        schema, record = self.article_package()
+        record["slots"] = [record["slots"][0]]
+        with self.assertRaisesRegex(ValidationError, "requires at least 1 active 'inline_photo'"):
             validate(record, schema, schema)
 
 

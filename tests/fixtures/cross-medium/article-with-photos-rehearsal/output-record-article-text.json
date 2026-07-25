@@ -1,0 +1,66 @@
+{
+  "output_record_id": "out_civic_garden_article_text_001",
+  "previous_output_record_id": null,
+  "project_id": "proj_civic_garden_hook_article",
+  "source_id": "src_civic_garden_hook_article",
+  "artist_meaning_id": "meaning_civic_garden_hook_article",
+  "transformation_brief_id": "tb_civic_garden_hook_article",
+  "beat_plan_id": "bp_civic_garden_hook_article",
+  "medium_plan_id": "tmp_civic_garden_hook_article",
+  "brief_id": "brief_civic_garden_hook_article",
+  "prompt_plan_id": "plan_civic_garden_hook_article",
+  "text_generation_plan_id": "plan_civic_garden_hook_article",
+  "prompt_branch_set_id": null,
+  "prompt_branch_id": null,
+  "prompt_variant_type": null,
+  "target_media_type": "text",
+  "output_artifact": {
+    "artifact_id": "artifact_civic_garden_article_text_001",
+    "artifact_kind": "text",
+    "uri_or_path": "workspace-library/artist-os/projects/proj_civic_garden_hook_article/outputs/text/civic-garden-article-001.md",
+    "mime_type": "text/markdown",
+    "description": "Accepted hook-driven article: muddy shoe print, the widening question of unseen maintenance, and changed noticing.",
+    "rights_notes": "Artist-owned rehearsal draft; no real user media."
+  },
+  "origin": {
+    "origin_type": "agent_drafted",
+    "created_by": "fresh_context_draft_sub_agent",
+    "generation_approval_ref": "gate_civic_garden_draft_generation_001"
+  },
+  "generation": {
+    "provider": null,
+    "model": null,
+    "settings": {
+      "text_generation_plan_id": "plan_civic_garden_hook_article",
+      "clear_writing_pass": "applied",
+      "human_voice_pass": "applied"
+    },
+    "seed": null,
+    "estimated_cost": null,
+    "actual_cost": null
+  },
+  "review_state": {
+    "output_critic_review_required": true,
+    "review_record_id": "review_civic_garden_article_text_output",
+    "review_status": "approved"
+  },
+  "acceptance_state": {
+    "output_acceptance_status": "accepted",
+    "accepted_work": true,
+    "artist_decision_ref": "gate_civic_garden_article_text_acceptance",
+    "waiver_reason": null
+  },
+  "traceability_summary": [
+    {
+      "source_type": "medium_plan",
+      "source_ref": "tmp_civic_garden_hook_article",
+      "note": "Sections map to the hook, turn, and payoff roles fixed by the Text Medium Plan."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_civic_garden_hook_article",
+      "note": "The three beats stay in order and the payoff is left as changed noticing rather than a call to act."
+    }
+  ],
+  "created_at": "2026-07-25T12:00:00Z"
+}

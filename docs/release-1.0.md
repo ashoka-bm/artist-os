@@ -175,21 +175,28 @@ the release.
 - [x] Add `cross_medium.plan` to the typed pipeline and structural transition
   list, including lazy creation, Mixed-Media Critic Review, artist approval,
   material-change invalidation, and terminal Asset Package compilation.
-- [ ] Extend the Cross-Medium Plan schema with schema-backed planned
+- [x] Extend the Cross-Medium Plan schema with schema-backed planned
   deliverables and shared references, plus valid and invalid fixtures.
-- [ ] Add the required Cross-Medium Plan gate and review vocabulary to Gate
+- [x] Add the required Cross-Medium Plan gate and review vocabulary to Gate
   Decision and Review Record schemas, including artifact/upstream refs, with
   valid fixtures and negative tests.
-- [ ] Add the Package Format Selection and Completeness gate vocabulary and
+- [x] Add the Package Format Selection and Completeness gate vocabulary and
   upstream refs, and require one Gate Decision for each waived required slot.
-- [ ] Wire the conductor to create the plan on second-medium activation or an
+- [x] Wire the conductor to create the plan on second-medium activation or an
   explicit multi-output request, confirm one primary medium, keep supporting
   media sequential, and refuse expansion before approval.
-- [ ] Add transition and behavior tests that prove the Shared Story Spine is
+- [x] Add transition and behavior tests that prove the Shared Story Spine is
   reused by id and is not recreated for a supporting medium.
-- [ ] Run one fixture-backed rehearsal from a primary medium through a supporting
+- [x] Run one fixture-backed rehearsal from a primary medium through a supporting
   medium, accepted Output Records, Package Format selection, Completeness gate,
   and Asset Package creation.
+
+This section is complete as implementation. It changed the conductor, so the
+stale-eval item under **Clear release regressions** is now owed against this
+conductor: `test_real_conductor_matches_blessed_lock` stays red until the real
+conductor-behavior eval runs and a passing digest is blessed. The rehearsal
+evidence lives in `tests/fixtures/cross-medium/article-with-photos-rehearsal/`;
+promoting it into a release-evidence manifest is still section 7 work.
 
 ### 3. Integrate database reliability hardening
 

@@ -311,9 +311,9 @@ Spine by id, recommend one primary medium for artist confirmation, keep every
 other medium supporting, record planned deliverables/shared references/order/
 continuity, run Mixed-Media Critic Review, and obtain explicit approval before
 supporting Phase 8 expansion. A material plan change invalidates that approval.
-Until the unchecked schema and gate/review blockers in
-`docs/release-1.0.md` are implemented, stop safely and report that this route is
-release work in progress rather than fabricating a valid record.
+Persist the Cross-Medium Plan, its Mixed-Media Critic Review Record, the
+`cross_medium_plan_approval` Gate Decision, and the plan ref in
+`project.json.resume_state` before any supporting-medium work begins.
 8. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), records medium-level `workflow_scale_routing`, and produces the Medium Plan. Persist each gate decision under `gates/`. When character or visual reference support was accepted, create Character Templates before medium locking when they affect voice, continuity, or visual identity, and create Visual Reference Sheet Plans after Style Direction is known or explicitly provisional. The medium recommends `long_work_stewardship` only when its medium-level evaluation finds BOTH cumulative dependency AND that medium's length floor (ADR 0013); otherwise it records the scale level without stewardship even at `cumulative_work` / `full_long_form_project`. When active stewardship exists, enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion. If the Medium Plan newly proves stewardship should be recommended and no activation decision exists, present the activation gate before expansion. If an activated stewardship project proves compact, ask for lightweight confirmation to deactivate as unnecessary and supersede the stewardship record.
 9. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
 10. **Critic Review** — `skills/artist-os/references/art-critic-review.md` for image or sound; `skills/artist-os/references/video-journey.md` in Video Critic Review mode for video; `skills/artist-os/references/writing-method-review.md` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
@@ -329,12 +329,15 @@ release work in progress rather than fabricating a valid record.
 Acceptance for an approved Album or Cross-Medium package, or an explicit
 package request with a selected Package Format. Intake returned or imported
 assets as Output Records, then read the Package Format index and only the
-matching entry. Run the Package Format Selection and Completeness Gate. Do not
-close the Asset Package while a planned deliverable lacks an accepted Output
+matching entry. Run the Package Format Selection and Completeness Gate as a
+Gate Decision with `gate_type = "package_format_selection_and_completeness"`. Do
+not close the Asset Package while a planned deliverable lacks an accepted Output
 Record unless the artist explicitly waives that named slot in its own Gate
-Decision. Persist a thin Asset Package manifest—refs by id, per-slot `filled` /
-`missing` / `waived`, no content copied—into the visible `exports/` area. This
-stage calls no provider.
+Decision, which records `package_completeness.waived_slot_id` and is referenced
+from that slot's `waiver_gate_id`. One waiver covers one slot: never reuse a
+single "ship anyway" decision across slots. Persist a thin Asset Package
+manifest—refs by id, per-slot `filled` / `missing` / `waived`, no content
+copied—into the visible `exports/` area. This stage calls no provider.
 
 ### Medium Specifics
 

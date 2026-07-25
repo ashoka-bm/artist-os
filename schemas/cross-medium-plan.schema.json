@@ -30,6 +30,8 @@
     "beat_plan_id",
     "primary_medium",
     "media",
+    "planned_deliverables",
+    "shared_references",
     "effective_project_scale",
     "production_order",
     "cross_medium_continuity",
@@ -49,6 +51,17 @@
       "type": "array",
       "minItems": 2,
       "items": { "$ref": "#/$defs/media_entry" }
+    },
+    "planned_deliverables": {
+      "type": "array",
+      "description": "The cross-medium checklist Package Compilation ticks off. The Python contract enforces that deliverable ids are unique, that every deliverable names an active medium, that every active medium carries at least one deliverable, and that a complete deliverable carries its Output Record id.",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/planned_deliverable" }
+    },
+    "shared_references": {
+      "type": "array",
+      "description": "References the coordinator holds because more than one medium depends on them. May be empty when the Shared Story Spine is the only shared material. The Python contract enforces unique ids and that shared_with_media names active media only.",
+      "items": { "$ref": "#/$defs/shared_reference" }
     },
     "effective_project_scale": { "$ref": "#/$defs/effective_scale" },
     "production_order": {
@@ -100,6 +113,67 @@
         },
         "plan_id": { "type": ["string", "null"], "pattern": "^(imp|vmp|smp|tmp|rpp)_[a-zA-Z0-9_-]+$" },
         "path_or_ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "planned_deliverable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deliverable_id",
+        "medium",
+        "deliverable_summary",
+        "required",
+        "package_slot_id",
+        "output_record_id",
+        "status"
+      ],
+      "properties": {
+        "deliverable_id": { "type": "string", "pattern": "^deliv_[a-zA-Z0-9_-]+$" },
+        "medium": { "type": "string", "enum": ["image", "video", "audio", "text"] },
+        "deliverable_summary": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "package_slot_id": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "Package Format slot this deliverable is expected to fill during Package Compilation; null when the deliverable is not part of a compiled package. Repeating slots (inline_photo, album_audio_track) legitimately recur across deliverables."
+        },
+        "output_record_id": { "type": ["string", "null"], "pattern": "^out_[a-zA-Z0-9_-]+$" },
+        "status": { "$ref": "#/$defs/planning_status" }
+      }
+    },
+    "shared_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shared_reference_id",
+        "reference_type",
+        "ref_id",
+        "path_or_ref",
+        "shared_with_media",
+        "continuity_role"
+      ],
+      "properties": {
+        "shared_reference_id": { "type": "string", "pattern": "^sref_[a-zA-Z0-9_-]+$" },
+        "reference_type": {
+          "type": "string",
+          "enum": [
+            "source_record",
+            "reference_inventory",
+            "character_template",
+            "visual_reference_sheet_plan",
+            "approved_output",
+            "writing_reference"
+          ]
+        },
+        "ref_id": { "type": "string", "minLength": 1 },
+        "path_or_ref": { "type": "string", "minLength": 1 },
+        "shared_with_media": {
+          "type": "array",
+          "description": "A reference belongs to the coordinator only when at least two active media depend on it; a single-medium reference belongs to that Medium Plan.",
+          "minItems": 2,
+          "items": { "type": "string", "enum": ["image", "video", "audio", "text"] }
+        },
+        "continuity_role": { "type": "string", "minLength": 1 }
       }
     },
     "medium_role": {

@@ -1,0 +1,43 @@
+{
+  "asset_package_id": "assetpkg_civic_garden_hook_article",
+  "project_id": "proj_civic_garden_hook_article",
+  "package_format_id": "article_with_photos",
+  "package_format_ref": "docs/structure-library/package-format/article-with-photos.md",
+  "cross_medium_plan_ref": "tests/fixtures/cross-medium/article-with-photos-rehearsal/cross-medium-plan-article.json",
+  "status": "complete",
+  "provider_boundary": {
+    "arranges_only": true,
+    "calls_provider": false
+  },
+  "slots": [
+    {
+      "slot_id": "article_text",
+      "slot_role": "primary",
+      "completeness": "filled",
+      "output_record_id": "out_civic_garden_article_text_001",
+      "slot_metadata": {
+        "title": "What the Muddy Shoe Was Telling Us"
+      }
+    },
+    {
+      "slot_id": "inline_photo",
+      "slot_role": "supporting",
+      "completeness": "filled",
+      "output_record_id": "out_civic_garden_inline_photo_shoe_001",
+      "slot_metadata": {
+        "caption": "A shoe print at the bed edge, left after someone finished watering."
+      }
+    },
+    {
+      "slot_id": "inline_photo",
+      "slot_role": "supporting",
+      "completeness": "filled",
+      "output_record_id": "out_civic_garden_inline_photo_hose_001",
+      "slot_metadata": {
+        "caption": "The hose, coiled and left ready for whoever comes next."
+      }
+    }
+  ],
+  "created_at": "2026-07-25T14:50:00Z",
+  "updated_at": "2026-07-25T14:50:00Z"
+}

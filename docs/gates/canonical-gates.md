@@ -92,6 +92,11 @@ continuity invalidates the standing approval. Rerun the affected
 Mixed-Media Critic Review and present this gate again before expansion
 continues.
 
+Store the decision as a Gate Decision with
+`gate_type = "cross_medium_plan_approval"`. Its `upstream_refs` must name both
+the `cross_medium_plan` it approves and the `review_record` of the Mixed-Media
+Critic Review that preceded it.
+
 ### Package Format Selection And Completeness Gate
 
 Selects the Package Format and decides whether an approved package has all
@@ -107,6 +112,16 @@ This gate is conditional. Run it only for an approved Album or Cross-Medium
 package, or when the artist explicitly requests Package Compilation and selects
 a Package Format. It calls no provider and does not replace per-output review
 or acceptance.
+
+Store each decision as a Gate Decision with
+`gate_type = "package_format_selection_and_completeness"`. Its
+`package_completeness` block records the selected `package_format_id` and one
+`completeness_verdict`: `format_selected`, `all_required_slots_filled`,
+`required_slot_waived`, or `returned_to_medium_journey`. Only the
+`required_slot_waived` verdict may carry `waived_slot_id`, and it names exactly
+one slot — that is what makes “ship anyway” unavailable. The Asset Package
+carries this gate's id in that slot's `waiver_gate_id`, and two waived slots may
+never share one waiver gate id.
 
 ### Format Length Gate
 

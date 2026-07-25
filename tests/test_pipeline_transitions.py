@@ -1154,5 +1154,270 @@ class PipelineTransitionTests(unittest.TestCase):
             self.assertNotIn("voice_point_of_view", part)
 
 
+# The constrained Cross-Medium Plan route, proven end to end on a tracked
+# fixture-backed rehearsal: one Shared Story Spine, text primary plus image
+# supporting, accepted Output Records, the article-with-photos Package Format, the
+# Completeness gate, and a terminal Asset Package. The frozen boundary lives in
+# docs/release-1.0.md -> "Constrained Cross-Medium Plan orchestration"; each numbered
+# rule there should be traceable to a test below.
+REHEARSAL = "tests/fixtures/cross-medium/article-with-photos-rehearsal"
+SPINE = "tests/fixtures/text-journey/article-rehearsal"
+CONDUCTOR = "skills/artist-os/SKILL.md"
+
+
+class CrossMediumRehearsalTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.plan = load(f"{REHEARSAL}/cross-medium-plan-article.json")
+        self.review = load(f"{REHEARSAL}/mixed-media-critic-review-record.json")
+        self.approval = load(f"{REHEARSAL}/cross-medium-plan-approval-gate.json")
+        self.completeness = load(f"{REHEARSAL}/package-format-completeness-gate.json")
+        self.waiver = load(f"{REHEARSAL}/package-slot-waiver-gate.json")
+        self.package = load(f"{REHEARSAL}/asset-package-article.json")
+        self.beat_plan = load(f"{SPINE}/beat-plan.json")
+        self.text_plan = load(f"{SPINE}/text-medium-plan.json")
+        self.outputs = {
+            name: load(f"{REHEARSAL}/output-record-{name}.json")
+            for name in ("article-text", "inline-photo-shoe", "inline-photo-hose")
+        }
+
+    # Rule 2 — every active medium reuses one unchanged Shared Story Spine.
+    def test_shared_story_spine_is_reused_by_id_not_recreated(self) -> None:
+        for field in ("source_id", "artist_meaning_id", "transformation_brief_id", "beat_plan_id"):
+            with self.subTest(field=field):
+                self.assertEqual(self.plan[field], self.beat_plan[field])
+        self.assertEqual(self.plan["beat_plan_id"], self.text_plan["beat_plan_id"])
+
+        # The rehearsal must not ship a second spine for the supporting medium.
+        forked = sorted(p.name for p in (REPO_ROOT / REHEARSAL).glob("*.json")
+                        if p.name in {"beat-plan.json", "transformation-brief.json", "artist-meaning.json"})
+        self.assertEqual(forked, [], "supporting medium activation must not fork the Shared Story Spine")
+
+    def test_standing_story_approval_carries_the_supporting_medium(self) -> None:
+        # No second Story gate: the standing approval on the unchanged Beat Plan holds.
+        self.assertEqual(self.beat_plan["story_approval"]["status"], "approved")
+        self.assertEqual(self.beat_plan["story_approval"]["waived_blocks"], [])
+        gate_types = {self.approval["gate_type"], self.completeness["gate_type"]}
+        self.assertNotIn("story_approval", gate_types)
+
+    def test_every_output_record_reuses_the_spine_ids(self) -> None:
+        for name, output in self.outputs.items():
+            with self.subTest(output=name):
+                for field in ("source_id", "artist_meaning_id", "transformation_brief_id", "beat_plan_id"):
+                    self.assertEqual(output[field], self.plan[field], f"{name}.{field}")
+
+    # Rule 3 — exactly one primary medium; every other medium is supporting.
+    def test_one_primary_medium_and_supporting_media_serve_it(self) -> None:
+        roles = [entry["medium_role"] for entry in self.plan["media"]]
+        self.assertEqual(roles.count("primary"), 1)
+        primary = self.plan["primary_medium"]
+        self.assertEqual(primary, "text")
+        for entry in self.plan["media"]:
+            if entry["medium_role"] == "supporting":
+                self.assertEqual(entry["serves_primary"], primary)
+                self.assertTrue(entry["continuity_from_primary_realization"])
+
+    # Rule 5 — supporting media default to compact treatment.
+    def test_supporting_medium_defaults_to_compact_treatment(self) -> None:
+        supporting = [e for e in self.plan["media"] if e["medium_role"] == "supporting"]
+        self.assertEqual([e["medium_scale_level"] for e in supporting], ["compact_artifact"])
+
+    # Rule 6 — production is sequential in 1.0.
+    def test_production_order_is_sequential_and_anchored_on_the_primary(self) -> None:
+        order = sorted(self.plan["production_order"], key=lambda step: step["order_index"])
+        self.assertEqual([step["order_index"] for step in order], list(range(1, len(order) + 1)))
+        self.assertEqual(order[0]["medium"], self.plan["primary_medium"])
+        self.assertIn("image", order[0]["required_before_media"])
+        # No step may run alongside another: one step per medium, indexes unique.
+        media = [step["medium"] for step in order]
+        self.assertEqual(len(media), len(set(media)))
+
+    # Rule 7 — review precedes approval; production does not expand while unapproved.
+    def test_mixed_media_critic_review_precedes_plan_approval(self) -> None:
+        self.assertEqual(self.review["review_role"], "mixed_media_critic")
+        self.assertEqual(self.review["artifact_under_review"]["artifact_type"], "cross_medium_plan")
+        self.assertEqual(
+            self.review["artifact_under_review"]["artifact_id"], self.plan["cross_medium_plan_id"]
+        )
+        self.assertEqual(self.review["approval_status"], "approve")
+        self.assertLess(timestamp(self.review), timestamp(self.approval))
+
+    def test_plan_approval_names_the_plan_and_its_review(self) -> None:
+        self.assertEqual(self.approval["gate_type"], "cross_medium_plan_approval")
+        self.assertEqual(self.approval["gate_status"], "approved")
+        self.assertFalse(self.approval["proceed_unconfirmed"])
+        self.assertIn(
+            ("cross_medium_plan", self.plan["cross_medium_plan_id"]),
+            ref_pairs(self.approval["upstream_refs"]),
+        )
+        self.assertIn(
+            ("review_record", self.review["review_record_id"]),
+            ref_pairs(self.approval["upstream_refs"]),
+        )
+
+    def test_supporting_medium_work_happens_after_plan_approval(self) -> None:
+        approved_at = timestamp(self.approval)
+        for name in ("inline-photo-shoe", "inline-photo-hose"):
+            with self.subTest(output=name):
+                self.assertGreater(timestamp(self.outputs[name]), approved_at)
+
+    def test_supporting_outputs_follow_the_accepted_primary_realization(self) -> None:
+        primary = self.outputs["article-text"]
+        self.assertEqual(primary["acceptance_state"]["output_acceptance_status"], "accepted")
+        for name in ("inline-photo-shoe", "inline-photo-hose"):
+            with self.subTest(output=name):
+                self.assertGreater(timestamp(self.outputs[name]), timestamp(primary))
+                traces = {note["source_ref"] for note in self.outputs[name]["traceability_summary"]}
+                self.assertIn(primary["output_record_id"], traces)
+
+    # Rule 4 — the plan owns deliverables and shared references; media own the rest.
+    def test_planned_deliverables_cover_every_active_medium(self) -> None:
+        active = {entry["medium"] for entry in self.plan["media"]}
+        planned = {item["medium"] for item in self.plan["planned_deliverables"]}
+        self.assertEqual(planned, active)
+
+    def test_shared_references_serve_more_than_one_medium(self) -> None:
+        active = {entry["medium"] for entry in self.plan["media"]}
+        for reference in self.plan["shared_references"]:
+            with self.subTest(reference=reference["shared_reference_id"]):
+                self.assertGreaterEqual(len(reference["shared_with_media"]), 2)
+                self.assertLessEqual(set(reference["shared_with_media"]), active)
+
+    def test_medium_specific_authority_stays_in_the_medium_plan(self) -> None:
+        # The coordinator carries refs, not form/voice/length decisions.
+        for entry in self.plan["media"]:
+            self.assertIn("medium_plan_ref", entry)
+        self.assertEqual(
+            self.plan["media"][0]["medium_plan_ref"]["plan_id"], self.text_plan["text_medium_plan_id"]
+        )
+
+    # Rule 9 — Package Compilation runs on accepted Output Records only.
+    def test_every_planned_deliverable_ticks_off_against_an_accepted_output(self) -> None:
+        accepted = {
+            output["output_record_id"]
+            for output in self.outputs.values()
+            if output["acceptance_state"]["output_acceptance_status"] == "accepted"
+            and output["acceptance_state"]["accepted_work"] is True
+        }
+        for item in self.plan["planned_deliverables"]:
+            with self.subTest(deliverable=item["deliverable_id"]):
+                self.assertEqual(item["status"], "complete")
+                self.assertIn(item["output_record_id"], accepted)
+
+    def test_package_slots_resolve_to_the_planned_deliverables(self) -> None:
+        planned = {item["output_record_id"]: item for item in self.plan["planned_deliverables"]}
+        for slot in self.package["slots"]:
+            with self.subTest(slot=slot["slot_id"]):
+                self.assertEqual(slot["completeness"], "filled")
+                deliverable = planned[slot["output_record_id"]]
+                self.assertEqual(deliverable["package_slot_id"], slot["slot_id"])
+
+    def test_completeness_gate_selects_the_format_and_closes_the_package(self) -> None:
+        self.assertEqual(self.completeness["gate_type"], "package_format_selection_and_completeness")
+        completeness = self.completeness["package_completeness"]
+        self.assertEqual(completeness["package_format_id"], self.package["package_format_id"])
+        self.assertEqual(completeness["completeness_verdict"], "all_required_slots_filled")
+        self.assertEqual(completeness["asset_package_id"], self.package["asset_package_id"])
+        self.assertNotIn("waived_slot_id", completeness)
+        self.assertEqual(self.package["status"], "complete")
+        self.assertGreater(timestamp(self.completeness), timestamp(self.approval))
+
+    def test_completeness_gate_follows_output_acceptance(self) -> None:
+        for output in self.outputs.values():
+            self.assertLess(timestamp(output), timestamp(self.completeness))
+
+    def test_waiver_gate_names_exactly_one_slot(self) -> None:
+        completeness = self.waiver["package_completeness"]
+        self.assertEqual(completeness["completeness_verdict"], "required_slot_waived")
+        self.assertEqual(completeness["waived_slot_id"], "inline_photo")
+        self.assertNotEqual(self.waiver["gate_decision_id"], self.completeness["gate_decision_id"])
+
+    def test_a_waived_slot_carries_its_own_gate_and_no_output_record(self) -> None:
+        # The only way a required slot is skipped: its own recorded Gate Decision.
+        package = load(f"{REHEARSAL}/asset-package-article.json")
+        package["slots"][2]["completeness"] = "waived"
+        package["slots"][2]["output_record_id"] = None
+        package["slots"][2]["waiver_gate_id"] = self.waiver["gate_decision_id"]
+        waived = [slot for slot in package["slots"] if slot["completeness"] == "waived"]
+        self.assertEqual(len(waived), 1)
+        self.assertIsNone(waived[0]["output_record_id"])
+        self.assertEqual(waived[0]["waiver_gate_id"], self.waiver["gate_decision_id"])
+        self.assertEqual(waived[0]["slot_id"], self.waiver["package_completeness"]["waived_slot_id"])
+
+    def test_package_compilation_calls_no_provider(self) -> None:
+        self.assertTrue(self.package["provider_boundary"]["arranges_only"])
+        self.assertFalse(self.package["provider_boundary"]["calls_provider"])
+        self.assertEqual(
+            self.package["cross_medium_plan_ref"],
+            f"{REHEARSAL}/cross-medium-plan-article.json",
+        )
+
+    def test_imported_supporting_assets_carry_no_provider_generation(self) -> None:
+        for name in ("inline-photo-shoe", "inline-photo-hose"):
+            output = self.outputs[name]
+            with self.subTest(output=name):
+                self.assertEqual(output["origin"]["origin_type"], "artist_imported")
+                self.assertIsNone(output["generation"]["provider"])
+                self.assertIsNone(output["origin"]["generation_approval_ref"])
+
+
+class CrossMediumConductorContractTests(unittest.TestCase):
+    """The conductor rules that cannot be proven by a record alone.
+
+    These pin the load-bearing sentences in skills/artist-os/SKILL.md so a later
+    leanness or dedup pass cannot delete the constraint and leave the route
+    silently unguarded — the same guard shape as test_gate_enforcement_contract.
+    """
+
+    def setUp(self) -> None:
+        self.conductor = (REPO_ROOT / CONDUCTOR).read_text(encoding="utf-8")
+
+    def test_conductor_no_longer_safe_stops_on_the_cross_medium_route(self) -> None:
+        for stale in (
+            "stop safely and report that this route is",
+            "release work in progress rather than fabricating",
+        ):
+            with self.subTest(fragment=stale):
+                self.assertNotIn(stale, self.conductor)
+
+    def test_conductor_creates_the_plan_lazily(self) -> None:
+        for fragment in (
+            "only when a second medium is activated",
+            "explicitly requests multiple outputs",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.conductor)
+
+    def test_conductor_refuses_expansion_before_approval(self) -> None:
+        for fragment in (
+            "Do not write the supporting Medium Plan or append `medium_activated` before",
+            "Mixed-Media Critic Review is complete, and the artist explicitly",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.conductor)
+
+    def test_conductor_keeps_production_sequential(self) -> None:
+        self.assertIn("General multi-medium production is sequential in 1.0", self.conductor)
+        self.assertIn("never run the", self.conductor)
+
+    def test_conductor_invalidates_approval_on_material_change(self) -> None:
+        self.assertIn("A material plan change invalidates that approval", self.conductor)
+
+    def test_conductor_persists_the_plan_review_approval_and_resume_refs(self) -> None:
+        for fragment in (
+            "Persist the Cross-Medium Plan, its Mixed-Media Critic Review Record",
+            "resume_state",
+        ):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, self.conductor)
+
+    def test_conductor_keeps_medium_specific_reviews_and_gates(self) -> None:
+        self.assertIn("its own reviews and downstream gates", self.conductor)
+
+    def test_conductor_states_package_compilation_is_conditional_and_provider_free(self) -> None:
+        self.assertIn("conditional terminal stage", self.conductor)
+        self.assertIn("stage calls no provider", self.conductor)
+        self.assertIn("One waiver covers one slot", self.conductor)
+
+
 if __name__ == "__main__":
     unittest.main()

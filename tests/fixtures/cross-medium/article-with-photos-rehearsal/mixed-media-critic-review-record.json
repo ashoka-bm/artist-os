@@ -1,0 +1,150 @@
+{
+  "review_record_id": "review_civic_garden_cross_medium_plan",
+  "project_id": "proj_civic_garden_hook_article",
+  "review_role": "mixed_media_critic",
+  "reviewer_execution": {
+    "execution_mode": "bounded_sub_agent",
+    "sub_agent_required": true,
+    "source_skill": "artist-os-critique-asset"
+  },
+  "artifact_under_review": {
+    "artifact_type": "cross_medium_plan",
+    "artifact_id": "cmp_civic_garden_hook_article",
+    "path_or_ref": "tests/fixtures/cross-medium/article-with-photos-rehearsal/cross-medium-plan-article.json"
+  },
+  "upstream_context": {
+    "source_id": "src_civic_garden_hook_article",
+    "artist_meaning_id": "meaning_civic_garden_hook_article",
+    "artist_meaning_summary": "Notice the unseen labor that keeps a shared garden usable, without turning it into praise or a call to action.",
+    "governing_refs": [
+      {
+        "ref_type": "beat_plan",
+        "ref_id": "bp_civic_garden_hook_article",
+        "path_or_ref": "tests/fixtures/text-journey/article-rehearsal/beat-plan.json"
+      },
+      {
+        "ref_type": "medium_plan",
+        "ref_id": "tmp_civic_garden_hook_article",
+        "path_or_ref": "tests/fixtures/text-journey/article-rehearsal/text-medium-plan.json"
+      },
+      {
+        "ref_type": "writing_reference",
+        "ref_id": "wref_civic_garden_maintenance_signs",
+        "path_or_ref": "references/maintenance-signs-notes.md"
+      }
+    ],
+    "open_questions": []
+  },
+  "emotional_tension_review": {
+    "intended_feeling_reviewed": "modest civic attention that lingers after the article",
+    "minimum_tension_criteria_reviewed": [
+      "The photos must sharpen the unsolved question rather than answer it.",
+      "The supporting medium must not restate what the prose already says."
+    ],
+    "tension_intensity_assessments": [
+      {
+        "source_ref": "cmp_civic_garden_hook_article#cross_medium_continuity",
+        "tension_name": "unresolved noticing across media",
+        "claimed_intensity": 0.7,
+        "reviewer_assessed_intensity": 0.72,
+        "minimum_required_intensity": 0.6,
+        "meets_minimum": true,
+        "assessment_note": "The must-not-drift rule blocks praise or a volunteer ask in either medium, so the question stays open in both."
+      },
+      {
+        "source_ref": "cmp_civic_garden_hook_article#planned_deliverables",
+        "tension_name": "supporting photos carry a distinct job",
+        "claimed_intensity": 0.65,
+        "reviewer_assessed_intensity": 0.66,
+        "minimum_required_intensity": 0.6,
+        "meets_minimum": true,
+        "assessment_note": "The shoe photo sits at the hook and the hose photo at the turn, so each photo does evidentiary work the prose only implies."
+      }
+    ],
+    "key_emotional_movements_reviewed": [
+      {
+        "movement_id": "kem_hook_001",
+        "review_note": "The shoe-print photo is placed at the hook without explaining the disturbance the prose opens with."
+      },
+      {
+        "movement_id": "kem_turn_001",
+        "review_note": "The coiled-hose photo lands at the reframing turn and shows readiness rather than a person."
+      },
+      {
+        "movement_id": "kem_payoff_001",
+        "review_note": "No photo is planned for the payoff, which keeps the changed noticing in the reader rather than on the page."
+      }
+    ],
+    "expectation_turns_reviewed": [
+      {
+        "beat_id": "beat_shoe_001",
+        "review_note": "The hook beat stays a question; the photo does not caption an answer."
+      },
+      {
+        "beat_id": "beat_water_001",
+        "review_note": "The turn beat widens to unseen labor and the hose photo supports that widening."
+      },
+      {
+        "beat_id": "beat_notice_001",
+        "review_note": "The payoff beat is left to the prose, protecting the lingering attention."
+      }
+    ],
+    "missing_context": [],
+    "reviewer_conclusion": "The Cross-Medium Plan is coherent enough to present for artist approval before the supporting image medium expands."
+  },
+  "matched": [
+    {
+      "summary": "One unchanged Shared Story Spine and its standing Story Approval are reused by id.",
+      "traces_to": [
+        {
+          "source_type": "beat_plan",
+          "source_ref": "bp_civic_garden_hook_article",
+          "note": "The plan references the existing Artist Meaning, Transformation Brief, and Beat Plan by id and does not fork the Beat Plan for the image medium."
+        }
+      ]
+    },
+    {
+      "summary": "Exactly one primary medium is named and every other medium is supporting.",
+      "traces_to": [
+        {
+          "source_type": "cross_medium_plan",
+          "source_ref": "cmp_civic_garden_hook_article#media",
+          "note": "Text carries the primary Medium Role; image is supporting and serves text."
+        }
+      ]
+    },
+    {
+      "summary": "Production order is sequential and medium-local authority stays in the Medium Plans.",
+      "traces_to": [
+        {
+          "source_type": "cross_medium_plan",
+          "source_ref": "cmp_civic_garden_hook_article#production_order",
+          "note": "Text is realized first and is required before image; the plan records no simultaneous production."
+        },
+        {
+          "source_type": "medium_plan",
+          "source_ref": "tmp_civic_garden_hook_article",
+          "note": "Form, voice, and length decisions remain in the independently reviewed Text Medium Plan."
+        }
+      ]
+    }
+  ],
+  "drifted": [],
+  "findings": [
+    {
+      "severity": "low",
+      "summary": "Both required inline photos must land or be waived by name before the package can close.",
+      "evidence": "Both photo deliverables are marked required and both point at the repeating inline_photo Package Format slot.",
+      "recommendation": "Carry both into the Package Format Selection And Completeness Gate and waive by named slot if either fails to land."
+    }
+  ],
+  "recommended_revision": "No blocking revision required before Cross-Medium Plan Approval.",
+  "approval_status": "approve",
+  "artist_waiver": {
+    "waived": false,
+    "reason": "",
+    "waived_by": null,
+    "waived_at": null
+  },
+  "created_at": "2026-07-25T10:20:00Z"
+}

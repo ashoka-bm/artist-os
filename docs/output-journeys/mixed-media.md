@@ -1,10 +1,14 @@
 # Mixed-Media Journey
 
 > **Status: Album v1 is implemented; constrained general Cross-Medium Plan
-> orchestration is frozen into 1.0 and is partially implemented.** The
-> Cross-Medium Plan and Asset Package schemas, fixtures, and terminal Package
-> Compilation contract exist. The remaining 1.0 work is the explicit
-> review/approval lifecycle and conductor wiring. Broader package, campaign,
+> orchestration is frozen into 1.0 and is implemented.** The Cross-Medium Plan
+> and Asset Package schemas, planned deliverables and shared references, the
+> Mixed-Media Critic Review and approval vocabulary, the Package Format
+> Selection And Completeness gate with per-slot waivers, the conductor wiring,
+> and a tracked fixture-backed rehearsal
+> (`tests/fixtures/cross-medium/article-with-photos-rehearsal/`) are in place.
+> The route still owes the real conductor-behavior eval and its promotion into
+> release-evidence, per `docs/release-1.0.md`. Broader package, campaign,
 > publishing, and distribution routers are post-1.0.
 
 The Mixed-Media Journey coordinates multiple output journeys from one approved Beat Plan. It is for projects where image, video, sound, text, or other media should share meaning and structure while expressing different parts of the work.

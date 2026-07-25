@@ -8,27 +8,28 @@ Artist OS is in 1.0 closure. The artist-approved product boundary, exclusions,
 change-control rule, blocking backlog, and release gate are authoritative in
 `docs/release-1.0.md`.
 
-The current implementation priority is to finish the constrained Cross-Medium
-Plan lifecycle, integrate database reliability hardening without the automatic
-conductor loop, clear the stale conductor eval lock, and certify the existing
-dry-run journeys. Provider adapters, automatic visible-file edit detection, and
+The constrained Cross-Medium Plan lifecycle is complete. The current
+implementation priority is to integrate database reliability hardening without
+the automatic conductor loop, clear the stale conductor eval lock, and certify
+the existing dry-run journeys. Provider adapters, automatic visible-file edit detection, and
 new package routers are post-1.0.
 
 ### Next implementation slice
 
-The next slice is **Cross-Medium Plan contract completion**, not a new medium
-or provider. Its bounded outcome is:
+**Cross-Medium Plan contract completion is done** (`docs/release-1.0.md`
+section 2, all boxes checked). All five of its bounded outcomes landed:
+`planned_deliverables` and `shared_references` on the Cross-Medium Plan; the
+Cross-Medium approval/review and package-completeness waiver vocabulary; valid
+and negative fixture coverage; the conductor's lazy review/approval interstitial
+with sequential supporting-medium entry; and a tracked primary-to-supporting
+rehearsal through Asset Package creation.
 
-1. add `planned_deliverables` and `shared_references` to the Cross-Medium Plan;
-2. add Cross-Medium approval/review and package-completeness waiver vocabulary;
-3. prove the new schema/ref transitions with valid and negative fixtures;
-4. wire the conductor's lazy review/approval interstitial and sequential
-   supporting-medium entry;
-5. rehearse one primary-to-supporting route through Asset Package creation.
-
-Start this slice only from an up-to-date branch after the scope-freeze
-documentation is reviewed and landed. Do not mix database hardening, provider
-work, or automatic learning behavior into it.
+The next slice is **database reliability hardening**: rebase or selectively
+integrate `self-improvement-db-hardening` without the automatic conductor loop
+from `conductor-learning-loop`. Before that lands, the conductor changed, so the
+real conductor-behavior eval is owed and `test_real_conductor_matches_blessed_lock`
+stays red until a passing digest is blessed. Do not mix provider work or
+automatic learning behavior into either slice.
 
 ```text
 Step Input Record
@@ -70,9 +71,9 @@ Implemented dry-run workflows:
 - Video storyboard approval to provider-specific Seedance Prompt Package, before any Seedance generation approval.
 - Existing script, dialogue, narration, or approved text to ElevenLabs v3 voice-over prompt preparation, before any TTS provider call.
 - Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
-- Schema-backed Cross-Medium Plan and terminal Asset Package compilation
-  foundation for accepted Output Records; the general approval/review and
-  conductor lifecycle remains 1.0 closure work.
+- Schema-backed Cross-Medium Plan and terminal Asset Package compilation for
+  accepted Output Records, including the general approval/review vocabulary and
+  conductor lifecycle.
 
 Artist OS 1.0 ships no provider adapter. Generation Approval remains a
 provenance/safety contract for future or external execution; it does not make a
@@ -141,10 +142,38 @@ recorded.
 
 Album v1's shipped Release Package Plan remains for back-compat, while its planning/output seam is now documented as generalizing toward Cross-Medium Plan plus Package Format plus Asset Package.
 
-The general Cross-Medium Plan is not release-complete yet. Gate Decision and
-Review Record vocabulary, conductor enforcement, transition behavior coverage,
-and a full primary-to-supporting rehearsal remain blocking 1.0 work in
-`docs/release-1.0.md`.
+### Cross-Medium Plan Lifecycle Completion
+
+Completed the constrained general route on top of that foundation:
+
+- `planned_deliverables` (the checklist Package Compilation ticks off) and
+  `shared_references` (held only when two or more active media depend on them) on
+  `schemas/cross-medium-plan.schema.json`, with the cross-field rules in
+  `validate_cross_medium_plan_contract`;
+- `cross_medium_plan_approval` and `package_format_selection_and_completeness`
+  gate types, `cross_medium_plan` / `asset_package` upstream ref types, and a
+  `package_completeness` block whose `required_slot_waived` verdict must name
+  exactly one `waived_slot_id`;
+- `cross_medium_plan` as a Review Record artifact/governing/traceability type,
+  with a schema rule that such a review must be the Mixed-Media Critic's and must
+  name the Beat Plan — the executable form of "the Shared Story Spine is reused by
+  id";
+- distinct `waiver_gate_id` per waived Asset Package slot. Before this, a
+  `complete` package with every required slot waived by one shared gate id
+  validated, which is precisely the general "ship anyway" decision the release
+  contract forbids;
+- conductor wiring in `skills/artist-os/SKILL.md`: the temporary safe-stop is
+  gone, the plan/review/approval/resume refs are persisted before any
+  supporting-medium work, and the waiver rule is stated at Phase 18;
+- a tracked rehearsal at
+  `tests/fixtures/cross-medium/article-with-photos-rehearsal/` — text primary
+  plus image supporting, one reused Shared Story Spine, three accepted Output
+  Records, the `article_with_photos` Package Format, the Completeness gate, and a
+  complete Asset Package.
+
+Still owed for this route: the real conductor-behavior eval (the conductor
+changed) and promotion of the rehearsal into a release-evidence manifest, both
+tracked in `docs/release-1.0.md`.
 
 ### Video Provider Export And Voice Prompt Prep
 
@@ -599,13 +628,12 @@ Implemented the schema pass for the accepted activation model:
 
 ## Current Best Next Step
 
-Complete the blocking backlog in `docs/release-1.0.md` in order. The immediate
-implementation pass is the thin Cross-Medium Plan contract: missing
-deliverable/reference fields, Cross-Medium approval/review refs, package
-completeness waiver vocabulary, transition tests, conductor enforcement, and a
-fixture-backed rehearsal. Then integrate the database reliability work from
-`self-improvement-db-hardening` without the automatic conductor wiring from
-`conductor-learning-loop`.
+Complete the blocking backlog in `docs/release-1.0.md` in order. The thin
+Cross-Medium Plan contract is now done, so the immediate implementation pass is
+the database reliability work from `self-improvement-db-hardening`, integrated
+without the automatic conductor wiring from `conductor-learning-loop`. Run the
+real conductor-behavior eval before or alongside that slice, since the
+Cross-Medium wiring changed the conductor.
 
 Reason:
 
@@ -623,11 +651,12 @@ Reason:
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,
 - Album v1 has a package plan schema, representative fixture, and
   fixture-backed rehearsal coverage;
-- Cross-Medium Plan and Asset Package schemas exist, but their general
-  review/approval and conductor lifecycle is not yet complete;
+- Cross-Medium Plan and Asset Package schemas now carry the general
+  review/approval and conductor lifecycle, with a tracked fixture-backed
+  rehearsal; the route still owes the real conductor eval;
 - the database hardening branch protects existing persistence and resume
   behavior without requiring automatic conductor self-improvement;
-- the current unit baseline runs 420 tests with one known failure: the
+- the current unit baseline runs 479 tests with one known failure: the
   conductor digest no longer matches its blessed eval lock.
 
 Near-term plan:

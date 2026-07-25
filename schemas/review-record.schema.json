@@ -4,6 +4,36 @@
   "title": "ReviewRecord",
   "type": "object",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "A Cross-Medium Plan is reviewed by the Mixed-Media Critic, and its review must name the Beat Plan it governs so the reused Shared Story Spine is traceable by id.",
+      "if": {
+        "required": ["artifact_under_review"],
+        "properties": {
+          "artifact_under_review": {
+            "required": ["artifact_type"],
+            "properties": { "artifact_type": { "const": "cross_medium_plan" } }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "review_role": { "const": "mixed_media_critic" },
+          "upstream_context": {
+            "properties": {
+              "governing_refs": {
+                "contains": {
+                  "required": ["ref_type"],
+                  "properties": { "ref_type": { "const": "beat_plan" } }
+                },
+                "minContains": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "required": [
     "review_record_id",
     "project_id",
@@ -84,7 +114,7 @@
       "properties": {
         "artifact_type": {
           "type": "string",
-          "enum": ["transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
+          "enum": ["transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "cross_medium_plan", "asset_package", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "prompt_branch_set", "output_record", "generated_work", "fragment_file", "text_draft", "mixed_media_package"]
         },
         "artifact_id": { "type": "string" },
         "path_or_ref": { "type": "string" }
@@ -107,7 +137,7 @@
             "properties": {
               "ref_type": {
                 "type": "string",
-                "enum": ["source_record", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
+                "enum": ["source_record", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "cross_medium_plan", "asset_package", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference"]
               },
               "ref_id": { "type": "string" },
               "path_or_ref": { "type": "string" }
@@ -250,7 +280,7 @@
       "properties": {
         "source_type": {
           "type": "string",
-          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference", "review_record"]
+          "enum": ["reference_evidence", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "cross_medium_plan", "asset_package", "medium_plan", "creative_brief", "sound_creative_brief", "text_creative_brief", "prompt_plan", "text_generation_plan", "approved_output", "writing_reference", "review_record"]
         },
         "source_ref": { "type": "string" },
         "note": { "type": "string" }

@@ -16,6 +16,25 @@ A changelog entry records the user-facing change, not the branch or commit narra
 - Constrained Cross-Medium 1.0 target contract: lazy plan creation, one
   artist-confirmed primary medium, sequential supporting media, material-change
   invalidation, and terminal provider-free Asset Package compilation.
+- Cross-Medium Plan `planned_deliverables` and `shared_references`: the plan now
+  carries the checklist Package Compilation ticks off, and the references two or
+  more active media depend on. Every active medium needs at least one planned
+  deliverable, and a complete deliverable must name its Output Record.
+- Cross-Medium Plan review and approval vocabulary: a Review Record can name a
+  `cross_medium_plan` as the reviewed artifact (Mixed-Media Critic only, and it
+  must name the governing Beat Plan), and a Gate Decision with
+  `gate_type = "cross_medium_plan_approval"` must reference both the plan and its
+  review.
+- Package Format Selection And Completeness Gate vocabulary:
+  `gate_type = "package_format_selection_and_completeness"` with a
+  `package_completeness` block recording the Package Format, the completeness
+  verdict, and — for a waiver only — the single `waived_slot_id`.
+- A tracked fixture-backed Cross-Medium rehearsal at
+  `tests/fixtures/cross-medium/article-with-photos-rehearsal/`: text primary plus
+  image supporting over one reused Shared Story Spine, through accepted Output
+  Records, the article-with-photos Package Format, the Completeness gate, and a
+  complete Asset Package.
+
 - Reference Inventory (`schemas/reference-inventory.schema.json`): a project-level
   continuity record for promoted character, location, and object references — it
   owns effective policy, scan history, subject / package / per-output readiness,
@@ -61,6 +80,14 @@ A changelog entry records the user-facing change, not the branch or commit narra
 - `bin/artist-os-eval bless` now refuses to update `blessed.lock` unless the
   conductor-behavior grade records the live conductor digest and
   `Overall result: PASS`; `start` stamps the digest into the scaffolded grade.
+
+### Fixed
+
+- Asset Package waivers are now genuinely per slot. A `complete` package whose
+  required slots were all waived by one shared `waiver_gate_id` used to validate,
+  which is exactly the general “ship anyway” decision the release contract
+  forbids; waiver gate ids must now be distinct, and a `filled` slot may not
+  carry one at all.
 
 ## [0.4.0] - 2026-06-21
 

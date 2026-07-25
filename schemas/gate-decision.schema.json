@@ -4,6 +4,53 @@
   "title": "GateDecision",
   "type": "object",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "description": "A Cross-Medium Plan Approval must point at the plan it approves and at the Mixed-Media Critic Review that preceded it.",
+      "if": {
+        "required": ["gate_type"],
+        "properties": { "gate_type": { "const": "cross_medium_plan_approval" } }
+      },
+      "then": {
+        "properties": {
+          "upstream_refs": {
+            "allOf": [
+              {
+                "contains": {
+                  "required": ["ref_type"],
+                  "properties": { "ref_type": { "const": "cross_medium_plan" } }
+                },
+                "minContains": 1
+              },
+              {
+                "contains": {
+                  "required": ["ref_type"],
+                  "properties": { "ref_type": { "const": "review_record" } }
+                },
+                "minContains": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["gate_type"],
+        "properties": { "gate_type": { "const": "package_format_selection_and_completeness" } }
+      },
+      "then": { "required": ["package_completeness"] }
+    },
+    {
+      "description": "The completeness block belongs only to its own gate.",
+      "if": { "required": ["package_completeness"] },
+      "then": {
+        "properties": {
+          "gate_type": { "const": "package_format_selection_and_completeness" }
+        }
+      }
+    }
+  ],
   "required": [
     "gate_decision_id",
     "project_id",
@@ -65,6 +112,8 @@
         "long_work_stewardship_activation",
         "long_work_checkpoint",
         "release_package_plan_approval",
+        "cross_medium_plan_approval",
+        "package_format_selection_and_completeness",
         "album_calibration",
         "generation_approval",
         "draft_generation_approval",
@@ -110,12 +159,55 @@
         "properties": {
           "ref_type": {
             "type": "string",
-                "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
+                "enum": ["source_record", "artist_meaning", "transformation_brief", "beat_plan", "long_work_stewardship", "release_package_plan", "cross_medium_plan", "asset_package", "medium_plan", "character_template", "visual_reference_sheet_plan", "illustration_plan", "creative_brief", "prompt_plan", "prompt_branch_set", "output_record", "review_record"]
           },
           "ref_id": { "type": "string" },
           "path_or_ref": { "type": "string" }
         }
       }
+    },
+    "package_completeness": {
+      "type": "object",
+      "description": "Package Format Selection And Completeness Gate payload. One Gate Decision per waived required slot: a waiver names exactly one slot, so a general 'ship anyway' decision cannot waive unnamed deliverables.",
+      "additionalProperties": false,
+      "required": ["package_format_id", "completeness_verdict"],
+      "properties": {
+        "package_format_id": {
+          "type": "string",
+          "enum": ["album", "article_with_photos", "video_with_soundtrack"]
+        },
+        "completeness_verdict": {
+          "type": "string",
+          "enum": [
+            "format_selected",
+            "all_required_slots_filled",
+            "required_slot_waived",
+            "returned_to_medium_journey"
+          ]
+        },
+        "waived_slot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The single Package Format slot this decision waives. Present only for the required_slot_waived verdict; the Asset Package carries this gate's id in that slot's waiver_gate_id."
+        },
+        "asset_package_id": { "type": ["string", "null"], "pattern": "^assetpkg_[a-zA-Z0-9_-]+$" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["completeness_verdict"],
+            "properties": { "completeness_verdict": { "const": "required_slot_waived" } }
+          },
+          "then": { "required": ["waived_slot_id"] }
+        },
+        {
+          "description": "Naming a waived slot is only meaningful for a waiver verdict.",
+          "if": { "required": ["waived_slot_id"] },
+          "then": {
+            "properties": { "completeness_verdict": { "const": "required_slot_waived" } }
+          }
+        }
+      ]
     },
     "created_at": { "type": "string", "format": "date-time" }
   }
