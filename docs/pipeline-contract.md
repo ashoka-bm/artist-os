@@ -34,6 +34,7 @@ Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orche
 | Beat Plan | `schemas/beat-plan.schema.json` | `examples/beat-plan.example.json` |
 | Long-Work Stewardship Record | `schemas/long-work-stewardship-record.schema.json` | `tests/fixtures/long-work/foundation-stewardship-record.json` |
 | Release Package Plan | `schemas/release-package-plan.schema.json` | `tests/fixtures/release-packages/album-release-package-plan.json` |
+| Cross-Medium Plan | `schemas/cross-medium-plan.schema.json` | `tests/fixtures/release-packages/cross-medium-plan.json` |
 | Character Template | `schemas/character-template.schema.json` | `tests/fixtures/characters/character-template.json` |
 | Visual Reference Sheet Plan | `schemas/visual-reference-sheet-plan.schema.json` | `tests/fixtures/characters/visual-reference-sheet-plan.json` |
 | Reference Inventory | `schemas/reference-inventory.schema.json` | `tests/fixtures/references/reference-inventory.json` |
@@ -51,6 +52,7 @@ Use `docs/subagent-orchestration.md` for worker packet structure, Standard Orche
 | Text Generation Plan | `schemas/text-generation-plan.schema.json` | `tests/fixtures/text-journey/text-generation-plan.json` |
 | Output Record | `schemas/output-record.schema.json` | `examples/output-record.example.json` |
 | Review Record | `schemas/review-record.schema.json` | `examples/review-record.example.json` |
+| Asset Package | `schemas/asset-package.schema.json` | `tests/fixtures/release-packages/asset-package.json` |
 
 ## Shared Steps
 
@@ -108,7 +110,10 @@ After persisting the Gate Decision, continue into the unlocked stage in the same
 - Reviewer required: Beat Reviewer sub-agent for multi-beat, sequence, series, lyric-bearing, scene, arc, or ambiguous plans.
 - Story Critic required when Story Mode scale, meaning preservation, symbolic progression, minimum tension criteria, or Story Approval authority is uncertain. If both Beat Reviewer and Story Critic are required, run Beat Reviewer first and pass its Review Record into Story Critic.
 - Gate: Story Gate and Story Approval Gate.
-- Next: `release_package.plan` for Album v1 and future Release Package routes; otherwise image, sound, video, text, or mixed-media medium planning.
+- Next: `release_package.plan` for Album v1; otherwise image, sound, video, or
+  text medium planning, with `cross_medium.plan` materializing only when a
+  second medium is activated or the artist explicitly requests multiple
+  outputs.
 
 ### `long_work.stewardship`
 
@@ -127,8 +132,13 @@ After persisting the Gate Decision, continue into the unlocked stage in the same
 - Schema: `schemas/release-package-plan.schema.json`.
 - Skill: conductor or future release package planning skill.
 - Reviewer required: Mixed-Media Critic Review before Album Calibration and after Album Calibration.
-- Gate: Release Package Plan Approval Gate after representative calibration Medium Plans and before Album Calibration; Album Calibration Gate before remaining expansion.
-- Next: after approved calibration subchecks, remaining Sound Medium Plans, Image Medium Plans, optional Text Medium Plans, Prompt Plans, Text Generation Plans, and per-output records.
+- Gate: Release Package Plan Approval Gate before representative calibration
+  Medium Plans; Album Calibration Gate after those representative plans and
+  before remaining expansion.
+- Next: representative calibration Sound and Image Medium Plans, Album
+  Calibration, then—after the relevant subchecks approve—remaining Sound,
+  Image, and optional Text Medium Plans, prompt/generation plans, and per-output
+  records.
 
 Album v1 is the only implemented Release Package subtype. EP, Single Bundle, Visual Album, campaign, and other package shapes are future sibling subtypes, not Album subtypes.
 
@@ -143,6 +153,37 @@ Per ADR 0014, the Release Package Plan is conceptually split along the plan/outp
 Album Calibration happens after representative Sound and Image Medium Plans exist for the Calibration Track and calibration visual target. The default subchecks are sonic direction, visual direction, and sound-visual fit. Expansion may continue only for deliverables whose relevant subchecks are approved; Track Cover expansion requires approved visual direction and approved sound-visual fit.
 
 Album Calibration is not final acceptance. Final Output Artifacts still require their normal Prompt Lock, Generation Approval, Output Critic Review, and Output Acceptance gates. Provider-backed generation approval may be per output or per enumerated batch only; the approval must name the exact outputs, provider, model or tool, and cost-bearing scope.
+
+### `cross_medium.plan`
+
+- Input: approved Shared Story Spine, at least one active Medium Plan, an artist
+  request to activate a second medium or create a multi-output package, and the
+  mixed-media scope, selection, role, continuity, and production-order
+  decisions.
+- Output: Cross-Medium Plan.
+- Schema: `schemas/cross-medium-plan.schema.json`.
+- Skill: conductor.
+- Reviewer required: Mixed-Media Critic Review before artist approval.
+- Gate: Cross-Medium Plan Approval Gate before supporting-medium expansion.
+- Next: sequential supporting Medium Plans beginning at Phase 8, normal
+  medium-specific tails, accepted Output Records, then `asset_package.compile`.
+
+The Cross-Medium Plan is lazy: a single-medium project does not create one. It
+must reuse the existing Artist Meaning, Transformation Brief, Beat Plan, and
+standing Story Approval by id rather than recreating the Shared Story Spine.
+Artist OS recommends one primary medium for artist confirmation; every other
+medium is supporting by default.
+
+The plan owns Medium Roles, planned deliverables, production order, Effective
+Project Scale, shared references, and cross-medium continuity. It does not own
+the medium-specific creative decisions held by independently reviewed and
+locked Medium Plans. Supporting media default to compact treatment but retain
+their standard reviews and gates.
+
+A material change to included media, Medium Roles, production order, or shared
+continuity invalidates the standing Cross-Medium Plan approval. Rerun the
+affected Mixed-Media Critic Review and obtain a new artist decision before
+supporting-medium expansion continues.
 
 ### `character.template`
 
@@ -237,7 +278,7 @@ Schema-backed Creative Brief Records, Prompt Plans, Sound Creative Brief Records
 - Output: Output Record.
 - Schema: `schemas/output-record.schema.json`.
 - Skill: conductor, provider adapter, import adapter, or drafting skill.
-- Reviewer required: Output Critic sub-agent before Output Acceptance Gate unless explicitly waived by the artist.
+- Reviewer required: Output Critic sub-agent before Output Acceptance Gate.
 - Gate: Generation Approval Gate for provider-backed generation; Output Acceptance Gate for acceptance.
 - Next: Output Critic Review, Output Acceptance Gate, calibration context, export, archive, or revision.
 
@@ -405,6 +446,29 @@ The Text Creative Brief Record must include `transformation_brief_id`, `beat_pla
 
 The Text Generation Plan must require fresh-context drafting, a returned draft trace, main-agent conformance review, editorial pass policies, length policy, review presentation decision, and Output Records for every concrete draft or rewrite artifact.
 
+### `asset_package.compile`
+
+- Input: approved Cross-Medium Plan or Album Release Package Plan, selected
+  Package Format, accepted Output Records for completed slots, and explicit
+  Gate Decisions for any waived required slots.
+- Output: Asset Package.
+- Schema: `schemas/asset-package.schema.json`.
+- Skill: conductor.
+- Reviewer required: Mixed-Media Critic when cross-medium continuity,
+  sequencing, or waiver scope is disputed; otherwise normal Output Reviews have
+  already occurred per artifact.
+- Gate: Package Format Selection and Completeness Gate.
+- Next: completed artist-facing package manifest or explicit return to the
+  missing deliverable's medium journey.
+
+Package Compilation is conditional, terminal, and provider-free. Run it only
+for an approved Album or Cross-Medium package, or when the artist explicitly
+requests a package and selects a Package Format. The Asset Package is a thin
+manifest that references Output Records by id and never copies asset content.
+It cannot be complete while a planned slot is missing unless the artist
+explicitly waives that named deliverable and the waiver Gate Decision is
+recorded.
+
 ## Transition Rules
 
 Allowed structural transitions:
@@ -414,15 +478,22 @@ Source Record -> Artist Meaning
 Gate Question -> Gate Decision
 Artist Meaning -> Transformation Brief
 Transformation Brief -> Beat Plan
-Beat Plan -> Long-Work Stewardship Record, when cumulative
+Beat Plan -> Long-Work Stewardship Activation Gate Decision, when ADR 0013 recommends it or the artist requests it
+Long-Work Stewardship Activation Gate Decision -> Long-Work Stewardship Record, when artist-activated
 Long-Work Stewardship Record -> Long-Work Checkpoint Gate Decision, when a checkpoint requires artist decision
+Beat Plan -> Release Package Plan, for Album v1
 Beat Plan -> Image Medium Plan
 Beat Plan -> Video Medium Plan
 Beat Plan -> Sound Medium Plan
 Beat Plan -> Text Medium Plan
-Image Medium Plan -> Long-Work Stewardship Record, when cumulative
-Video Medium Plan -> Long-Work Stewardship Record, when cumulative
-Text Medium Plan -> Long-Work Stewardship Record, when cumulative
+Approved Shared Story Spine + active Medium Plan + second-medium request -> Cross-Medium Plan
+Cross-Medium Plan -> Mixed-Media Critic Review Record
+Mixed-Media Critic Review Record -> Cross-Medium Plan Approval Gate Decision
+Approved Cross-Medium Plan -> Supporting Medium Plan, sequentially from Phase 8
+Image Medium Plan -> Long-Work Stewardship Activation Gate Decision, when newly recommended
+Video Medium Plan -> Long-Work Stewardship Activation Gate Decision, when newly recommended
+Sound Medium Plan -> Long-Work Stewardship Activation Gate Decision, when newly recommended
+Text Medium Plan -> Long-Work Stewardship Activation Gate Decision, when newly recommended
 Image Medium Plan -> Creative Brief Record
 Video Medium Plan -> Video Creative Brief Document, v0 planning handoff
 Sound Medium Plan -> Sound Creative Brief Record
@@ -431,11 +502,12 @@ Creative Brief Record -> Provider-Neutral Image Prompt Plan
 Text Creative Brief Record -> Text Generation Plan
 Provider-Neutral Image Prompt Plan -> Prompt Branch Set
 Prompt Plan / Text Generation Plan / Prompt Branch Set -> Output Record
-Output Record -> Long-Work Stewardship Record, when cumulative
+Output Record -> Long-Work Stewardship Record, when stewardship is active
 Output Record -> Output Critic Review Record
 Output Critic Review Record -> Output Acceptance Gate Decision
 Sound Creative Brief Record -> Sound Prompt Plan
 Review Packet -> Review Record
+Approved package plan + accepted Output Records and waiver Gate Decisions + Package Format -> Asset Package
 ```
 
 Future medium branches should add transitions here before adding schemas or skills.

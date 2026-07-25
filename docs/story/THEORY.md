@@ -24,7 +24,8 @@ Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Story / Beat Plan
-  -> Long-Work Stewardship, when cumulative
+  -> Long-Work Stewardship Activation Gate, when ADR 0013 recommends it or the artist requests it
+  -> Long-Work Stewardship, only when artist-activated
   -> Medium Plan
   -> Prompt Plan
   -> Output Record
@@ -34,7 +35,12 @@ Reference
 
 The current image, Suno, video, and text workflows use a first-class Beat Plan before medium planning. Medium-specific briefs carry `beat_plan_id`; they do not embed duplicate Beat summaries.
 
-Long-Work Stewardship exists only for Cumulative Work: long text, image series, songs or sound movements, video sequences, or mixed-media sequences where later parts depend on earlier parts. It protects continuity, readiness, checkpoints, emotional-arc expression, and drift across parts. It is not needed for a non-sequential portfolio, store collection, or curator batch whose pieces are related but do not build one after another.
+Long-Work Stewardship is eligible only when ADR 0013's cumulative-dependency
+and medium-specific length-floor threshold both hold, or when the artist asks
+for it below that threshold. Eligibility is a recommendation, not activation.
+The artist-facing ADR 0015 gate must activate it before a stewardship record is
+created. It is not needed for a non-sequential portfolio, store collection, or
+curator batch whose pieces are related but do not build one after another.
 
 ## Story Is Not Only Narrative
 
@@ -207,7 +213,14 @@ Approval means:
 
 After Story Approval, medium-specific branches may translate the Beat Plan into images, video, music/audio, text, or mixed-media outputs.
 
-If the approved Story Mode creates Cumulative Work, create a foundation Long-Work Stewardship Record before full medium expansion. At this point the record can have no medium-specific parts yet; enrich it after the Medium Plan maps beats into images, sections, chapters, scenes, or movements. The record should keep part-to-part continuity and readiness visible, but it must not become the authority for meaning or story. If a stewardship review proposes changing the meaning, Story Mode, Beat movement, or emotional arc, return to Story Approval.
+If ADR 0013 recommends Long-Work Stewardship, present the ADR 0015 activation
+gate after Story Approval. Create a foundation record only when the artist
+activates it; defer and waive create Gate Decisions only. Enrich an active
+record after the Medium Plan maps beats into images, sections, chapters,
+scenes, or movements. The record keeps part-to-part continuity and readiness
+visible but does not become the authority for meaning or story. If a
+stewardship review proposes changing the meaning, Story Mode, Beat movement,
+or emotional arc, return to Story Approval.
 
 ## Design Invariant
 

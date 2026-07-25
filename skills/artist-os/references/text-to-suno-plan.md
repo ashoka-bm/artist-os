@@ -78,7 +78,10 @@ Use this only after the shared Transformation Brief and Beat Plan exist.
 12. Finalize Arrangement / Form Direction using `Song -> Sections -> Phrases -> Bars / beats` when the output is a song. Include section functions and section tension roles, revising the preliminary skeleton and Lyrics Draft together when needed.
 13. Select 6 to 8 Active Sonic Tension Pairs. Use evidence, independent pole presences, tension intensity, and translation notes.
 14. Add Sequence Recommendation from the shared Beat Plan.
-15. Record medium-level Workflow Scale Routing. A single multi-section sound work may stay a structured single artifact. Activate sequence and Long-Work supports when `workflow_scale_routing` calls for them because the accepted sound shape creates dependent tracks, movements, or sequence parts, durable canon is needed, recurring motifs or world rules must persist, or full long-form sound support is required.
+15. Record medium-level Workflow Scale Routing. A single multi-section sound
+work may stay a structured single artifact. Recommend Long-Work Stewardship
+only when both ADR 0013 conditions hold, or when the artist requests it; never
+activate it from routing alone.
 16. Produce the Sound Medium Plan only after Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric, Arrangement / Form, and Workflow Scale Routing are complete or explicitly allowed to proceed unconfirmed.
 17. When medium-level routing recommends `long_work_stewardship`, first resolve the ADR 0015 activation gate if no activation decision exists. If the artist activates stewardship, enrich the active Long-Work Stewardship Record from the completed Sound Medium Plan with one Long-Work Part per track, movement, section, or sequence part; include continuity rules, checkpoint plan, and Long-Work Readiness before any multi-track or long-form prompt expansion. If the artist defers or waives, record only the Gate Decision and do not create a placeholder stewardship record. Validate active stewardship records against `schemas/long-work-stewardship-record.schema.json`.
 
@@ -89,7 +92,12 @@ Use this only after the Sound Medium Plan exists. Before critic review, build a 
 1. Preserve `transformation_brief_id` and `beat_plan_id`.
 2. Use the Sound Medium Plan as the source of truth for Medium Output Shape Recommendation, sound work type, Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, and sequence planning.
 3. Add Emotional Qualities, medium-local Beat summaries, Tension Point summaries, value shifts, transformation constraints, and Sequence Recommendation from the shared Beat Plan and Sound Medium Plan.
-4. If lyrics are required by the Sound Medium Plan, include the Lyrics Draft created against the preliminary or finalized Arrangement / Form plan before final prompt locking.
+4. If lyrics are required by the Sound Medium Plan, include the Lyrics Draft
+   created against the preliminary or finalized Arrangement / Form plan before
+   final prompt locking. Treat that embedded Lyrics Draft as internal
+   brief-planning material. If the artist asks for a standalone lyric work,
+   route it through Text Journey Draft Generation Approval and create an Output
+   Record.
 5. Produce the draft Sound Creative Brief Document only after required medium gates are complete or explicitly allowed to proceed unconfirmed.
 
 If running standalone, recommend Music / Sound Critic Review. If the `artist-os` orchestrator is running, return the draft and stop; the orchestrator advances automatically.

@@ -1,6 +1,9 @@
 # Sound Journey
 
-The Sound Journey translates an approved Beat Plan into music, audio, or sound design. The current implemented target is a Sound Prompt Plan with a Suno Custom Mode rendering, but the journey is broader than Suno.
+The Sound Journey translates an approved Beat Plan into music, audio, or sound
+design. The current implemented target is a Sound Prompt Plan with a Suno
+Custom Mode field export, not generated audio, but the journey is broader than
+Suno.
 
 ## Best Fit
 
@@ -28,11 +31,15 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Vocal / Lyric Gate
   -> Arrangement / Form Gate
   -> Sound Medium Plan with Medium-Level Workflow Scale Routing
+  -> Draft Sound Creative Brief Document
   -> Sound Critic Review
+  -> Brief Approval Gate
+  -> Sound Creative Brief Record
   -> Sound Prompt Plan
   -> Prompt Critic Review
   -> Prompt Lock Gate
   -> Generation Approval Gate
+  -> Output Record, when audio is generated or imported
   -> Output Critic Review
   -> Output Acceptance Gate
 ```
@@ -50,7 +57,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Reviews
 
-- Story Critic Review happens before this journey as a bounded sub-agent review.
+- Story Critic Review happens before this journey for multi-beat, sequence,
+  lyric-bearing, or otherwise ambiguous plans.
 - Beat Reviewer sub-agent is mandatory for multi-section, sequence, or lyric-bearing sound plans.
 - Sound Critic Review checks Sonic Concept, Genre / Production, Tempo / Groove, Vocal / Lyric Policy, Arrangement / Form, Sonic Dynamics, lyrics when present, and platform readiness as a bounded sub-agent review.
 - Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, motif/voice continuity, and proposed continuity updates when cumulative or full long-form sound support is active.
@@ -60,5 +68,12 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 ## Current Implementation
 
 The current text-to-sound slice implements this route through the Sound Prompt Plan with platform renderings, Output Record, Output Critic Review, and Output Acceptance Gate contracts. The Sound Medium Plan records Medium-Level Workflow Scale Routing. The Sound Creative Brief carries `beat_plan_id`; the referenced Beat Plan is authoritative.
+
+A Lyrics Draft embedded in a draft Sound Creative Brief is internal planning
+material, not a standalone Output Artifact. It does not require a Draft
+Generation Approval or Output Record while it remains inside that brief. If
+lyrics are returned as a standalone work, reviewed independently, or reused as
+an output, route them through the Text Journey: obtain Draft Generation
+Approval and create an Output Record before output review.
 
 When sound routing recommends Long-Work Stewardship, present the ADR 0015 activation gate after Story Approval and create a foundation Long-Work Stewardship Record only if the artist activates it. Enrich active stewardship after the Sound Medium Plan maps Beats to tracks, movements, sections, or sequence parts. The Sound Medium Plan owns Sonic Dynamics, sequence planning, arrangement/form, vocal/lyric policy, and sound-role details; the stewardship record references sound part ids and tracks cumulative readiness, checkpoints, part status, continuity rules, and drift.

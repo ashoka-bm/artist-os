@@ -1,10 +1,20 @@
 # Mixed-Media Journey
 
-> **Status: Album v1 planning contract exists; broader mixed-media is not built yet.** The implemented dry-run slices are image, Suno sound, text, and the schema-backed Album v1 Release Package Plan. General mixed-media package behavior remains planning input for later branches.
+> **Status: Album v1 is implemented; constrained general Cross-Medium Plan
+> orchestration is frozen into 1.0 and is partially implemented.** The
+> Cross-Medium Plan and Asset Package schemas, fixtures, and terminal Package
+> Compilation contract exist. The remaining 1.0 work is the explicit
+> review/approval lifecycle and conductor wiring. Broader package, campaign,
+> publishing, and distribution routers are post-1.0.
 
 The Mixed-Media Journey coordinates multiple output journeys from one approved Beat Plan. It is for projects where image, video, sound, text, or other media should share meaning and structure while expressing different parts of the work.
 
-Album v1 is the first concrete Release Package route inside this branch. Broader mixed-media behavior remains forward-looking until additional package subtypes are implemented. The governing language for Release Package, Album, Album Sonic System, Album Visual System, Album Calibration, and Track Cover lives in `CONTEXT.md`; ADR 0008 records why the schema is generic while Album is the only v1 subtype.
+Album v1 is the first concrete Release Package route inside this branch. The
+general 1.0 route is a smaller coordinator over existing medium journeys, not a
+generic campaign system. The governing language for Release Package, Album,
+Album Sonic System, Album Visual System, Album Calibration, Track Cover,
+Cross-Medium Plan, and Medium Role lives in `CONTEXT.md`. The exact release
+boundary lives in `docs/release-1.0.md`.
 
 ## Best Fit
 
@@ -13,10 +23,12 @@ Use the Mixed-Media Journey when the final work should include:
 - an image plus music,
 - a video plus soundtrack,
 - a poem plus image series,
-- a visual album concept,
-- a campaign or release package,
 - a gallery sequence with sound,
 - several coordinated assets from the same Reference.
+
+Visual Album, campaign, publishing, and distribution-specific routing are not
+part of 1.0. Artist OS may preserve those requests as planning notes, but it
+must not claim a dedicated workflow for them.
 
 ## Route
 
@@ -45,22 +57,38 @@ When Album Cohesion Mode recommends Long-Work Stewardship, present the ADR 0015 
 
 Album Calibration is directional. It checks sonic direction, visual direction, and sound-visual fit after representative Sound and Image Medium Plans exist, before the remaining album deliverables expand. Final artifacts still go through the normal per-output gates.
 
-### Future Mixed Media
+### General Cross-Medium v1
 
 ```text
-Approved Beat Plan with Project-Level Workflow Scale Routing
+Existing project with an approved Shared Story Spine
+  -> Second-medium activation or explicit multi-output request
   -> Mixed-Media Scope Gate
   -> Medium Selection Gate
   -> Role Assignment Gate
   -> Cross-Media Continuity Gate
-  -> Medium-Specific Journeys with Medium-Level Workflow Scale Routing
+  -> Production Order Gate
+  -> Draft Cross-Medium Plan
   -> Mixed-Media Critic Review
-  -> Prompt Critic Review
-  -> Prompt Lock Gate
-  -> Generation Approval Gate
-  -> Output Critic Review
-  -> Output Acceptance Gate
+  -> Cross-Medium Plan Approval Gate
+  -> Sequential Medium-Specific Journeys from Phase 8
+  -> Per-output Prompt, Generation, Review, and Acceptance Gates
+  -> Package Format Selection and Completeness Gate
+  -> Asset Package
 ```
+
+The Cross-Medium Plan materializes lazily. It is not required for a
+single-medium project. It appears when a second medium is activated or the
+artist explicitly requests a multi-output package.
+
+One primary medium anchors the plan. Supporting media default to compact
+treatment, remain independently reviewed, and take continuity from the primary
+realization when the approved production order requires it. General
+multi-medium production is sequential in 1.0.
+
+A material change to included media, Medium Roles, production order, or shared
+continuity invalidates the standing Cross-Medium Plan approval. Rerun the
+affected Mixed-Media Critic Review and obtain a new artist decision before
+expansion continues.
 
 ### Medium Roles
 
@@ -83,19 +111,40 @@ The review-reduction half of the compact tier is deferred: supporting media reus
 - Role Assignment Gate: which beats belong to which medium?
 - Cross-Media Continuity Gate: what must stay consistent across media, and what may diverge?
 - Production Order Gate: which output should be created first as calibration?
+- Cross-Medium Plan Approval Gate: does the artist approve the Medium Roles,
+  deliverables, production order, Effective Project Scale, and continuity rules
+  before supporting-medium expansion?
 - Generation Approval Gate: each provider-backed generation call still requires explicit approval.
 
 ## Reviews
 
-- Story Critic Review happens before this journey as a bounded sub-agent review.
+- Story Critic Review happens before this journey when the shared Beat Plan is
+  multi-beat, sequence-based, lyric-bearing, or otherwise ambiguous.
 - Beat Reviewer sub-agent is mandatory when beats are assigned across multiple media.
 - Album v1 uses Mixed-Media Critic Review with album-specific criteria, not a separate Album Critic role.
 - Pre-calibration Mixed-Media Critic Review checks whether the Release Package Plan is coherent enough to test.
 - Post-calibration Mixed-Media Critic Review checks whether the calibrated direction is strong enough to expand.
 - Medium-specific critic reviews happen inside each selected output journey as bounded sub-agent reviews.
 - Mixed-Media Critic Review checks whether the media work together instead of duplicating or contradicting each other accidentally as a bounded sub-agent review.
-- Prompt Critic Review checks the complete output package for traceability, consistency, sequencing, and generation risk as a bounded sub-agent review.
-- Output Critic Review checks the generated package against Artist Meaning, Beat Plan, medium plans, and cross-media continuity decisions as a bounded sub-agent review.
+- Prompt Critic Review remains scoped to each medium-specific prompt or
+  generation plan.
+- Output Critic Review remains scoped to each concrete Output Artifact.
+  Package Compilation validates completeness over the accepted Output Records;
+  it does not invent a separate generated-package artifact.
+- Mixed-Media Critic Review reruns only when cross-medium continuity,
+  production order, or waiver scope is disputed or materially changed.
+
+For a general Cross-Medium Plan, Mixed-Media Critic Review must check:
+
+- one unchanged Shared Story Spine and standing Story Approval are reused,
+- exactly one primary medium is artist-confirmed,
+- every supporting medium has a distinct job and an explicit relationship to
+  the primary realization,
+- production order is sequential and internally consistent,
+- continuity rules distinguish what must stay fixed from what may vary,
+- each medium retains its normal reviews and gates,
+- and Package Compilation cannot declare missing deliverables complete without
+  an explicit waiver.
 
 ### Album v1 Review Criteria
 

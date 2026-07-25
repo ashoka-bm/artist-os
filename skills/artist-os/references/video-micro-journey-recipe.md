@@ -126,15 +126,21 @@ trigger a strong emotion, forge one simple mental link. Every shot names its int
    schema-valid JSON, validate, persist, and then treat the schema as consulted.
    Do not use the full schema as the authoring surface and do not re-read it on
    later turns.
-8. **Video Critic Review (standard bounded sub-agent).** Review only the bounded
-   packet — Artist Meaning, Transformation Brief, Beat Plan, Video Medium Plan, the shot
-   list, open questions — checking meaning fidelity, hook strength, cut fluidity/variety,
-   continuity of any promoted state, and that no story turn was compressed. Emit a Review
-   Record (`schemas/review-record.schema.json`) with `review_role = "video_critic"`. Apply
-   blocking findings before advancing. (A lighter compact inline-review variant is a
-   separate, later change that touches the review-record contract; until it lands, use the
-   standard bounded review here.)
-9. **Storyboard on request = one composite multi-panel sheet** (provider-gated,
+8. **Draft the compact Video Creative Brief Document.** Translate the finalized
+   Video Medium Plan into a concise artist-readable meaning contract: intended
+   feeling, hook-to-payoff movement, visual language, shot logic, continuity,
+   audio posture, must-preserve constraints, and storyboard output boundary.
+9. **Video Critic Review (standard bounded sub-agent).** Review only the bounded
+   packet — Artist Meaning, Transformation Brief, Beat Plan, Video Medium Plan,
+   compact Video Creative Brief, shot list, and open questions — checking meaning
+   fidelity, hook strength, cut fluidity/variety, continuity of any promoted state,
+   and that no story turn was compressed. Emit a Review Record
+   (`schemas/review-record.schema.json`) with `review_role = "video_critic"`.
+   Apply findings to the compact Video Creative Brief before advancing.
+10. **Brief Approval (explicit artist gate).** Present the revised compact Video
+    Creative Brief and wait for approval. Do not create the storyboard-ready
+    handoff, Seedance package, or storyboard-generation request before approval.
+11. **Storyboard on request = one composite multi-panel sheet** (provider-gated,
    per-call approval, Output Record). Use the approved shot count as the source of truth;
    if the sheet needs a different panel count for readability, state the proposed
    split/merge before generation approval.

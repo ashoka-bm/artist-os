@@ -4,9 +4,31 @@ This document records what has been created, what is transitional, and what come
 
 ## Current Goal
 
-Artist OS has established the core typed transformation pipeline for the current image, video storyboard, Suno, text, reference-continuity, and package-compilation dry-run slices. The current refinement pass adds an emotional-primacy and provenance contract on top of that pipeline: records must name the intended feeling, preserve the artist's authority through a Decision Interview, carry enough tension movement for reviewers to judge whether the work expresses a feeling rather than only describing a fact, and keep generated/imported/reference/package artifacts traceable through Output Records and thin manifests.
+Artist OS is in 1.0 closure. The artist-approved product boundary, exclusions,
+change-control rule, blocking backlog, and release gate are authoritative in
+`docs/release-1.0.md`.
 
-Current implementation priority is dry-run output quality: generate the right briefs, plans, prompts, drafts, reviews, and records at the highest possible quality before adding external generation. API setup, provider credentials, provider adapters, and actual external image or Suno generation are intentionally deferred until the dry-run contracts and output quality are strong enough to support them.
+The current implementation priority is to finish the constrained Cross-Medium
+Plan lifecycle, integrate database reliability hardening without the automatic
+conductor loop, clear the stale conductor eval lock, and certify the existing
+dry-run journeys. Provider adapters, automatic visible-file edit detection, and
+new package routers are post-1.0.
+
+### Next implementation slice
+
+The next slice is **Cross-Medium Plan contract completion**, not a new medium
+or provider. Its bounded outcome is:
+
+1. add `planned_deliverables` and `shared_references` to the Cross-Medium Plan;
+2. add Cross-Medium approval/review and package-completeness waiver vocabulary;
+3. prove the new schema/ref transitions with valid and negative fixtures;
+4. wire the conductor's lazy review/approval interstitial and sequential
+   supporting-medium entry;
+5. rehearse one primary-to-supporting route through Asset Package creation.
+
+Start this slice only from an up-to-date branch after the scope-freeze
+documentation is reviewed and landed. Do not mix database hardening, provider
+work, or automatic learning behavior into it.
 
 ```text
 Step Input Record
@@ -42,15 +64,19 @@ Every image, series, or arc-shaped plan should also preserve:
 Implemented dry-run workflows:
 
 - Text Reference to Provider-Neutral Image Prompt Plan.
-- Text Reference to Sound Prompt Plan with Suno rendering.
+- Text Reference to Sound Prompt Plan with a Suno Custom Mode field export.
 - Text Reference to Text Generation Plan and drafted written Output Records (Text Journey).
 - Text Reference to storyboard-ready Video Medium Plan (Video Journey v0 planning).
 - Video storyboard approval to provider-specific Seedance Prompt Package, before any Seedance generation approval.
 - Existing script, dialogue, narration, or approved text to ElevenLabs v3 voice-over prompt preparation, before any TTS provider call.
 - Album v1 Release Package Plan for coordinating a sound-primary multi-output release before per-output production.
-- Multi-medium Cross-Medium Plan plus terminal Asset Package compilation for accepted Output Records.
+- Schema-backed Cross-Medium Plan and terminal Asset Package compilation
+  foundation for accepted Output Records; the general approval/review and
+  conductor lifecycle remains 1.0 closure work.
 
-Provider-backed generation remains out of scope without explicit approval.
+Artist OS 1.0 ships no provider adapter. Generation Approval remains a
+provenance/safety contract for future or external execution; it does not make a
+provider call available in the current release.
 
 ### Reference Inventory And Reference Readiness
 
@@ -92,7 +118,8 @@ Album Calibration is directional only. Representative Sound and Image Medium Pla
 
 ### Cross-Medium Plan And Package Compilation
 
-Added the general multi-medium coordination and terminal package stage:
+Added the general multi-medium schema/package foundation and terminal package
+stage:
 
 - `schemas/cross-medium-plan.schema.json`,
 - `schemas/asset-package.schema.json`,
@@ -104,9 +131,20 @@ Added the general multi-medium coordination and terminal package stage:
 
 Cross-Medium Plan records one primary medium and supporting media, Medium Roles, production order, effective project scale, and cross-medium continuity. It is the general multi-medium planning seam outside Album v1.
 
-Package Compilation is now Phase 18. It runs after Output Acceptance, calls no provider, selects a Package Format, arranges accepted Output Records into slots, and persists a thin Asset Package manifest. A complete Asset Package cannot keep missing slots unless the artist explicitly waives the missing deliverable and the waiver is recorded.
+Package Compilation is the conditional Phase 18 for an approved Album or
+Cross-Medium package, or an explicit package request with a selected Package
+Format. It runs after Output Acceptance, calls no provider, arranges accepted
+Output Records into slots, and persists a thin Asset Package manifest. A
+complete Asset Package cannot keep a missing required slot unless the artist
+explicitly waives that named deliverable and the waiver Gate Decision is
+recorded.
 
 Album v1's shipped Release Package Plan remains for back-compat, while its planning/output seam is now documented as generalizing toward Cross-Medium Plan plus Package Format plus Asset Package.
+
+The general Cross-Medium Plan is not release-complete yet. Gate Decision and
+Review Record vocabulary, conductor enforcement, transition behavior coverage,
+and a full primary-to-supporting rehearsal remain blocking 1.0 work in
+`docs/release-1.0.md`.
 
 ### Video Provider Export And Voice Prompt Prep
 
@@ -434,9 +472,10 @@ Added tests that verify allowed record transitions:
 ```text
 Source Record + Meaning Interview -> Transformation Brief
 Transformation Brief -> Beat Plan
-Beat Plan -> Long-Work Stewardship Record, when cumulative
+Beat Plan -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+Activation Gate -> Long-Work Stewardship Record, when artist-activated
 Beat Plan -> Image Medium Plan / Sound Medium Plan / Text Medium Plan
-Image Medium Plan / Text Medium Plan -> Long-Work Stewardship Record, when cumulative
+Medium Plan -> Long-Work Stewardship Activation Gate, when newly recommended
 Image Medium Plan -> Creative Brief
 Sound Medium Plan -> Sound Creative Brief
 Text Medium Plan -> Text Creative Brief
@@ -560,7 +599,13 @@ Implemented the schema pass for the accepted activation model:
 
 ## Current Best Next Step
 
-The consolidation rehearsal pass, first import adapter, subagent packet schemas, and guarded eval re-bless path are complete enough to move into adapter hardening without weakening the dry-run boundary. The immediate next pass should add human-edited Artist Library file detection and Output Record revision creation, because it builds on the import adapter and closes the visible-edit loop. After that, implement the first provider adapter behind `artist_os_adapter_guards.assert_generation_approval(...)`.
+Complete the blocking backlog in `docs/release-1.0.md` in order. The immediate
+implementation pass is the thin Cross-Medium Plan contract: missing
+deliverable/reference fields, Cross-Medium approval/review refs, package
+completeness waiver vocabulary, transition tests, conductor enforcement, and a
+fixture-backed rehearsal. Then integrate the database reliability work from
+`self-improvement-db-hardening` without the automatic conductor wiring from
+`conductor-learning-loop`.
 
 Reason:
 
@@ -576,14 +621,22 @@ Reason:
 - `bin/artist-os-eval bless` now requires a current passing grade before it can refresh the conductor digest lock,
 - promoted reference continuity now has a schema-backed Reference Inventory; accepted-work promotion and durable taste/curation records still need real curation workflows before becoming schemas,
 - output batch/group records need provider adapters or batch generation workflows before they become schemas,
-- Album v1 now has a package plan schema, representative fixture, and fixture-backed rehearsal coverage; Cross-Medium Plan and Asset Package cover the general plan/output seam, while EP, Single Bundle, Visual Album, and campaign-specific routers should still wait for more real output/import workflows.
+- Album v1 has a package plan schema, representative fixture, and
+  fixture-backed rehearsal coverage;
+- Cross-Medium Plan and Asset Package schemas exist, but their general
+  review/approval and conductor lifecycle is not yet complete;
+- the database hardening branch protects existing persistence and resume
+  behavior without requiring automatic conductor self-improvement;
+- the current unit baseline runs 420 tests with one known failure: the
+  conductor digest no longer matches its blessed eval lock.
 
 Near-term plan:
 
-1. Add human-edited Artist Library file detection and Output Record revision creation so edited Review Drafts or Accepted Works become `human_edited` revisions.
-2. Implement the first provider adapter only behind `assert_generation_approval`, starting with a no-network dry-run adapter harness before any real provider call.
-3. Keep focused regression coverage for adapter findings: missing/mismatched Generation Approval, exact approved batch scope, and imported-output provider metadata rejection.
-4. Defer EP, Single Bundle, Visual Album, and broader publishing package schemas until imported or generated accepted outputs expose real package needs.
+1. Complete and rehearse constrained Cross-Medium Plan orchestration.
+2. Integrate and re-verify database reliability hardening.
+3. Run the real conductor-behavior eval and clear the stale blessed lock.
+4. Run release rehearsals and the full release gate.
+5. Publish `1.0.0` only after the authoritative checklist is complete.
 
 Final verification for this pass:
 
@@ -619,21 +672,26 @@ Implemented branches:
 
 - text-to-image through Image Medium Plan, Creative Brief Record, Provider-Neutral Image Prompt Plan, optional Prompt Branch Set, and output lifecycle fixtures,
 - Video Journey through storyboard-ready Video Medium Plan, scene and shot mapping, audio posture, storyboard frame prompts, composite storyboard-sheet policy, and optional Seedance Prompt Package export before provider approval,
-- text-to-sound through Sound Medium Plan, Sound Creative Brief Record, Sound Prompt Plan with Suno rendering, and output lifecycle contracts,
+- text-to-sound through Sound Medium Plan, Sound Creative Brief Record, Sound
+  Prompt Plan with a Suno Custom Mode field export, and output lifecycle
+  contracts,
 - ElevenLabs v3 voice-over prompt preparation from existing script, dialogue, narration, or approved text, without calling the provider,
 - Text Journey through Text Medium Plan, Text Creative Brief Record, Text Generation Plan, fresh-context draft Output Record, and editorial rewrite Output Record fixtures,
 - Reference Inventory through promoted subject planning, reference Output Record tracking, visible reference publication, and SQLite indexing,
-- Cross-Medium Plan plus Package Format plus Asset Package for terminal package compilation after Output Acceptance,
+- Cross-Medium Plan and Package Format schemas plus Asset Package compilation
+  foundations after Output Acceptance; the general plan lifecycle remains 1.0
+  closure work,
 - Structure Library docs for reusable Story Structures, Cultural Format Structures, and Package Formats, split into context-efficient per-entry files with chooser indexes.
 
-Not implemented yet:
+Post-1.0 non-blockers:
 
 - EP, Single Bundle, Visual Album, campaign, export, or publishing-specific routers on top of the Cross-Medium Plan / Asset Package seam,
 - provider adapters and real provider-backed generation calls,
 - automatic human-edited Artist Library file detection,
-- durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records.
+- durable taste memory, calibration choice, accepted-work promotion, output batch, or provider-run records,
+- automatic conductor learning review, application, open-project triage, and Close-Out capture.
 
-This means the next work should be consolidation first, then expansion. Good next passes are:
+After 1.0, reasonable expansion passes are:
 
 - add visible Artist Library edit detection on top of `bin/artist-os-import-output`,
 - add a project status view over `project.json`, `events.jsonl`, and SQLite so progress is queryable without re-reading the workspace by hand,

@@ -104,6 +104,12 @@ Valid directions:
 
 If the artist chooses adapted or new lyrics, define a preliminary Arrangement / Form skeleton before drafting lyrics, then create a Lyrics Draft before final prompt locking. The Lyrics Draft must be reviewed as part of the Creative Brief Document or as a required revision to it. Do not silently generate lyrics inside the final prompt.
 
+While the Lyrics Draft stays embedded in the draft Sound Creative Brief, it is
+internal planning material and does not require a separate Output Record. If it
+is returned as a standalone lyric work, reviewed independently, or reused as
+an output, route it through the Text Journey with Draft Generation Approval and
+an Output Record.
+
 The Lyrics Draft should include:
 
 - title or working title,

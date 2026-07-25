@@ -1,8 +1,13 @@
 # Story Architecture
 
-The story architecture defines the shared route Artist OS uses before branching into image, sound, and future video, text, or mixed-media output.
+The story architecture defines the shared route Artist OS uses before
+branching into image, video v0, sound, text, Album, or constrained
+cross-medium output.
 
-This is the planning contract for the shared story route. Formal schemas for Transformation Brief, Beat Plan, Long-Work Stewardship Record, Review Record, Gate Decision, and Output Record now live in `schemas/`.
+This is the planning contract for the shared story route. Formal schemas for
+the shared story, medium, review, package, and output records live in
+`schemas/`. `docs/release-1.0.md` distinguishes schema foundations from
+end-to-end completed behavior.
 
 ## Shared Journey
 
@@ -11,11 +16,14 @@ Reference Intake
   -> Meaning Journey
   -> Transformation Brief
   -> Story Journey
-  -> Long-Work Stewardship, when cumulative
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship, when artist-activated
   -> Medium Journey
+  -> optional Cross-Medium Plan, when a second medium is activated
   -> Prompt Journey
   -> Generation Journey
   -> Output Review Journey
+  -> optional Package Compilation, for an approved package request
 ```
 
 ## Journey Responsibilities
@@ -114,7 +122,9 @@ Enforcement: Beats are the smallest meaningful story movements. Use Story Moveme
 
 ### Long-Work Stewardship
 
-Protects projects whose parts build on each other after Story Approval.
+Protects artist-activated projects whose parts build on each other after Story
+Approval and meet ADR 0013's dependency and length threshold, or projects for
+which the artist explicitly requests stewardship.
 
 Outputs:
 
@@ -135,7 +145,10 @@ Review:
 
 The Beat Plan remains the story authority. The foundation record references the approved Beat Plan before medium-specific parts exist; the enriched record references the medium-specific part ids. Long-Work Stewardship does not duplicate beat movement, shot design, text section execution, sonic arrangement, or final acceptance.
 
-Do not use Long-Work Stewardship for non-sequential portfolios, store collections, style explorations, or curator batches unless the parts build on each other.
+Recommendation is not activation. Present the ADR 0015 gate and create the
+record only when the artist activates it. Do not use Long-Work Stewardship for
+non-sequential portfolios, store collections, style explorations, or curator
+batches unless the parts build on each other and the artist activates it.
 
 ### Medium Journey
 
@@ -147,7 +160,8 @@ Outputs:
 - Video Medium Plan,
 - Sound Medium Plan,
 - Text Medium Plan,
-- Mixed-Media Plan.
+- Cross-Medium Plan, only for the general multi-medium coordinator,
+- Release Package Plan, only for the Album workflow.
 
 Gate:
 
@@ -169,10 +183,11 @@ Turns an approved Medium Plan into provider-neutral prompt plans.
 Outputs:
 
 - Provider-Neutral Image Prompt Plan,
-- Video Prompt Plan,
+- storyboard-ready Video Medium Plan and optional provider-specific Seedance
+  Prompt Package,
 - Sound Prompt Plan,
 - Text Generation Plan,
-- mixed output package.
+- medium-specific prompt or generation plans referenced by a Cross-Medium Plan.
 
 Gate:
 
@@ -212,7 +227,6 @@ Outputs:
 - Review Record,
 - Output Acceptance Gate Decision,
 - revision prompt,
-- taste memory note,
 - archive/export decision.
 
 Gate:
@@ -263,7 +277,8 @@ Text Reference
   -> Artist Meaning
   -> Transformation Brief
   -> Beat Plan
-  -> Long-Work Stewardship Record, when cumulative
+  -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
+  -> Long-Work Stewardship Record, when artist-activated
   -> Image Medium Plan
   -> draft image Creative Brief
   -> Art Critic Review (Review Record)
@@ -277,4 +292,10 @@ Text Reference
   -> Output Acceptance Gate Decision
 ```
 
-The image, Suno, and text workflows now consume the approved Beat Plan instead of each owning its own story model. Medium-specific brief records carry `beat_plan_id` and do not embed duplicate Beat summaries. Cumulative work also carries a Long-Work Stewardship Record so later parts stay traceable to the approved arc without turning non-sequential collections into heavy story projects.
+The image, video v0, sound, text, and Album workflows consume the approved Beat
+Plan instead of each owning its own story model. Medium-specific brief records
+carry `beat_plan_id` and do not embed duplicate Beat summaries. Eligible
+cumulative work carries a Long-Work Stewardship Record only after explicit
+artist activation. General Cross-Medium planning coordinates existing medium
+journeys without recreating the Shared Story Spine, and Package Compilation is
+terminal and provider-free when an approved package is requested.

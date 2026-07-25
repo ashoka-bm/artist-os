@@ -55,6 +55,9 @@ These are the conductor's safety rails — the things only you can enforce becau
 - Do not produce multiple series image prompts, or multiple sound sequence plans, until the artist approves the Series/Sequence Plan. A series multiplies generation cost and commits the artist to a direction, so each expansion stays a deliberate artist choice rather than a default.
 - When Workflow Scale Routing recommends Long-Work Stewardship, ask the artist before activating it. The ADR 0013 threshold makes stewardship eligible only when BOTH (1) cumulative dependency holds (parts depend on each other for continuity — the existing `requires_part_to_part_dependency`) AND (2) the per-medium length floor holds (video cumulative arc longer than ~5 minutes; text cumulative arc that is multi-chapter; audio cumulative arc across tracks (Album Cohesion Mode `arc_album`) that is full-length ~8+ dependent tracks / ~30 minutes; image recurring-subject continuity and a book-scale ~20+ image series, or illustrated long-form riding on the text floor). ADR 0015 adds the artist-facing activation rule: recommend after Story Approval, then create a foundation Long-Work Stewardship Record only if the artist activates it. Defer and waive are Gate Decisions only. Do not expand while activation is unresolved, the initial Medium Mapping Checkpoint is unresolved for multiple dependent parts, or Long-Work Readiness is `pending` / `repair_before_expansion` unless the artist completes readiness, repairs, or explicitly waives the block.
 - For Album v1, create a Release Package Plan after the Album Beat Plan and before full medium-specific expansion. Do not create calibration Medium Plans until the artist approves Album Cohesion Mode, deliverables, Album Sonic System, Album Visual System, Calibration Track, and calibration visual target. Do not expand remaining track prompts or covers until the relevant Album Calibration subchecks are approved.
+- Outside Album, do not expand a supporting medium until the Cross-Medium Plan
+  exists, Mixed-Media Critic Review is complete, and the artist explicitly
+  approves the plan. General multi-medium production is sequential in 1.0.
 - After generation, import, drafting, or human editing creates a concrete Output Artifact, create an Output Record before Output Critic Review or Output Acceptance Gate. Review and acceptance must point at a fixed, traceable artifact — without a record there is nothing durable to critique or to tie the verdict to.
 - Do not advance a blocked Output Critic Review to Output Acceptance Gate unless the artist explicitly waives the blocking finding and the waiver is recorded in the Review Record. Blocking findings protect meaning; an unrecorded override erases the audit trail of what was knowingly shipped.
 - Do not leave project state only in chat. Persist each phase before advancing (see Persisting State). Chat is ephemeral — if state lives only in the conversation, a returning artist loses the thread and the pipeline's traceability guarantees break.
@@ -66,7 +69,10 @@ If the target output is unclear, run a short Orientation before analysis hardens
 
 First ask:
 
-> Turn any reference into a complete creative release system. Transform one idea, source, or inspiration into albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, audio works, and coordinated release packages. Artist OS keeps the core meaning intact while giving the work structure, momentum, and a clear path from raw spark to finished artifact.
+> Turn a text Reference into a traceable dry-run plan for image, video
+> storyboards, audio, text, an Album, or a constrained multi-medium package.
+> Artist OS keeps the core meaning intact while giving the work structure,
+> review gates, and a path to accepted artifacts.
 >
 > What do you want to create from this Reference?
 >
@@ -75,7 +81,18 @@ First ask:
 > - **Audio**: a song, instrumental, soundscape, score, spoken word, or other sound work
 > - **Text**: a poem, prose, story, script, lyrics, essay, letter, or other writing
 
-Then ask the medium-specific output-kind question for Image, Video, Audio, or Text. For the outcome shortcuts, route directly when the artist's intent is clear: character creation routes as an intent shortcut to Character Template and optional Visual Reference Sheet Plan before the chosen medium; Create an album routes to Album v1; develop a novel / long-form writing project routes to Text Journey with Full Long-Form Project routing when durable continuity is needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey with Research Grounding offered when current facts, market context, examples, or platform discourse would materially strengthen the piece; illustrated written work such as a children's book, picture book, comic, story with images, cover plus interiors, or diagram-rich piece routes to Text Journey first and then Illustration Plan; multi-output release package routes to Album v1 only when sound-primary and album-shaped, otherwise ask which implemented medium to start with or capture broader package notes.
+Then ask the medium-specific output-kind question for Image, Video, Audio, or
+Text. For the outcome shortcuts, route directly when the artist's intent is
+clear: character creation routes as an intent shortcut to Character Template
+and optional Visual Reference Sheet Plan before the chosen medium; Create an
+album routes to Album; develop a novel / long-form writing project routes to
+Text Journey with Full Long-Form Project routing when durable continuity is
+needed; blog essays, Substack pieces, and LinkedIn posts route to Text Journey
+with Research Grounding offered when current facts, market context, examples,
+or platform discourse would materially strengthen the piece; illustrated
+written work routes to Text Journey first and then Illustration Plan. A
+non-Album multi-output request routes to the constrained Cross-Medium
+interstitial after the Shared Story Spine and primary Medium Plan exist.
 
 For any story with recurring characters, ask once early and make the generation value clear:
 
@@ -222,7 +239,13 @@ Use `docs/subagent-orchestration.md` before delegating planning, validation, rev
 
 The conductor keeps pipeline authority. Subagents may analyze, draft, validate, critique, or prepare disposable packets, but they must not ask artist-facing gates, record approvals or waivers, persist authoritative state, mutate manifests/events/indexes, call providers, generate media, or advance phases.
 
-Choose the lightest orchestration mode that protects provenance and quality. Use **Standard Orchestration** for compact single-output work, avoiding fanout unless there is a specific risk. Use **Parallel Production** more regularly for cumulative work, release packages, Prompt Variant Plans, Prompt Branch Set branches, approved series roles, approved album/release-package deliverables, or explicitly approved multi-output package parts. Do not activate Parallel Production merely because multiple mediums are mentioned.
+Choose the lightest orchestration mode that protects provenance and quality.
+Use **Standard Orchestration** for compact single-output work, avoiding fanout
+unless there is a specific risk. Use **Parallel Production** for independent
+units inside the currently active medium, Prompt Variant Plans, Prompt Branch
+Set branches, approved series roles, or Album deliverables after the relevant
+approvals. General Cross-Medium production is sequential in 1.0; never run the
+primary and supporting medium journeys simultaneously.
 
 Run delegated work in waves: freeze the input packet, dispatch eligible subagents, collect results, reconcile one candidate stage output, validate, persist, then ask the next gate question or advance. Critique of a draft waits until the draft exists; independent variants, branches, outputs, or review lenses may be critiqued in parallel after their inputs exist. When multiple workers return findings, reduce them by fingerprint and confidence before changing the authoritative artifact or presenting artist-facing decisions.
 
@@ -246,8 +269,18 @@ When the artist asks to add or activate a medium on work that already exists:
 
 - **Detect the project first.** Query `artist-os.sqlite`, then read the matching `project.json`, before asking the artist to restate anything (the rule in Persisting State). One clear match: name it and offer to activate the new medium on it. Several: ask which. None: treat as a cold start.
 - **Reuse the spine; do not re-derive it.** Name the Shared Story Spine being reused and state that the standing Story Approval on the unchanged Beat Plan still holds — that satisfies the Gate Completion Rule, so do not re-run the Story gate or re-interview meaning. Reference `transformation_brief_id` and `beat_plan_id`; never fork or edit the Beat Plan for the new medium.
-- **Enter at Phase 8 (Medium Plan).** Run only the medium-specific tail (Phases 8–17). Conditional phases re-evaluate fresh for this medium (Long-Work Stewardship per ADR 0013; Release Package for album shape), and the medium's own reviews and downstream gates still run fresh. A not-yet-active medium is a reset-eligible checkpoint: when context is high, offer the reset handoff (the `project.json` resume-state projection from Persisting State) instead of continuing in-thread.
-- **Record the hop lightly.** Write the new medium's Medium Plan and append a `medium_activated` event to `events.jsonl`. There is no inheritance record and no sibling field — cross-medium lineage is implicit through the existing `*_id` references. Do not write a `resume-packet.json`.
+- **Create and approve the Cross-Medium Plan before Phase 8.** Draft the plan
+  from the existing Shared Story Spine and primary Medium Plan, run
+  Mixed-Media Critic Review, and ask for explicit Cross-Medium Plan Approval.
+  Do not write the supporting Medium Plan or append `medium_activated` before
+  approval.
+- **Enter at Phase 8 only after approval.** Run only the supporting
+  medium-specific tail (Phases 8–17), sequentially. Conditional phases
+  re-evaluate fresh for this medium, and its own reviews and downstream gates
+  still run fresh.
+- **Record the hop after approval.** Write the supporting Medium Plan, append a
+  `medium_activated` event, and keep Cross-Medium Plan refs in durable state.
+  Do not write a `resume-packet.json`.
 
 When the artist wants more than one medium outside Album v1, assign a **Medium Role** per active medium. Recommend the primary medium from the requested output type — video for a video, the song for a music video, text for an article with photos — and ask the artist to **confirm** it; this is recommendation-first, not hard-coded, and honors the Gate Completion Rule. The remaining media default to **supporting** and activate as compact-tier Medium Plans that take continuity from the primary medium's realization in addition to the Shared Story Spine. Record the Medium Role for each active medium on the Cross-Medium Plan.
 
@@ -271,6 +304,16 @@ Image, video, audio, and text share one spine. Run the phases in order, hand off
 5. **Story Critic Review And Story Approval** — `skills/artist-os/references/writing-method-review.md`, before medium planning, for any multi-beat, sequence, image-series, or lyric-bearing plan: run Beat Reviewer first for beat mechanics, then Story Critic to consume that Review Record and own the Story Approval contract (see `docs/gates-and-reviews.md` → "Story Critic"). Then present the revised Beat Plan for Story Approval.
 6. **Long-Work Stewardship Activation** — when project-level routing recommends `long_work_stewardship`, present the ADR 0015 activation gate immediately after Story Approval. Use shared core wording with one medium-specific sentence. If the artist activates, create a foundation Long-Work Stewardship Record immediately. If the artist defers or waives, record only the Gate Decision and carry the operational summary in `project.json.resume_state`; do not create a placeholder stewardship record. If the artist explicitly requests stewardship below the normal threshold, activation is allowed and records `artist_requested = true`. At the foundation stage `medium_plan_id` may be `null` and `part_plan` may be empty because medium-specific parts do not exist yet. The Beat Plan remains story authority.
 7. **Release Package Plan** — for Album v1 only, create `schemas/release-package-plan.schema.json` after the Album Beat Plan, and after the activation gate / foundation Long-Work Stewardship when Album Cohesion Mode recommends stewardship, before full medium-specific expansion. The plan owns package subtype, deliverables, Album Cohesion Mode, Album Sonic System, Album Visual System, Album Calibration state, production order, track mapping, and cross-media continuity; it does not replace Medium Plans, Long-Work Stewardship, Prompt Plans, Text Generation Plans, or Output Records. Run pre-calibration Mixed-Media Critic Review, then ask for Release Package Plan Approval before calibration Medium Plans.
+**Cross-Medium Plan interstitial** — outside Album, materialize
+`schemas/cross-medium-plan.schema.json` only when a second medium is activated
+or the artist explicitly requests multiple outputs. Reuse the Shared Story
+Spine by id, recommend one primary medium for artist confirmation, keep every
+other medium supporting, record planned deliverables/shared references/order/
+continuity, run Mixed-Media Critic Review, and obtain explicit approval before
+supporting Phase 8 expansion. A material plan change invalidates that approval.
+Until the unchecked schema and gate/review blockers in
+`docs/release-1.0.md` are implemented, stop safely and report that this route is
+release work in progress rather than fabricating a valid record.
 8. **Medium Plan** — medium skill consumes the Beat Plan, works the medium's gates (see Medium Specifics), records medium-level `workflow_scale_routing`, and produces the Medium Plan. Persist each gate decision under `gates/`. When character or visual reference support was accepted, create Character Templates before medium locking when they affect voice, continuity, or visual identity, and create Visual Reference Sheet Plans after Style Direction is known or explicitly provisional. The medium recommends `long_work_stewardship` only when its medium-level evaluation finds BOTH cumulative dependency AND that medium's length floor (ADR 0013); otherwise it records the scale level without stewardship even at `cumulative_work` / `full_long_form_project`. When active stewardship exists, enrich the Long-Work Stewardship Record with `medium_plan_id`, medium-specific Long-Work Parts, continuity rules, checkpoints, and Long-Work Readiness before expansion. If the Medium Plan newly proves stewardship should be recommended and no activation decision exists, present the activation gate before expansion. If an activated stewardship project proves compact, ask for lightweight confirmation to deactivate as unnecessary and supersede the stewardship record.
 9. **Draft Brief** — medium skill produces the draft (Sound) Creative Brief Document.
 10. **Critic Review** — `skills/artist-os/references/art-critic-review.md` for image or sound; `skills/artist-os/references/video-journey.md` in Video Critic Review mode for video; `skills/artist-os/references/writing-method-review.md` in Writing Critic mode for text. Then present the revised brief and ask for Brief Approval.
@@ -282,7 +325,16 @@ Image, video, audio, and text share one spine. Run the phases in order, hand off
 15. **Output Record** — once generation, import, drafting, or editing creates a concrete Output Artifact, persist it against `schemas/output-record.schema.json` before review or acceptance. When Long-Work Stewardship is active, update the Long-Work Stewardship Record with the relevant part status and output reference.
 16. **Output Critic Review** — `skills/artist-os/references/critique-asset.md` in Output Critic mode against the Output Record and governing upstream records.
 17. **Output Acceptance Gate** — present the result; ask whether to accept, revise, reject, archive, export, or extend. If the review blocks, proceed only when the artist explicitly waives the block and the waiver is recorded.
-18. **Package Compilation** — terminal stage after Output Acceptance. Intake the returned or imported assets as Output Records, then choose a Package Format by reading `docs/structure-library/package-format/README.md` and then only the matching entry. Arrange the accepted Output Records into the format's slots and run the Completeness gate: the plan is the checklist and accepted Output Records are the ticks. Do not close the Asset Package while a planned deliverable lacks an accepted Output Record unless the artist explicitly waives it and the waiver is recorded. Persist the Asset Package against `schemas/asset-package.schema.json` as a thin manifest — refs by id, per-slot `filled` / `missing` / `waived`, no content copied — into the visible `exports/` area. This stage calls NO provider (ADR 0001 dry-run boundary): it arranges assets the artist already generated or imported.
+18. **Package Compilation** — conditional terminal stage after Output
+Acceptance for an approved Album or Cross-Medium package, or an explicit
+package request with a selected Package Format. Intake returned or imported
+assets as Output Records, then read the Package Format index and only the
+matching entry. Run the Package Format Selection and Completeness Gate. Do not
+close the Asset Package while a planned deliverable lacks an accepted Output
+Record unless the artist explicitly waives that named slot in its own Gate
+Decision. Persist a thin Asset Package manifest—refs by id, per-slot `filled` /
+`missing` / `waived`, no content copied—into the visible `exports/` area. This
+stage calls no provider.
 
 ### Medium Specifics
 
@@ -291,9 +343,36 @@ Load the owning mode file for the detailed checklist. Keep only these conductor-
 - **Album v1 / Release Package** stays conductor-owned until a package router exists. Use `schemas/release-package-plan.schema.json`, set `package_subtype = "album"`, create the plan after the Album Beat Plan, run Mixed-Media Critic Review before Album Calibration, require Release Package Plan Approval before calibration Medium Plans, and never accept open-ended "generate the album" approval.
 - **Medium Role** — for any multi-medium project outside Album v1, the Cross-Medium Plan records a Medium Role per active medium (`primary` | `supporting`). The primary medium is fully fleshed out; a supporting medium defaults to the compact treatment tier (a lean Medium Plan) and obeys the primary medium's realization for continuity in addition to the Shared Story Spine. Medium Role (importance) is distinct from medium-level Workflow Scale Routing (depth): the role seeds the default scale and the artist may override it. Supporting media reuse the full standard bounded review set for now; the reduced review count for the compact tier is deferred until the scale-gated-review-count lever lands.
 - **Image** — Symbology precedes Style; Presentation Mode is decided inside Symbology; image records validate against `schemas/image-medium-plan.schema.json`, `schemas/creative-brief.schema.json`, and `schemas/prompt-plan.schema.json`; series expansion requires Series Plan approval and calibration before remaining image-role prompts.
-- **Video** — For short-form / micro-journey clips (short social video, reel, single dynamic clip), use the lean `skills/artist-os/references/video-micro-journey-recipe.md` (self-contained, one batched many-shot pass, one inline review) instead of loading the full video-journey stack; escalate to `video-journey.md` only for full_story or long-form. The current path is storyboard-ready planning plus optional post-storyboard provider prompt packaging only: no finished video, no provider-neutral Video Prompt Plan, storyboard frame prompts stay in the Video Medium Plan, requested storyboard generation defaults to one composite multi-panel storyboard sheet (itself a provider-backed action requiring per-call approval plus an Output Record), and individual storyboard stills require separate explicit provider approval plus their own Output Records. Proactively offer a small style/reference image batch before storyboard export when Style Direction and continuity needs are known; include a rough per-image time estimate. The storyboard must map approved smallest Story Beats to panels or shots; if a requested panel count would force several turns into one panel, state the split before generation approval instead of silently compressing the story. Seedance Prompt Packages are post-storyboard, English-only provider exports with reference files and bindings; they require Prompt Plan Critique before any Seedance generation approval.
+- **Video** — For short-form / micro-journey clips (short social video, reel,
+  single dynamic clip), use the lean
+  `skills/artist-os/references/video-micro-journey-recipe.md` (self-contained,
+  one batched many-shot pass, compact Video Creative Brief, standard bounded
+  Video Critic Review, and explicit Brief Approval) instead of loading the full
+  video-journey stack; escalate to `video-journey.md` only for `full_story` or
+  long-form. The current path is storyboard-ready planning plus optional
+  post-storyboard provider prompt packaging only: no finished video, no
+  provider-neutral Video Prompt Plan, storyboard frame prompts stay in the
+  Video Medium Plan, requested storyboard generation defaults to one composite
+  multi-panel storyboard sheet (itself a provider-backed action requiring
+  per-call approval plus an Output Record), and individual storyboard stills
+  require separate explicit provider approval plus their own Output Records.
+  Proactively offer a small style/reference image batch before storyboard
+  export when Style Direction and continuity needs are known; include a rough
+  per-image time estimate. The storyboard must map approved smallest Story
+  Beats to panels or shots; if a requested panel count would force several
+  turns into one panel, state the split before generation approval instead of
+  silently compressing the story. Seedance Prompt Packages are
+  post-storyboard, English-only provider exports with reference files and
+  bindings; they require Prompt Plan Critique before any Seedance generation
+  approval.
 - **Illustrated Written Work** — Use `skills/artist-os/references/illustration-plan.md` after Text Medium Plan. Illustration Plan coordinates Text Journey and Image Journey for pages, spreads, panels, covers, diagrams, character references, and visual continuity. It does not create timed Storyboard Shots, Video Audio Posture, or finished-video claims.
-- **Sound / Suno rendering** — Suno-specific output rules live in `skills/artist-os/references/platforms/suno-output.md`. Resolve Vocal / Lyric before locking; final records validate against `schemas/sound-creative-brief.schema.json` and `schemas/sound-prompt-plan.schema.json`; sequence expansion requires approval; do not add an image-style Prompt Branch Set.
+- **Sound / Suno field export** — Suno-specific output rules live in
+  `skills/artist-os/references/platforms/suno-output.md`. The export prepares
+  Suno Custom Mode fields; it does not generate audio. Resolve Vocal / Lyric
+  before locking; final records validate against
+  `schemas/sound-creative-brief.schema.json` and
+  `schemas/sound-prompt-plan.schema.json`; sequence expansion requires
+  approval; do not add an image-style Prompt Branch Set.
 - **Text** — Draft Generation Approval is required even without a paid provider call; the first draft runs in a fresh-context sub-agent from a Text Draft Packet; conformance review precedes polish; Clear Writing Pass then Human Voice Pass use their internal mode files; every concrete rewrite gets a new Output Record with `origin.origin_type = "agent_rewritten"` and `previous_output_record_id`.
 - **Package Compilation** — never call a provider during compilation (it only arranges already-accepted Output Records); never declare a package `complete` without passing the Completeness gate; never duplicate asset content into the manifest (reference Output Records by id only).
 - **ElevenLabs v3 voice-over** — When the artist asks for an ElevenLabs v3 voice-over prompt from existing script, dialogue, narration, or approved text, load `skills/artist-os/references/platforms/elevenlabs-v3-voiceover.md`. This is prompt preparation only: add voice-only audio tags and permitted emphasis for TTS delivery while preserving the original wording and meaning. Do not call ElevenLabs or any TTS provider without explicit per-call approval.

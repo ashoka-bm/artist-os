@@ -43,14 +43,21 @@ checked) → resolver-relative bundle root → `git rev-parse --show-toplevel` �
 **never** falls back to the working directory. `doctor` fails loud if any
 manifest path, or any file named in a skill body, is missing under the root.
 
-## Source vs generated
+## Source vs release artifact
 
-Everything the `MANIFEST.json` include list ships — the canonical root docs
+Everything in the `MANIFEST.json` include list must ship in the 1.0 bundle—the canonical root docs
 (`THEORY.md`, `ARCHITECTURE.md`, `AGENTS.md`, `CONTEXT.md`), the
 root helper modules, `bin/`, `docs/`, `schemas/`, the public
 `artist-os` skill plus internal mode files under `skills/artist-os/references/`, and this `packaging/`
-dir — is the single source of truth, edited by hand. The
-future generator (`bin/artist-os-generate`, ADR 0008 "Later") will write
+dir—and is the single source of truth, edited by hand.
+
+That materialized bundle does not exist yet. The current
+`bin/install-codex-dev-skills` path is checkout-backed development
+installation; copy mode does not yet prove the full manifest surface, and its
+post-install doctor checks the checkout rather than an independent installed
+target. These are blocking 1.0 items in `docs/release-1.0.md`.
+
+The future generator (`bin/artist-os-generate`, ADR 0008 "Later") will write
 per-host install trees to `packaging/build/<host>/` (gitignored) carrying an
 `AUTO-GENERATED — do not edit` header; those are never edited by hand. See
 `docs/adr/0008-multi-host-skill-distribution.md`.

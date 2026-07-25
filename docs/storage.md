@@ -352,7 +352,10 @@ If persistence fails, report that before proceeding.
 
 Artist OS should append raw project feedback to the project Feedback Log as it arrives. At project completion, mark unclassified feedback as pending learning review rather than forcing the artist through a long cleanup step.
 
-At the start of a later project, Artist OS may run Learning Review over pending projects and relevant prior work. Relevant Soft Learning applies by default with brief disclosure. Relevant Hard Learning applies by default unless it conflicts with current Artist Meaning or approved plans.
+In 1.0, Learning Review, promotion, and application are explicitly invoked and
+human-gated. The conductor does not run them automatically at session start or
+apply stored Soft or Hard Learning by default. Automatic session-start review
+and learning application remain part of the post-1.0 design in ADR 0016.
 
 Concrete schema, process, or tool-field mismatches can become Hard Learning immediately. Taste and creative preferences usually start as Learning Candidates or Soft Learning unless repeated feedback, strong analytics, or explicit artist confirmation promotes them.
 

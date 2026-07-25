@@ -54,9 +54,27 @@ Drift check: compare written choices against Artist Meaning, source material, Be
 
 Checks whether selected media work together instead of duplicating, flattening, or accidentally contradicting each other.
 
-It owns cross-media role assignment, continuity, divergence, and production order.
+For a general Cross-Medium Plan, it must verify that:
 
-Drift check: compare each medium's role against Artist Meaning, Beat Plan, cross-media continuity decisions, and the other approved medium plans.
+- one unchanged Shared Story Spine and standing Story Approval are reused by id,
+- exactly one primary medium is artist-confirmed,
+- every supporting medium has a distinct job and explicit relationship to the
+  primary realization,
+- production order is sequential in 1.0,
+- continuity rules distinguish what must stay fixed from what may vary,
+- medium-local creative authority remains in independently reviewed Medium
+  Plans,
+- material changes invalidate the standing Cross-Medium Plan approval,
+- and missing package deliverables cannot be declared complete without
+  per-slot artist waivers.
+
+It owns cross-media role assignment, continuity, permitted divergence,
+production order, and the review of material plan changes. It does not replace
+the medium critics or per-output review.
+
+Drift check: compare each medium's role against Artist Meaning, Beat Plan, the
+approved Cross-Medium or Release Package Plan, cross-media continuity
+decisions, and the other approved medium plans.
 
 ### Long-Work Reviewer
 

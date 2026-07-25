@@ -71,10 +71,11 @@ The project is really two stages:
 
 ## Consequences
 
-- A new terminal phase (after Output Critic Review / Output Acceptance) — Package
-  Compilation — activates whenever a project has deliverables to assemble, and is the
-  natural home for multi-output and multi-medium projects (albums, article+photos,
-  video+soundtrack).
+- A new conditional terminal phase (after Output Critic Review / Output
+  Acceptance) — Package Compilation — activates for an approved Album or
+  Cross-Medium package, or when the artist explicitly requests a package and
+  selects a Package Format. It is the natural home for multi-output and
+  multi-medium projects (albums, article+photos, video+soundtrack).
 - It builds on existing machinery: Output Records, the import path for returned
   assets, the Output Acceptance Gate, and the visible Artist Library `exports/` area
   where the Asset Package materializes.
@@ -89,12 +90,17 @@ The project is really two stages:
   A full field-by-field record rewrite remains deferred (see Open).
 - No provider is called during compilation; ADR 0001's dry-run boundary holds.
 
-## Open
+## Resolved for Artist OS 1.0
 
-- Partial-package policy: when a missing deliverable may be waived, and how the
-  `waived` status is surfaced to the artist (the Output Acceptance waiver posture).
-- How the Asset Package materializes into the visible `exports/` layout in
-  `docs/storage.md`.
-- Naming: the format library sits beside `structure-library/` though a Package Format
-  is an assembly template, not a story/format *structure* — confirm that path or give
-  it its own top-level library dir.
+- A required slot may be omitted only when the artist explicitly waives that
+  named slot. Store one Gate Decision per waived required slot and reference it
+  from the Asset Package.
+- The internal Asset Package manifest persists at
+  `exports/asset-package.json`; the artist-facing bundle materializes in the
+  visible Artist Library `exports/` area, as defined in `docs/storage.md`.
+- The Package Format library remains at
+  `docs/structure-library/package-format/` for 1.0. It is assembly grammar, not
+  story authority; a later move would be a compatibility-sensitive cleanup,
+  not release work.
+- The 1.0 Asset Package remains manifest-only. A future release may add an
+  optional copied archive, but that is outside this contract.

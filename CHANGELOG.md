@@ -10,6 +10,12 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ### Added
 
+- Artist OS 1.0 release contract with an artist-approved scope freeze,
+  change-control rule, explicit exclusions, blocking completion backlog, and
+  release gate.
+- Constrained Cross-Medium 1.0 target contract: lazy plan creation, one
+  artist-confirmed primary medium, sequential supporting media, material-change
+  invalidation, and terminal provider-free Asset Package compilation.
 - Reference Inventory (`schemas/reference-inventory.schema.json`): a project-level
   continuity record for promoted character, location, and object references — it
   owns effective policy, scan history, subject / package / per-output readiness,
@@ -36,6 +42,19 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ### Changed
 
+- Current architecture, journey, gate, storage, packaging, and runtime
+  documentation now distinguish implemented foundations from unfinished 1.0
+  behavior and post-1.0 work.
+- Long-Work Stewardship now consistently requires ADR 0013 eligibility plus
+  explicit ADR 0015 artist activation; routing recommendations do not create a
+  stewardship record.
+- Micro-video planning now requires a compact Video Creative Brief, bounded
+  Video Critic Review, and explicit Brief Approval before storyboard handoff or
+  generation.
+- Embedded Sound Creative Brief lyrics are planning material; standalone lyric
+  outputs use Text Journey approval and Output Record provenance.
+- Suno output wording now says “Custom Mode field export” to avoid implying
+  that Artist OS generates audio.
 - Image outputs now record `reference_refs_used` so downstream usage is traceable
   back to Reference Inventory subjects (availability lives in the inventory; usage
   lives on the consuming output).

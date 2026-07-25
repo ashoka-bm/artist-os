@@ -76,6 +76,38 @@ At medium gates, present the strongest recommendation first, then ask for artist
 
 For the Video Format Gate, the recommendation must include the story type and Beat Plan shape before the artist is asked to choose. State what the story is, how many smallest Story Beats or Story Movements it appears to need, the recommended video format, and why that format fits better than nearby alternatives. Do not start with a broad video format menu when the Reference or Beat Plan gives enough material to recommend.
 
+### Cross-Medium Plan Approval Gate
+
+Approves a general Cross-Medium Plan outside Album v1 after Mixed-Media Critic
+Review and before supporting-medium expansion.
+
+Complete when the artist approves or revises the included media, one primary
+Medium Role, supporting Medium Roles, planned deliverables, production order,
+Effective Project Scale, and cross-medium continuity rules. Proceeding
+unconfirmed is not allowed because supporting Medium Plans take authority from
+these decisions.
+
+A material change to included media, Medium Roles, production order, or shared
+continuity invalidates the standing approval. Rerun the affected
+Mixed-Media Critic Review and present this gate again before expansion
+continues.
+
+### Package Format Selection And Completeness Gate
+
+Selects the Package Format and decides whether an approved package has all
+required deliverables before its Asset Package is marked complete.
+
+Complete when every required slot points to an accepted Output Record. If a
+required deliverable is missing, the artist may return to that medium journey
+or explicitly waive that one slot. Record one Gate Decision per waived required
+slot, and carry its id into the Asset Package. A general “ship anyway” decision
+does not waive unnamed missing deliverables.
+
+This gate is conditional. Run it only for an approved Album or Cross-Medium
+package, or when the artist explicitly requests Package Compilation and selects
+a Package Format. It calls no provider and does not replace per-output review
+or acceptance.
+
 ### Format Length Gate
 
 Confirms or overrides the Format Length Standard when the artist wants a different word count than the default for the selected Cultural Format Structure and publication use.

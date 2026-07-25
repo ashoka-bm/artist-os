@@ -50,6 +50,12 @@ A Gate Decision records one artist-facing choice or explicit permission to proce
 
 Use Gate Decision records for Routing, Meaning Confirmation, Interpretation, Story, Story Approval, Long-Work Stewardship Activation, Long-Work Checkpoints, Medium Gates, Prompt Branch, Prompt Lock, Generation Approval, and Output Acceptance decisions. The schema now includes `long_work_stewardship_activation` so activation, defer, waive, and deactivation choices can validate as normal Gate Decisions.
 
+The frozen 1.0 contract also requires
+`cross_medium_plan_approval` and package-completeness/per-slot waiver
+vocabulary with Cross-Medium and Asset Package upstream refs. Those enum/ref
+changes are not implemented yet and remain blocking items in
+`docs/release-1.0.md`; do not fabricate them with a nearby gate type.
+
 ### Transformation Brief
 
 A Transformation Brief is the cross-medium interpretation record created after Artist Meaning and before Story / Beat planning. It validates against `schemas/transformation-brief.schema.json`.
@@ -151,6 +157,32 @@ Create it after a Text Medium Plan exists, because page, spread, panel, diagram,
 
 Illustration Plan is not a Video Medium Plan. It has no Video Audio Posture, timed Storyboard Shots, camera-motion contract, or finished-video promise.
 
+### Cross-Medium Plan
+
+A Cross-Medium Plan is the lazy project-level coordinator for general
+multi-medium work outside Album. It validates against
+`schemas/cross-medium-plan.schema.json` and reuses one unchanged Shared Story
+Spine. It records one artist-confirmed primary medium, supporting media,
+Effective Project Scale, sequential production order, and cross-medium
+continuity without absorbing medium-specific creative authority.
+
+The current schema is a foundation. The frozen 1.0 record must also carry
+schema-backed planned deliverables and shared references; those fields, the
+approval/review vocabulary, and end-to-end transition coverage remain release
+blockers.
+
+### Asset Package
+
+An Asset Package is the terminal, provider-free manifest compiled through a
+selected Package Format. It validates against
+`schemas/asset-package.schema.json`, references accepted Output Records by id,
+and does not copy their content.
+
+Every required missing slot needs its own explicit artist waiver Gate Decision.
+The Package Format Selection and Completeness gate vocabulary and upstream refs
+are not yet implemented in the Gate Decision schema; Package Compilation is
+therefore a foundation rather than a release-certified general route.
+
 ### Review Record
 
 A Review Record captures one mandatory bounded sub-agent review. It validates against `schemas/review-record.schema.json`.
@@ -233,7 +265,12 @@ A Sound Prompt Plan is the structured dry-run generation plan created from an ap
 
 The three sound Prompt Variant Plans keep the same stable labels as image Prompt Variant Plans: Faithful, Amplified, and Minimal. They use `sonic_differentiators` instead of visual differentiators and `derived_sonic_elements` instead of Derived Symbols. Each variant also includes `emotional_tension_preservation` and `platform_output_intent` so the variant can be reviewed against the approved emotional/tension contract before any provider-specific rendering.
 
-`platform_renderings[]` is the final platform-facing contract. For the first text-to-sound version, a Suno rendering stores `outputs.suno_custom_mode_outputs` with `title`, `instrumental`, `lyrics`, `style_of_music`, `exclude`, and optional Suno advanced notes. Later platform renderers add sibling entries without changing upstream sound planning.
+`platform_renderings[]` is the final platform-facing contract. For the first
+text-to-sound version, a Suno field export stores
+`outputs.suno_custom_mode_outputs` with `title`, `instrumental`, `lyrics`,
+`style_of_music`, `exclude`, and optional Suno advanced notes. This prepares
+fields and does not generate audio. Later platform renderers add sibling
+entries without changing upstream sound planning.
 
 Sound Prompt Plans must preserve the lineage IDs from the approved Sound Creative Brief and Sound Medium Plan. `traceability_summary`, Prompt Variant trace notes, and platform rendering trace notes may cite `transformation_brief`, `beat_plan`, and `medium_plan` directly.
 

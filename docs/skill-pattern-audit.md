@@ -1,5 +1,10 @@
 <!-- Generated 2026-06-26 by the agentic-skill-patterns auditor (artist-os-pattern-audit workflow). Profiled the live repo; every gap survived an adversarial verify pass (0 false gaps). Catalog + evidence: ~/code/personal/agentic-skill-patterns. -->
 
+> **Historical snapshot (2026-06-26).** This report describes the repository at
+> the time it was generated. Several findings and counts have since been
+> resolved or superseded. Do not use it as current release status; use
+> `docs/release-1.0.md` and `docs/progress.md`.
+
 ## Audit: Artist OS
 
 Archetype: Conductor / gated-pipeline (+ Stateful-engine; weak third axis: multi-harness-portability)

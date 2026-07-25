@@ -76,7 +76,8 @@ Ask the Review Presentation question for written format outputs. Recommend a loc
 
 ## Reviews
 
-- Story Critic Review happens before this journey as a bounded sub-agent review.
+- Story Critic Review happens before this journey for multi-beat, sequence,
+  lyric-bearing, or otherwise ambiguous plans.
 - Writing Critic Review checks form, voice, point of view, structure, pacing, line or paragraph pressure, continuity, and fidelity to Artist Meaning as a bounded sub-agent review.
 - Fragment Reviewer sub-agent checks raw material capture against `docs/writing/references/writing-fragments.SKILL.md`.
 - Beat Reviewer sub-agent checks journey movement against `docs/writing/references/writing-beats.SKILL.md`.
@@ -99,7 +100,16 @@ After a written Output Artifact exists, run a Clear Writing Pass when the Text G
 
 After editorial passes, the main agent performs a final check against Artist Meaning, Text Medium Plan, Text Creative Brief, Text Generation Plan, source-wording policy, protected features, and structure before Output Critic Review.
 
-For long text where Workflow Scale Routing identifies cumulative or full long-form support, create a foundation Long-Work Stewardship Record after Story Approval and enrich it after the Text Medium Plan maps Beats to text sections or other medium parts. The Text Medium Plan owns Medium-Level Workflow Scale Routing, Medium Output Shape Recommendation, Cultural Format Structure, text form, voice, structure, fidelity, publication use, and section jobs; the stewardship record references text section or chapter ids and tracks cumulative progress, readiness, checkpoints, continuity rules, and drift.
+For long text, recommend Long-Work Stewardship only when ADR 0013's cumulative
+dependency and multi-chapter length threshold both hold, or when the artist
+asks for it. Present the ADR 0015 activation gate after Story Approval and
+create a foundation record only if the artist activates it. Enrich an active
+record after the Text Medium Plan maps Beats to text sections or other medium
+parts. The Text Medium Plan owns Medium-Level Workflow Scale Routing, Medium
+Output Shape Recommendation, Cultural Format Structure, text form, voice,
+structure, fidelity, publication use, and section jobs; the stewardship record
+references text section or chapter ids and tracks cumulative progress,
+readiness, checkpoints, continuity rules, and drift.
 
 Plot-tracker-style documents, act trackers, open-thread lists, and character continuity summaries are Stewardship Views over Text Medium Plan and Long-Work Stewardship state. They are not separate story-authority records.
 

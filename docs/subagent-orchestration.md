@@ -36,7 +36,7 @@ Use this scale guide, aligned with `workflow_scale_routing` where applicable:
 | `compact_artifact` | single image, short poem, one prompt plan, one small text draft | Use mandatory reviewers and at most one or two prep workers when useful. Avoid fanout by default. |
 | `structured_single_artifact` | article, essay, short story, video storyboard, single song with lyrics | Use Standard Orchestration, focused audits, and one critic per required stage. Add specialist checks only for real risk. |
 | `cumulative_work` or `full_long_form_project` | image series, multi-section text, track sequence, chapter/scene set | Use Parallel Production after gates allow expansion. Add stewardship, artifact-per-worker execution, and readiness audits. |
-| release package route | Album v1, multi-output package, coordinated campaign | Use regular worker waves, specialist review fanout, reduction, calibration checks, and artifact-per-worker status reporting. |
+| release package route | Album workflow; approved units inside the currently active medium of a general package | Use regular worker waves, specialist review fanout, reduction, calibration checks, and artifact-per-worker status reporting without running primary and supporting media simultaneously. |
 
 ### Standard Orchestration
 
@@ -63,9 +63,15 @@ Parallel Production may activate for:
 - approved sound sequence parts after the Sequence Approval Gate and calibration gates allow expansion,
 - Album v1 or release-package deliverables after package approval and relevant calibration subchecks,
 - independent text sections, image roles, tracks, storyboard stills, or outputs when Long-Work Stewardship marks them ready,
-- explicitly approved multi-output package work.
+- independent units inside the currently active medium of an approved general
+  Cross-Medium package.
 
-Do not activate Parallel Production merely because multiple mediums are mentioned. Outside Album v1 or an explicitly approved multi-output route, the conductor still asks which implemented medium to run first.
+Do not activate Parallel Production merely because multiple media are
+mentioned. General Cross-Medium production is sequential in 1.0: parallelism
+may occur inside the currently active medium, but the primary and supporting
+medium journeys do not execute simultaneously. Album retains its existing
+package-specific parallelism after package approval and relevant calibration
+subchecks.
 
 ## Wave Model
 

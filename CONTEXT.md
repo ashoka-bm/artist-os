@@ -2,6 +2,15 @@
 
 Artist Generation is the repository for Artist OS. This context defines the domain language for the artist-facing operating system.
 
+## Artist OS 1.0 Boundary
+
+`docs/release-1.0.md` is authoritative for what the first finished release
+ships. This glossary may define later domain concepts, but a definition here
+does not place a feature in 1.0. The 1.0 input claim is an artist-provided text
+Reference; other Reference media remain valid domain language for later
+ingestion work. Automatic learning application and conductor
+self-improvement are post-1.0.
+
 ## Language
 
 **Artist Generation**:
@@ -446,6 +455,10 @@ _Avoid_: Silently inventing lyrics inside a final prompt
 
 **Lyrics Draft**:
 Reviewable lyrics created when the artist asks for adapted or new lyrics in a text-to-sound workflow.
+While embedded in the draft Sound Creative Brief, it is internal planning
+material rather than a standalone Output Artifact. If it is returned or reused
+as a standalone lyric work, route it through Text Journey Draft Generation
+Approval and create an Output Record before output review.
 _Avoid_: Hidden provider prompt text
 
 **Arrangement / Form Direction**:
@@ -857,7 +870,10 @@ Changing medium or form while preserving Artist Meaning, selected Formal Analysi
 _Avoid_: Format conversion, style transfer
 
 **Medium Plan**:
-The medium-specific translation record that explains how an approved Beat Plan becomes a specific medium. Image Medium Plan, Sound Medium Plan, Video Medium Plan, Text Medium Plan, and Mixed-Media Plan are specializations of this concept.
+The medium-specific translation record that explains how an approved Beat Plan
+becomes a specific medium. Image Medium Plan, Sound Medium Plan, Video Medium
+Plan, and Text Medium Plan are specializations of this concept. Cross-Medium
+Plan is a coordinator over those plans, not another Medium Plan subtype.
 _Avoid_: Creative Brief, Prompt Plan, provider settings
 
 **Medium Output Shape Recommendation**:
@@ -917,7 +933,17 @@ A large Cumulative Work with durable canon needs, such as a novel, novella, feat
 _Avoid_: Any multi-beat arc, any long text, any image series
 
 **Workflow Scale Support Bundle**:
-The default set of planning, stewardship, review, continuity, and long-form helper tools activated for a Workflow Scale Level. Compact Artifacts use the core Artist OS pipeline without Long-Work Stewardship. Structured Single Artifacts add medium-owned section, movement, scene, argument, or arrangement planning. Cumulative Work adds Long-Work Stewardship, Long-Work Parts, readiness, checkpoints when needed, and Stewardship Views when useful. Full Long-Form Projects add durable canon tools such as plot trackers, character sheets, world-building records, chapter or scene briefs, style guides, extraction and verification, synthesis checkpoints, and publishing or completion audits.
+The default set of planning, stewardship, review, continuity, and long-form
+helper tools recommended for a Workflow Scale Level. Compact Artifacts use the
+core Artist OS pipeline without Long-Work Stewardship. Structured Single
+Artifacts add medium-owned section, movement, scene, argument, or arrangement
+planning. Eligible Cumulative Work may recommend Long-Work Stewardship,
+Long-Work Parts, readiness, checkpoints, and Stewardship Views, but ADR 0013's
+dependency and length threshold plus ADR 0015 artist activation still govern.
+Full Long-Form Projects may add durable canon tools such as plot trackers,
+character sheets, world-building records, chapter or scene briefs, style
+guides, extraction and verification, synthesis checkpoints, and publishing or
+completion audits.
 _Avoid_: Enabling every helper for every project, skipping scale-specific support
 
 **Workflow Scale Support**:
@@ -1208,7 +1234,12 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - An **Album Beat Plan** is the album story authority; **Track-Level Beat Plans** may deepen individual tracks but must trace back to the governing Album Beat Plan.
 - Every Album track is represented by an Album Beat Plan Beat or Long-Work Part, but a **Track-Level Beat Plan** is created only when the track needs internal emotional movement beyond its album-level job.
 - **Album Cohesion Mode** may be arc album, collection album, or hybrid album.
-- An arc album activates **Cumulative Work** and recommends **Long-Work Stewardship** by default; a collection album uses **Collection Coherence Review** by default; a hybrid album recommends stewardship only for dependent clusters or a governing album arc.
+- An arc album activates **Cumulative Work** but recommends **Long-Work
+  Stewardship** only when the album also meets ADR 0013's full-length audio
+  threshold (about 8+ dependent tracks or 30 minutes), or when the artist asks
+  for it. A collection album uses **Collection Coherence Review** by default; a
+  hybrid album recommends stewardship only for dependent clusters or a
+  governing album arc that also meets the threshold.
 - When **Album Cohesion Mode** recommends **Long-Work Stewardship**, present the activation gate after Story Approval. If the artist activates it, create the foundation Long-Work Stewardship Record before approving the Release Package Plan so the Release Package Plan can reference an existing stewardship record.
 - A collection album still requires explicit Album Sonic System, Album Visual System, Working Release Copy, and Collection Coherence Review, but it should not invent track-to-track escalation or dependency.
 - A hybrid album uses one album-level **Release Package Plan** and one **Long-Work Stewardship Record** per dependent cluster or governing album arc.
@@ -1430,8 +1461,13 @@ _Avoid_: Adding batch-only fields to each Output Record before provider batch wo
 - **Soft Learning** may guide future recommendations, but **Hard Learning** carries stronger default authority.
 - A **Learning Rule** stays compact; detailed feedback, analytics, and output comparisons remain separate evidence.
 - **Hard Learning** can come from repeated feedback, strong analytics, explicit artist confirmation, or a concrete schema/tooling mismatch.
-- Artist OS marks completed projects with unclassified feedback as **Pending Learning Review** and may process them at the start of a later project.
-- Relevant **Soft Learning** applies by default with brief disclosure; relevant **Hard Learning** applies by default unless it conflicts with current Artist Meaning or approved plans.
+- Artist OS marks completed projects with unclassified feedback as **Pending
+  Learning Review**. In 1.0, processing is explicitly invoked and human-gated;
+  automatic session-start processing is post-1.0.
+- The later learning design may apply relevant **Soft Learning** by default
+  with brief disclosure and relevant **Hard Learning** by default unless it
+  conflicts with current Artist Meaning or approved plans. Artist OS 1.0 does
+  not apply stored learning automatically.
 - **Performance Signals** and artist feedback are equal evidence classes for learning, but neither automatically overrides the other.
 - When **Performance Signals** conflict with artist feedback, Artist OS preserves both and asks whether the current project should prioritize personal expression, performance optimization, or a hybrid.
 

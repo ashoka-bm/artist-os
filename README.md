@@ -8,18 +8,33 @@ The current dry-run workflows are:
 
 - Text reference to Provider-Neutral Image Prompt Plan.
 - Text reference to storyboard-ready Video Medium Plan (Video Journey v0).
-- Text reference to Sound Prompt Plan with Suno Custom Mode rendering.
+- Text reference to Sound Prompt Plan with a Suno Custom Mode field export
+  (not generated audio).
 - Text reference to Text Generation Plan and drafted written output (Text Journey).
 - Album v1 Release Package Plan for ordered tracks, album/track cover planning, release copy, and calibration.
 
-Dry-run means the skills produce briefs, prompt plans, lyrics when requested, written drafts, critique records, and metadata. They do not call paid generation providers without explicit approval.
+Dry-run means the skills produce briefs, prompt plans, lyrics when requested,
+written drafts, critique records, and metadata. Artist OS 1.0 ships no provider
+adapter: a Generation Approval records permission but does not make a provider
+call executable from this repository.
 
-## Install In Codex
+The artist-approved boundary and completion checklist for the first finished
+version lives in `docs/release-1.0.md`. Thin Cross-Medium Plan orchestration is
+part of that boundary; provider adapters, finished video, automatic conductor
+self-improvement, and broader package routers are not.
 
-Clone the repo, then install the local skills:
+> **Release status:** Artist OS 1.0 is scope-frozen but not released. The
+> commands below install from a source checkout for development. The packaged
+> Codex artifact, supported-environment matrix, and clean-host certification
+> remain release blockers in `docs/release-1.0.md`.
+
+## Development Install In Codex
+
+Clone the repo, choose a Wondermint Root outside a git repository, then install
+the checkout-backed skill:
 
 ```bash
-bin/install-codex-dev-skills
+WONDERMINT_ROOT=/absolute/path/to/your/root bin/install-codex-dev-skills
 ```
 
 This installs one public skill:
@@ -30,7 +45,16 @@ artist-os
 
 Restart Codex or open a new thread after installing so skill discovery refreshes.
 
-Start all Artist OS work with `artist-os`. It turns any reference into a complete creative release system for albums, essays, Substack pieces, LinkedIn posts, long-form writing, image collections, video storyboard plans, audio works, and coordinated release packages. It routes unclear work into image, video, audio, or text through the required gates, then loads internal mode files for isolated planning, review, and editorial-pass work.
+Start all Artist OS work with `artist-os`. The frozen 1.0 target turns an
+artist-provided text Reference into traceable dry-run image plans,
+storyboard-ready video plans, audio plans, written drafts, Album plans, or a
+constrained multi-medium package. It routes unclear work through the required
+gates, then loads internal mode files for isolated planning, review, and
+editorial-pass work.
+
+Current automated CI exercises Ubuntu with Python 3.12–3.14. That is test
+coverage, not yet the final support matrix; macOS and clean packaged
+installation still require release certification.
 
 ## Workflows
 
@@ -81,7 +105,7 @@ Text Reference
   -> Brief Approval
   -> Sound Creative Brief Record
   -> Sound Prompt Plan
-  -> Suno Custom Mode rendering
+  -> Suno Custom Mode field export
   -> Prompt Plan Critique
   -> optional Generation Approval Gate
   -> Output Record, when an artifact exists
@@ -89,7 +113,12 @@ Text Reference
   -> Output Acceptance Gate
 ```
 
-The Vocal / Lyric gate is required. If the artist wants lyrics or intelligible words, Artist OS drafts lyrics and includes them in review before final prompt locking. The sound plan stays platform-neutral until the final rendering step. The first sound renderer targets Suno Custom Mode fields: title, lyrics or instrumental choice, Style of Music, Exclude, and optional advanced notes.
+The Vocal / Lyric gate is required. If the artist wants lyrics or intelligible
+words, Artist OS drafts lyrics and includes them in review before final prompt
+locking. The sound plan stays platform-neutral until the final field-export
+step. The first sound exporter targets Suno Custom Mode fields: title, lyrics
+or instrumental choice, Style of Music, Exclude, and optional advanced notes.
+It does not generate audio.
 
 ### Text To Text (Text Journey)
 
@@ -117,7 +146,11 @@ Text Reference
 
 The Text Journey drafts the written Output Artifact in a fresh-context sub-agent, runs a conformance review before any editorial pass, and runs Clear Writing Pass before Human Voice Pass when the Text Generation Plan requires or recommends them. Each concrete rewrite gets a new Output Record. Drafting requires Draft Generation Approval even though no paid provider is called.
 
-All critic and reviewer stages run as bounded sub-agent reviews. The creating agent does not self-review its own Story, Medium, Prompt, or Output review stage. Provider-backed generation still requires explicit approval; the output lifecycle applies after a generated, imported, drafted, or edited artifact exists.
+All critic and reviewer stages run as bounded sub-agent reviews. The creating
+agent does not self-review its own Story, Medium, Prompt, or Output review
+stage. Provider-backed generation is outside 1.0; if a later or external
+adapter is used, it still requires explicit approval. The output lifecycle
+applies after a generated, imported, drafted, or edited artifact exists.
 
 Artist OS has standing user authorization to spawn bounded internal sub-agents automatically for mandatory reviews, validation, drafting passes, audits, and approved orchestration patterns. This does not authorize provider-backed generation, paid actions, uploads, destructive actions, artist-facing gate approvals, waivers, or output acceptance.
 
@@ -130,6 +163,7 @@ THEORY.md                    Shared Artist OS theory
 ARCHITECTURE.md              Workflow and data-flow architecture
 docs/metadata-schema.md      Metadata field reference
 docs/storage.md              Local Workspace Library rules
+docs/release-1.0.md          Authoritative 1.0 scope and completion checklist
 docs/progress.md             Current roadmap, transition state, and completed milestones
 docs/pipeline-contract.md    Typed step input/output contract
 docs/provider-import-adapter-contracts.md Provider/import execution boundary
@@ -154,7 +188,9 @@ Artist OS now has a shared story layer for the implemented image, video v0, Suno
 
 The governing rule is emotional primacy. Artist OS should grab attention, trigger a strong emotion, and forge a simple mental link. Plans must express a feeling rather than only communicate a fact, so Beat Plans, Medium Plans, and briefs now track Intended Feeling, Key Emotional Movements, Expectation Turns, and Minimum Tension Criteria.
 
-The current dry-run slices are text-to-image, video storyboard planning, text-to-Suno, and the text-to-text Text Journey. The remaining planned cross-medium architecture lives in:
+The current dry-run slices are text-to-image, video storyboard planning,
+text-to-Suno, and the text-to-text Text Journey. Shared cross-medium
+architecture lives in:
 
 ```text
 docs/story/
@@ -162,7 +198,17 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The shared cross-medium schemas now exist for Transformation Briefs, Beat Plans, Image, Video, Sound, and Text Medium Plans, Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch Sets, Text Generation Plans, and Output Records. The image, video v0, Suno, and text dry-run slices translate the shared Beat Plan through medium-specific Medium Plans before producing final brief records, prompt plans, generation plans, or storyboard-ready handoffs that preserve emotional movement and tension criteria. Creative Brief Records carry `beat_plan_id` rather than duplicate embedded Beat summaries. The current plan is to run end-to-end dry-run rehearsals before finished-video support or provider adapters.
+The shared cross-medium schemas now exist for Transformation Briefs, Beat
+Plans, Image, Video, Sound, and Text Medium Plans, Cross-Medium Plans,
+Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch
+Sets, Text Generation Plans, Output Records, and Asset Packages. The thin
+general Cross-Medium Plan lifecycle is 1.0 closure work; EP, Single Bundle,
+Visual Album, campaign, publishing, and distribution routers remain later
+work. The image, video v0, Suno, and text dry-run slices translate the shared
+Beat Plan through medium-specific Medium Plans before producing final brief
+records, prompt plans, generation plans, or storyboard-ready handoffs that
+preserve emotional movement and tension criteria. Creative Brief Records carry
+`beat_plan_id` rather than duplicate embedded Beat summaries.
 
 ## Local State And Privacy
 
@@ -179,6 +225,10 @@ The accepted storage model for installed user runs stores user-facing files and 
 `Wondermint/Artist Library/` contains visible project outputs, Review Drafts, readable summaries, and artist-useful Personal Library notes. The hidden sibling `.wondermint/artist-os/` contains internal Workspace Library state such as project manifests, event logs, prompt plans, critiques, sidecars, feedback evidence, learning records, and performance signals. Basic installed-root setup, Project Pointer creation, manifest fields, SQLite indexing, visible-missing sync, and feedback/learning/performance record scaffolding are available. See `docs/storage.md` and `docs/progress.md`.
 
 Use `bin/artist-os-import-output` to record an artist-owned or human-edited local artifact as an Output Record without calling a provider.
+
+The import command is a development surface until the path-confinement,
+atomic-persistence, manifest/resume, SQLite-refresh, and failure-recovery
+checks in `docs/release-1.0.md` pass.
 
 For repo development and tests, the internal Workspace Library can still live at:
 

@@ -44,3 +44,13 @@ The guard `artist_os_adapter_guards.assert_import_output_record(...)` requires:
 - `previous_output_record_id` when the artifact is a `human_edited` revision.
 
 Imported artifacts still need normal Output Critic Review and Output Acceptance before they become accepted work.
+
+### Current hardening status
+
+The import command exists, but it is not release-certified yet. The 1.0
+checklist requires path confinement under the resolved Workspace Library,
+complete manifest and upstream-lineage validation, recoverable or atomic
+record/event persistence, manifest/resume updates, SQLite refresh, and
+import-to-resume tests. Until those checks pass, treat the command as a
+development surface and do not claim that it satisfies the full persistence
+contract.

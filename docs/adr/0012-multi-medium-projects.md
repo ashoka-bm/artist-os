@@ -1,6 +1,8 @@
 # Multi-Medium Projects and Medium Activation
 
-Status: proposed.
+Status: accepted for the constrained 1.0 route on 2026-07-25; schema and
+medium-activation foundations exist, while the approval/review lifecycle and
+final conductor wiring remain tracked in `docs/release-1.0.md`.
 
 A project is one Reference, one Artist Meaning, and one Beat Plan — the
 medium-neutral Shared Story Spine — plus a medium layer that can carry any subset
@@ -31,13 +33,15 @@ one-project model and only build the medium-specific part.
   medium-specific work, not a story change. A genuinely different meaning or story
   from the same Reference is a new project that links back to the same Source Record.
 
-- **D3 — State-and-proceed entry; Story Approval stands.** When the artist asks for a
-  medium that is not yet active, the conductor names the spine it is building on
-  (Artist Meaning + Beat Plan; Story Approval already holds on the unchanged Beat
-  Plan) and continues into that medium's Medium Plan in the same turn. This reuses a
-  real prior approval on an unchanged record, so it satisfies the Gate Completion
-  Rule without re-running the Story gate. Medium-specific reviews (Video/Music/Writing
-  Critic, Brief Approval) and downstream gates still run fresh for the new medium.
+- **D3 — State, approve coordination, then proceed; Story Approval stands.**
+  When the artist asks for a medium that is not yet active, the conductor names
+  the spine it is building on (Artist Meaning + Beat Plan; Story Approval
+  already holds on the unchanged Beat Plan), drafts the Cross-Medium Plan, runs
+  Mixed-Media Critic Review, and asks for Cross-Medium Plan Approval. Only then
+  does it continue into the supporting Medium Plan. This reuses a real prior
+  approval on an unchanged record without re-running the Story gate while still
+  giving cross-medium roles, deliverables, order, and continuity their own
+  explicit authority. Medium-specific reviews and downstream gates run fresh.
 
 - **D4 — Per-medium scale is additive; effective project scale is derived.**
   Medium-Level Workflow Scale Routing is decided per medium and may recommend supports
@@ -51,9 +55,11 @@ one-project model and only build the medium-specific part.
 
 - **D4′ — Thin coordinator over separate medium bodies.** The medium layer is a lazy,
   project-level **Cross-Medium Plan** (a generalization of the album-only Release
-  Package Plan) that materializes when a second medium is activated. It lists each
-  active medium and its medium-plan ref and owns lead medium, production order,
-  cross-medium continuity, and Effective Project Scale. The heavy medium-specific
+  Package Plan) that materializes when a second medium is activated or the
+  artist explicitly requests multiple outputs. It lists each active medium and
+  its medium-plan ref and owns the artist-confirmed primary medium, planned
+  deliverables, shared references, production order, cross-medium continuity,
+  and Effective Project Scale. The heavy medium-specific
   bodies stay separate, lean, and independently locked. The medium plans are not
   collapsed into one record: the four bodies are largely disjoint, so a unified schema
   would be the sum of all bodies (~85KB+) loaded whole to author any single medium — a
@@ -75,17 +81,19 @@ one-project model and only build the medium-specific part.
   to continue/activate, naming it; several → ask which; none → cold start. (Reuses the
   existing "query SQLite first, then `project.json`" rule.)
 
-- **D7 — No special provenance for the hop.** There is no boundary to audit:
-  activating a medium writes that medium's Medium Plan and a lightweight
-  `medium_activated` event in `events.jsonl`. Cross-medium lineage is otherwise
-  implicit via the existing `*_id` references. No inheritance record, no sibling field.
+- **D7 — The plan and approval are the provenance for the hop.** Activating a
+  medium first writes the reviewed and approved Cross-Medium Plan and its Gate
+  Decision. After approval, the conductor writes that medium's Medium Plan and
+  a lightweight `medium_activated` event in `events.jsonl`. Cross-medium
+  lineage is explicit through the Cross-Medium Plan and existing `*_id`
+  references. No inheritance record or sibling field is needed.
 
-- **D8 — Enter at Phase 8; offer reset.** Activating a not-yet-active medium enters
-  the spine at the Medium Plan phase and runs the medium-specific tail. Conditional
-  phases re-evaluate for that medium (Long-Work Stewardship per ADR 0013; Release
-  Package for album shape). It may run in-thread, but a not-yet-active medium is a
-  reset-eligible checkpoint, so the conductor offers the reset handoff (the D5
-  projection) when context is high.
+- **D8 — Approve the coordinator, then enter at Phase 8; offer reset.**
+  Activating a not-yet-active medium enters the Cross-Medium interstitial
+  first, then the supporting Medium Plan phase after approval and runs the
+  medium-specific tail sequentially. Conditional phases re-evaluate for that
+  medium. It may run in-thread, but a not-yet-active medium is a reset-eligible
+  checkpoint, so the conductor offers the reset handoff when context is high.
 
   (D9 — Long-Work Stewardship activation threshold — is recorded separately in ADR 0013.)
 
@@ -108,11 +116,13 @@ one-project model and only build the medium-specific part.
 
 ## Consequences
 
-- Activating a medium runs only Medium Plan → Draft Brief → Critic → Brief Approval →
-  Final Records → downstream, reusing `transformation_brief_id` / `beat_plan_id` by
-  reference. No contract change to the spine schemas.
+- Activating a medium runs Cross-Medium Plan → Mixed-Media Critic → Plan
+  Approval → supporting Medium Plan → Draft Brief → Critic → Brief Approval →
+  Final Records → downstream, reusing `transformation_brief_id` /
+  `beat_plan_id` by reference. No contract change to the spine schemas.
 - The Cross-Medium Plan is created lazily — only when a project has a second active
-  medium. Single-medium projects rely on the `project.json` media index. The Release
+  medium or the artist explicitly requests multiple outputs. Single-medium
+  projects rely on the `project.json` media index. The Release
   Package Plan is split along the plan/output seam (D11, resolved in ADR 0014): its
   planning role belongs to this coordinator, its finished-bundle role to the Asset
   Package. It is not unified into this coordinator as a plan-profile nor stacked beside

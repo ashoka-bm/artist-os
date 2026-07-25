@@ -14,11 +14,15 @@ Routing Gate
   -> Research Grounding Gate, when timely or public-facing work may need current evidence
   -> Interpretation Gate
   -> Story Gate
-  -> Story Critic Review
+  -> Story Critic Review, for multi-beat, sequence, series, lyric-bearing, or ambiguous plans
   -> Story Approval Gate
   -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
   -> Long-Work Readiness / Checkpoints, when stewardship is active
-  -> Medium Gates
+  -> Primary Medium Gates
+  -> Draft Cross-Medium Plan, when a second medium is activated outside Album
+  -> Mixed-Media Critic Review
+  -> Cross-Medium Plan Approval Gate
+  -> Supporting Medium Gates, sequentially
   -> Format Length Gate, when the artist overrides the default length standard
   -> Medium Critic Review
   -> Brief Approval Gate
@@ -29,9 +33,16 @@ Routing Gate
   -> Generation Approval Gate, or Draft Generation Approval Gate for text drafting
   -> Output Critic Review
   -> Output Acceptance Gate
+  -> Package Format Selection And Completeness Gate, for an approved or explicitly requested package
 ```
 
 Provider-backed generation always requires explicit approval. Drafting briefs, boards, prompt plans, lyrics, scripts, shot lists, comparison boards, or other dry-run artifacts is allowed.
+
+The Cross-Medium interstitial is conditional. Single-medium projects skip it,
+and Album uses the Release Package Plan approval and calibration route instead.
+The ordering above means a primary Medium Plan may already exist when the
+second medium is activated; no supporting Medium Plan may expand before the
+Cross-Medium Plan review and artist approval complete.
 
 ## Standing Sub-Agent Authorization
 

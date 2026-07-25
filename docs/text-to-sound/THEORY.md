@@ -89,6 +89,12 @@ If the artist chooses `source_text_adapted` or `new_lyrics`, Artist OS must draf
 - constraints around forbidden changes,
 - rights notes for source text.
 
+While the Lyrics Draft remains embedded in the draft Sound Creative Brief, it
+is internal planning material rather than a standalone Output Artifact. If it
+is returned as a standalone lyric work, reviewed independently, or reused as
+an output, route it through Text Journey Draft Generation Approval and create
+an Output Record before output review.
+
 Do not invent lyrics when the artist has not approved lyrics. Do not use private or copyrighted source text as lyrics beyond the artist's stated rights and intended use.
 
 When lyrics are requested, write them against the Arrangement Plan. Lyrics should not be drafted as loose poem text unless the artist explicitly wants unstructured lyrics. Each lyric section should have a structural function, a tension role, and traceability back to Artist Meaning, Beat Plan, and Poetic Density Notes.

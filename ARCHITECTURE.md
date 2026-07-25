@@ -37,7 +37,15 @@ Use `artist-os` as the orchestration skill for this workflow. It moves through t
 
 ## Cross-Medium Direction
 
-Artist OS now has the core of a shared story architecture where every output is one or more approved beats translated into a medium. The implemented dry-run paths are the First Slice, Text-to-Sound Slice, and Text Journey. They all reference the shared Beat Plan; medium-specific brief records carry `beat_plan_id` rather than duplicating embedded Beat summaries.
+Artist OS uses a shared story architecture where every output is one or more
+approved beats translated into a medium. The current dry-run paths are image,
+video v0 storyboard planning, sound prompt planning, text drafting, and the
+Album workflow. The constrained general Cross-Medium lifecycle is frozen into
+1.0 but is not complete; `docs/release-1.0.md` tracks its remaining schema,
+conductor, transition, and rehearsal work.
+
+All journeys reference the shared Beat Plan. Medium-specific brief records
+carry `beat_plan_id` rather than duplicating embedded Beat summaries.
 
 Planning docs for that direction live in:
 
@@ -47,7 +55,11 @@ Planning docs for that direction live in:
 - `docs/gates-and-reviews.md`
 - `docs/output-journeys/`
 
-Shared schemas for the Transformation Brief, Beat Plan, Long-Work Stewardship Record, Image Medium Plan, Sound Medium Plan, Text Medium Plan, Review Record, Gate Decision, Prompt Branch Set, Text Generation Plan, and Output Record now exist. The image, Suno, and text flows consume the shared Beat Plan through medium-specific planning records, then preserve emotional movement and tension criteria through final records and review.
+Shared schemas exist for the Transformation Brief, Beat Plan, Long-Work
+Stewardship Record, Image, Video, Sound, and Text Medium Plans, Cross-Medium
+Plan, Release Package Plan, Review Record, Gate Decision, Prompt Branch Set,
+Text Generation Plan, Output Record, and Asset Package. Schema existence is not
+the same as end-to-end completion; the release checklist is authoritative.
 
 ## Data Flow
 
@@ -82,7 +94,8 @@ Artist OS keeps public product behavior separate from local project state.
 
 - `README.md` explains installation and usage.
 - `THEORY.md`, `ARCHITECTURE.md`, `CONTEXT.md`, `docs/text-to-sound/`, schemas, examples, and `skills/` define product behavior.
-- Provider setup, API keys, host adapters, and media ingestion come after the manual image, Suno, and text workflows are proven.
+- The supported 1.0 host is Codex. Other host adapters, provider setup, API
+  keys, and provider-backed generation are post-1.0.
 - `workspace-library/artist-os/` stores private project records and media locally and is ignored by git.
 - `workspace-library/artist-os/artist-os.sqlite` is the local query index for resuming projects across sessions; the project folders remain the durable source artifacts.
 
@@ -92,4 +105,9 @@ Every Prompt Variant Plan, Text Generation Plan, and Output Artifact must trace 
 
 ## Provider Boundary
 
-Generation providers come later. The current implementation produces Provider-Neutral Image Prompt Plans and platform-neutral Sound Prompt Plans with Suno renderings as dry-run artifacts. A later Provider Adapter may call a media model, but it must record provider, model, prompt, settings, seed if available, output path, and cost-bearing approval.
+Artist OS 1.0 ships no provider adapter. The current implementation produces
+Provider-Neutral Image Prompt Plans, platform-neutral Sound Prompt Plans with
+Suno Custom Mode field exports, storyboard-ready Video Medium Plans, and Text
+Generation Plans with approved local drafting. A future Provider Adapter may
+call a media model, but it must preserve the existing approval and provenance
+contracts.

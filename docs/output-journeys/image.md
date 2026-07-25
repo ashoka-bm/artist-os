@@ -22,13 +22,16 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
   -> Symbology Gate
   -> Style Gate
   -> Image Medium Plan with Medium-Level Workflow Scale Routing
+  -> Draft Image Creative Brief Document
   -> Art Critic Review
   -> Brief Approval Gate
+  -> Image Creative Brief Record
   -> Prompt Variant Strategy
   -> Provider-Neutral Image Prompt Plan
   -> Prompt Critic Review
   -> Prompt Lock Gate
   -> Generation Approval Gate
+  -> Output Record, when an artifact is generated or imported
   -> Output Critic Review
   -> Output Acceptance Gate
 ```
@@ -44,7 +47,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Reviews
 
-- Story Critic Review happens before this journey as a bounded sub-agent review.
+- Story Critic Review happens before this journey when the plan is multi-beat,
+  a series, ambiguous, or otherwise meets the shared applicability rule.
 - Beat Reviewer sub-agent is mandatory for image series or any ambiguous multi-beat image plan.
 - Long-Work Reviewer checks readiness, checkpoints, cumulative drift, continuity rules, and proposed continuity updates when image-series support is active.
 - Art Critic Review checks Symbology Direction, Style Direction, Visual Dynamics, image-role distinction, and series coherence as a bounded sub-agent review.

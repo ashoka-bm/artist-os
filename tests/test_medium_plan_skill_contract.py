@@ -228,14 +228,15 @@ class MediumPlanSkillContractTests(unittest.TestCase):
     def test_orientation_keeps_promise_and_four_primary_choices(self) -> None:
         text = self._read(CONDUCTOR_SKILL)
         for phrase in [
-            "Turn any reference into a complete creative release system",
-            "raw spark to finished artifact",
+            "Turn a text Reference into a traceable dry-run plan",
+            "review gates, and a path to accepted artifacts",
             "- **Image**:",
             "- **Video**:",
             "- **Audio**:",
             "- **Text**:",
             "Album v1",
             "Full Long-Form Project",
+            "constrained Cross-Medium",
         ]:
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
@@ -329,6 +330,18 @@ class MicroJourneyLeanPathContractTests(unittest.TestCase):
         schema_index = text.index("read\n   `schemas/video-medium-plan.schema.json` once")
         self.assertLess(packet_index, finalization_index)
         self.assertLess(finalization_index, schema_index)
+
+    def test_micro_journey_requires_brief_review_and_artist_approval(self) -> None:
+        text = self._read("skills/artist-os/references/video-micro-journey-recipe.md")
+        brief_index = text.index("Draft the compact Video Creative Brief Document")
+        critic_index = text.index("Video Critic Review (standard bounded sub-agent)")
+        approval_index = text.index("Brief Approval (explicit artist gate)")
+        storyboard_index = text.index(
+            "Storyboard on request = one composite multi-panel sheet"
+        )
+        self.assertLess(brief_index, critic_index)
+        self.assertLess(critic_index, approval_index)
+        self.assertLess(approval_index, storyboard_index)
 
 
 # Slice 2 — Medium Roles (ADR 0012, D10). Multi-medium projects outside Album v1

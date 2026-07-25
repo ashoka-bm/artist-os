@@ -13,22 +13,29 @@ Reference
   -> Long-Work Stewardship Activation Gate, when recommended or artist-requested
   -> Long-Work Stewardship, when activated by the artist
   -> Medium Plan with Medium-Level Workflow Scale Routing
+  -> Cross-Medium Plan + Mixed-Media Critic + artist approval, when a second medium is activated outside Album
   -> Creative Brief or storyboard-ready handoff
   -> Prompt Plan or Text Generation Plan, when the medium has one
   -> Generation Approval Gate or Draft Generation Approval Gate, when required
   -> Output Record, when an artifact exists
   -> Output Critic Review
   -> Output Acceptance Gate
+  -> Package Compilation, only for an approved or explicitly requested package
 ```
 
 Journeys in this directory:
 
 - `image.md`: still images and image series. **Implemented.**
 - `video.md`: storyboard-ready Video Medium Plans for clips, scenes, sequences, trailers, and longer arcs. **Implemented as v0 planning.**
-- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word beds, Sound Prompt Plans, and Suno renderings. **Implemented.**
+- `sound.md`: songs, instrumental tracks, soundscapes, scores, spoken-word
+  beds, Sound Prompt Plans, and Suno Custom Mode field exports. **Implemented
+  as dry-run planning; no audio generation.**
 - `text.md`: rewrites, poems, monologues, scenes, scripts, and larger written forms. **Implemented.**
 - `illustrated-written-work.md`: children's books, comics, story-with-images projects, covers plus interiors, and diagram-rich written works coordinated by Illustration Plan. **Planning contract exists.**
-- `mixed-media.md`: coordinated outputs across multiple media. **Not built yet — forward-looking design.**
+- `mixed-media.md`: Album v1 plus constrained general Cross-Medium Plan
+  coordination. **Album v1 is implemented; the general schema/package
+  foundation exists and its 1.0 review/approval and conductor lifecycle is
+  tracked in `docs/release-1.0.md`.**
 
 Writing-method integration lives in `docs/writing/README.md`. Its referenced `writing-fragments`, `writing-beats`, and `writing-shape` skill files are high-authority for raw material capture, beat-by-beat journey creation, and finished written shape.
 

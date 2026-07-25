@@ -10,6 +10,7 @@ Use these product docs as durable references:
 
 - `THEORY.md`
 - `ARCHITECTURE.md`
+- `docs/release-1.0.md`
 - `docs/progress.md`
 - `docs/pipeline-contract.md`
 - `docs/gates-and-reviews.md`
@@ -94,14 +95,28 @@ Everything else an agent needs at runtime is canonical elsewhere — point to it
 
 ## Slices
 
-Artist OS ships three dry-run slices:
+Artist OS 1.0 targets these dry-run journeys:
 
 - **First Slice** — Text Reference → Provider-Neutral Image Prompt Plan.
-- **Text-to-Sound Slice** — Text Reference → Sound Prompt Plan (with Suno renderings).
+- **Video v0 Slice** — Text Reference → storyboard-ready Video Medium Plan.
+- **Text-to-Sound Slice** — Text Reference → Sound Prompt Plan (with a Suno
+  Custom Mode field export, not generated audio).
 - **Text Journey Slice** — Text Reference → Text Generation Plan and drafted written Output Records.
+- **Album workflow** — Album Release Package Plan with representative
+  calibration and normal per-output gates.
+- **Constrained Cross-Medium workflow** — one Shared Story Spine, one
+  artist-confirmed primary medium, sequential supporting media, and terminal
+  Asset Package compilation.
 
 The authoritative phase order for each is owned by the `artist-os` conductor skill, `skills/artist-os/SKILL.md` → "Phase Order". Read it there rather than maintaining a second copy here.
 
+`docs/release-1.0.md` owns the frozen release boundary and blocking completion
+checklist. A schema or planning contract can exist before its conductor route is
+implemented; do not describe an unchecked release item as shipped behavior.
+
 ## Provider Boundary
 
-The current repository state is dry-run first. Provider Adapters, setup scripts, host adapters, and API-key-backed generation come after the manual image, Suno, and Text Journey slices work.
+The current repository state is dry-run first. Artist OS 1.0 does not ship a
+provider adapter or promise provider-backed generation. Generation Approval
+records permission for a future or external call; it does not imply that this
+repository can execute that call.

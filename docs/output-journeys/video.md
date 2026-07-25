@@ -79,7 +79,8 @@ Approved Beat Plan with Project-Level Workflow Scale Routing
 
 ## Reviews
 
-- Story Critic Review happens before this journey as a bounded sub-agent review.
+- Story Critic Review happens before this journey for multi-beat, sequence,
+  scene, lyric-bearing, or otherwise ambiguous plans.
 - Beat Reviewer sub-agent is mandatory for scene, sequence, trailer, arc, or long-form video plans.
 - Video Critic Review checks shot progression, scene pacing, motion logic, transition logic, visual continuity over time, and script or audio alignment against Artist Meaning, Beat Plan, and Video Medium Plan.
 - Video Critic Review also checks whether aspect ratio, shot scale, camera angle, camera movement, subject movement, and blocking still match the accepted format and emotional job.

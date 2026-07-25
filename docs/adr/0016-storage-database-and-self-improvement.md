@@ -1,7 +1,25 @@
 # Storage, Database, and Self-Improvement Finalization
 
-Status: proposed. This is the finalized design; execution has not started. It is
-written for review before any code changes.
+Status: accepted in part for 1.0. Database-hardening implementation exists on
+`self-improvement-db-hardening` and awaits integration and verification;
+automatic conductor self-improvement remains post-1.0.
+
+## Artist OS 1.0 disposition
+
+The artist-approved 1.0 scope freeze on 2026-07-25 splits this proposal at the
+reliability/behavior boundary:
+
+- **In 1.0:** fault-isolated and scoped sync, event integrity, read-path
+  self-healing, read-only project status, and explicit manual feedback,
+  learning, performance, and promotion-review commands.
+- **Post-1.0:** conductor wiring that automatically runs Learning Review at
+  Start, applies learnings, triages open projects, triggers Close-Out, or loads
+  behavior-changing local conductor rules.
+
+This disposition does not reject the later self-improvement design below. It
+keeps automatic behavioral mutation out of the first release while allowing
+database hardening to protect existing persistence and resume promises. For
+release authority and completion criteria, see `docs/release-1.0.md`.
 
 Artist OS keeps durable state as JSON/JSONL files on disk (`project.json`
 manifests, `events.jsonl`, `feedback-log.jsonl`, schema-backed `learning` and
