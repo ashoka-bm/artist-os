@@ -354,6 +354,16 @@ class SchemaValidationTests(unittest.TestCase):
         ):
             validate(record, schema, schema)
 
+    def test_cross_medium_plan_rejects_a_missing_primary_role(self) -> None:
+        schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
+        data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
+        schema = load_json(schema_path)
+        record = load_json(data_path)
+        record["media"][0]["medium_role"] = "supporting"
+        record["media"][0]["serves_primary"] = record["primary_medium"]
+        with self.assertRaisesRegex(ValidationError, "matches fewer than minContains"):
+            validate(record, schema, schema)
+
     def test_cross_medium_plan_requires_two_media(self) -> None:
         schema_path = REPO_ROOT / "schemas" / "cross-medium-plan.schema.json"
         data_path = REPO_ROOT / "tests" / "fixtures" / "release-packages" / "cross-medium-plan.json"
@@ -464,6 +474,12 @@ class SchemaValidationTests(unittest.TestCase):
 
     def test_cross_medium_rehearsal_plan_validates(self) -> None:
         validate_file(self.CMP_SCHEMA, self.CMP_FIXTURE)
+
+    def test_cross_medium_rehearsal_supporting_image_plan_validates(self) -> None:
+        validate_file(
+            REPO_ROOT / "schemas" / "image-medium-plan.schema.json",
+            REPO_ROOT / "tests" / "fixtures" / "cross-medium" / "article-with-photos-rehearsal" / "image-medium-plan.json",
+        )
 
     def test_cross_medium_plan_requires_planned_deliverables(self) -> None:
         schema, record = self.cross_medium_rehearsal()

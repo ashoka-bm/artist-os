@@ -1175,6 +1175,7 @@ class CrossMediumRehearsalTests(unittest.TestCase):
         self.package = load(f"{REHEARSAL}/asset-package-article.json")
         self.beat_plan = load(f"{SPINE}/beat-plan.json")
         self.text_plan = load(f"{SPINE}/text-medium-plan.json")
+        self.image_plan = load(f"{REHEARSAL}/image-medium-plan.json")
         self.outputs = {
             name: load(f"{REHEARSAL}/output-record-{name}.json")
             for name in ("article-text", "inline-photo-shoe", "inline-photo-hose")
@@ -1186,6 +1187,7 @@ class CrossMediumRehearsalTests(unittest.TestCase):
             with self.subTest(field=field):
                 self.assertEqual(self.plan[field], self.beat_plan[field])
         self.assertEqual(self.plan["beat_plan_id"], self.text_plan["beat_plan_id"])
+        self.assertEqual(self.plan["beat_plan_id"], self.image_plan["beat_plan_id"])
 
         # The rehearsal must not ship a second spine for the supporting medium.
         forked = sorted(p.name for p in (REPO_ROOT / REHEARSAL).glob("*.json")
@@ -1255,6 +1257,12 @@ class CrossMediumRehearsalTests(unittest.TestCase):
         )
 
     def test_supporting_medium_work_happens_after_plan_approval(self) -> None:
+        approval_refs = {
+            note["source_ref"]
+            for note in self.image_plan["traceability_summary"]
+            if note["source_type"] == "gate_decision"
+        }
+        self.assertIn(self.approval["gate_decision_id"], approval_refs)
         approved_at = timestamp(self.approval)
         for name in ("inline-photo-shoe", "inline-photo-hose"):
             with self.subTest(output=name):
@@ -1289,6 +1297,11 @@ class CrossMediumRehearsalTests(unittest.TestCase):
         self.assertEqual(
             self.plan["media"][0]["medium_plan_ref"]["plan_id"], self.text_plan["text_medium_plan_id"]
         )
+        supporting_ref = self.plan["media"][1]["medium_plan_ref"]
+        self.assertEqual(supporting_ref["plan_id"], self.image_plan["image_medium_plan_id"])
+        self.assertTrue((REPO_ROOT / supporting_ref["path_or_ref"]).is_file())
+        self.assertNotIn("style_direction", self.plan)
+        self.assertIn("style_direction", self.image_plan)
 
     # Rule 9 — Package Compilation runs on accepted Output Records only.
     def test_every_planned_deliverable_ticks_off_against_an_accepted_output(self) -> None:

@@ -1,0 +1,230 @@
+{
+  "image_medium_plan_id": "imp_civic_garden_hook_article",
+  "source_id": "src_civic_garden_hook_article",
+  "artist_meaning_id": "meaning_civic_garden_hook_article",
+  "transformation_brief_id": "tb_civic_garden_hook_article",
+  "beat_plan_id": "bp_civic_garden_hook_article",
+  "target_media_type": "image",
+  "story_mode": "sequence",
+  "workflow_scale_routing": {
+    "scale_level": "compact_artifact",
+    "rationale": "Two supporting editorial photos serve one accepted article realization and do not need long-work continuity machinery.",
+    "trigger_signals": [
+      "artist_requested_compact_output"
+    ],
+    "recommended_supports": [],
+    "activated_supports": [
+      "core_pipeline"
+    ],
+    "skipped_supports": [
+      "long_work_stewardship",
+      "long_work_parts",
+      "long_work_readiness",
+      "long_work_checkpoints",
+      "stewardship_views"
+    ],
+    "reroute_triggers": [
+      "Reroute if the supporting photos expand into a dependent book-scale image sequence."
+    ]
+  },
+  "symbology_direction": {
+    "selection_method": "artist_specified",
+    "primary_symbolic_representation": "small physical signs of maintenance that reveal unseen civic labor without showing or naming a hero",
+    "confirmation_status": "confirmed",
+    "rationale": "The accepted article makes the muddy shoe print and coiled hose its evidence; the supporting images must preserve that framing.",
+    "avoid": [
+      "staged volunteer portraits",
+      "gratitude-poster imagery",
+      "before-and-after transformation clichés"
+    ]
+  },
+  "presentation_mode": "image_series",
+  "style_direction": {
+    "selection_method": "artist_specified",
+    "primary_style": "observational editorial photography",
+    "style_modifiers": [
+      "natural light",
+      "restrained color",
+      "unstaged detail"
+    ],
+    "confirmation_status": "confirmed",
+    "rationale": "Documentary restraint lets ordinary maintenance evidence carry the article's perceptual turn without manufacturing drama.",
+    "avoid": [
+      "glossy campaign photography",
+      "sentimental portraiture"
+    ]
+  },
+  "visual_dynamics": {
+    "target_visual_engine": "two quiet evidence images that move from an attention-grabbing trace of use to the residue of ongoing care",
+    "active_visual_tensions": [
+      {
+        "name": "Presence / Absence",
+        "tension_intensity": 0.78,
+        "translation_notes": [
+          "Show evidence of a person who remains outside the frame."
+        ]
+      },
+      {
+        "name": "Stillness / Motion",
+        "tension_intensity": 0.7,
+        "translation_notes": [
+          "Let recently finished work remain legible inside otherwise still frames."
+        ]
+      }
+    ],
+    "minimum_tension_criteria": {
+      "single_image_requirement": "Each photo must make unseen labor emotionally legible through at least two active visual tensions rather than functioning as a generic garden illustration.",
+      "series_requirement": "The shoe image must create the question and the hose image must reframe it as ongoing care, with a clear change in composition and communication intent.",
+      "minimum_active_visual_tensions": 2,
+      "minimum_primary_tension_intensity": 0.7,
+      "minimum_adjacent_amplitude_shift_count": 2,
+      "minimum_adjacent_tension_shift_count": 1,
+      "reviewer_instruction": "Block if either photo merely decorates the article or if both images communicate the same claim in the same framing."
+    },
+    "style_visual_conflicts": []
+  },
+  "image_roles": [
+    {
+      "image_role_id": "imgrole_civic_garden_shoe",
+      "beat_id": "beat_shoe_001",
+      "key_emotional_movement_id": "kem_hook_001",
+      "reference_refs_used": [],
+      "role_label": "hook evidence image",
+      "composition_intent": "Frame the muddy shoe print close enough to feel newly discovered while retaining a narrow strip of garden-bed context.",
+      "communication_intent": "Open the article's question by making a minor disturbance feel tender, used, and unexplained.",
+      "expectation_turn_translation": "A garden photo should offer beauty, but the first frame centers a muddy trace that points to use, absence, and care.",
+      "intended_feeling": "curious tenderness sharpened by a small disturbance",
+      "emotional_payload": "A trace of use redirects attention from scenery to maintenance.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.82,
+          "translation_notes": [
+            "The worker is absent while their fresh trace dominates the frame."
+          ]
+        },
+        {
+          "name": "Stillness / Motion",
+          "tension_intensity": 0.72,
+          "translation_notes": [
+            "The print implies recent motion inside a still bed edge."
+          ]
+        }
+      ],
+      "shot_design": {
+        "shot_scale": "close_up",
+        "camera_angle": "high_angle",
+        "visual_emphasis": "symbolic_detail",
+        "composition_strategy": "Place the shoe print off-center with the worked soil and bed edge giving just enough context to resist abstraction.",
+        "emotional_rationale": "The close, slightly displaced evidence creates curiosity without turning the garden into a scenic overview.",
+        "avoid": [
+          "wide garden establishing shot",
+          "visible posed person"
+        ]
+      },
+      "distinction_notes": {
+        "from_previous_role": "opening supporting image; no prior image role",
+        "composition_shift": "tight, high-angle focus on one disturbed patch",
+        "communication_shift": "creates the unanswered question",
+        "tension_shift": "starts with high absence pressure around a fresh human trace"
+      },
+      "amplitude_profile": {
+        "framing_distance": 0.75,
+        "subject_scale": 0.7,
+        "visual_density": 0.35,
+        "motion_energy": 0.28,
+        "spatial_openness": 0.25,
+        "detail_intensity": 0.72,
+        "emotional_pressure": 0.76
+      }
+    },
+    {
+      "image_role_id": "imgrole_civic_garden_hose",
+      "beat_id": "beat_water_001",
+      "key_emotional_movement_id": "kem_turn_001",
+      "reference_refs_used": [],
+      "role_label": "reframing evidence image",
+      "composition_intent": "Show the coiled hose in its working context, left orderly and ready beside the beds rather than presented as a product.",
+      "communication_intent": "Turn the article from the mystery of one object toward recognition of repeated, uncredited care.",
+      "expectation_turn_translation": "The expected answer to who lost the shoe gives way to a wider system of watering, repair, and readiness.",
+      "intended_feeling": "respectful recognition of quiet effort",
+      "emotional_payload": "Orderly residue makes ongoing care visible without resolving it into praise.",
+      "tension_profile": [
+        {
+          "name": "Presence / Absence",
+          "tension_intensity": 0.7,
+          "translation_notes": [
+            "The person remains absent, but readiness makes their continuing role legible."
+          ]
+        },
+        {
+          "name": "Order / Chaos",
+          "tension_intensity": 0.76,
+          "translation_notes": [
+            "The careful coil holds order against the soil, wear, and irregular garden edge."
+          ]
+        }
+      ],
+      "shot_design": {
+        "shot_scale": "medium_shot",
+        "camera_angle": "eye_level",
+        "visual_emphasis": "hands_or_object",
+        "composition_strategy": "Let the hose occupy the lower third while the beds and tap establish the shared system it serves.",
+        "emotional_rationale": "The wider, more level view changes the reader from inspecting a clue to recognizing a maintained system.",
+        "avoid": [
+          "isolated catalog-style object shot",
+          "heroic worker portrait"
+        ]
+      },
+      "distinction_notes": {
+        "from_previous_role": "moves from the close shoe-print clue to a wider system view",
+        "composition_shift": "opens from high-angle detail to a medium contextual frame",
+        "communication_shift": "reframes mystery as repeated care",
+        "tension_shift": "reduces absence pressure while introducing order against ongoing disorder"
+      },
+      "amplitude_profile": {
+        "framing_distance": 0.5,
+        "subject_scale": 0.48,
+        "visual_density": 0.52,
+        "motion_energy": 0.18,
+        "spatial_openness": 0.55,
+        "detail_intensity": 0.52,
+        "emotional_pressure": 0.66
+      }
+    }
+  ],
+  "series_plan": {
+    "is_series": true,
+    "requires_series_approval": true,
+    "calibration_required": true,
+    "style_progression": "The first image isolates a trace that opens the question; the second widens into a working system that changes what the reader notices."
+  },
+  "gates": {
+    "symbology_gate": "complete",
+    "presentation_gate": "complete",
+    "style_gate": "complete",
+    "detail_gate": "complete"
+  },
+  "review_requirements": {
+    "beat_reviewer_required": true,
+    "art_critic_required": true,
+    "prompt_critic_required": true
+  },
+  "traceability_summary": [
+    {
+      "source_type": "gate_decision",
+      "source_ref": "gate_civic_garden_cross_medium_plan_approval",
+      "note": "The supporting Image Medium Plan begins only after the reviewed Cross-Medium Plan receives explicit artist approval."
+    },
+    {
+      "source_type": "beat_plan",
+      "source_ref": "bp_civic_garden_hook_article",
+      "note": "Both image roles reuse the approved hook and turn beats from the unchanged Shared Story Spine."
+    },
+    {
+      "source_type": "artist_meaning",
+      "source_ref": "meaning_civic_garden_hook_article",
+      "note": "The images preserve the article's meaning: notice the labor that keeps a shared garden usable without naming a hero."
+    }
+  ]
+}
