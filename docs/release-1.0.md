@@ -223,7 +223,7 @@ the shared release-evidence manifest is still section 7 work.
   record/event persistence atomic or recoverable, update manifest/resume state,
   refresh SQLite, and test traversal and event-write failure.
 - [x] Confirm all schemas and fixtures validate after validator hardening.
-- [ ] Confirm the full unit suite, Python compilation, shell syntax checks,
+- [x] Confirm the full unit suite, Python compilation, shell syntax checks,
   JSON parsing, skill lint, path doctor, storage smoke, and
   distribution-manifest checks pass from a clean checkout.
 - [ ] Smoke-test install, update, Workspace Library setup, resume discovery,
