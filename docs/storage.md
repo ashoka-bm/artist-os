@@ -215,14 +215,31 @@ Initialize or refresh it with:
 ```bash
 bin/artist-os-db setup --wondermint-root /path/to/root
 bin/artist-os-db sync --wondermint-root /path/to/root
+bin/artist-os-db sync --project <project_id> --wondermint-root /path/to/root
 ```
+
+`sync` is fault-isolated: one corrupt `project.json` or event line degrades to
+a skipped-and-reported project, never an aborted sync, and a missing or
+unreadable `events.jsonl` preserves the previously indexed events. Scoped
+`sync --project` indexes exactly one manifest and never runs the missing-sweep;
+it is what the feedback/learning write commands ride on, so their index writes
+succeed even when an unrelated project is corrupt.
 
 Useful reads:
 
 ```bash
 bin/artist-os-db list --wondermint-root /path/to/root
 bin/artist-os-db show <project_id> --wondermint-root /path/to/root
+bin/artist-os-db status [project_id] --wondermint-root /path/to/root
 ```
+
+`status` prints one row per project — status, stage, learning-review state,
+and staleness (whether the index row still matches the on-disk manifest). It
+opens the database read-only and never writes; the learning-surfacing verbs
+(`pending-learning-reviews`, `learnings-report`, `review-learnings`) instead
+self-heal by re-indexing from files immediately before they read, so a
+learning present in files but missing from the index is still surfaced, and
+all three work on a fresh clone with no database.
 
 `index.json` is optional as a human-readable export. It is not the primary index once SQLite exists.
 
@@ -370,7 +387,24 @@ bin/artist-os-db add-performance-signal <project_id> <signal_id> --metric-name s
 bin/artist-os-db mark-learning-review-complete <project_id> --wondermint-root /path/to/root
 bin/artist-os-db pending-learning-reviews --wondermint-root /path/to/root
 bin/artist-os-db learnings-report [project_id] --wondermint-root /path/to/root
+bin/artist-os-db review-learnings --wondermint-root /path/to/root
+bin/artist-os-db add-conductor-rule <project_id> --rule "..." --from-learning <learning_id> --wondermint-root /path/to/root
 ```
+
+Each feedback, learning, performance-signal, and review-completion write also
+appends its event to the project's `events.jsonl` (creating the log when the
+manifest declares one that does not exist yet) and runs a scoped sync, so the
+event history and the index reflect the write immediately.
+
+`review-learnings` renders the promotion queue in plain language for someone
+unfamiliar with the system: each pending feedback item with the exact command
+to promote it (soft preference, hard rule, staged conductor candidate) or
+dismiss it, then staged conductor candidates with the `add-conductor-rule`
+command to adopt each one locally.
+
+`learnings-report` prints each linked learning's actual rule text, scope, and
+evidence count by reading the referenced record, noting records that are
+missing on disk.
 
 `learnings-report` is a read-only close-out: per project it shows the
 learning-review state, the linked learnings, and any performance signals, then
@@ -378,6 +412,20 @@ prints the next action (which projects still owe a learning review). Run it at
 the end of a session to see what to capture before moving on.
 
 Learning and Performance Signal ids must match their schemas and cannot overwrite an existing record unless the command is run with `--overwrite`.
+
+## Local Conductor Rules
+
+`<workspace_library>/conductor-rules.md` holds local, additive conductor rules
+adopted from this installation's learnings (ADR 0016 tier 2). Each entry is
+one dated line written by `add-conductor-rule`, which also marks the source
+candidate learning superseded, appends a `conductor_rule_adopted` event, and
+refreshes the index. The conductor reads this file at session start after the
+canonical `## Rules` in `skills/artist-os/SKILL.md`. Local rules may tighten
+behavior or record preferences; they must never disable canonical gates,
+approvals, or the never-auto-decide class. Because the file lives in the
+Workspace Library, upgrading Artist OS never touches it — promoting a local
+rule to every installation is a deliberate maintainer edit of `SKILL.md`
+followed by one conductor-eval re-bless.
 
 ## Package Setup
 

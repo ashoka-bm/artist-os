@@ -7,12 +7,14 @@ import argparse
 import json
 import os
 import re
+import shlex
 import shutil
 import sqlite3
 import sys
 from collections import namedtuple
 from contextlib import closing
 from datetime import datetime, timezone
+from itertools import count
 from pathlib import Path
 
 
@@ -86,6 +88,11 @@ def connect(db_path: Path) -> sqlite3.Connection:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.execute("PRAGMA foreign_keys = ON")
+    # Concurrent access (a reader during a writer's sync, or two write
+    # commands racing) should wait briefly instead of failing with "database
+    # is locked" — the exact failure that would leave durable JSON written
+    # but the index row missing.
+    conn.execute("PRAGMA busy_timeout = 5000")
     return conn
 
 
@@ -623,6 +630,53 @@ def event_key(payload: dict, fallback_index: int) -> tuple:
     return ("row", fallback_index)
 
 
+def read_event_rows(events_path: Path | None, project_id: str) -> tuple[list[tuple] | None, int]:
+    """Read events.jsonl into insertable rows BEFORE any destructive index write.
+
+    Returns (rows, skipped_line_count). rows is None when the file is missing
+    or unreadable — the caller must then preserve the previously indexed
+    events instead of deleting them (the index is a cache; a transient or
+    mid-write file must not erase last known-good history). Malformed lines
+    are skipped and counted so one bad tail line (a mid-append crash) does
+    not discard the readable history around it.
+    """
+    if not events_path or not events_path.exists():
+        return None, 0
+    try:
+        text = events_path.read_text(encoding="utf-8")
+    except OSError:
+        return None, 0
+    rows: list[tuple] = []
+    skipped = 0
+    for index, line in enumerate(text.splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            payload = json.loads(line)
+        except json.JSONDecodeError:
+            skipped += 1
+            continue
+        if not isinstance(payload, dict):
+            # Valid JSON but the wrong shape (`[]`, `"x"`, `123`) is just as
+            # malformed as a truncated line — skip it, don't abort the sync.
+            skipped += 1
+            continue
+        key_type, key_value = event_key(payload, index)
+        event_id = key_value if key_type == "event_id" else None
+        rows.append(
+            (
+                event_id,
+                payload.get("project_id", project_id),
+                payload.get("occurred_at") or payload.get("created_at") or payload.get("timestamp"),
+                payload.get("stage"),
+                payload.get("event_type") or payload.get("type"),
+                payload.get("summary"),
+                json.dumps(payload, sort_keys=True),
+            )
+        )
+    return rows, skipped
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -656,6 +710,67 @@ def load_project_manifest(library_root: Path, project_id: str) -> tuple[Path, di
 
 def write_project_manifest(manifest_path: Path, manifest: dict) -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+
+# Per-process sequence for writer event ids: same-microsecond events (even
+# ref-less ones) must never share an id.
+_EVENT_ID_SEQUENCE = count(1)
+
+
+def append_project_event(
+    library_root: Path,
+    manifest: dict,
+    project_id: str,
+    event_type: str,
+    stage: str,
+    details: str,
+    occurred_at: str,
+    refs: list[str] | None = None,
+) -> None:
+    """Append one event to the project's events.jsonl, creating it if absent.
+
+    The storage contract requires feedback, learning, and performance-signal
+    writes to appear in the event history, so the log must be created when the
+    manifest declares an events path that has no file yet — resolve_path only
+    returns existing files, hence the write-path fallback to the declared
+    location (Workspace-Library-relative by convention).
+    """
+    paths = manifest.get("paths", {})
+    events_value = paths.get("events")
+    if not events_value:
+        return
+    project_dir = Path(paths.get("project_dir", str(project_manifest_path(library_root, project_id).parent)))
+    events_path = resolve_path(events_value, project_dir, library_root)
+    if not events_path:
+        # New log: mirror resolve_path's resolution rules for the write.
+        # "projects/<id>/..." is Workspace-Library-relative (the storage
+        # convention); any other relative value is project-relative.
+        value_path = Path(events_value)
+        if value_path.is_absolute():
+            events_path = value_path
+        elif value_path.parts[:1] == ("projects",):
+            events_path = library_root / value_path
+        else:
+            anchor = project_dir if project_dir.is_absolute() else library_root / project_dir
+            events_path = anchor / value_path
+    events_path.parent.mkdir(parents=True, exist_ok=True)
+    # Suffix the id with the primary ref (or the event type) plus a
+    # per-process sequence number, so two writer events in the same
+    # microsecond — even ref-less ones like two review marks — still get
+    # distinct, meaningful ids.
+    suffix = re.sub(r"[^a-zA-Z0-9_-]+", "-", refs[0] if refs else event_type)
+    event = {
+        "event_id": f"evt_{project_id.removeprefix('proj_')}_{compact_timestamp(occurred_at)}_{suffix}_{next(_EVENT_ID_SEQUENCE)}",
+        "project_id": project_id,
+        "event_type": event_type,
+        "stage": stage,
+        "created_at": occurred_at,
+        "details": details,
+    }
+    if refs:
+        event["refs"] = refs
+    with events_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(event, sort_keys=True) + "\n")
 
 
 def feedback_state_for(manifest: dict, project_id: str) -> dict:
@@ -1132,69 +1247,155 @@ def upsert_manifest(
     events_path_value = paths.get("events")
     if events_path_value:
         events_path = resolve_path(events_path_value, project_dir_path, library_root)
-        conn.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
-        if events_path and events_path.exists():
-            for index, line in enumerate(events_path.read_text(encoding="utf-8").splitlines(), 1):
-                if not line.strip():
-                    continue
-                payload = json.loads(line)
-                key_type, key_value = event_key(payload, index)
-                event_id = key_value if key_type == "event_id" else None
-                conn.execute(
-                    """
-                    INSERT INTO events (
-                      event_id, project_id, occurred_at, stage, event_type,
-                      summary, payload_json
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        event_id,
-                        payload.get("project_id", project_id),
-                        payload.get("occurred_at") or payload.get("created_at") or payload.get("timestamp"),
-                        payload.get("stage"),
-                        payload.get("event_type") or payload.get("type"),
-                        payload.get("summary"),
-                        json.dumps(payload, sort_keys=True),
-                    ),
+        event_rows, skipped_event_lines = read_event_rows(events_path, project_id)
+        if event_rows is not None:
+            # The full file parsed (bad lines skipped and counted), so it is
+            # now safe to replace this project's event index. When rows is
+            # None (missing or unreadable file) the previously indexed events
+            # are deliberately preserved — never delete before a successful
+            # read.
+            conn.execute("DELETE FROM events WHERE project_id = ?", (project_id,))
+            conn.executemany(
+                """
+                INSERT INTO events (
+                  event_id, project_id, occurred_at, stage, event_type,
+                  summary, payload_json
                 )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                event_rows,
+            )
+        if skipped_event_lines:
+            print(
+                f"warning: skipped {skipped_event_lines} malformed event line(s) in {project_id}",
+                file=sys.stderr,
+            )
+
+    return project_id
 
 
-def sync_db(args: argparse.Namespace) -> None:
-    library_root = library_root_for(args)
-    db_path = db_path_for(args)
-    artist_library_root = artist_library_root_for(args)
+# Exceptions one broken project may raise during its own indexing. The index
+# is a cache, so a corrupt manifest, record, or event file must degrade to a
+# skipped-and-reported project — never abort the sync for its siblings.
+# TypeError/AttributeError cover valid-JSON-wrong-shape files (a project.json
+# holding `[]` indexes as a TypeError, not a JSONDecodeError). Deliberately
+# excludes KeyboardInterrupt/SystemExit so a Ctrl-C still aborts the whole
+# transaction.
+SYNC_MANIFEST_ERRORS = (
+    OSError,
+    json.JSONDecodeError,
+    KeyError,
+    ValueError,
+    TypeError,
+    AttributeError,
+    sqlite3.Error,
+)
+
+
+def sync_library(
+    library_root: Path,
+    db_path: Path,
+    artist_library_root: Path | None,
+    only_project_id: str | None = None,
+    quiet: bool = False,
+) -> None:
+    """Refresh the SQLite index from project files.
+
+    With only_project_id, index exactly that project's manifest (the scoped
+    sync the self-improvement writers ride on): cheap, and immune to a corrupt
+    sibling because no sibling is ever scanned. Without it, index the whole
+    library and run the missing-sweep.
+    """
     checked_at = datetime.now(timezone.utc).isoformat()
-    manifests = sorted((library_root / "projects").glob("*/project.json"))
+    if only_project_id:
+        manifest_path = project_manifest_path(library_root, only_project_id)
+        if not manifest_path.exists():
+            raise SystemExit(f"project manifest not found: {manifest_path}")
+        manifests = [manifest_path]
+    else:
+        manifests = sorted((library_root / "projects").glob("*/project.json"))
+    skipped: list[tuple[Path, str]] = []
     with closing(connect(db_path)) as conn, conn:
         apply_schema(conn)
         found_project_ids = set()
         for manifest_path in manifests:
-            upsert_manifest(conn, manifest_path, library_root, artist_library_root, checked_at)
-            found_project_ids.add(read_json(manifest_path)["project_id"])
-        if found_project_ids:
-            placeholders = ",".join("?" for _ in found_project_ids)
+            # Per-manifest savepoint: one corrupt project rolls back its own
+            # partial rows and is reported, while every sibling still indexes.
+            conn.execute("SAVEPOINT artist_os_manifest_sync")
+            try:
+                project_id = upsert_manifest(
+                    conn, manifest_path, library_root, artist_library_root, checked_at
+                )
+            except SYNC_MANIFEST_ERRORS as exc:
+                conn.execute("ROLLBACK TO SAVEPOINT artist_os_manifest_sync")
+                conn.execute("RELEASE SAVEPOINT artist_os_manifest_sync")
+                skipped.append((manifest_path, f"{type(exc).__name__}: {exc}"))
+                continue
+            conn.execute("RELEASE SAVEPOINT artist_os_manifest_sync")
+            found_project_ids.add(project_id)
+        # Missing-sweep: a project is only 'missing' when its manifest is
+        # genuinely absent. Two guards keep the sweep honest:
+        #   1. It runs ONLY on a full sync. A scoped sync scans exactly one
+        #      manifest, so sweeping there would mark every other project
+        #      missing on every feedback/learning write.
+        #   2. A skipped (present-but-broken) manifest must not be flipped to
+        #      missing — match by manifest_path since its project_id is
+        #      unreadable by definition.
+        if only_project_id is None:
+            clauses = ["status != 'archived'"]
+            params: list[str] = [checked_at]
+            if found_project_ids:
+                placeholders = ",".join("?" for _ in found_project_ids)
+                clauses.append(f"project_id NOT IN ({placeholders})")
+                params.extend(sorted(found_project_ids))
+            skipped_paths = [str(path) for path, _ in skipped]
+            if skipped_paths:
+                placeholders = ",".join("?" for _ in skipped_paths)
+                clauses.append(f"manifest_path NOT IN ({placeholders})")
+                params.extend(skipped_paths)
             conn.execute(
                 f"""
                 UPDATE projects
                 SET status = 'missing',
                     updated_at = ?
-                WHERE project_id NOT IN ({placeholders})
-                  AND status != 'archived'
+                WHERE {' AND '.join(clauses)}
                 """,
-                (checked_at, *sorted(found_project_ids)),
+                params,
             )
-        else:
-            conn.execute(
-                """
-                UPDATE projects
-                SET status = 'missing',
-                    updated_at = ?
-                WHERE status != 'archived'
-                """,
-                (checked_at,),
-            )
-    print(f"synced {len(manifests)} project(s) into {db_path}")
+    if not quiet:
+        print(f"synced {len(manifests) - len(skipped)} project(s) into {db_path}")
+    for manifest_path, reason in skipped:
+        print(f"warning: skipped {manifest_path}: {reason}", file=sys.stderr)
+
+
+def self_heal_sync(args: argparse.Namespace, project_id: str | None = None) -> None:
+    """Re-index from files immediately before a read that will trust the index.
+
+    The read verbs that surface learnings must reflect files-as-truth: a write
+    that reached JSON but not the index (crash, lock, old bug) would otherwise
+    make the conductor silently under-surface. Scoped when the target project's
+    manifest exists; otherwise a full (fault-isolated) sync, which also makes
+    the verbs work on a fresh clone where the DB does not exist yet.
+    """
+    library_root = library_root_for(args)
+    db_path = db_path_for(args)
+    artist_library_root = artist_library_root_for(args)
+    if project_id and project_manifest_path(library_root, project_id).exists():
+        sync_library(library_root, db_path, artist_library_root, only_project_id=project_id, quiet=True)
+    else:
+        sync_library(library_root, db_path, artist_library_root, quiet=True)
+
+
+def sync_db(args: argparse.Namespace) -> None:
+    only_project_id = getattr(args, "project", None)
+    if only_project_id:
+        validate_id(only_project_id, PROJECT_ID_PATTERN, "project")
+    sync_library(
+        library_root_for(args),
+        db_path_for(args),
+        artist_library_root_for(args),
+        only_project_id=only_project_id,
+    )
 
 
 def validate_record(record: dict, schema_name: str) -> None:
@@ -1245,7 +1446,19 @@ def add_feedback(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = received_at
     write_project_manifest(manifest_path, manifest)
-    sync_db(args)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="feedback_received",
+        stage=args.stage or "feedback",
+        details=f"Recorded feedback {feedback_id}; learning review pending.",
+        occurred_at=received_at,
+        refs=[feedback_id],
+    )
+    # Scoped: the write must reach the index even when a sibling project's
+    # manifest is corrupt, so never scan the siblings at all.
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"appended feedback {feedback_id}")
 
 
@@ -1313,7 +1526,17 @@ def add_learning(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
-    sync_db(args)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="learning_recorded",
+        stage="learning_review",
+        details=f"Recorded {args.learning_type} learning {args.learning_id}.",
+        occurred_at=now,
+        refs=[args.learning_id],
+    )
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"wrote learning record {learning_path}")
 
 
@@ -1361,7 +1584,17 @@ def add_performance_signal(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
-    sync_db(args)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="performance_signal_imported",
+        stage="performance_signals",
+        details=f"Imported performance signal {args.signal_id} ({args.metric_name}).",
+        occurred_at=now,
+        refs=[args.signal_id],
+    )
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"wrote performance signal {signal_path}")
 
 
@@ -1380,11 +1613,24 @@ def mark_learning_review_complete(args: argparse.Namespace) -> None:
     manifest["feedback_state"] = feedback_state
     manifest["updated_at"] = now
     write_project_manifest(manifest_path, manifest)
-    sync_db(args)
+    review_state = "complete" if all_feedback_reviewed else "pending"
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="learning_review_marked",
+        stage="learning_review",
+        details=f"Marked learning review {review_state} ({args.classification_status}).",
+        occurred_at=now,
+    )
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
     print(f"marked learning review complete for {args.project_id}")
 
 
 def pending_learning_reviews(args: argparse.Namespace) -> None:
+    # Self-heal before reading: this listing is what Learning-Review-at-Start
+    # trusts, so the index must reflect files at the moment it is read.
+    self_heal_sync(args)
     with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         rows = conn.execute(
@@ -1400,9 +1646,37 @@ def pending_learning_reviews(args: argparse.Namespace) -> None:
         print("\t".join(str(value or "") for value in row))
 
 
+def learning_record_summary(library_root: Path, ref_path: str) -> str:
+    """One plain-language line of the actual rule behind a learning ref.
+
+    The learning_refs index stores only ids and paths; the rule text the
+    conductor must APPLY lives in the referenced JSON record. Files are truth,
+    so read it live — and degrade honestly when the record is gone."""
+    record_path = library_root / ref_path
+    if not record_path.exists():
+        return f"(record missing on disk: {ref_path})"
+    try:
+        record = read_json(record_path)
+    except (OSError, json.JSONDecodeError):
+        return f"(record unreadable: {ref_path})"
+    if not isinstance(record, dict):
+        return f"(record malformed: {ref_path})"
+    rule = record.get("learning_rule") or "(no rule text)"
+    annotations = []
+    if record.get("scope"):
+        annotations.append(f"scope: {record['scope']}")
+    annotations.append(f"evidence: {len(record.get('evidence_refs', []))}")
+    return f"{rule}  [{'; '.join(annotations)}]"
+
+
 def learnings_report(args: argparse.Namespace) -> None:
-    """Close-out summary: per-project learning-review state, linked learnings, and
-    performance signals, ending with the next action. Read-only."""
+    """Close-out summary: per-project learning-review state, linked learnings
+    with their rule text, and performance signals, ending with the next
+    action. Read-only apart from the self-heal sync."""
+    # Self-heal before reading (scoped when a project is named): a learning
+    # present in files but missing from the index must still be surfaced.
+    self_heal_sync(args, getattr(args, "project_id", None))
+    library_root = library_root_for(args)
     with closing(connect(db_path_for(args))) as conn, conn:
         apply_schema(conn)
         if args.project_id:
@@ -1411,13 +1685,13 @@ def learnings_report(args: argparse.Namespace) -> None:
                 (args.project_id,),
             ).fetchall()
             if not rows:
-                raise SystemExit(f"no indexed project {args.project_id!r}; run `artist-os-db sync` first")
+                raise SystemExit(f"no such project {args.project_id!r} in the Workspace Library or index")
         else:
             rows = conn.execute(
                 "SELECT project_id, title, updated_at FROM projects ORDER BY updated_at DESC"
             ).fetchall()
         if not rows:
-            print("no indexed projects; run `artist-os-db sync` first")
+            print("no projects found in the Workspace Library or index")
             return
 
         pending = complete = not_applicable = no_feedback = 0
@@ -1437,7 +1711,7 @@ def learnings_report(args: argparse.Namespace) -> None:
             else:  # no project_feedback_state row -> review=none
                 no_feedback += 1
             learnings = conn.execute(
-                "SELECT ref_id, learning_type, status FROM learning_refs WHERE project_id = ? ORDER BY ref_id",
+                "SELECT ref_id, learning_type, path, status FROM learning_refs WHERE project_id = ? ORDER BY ref_id",
                 (project_id,),
             ).fetchall()
             signals = conn.execute(
@@ -1449,8 +1723,9 @@ def learnings_report(args: argparse.Namespace) -> None:
             if reviewed_at:
                 header += f"  reviewed_at={reviewed_at}"
             print(header)
-            for ref_id, learning_type, ref_status in learnings:
+            for ref_id, learning_type, ref_path, ref_status in learnings:
                 print(f"    learning  {ref_id}  ({learning_type}, {ref_status})")
+                print(f"        rule: {learning_record_summary(library_root, ref_path)}")
             for signal_id, ref_status in signals:
                 print(f"    signal    {signal_id}  ({ref_status})")
             if not learnings and not signals and status in ("none", None):
@@ -1471,6 +1746,267 @@ def learnings_report(args: argparse.Namespace) -> None:
                 parts.append(f"{no_feedback} with no feedback yet")
             detail = f" ({', '.join(parts)})" if parts else ""
             print(f"\nno projects await a learning review{detail}.")
+
+
+def index_staleness(library_root: Path, project_id: str, indexed_updated_at: str | None) -> str | None:
+    """Fingerprint-free staleness: the index stores the manifest's updated_at,
+    so a mismatch with the on-disk manifest means the row predates the file.
+    Returns a marker string, or None when the index reflects the file."""
+    manifest_path = project_manifest_path(library_root, project_id)
+    if not manifest_path.exists():
+        return "manifest-missing"
+    try:
+        manifest = read_json(manifest_path)
+    except (OSError, json.JSONDecodeError):
+        return "manifest-unreadable"
+    if not isinstance(manifest, dict) or manifest.get("updated_at") != indexed_updated_at:
+        return "stale"
+    return None
+
+
+def status_projects(args: argparse.Namespace) -> None:
+    """Minimal status view: one row per project with review state and
+    staleness. Strictly read-only on the index (mode=ro) — a status read must
+    never be able to write, so it reports staleness rather than self-healing;
+    the surfacing verbs are the self-healing readers."""
+    library_root = library_root_for(args)
+    db_path = db_path_for(args)
+    hint = "no index found; run `bin/artist-os-db sync` first"
+    if not db_path.exists():
+        print(hint, file=sys.stderr)
+        return
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    except sqlite3.OperationalError:
+        print(hint, file=sys.stderr)
+        return
+    with closing(conn):
+        try:
+            rows = conn.execute(
+                """
+                SELECT p.project_id, p.status, p.current_stage, p.updated_at,
+                       COALESCE(f.learning_review_status, 'none')
+                FROM projects p
+                LEFT JOIN project_feedback_state f ON f.project_id = p.project_id
+                ORDER BY p.updated_at DESC
+                """
+            ).fetchall()
+        except sqlite3.OperationalError:
+            print(hint, file=sys.stderr)
+            return
+    if getattr(args, "project_id", None):
+        rows = [row for row in rows if row[0] == args.project_id]
+        if not rows:
+            raise SystemExit(f"project not found in index: {args.project_id}")
+    pending = 0
+    for project_id, project_status, stage, updated_at, review in rows:
+        if review == "pending":
+            pending += 1
+        stale = index_staleness(library_root, project_id, updated_at)
+        print(
+            "\t".join(
+                [
+                    project_id,
+                    project_status,
+                    stage,
+                    f"review={review}",
+                    stale or "fresh",
+                    str(updated_at or ""),
+                ]
+            )
+        )
+    if pending and not getattr(args, "project_id", None):
+        print(f"\n{pending} project(s) pending learning review")
+
+
+def conductor_rules_path(library_root: Path) -> Path:
+    return library_root / "conductor-rules.md"
+
+
+CONDUCTOR_RULES_HEADER = """# Conductor Rules (Local)
+
+Local, additive rules adopted from this installation's learnings. The
+conductor reads them at session start after the canonical `## Rules` in
+skills/artist-os/SKILL.md. They may tighten behavior or record preferences;
+they must never disable canonical gates, approvals, or the never-auto-decide
+class. Upgrades never touch this file.
+
+"""
+
+
+def add_conductor_rule(args: argparse.Namespace) -> None:
+    """Adopt a staged conductor-rule candidate as a local rule (tier 2).
+
+    Appends one dated line to <workspace_library>/conductor-rules.md, marks
+    the source candidate learning superseded, appends the event, and
+    scoped-syncs — the upgrade-safe middle tier between a staged candidate and
+    a canonical SKILL.md rule (which alone requires an eval re-bless)."""
+    library_root = library_root_for(args)
+    manifest_path, manifest = load_project_manifest(library_root, args.project_id)
+    rule = " ".join(args.rule.split())
+    if not rule:
+        raise SystemExit("conductor rule must not be empty")
+    if len(rule) > 600:
+        raise SystemExit("conductor rule must be 600 characters or fewer (one dated line)")
+    from_learning = validate_id(args.from_learning, LEARNING_ID_PATTERN, "from_learning")
+    now = utc_now()
+
+    # Tier-2 promotion adopts a STAGED CONDUCTOR CANDIDATE — never a free-form
+    # rule and never a creative (soft/hard) learning. Provenance is the point:
+    # the candidate carries the evidence chain the adopted rule inherits.
+    learning_path = library_root / "personal-library" / "learnings" / f"{from_learning}.json"
+    if not learning_path.exists():
+        raise SystemExit(f"learning record not found: {learning_path}")
+    record = read_json(learning_path)
+    if not (
+        isinstance(record, dict)
+        and record.get("learning_type") == "candidate"
+        and record.get("scope") == "conductor"
+        and record.get("status") == "active"
+    ):
+        raise SystemExit(
+            f"{from_learning} is not a staged conductor candidate "
+            "(requires learning_type=candidate, scope=conductor, status=active); "
+            "stage one with add-learning --learning-type candidate --scope conductor"
+        )
+    feedback_state = feedback_state_for(manifest, args.project_id)
+    if not any(
+        ref.get("ref_id") == from_learning and ref.get("status") == "active"
+        for ref in feedback_state.get("learning_refs", [])
+    ):
+        raise SystemExit(
+            f"project {args.project_id} has no active learning ref {from_learning}"
+        )
+    record["status"] = "superseded"
+    record.setdefault("promotion_state", {})["promotion_reason"] = "adopted as local conductor rule"
+    record["updated_at"] = now
+    validate_record(record, "learning-record.schema.json")
+    learning_path.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+    feedback_state["learning_refs"] = [
+        {**ref, "status": "superseded"} if ref.get("ref_id") == from_learning else ref
+        for ref in feedback_state.get("learning_refs", [])
+    ]
+    manifest["feedback_state"] = feedback_state
+    refs = [from_learning]
+
+    rules_path = conductor_rules_path(library_root)
+    if not rules_path.exists():
+        rules_path.write_text(CONDUCTOR_RULES_HEADER, encoding="utf-8")
+    with rules_path.open("a", encoding="utf-8") as handle:
+        handle.write(f"- {now[:10]}: {rule}\n")
+
+    manifest["updated_at"] = now
+    write_project_manifest(manifest_path, manifest)
+    append_project_event(
+        library_root,
+        manifest,
+        args.project_id,
+        event_type="conductor_rule_adopted",
+        stage="learning_review",
+        details=f"Adopted local conductor rule: {rule}",
+        occurred_at=now,
+        refs=refs or None,
+    )
+    sync_library(library_root, db_path_for(args), artist_library_root_for(args), only_project_id=args.project_id)
+    print(f"adopted local conductor rule in {rules_path}")
+
+
+def library_root_cli_suffix(args: argparse.Namespace) -> str:
+    """The root flags a printed command must carry to hit the SAME library the
+    queue was reviewed against — otherwise following the 'exact command'
+    writes to the repo-default Workspace Library instead."""
+    if getattr(args, "wondermint_root", None):
+        return f" --wondermint-root {shlex.quote(str(args.wondermint_root))}"
+    if getattr(args, "library_root", None):
+        return f" --library-root {shlex.quote(str(args.library_root))}"
+    return ""
+
+
+def review_learnings(args: argparse.Namespace) -> None:
+    """Plain-language promotion queue for someone unfamiliar with the system:
+    pending feedback with the exact command per choice, then staged conductor
+    candidates. Applies nothing itself."""
+    self_heal_sync(args)
+    library_root = library_root_for(args)
+    root_suffix = library_root_cli_suffix(args)
+    with closing(connect(db_path_for(args))) as conn, conn:
+        apply_schema(conn)
+        # The index only DISCOVERS projects; pending-ness is decided from the
+        # feedback log FILE below (files are truth — a stale or wrong indexed
+        # review state must not hide a pending entry that exists on disk).
+        projects = conn.execute(
+            "SELECT project_id, title FROM projects ORDER BY updated_at DESC"
+        ).fetchall()
+        learning_rows = conn.execute(
+            "SELECT project_id, ref_id, path FROM learning_refs ORDER BY project_id, ref_id"
+        ).fetchall()
+
+    printed = False
+    for project_id, title in projects:
+        manifest_path = project_manifest_path(library_root, project_id)
+        if not manifest_path.exists():
+            continue
+        try:
+            manifest = read_json(manifest_path)
+            if not isinstance(manifest, dict):
+                continue
+            entries = read_feedback_entries(
+                feedback_log_path_for(library_root, manifest, project_id)
+            )
+        except (OSError, json.JSONDecodeError, SystemExit):
+            continue
+        pending_entries = [
+            entry for entry in entries
+            if isinstance(entry, dict) and entry.get("learning_review_status") == "pending"
+        ]
+        if not pending_entries:
+            continue
+        printed = True
+        print(f"{project_id}  [{title or 'untitled'}] — {len(pending_entries)} feedback item(s) awaiting review")
+        for entry in pending_entries:
+            feedback_id = entry.get("feedback_id")
+            received = (entry.get("received_at") or "")[:10]
+            print(f"  feedback {feedback_id} ({received}): {entry.get('feedback_text')}")
+            print("    if this is a repeatable creative preference (applies by default, disclosed):")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type soft --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
+            print("    if it must always hold:")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type hard --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
+            print("    if it describes how the CONDUCTOR itself should behave (stages a proposal, changes nothing yet):")
+            print(f"      bin/artist-os-db add-learning {project_id} learn_<name> --learning-type candidate --scope conductor --learning-rule \"<rule>\" --evidence-ref {feedback_id} --mark-review-complete{root_suffix}")
+            print("    if there is no lasting lesson:")
+            print(f"      bin/artist-os-db mark-learning-review-complete {project_id} --feedback-id {feedback_id} --classification-status dismissed{root_suffix}")
+
+    candidates = []
+    for project_id, ref_id, ref_path in learning_rows:
+        record_path = library_root / ref_path
+        if not record_path.exists():
+            continue
+        try:
+            record = read_json(record_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(record, dict):
+            continue
+        if (
+            record.get("learning_type") == "candidate"
+            and record.get("scope") == "conductor"
+            and record.get("status") == "active"
+        ):
+            candidates.append(
+                (project_id, ref_id, record.get("learning_rule"), len(record.get("evidence_refs", [])))
+            )
+    if candidates:
+        printed = True
+        print("\nproposed changes to how the conductor works (staged, nothing applied yet):")
+        for project_id, ref_id, rule, evidence_count in candidates:
+            print(f"  {ref_id} (from {project_id}): {rule}  [scope: conductor; evidence: {evidence_count}]")
+            print("    adopt for this installation (safe, reversible, survives upgrades, no re-bless):")
+            print(f"      bin/artist-os-db add-conductor-rule {project_id} --rule {shlex.quote(rule or '')} --from-learning {ref_id}{root_suffix}")
+            print("    ship to every installation (maintainer act):")
+            print("      add a dated line to skills/artist-os/SKILL.md '## Rules', then re-run and bless the conductor eval")
+
+    if not printed:
+        print("nothing awaiting review — no pending feedback and no staged conductor candidates.")
 
 
 def project_pointer_payload(project_id: str, workspace_root_hint: str | None) -> dict:
@@ -2085,6 +2621,11 @@ def parser() -> argparse.ArgumentParser:
     setup.set_defaults(func=setup_db)
 
     sync = sub.add_parser("sync", help="sync project manifests into the SQLite index")
+    sync.add_argument(
+        "--project",
+        default=None,
+        help="sync exactly one project's manifest (skips the missing-sweep)",
+    )
     add_library_args(sync)
     sync.set_defaults(func=sync_db)
 
@@ -2150,6 +2691,31 @@ def parser() -> argparse.ArgumentParser:
     report.add_argument("project_id", nargs="?", default=None)
     add_library_args(report)
     report.set_defaults(func=learnings_report)
+
+    review_queue = sub.add_parser(
+        "review-learnings",
+        help="plain-language promotion queue: pending feedback and staged conductor candidates with the exact command per choice",
+    )
+    add_library_args(review_queue)
+    review_queue.set_defaults(func=review_learnings)
+
+    conductor_rule = sub.add_parser(
+        "add-conductor-rule",
+        help="adopt a local conductor rule (dated line in conductor-rules.md; survives upgrades, no re-bless)",
+    )
+    conductor_rule.add_argument("project_id")
+    conductor_rule.add_argument("--rule", required=True)
+    conductor_rule.add_argument("--from-learning", required=True)
+    add_library_args(conductor_rule)
+    conductor_rule.set_defaults(func=add_conductor_rule)
+
+    status = sub.add_parser(
+        "status",
+        help="one row per project: status, stage, learning-review state, staleness (read-only)",
+    )
+    status.add_argument("project_id", nargs="?", default=None)
+    add_library_args(status)
+    status.set_defaults(func=status_projects)
 
     link = sub.add_parser("link-visible-project", help="create a visible Artist Library project folder and Project Pointer")
     link.add_argument("project_id")

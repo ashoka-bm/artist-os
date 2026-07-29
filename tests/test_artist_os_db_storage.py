@@ -8,6 +8,7 @@ import sqlite3
 import tempfile
 import unittest
 from contextlib import closing
+from contextlib import redirect_stderr
 from contextlib import redirect_stdout
 from importlib.machinery import SourceFileLoader
 from io import StringIO
@@ -2735,6 +2736,896 @@ class LearningsLoopTests(unittest.TestCase):
             self.assertIn("review=not_applicable", report)
             self.assertIn("not applicable", report)
             self.assertNotIn("with no feedback yet", report)
+
+
+class SyncFaultIsolationTests(unittest.TestCase):
+    """ADR 0016 Step 1: one broken project degrades to skipped-and-reported,
+    events indexing is parse-before-delete (never destructive without a
+    successful read), and the self-improvement writers emit events."""
+
+    def _seed_project(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _sync(self, base: dict) -> str:
+        err = StringIO()
+        with redirect_stdout(StringIO()), redirect_stderr(err):
+            artist_os_db.sync_db(argparse.Namespace(**base))
+        return err.getvalue()
+
+    def _event_rows(self, library_root: Path, project_id: str) -> list[tuple]:
+        with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+            return conn.execute(
+                "SELECT event_type FROM events WHERE project_id = ? ORDER BY id",
+                (project_id,),
+            ).fetchall()
+
+    def _write_events(self, library_root: Path, project_id: str, lines: list[str]) -> Path:
+        events_path = library_root / "projects" / project_id / "events.jsonl"
+        events_path.write_text("".join(line + "\n" for line in lines), encoding="utf-8")
+        return events_path
+
+    def test_connect_sets_busy_timeout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with closing(artist_os_db.connect(Path(tmpdir) / "artist-os.sqlite")) as conn:
+                value = conn.execute("PRAGMA busy_timeout").fetchone()[0]
+        self.assertEqual(value, 5000)
+
+    def test_sync_isolates_corrupt_sibling_manifest_and_continues(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root, "proj_alpha")
+            self._sync(base)
+
+            # Corrupt alpha's manifest, then add a fresh sibling.
+            alpha_manifest = library_root / "projects" / "proj_alpha" / "project.json"
+            alpha_manifest.write_text("{not json", encoding="utf-8")
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+
+            stderr_text = self._sync(base)
+
+            self.assertIn("skipped", stderr_text)
+            self.assertIn("proj_alpha", stderr_text)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                rows = dict(
+                    conn.execute("SELECT project_id, status FROM projects").fetchall()
+                )
+            # The sibling indexed despite the corruption...
+            self.assertEqual(rows["proj_beta"], "active")
+            # ...and the broken-but-present project keeps its last known-good
+            # row: NOT flipped to 'missing' (its manifest exists, it is merely
+            # unreadable right now).
+            self.assertEqual(rows["proj_alpha"], "active")
+
+    def test_sync_preserves_events_when_events_file_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+            events_path.unlink()
+            self._sync(base)
+            self.assertEqual(
+                len(self._event_rows(library_root, "proj_door_left_lit")),
+                2,
+                "a missing events.jsonl must preserve the previously indexed events",
+            )
+
+    def test_sync_preserves_events_when_events_file_unreadable(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [json.dumps({"event_id": "evt_a", "event_type": "stage_entered"})],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 1)
+
+            os.chmod(events_path, 0)
+            try:
+                self._sync(base)
+            finally:
+                os.chmod(events_path, 0o644)
+            self.assertEqual(
+                len(self._event_rows(library_root, "proj_door_left_lit")),
+                1,
+                "an unreadable events.jsonl must preserve the previously indexed events",
+            )
+
+    def test_sync_skips_malformed_event_line_and_keeps_good_lines(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            self._sync(base)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+            # A mid-write crash appends a truncated line, then a good one lands.
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                    '{"event_id": "evt_c", "event_type": "trunca',
+                    json.dumps({"event_id": "evt_d", "event_type": "output_accepted"}),
+                ],
+            )
+            stderr_text = self._sync(base)
+
+            self.assertIn("malformed", stderr_text)
+            rows = self._event_rows(library_root, "proj_door_left_lit")
+            self.assertEqual(
+                len(rows),
+                3,
+                "good lines around a malformed one must all stay indexed",
+            )
+
+    def test_sync_isolates_wrong_shape_manifest_and_continues(self) -> None:
+        """Valid JSON that is not an object ([]) must degrade to a skipped
+        project, not abort the sync (raises TypeError, not JSONDecodeError)."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root, "proj_alpha")
+            self._sync(base)
+
+            (library_root / "projects" / "proj_alpha" / "project.json").write_text(
+                "[]", encoding="utf-8"
+            )
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+
+            stderr_text = self._sync(base)
+
+            self.assertIn("proj_alpha", stderr_text)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                rows = dict(
+                    conn.execute("SELECT project_id, status FROM projects").fetchall()
+                )
+            self.assertEqual(rows["proj_beta"], "active")
+            self.assertEqual(rows["proj_alpha"], "active")
+
+    def test_sync_skips_wrong_shape_event_line(self) -> None:
+        """A valid-JSON-but-not-dict event line ([]) is malformed: skipped
+        with a warning while the good lines still index."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            self._write_events(
+                library_root,
+                "proj_door_left_lit",
+                [
+                    json.dumps({"event_id": "evt_a", "event_type": "stage_entered"}),
+                    "[]",
+                    json.dumps({"event_id": "evt_b", "event_type": "record_written"}),
+                ],
+            )
+            stderr_text = self._sync(base)
+
+            self.assertIn("malformed", stderr_text)
+            self.assertEqual(len(self._event_rows(library_root, "proj_door_left_lit")), 2)
+
+    def test_writers_create_events_log_when_missing(self) -> None:
+        """The manifest declares paths.events but the file was never created:
+        the writer must create it and append, not silently skip the event."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            self.assertFalse(events_path.exists())
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            self.assertTrue(events_path.exists())
+            event = json.loads(events_path.read_text(encoding="utf-8").strip())
+            self.assertEqual(event["event_type"], "feedback_received")
+            self.assertEqual(
+                [row[0] for row in self._event_rows(library_root, "proj_door_left_lit")],
+                ["feedback_received"],
+            )
+
+    def test_append_project_event_ids_distinct_for_same_timestamp(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed_project(library_root)
+            manifest = minimal_manifest()
+            occurred_at = "2026-07-06T12:00:00.000000+00:00"
+            for event_type, refs in (
+                ("feedback_received", ["fb_one"]),
+                ("learning_recorded", ["learn_two"]),
+                # Two ref-less events of the SAME type: the hardest collision
+                # case (same project, timestamp, and suffix source).
+                ("learning_review_marked", None),
+                ("learning_review_marked", None),
+            ):
+                artist_os_db.append_project_event(
+                    library_root,
+                    manifest,
+                    "proj_door_left_lit",
+                    event_type=event_type,
+                    stage="learning_review",
+                    details="collision probe",
+                    occurred_at=occurred_at,
+                    refs=refs,
+                )
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            event_ids = [
+                json.loads(line)["event_id"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(
+                len(set(event_ids)),
+                4,
+                "same-timestamp events must still get distinct event ids",
+            )
+
+    def test_writer_creates_project_relative_events_log_at_project_dir(self) -> None:
+        """paths.events declared project-relative ("events.jsonl") with no
+        file yet: the writer must create it inside the project folder, not at
+        the Workspace Library root."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            manifest_path = library_root / "projects" / "proj_door_left_lit" / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["paths"]["events"] = "events.jsonl"
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            self.assertTrue(
+                (library_root / "projects" / "proj_door_left_lit" / "events.jsonl").exists(),
+                "project-relative events log must be created inside the project dir",
+            )
+            self.assertFalse(
+                (library_root / "events.jsonl").exists(),
+                "the log must not be created at the Workspace Library root",
+            )
+
+    def test_self_improvement_writers_append_events(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed_project(library_root)
+            events_path = self._write_events(library_root, "proj_door_left_lit", [])
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback="The first draft should be rawer.",
+                    feedback_id="fb_rawer_draft",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+                artist_os_db.add_learning(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    learning_id="learn_rawer_first_drafts",
+                    learning_type="soft",
+                    learning_rule="Keep first drafts rawer before polishing.",
+                    scope=None,
+                    evidence_type="feedback_entry",
+                    evidence_ref=["fb_rawer_draft"],
+                    evidence_summary=None,
+                    occurrence_count=1,
+                    promotion_reason=None,
+                    mark_review_complete=False,
+                    overwrite=False,
+                ))
+                artist_os_db.add_performance_signal(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    signal_id="perf_save_rate_001",
+                    metric_name="save_rate",
+                    metric_value="0.32",
+                    signal_direction="positive",
+                    source="manual_import",
+                    output_record_id=None,
+                    notes=None,
+                    overwrite=False,
+                ))
+                artist_os_db.mark_learning_review_complete(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback_id=None,
+                    classification_status="applied",
+                ))
+
+            event_types = [
+                json.loads(line)["event_type"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertEqual(
+                event_types,
+                [
+                    "feedback_received",
+                    "learning_recorded",
+                    "performance_signal_imported",
+                    "learning_review_marked",
+                ],
+            )
+            # The same sync each writer runs must have indexed its event.
+            indexed = [row[0] for row in self._event_rows(library_root, "proj_door_left_lit")]
+            self.assertEqual(sorted(indexed), sorted(event_types))
+
+
+class ScopedSyncTests(unittest.TestCase):
+    """ADR 0016 Step 2: `sync --project` indexes exactly one manifest, never
+    runs the missing-sweep, and is what the self-improvement writers ride on
+    so their writes reach the index despite a corrupt sibling."""
+
+    def _seed(self, library_root: Path, project_id: str) -> None:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+
+    def _base(self, library_root: Path) -> dict:
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _sync(self, base: dict, project: str | None = None) -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.sync_db(argparse.Namespace(**base, project=project))
+
+    def _project_rows(self, library_root: Path) -> dict[str, tuple[str, str]]:
+        with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+            return {
+                row[0]: (row[1], row[2])
+                for row in conn.execute(
+                    "SELECT project_id, status, title FROM projects"
+                ).fetchall()
+            }
+
+    def test_scoped_sync_updates_only_target_and_leaves_foreign_rows_intact(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_beta")
+            base = self._base(library_root)
+            self._sync(base)
+
+            # Edit both manifests on disk, then scoped-sync only alpha.
+            for project_id in ("proj_alpha", "proj_beta"):
+                manifest_path = library_root / "projects" / project_id / "project.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest["title"] = f"Retitled {project_id}"
+                manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            self._sync(base, project="proj_alpha")
+
+            rows = self._project_rows(library_root)
+            self.assertEqual(rows["proj_alpha"][1], "Retitled proj_alpha")
+            self.assertEqual(
+                rows["proj_beta"][1],
+                "Door Left Lit",
+                "a scoped sync must not touch a foreign project's rows",
+            )
+
+    def test_scoped_sync_does_not_mark_foreign_projects_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_beta")
+            base = self._base(library_root)
+            self._sync(base)
+
+            self._sync(base, project="proj_alpha")
+
+            rows = self._project_rows(library_root)
+            self.assertEqual(
+                rows["proj_beta"][0],
+                "active",
+                "the missing-sweep must never run under a scoped sync",
+            )
+
+    def test_scoped_sync_rejects_missing_manifest(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            base = self._base(library_root)
+            with self.assertRaisesRegex(SystemExit, "manifest not found"):
+                self._sync(base, project="proj_ghost")
+
+    def test_add_feedback_reaches_index_despite_corrupt_sibling(self) -> None:
+        """The load-bearing integration proof for the self-improvement loop:
+        a close-out write on one project reaches the index even when another
+        project's manifest is corrupt."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            self._seed(library_root, "proj_alpha")
+            self._seed(library_root, "proj_broken")
+            base = self._base(library_root)
+            self._sync(base)
+
+            (library_root / "projects" / "proj_broken" / "project.json").write_text(
+                "{definitely not json", encoding="utf-8"
+            )
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_feedback(argparse.Namespace(
+                    **base,
+                    project_id="proj_alpha",
+                    feedback="The pacing drags in the middle.",
+                    feedback_id="fb_pacing_drags",
+                    source="artist",
+                    stage="project_completion",
+                    output_record_id=None,
+                    notes=None,
+                ))
+
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                pending = conn.execute(
+                    """
+                    SELECT learning_review_status FROM project_feedback_state
+                    WHERE project_id = 'proj_alpha'
+                    """
+                ).fetchone()
+                broken_status = conn.execute(
+                    "SELECT status FROM projects WHERE project_id = 'proj_broken'"
+                ).fetchone()[0]
+            self.assertIsNotNone(pending, "the feedback write must reach the index")
+            self.assertEqual(pending[0], "pending")
+            self.assertEqual(
+                broken_status,
+                "active",
+                "a scoped write must leave the corrupt sibling's last known-good row untouched",
+            )
+
+
+class ReadPathSelfHealingTests(unittest.TestCase):
+    """ADR 0016 Step 3 (read half): the surfacing verbs re-index from files
+    before reading, emit actual rule text, and work on a fresh clone."""
+
+    def _seed(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _capture(self, func, args) -> str:
+        buf = StringIO()
+        with redirect_stdout(buf), redirect_stderr(StringIO()):
+            func(args)
+        return buf.getvalue()
+
+    def _add_learning(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_learning(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                learning_id="learn_rawer_first_drafts",
+                learning_type="soft",
+                learning_rule="Keep first drafts rawer before polishing.",
+                scope="images",
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_rawer_draft"],
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            ))
+
+    def test_learnings_report_surfaces_rule_text_scope_and_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("Keep first drafts rawer before polishing.", report)
+            self.assertIn("scope: images", report)
+            self.assertIn("evidence: 1", report)
+
+    def test_learnings_report_notes_missing_learning_record(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+            (library_root / "personal-library" / "learnings" / "learn_rawer_first_drafts.json").unlink()
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("record missing on disk", report)
+
+    def test_learning_in_files_but_not_index_is_still_surfaced(self) -> None:
+        """The self-heal proof: delete the SQLite DB entirely (files intact)
+        and the report must still surface the learning."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_learning(base)
+            (library_root / "artist-os.sqlite").unlink()
+
+            report = self._capture(
+                artist_os_db.learnings_report,
+                argparse.Namespace(**base, project_id="proj_door_left_lit"),
+            )
+            self.assertIn("learn_rawer_first_drafts", report)
+            self.assertIn("Keep first drafts rawer before polishing.", report)
+
+    def test_pending_learning_reviews_self_heals_on_fresh_clone(self) -> None:
+        """Files exist with a pending review, but no DB was ever created —
+        the listing must sync from files instead of silently printing nothing."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            manifest_path = library_root / "projects" / "proj_door_left_lit" / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["feedback_state"] = {
+                "feedback_log_path": "projects/proj_door_left_lit/feedback-log.jsonl",
+                "learning_review_status": "pending",
+                "learning_reviewed_at": None,
+            }
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            self.assertFalse((library_root / "artist-os.sqlite").exists())
+
+            listing = self._capture(
+                artist_os_db.pending_learning_reviews, argparse.Namespace(**base)
+            )
+            self.assertIn("proj_door_left_lit", listing)
+
+
+class StatusAndPromotionTests(unittest.TestCase):
+    """ADR 0016 Step 3 (surface half): minimal read-only status, the
+    plain-language review-learnings queue, and tier-2 local conductor-rule
+    adoption via add-conductor-rule."""
+
+    def _seed(self, library_root: Path, project_id: str = "proj_door_left_lit") -> dict:
+        proj_dir = library_root / "projects" / project_id
+        proj_dir.mkdir(parents=True)
+        (proj_dir / "project.json").write_text(
+            json.dumps(minimal_manifest(project_id)), encoding="utf-8"
+        )
+        return {"db": None, "library_root": str(library_root), "wondermint_root": None}
+
+    def _capture(self, func, args) -> tuple[str, str]:
+        out, err = StringIO(), StringIO()
+        with redirect_stdout(out), redirect_stderr(err):
+            func(args)
+        return out.getvalue(), err.getvalue()
+
+    def _sync(self, base: dict) -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.sync_db(argparse.Namespace(**base, project=None))
+
+    def _add_feedback(self, base: dict, project_id: str = "proj_door_left_lit") -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_feedback(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                feedback="The middle section drags.",
+                feedback_id="fb_middle_drags",
+                source="artist",
+                stage="project_completion",
+                output_record_id=None,
+                notes=None,
+            ))
+
+    def _stage_conductor_candidate(
+        self,
+        base: dict,
+        project_id: str = "proj_door_left_lit",
+        learning_id: str = "learn_confirm_before_expand",
+        rule: str = "Confirm the part map before expanding multiple parts.",
+        learning_type: str = "candidate",
+        scope: str | None = "conductor",
+    ) -> None:
+        with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+            artist_os_db.add_learning(argparse.Namespace(
+                **base,
+                project_id=project_id,
+                learning_id=learning_id,
+                learning_type=learning_type,
+                learning_rule=rule,
+                scope=scope,
+                evidence_type="feedback_entry",
+                evidence_ref=["fb_middle_drags"],
+                evidence_summary=None,
+                occurrence_count=1,
+                promotion_reason=None,
+                mark_review_complete=False,
+                overwrite=False,
+            ))
+
+    def test_status_lists_projects_with_review_state_and_staleness(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root, "proj_alpha")
+            beta_dir = library_root / "projects" / "proj_beta"
+            beta_dir.mkdir(parents=True)
+            (beta_dir / "project.json").write_text(
+                json.dumps(minimal_manifest("proj_beta")), encoding="utf-8"
+            )
+            self._sync(base)
+            self._add_feedback(base, "proj_alpha")
+
+            out, _ = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            alpha_line = next(line for line in out.splitlines() if line.startswith("proj_alpha"))
+            beta_line = next(line for line in out.splitlines() if line.startswith("proj_beta"))
+            self.assertIn("review=pending", alpha_line)
+            self.assertIn("fresh", alpha_line)
+            self.assertIn("review=none", beta_line)
+            self.assertIn("1 project(s) pending learning review", out)
+
+            # Out-of-band manifest edit: status must call it out, not lie.
+            manifest_path = beta_dir / "project.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["updated_at"] = "2026-07-07T00:00:00Z"
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            out, _ = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            beta_line = next(line for line in out.splitlines() if line.startswith("proj_beta"))
+            self.assertIn("stale", beta_line)
+
+    def test_status_is_read_only_and_degrades_without_db(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+
+            # No DB yet: a hint, not a crash — and crucially, no DB created.
+            out, err = self._capture(
+                artist_os_db.status_projects,
+                argparse.Namespace(**base, project_id=None),
+            )
+            self.assertIn("run `bin/artist-os-db sync` first", err)
+            self.assertFalse((library_root / "artist-os.sqlite").exists())
+
+            # With a read-only DB file, status still works (it never writes).
+            self._sync(base)
+            db_path = library_root / "artist-os.sqlite"
+            os.chmod(db_path, 0o444)
+            try:
+                out, _ = self._capture(
+                    artist_os_db.status_projects,
+                    argparse.Namespace(**base, project_id=None),
+                )
+            finally:
+                os.chmod(db_path, 0o644)
+            self.assertIn("proj_door_left_lit", out)
+
+    def test_review_learnings_lists_pending_feedback_with_commands(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("The middle section drags.", out)
+            self.assertIn("add-learning proj_door_left_lit", out)
+            self.assertIn("--learning-type candidate --scope conductor", out)
+            # Following a printed command must fully resolve the item: the
+            # add-learning suggestions carry --mark-review-complete so the
+            # feedback does not stay review=pending afterwards.
+            self.assertIn("--mark-review-complete", out)
+            self.assertIn(
+                "mark-learning-review-complete proj_door_left_lit --feedback-id fb_middle_drags",
+                out,
+            )
+            # The printed commands must target the SAME library that was
+            # reviewed, not the repo default.
+            self.assertIn(f"--library-root {library_root}", out)
+
+    def test_review_learnings_lists_staged_conductor_candidates(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            self._stage_conductor_candidate(base)
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("proposed changes to how the conductor works", out)
+            self.assertIn("Confirm the part map before expanding multiple parts.", out)
+            self.assertIn("add-conductor-rule proj_door_left_lit --rule", out)
+            self.assertIn("--from-learning learn_confirm_before_expand", out)
+
+    def test_add_conductor_rule_appends_marks_and_events(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            self._stage_conductor_candidate(base)
+
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.add_conductor_rule(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    rule="Confirm the part\nmap   before expanding multiple parts.",
+                    from_learning="learn_confirm_before_expand",
+                ))
+
+            # Dated, single-line rule in the sidecar (whitespace collapsed).
+            rules_text = (library_root / "conductor-rules.md").read_text(encoding="utf-8")
+            self.assertIn("# Conductor Rules (Local)", rules_text)
+            self.assertRegex(
+                rules_text,
+                r"- \d{4}-\d{2}-\d{2}: Confirm the part map before expanding multiple parts\.",
+            )
+            # Source candidate superseded on disk and in the manifest ref.
+            record = json.loads(
+                (library_root / "personal-library" / "learnings" / "learn_confirm_before_expand.json")
+                .read_text(encoding="utf-8")
+            )
+            self.assertEqual(record["status"], "superseded")
+            self.assertEqual(
+                record["promotion_state"]["promotion_reason"],
+                "adopted as local conductor rule",
+            )
+            manifest = json.loads(
+                (library_root / "projects" / "proj_door_left_lit" / "project.json")
+                .read_text(encoding="utf-8")
+            )
+            ref = next(
+                ref for ref in manifest["feedback_state"]["learning_refs"]
+                if ref["ref_id"] == "learn_confirm_before_expand"
+            )
+            self.assertEqual(ref["status"], "superseded")
+            # Event appended and indexed by the scoped sync.
+            events_path = library_root / "projects" / "proj_door_left_lit" / "events.jsonl"
+            event_types = [
+                json.loads(line)["event_type"]
+                for line in events_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            self.assertIn("conductor_rule_adopted", event_types)
+            with closing(sqlite3.connect(library_root / "artist-os.sqlite")) as conn:
+                indexed = conn.execute(
+                    "SELECT COUNT(*) FROM events WHERE event_type = 'conductor_rule_adopted'"
+                ).fetchone()[0]
+            self.assertEqual(indexed, 1)
+            # The adopted candidate no longer shows as staged.
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertNotIn("proposed changes to how the conductor works", out)
+
+    def test_add_conductor_rule_appends_to_existing_file_once_headed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            for learning_id, rule in (
+                ("learn_rule_one", "First local rule."),
+                ("learn_rule_two", "Second local rule."),
+            ):
+                self._stage_conductor_candidate(base, learning_id=learning_id, rule=rule)
+                with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                    artist_os_db.add_conductor_rule(argparse.Namespace(
+                        **base,
+                        project_id="proj_door_left_lit",
+                        rule=rule,
+                        from_learning=learning_id,
+                    ))
+            rules_text = (library_root / "conductor-rules.md").read_text(encoding="utf-8")
+            self.assertEqual(rules_text.count("# Conductor Rules (Local)"), 1)
+            self.assertIn("First local rule.", rules_text)
+            self.assertIn("Second local rule.", rules_text)
+
+    def test_add_conductor_rule_rejects_non_candidate_source(self) -> None:
+        """Tier-2 promotion adopts staged conductor candidates only — a soft
+        creative learning must be refused."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._stage_conductor_candidate(
+                base,
+                learning_id="learn_soft_taste",
+                rule="Keep first drafts rawer.",
+                learning_type="soft",
+                scope="images",
+            )
+            with self.assertRaisesRegex(SystemExit, "not a staged conductor candidate"):
+                artist_os_db.add_conductor_rule(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    rule="Keep first drafts rawer.",
+                    from_learning="learn_soft_taste",
+                ))
+
+    def test_review_learnings_derives_pending_from_log_file(self) -> None:
+        """Files are truth at the read: a pending entry hand-appended to the
+        feedback log must surface even though the manifest/index say the
+        review is complete."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            library_root = Path(tmpdir)
+            base = self._seed(library_root)
+            self._add_feedback(base)
+            with redirect_stdout(StringIO()), redirect_stderr(StringIO()):
+                artist_os_db.mark_learning_review_complete(argparse.Namespace(
+                    **base,
+                    project_id="proj_door_left_lit",
+                    feedback_id=None,
+                    classification_status="dismissed",
+                ))
+
+            log_path = library_root / "projects" / "proj_door_left_lit" / "feedback-log.jsonl"
+            with log_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({
+                    "feedback_id": "fb_hand_added",
+                    "project_id": "proj_door_left_lit",
+                    "received_at": "2026-07-06T00:00:00Z",
+                    "source": "artist",
+                    "stage": None,
+                    "output_record_id": None,
+                    "feedback_text": "The ending needs more silence.",
+                    "classification_status": "unclassified",
+                    "learning_review_status": "pending",
+                    "notes": None,
+                }) + "\n")
+
+            out, _ = self._capture(
+                artist_os_db.review_learnings, argparse.Namespace(**base)
+            )
+            self.assertIn("fb_hand_added", out)
+            self.assertIn("The ending needs more silence.", out)
 
 
 if __name__ == "__main__":
