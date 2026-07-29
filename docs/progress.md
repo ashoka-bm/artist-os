@@ -8,11 +8,12 @@ Artist OS is in 1.0 closure. The artist-approved product boundary, exclusions,
 change-control rule, blocking backlog, and release gate are authoritative in
 `docs/release-1.0.md`.
 
-The constrained Cross-Medium Plan lifecycle is complete. The current
-implementation priority is to integrate database reliability hardening without
-the automatic conductor loop, clear the stale conductor eval lock, and certify
-the existing dry-run journeys. Provider adapters, automatic visible-file edit detection, and
-new package routers are post-1.0.
+The constrained Cross-Medium Plan lifecycle and database reliability hardening
+are complete on the release feature branch. The conductor evaluation is current,
+the local schema validator fails closed on unsupported keywords, and manual
+output import now protects project paths and durable state. The current priority
+is release certification and distribution correctness. Provider adapters,
+automatic visible-file edit detection, and new package routers are post-1.0.
 
 ### Next implementation slice
 
@@ -24,12 +25,11 @@ and negative fixture coverage; the conductor's lazy review/approval interstitial
 with sequential supporting-medium entry; and a tracked primary-to-supporting
 rehearsal through Asset Package creation.
 
-The next slice is **database reliability hardening**: rebase or selectively
-integrate `self-improvement-db-hardening` without the automatic conductor loop
-from `conductor-learning-loop`. Before that lands, the conductor changed, so the
-real conductor-behavior eval is owed and `test_real_conductor_matches_blessed_lock`
-stays red until a passing digest is blessed. Do not mix provider work or
-automatic learning behavior into either slice.
+The next slice is **release certification**: finish the installed-bundle smoke
+matrix, promote all six end-to-end rehearsals into the tracked release-evidence
+manifest, reconcile public release documentation, and verify the clean-checkout
+release gate. Do not mix provider work or automatic learning behavior into this
+slice.
 
 ```text
 Step Input Record
@@ -628,12 +628,11 @@ Implemented the schema pass for the accepted activation model:
 
 ## Current Best Next Step
 
-Complete the blocking backlog in `docs/release-1.0.md` in order. The thin
-Cross-Medium Plan contract is now done, so the immediate implementation pass is
-the database reliability work from `self-improvement-db-hardening`, integrated
-without the automatic conductor wiring from `conductor-learning-loop`. Run the
-real conductor-behavior eval before or alongside that slice, since the
-Cross-Medium wiring changed the conductor.
+Complete the remaining blocking backlog in `docs/release-1.0.md` in order. The
+thin Cross-Medium Plan contract, database reliability work, conductor
+evaluation, validator hardening, and manual output-import hardening are now
+complete on the release feature branch. The immediate pass is installed-bundle
+verification and tracked rehearsal evidence.
 
 Reason:
 
@@ -653,18 +652,23 @@ Reason:
   fixture-backed rehearsal coverage;
 - Cross-Medium Plan and Asset Package schemas now carry the general
   review/approval and conductor lifecycle, with a tracked fixture-backed
-  rehearsal; the route still owes the real conductor eval;
-- the database hardening branch protects existing persistence and resume
-  behavior without requiring automatic conductor self-improvement;
-- the current unit baseline runs 479 tests with one known failure: the
-  conductor digest no longer matches its blessed eval lock.
+  rehearsal and a current passing conductor evaluation;
+- database hardening now protects existing persistence and resume behavior
+  without automatic conductor self-improvement;
+- the local validator enforces every schema keyword currently used and rejects
+  unknown future keywords instead of silently accepting them;
+- manual output import validates image, sound, and text lineage, confines
+  durable writes to the active project, updates resume state, and refreshes
+  SQLite;
+- the current unit baseline runs 518 tests successfully.
 
 Near-term plan:
 
-1. Complete and rehearse constrained Cross-Medium Plan orchestration.
-2. Integrate and re-verify database reliability hardening.
-3. Run the real conductor-behavior eval and clear the stale blessed lock.
-4. Run release rehearsals and the full release gate.
+1. Build and verify the materialized Codex bundle.
+2. Smoke-test install, update, Workspace Library setup, resume, import, and
+   uninstall in disposable roots.
+3. Promote all six release rehearsals into the tracked evidence manifest.
+4. Finish public-release documentation and run the clean-checkout release gate.
 5. Publish `1.0.0` only after the authoritative checklist is complete.
 
 Final verification for this pass:

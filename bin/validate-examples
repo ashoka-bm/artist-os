@@ -27,6 +27,9 @@ def parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = parser().parse_args()
     targets = iter_validation_targets(include_fixtures=not args.examples_only)
+    if not targets:
+        print("FAIL no validation targets found")
+        return 1
     failures = []
     for schema_path, data_path in targets:
         try:

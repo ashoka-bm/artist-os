@@ -4,10 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import mimetypes
+import os
 import re
+import subprocess
 import sys
+import tempfile
 from datetime import UTC
 from datetime import datetime
 from pathlib import Path
@@ -26,14 +30,59 @@ from artist_os_schema_validator import validate  # noqa: E402
 
 
 OUTPUT_SCHEMA = load_json(REPO_ROOT / "schemas" / "output-record.schema.json")
+PROJECT_SCHEMA = load_json(REPO_ROOT / "schemas" / "project-manifest.schema.json")
+DB_CLI = REPO_ROOT / "bin" / "artist-os-db"
+PROJECT_ID_PATTERN = re.compile(r"^proj_[a-zA-Z0-9_-]+$")
+MEDIUM_CONTRACTS = {
+    "image": {
+        "medium_path_key": "image_medium_plan",
+        "medium_schema": "image-medium-plan.schema.json",
+        "medium_id_key": "image_medium_plan_id",
+        "brief_schema": "creative-brief.schema.json",
+        "plan_schema": "prompt-plan.schema.json",
+        "plan_id_key": "prompt_plan_id",
+    },
+    "sound": {
+        "medium_path_key": "sound_medium_plan",
+        "medium_schema": "sound-medium-plan.schema.json",
+        "medium_id_key": "sound_medium_plan_id",
+        "brief_schema": "sound-creative-brief.schema.json",
+        "plan_schema": "sound-prompt-plan.schema.json",
+        "plan_id_key": "prompt_plan_id",
+    },
+    "text": {
+        "medium_path_key": "text_medium_plan",
+        "medium_schema": "text-medium-plan.schema.json",
+        "medium_id_key": "text_medium_plan_id",
+        "brief_schema": "text-creative-brief.schema.json",
+        "plan_schema": "text-generation-plan.schema.json",
+        "plan_id_key": "text_generation_plan_id",
+    },
+}
 
 
 def utc_now() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
+def library_root(args: argparse.Namespace) -> Path:
+    return Path(args.library_root).expanduser().resolve()
+
+
+def confined_path(path: Path, boundary: Path, label: str) -> Path:
+    resolved = path.expanduser().resolve()
+    try:
+        resolved.relative_to(boundary)
+    except ValueError as exc:
+        raise AdapterGuardError(f"{label} resolves outside project directory: {resolved}") from exc
+    return resolved
+
+
 def project_dir(args: argparse.Namespace) -> Path:
-    return Path(args.library_root) / "projects" / args.project_id
+    if not PROJECT_ID_PATTERN.fullmatch(args.project_id):
+        raise AdapterGuardError(f"invalid project id: {args.project_id!r}")
+    root = library_root(args)
+    return confined_path(root / "projects" / args.project_id, root / "projects", "project path")
 
 
 def project_manifest_path(args: argparse.Namespace) -> Path:
@@ -44,9 +93,18 @@ def read_project_manifest(args: argparse.Namespace) -> dict[str, Any]:
     path = project_manifest_path(args)
     if not path.is_file():
         raise AdapterGuardError(f"project.json is required before importing outputs: {path}")
-    manifest = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AdapterGuardError(f"project.json is unreadable or malformed: {path}: {exc}") from exc
+    if not isinstance(manifest, dict):
+        raise AdapterGuardError(f"project.json must contain an object: {path}")
     if manifest.get("project_id") != args.project_id:
         raise AdapterGuardError("project.json project_id does not match import request")
+    try:
+        validate(manifest, PROJECT_SCHEMA, PROJECT_SCHEMA)
+    except ValidationError as exc:
+        raise AdapterGuardError(f"project.json does not validate: {exc}") from exc
     return manifest
 
 
@@ -55,11 +113,15 @@ def manifest_write_path(path_value: str | None, args: argparse.Namespace, defaul
         return default
     path = Path(path_value)
     if path.is_absolute():
-        return path
-    library_root = Path(args.library_root)
-    if path.parts[:1] == ("projects",):
-        return library_root / path
-    return project_dir(args) / path
+        candidate = path
+    else:
+        root = library_root(args)
+        if "projects" in path.parts:
+            project_index = path.parts.index("projects")
+            candidate = root / Path(*path.parts[project_index:])
+        else:
+            candidate = project_dir(args) / path
+    return confined_path(candidate, project_dir(args), "manifest path")
 
 
 def output_group(args: argparse.Namespace) -> str:
@@ -91,6 +153,158 @@ def output_record_path(args: argparse.Namespace, manifest: dict[str, Any]) -> Pa
         / "output-records"
         / f"{args.output_record_id}.json"
     )
+
+
+def read_upstream_record(
+    args: argparse.Namespace,
+    manifest: dict[str, Any],
+    path_key: str,
+    schema_name: str,
+    label: str,
+) -> dict[str, Any]:
+    path_value = manifest.get("paths", {}).get(path_key)
+    if not path_value:
+        raise AdapterGuardError(f"project.json is missing path for upstream {label}: {path_key}")
+    path = manifest_write_path(path_value, args, project_dir(args) / path_key)
+    if not path.is_file():
+        raise AdapterGuardError(f"upstream {label} does not exist: {path}")
+    try:
+        record = json.loads(path.read_text(encoding="utf-8"))
+        schema = load_json(REPO_ROOT / "schemas" / schema_name)
+        validate(record, schema, schema)
+    except (OSError, json.JSONDecodeError, ValidationError) as exc:
+        raise AdapterGuardError(f"upstream {label} is invalid: {path}: {exc}") from exc
+    return record
+
+
+def assert_link(record: dict[str, Any], field: str, expected: str, label: str) -> None:
+    if record.get(field) != expected:
+        raise AdapterGuardError(
+            f"upstream {label} does not match {field}={expected!r}: found {record.get(field)!r}"
+        )
+
+
+def validate_previous_output(
+    args: argparse.Namespace,
+    manifest: dict[str, Any],
+    previous_output_record_id: str,
+) -> None:
+    base = output_records_base(args, manifest)
+    if not base.is_dir():
+        raise AdapterGuardError(f"previous Output Record not found: {previous_output_record_id}")
+    for path in base.rglob("*.json"):
+        try:
+            record = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if record.get("output_record_id") != previous_output_record_id:
+            continue
+        try:
+            validate(record, OUTPUT_SCHEMA, OUTPUT_SCHEMA)
+        except ValidationError as exc:
+            raise AdapterGuardError(f"previous Output Record is invalid: {path}: {exc}") from exc
+        if record.get("project_id") != args.project_id:
+            raise AdapterGuardError("previous Output Record belongs to a different project")
+        return
+    raise AdapterGuardError(f"previous Output Record not found: {previous_output_record_id}")
+
+
+def validate_upstream_lineage(
+    args: argparse.Namespace,
+    manifest: dict[str, Any],
+    record: dict[str, Any],
+) -> None:
+    common = {
+        "source_id": args.source_id,
+        "artist_meaning_id": args.artist_meaning_id,
+        "transformation_brief_id": args.transformation_brief_id,
+        "beat_plan_id": args.beat_plan_id,
+    }
+    source = read_upstream_record(args, manifest, "source_record", "source-record.schema.json", "Source Record")
+    assert_link(source, "source_id", args.source_id, "Source Record")
+
+    meaning_path_key = "artist_meaning" if manifest.get("paths", {}).get("artist_meaning") else "meaning_interview"
+    meaning = read_upstream_record(
+        args,
+        manifest,
+        meaning_path_key,
+        "artist-meaning.schema.json",
+        "Artist Meaning",
+    )
+    for field in ("source_id", "artist_meaning_id"):
+        assert_link(meaning, field, common[field], "Artist Meaning")
+
+    transformation = read_upstream_record(
+        args,
+        manifest,
+        "transformation_brief",
+        "transformation-brief.schema.json",
+        "Transformation Brief",
+    )
+    for field in ("source_id", "artist_meaning_id", "transformation_brief_id"):
+        assert_link(transformation, field, common[field], "Transformation Brief")
+
+    beat_plan = read_upstream_record(
+        args,
+        manifest,
+        "beat_plan",
+        "beat-plan.schema.json",
+        "Beat Plan",
+    )
+    for field, expected in common.items():
+        assert_link(beat_plan, field, expected, "Beat Plan")
+
+    contract = MEDIUM_CONTRACTS.get(args.target_media_type)
+    if contract is None:
+        raise AdapterGuardError(
+            f"complete import lineage is not implemented for {args.target_media_type!r}; "
+            "use image, sound, or text"
+        )
+
+    medium_plan = read_upstream_record(
+        args,
+        manifest,
+        contract["medium_path_key"],
+        contract["medium_schema"],
+        "Medium Plan",
+    )
+    assert_link(medium_plan, contract["medium_id_key"], args.medium_plan_id, "Medium Plan")
+    for field, expected in common.items():
+        assert_link(medium_plan, field, expected, "Medium Plan")
+
+    brief = read_upstream_record(
+        args,
+        manifest,
+        "creative_brief_record",
+        contract["brief_schema"],
+        "Creative Brief",
+    )
+    assert_link(brief, "brief_id", args.brief_id, "Creative Brief")
+    for field, expected in common.items():
+        assert_link(brief, field, expected, "Creative Brief")
+
+    plan = read_upstream_record(
+        args,
+        manifest,
+        "prompt_plan",
+        contract["plan_schema"],
+        "prompt plan",
+    )
+    expected_plan_id = (
+        args.text_generation_plan_id
+        if contract["plan_id_key"] == "text_generation_plan_id"
+        else args.prompt_plan_id
+    )
+    if not expected_plan_id:
+        raise AdapterGuardError(f"upstream {contract['plan_id_key']} is required")
+    assert_link(plan, contract["plan_id_key"], expected_plan_id, "prompt plan")
+    assert_link(plan, "brief_id", args.brief_id, "prompt plan")
+    for field, expected in common.items():
+        assert_link(plan, field, expected, "prompt plan")
+    assert_link(plan, contract["medium_id_key"], args.medium_plan_id, "prompt plan")
+
+    if record.get("previous_output_record_id"):
+        validate_previous_output(args, manifest, record["previous_output_record_id"])
 
 
 def guess_mime_type(path: Path) -> str:
@@ -163,8 +377,8 @@ def build_output_record(args: argparse.Namespace) -> dict[str, Any]:
         },
         "traceability_summary": [
             {
-                "source_type": "prompt_plan",
-                "source_ref": args.prompt_plan_id,
+                "source_type": "text_generation_plan" if args.target_media_type == "text" else "prompt_plan",
+                "source_ref": args.text_generation_plan_id or args.prompt_plan_id,
                 "note": "Imported artifact is linked to the governing prompt or generation plan for downstream review.",
             }
         ],
@@ -183,7 +397,7 @@ def build_output_record(args: argparse.Namespace) -> dict[str, Any]:
     return record
 
 
-def append_event(args: argparse.Namespace, manifest: dict[str, Any], record: dict[str, Any]) -> None:
+def build_event(args: argparse.Namespace, manifest: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
     event_slug = args.output_record_id.removeprefix("out_")
     event = {
         "event_id": f"evt_{event_slug}_{compact_timestamp(record['created_at'])}",
@@ -196,10 +410,124 @@ def append_event(args: argparse.Namespace, manifest: dict[str, Any], record: dic
         "output_record_path": str(output_record_path(args, manifest)),
         "created_at": record["created_at"],
     }
-    path = events_path(args, manifest)
+    return event
+
+
+def updated_manifest(
+    args: argparse.Namespace,
+    manifest: dict[str, Any],
+    record: dict[str, Any],
+    destination: Path,
+) -> dict[str, Any]:
+    updated = copy.deepcopy(manifest)
+    updated["updated_at"] = record["created_at"]
+    updated["current_stage"] = "critique"
+    if any(asset.get("asset_id") == args.artifact_id for asset in updated["assets"]):
+        raise AdapterGuardError(f"artifact id already exists in project manifest: {args.artifact_id}")
+    updated["assets"].append(
+        {
+            "asset_id": args.artifact_id,
+            "asset_type": "generated",
+            "stage": "output_record",
+            "path": record["output_artifact"]["uri_or_path"],
+            "metadata_path": str(destination),
+            "status": "imported",
+            "created_at": record["created_at"],
+        }
+    )
+
+    resume = updated.setdefault(
+        "resume_state",
+        {
+            "current_checkpoint": "output_record",
+            "next_phase": "Output Critic Review",
+            "media_index": [],
+        },
+    )
+    resume["current_checkpoint"] = "output_record"
+    resume["next_phase"] = "Output Critic Review"
+    resume_medium = {"image": "image", "sound": "audio", "text": "text"}[args.target_media_type]
+    media_entry = next(
+        (entry for entry in resume["media_index"] if entry.get("medium") == resume_medium),
+        None,
+    )
+    if media_entry is None:
+        resume["media_index"].append(
+            {
+                "medium": resume_medium,
+                "medium_plan_ref": args.medium_plan_id,
+                "status": "active",
+                "artist_meaning_id": args.artist_meaning_id,
+                "transformation_brief_id": args.transformation_brief_id,
+                "beat_plan_id": args.beat_plan_id,
+            }
+        )
+    else:
+        media_entry["medium_plan_ref"] = args.medium_plan_id
+        media_entry["status"] = "active"
+
+    try:
+        validate(updated, PROJECT_SCHEMA, PROJECT_SCHEMA)
+    except ValidationError as exc:
+        raise AdapterGuardError(f"updated project.json does not validate: {exc}") from exc
+    return updated
+
+
+def stage_payload(path: Path, payload: bytes) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps(event, sort_keys=True) + "\n")
+    descriptor, staged_name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    staged = Path(staged_name)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+    except Exception:
+        staged.unlink(missing_ok=True)
+        raise
+    return staged
+
+
+def persist_transaction(payloads: list[tuple[Path, bytes]]) -> None:
+    originals: dict[Path, bytes | None] = {}
+    staged: dict[Path, Path] = {}
+    replaced: list[Path] = []
+    try:
+        for path, payload in payloads:
+            if path.exists() and not path.is_file():
+                raise AdapterGuardError(f"transaction target is not a file: {path}")
+            originals[path] = path.read_bytes() if path.exists() else None
+            staged[path] = stage_payload(path, payload)
+        for path, _payload in payloads:
+            os.replace(staged[path], path)
+            replaced.append(path)
+    except Exception:
+        for path in reversed(replaced):
+            original = originals[path]
+            if original is None:
+                path.unlink(missing_ok=True)
+            else:
+                restore = stage_payload(path, original)
+                os.replace(restore, path)
+        for staged_path in staged.values():
+            staged_path.unlink(missing_ok=True)
+        raise
+
+
+def refresh_sqlite(args: argparse.Namespace) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [
+            sys.executable,
+            str(DB_CLI),
+            "sync",
+            "--project",
+            args.project_id,
+            "--library-root",
+            str(library_root(args)),
+        ],
+        capture_output=True,
+        text=True,
+    )
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -248,27 +576,64 @@ def main(argv: list[str] | None = None) -> int:
     if not artifact_path.is_file():
         print(f"artifact file does not exist: {artifact_path}", file=sys.stderr)
         return 1
-    if not project_dir(args).is_dir():
-        print(f"project does not exist in Workspace Library: {project_dir(args)}", file=sys.stderr)
-        return 1
-
     try:
+        target_project_dir = project_dir(args)
+        if not target_project_dir.is_dir():
+            raise AdapterGuardError(f"project does not exist in Workspace Library: {target_project_dir}")
         manifest = read_project_manifest(args)
         record = build_output_record(args)
         validate(record, OUTPUT_SCHEMA, OUTPUT_SCHEMA)
         assert_import_output_record(record)
+        validate_upstream_lineage(args, manifest, record)
+        destination = output_record_path(args, manifest)
+        event_path = events_path(args, manifest)
+        manifest_path = project_manifest_path(args)
     except (AdapterGuardError, ValidationError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
-    destination = output_record_path(args, manifest)
     if destination.exists():
         print(f"output record already exists: {destination}", file=sys.stderr)
         return 1
 
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    append_event(args, manifest, record)
+    if event_path.exists() and not event_path.is_file():
+        print(f"events path is not a file: {event_path}", file=sys.stderr)
+        return 1
+    if len({destination, event_path, manifest_path}) != 3:
+        print("output record, events, and project manifest paths must be distinct", file=sys.stderr)
+        return 1
+
+    try:
+        manifest_after = updated_manifest(args, manifest, record, destination)
+        event = build_event(args, manifest, record)
+        prior_events = event_path.read_bytes() if event_path.exists() else b""
+        if prior_events and not prior_events.endswith(b"\n"):
+            prior_events += b"\n"
+        event_payload = prior_events + (json.dumps(event, sort_keys=True) + "\n").encode("utf-8")
+        persist_transaction(
+            [
+                (destination, (json.dumps(record, indent=2, sort_keys=True) + "\n").encode("utf-8")),
+                (event_path, event_payload),
+                (
+                    manifest_path,
+                    (json.dumps(manifest_after, indent=2, sort_keys=True) + "\n").encode("utf-8"),
+                ),
+            ]
+        )
+    except (AdapterGuardError, OSError) as exc:
+        print(f"output import transaction failed: {exc}", file=sys.stderr)
+        return 1
+
+    sync_result = refresh_sqlite(args)
+    if sync_result.returncode != 0:
+        print(
+            "output import persisted, but SQLite refresh failed; "
+            f"rerun `bin/artist-os-db sync --project {args.project_id} --library-root {library_root(args)}`",
+            file=sys.stderr,
+        )
+        if sync_result.stderr:
+            print(sync_result.stderr.strip(), file=sys.stderr)
+        return 2
     print(f"imported output record {args.output_record_id} -> {destination}")
     return 0
 

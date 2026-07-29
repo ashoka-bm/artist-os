@@ -34,6 +34,54 @@ def routing_recommended_skip_overlap(record: dict) -> set[str]:
 
 
 class SchemaValidationTests(unittest.TestCase):
+    def test_one_of_requires_exactly_one_match(self) -> None:
+        schema = {
+            "oneOf": [
+                {"type": "string"},
+                {"type": "string", "minLength": 1},
+            ],
+        }
+        with self.assertRaisesRegex(ValidationError, "matched 2 oneOf branches"):
+            validate("ambiguous", schema, schema)
+
+    def test_date_time_format_rejects_invalid_or_naive_values(self) -> None:
+        schema = {"type": "string", "format": "date-time"}
+        for value in ["not-a-date", "2026-07-29T12:00:00"]:
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(ValidationError, "valid RFC 3339 date-time"):
+                    validate(value, schema, schema)
+
+    def test_object_property_count_is_enforced(self) -> None:
+        schema = {
+            "type": "object",
+            "minProperties": 2,
+            "maxProperties": 2,
+        }
+        with self.assertRaisesRegex(ValidationError, "fewer than 2 properties"):
+            validate({"left": 1}, schema, schema)
+        with self.assertRaisesRegex(ValidationError, "more than 2 properties"):
+            validate({"left": 1, "right": 2, "extra": 3}, schema, schema)
+
+    def test_schema_valued_additional_properties_are_validated(self) -> None:
+        schema = {
+            "type": "object",
+            "properties": {"known": {"type": "string"}},
+            "additionalProperties": {"type": "integer"},
+        }
+        validate({"known": "yes", "dynamic": 1}, schema, schema)
+        with self.assertRaisesRegex(ValidationError, r"\$\.dynamic: expected integer"):
+            validate({"known": "yes", "dynamic": "no"}, schema, schema)
+
+    def test_unsupported_schema_keyword_fails_closed(self) -> None:
+        schema = {
+            "oneOf": [
+                {"type": "string"},
+                {"type": "integer", "futureKeyword": True},
+            ],
+        }
+        with self.assertRaisesRegex(ValidationError, "unsupported schema keyword"):
+            validate("value", schema, schema)
+
     def test_examples_and_fixtures_validate(self) -> None:
         targets = iter_validation_targets(include_fixtures=True)
         self.assertGreaterEqual(len(targets), 16)

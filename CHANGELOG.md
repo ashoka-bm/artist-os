@@ -50,6 +50,9 @@ A changelog entry records the user-facing change, not the branch or commit narra
 - `learnings-report` now prints each learning's actual rule text, scope, and
   evidence count; the learning-surfacing verbs self-heal (re-index from files
   before reading) and work on a fresh clone with no database.
+- Manual image, sound, and text output import now validates the full Project
+  Manifest and upstream lineage, confines durable paths to the active project,
+  updates resume state, and refreshes SQLite.
 
 - Reference Inventory (`schemas/reference-inventory.schema.json`): a project-level
   continuity record for promoted character, location, and object references — it
@@ -99,6 +102,13 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ### Fixed
 
+- The local schema validator now enforces every JSON Schema keyword used by the
+  repository (`oneOf`, date-time `format`, property counts, and schema-valued
+  `additionalProperties`) and fails closed when a future unsupported keyword
+  appears. `bin/validate-examples` also fails when it discovers zero targets.
+- Output import stages the Output Record, event, and Project Manifest as a
+  recoverable transaction, preventing a failed event write from leaving partial
+  durable state.
 - `bin/artist-os-db sync` is fault-isolated: one corrupt or wrong-shape
   `project.json` or event line no longer aborts indexing for sibling
   projects, present-but-broken manifests are not swept to `missing`, and a

@@ -10,11 +10,45 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parent
+SUPPORTED_SCHEMA_KEYWORDS = {
+    "$defs",
+    "$id",
+    "$ref",
+    "$schema",
+    "additionalProperties",
+    "allOf",
+    "const",
+    "contains",
+    "description",
+    "enum",
+    "format",
+    "if",
+    "items",
+    "maxContains",
+    "maxItems",
+    "maxLength",
+    "maxProperties",
+    "maximum",
+    "minContains",
+    "minItems",
+    "minLength",
+    "minProperties",
+    "minimum",
+    "not",
+    "oneOf",
+    "pattern",
+    "properties",
+    "required",
+    "then",
+    "title",
+    "type",
+}
 
 
 @dataclass
@@ -58,11 +92,55 @@ def type_matches(value: Any, expected: str | list[str]) -> bool:
     return checks[expected](value)
 
 
+def validate_format(value: str, format_name: str, path: str) -> None:
+    if format_name != "date-time":
+        raise ValidationError(path, f"unsupported format {format_name!r}")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValidationError(path, "expected a valid RFC 3339 date-time") from exc
+    if parsed.tzinfo is None:
+        raise ValidationError(path, "expected a valid RFC 3339 date-time with timezone")
+
+
+def assert_supported_schema_tree(schema: dict[str, Any], path: str = "$schema") -> None:
+    unsupported = sorted(set(schema) - SUPPORTED_SCHEMA_KEYWORDS)
+    if unsupported:
+        raise ValidationError(path, f"unsupported schema keyword(s) {unsupported!r}")
+
+    for container in ("$defs", "properties"):
+        for name, subschema in schema.get(container, {}).items():
+            assert_supported_schema_tree(subschema, f"{path}.{container}.{name}")
+    for keyword in ("items", "contains", "not", "if", "then", "additionalProperties"):
+        subschema = schema.get(keyword)
+        if isinstance(subschema, dict):
+            assert_supported_schema_tree(subschema, f"{path}.{keyword}")
+    for keyword in ("allOf", "oneOf"):
+        for index, subschema in enumerate(schema.get(keyword, [])):
+            assert_supported_schema_tree(subschema, f"{path}.{keyword}[{index}]")
+
+
 def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str = "$") -> None:
+    if path == "$":
+        assert_supported_schema_tree(root)
     schema = resolve_schema(schema, root)
+    unsupported = sorted(set(schema) - SUPPORTED_SCHEMA_KEYWORDS)
+    if unsupported:
+        raise ValidationError(path, f"unsupported schema keyword(s) {unsupported!r}")
 
     for subschema in schema.get("allOf", []):
         validate(value, subschema, root, path)
+
+    if "oneOf" in schema:
+        match_count = 0
+        for subschema in schema["oneOf"]:
+            try:
+                validate(value, subschema, root, path)
+            except ValidationError:
+                continue
+            match_count += 1
+        if match_count != 1:
+            raise ValidationError(path, f"matched {match_count} oneOf branches; expected exactly one")
 
     if "if" in schema:
         try:
@@ -97,6 +175,8 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
             raise ValidationError(path, f"longer than maxLength {schema['maxLength']}")
         if "pattern" in schema and not re.match(schema["pattern"], value):
             raise ValidationError(path, f"{value!r} does not match {schema['pattern']!r}")
+        if "format" in schema:
+            validate_format(value, schema["format"], path)
 
     if isinstance(value, (int, float)) and not isinstance(value, bool):
         if "minimum" in schema and value < schema["minimum"]:
@@ -128,13 +208,21 @@ def validate(value: Any, schema: dict[str, Any], root: dict[str, Any], path: str
 
     if isinstance(value, dict):
         properties = schema.get("properties", {})
+        if "minProperties" in schema and len(value) < schema["minProperties"]:
+            raise ValidationError(path, f"has fewer than {schema['minProperties']} properties")
+        if "maxProperties" in schema and len(value) > schema["maxProperties"]:
+            raise ValidationError(path, f"has more than {schema['maxProperties']} properties")
         for key in schema.get("required", []):
             if key not in value:
                 raise ValidationError(path, f"missing required field {key!r}")
-        if schema.get("additionalProperties") is False:
-            extras = sorted(set(value) - set(properties))
+        extras = sorted(set(value) - set(properties))
+        additional_properties = schema.get("additionalProperties", True)
+        if additional_properties is False:
             if extras:
                 raise ValidationError(path, f"unexpected fields {extras!r}")
+        elif isinstance(additional_properties, dict):
+            for key in extras:
+                validate(value[key], additional_properties, root, f"{path}.{key}")
         for key, item in value.items():
             if key in properties:
                 validate(item, properties[key], root, f"{path}.{key}")

@@ -191,39 +191,38 @@ the release.
   medium, accepted Output Records, Package Format selection, Completeness gate,
   and Asset Package creation.
 
-This section is complete as implementation. It changed the conductor, so the
-stale-eval item under **Clear release regressions** is now owed against this
-conductor: `test_real_conductor_matches_blessed_lock` stays red until the real
-conductor-behavior eval runs and a passing digest is blessed. The rehearsal
-evidence lives in `tests/fixtures/cross-medium/article-with-photos-rehearsal/`;
-promoting it into a release-evidence manifest is still section 7 work.
+This section is complete as implementation. The changed conductor passed its
+real behavior evaluation and the current digest was blessed on 2026-07-28.
+The rehearsal evidence lives in
+`tests/fixtures/cross-medium/article-with-photos-rehearsal/`; promoting it into
+the shared release-evidence manifest is still section 7 work.
 
 ### 3. Integrate database reliability hardening
 
-- [ ] Rebase or selectively integrate `self-improvement-db-hardening` onto the
+- [x] Rebase or selectively integrate `self-improvement-db-hardening` onto the
   release branch without the automatic conductor loop from
   `conductor-learning-loop`.
-- [ ] Preserve per-project fault isolation, scoped sync, event integrity,
+- [x] Preserve per-project fault isolation, scoped sync, event integrity,
   read-path self-healing, and a read-only status surface.
-- [ ] Keep feedback and learning capture/review explicitly invoked; do not add
+- [x] Keep feedback and learning capture/review explicitly invoked; do not add
   session-start application, automatic triage, or automatic Close-Out behavior.
-- [ ] Re-run the database suite against corrupt siblings, missing event logs,
+- [x] Re-run the database suite against corrupt siblings, missing event logs,
   stale indexes, fresh databases, and scoped writes.
 
 ### 4. Clear release regressions
 
-- [ ] Resolve the stale conductor eval lock by running the real conductor
+- [x] Resolve the stale conductor eval lock by running the real conductor
   behavior eval and blessing only a passing, current digest.
-- [ ] Make the local schema validator implement every JSON Schema keyword used
+- [x] Make the local schema validator implement every JSON Schema keyword used
   by repository schemas—or fail closed on unsupported keywords—including
   `oneOf`, `format`, `minProperties`, `maxProperties`, and schema-valued
   `additionalProperties`. Add negative probes and make zero validation targets
   a failure.
-- [ ] Harden manual output import: confine all resolved paths to the Workspace
+- [x] Harden manual output import: confine all resolved paths to the Workspace
   Library, validate the complete manifest and upstream lineage, make
   record/event persistence atomic or recoverable, update manifest/resume state,
   refresh SQLite, and test traversal and event-write failure.
-- [ ] Confirm all schemas and fixtures validate after validator hardening.
+- [x] Confirm all schemas and fixtures validate after validator hardening.
 - [ ] Confirm the full unit suite, Python compilation, shell syntax checks,
   JSON parsing, skill lint, path doctor, storage smoke, and
   distribution-manifest checks pass from a clean checkout.
