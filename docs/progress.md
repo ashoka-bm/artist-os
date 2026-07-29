@@ -4,16 +4,15 @@ This document records what has been created, what is transitional, and what come
 
 ## Current Goal
 
-Artist OS is in 1.0 closure. The artist-approved product boundary, exclusions,
-change-control rule, blocking backlog, and release gate are authoritative in
-`docs/release-1.0.md`.
+Artist OS 1.0 is release-certified as `v1.0.0`. The artist-approved product
+boundary, exclusions, change-control rule, blocking backlog, and release gate
+are authoritative in `docs/release-1.0.md`.
 
-The constrained Cross-Medium Plan lifecycle and database reliability hardening
-are complete on the release feature branch. The conductor evaluation is current,
-the local schema validator fails closed on unsupported keywords, and manual
-output import now protects project paths and durable state. The current priority
-is release certification and distribution correctness. Provider adapters,
-automatic visible-file edit detection, and new package routers are post-1.0.
+The Cross-Medium Plan lifecycle, database reliability hardening, strict local
+validation, recoverable output import, materialized Codex bundle, installed
+runtime smoke matrix, six-journey evidence manifest, and public release
+documentation are complete on `main`. Provider adapters, automatic visible-file
+edit detection, and new package routers remain post-1.0.
 
 ### Next implementation slice
 
@@ -25,11 +24,9 @@ and negative fixture coverage; the conductor's lazy review/approval interstitial
 with sequential supporting-medium entry; and a tracked primary-to-supporting
 rehearsal through Asset Package creation.
 
-The next slice is **release certification**: finish the installed-bundle smoke
-matrix, promote all six end-to-end rehearsals into the tracked release-evidence
-manifest, reconcile public release documentation, and verify the clean-checkout
-release gate. Do not mix provider work or automatic learning behavior into this
-slice.
+No post-1.0 implementation slice is selected. The recommended next decision is
+whether to publish the tag and bundle remotely, then collect installation and
+real-project feedback before choosing provider or automation work.
 
 ```text
 Step Input Record
@@ -628,11 +625,9 @@ Implemented the schema pass for the accepted activation model:
 
 ## Current Best Next Step
 
-Complete the remaining blocking backlog in `docs/release-1.0.md` in order. The
-thin Cross-Medium Plan contract, database reliability work, conductor
-evaluation, validator hardening, and manual output-import hardening are now
-complete on the release feature branch. The immediate pass is installed-bundle
-verification and tracked rehearsal evidence.
+Keep the certified 1.0 boundary stable while the distribution is shared and
+tested with real projects. The implementation, installed runtime matrix,
+tracked rehearsal evidence, and public documentation are complete on `main`.
 
 Reason:
 
@@ -661,16 +656,17 @@ Reason:
   lineage, confines durable writes to the active project, recovers interrupted
   record/event/manifest transactions, updates resume state, and refreshes
   SQLite;
-- the current unit baseline runs 520 tests successfully.
+- the current unit baseline is 530 passing tests, including release-bundle and
+  six-journey evidence coverage.
 
 Near-term plan:
 
-1. Build and verify the materialized Codex bundle.
-2. Smoke-test install, update, Workspace Library setup, resume, import, and
-   uninstall in disposable roots.
-3. Promote all six release rehearsals into the tracked evidence manifest.
-4. Finish public-release documentation and run the clean-checkout release gate.
-5. Publish `1.0.0` only after the authoritative checklist is complete.
+1. Push `main` and `v1.0.0`, and attach the archive to a remote release, only
+   when remote publication is explicitly authorized.
+2. Collect clean-install and real-project feedback without changing the frozen
+   1.0 contract.
+3. Choose the next slice from evidence rather than silently starting provider
+   or automatic-learning work.
 
 Final verification for this pass:
 
@@ -679,6 +675,8 @@ Final verification for this pass:
 - `python3 -m py_compile $(rg --files -g '*.py')`
 - `jq empty schemas/*.json examples/*.json tests/fixtures/*/*.json tests/invalid/*.json`
 - `bash -n bin/install-codex-dev-skills bin/uninstall-codex-dev-skills`
+- `bash -n bin/install-codex-skills bin/uninstall-codex-skills`
+- `bin/artist-os-build-bundle --require-clean`
 - manual evals in `evals/` after changing skill `description:` frontmatter or `skills/artist-os/SKILL.md`
 - stale field scan for deferred promotion and batch fields
 

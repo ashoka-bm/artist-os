@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+bundle_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+version="$(cat "$bundle_root/VERSION")"
+mode="copy"
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --mode)
+      mode="${2:-}"
+      shift 2
+      ;;
+    -h|--help)
+      echo "usage: install-codex-skills [--mode copy|symlink]"
+      exit 0
+      ;;
+    *)
+      echo "unknown argument: $1" >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ "$mode" != "copy" && "$mode" != "symlink" ]]; then
+  echo "--mode must be copy or symlink" >&2
+  exit 2
+fi
+
+codex_global_root="$("$bundle_root/bin/artist-os-paths" get codex globalRoot)"
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/$codex_global_root}"
+target="$skills_dir/artist-os"
+setup_args=(setup)
+if [[ -n "${WONDERMINT_ROOT:-}" ]]; then
+  library_root="${ARTIST_OS_LIBRARY_ROOT:-$WONDERMINT_ROOT/.wondermint/artist-os}"
+  setup_args+=(--wondermint-root "$WONDERMINT_ROOT")
+elif [[ -n "${ARTIST_OS_LIBRARY_ROOT:-}" ]]; then
+  library_root="$ARTIST_OS_LIBRARY_ROOT"
+  setup_args+=(--library-root "$ARTIST_OS_LIBRARY_ROOT")
+else
+  echo "set WONDERMINT_ROOT to the folder that should contain Wondermint/ and .wondermint/" >&2
+  echo "or set ARTIST_OS_LIBRARY_ROOT for a low-level Workspace Library override" >&2
+  exit 2
+fi
+
+validate_installed_target() {
+  local candidate="$1"
+  if [[ ! -f "$candidate/SKILL.md" ]]; then
+    echo "refusing to replace non-Artist-OS target: $candidate" >&2
+    exit 1
+  fi
+  local name
+  name="$(awk -F': ' '/^name: / {print $2; exit}' "$candidate/SKILL.md" | tr -d '"')"
+  if [[ "$name" != "artist-os" ]]; then
+    echo "refusing to replace skill named '$name' at $candidate" >&2
+    exit 1
+  fi
+}
+
+mkdir -p "$skills_dir"
+backup=""
+old_link=""
+stage=""
+rollback_required=false
+
+rollback() {
+  if [[ -L "$target" ]]; then
+    rm "$target"
+  elif [[ -d "$target" ]]; then
+    rm -rf "$target"
+  fi
+  if [[ -n "$backup" && -d "$backup" ]]; then
+    mv "$backup" "$target"
+  elif [[ -n "$old_link" ]]; then
+    ln -s "$old_link" "$target"
+  fi
+}
+
+cleanup() {
+  local status="$?"
+  trap - EXIT INT TERM
+  if [[ "$status" -ne 0 && "$rollback_required" == true ]]; then
+    rollback
+    echo "install failed; prior Artist OS installation restored" >&2
+  fi
+  if [[ -n "$stage" && -d "$stage" ]]; then
+    rm -rf "$stage"
+  fi
+  exit "$status"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+if [[ -L "$target" ]]; then
+  validate_installed_target "$target"
+  old_link="$(readlink "$target")"
+  rm "$target"
+  rollback_required=true
+elif [[ -e "$target" ]]; then
+  validate_installed_target "$target"
+  backup="$skills_dir/.artist-os.backup.$$"
+  if [[ -e "$backup" ]]; then
+    echo "refusing to overwrite temporary backup: $backup" >&2
+    exit 1
+  fi
+  mv "$target" "$backup"
+  rollback_required=true
+else
+  rollback_required=true
+fi
+
+if [[ "$mode" == "symlink" ]]; then
+  ln -s "$bundle_root" "$target"
+else
+  stage="$(mktemp -d "$skills_dir/.artist-os.install.XXXXXX")"
+  cp -R "$bundle_root/." "$stage/"
+  mv "$stage" "$target"
+  stage=""
+fi
+
+if ! ARTIST_OS_ROOT="$target" "$target/bin/artist-os-paths" doctor >/dev/null; then
+  echo "installed-target verification failed" >&2
+  exit 1
+fi
+
+"$target/bin/artist-os-db" "${setup_args[@]}"
+
+if [[ -n "$backup" && -d "$backup" ]]; then
+  rm -rf "$backup"
+fi
+rollback_required=false
+
+cat <<EOF
+Artist OS v$version installed in $mode mode:
+  $target
+
+Workspace Library:
+  $library_root
+
+Installed-target verification passed.
+EOF

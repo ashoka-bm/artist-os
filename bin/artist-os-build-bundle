@@ -1,0 +1,365 @@
+#!/usr/bin/env python3
+"""Build and verify the self-contained Artist OS Codex release bundle."""
+
+from __future__ import annotations
+
+import argparse
+import fnmatch
+import gzip
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tarfile
+import tempfile
+from datetime import UTC
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = REPO_ROOT / "packaging" / "MANIFEST.json"
+HOSTS_PATH = REPO_ROOT / "packaging" / "hosts.json"
+SENSITIVE_PATH_PATTERNS = (
+    ".env*",
+    "*.key",
+    "*.pem",
+    "*credentials*",
+    "*secret*",
+    "id_ed25519",
+    "id_rsa",
+)
+SENSITIVE_CONTENT_MARKERS = (
+    b"-----BEGIN OPENSSH PRIVATE KEY-----",
+    b"-----BEGIN PRIVATE KEY-----",
+    b"-----BEGIN RSA PRIVATE KEY-----",
+)
+
+
+class BundleError(RuntimeError):
+    pass
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BundleError(f"cannot read {path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise BundleError(f"{path} must contain a JSON object")
+    return value
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def git_output(*args: str) -> str:
+    try:
+        return subprocess.run(
+            ["git", *args],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise BundleError(f"git {' '.join(args)} failed") from exc
+
+
+def is_excluded(relative: Path, patterns: list[str]) -> bool:
+    value = relative.as_posix()
+    for pattern in patterns:
+        normalized = pattern.rstrip("/")
+        if pattern.endswith("/"):
+            if (
+                value == normalized
+                or value.startswith(f"{normalized}/")
+                or f"/{normalized}/" in f"/{value}/"
+            ):
+                return True
+        if fnmatch.fnmatch(value, pattern) or fnmatch.fnmatch(relative.name, pattern):
+            return True
+    return False
+
+
+def git_tracked_files() -> list[Path]:
+    try:
+        result = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=REPO_ROOT,
+            check=True,
+            capture_output=True,
+        )
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise BundleError("git ls-files failed") from exc
+    return [Path(os.fsdecode(value)) for value in result.stdout.split(b"\0") if value]
+
+
+def select_manifest_files(includes: list[str], excludes: list[str]) -> list[Path]:
+    selected: list[Path] = []
+    matched = {include: False for include in includes}
+    for relative in git_tracked_files():
+        value = relative.as_posix()
+        for include in includes:
+            normalized = include.rstrip("/")
+            include_matches = (
+                value.startswith(f"{normalized}/")
+                if include.endswith("/")
+                else value == normalized
+            )
+            if include_matches:
+                matched[include] = True
+                if not is_excluded(relative, excludes):
+                    selected.append(relative)
+                break
+    missing = [include for include, found in matched.items() if not found]
+    if missing:
+        raise BundleError(
+            "manifest include has no Git-tracked files: " + ", ".join(missing)
+        )
+    return sorted(selected)
+
+
+def copy_tracked_file(destination_root: Path, relative: Path) -> None:
+    source = REPO_ROOT / relative
+    if source.is_symlink() or not source.is_file():
+        raise BundleError(f"tracked bundle entry must be a regular file: {relative}")
+    destination = destination_root / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+
+
+def assert_safe_output_root(output_root: Path) -> Path:
+    resolved = output_root.expanduser().resolve()
+    if resolved == Path(resolved.anchor):
+        raise BundleError("refusing to use a filesystem root as the bundle output directory")
+    resolved.mkdir(parents=True, exist_ok=True)
+    return resolved
+
+
+def write_archive(bundle: Path, archive: Path, *, root_name: str | None = None) -> None:
+    root_name = root_name or bundle.name
+    archive.unlink(missing_ok=True)
+    with archive.open("wb") as raw:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as compressed:
+            with tarfile.open(fileobj=compressed, mode="w", format=tarfile.PAX_FORMAT) as handle:
+                for path in [bundle, *sorted(bundle.rglob("*"))]:
+                    relative = path.relative_to(bundle)
+                    arcname = Path(root_name) / relative
+                    info = handle.gettarinfo(str(path), arcname=str(arcname))
+                    info.uid = 0
+                    info.gid = 0
+                    info.uname = "root"
+                    info.gname = "root"
+                    info.mtime = 0
+                    info.pax_headers = {}
+                    if path.is_file():
+                        with path.open("rb") as source:
+                            handle.addfile(info, source)
+                    else:
+                        handle.addfile(info)
+
+
+def publish_outputs(replacements: list[tuple[Path, Path]], output_root: Path) -> None:
+    backup_root = Path(tempfile.mkdtemp(prefix=".artist-os.backup.", dir=output_root))
+    published: list[Path] = []
+    backed_up: list[tuple[Path, Path]] = []
+    try:
+        for _staged, final in replacements:
+            if final.exists():
+                backup = backup_root / final.name
+                os.replace(final, backup)
+                backed_up.append((backup, final))
+        for staged, final in replacements:
+            os.replace(staged, final)
+            published.append(final)
+    except Exception:
+        for final in reversed(published):
+            if final.is_dir():
+                shutil.rmtree(final, ignore_errors=True)
+            else:
+                final.unlink(missing_ok=True)
+        for backup, final in reversed(backed_up):
+            if backup.exists():
+                os.replace(backup, final)
+        raise
+    finally:
+        shutil.rmtree(backup_root, ignore_errors=True)
+
+
+def verify_bundle(
+    bundle: Path,
+    *,
+    expected_version: str | None = None,
+    expected_commit: str | None = None,
+) -> dict[str, Any]:
+    bundle = bundle.expanduser().resolve()
+    metadata = load_json(bundle / "RELEASE-METADATA.json")
+    version = (bundle / "VERSION").read_text(encoding="utf-8").strip()
+    if metadata.get("version") != version:
+        raise BundleError("bundle VERSION and RELEASE-METADATA.json disagree")
+    if expected_version and version != expected_version:
+        raise BundleError(f"bundle version is {version}, expected {expected_version}")
+    if expected_commit and metadata.get("commit_sha") != expected_commit:
+        raise BundleError(
+            f"bundle commit is {metadata.get('commit_sha')}, expected {expected_commit}"
+        )
+    if metadata.get("host") != "codex":
+        raise BundleError("bundle host must be codex")
+    if not (bundle / "SKILL.md").is_file():
+        raise BundleError("bundle root is missing Codex-discoverable SKILL.md")
+
+    manifest_path = bundle / "packaging" / "MANIFEST.json"
+    manifest = load_json(manifest_path)
+    if metadata.get("manifest_sha256") != sha256_file(manifest_path):
+        raise BundleError("bundle manifest digest does not match release metadata")
+    excludes = manifest.get("exclude", [])
+    for entry in bundle.rglob("*"):
+        relative = entry.relative_to(bundle)
+        if entry.is_symlink():
+            raise BundleError(f"bundle must not contain symlinks: {relative}")
+        if is_excluded(relative, excludes):
+            raise BundleError(f"excluded or sensitive path found in bundle: {relative}")
+        if entry.is_file() and any(
+            fnmatch.fnmatch(relative.name.lower(), pattern)
+            for pattern in SENSITIVE_PATH_PATTERNS
+        ):
+            raise BundleError(f"sensitive filename found in bundle: {relative}")
+        if entry.is_file():
+            content = entry.read_bytes()
+            if any(marker in content for marker in SENSITIVE_CONTENT_MARKERS):
+                raise BundleError(f"private-key material found in bundle: {relative}")
+
+    environment = os.environ.copy()
+    environment["ARTIST_OS_ROOT"] = str(bundle)
+    doctor = subprocess.run(
+        [str(bundle / "bin" / "artist-os-paths"), "doctor"],
+        cwd=bundle,
+        env=environment,
+        capture_output=True,
+        text=True,
+    )
+    if doctor.returncode != 0:
+        raise BundleError(f"installed-target doctor failed:\n{doctor.stdout}{doctor.stderr}")
+    return metadata
+
+
+def build_bundle(args: argparse.Namespace) -> tuple[Path, Path]:
+    manifest = load_json(MANIFEST_PATH)
+    registry = load_json(HOSTS_PATH)
+    host = registry.get("hosts", {}).get(args.host)
+    if not isinstance(host, dict) or host.get("status") != "active":
+        raise BundleError(f"host {args.host!r} is not active")
+    if args.host != "codex":
+        raise BundleError("Artist OS 1.0 only supports the codex bundle")
+
+    version = (REPO_ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    commit_sha = git_output("rev-parse", "HEAD")
+    dirty = bool(git_output("status", "--porcelain"))
+    if args.require_clean and dirty:
+        raise BundleError("release bundle requires a clean working tree")
+
+    output_root = assert_safe_output_root(Path(args.output_root))
+    bundle_name = f"artist-os-{version}"
+    target = output_root / bundle_name
+    staging = Path(tempfile.mkdtemp(prefix=f".{bundle_name}.", dir=output_root))
+    archive = output_root / f"{bundle_name}-{args.host}.tar.gz"
+    checksum_path = archive.with_suffix(archive.suffix + ".sha256")
+    staged_archive = output_root / f".{archive.name}.{os.getpid()}.tmp"
+    staged_checksum = output_root / f".{checksum_path.name}.{os.getpid()}.tmp"
+    try:
+        includes = manifest.get("include")
+        excludes = manifest.get("exclude")
+        if (
+            not isinstance(includes, list)
+            or not all(isinstance(value, str) for value in includes)
+            or not isinstance(excludes, list)
+            or not all(isinstance(value, str) for value in excludes)
+        ):
+            raise BundleError("packaging manifest requires include and exclude arrays")
+        for relative in select_manifest_files(includes, excludes):
+            copy_tracked_file(staging, relative)
+
+        shutil.copy2(REPO_ROOT / "skills" / "artist-os" / "SKILL.md", staging / "SKILL.md")
+        metadata = {
+            "artifact": bundle_name,
+            "built_at": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+            "commit_sha": commit_sha,
+            "host": args.host,
+            "manifest_sha256": sha256_file(MANIFEST_PATH),
+            "source_tree_clean": not dirty,
+            "version": version,
+        }
+        (staging / "RELEASE-METADATA.json").write_text(
+            json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+        verify_bundle(staging, expected_version=version, expected_commit=commit_sha)
+        write_archive(staging, staged_archive, root_name=bundle_name)
+        checksum = sha256_file(staged_archive)
+        staged_checksum.write_text(
+            f"{checksum}  {archive.name}\n",
+            encoding="utf-8",
+        )
+        publish_outputs(
+            [
+                (staging, target),
+                (staged_archive, archive),
+                (staged_checksum, checksum_path),
+            ],
+            output_root,
+        )
+    except Exception:
+        shutil.rmtree(staging, ignore_errors=True)
+        staged_archive.unlink(missing_ok=True)
+        staged_checksum.unlink(missing_ok=True)
+        raise
+    return target, archive
+
+
+def parser() -> argparse.ArgumentParser:
+    result = argparse.ArgumentParser(description=__doc__)
+    result.add_argument("--host", default="codex")
+    result.add_argument("--output-root", default=str(REPO_ROOT / "packaging" / "build" / "codex"))
+    result.add_argument("--require-clean", action="store_true")
+    result.add_argument("--verify-bundle")
+    result.add_argument("--expected-version")
+    result.add_argument("--expected-commit")
+    return result
+
+
+def main() -> int:
+    args = parser().parse_args()
+    try:
+        if args.verify_bundle:
+            metadata = verify_bundle(
+                Path(args.verify_bundle),
+                expected_version=args.expected_version,
+                expected_commit=args.expected_commit,
+            )
+            print(
+                f"verified Artist OS {metadata['version']} {metadata['host']} bundle "
+                f"at {Path(args.verify_bundle).resolve()}"
+            )
+            return 0
+        bundle, archive = build_bundle(args)
+    except (BundleError, OSError) as exc:
+        print(f"bundle error: {exc}", file=sys.stderr)
+        return 1
+    print(f"built bundle: {bundle}")
+    print(f"built archive: {archive}")
+    print(f"checksum: {archive.with_suffix(archive.suffix + '.sha256')}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

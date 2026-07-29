@@ -8,8 +8,17 @@ A changelog entry records the user-facing change, not the branch or commit narra
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-29
+
 ### Added
 
+- Self-contained Codex release bundle with copy and symlink installation,
+  installed-target verification, safe updates and uninstall, artifact metadata,
+  and a SHA-256 checksum.
+- Tracked, executable release evidence for the image, Video v0, audio, text,
+  Album v1, and constrained Cross-Medium dry-run journeys.
+- MIT license, security and support policies, privacy/network guidance,
+  supported-environment matrix, and five-minute quickstart.
 - Artist OS 1.0 release contract with an artist-approved scope freeze,
   change-control rule, explicit exclusions, blocking completion backlog, and
   release gate.
@@ -119,6 +128,11 @@ A changelog entry records the user-facing change, not the branch or commit narra
   which is exactly the general “ship anyway” decision the release contract
   forbids; waiver gate ids must now be distinct, and a `filled` slot may not
   carry one at all.
+
+The `0.2.0`, `0.3.0`, and `0.4.0` sections below document internal development
+milestones. They were not certified distribution bundles and do not require
+retroactive immutable tags. `1.0.0` is the first fully certified
+distribution.
 
 ## [0.4.0] - 2026-06-21
 

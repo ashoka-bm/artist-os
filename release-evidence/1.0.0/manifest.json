@@ -1,0 +1,130 @@
+{
+  "release_version": "1.0.0",
+  "recorded_at": "2026-07-29T00:00:00Z",
+  "provider_calls_made": false,
+  "rehearsal_run": "release-evidence/1.0.0/rehearsal-run.json",
+  "artifact_policy": "No Generated Works are committed. Output Records are share-safe metadata fixtures, and package checks use their recorded acceptance state.",
+  "rehearsals": [
+    {
+      "journey": "image",
+      "result": "passed",
+      "summary": "Text Reference through the shared story spine, Image Medium Plan, approved brief, and provider-neutral Prompt Plan.",
+      "records": [
+        {"kind": "source_record", "path": "tests/fixtures/story/source-record.json", "schema": "schemas/source-record.schema.json"},
+        {"kind": "artist_meaning", "path": "tests/fixtures/story/artist-meaning.json", "schema": "schemas/artist-meaning.schema.json"},
+        {"kind": "transformation_brief", "path": "tests/fixtures/story/transformation-brief.json", "schema": "schemas/transformation-brief.schema.json"},
+        {"kind": "beat_plan", "path": "tests/fixtures/text-to-image/single-image-rehearsal/beat-plan.json", "schema": "schemas/beat-plan.schema.json"},
+        {"kind": "image_medium_plan", "path": "tests/fixtures/text-to-image/single-image-rehearsal/image-medium-plan.json", "schema": "schemas/image-medium-plan.schema.json"},
+        {"kind": "creative_brief", "path": "tests/fixtures/text-to-image/creative-brief.json", "schema": "schemas/creative-brief.schema.json"},
+        {"kind": "prompt_plan", "path": "tests/fixtures/text-to-image/prompt-plan.json", "schema": "schemas/prompt-plan.schema.json"},
+        {"kind": "brief_review", "path": "tests/fixtures/reviews/image-art-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "prompt_review", "path": "tests/fixtures/reviews/image-prompt-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "brief_approval", "path": "tests/fixtures/gates/image-brief-approval-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "prompt_lock", "path": "tests/fixtures/gates/image-prompt-lock-gate.json", "schema": "schemas/gate-decision.schema.json"}
+      ],
+      "concrete_output_records": [],
+      "supporting_tests": ["tests/test_pipeline_transitions.py", "tests/test_medium_plan_skill_contract.py"]
+    },
+    {
+      "journey": "video_v0",
+      "result": "passed",
+      "summary": "Text Reference through the shared story spine to a storyboard-ready Video Medium Plan and optional post-storyboard Seedance package.",
+      "records": [
+        {"kind": "source_record", "path": "tests/fixtures/story/source-record.json", "schema": "schemas/source-record.schema.json"},
+        {"kind": "artist_meaning", "path": "tests/fixtures/story/artist-meaning.json", "schema": "schemas/artist-meaning.schema.json"},
+        {"kind": "transformation_brief", "path": "tests/fixtures/story/transformation-brief.json", "schema": "schemas/transformation-brief.schema.json"},
+        {"kind": "beat_plan", "path": "tests/fixtures/video-journey/beat-plan.json", "schema": "schemas/beat-plan.schema.json"},
+        {"kind": "video_medium_plan", "path": "tests/fixtures/video-journey/video-medium-plan.json", "schema": "schemas/video-medium-plan.schema.json"},
+        {"kind": "seedance_prompt_package", "path": "tests/fixtures/video-journey/seedance-prompt-package.json", "schema": "schemas/seedance-prompt-package.schema.json"}
+      ],
+      "concrete_output_records": [],
+      "supporting_tests": ["tests/test_video_medium_plan_finalizer.py", "tests/test_medium_plan_skill_contract.py"]
+    },
+    {
+      "journey": "audio",
+      "result": "passed",
+      "summary": "Text Reference through the shared story spine, Sound Medium Plan, Sound Creative Brief, and Suno-ready Sound Prompt Plan field export.",
+      "records": [
+        {"kind": "source_record", "path": "tests/fixtures/story/source-record.json", "schema": "schemas/source-record.schema.json"},
+        {"kind": "artist_meaning", "path": "tests/fixtures/story/artist-meaning.json", "schema": "schemas/artist-meaning.schema.json"},
+        {"kind": "transformation_brief", "path": "tests/fixtures/story/transformation-brief.json", "schema": "schemas/transformation-brief.schema.json"},
+        {"kind": "beat_plan", "path": "tests/fixtures/story/beat-plan.json", "schema": "schemas/beat-plan.schema.json"},
+        {"kind": "sound_medium_plan", "path": "tests/fixtures/text-to-suno/sound-medium-plan.json", "schema": "schemas/sound-medium-plan.schema.json"},
+        {"kind": "sound_creative_brief", "path": "tests/fixtures/text-to-suno/sound-creative-brief.json", "schema": "schemas/sound-creative-brief.schema.json"},
+        {"kind": "sound_prompt_plan", "path": "tests/fixtures/text-to-suno/sound-prompt-plan.json", "schema": "schemas/sound-prompt-plan.schema.json"},
+        {"kind": "brief_review", "path": "tests/fixtures/reviews/suno-sound-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "prompt_review", "path": "tests/fixtures/reviews/suno-prompt-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "brief_approval", "path": "tests/fixtures/gates/suno-brief-approval-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "prompt_lock", "path": "tests/fixtures/gates/suno-prompt-lock-gate.json", "schema": "schemas/gate-decision.schema.json"}
+      ],
+      "concrete_output_records": [],
+      "supporting_tests": ["tests/test_pipeline_transitions.py", "tests/test_medium_plan_skill_contract.py"]
+    },
+    {
+      "journey": "text",
+      "result": "passed",
+      "summary": "Text Reference through Text Medium Plan and Text Generation Plan to traceable draft, Clear Writing, and Human Voice Output Records.",
+      "records": [
+        {"kind": "source_record", "path": "tests/fixtures/story/source-record.json", "schema": "schemas/source-record.schema.json"},
+        {"kind": "artist_meaning", "path": "tests/fixtures/story/artist-meaning.json", "schema": "schemas/artist-meaning.schema.json"},
+        {"kind": "transformation_brief", "path": "tests/fixtures/story/transformation-brief.json", "schema": "schemas/transformation-brief.schema.json"},
+        {"kind": "beat_plan", "path": "tests/fixtures/story/beat-plan.json", "schema": "schemas/beat-plan.schema.json"},
+        {"kind": "text_medium_plan", "path": "tests/fixtures/text-journey/text-medium-plan.json", "schema": "schemas/text-medium-plan.schema.json"},
+        {"kind": "text_creative_brief", "path": "tests/fixtures/text-journey/text-creative-brief.json", "schema": "schemas/text-creative-brief.schema.json"},
+        {"kind": "text_generation_plan", "path": "tests/fixtures/text-journey/text-generation-plan.json", "schema": "schemas/text-generation-plan.schema.json"},
+        {"kind": "draft_approval", "path": "tests/fixtures/gates/text-draft-generation-approval-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "writing_review", "path": "tests/fixtures/reviews/text-writing-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "draft_output_record", "path": "tests/fixtures/text-journey/output-record-draft.json", "schema": "schemas/output-record.schema.json"},
+        {"kind": "clear_writing_output_record", "path": "tests/fixtures/text-journey/output-record-clear-writing.json", "schema": "schemas/output-record.schema.json"},
+        {"kind": "human_voice_output_record", "path": "tests/fixtures/text-journey/output-record-human-voice.json", "schema": "schemas/output-record.schema.json"}
+      ],
+      "concrete_output_records": [
+        "tests/fixtures/text-journey/output-record-draft.json",
+        "tests/fixtures/text-journey/output-record-clear-writing.json",
+        "tests/fixtures/text-journey/output-record-human-voice.json"
+      ],
+      "supporting_tests": ["tests/test_text_journey_skill_contract.py", "tests/test_pipeline_transitions.py"]
+    },
+    {
+      "journey": "album_v1",
+      "result": "passed",
+      "summary": "Album dry run from the shared source and meaning lineage through the approved Album Beat authority, active Long-Work Stewardship, package planning, pre-calibration review, representative sound/image calibration plans, and Album Calibration.",
+      "records": [
+        {"kind": "source_record", "path": "tests/fixtures/story/source-record.json", "schema": "schemas/source-record.schema.json"},
+        {"kind": "artist_meaning", "path": "tests/fixtures/story/artist-meaning.json", "schema": "schemas/artist-meaning.schema.json"},
+        {"kind": "transformation_brief", "path": "tests/fixtures/story/transformation-brief.json", "schema": "schemas/transformation-brief.schema.json"},
+        {"kind": "long_work_stewardship", "path": "tests/fixtures/long-work/album-stewardship-record.json", "schema": "schemas/long-work-stewardship-record.schema.json"},
+        {"kind": "release_package_plan", "path": "tests/fixtures/release-packages/album-release-package-plan.json", "schema": "schemas/release-package-plan.schema.json"},
+        {"kind": "pre_calibration_review", "path": "tests/fixtures/reviews/album-pre-calibration-mixed-media-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "release_package_plan_approval", "path": "tests/fixtures/gates/album-release-package-plan-approval-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "sound_medium_plan", "path": "tests/fixtures/release-packages/album-calibration/sound-medium-plan.json", "schema": "schemas/sound-medium-plan.schema.json"},
+        {"kind": "image_medium_plan", "path": "tests/fixtures/release-packages/album-calibration/image-medium-plan.json", "schema": "schemas/image-medium-plan.schema.json"},
+        {"kind": "album_calibration", "path": "tests/fixtures/gates/album-calibration-gate.json", "schema": "schemas/gate-decision.schema.json"}
+      ],
+      "concrete_output_records": [],
+      "supporting_tests": ["tests/test_pipeline_transitions.py", "tests/test_schema_validation.py"]
+    },
+    {
+      "journey": "cross_medium",
+      "result": "passed",
+      "summary": "Text-primary article plus sequential supporting images over one Shared Story Spine through accepted Output Records and complete Asset Package.",
+      "records": [
+        {"kind": "cross_medium_plan", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/cross-medium-plan-article.json", "schema": "schemas/cross-medium-plan.schema.json"},
+        {"kind": "mixed_media_review", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/mixed-media-critic-review-record.json", "schema": "schemas/review-record.schema.json"},
+        {"kind": "cross_medium_plan_approval", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/cross-medium-plan-approval-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "text_output_record", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-article-text.json", "schema": "schemas/output-record.schema.json"},
+        {"kind": "image_output_record", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-inline-photo-shoe.json", "schema": "schemas/output-record.schema.json"},
+        {"kind": "image_output_record", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-inline-photo-hose.json", "schema": "schemas/output-record.schema.json"},
+        {"kind": "package_completeness_gate", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/package-format-completeness-gate.json", "schema": "schemas/gate-decision.schema.json"},
+        {"kind": "asset_package", "path": "tests/fixtures/cross-medium/article-with-photos-rehearsal/asset-package-article.json", "schema": "schemas/asset-package.schema.json"}
+      ],
+      "concrete_output_records": [
+        "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-article-text.json",
+        "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-inline-photo-shoe.json",
+        "tests/fixtures/cross-medium/article-with-photos-rehearsal/output-record-inline-photo-hose.json"
+      ],
+      "asset_package": "tests/fixtures/cross-medium/article-with-photos-rehearsal/asset-package-article.json",
+      "supporting_tests": ["tests/test_pipeline_transitions.py", "tests/test_schema_validation.py"]
+    }
+  ]
+}

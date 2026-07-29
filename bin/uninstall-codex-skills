@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+bundle_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+codex_global_root="$("$bundle_root/bin/artist-os-paths" get codex globalRoot)"
+skills_dir="${CODEX_SKILLS_DIR:-$HOME/$codex_global_root}"
+target="$skills_dir/artist-os"
+
+if [[ -L "$target" ]]; then
+  if [[ ! -f "$target/SKILL.md" ]]; then
+    echo "refusing to remove dangling or unrecognized skill link: $target" >&2
+    exit 1
+  fi
+  name="$(awk -F': ' '/^name: / {print $2; exit}' "$target/SKILL.md" | tr -d '"')"
+  if [[ "$name" != "artist-os" ]]; then
+    echo "refusing to remove skill link named '$name': $target" >&2
+    exit 1
+  fi
+  rm "$target"
+  echo "removed Artist OS skill link: $target"
+elif [[ -d "$target" ]]; then
+  if [[ ! -f "$target/SKILL.md" ]]; then
+    echo "refusing to remove non-skill directory: $target" >&2
+    exit 1
+  fi
+  name="$(awk -F': ' '/^name: / {print $2; exit}' "$target/SKILL.md" | tr -d '"')"
+  if [[ "$name" != "artist-os" || ! -f "$target/RELEASE-METADATA.json" ]]; then
+    echo "refusing to remove unrecognized skill directory: $target" >&2
+    exit 1
+  fi
+  rm -rf "$target"
+  echo "removed copied Artist OS bundle: $target"
+elif [[ -e "$target" ]]; then
+  echo "refusing to remove non-skill file: $target" >&2
+  exit 1
+else
+  echo "no Artist OS installation found at $target"
+fi
+
+cat <<'EOF'
+The Workspace Library and artist-os.sqlite index were preserved.
+EOF

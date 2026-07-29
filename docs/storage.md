@@ -430,16 +430,19 @@ followed by one conductor-eval re-bless.
 
 ## Package Setup
 
-Installing the local Codex dev skills also initializes the Workspace Library:
+Installing the certified Codex bundle initializes the Workspace Library:
 
 ```bash
-bin/install-codex-dev-skills
+WONDERMINT_ROOT=/path/to/root bin/install-codex-skills --mode copy
 ```
 
-The installer runs:
+The release installer runs the installed copy of:
 
 ```bash
 bin/artist-os-db setup
 ```
 
-Use `WONDERMINT_ROOT=/path/to/root` to choose the user-facing Wondermint Root for installed use. Use `ARTIST_OS_LIBRARY_ROOT=/path/to/library` only when you need to point tooling directly at a Workspace Library.
+Checkout development may still use `bin/install-codex-dev-skills`. Use
+`WONDERMINT_ROOT=/path/to/root` to choose the user-facing Wondermint Root. Use
+`ARTIST_OS_LIBRARY_ROOT=/path/to/library` only when intentionally pointing
+tooling directly at a Workspace Library.

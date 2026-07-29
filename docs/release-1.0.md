@@ -193,9 +193,11 @@ the release.
 
 This section is complete as implementation. The changed conductor passed its
 real behavior evaluation and the current digest was blessed on 2026-07-28.
-The rehearsal evidence lives in
-`tests/fixtures/cross-medium/article-with-photos-rehearsal/`; promoting it into
-the shared release-evidence manifest is still section 7 work.
+The Cross-Medium fixture lives in
+`tests/fixtures/cross-medium/article-with-photos-rehearsal/` and is indexed by
+`release-evidence/1.0.0/manifest.json`. The adjacent
+`rehearsal-run.json` records the executed six-route verification command,
+environment, result, and record-set digest.
 
 ### 3. Integrate database reliability hardening
 
@@ -226,52 +228,52 @@ the shared release-evidence manifest is still section 7 work.
 - [x] Confirm the full unit suite, Python compilation, shell syntax checks,
   JSON parsing, skill lint, path doctor, storage smoke, and
   distribution-manifest checks pass from a clean checkout.
-- [ ] Smoke-test install, update, Workspace Library setup, resume discovery,
+- [x] Smoke-test install, update, Workspace Library setup, resume discovery,
   output import, and uninstall in disposable directories.
 
 ### 5. Distribution correctness
 
-- [ ] Build a materialized Codex bundle containing every `MANIFEST.json`
+- [x] Build a materialized Codex bundle containing every `MANIFEST.json`
   include and none of its exclusions.
-- [ ] Decide which commands are runtime versus developer-only, then ensure each
+- [x] Decide which commands are runtime versus developer-only, then ensure each
   shipped command carries its required examples, tests, eval resources, or is
   excluded from the runtime bundle.
-- [ ] Verify `doctor` against the installed target rather than the source
+- [x] Verify `doctor` against the installed target rather than the source
   checkout.
-- [ ] Cover copy mode and symlink mode, update, and uninstall while preserving
+- [x] Cover copy mode and symlink mode, update, and uninstall while preserving
   the Workspace Library.
-- [ ] Prove the installed runtime still works after the checkout is moved or
+- [x] Prove the installed runtime still works after the checkout is moved or
   removed.
-- [ ] Generate an artifact checksum and verify artifact version, commit SHA,
+- [x] Generate an artifact checksum and verify artifact version, commit SHA,
   `VERSION`, changelog, and release tag agree.
 
 ### 6. Public release readiness
 
-- [ ] Publish a supported-environment matrix for Codex, operating systems,
+- [x] Publish a supported-environment matrix for Codex, operating systems,
   Python, Bash, and Git based on completed release smoke tests.
-- [ ] Choose and ship a license, or explicitly declare 1.0 private/internal.
-- [ ] Add security-reporting and supported-version guidance.
-- [ ] Document the privacy/network boundary: local persistence, Codex host/model
+- [x] Choose and ship a license, or explicitly declare 1.0 private/internal.
+- [x] Add security-reporting and supported-version guidance.
+- [x] Document the privacy/network boundary: local persistence, Codex host/model
   processing, optional web research, and absent provider-generation adapters.
-- [ ] Add a five-minute quickstart, expected gates/output locations, resume,
+- [x] Add a five-minute quickstart, expected gates/output locations, resume,
   update, doctor troubleshooting, uninstall, and a concise Video v0 example.
-- [ ] Reconcile `CHANGELOG.md` against the full 1.0 commit range and decide
+- [x] Reconcile `CHANGELOG.md` against the full 1.0 commit range and decide
   whether untagged 0.2–0.4 entries are internal milestones or require justified
   immutable tags.
 
 ### 7. Release certification
 
-- [ ] Run end-to-end dry-run rehearsals for image, video v0, audio, text, Album
+- [x] Run end-to-end dry-run rehearsals for image, video v0, audio, text, Album
   v1, and the constrained Cross-Medium Plan route.
-- [ ] Store tracked rehearsal evidence in a defined release-evidence manifest;
+- [x] Store tracked rehearsal evidence in a defined release-evidence manifest;
   ignored `.tmp` output is not release proof.
-- [ ] Verify that every concrete artifact in the rehearsals has an Output Record
+- [x] Verify that every concrete artifact in the rehearsals has an Output Record
   before review and acceptance, and that packages contain only accepted or
   explicitly waived slots.
-- [ ] Review public language for claims that exceed this contract.
-- [ ] Move the completed changelog entries into a `1.0.0` release section, set
+- [x] Review public language for claims that exceed this contract.
+- [x] Move the completed changelog entries into a `1.0.0` release section, set
   `VERSION` to `1.0.0`, and verify their consistency.
-- [ ] Tag 1.0 only after the working tree is clean and every release command
+- [x] Tag 1.0 only after the working tree is clean and every release command
   below passes.
 
 ## Release Gate
@@ -283,12 +285,15 @@ bin/validate-examples
 python3 -m unittest discover -s tests -p 'test_*.py'
 python3 -m py_compile $(rg --files -g '*.py')
 bash -n bin/install-codex-dev-skills bin/uninstall-codex-dev-skills
+bash -n bin/install-codex-skills bin/uninstall-codex-skills
 bin/artist-os-lint
 bin/artist-os-paths validate
 bin/artist-os-paths doctor
 bin/artist-os-storage-smoke
 bin/artist-os-eval status
+bin/artist-os-build-bundle --require-clean
 jq empty schemas/*.json examples/*.json
+jq empty release-evidence/1.0.0/*.json
 git diff --check
 test -z "$(git status --porcelain)"
 ```

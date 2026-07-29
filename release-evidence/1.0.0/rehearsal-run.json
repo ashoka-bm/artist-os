@@ -1,0 +1,38 @@
+{
+  "release_version": "1.0.0",
+  "release_ref": "v1.0.0",
+  "executed_at": "2026-07-29T19:44:01Z",
+  "result": "passed",
+  "provider_calls_made": false,
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_pipeline_transitions",
+    "tests.test_medium_plan_skill_contract",
+    "tests.test_text_journey_skill_contract",
+    "tests.test_video_medium_plan_finalizer",
+    "tests.test_schema_validation"
+  ],
+  "tests_run": 280,
+  "command_exit_status": 0,
+  "observed_output": "Ran 280 tests in 0.510s; OK",
+  "observed_output_sha256": "80ad0929d2c0eb17515025482e4f63e200efbcaa0b00b323ebbc4434b75fa5fa",
+  "journeys": [
+    "image",
+    "video_v0",
+    "audio",
+    "text",
+    "album_v1",
+    "cross_medium"
+  ],
+  "record_entries": 58,
+  "unique_records": 45,
+  "record_set_sha256": "d90ada20fb2ad4ae160b3a45d2887fdba731046bf10e0aa99f0c266d1632d407",
+  "source_surface_sha256": "a053e8dd7e6511e635eae1f73c922b418671c93a2a4f2bf5018c841ee52cb6b6",
+  "environment": {
+    "operating_system": "macOS 26.5.2 arm64",
+    "python": "CPython 3.14.3"
+  },
+  "artifact_policy": "No Generated Works are committed. Output Records are share-safe metadata fixtures, and package checks use their recorded acceptance state."
+}

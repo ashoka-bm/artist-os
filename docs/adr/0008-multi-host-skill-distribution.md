@@ -1,16 +1,13 @@
 # Multi-Host Skill Distribution
 
-Status: accepted architecture; materialized-bundle implementation is incomplete
-and blocks 1.0 release certification.
+Status: accepted and implemented for the Codex 1.0 bundle.
 
 ## Current implementation status
 
-The resolver, host registry, manifest, anchor language, and checkout-backed
-Codex installer exist. The current copy path does not materialize the complete
-manifest surface, and post-install `doctor` still validates the checkout rather
-than an independent installed target. Therefore the packaged Codex bundle is a
-1.0 target, not a current supported artifact. The blocking acceptance criteria
-live in `docs/release-1.0.md`.
+The resolver, host registry, explicit runtime manifest, bundle builder, copy and
+symlink installer, installed-target doctor, archive metadata, checksum, and
+release smoke tests are implemented for Codex. Claude Code and Cursor remain
+stub hosts.
 
 Artist OS will distribute its skills as a self-contained, install-anchored bundle resolved at runtime through one anchor, `$ARTIST_OS_ROOT`, governed by a data-only host registry, with the per-host generator deferred but seamed. We choose this over today's symlink-accidental reachability and over copying canonical docs into each skill, because the first orphans the reference surface on any non-symlink host and the second breaks single-source-of-truth.
 
@@ -44,10 +41,14 @@ We mirror G-Stack's cheap, proven patterns: one data config per host, an all-hos
 - `bin/artist-os-paths` resolver with the loud fallback chain.
 - The anchor sentence in the reference-bearing public skill body and internal mode files.
 - `packaging/hosts.json`, `packaging/MANIFEST.json`, `packaging/README.md`.
-- Checkout-backed installer exposes the public `artist-os` skill, reads Codex's
+- Checkout-backed development installer exposes the public `artist-os` skill, reads Codex's
   prefix/target via `artist-os-paths get codex`, removes retired old public
-  skill links, and runs `doctor`. Full manifest materialization and
-  installed-target verification remain release blockers.
+  skill links, and runs `doctor`.
+- `bin/artist-os-build-bundle` materializes the explicit runtime manifest,
+  verifies the independent target, and produces release metadata, an archive,
+  and a checksum.
+- `bin/install-codex-skills` supports copy and symlink installs, safe updates,
+  installed-target verification, and Workspace Library preservation.
 - New tests: `test_host_registry.py` (parse, primary-host key, name regex, root uniqueness, stub flags), `test_dist_manifest.py` (every manifest path exists and every bare doc/schema reference resolves to an existing file under an included tree — a live drift gate), `test_anchor_resolver.py` (loud-fail behavior + resolution from a temp install).
 
 **Later** (the deferred generator — no source move, no test-path change):
@@ -66,11 +67,12 @@ We mirror G-Stack's cheap, proven patterns: one data config per host, an all-hos
 
 - **Resilience is the acceptance target.** The anchor resolves without
   current-working-directory dependence and the manifest test keeps the intended
-  travelling set honest. Release certification must still prove that everything
-  travels and that installed-target `doctor` fails loud on missing content.
+  travelling set honest. Release tests prove that everything travels,
+  installed-target `doctor` passes independently, and copy mode survives a
+  moved source bundle.
 - **SSoT is strengthened.** No doc or schema is duplicated as an editable copy; the new artifacts are a path list and a data registry. Phase Order stays solely in `skills/artist-os/SKILL.md`; the README overview diagrams, the byte-exact pointer fragments in `AGENTS.md` and `ARCHITECTURE.md`, and ARCHITECTURE.md's "does not maintain a third copy" line are untouched.
-- **Multi-host is seam-ready.** Codex is the only 1.0 target; its packaged
-  artifact is not certified yet. Claude Code and Cursor are stubs.
+- **Multi-host is seam-ready.** Codex is the only certified 1.0 target. Claude
+  Code and Cursor are stubs.
 - **At-risk tests are handled.** `test_phase_order_doc_drift` still owns the conductor's canonical phase order. `test_skill_set_sync` now protects the single public skill rather than every internal mode file. The contract tests pin logical modes at their internal paths. The registry/manifest directory is named `packaging/` rather than `dist/` to signal hand-authored source, not build output.
 - **Tradeoffs.** Copy mode must carry the whole bundle, so `install_skill`
   idempotence and refuse-overwrite need release testing. JSON loses compile-time

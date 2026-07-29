@@ -23,27 +23,32 @@ version lives in `docs/release-1.0.md`. Thin Cross-Medium Plan orchestration is
 part of that boundary; provider adapters, finished video, automatic conductor
 self-improvement, and broader package routers are not.
 
-> **Release status:** Artist OS 1.0 is scope-frozen but not released. The
-> commands below install from a source checkout for development. The packaged
-> Codex artifact, supported-environment matrix, and clean-host certification
-> remain release blockers in `docs/release-1.0.md`.
+> **Release status:** Artist OS 1.0 is the first certified Codex distribution.
+> It is local-first and dry-run only: no provider adapter, publishing
+> integration, or finished-video renderer ships in this release.
 
-## Development Install In Codex
+## Install In Codex
 
-Clone the repo, choose a Wondermint Root outside a git repository, then install
-the checkout-backed skill:
+Download and extract `artist-os-1.0.0-codex.tar.gz`, choose a Wondermint Root
+outside a Git repository, then run from the extracted bundle:
 
 ```bash
-WONDERMINT_ROOT=/absolute/path/to/your/root bin/install-codex-dev-skills
+WONDERMINT_ROOT=/absolute/path/to/your/root \
+  bin/install-codex-skills --mode copy
 ```
 
-This installs one public skill:
+Copy mode is recommended and remains usable after the downloaded bundle is
+moved or removed. Symlink mode is also supported with `--mode symlink`.
 
-```text
-artist-os
-```
+Restart Codex or open a new task after installing so skill discovery refreshes.
+The [five-minute quickstart](docs/quickstart.md) covers the first project,
+expected gates and output locations, resume, updates, doctor troubleshooting,
+Video v0, and uninstall.
 
-Restart Codex or open a new thread after installing so skill discovery refreshes.
+The certified environment is documented in
+[supported environments](docs/supported-environments.md). Privacy and network
+behavior is documented in
+[privacy and network boundary](docs/privacy-and-network.md).
 
 Start all Artist OS work with `artist-os`. The frozen 1.0 target turns an
 artist-provided text Reference into traceable dry-run image plans,
@@ -52,9 +57,16 @@ constrained multi-medium package. It routes unclear work through the required
 gates, then loads internal mode files for isolated planning, review, and
 editorial-pass work.
 
-Current automated CI exercises Ubuntu with Python 3.12–3.14. That is test
-coverage, not yet the final support matrix; macOS and clean packaged
-installation still require release certification.
+Automated CI exercises Ubuntu with Python 3.12–3.14. The complete packaged
+installation matrix is certified on macOS as listed in the support matrix.
+
+## Development Install In Codex
+
+Contributors can install directly from a checkout:
+
+```bash
+WONDERMINT_ROOT=/absolute/path/to/your/root bin/install-codex-dev-skills
+```
 
 ## Workflows
 
@@ -180,6 +192,8 @@ skills/                      Codex skill source files
 evals/                       Routing and conductor-behavior evals
 tests/                       Schema, transition, and contract tests
 bin/                         Local install and workspace helpers
+packaging/                   Distribution manifest, host registry, and build notes
+release-evidence/            Tracked release rehearsal evidence
 ```
 
 ## Architecture Direction
@@ -198,11 +212,11 @@ docs/output-journeys/
 docs/writing/
 ```
 
-The shared cross-medium schemas now exist for Transformation Briefs, Beat
+The shared cross-medium schemas exist for Transformation Briefs, Beat
 Plans, Image, Video, Sound, and Text Medium Plans, Cross-Medium Plans,
 Long-Work Stewardship Records, Review Records, Gate Decisions, Prompt Branch
 Sets, Text Generation Plans, Output Records, and Asset Packages. The thin
-general Cross-Medium Plan lifecycle is 1.0 closure work; EP, Single Bundle,
+general Cross-Medium Plan lifecycle ships in 1.0; EP, Single Bundle,
 Visual Album, campaign, publishing, and distribution routers remain later
 work. The image, video v0, Suno, and text dry-run slices translate the shared
 Beat Plan through medium-specific Medium Plans before producing final brief
@@ -241,7 +255,9 @@ workspace-library/artist-os/
 
 The repo-local development library is ignored by this repository's git rules. User-chosen Wondermint Roots should live outside git repositories, or the containing repository should explicitly ignore both `Wondermint/` and `.wondermint/`.
 
-Do not commit generated media, private artist references, secrets, API keys, or paid-service credentials.
+Do not commit generated media, private artist references, secrets, API keys, or
+paid-service credentials. See `docs/privacy-and-network.md` for the complete
+local-storage and Codex-processing boundary.
 
 ## Development
 
