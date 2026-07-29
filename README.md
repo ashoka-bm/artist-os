@@ -225,11 +225,13 @@ The accepted storage model for installed user runs stores user-facing files and 
 `Wondermint/Artist Library/` contains visible project outputs, Review Drafts, readable summaries, and artist-useful Personal Library notes. The hidden sibling `.wondermint/artist-os/` contains internal Workspace Library state such as project manifests, event logs, prompt plans, critiques, sidecars, feedback evidence, learning records, and performance signals. Basic installed-root setup, Project Pointer creation, manifest fields, SQLite indexing, visible-missing sync, and feedback/learning/performance record scaffolding are available. See `docs/storage.md` and `docs/progress.md`.
 
 Use `bin/artist-os-import-output` to record an artist-owned or human-edited
-local image, sound, or text artifact as an Output Record without calling a
-provider. The command validates the governing project and upstream lineage,
-confines durable writes to that project, updates its manifest and resume state,
-and refreshes SQLite. Video and mixed-media imports fail closed until their
-schema-backed brief and prompt lineage contracts exist.
+local artifact as an Output Record without calling a provider. The command
+validates the governing project and complete upstream lineage, confines durable
+writes to that project, uses a recovery journal for the record/event/manifest
+transaction, updates resume state, and refreshes SQLite. Image, sound, and text
+planning records are schema-validated; video and mixed-media imports also
+schema-validate their governing Video or Cross-Medium Plan and require exact
+linked brief and planning records.
 
 For repo development and tests, the internal Workspace Library can still live at:
 

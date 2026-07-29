@@ -58,6 +58,22 @@ MEDIUM_CONTRACTS = {
         "plan_schema": "text-generation-plan.schema.json",
         "plan_id_key": "text_generation_plan_id",
     },
+    "video": {
+        "medium_path_key": "video_medium_plan",
+        "medium_schema": "video-medium-plan.schema.json",
+        "medium_id_key": "video_medium_plan_id",
+        "brief_schema": None,
+        "plan_schema": None,
+        "plan_id_key": "prompt_plan_id",
+    },
+    "mixed_media": {
+        "medium_path_key": "cross_medium_plan",
+        "medium_schema": "cross-medium-plan.schema.json",
+        "medium_id_key": "cross_medium_plan_id",
+        "brief_schema": None,
+        "plan_schema": None,
+        "plan_id_key": "prompt_plan_id",
+    },
 }
 
 
@@ -71,8 +87,9 @@ def library_root(args: argparse.Namespace) -> Path:
 
 def confined_path(path: Path, boundary: Path, label: str) -> Path:
     resolved = path.expanduser().resolve()
+    resolved_boundary = boundary.expanduser().resolve()
     try:
-        resolved.relative_to(boundary)
+        resolved.relative_to(resolved_boundary)
     except ValueError as exc:
         raise AdapterGuardError(f"{label} resolves outside project directory: {resolved}") from exc
     return resolved
@@ -159,7 +176,7 @@ def read_upstream_record(
     args: argparse.Namespace,
     manifest: dict[str, Any],
     path_key: str,
-    schema_name: str,
+    schema_name: str | None,
     label: str,
 ) -> dict[str, Any]:
     path_value = manifest.get("paths", {}).get(path_key)
@@ -170,8 +187,11 @@ def read_upstream_record(
         raise AdapterGuardError(f"upstream {label} does not exist: {path}")
     try:
         record = json.loads(path.read_text(encoding="utf-8"))
-        schema = load_json(REPO_ROOT / "schemas" / schema_name)
-        validate(record, schema, schema)
+        if not isinstance(record, dict):
+            raise AdapterGuardError(f"upstream {label} must contain an object: {path}")
+        if schema_name is not None:
+            schema = load_json(REPO_ROOT / "schemas" / schema_name)
+            validate(record, schema, schema)
     except (OSError, json.JSONDecodeError, ValidationError) as exc:
         raise AdapterGuardError(f"upstream {label} is invalid: {path}: {exc}") from exc
     return record
@@ -254,12 +274,7 @@ def validate_upstream_lineage(
     for field, expected in common.items():
         assert_link(beat_plan, field, expected, "Beat Plan")
 
-    contract = MEDIUM_CONTRACTS.get(args.target_media_type)
-    if contract is None:
-        raise AdapterGuardError(
-            f"complete import lineage is not implemented for {args.target_media_type!r}; "
-            "use image, sound, or text"
-        )
+    contract = MEDIUM_CONTRACTS[args.target_media_type]
 
     medium_plan = read_upstream_record(
         args,
@@ -446,7 +461,14 @@ def updated_manifest(
     )
     resume["current_checkpoint"] = "output_record"
     resume["next_phase"] = "Output Critic Review"
-    resume_medium = {"image": "image", "sound": "audio", "text": "text"}[args.target_media_type]
+    if args.target_media_type == "mixed_media":
+        return updated
+    resume_medium = {
+        "image": "image",
+        "sound": "audio",
+        "video": "video",
+        "text": "text",
+    }[args.target_media_type]
     media_entry = next(
         (entry for entry in resume["media_index"] if entry.get("medium") == resume_medium),
         None,
@@ -488,29 +510,107 @@ def stage_payload(path: Path, payload: bytes) -> Path:
     return staged
 
 
-def persist_transaction(payloads: list[tuple[Path, bytes]]) -> None:
-    originals: dict[Path, bytes | None] = {}
+def fsync_directory(path: Path) -> None:
+    descriptor = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def recover_transaction(journal_path: Path, project_boundary: Path) -> None:
+    try:
+        journal = json.loads(journal_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AdapterGuardError(f"cannot recover malformed import journal {journal_path}: {exc}") from exc
+    entries = journal.get("entries")
+    if not isinstance(entries, list):
+        raise AdapterGuardError(f"cannot recover import journal without entries: {journal_path}")
+
+    for entry in reversed(entries):
+        if not isinstance(entry, dict):
+            raise AdapterGuardError(f"cannot recover malformed import journal entry: {journal_path}")
+        target = confined_path(Path(entry["target"]), project_boundary, "transaction target")
+        staged = confined_path(Path(entry["staged"]), project_boundary, "staged transaction file")
+        backup_value = entry.get("backup")
+        backup = (
+            confined_path(Path(backup_value), project_boundary, "transaction backup")
+            if backup_value
+            else None
+        )
+        if entry.get("original_exists"):
+            if backup is None or not backup.is_file():
+                raise AdapterGuardError(f"cannot recover missing transaction backup for {target}")
+            os.replace(backup, target)
+            fsync_directory(target.parent)
+        else:
+            target.unlink(missing_ok=True)
+            fsync_directory(target.parent)
+        staged.unlink(missing_ok=True)
+        if backup is not None:
+            backup.unlink(missing_ok=True)
+
+    journal_path.unlink()
+    fsync_directory(journal_path.parent)
+
+
+def recover_pending_transactions(project_boundary: Path) -> None:
+    transaction_dir = project_boundary / ".transactions"
+    if not transaction_dir.is_dir():
+        return
+    for journal_path in sorted(transaction_dir.glob("import-*.json")):
+        recover_transaction(journal_path, project_boundary)
+
+
+def persist_transaction(
+    payloads: list[tuple[Path, bytes]],
+    journal_path: Path,
+    project_boundary: Path,
+) -> None:
     staged: dict[Path, Path] = {}
-    replaced: list[Path] = []
+    backups: dict[Path, Path | None] = {}
+    journal_written = False
     try:
         for path, payload in payloads:
             if path.exists() and not path.is_file():
                 raise AdapterGuardError(f"transaction target is not a file: {path}")
-            originals[path] = path.read_bytes() if path.exists() else None
+            backups[path] = stage_payload(path, path.read_bytes()) if path.exists() else None
             staged[path] = stage_payload(path, payload)
+        journal = {
+            "transaction_type": "output_import",
+            "entries": [
+                {
+                    "target": str(path),
+                    "staged": str(staged[path]),
+                    "backup": str(backups[path]) if backups[path] is not None else None,
+                    "original_exists": backups[path] is not None,
+                }
+                for path, _payload in payloads
+            ],
+        }
+        journal_payload = (json.dumps(journal, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        staged_journal = stage_payload(journal_path, journal_payload)
+        os.replace(staged_journal, journal_path)
+        fsync_directory(journal_path.parent)
+        journal_written = True
+
         for path, _payload in payloads:
             os.replace(staged[path], path)
-            replaced.append(path)
+            fsync_directory(path.parent)
+        journal_path.unlink()
+        fsync_directory(journal_path.parent)
+        journal_written = False
+        for backup in backups.values():
+            if backup is not None:
+                backup.unlink(missing_ok=True)
     except Exception:
-        for path in reversed(replaced):
-            original = originals[path]
-            if original is None:
-                path.unlink(missing_ok=True)
-            else:
-                restore = stage_payload(path, original)
-                os.replace(restore, path)
+        if journal_written and journal_path.exists():
+            recover_transaction(journal_path, project_boundary)
         for staged_path in staged.values():
             staged_path.unlink(missing_ok=True)
+        for backup in backups.values():
+            if backup is not None:
+                backup.unlink(missing_ok=True)
         raise
 
 
@@ -580,6 +680,7 @@ def main(argv: list[str] | None = None) -> int:
         target_project_dir = project_dir(args)
         if not target_project_dir.is_dir():
             raise AdapterGuardError(f"project does not exist in Workspace Library: {target_project_dir}")
+        recover_pending_transactions(target_project_dir)
         manifest = read_project_manifest(args)
         record = build_output_record(args)
         validate(record, OUTPUT_SCHEMA, OUTPUT_SCHEMA)
@@ -610,6 +711,9 @@ def main(argv: list[str] | None = None) -> int:
         if prior_events and not prior_events.endswith(b"\n"):
             prior_events += b"\n"
         event_payload = prior_events + (json.dumps(event, sort_keys=True) + "\n").encode("utf-8")
+        transaction_dir = target_project_dir / ".transactions"
+        transaction_dir.mkdir(parents=True, exist_ok=True)
+        journal_path = transaction_dir / f"import-{args.output_record_id}.json"
         persist_transaction(
             [
                 (destination, (json.dumps(record, indent=2, sort_keys=True) + "\n").encode("utf-8")),
@@ -618,7 +722,9 @@ def main(argv: list[str] | None = None) -> int:
                     manifest_path,
                     (json.dumps(manifest_after, indent=2, sort_keys=True) + "\n").encode("utf-8"),
                 ),
-            ]
+            ],
+            journal_path,
+            target_project_dir,
         )
     except (AdapterGuardError, OSError) as exc:
         print(f"output import transaction failed: {exc}", file=sys.stderr)

@@ -657,10 +657,11 @@ Reason:
   without automatic conductor self-improvement;
 - the local validator enforces every schema keyword currently used and rejects
   unknown future keywords instead of silently accepting them;
-- manual output import validates image, sound, and text lineage, confines
-  durable writes to the active project, updates resume state, and refreshes
+- manual output import validates image, sound, video, text, and mixed-media
+  lineage, confines durable writes to the active project, recovers interrupted
+  record/event/manifest transactions, updates resume state, and refreshes
   SQLite;
-- the current unit baseline runs 518 tests successfully.
+- the current unit baseline runs 520 tests successfully.
 
 Near-term plan:
 

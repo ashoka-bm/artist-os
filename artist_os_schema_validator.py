@@ -16,6 +16,11 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parent
+RFC3339_DATE_TIME_PATTERN = re.compile(
+    r"^(?P<date>\d{4}-\d{2}-\d{2})T"
+    r"(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})"
+    r"(?P<fraction>\.\d+)?(?P<offset>Z|[+-]\d{2}:\d{2})$"
+)
 SUPPORTED_SCHEMA_KEYWORDS = {
     "$defs",
     "$id",
@@ -95,12 +100,19 @@ def type_matches(value: Any, expected: str | list[str]) -> bool:
 def validate_format(value: str, format_name: str, path: str) -> None:
     if format_name != "date-time":
         raise ValidationError(path, f"unsupported format {format_name!r}")
+    match = RFC3339_DATE_TIME_PATTERN.fullmatch(value)
+    if match is None:
+        raise ValidationError(path, "expected a valid RFC 3339 date-time")
+    parse_value = value
+    if match.group("second") == "60":
+        start, end = match.span("second")
+        parse_value = f"{value[:start]}59{value[end:]}"
     try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        parsed = datetime.fromisoformat(parse_value.replace("Z", "+00:00"))
     except ValueError as exc:
         raise ValidationError(path, "expected a valid RFC 3339 date-time") from exc
-    if parsed.tzinfo is None:
-        raise ValidationError(path, "expected a valid RFC 3339 date-time with timezone")
+    if parsed.tzinfo is None:  # Defensive: the regex already requires a timezone.
+        raise ValidationError(path, "expected a valid RFC 3339 date-time")
 
 
 def assert_supported_schema_tree(schema: dict[str, Any], path: str = "$schema") -> None:

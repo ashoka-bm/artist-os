@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import shutil
 import sqlite3
@@ -8,7 +9,9 @@ import sys
 import tempfile
 import unittest
 from contextlib import closing
+from importlib.machinery import SourceFileLoader
 from pathlib import Path
+from unittest import mock
 
 from artist_os_adapter_guards import assert_import_output_record
 from artist_os_schema_validator import REPO_ROOT, load_json, validate
@@ -41,7 +44,25 @@ MEDIUM_LINEAGE_FIXTURES = {
             "tests/fixtures/text-journey/output-record-draft.json"
         ),
     },
+    "video": {
+        "medium-plans/video-medium-plan.json": "tests/fixtures/video-journey/video-medium-plan.json",
+    },
+    "mixed_media": {
+        "medium-plans/cross-medium-plan.json": (
+            "tests/fixtures/cross-medium/article-with-photos-rehearsal/cross-medium-plan-article.json"
+        ),
+    },
 }
+
+
+def load_import_output_module():
+    loader = SourceFileLoader("artist_os_import_output", str(IMPORT_OUTPUT))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"cannot load {IMPORT_OUTPUT}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
 
 
 def base_args(library_root: Path, artifact_path: Path) -> list[str]:
@@ -99,17 +120,61 @@ def write_manifest(
         destination_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(REPO_ROOT / source, destination_path)
 
-    medium_path_key = f"{medium}_medium_plan"
-    medium_path = f"projects/proj_door_left_lit/medium-plans/{medium}-medium-plan.json"
+    if medium == "mixed_media":
+        cross_medium_path = project_dir / "medium-plans" / "cross-medium-plan.json"
+        cross_medium_plan = json.loads(cross_medium_path.read_text(encoding="utf-8"))
+        cross_medium_plan.update(
+            {
+                "cross_medium_plan_id": "cmp_door_left_lit",
+                "project_id": "proj_door_left_lit",
+                "source_id": "src_door_left_lit",
+                "artist_meaning_id": "meaning_door_left_lit",
+                "transformation_brief_id": "tb_door_left_lit",
+                "beat_plan_id": "bp_door_left_lit",
+            }
+        )
+        cross_medium_path.write_text(json.dumps(cross_medium_plan), encoding="utf-8")
+
+    medium_path_key = "cross_medium_plan" if medium == "mixed_media" else f"{medium}_medium_plan"
+    medium_filename = "cross-medium-plan.json" if medium == "mixed_media" else f"{medium}-medium-plan.json"
+    medium_path = f"projects/proj_door_left_lit/medium-plans/{medium_filename}"
     if medium == "image":
         brief_path = "projects/proj_door_left_lit/briefs/creative-brief.record.json"
         prompt_path = "projects/proj_door_left_lit/prompt-plans/prompt-plan.json"
     elif medium == "sound":
         brief_path = "projects/proj_door_left_lit/briefs/sound-creative-brief.record.json"
         prompt_path = "projects/proj_door_left_lit/prompt-plans/sound-prompt-plan.json"
-    else:
+    elif medium == "text":
         brief_path = "projects/proj_door_left_lit/briefs/text-creative-brief.record.json"
         prompt_path = "projects/proj_door_left_lit/prompt-plans/text-generation-plan.json"
+    else:
+        brief_path = "projects/proj_door_left_lit/briefs/creative-brief.record.json"
+        prompt_path = "projects/proj_door_left_lit/prompt-plans/prompt-plan.json"
+        common = {
+            "source_id": "src_door_left_lit",
+            "artist_meaning_id": "meaning_door_left_lit",
+            "transformation_brief_id": "tb_door_left_lit",
+            "beat_plan_id": "bp_door_left_lit",
+        }
+        medium_id_key = "video_medium_plan_id" if medium == "video" else "cross_medium_plan_id"
+        medium_id = "vmp_threshold_reel_storyboard" if medium == "video" else "cmp_door_left_lit"
+        brief_record = {
+            "brief_id": "brief_door_left_lit_video" if medium == "video" else "brief_door_left_lit_mixed",
+            **common,
+            medium_id_key: medium_id,
+        }
+        prompt_record = {
+            "prompt_plan_id": "plan_door_left_lit_video" if medium == "video" else "plan_door_left_lit_mixed",
+            "brief_id": brief_record["brief_id"],
+            **common,
+            medium_id_key: medium_id,
+        }
+        brief_destination = project_dir / "briefs" / "creative-brief.record.json"
+        prompt_destination = project_dir / "prompt-plans" / "prompt-plan.json"
+        brief_destination.parent.mkdir(parents=True, exist_ok=True)
+        prompt_destination.parent.mkdir(parents=True, exist_ok=True)
+        brief_destination.write_text(json.dumps(brief_record), encoding="utf-8")
+        prompt_destination.write_text(json.dumps(prompt_record), encoding="utf-8")
 
     manifest = {
         "project_id": "proj_door_left_lit",
@@ -124,12 +189,17 @@ def write_manifest(
             "next_phase": "Generation Approval",
             "media_index": [
                 {
-                    "medium": "audio" if medium == "sound" else medium,
+                    "medium": {
+                        "sound": "audio",
+                        "mixed_media": "image",
+                    }.get(medium, medium),
                     "medium_role": "primary",
                     "medium_plan_ref": {
                         "image": "imp_door_left_lit",
                         "sound": "smp_door_left_lit",
                         "text": "tmp_door_left_lit",
+                        "video": "vmp_threshold_reel_storyboard",
+                        "mixed_media": "cmp_door_left_lit",
                     }[medium],
                     "status": "active",
                     "artist_meaning_id": "meaning_door_left_lit",
@@ -173,6 +243,14 @@ def configure_args_for_medium(args: list[str], medium: str) -> None:
         args[args.index("--prompt-plan-id") + 1] = "plan_text_door_left_lit"
         args[args.index("--medium-plan-id") + 1] = "tmp_door_left_lit"
         args.extend(["--text-generation-plan-id", "plan_text_door_left_lit"])
+    elif medium == "video":
+        args[args.index("--brief-id") + 1] = "brief_door_left_lit_video"
+        args[args.index("--prompt-plan-id") + 1] = "plan_door_left_lit_video"
+        args[args.index("--medium-plan-id") + 1] = "vmp_threshold_reel_storyboard"
+    elif medium == "mixed_media":
+        args[args.index("--brief-id") + 1] = "brief_door_left_lit_mixed"
+        args[args.index("--prompt-plan-id") + 1] = "plan_door_left_lit_mixed"
+        args[args.index("--medium-plan-id") + 1] = "cmp_door_left_lit"
 
 
 class ImportOutputAdapterCliTests(unittest.TestCase):
@@ -321,6 +399,36 @@ class ImportOutputAdapterCliTests(unittest.TestCase):
                 ).is_file()
             )
 
+    def test_video_and_mixed_media_imports_validate_complete_lineage(self) -> None:
+        for medium, artifact_kind in (("video", "video"), ("mixed_media", "mixed_media_package")):
+            with self.subTest(medium=medium), tempfile.TemporaryDirectory() as tmpdir:
+                root = Path(tmpdir)
+                library_root = root / "library"
+                project_dir = write_manifest(library_root, medium=medium)
+                artifact_path = root / f"artifact-{medium}.bin"
+                artifact_path.write_bytes(b"artifact")
+                args = base_args(library_root, artifact_path)
+                args[args.index("--output-record-id") + 1] = f"out_door_left_lit_{medium}_import_001"
+                args[args.index("--artifact-id") + 1] = f"artifact_door_left_lit_{medium}_import_001"
+                args[args.index("--target-media-type") + 1] = medium
+                args[args.index("--artifact-kind") + 1] = artifact_kind
+                configure_args_for_medium(args, medium)
+
+                proc = subprocess.run(args, capture_output=True, text=True)
+
+                self.assertEqual(proc.returncode, 0, msg=proc.stdout + proc.stderr)
+                output_group = "mixed_media" if medium == "mixed_media" else medium
+                output_path = (
+                    project_dir
+                    / "outputs"
+                    / output_group
+                    / "output-records"
+                    / f"out_door_left_lit_{medium}_import_001.json"
+                )
+                record = json.loads(output_path.read_text(encoding="utf-8"))
+                validate(record, OUTPUT_SCHEMA, OUTPUT_SCHEMA)
+                assert_import_output_record(record)
+
     def test_rejects_project_without_manifest(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
@@ -421,6 +529,46 @@ class ImportOutputAdapterCliTests(unittest.TestCase):
             self.assertIn("events path is not a file", proc.stderr)
             self.assertEqual((project_dir / "project.json").read_bytes(), manifest_before)
             self.assertFalse((project_dir / "outputs").exists())
+
+    def test_interrupted_event_replace_is_recovered_from_durable_journal(self) -> None:
+        module = load_import_output_module()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_dir = Path(tmpdir) / "project"
+            project_dir.mkdir()
+            record_path = project_dir / "output-record.json"
+            event_path = project_dir / "events.jsonl"
+            manifest_path = project_dir / "project.json"
+            event_path.write_bytes(b'{"event":"before"}\n')
+            manifest_path.write_bytes(b'{"manifest":"before"}\n')
+            journal_path = project_dir / ".transactions" / "import-out_test.json"
+            journal_path.parent.mkdir()
+            real_replace = module.os.replace
+
+            def interrupt_event_replace(source, destination):
+                if Path(destination) == event_path:
+                    raise KeyboardInterrupt("simulated process interruption")
+                return real_replace(source, destination)
+
+            with (
+                mock.patch.object(module.os, "replace", side_effect=interrupt_event_replace),
+                self.assertRaises(KeyboardInterrupt),
+            ):
+                module.persist_transaction(
+                    [
+                        (record_path, b'{"record":"after"}\n'),
+                        (event_path, b'{"event":"after"}\n'),
+                        (manifest_path, b'{"manifest":"after"}\n'),
+                    ],
+                    journal_path,
+                    project_dir,
+                )
+
+            self.assertTrue(journal_path.is_file())
+            module.recover_pending_transactions(project_dir)
+            self.assertFalse(record_path.exists())
+            self.assertEqual(event_path.read_bytes(), b'{"event":"before"}\n')
+            self.assertEqual(manifest_path.read_bytes(), b'{"manifest":"before"}\n')
+            self.assertFalse(journal_path.exists())
 
 
 if __name__ == "__main__":

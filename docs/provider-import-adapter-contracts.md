@@ -47,10 +47,15 @@ Imported artifacts still need normal Output Critic Review and Output Acceptance 
 
 ### Current hardening status
 
-The import command exists, but it is not release-certified yet. The 1.0
-checklist requires path confinement under the resolved Workspace Library,
-complete manifest and upstream-lineage validation, recoverable or atomic
-record/event persistence, manifest/resume updates, SQLite refresh, and
-import-to-resume tests. Until those checks pass, treat the command as a
-development surface and do not claim that it satisfies the full persistence
-contract.
+The import command confines durable paths to the active project, validates the
+complete Project Manifest and upstream lineage, journals the Output Record,
+event, and Project Manifest as one recoverable transaction, updates resume
+state, and refreshes SQLite. Tests cover traversal, ordinary write failure,
+mid-transaction process interruption, SQLite indexing, and all five output
+media types. Image, sound, and text planning records have dedicated schemas;
+video and mixed-media imports schema-validate their governing Video or
+Cross-Medium Plan and require exact links in their brief and equivalent
+planning records.
+
+This command remains part of the 1.0 release candidate until the full
+distribution and install matrix in `docs/release-1.0.md` passes.

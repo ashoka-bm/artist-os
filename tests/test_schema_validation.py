@@ -46,7 +46,13 @@ class SchemaValidationTests(unittest.TestCase):
 
     def test_date_time_format_rejects_invalid_or_naive_values(self) -> None:
         schema = {"type": "string", "format": "date-time"}
-        for value in ["not-a-date", "2026-07-29T12:00:00"]:
+        for value in [
+            "not-a-date",
+            "2026-07-29T12:00:00",
+            "20260729T120000+0000",
+            "2026-W31-3T12:00:00+00:00",
+            "2026-07-29T12:00:00+00:00:30",
+        ]:
             with self.subTest(value=value):
                 with self.assertRaisesRegex(ValidationError, "valid RFC 3339 date-time"):
                     validate(value, schema, schema)

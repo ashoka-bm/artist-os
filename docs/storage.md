@@ -406,10 +406,11 @@ command to adopt each one locally.
 evidence count by reading the referenced record, noting records that are
 missing on disk.
 
-`learnings-report` is a read-only close-out: per project it shows the
-learning-review state, the linked learnings, and any performance signals, then
-prints the next action (which projects still owe a learning review). Run it at
-the end of a session to see what to capture before moving on.
+`learnings-report` is a close-out report that does not change project records:
+it first refreshes the rebuildable SQLite index from files, then shows each
+project's learning-review state, linked learnings, performance signals, and
+next action. Run it at the end of a session to see what to capture before
+moving on.
 
 Learning and Performance Signal ids must match their schemas and cannot overwrite an existing record unless the command is run with `--overwrite`.
 

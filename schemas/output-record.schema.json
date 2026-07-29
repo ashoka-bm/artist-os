@@ -31,7 +31,7 @@
     "artist_meaning_id": { "type": "string", "pattern": "^meaning_[a-zA-Z0-9_-]+$" },
     "transformation_brief_id": { "type": "string", "pattern": "^tb_[a-zA-Z0-9_-]+$" },
     "beat_plan_id": { "type": "string", "pattern": "^bp_[a-zA-Z0-9_-]+$" },
-    "medium_plan_id": { "type": "string", "pattern": "^(imp|smp|vmp|tmp|mmp)_[a-zA-Z0-9_-]+$" },
+    "medium_plan_id": { "type": "string", "pattern": "^(imp|smp|vmp|tmp|mmp|cmp)_[a-zA-Z0-9_-]+$" },
     "brief_id": { "type": "string", "pattern": "^brief_[a-zA-Z0-9_-]+$" },
     "prompt_plan_id": { "type": "string", "pattern": "^plan_[a-zA-Z0-9_-]+$" },
     "text_generation_plan_id": { "type": ["string", "null"], "pattern": "^plan_[a-zA-Z0-9_-]+$" },
